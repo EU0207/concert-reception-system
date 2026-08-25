@@ -1,0 +1,56 @@
+name: 作業
+description: 開発、文書作成、調査、確認などの作業を登録します
+title: "[Task] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        システム開発上の目的と、確認可能な完了条件を記載してください。
+        個人情報、秘密情報、作成者個人の事情は記載しないでください。
+  - type: textarea
+    id: purpose
+    attributes:
+      label: 目的
+      description: この作業によって解決する業務上または開発上の課題を記載してください。
+    validations:
+      required: true
+  - type: textarea
+    id: background
+    attributes:
+      label: 背景
+      description: 作業が必要になった経緯、前提、制約を記載してください。
+    validations:
+      required: true
+  - type: textarea
+    id: tasks
+    attributes:
+      label: 作業内容
+      description: 実施する内容をチェックリストで記載してください。
+      value: |
+        - [ ] 
+    validations:
+      required: true
+  - type: textarea
+    id: completion
+    attributes:
+      label: 完了条件
+      description: このIssueを完了できる具体的な条件を記載してください。
+      value: |
+        - [ ] 
+    validations:
+      required: true
+  - type: textarea
+    id: related_documents
+    attributes:
+      label: 関連文書
+      description: 関連する要件、設計、ADRなどのリンクを記載してください。ない場合は「なし」と記載してください。
+    validations:
+      required: true
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: 対象外
+      description: このIssueでは対応しない内容を記載してください。ない場合は「なし」と記載してください。
+    validations:
+      required: true
