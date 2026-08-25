@@ -1,2 +1,2 @@
-# Local-only notes. These files must never be committed.
-/private-notes/
+# Local-only notes. Ignore this directory at any depth.
+**/private-notes/

@@ -9,7 +9,7 @@
 | 作成・更新時期 | プロジェクト開始時、計画変更時 |
 | 記載する内容 | 工程、成果物、管理方法、承認ゲート、変更管理 |
 | 記載しない内容 | 個別機能の仕様、未決定の技術構成 |
-| 関連文書 | [ドキュメント案内](../README.md)、[ADR案内](decisions/README.md) |
+| 関連文書 | [ドキュメント案内](../document-guide.md)、[ADR案内](decisions/adr-guide.md) |
 | 関連Issue | [#1](https://github.com/EU0207/concert-reception-system/issues/1) |
 | 状態 | Draft |
 | 承認情報 | 未承認 |

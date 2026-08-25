@@ -9,7 +9,7 @@
 | 作成・更新時期 | プロジェクト全工程、新しい用語を使用する時 |
 | 記載する内容 | 業務用語、開発用語、略語の意味 |
 | 記載しない内容 | 個別機能の詳細仕様 |
-| 関連文書 | [ドキュメント案内](../README.md) |
+| 関連文書 | [ドキュメント案内](../document-guide.md) |
 | 関連Issue | [#1](https://github.com/EU0207/concert-reception-system/issues/1) |
 | 状態 | Draft |
 | 承認情報 | 未承認 |
