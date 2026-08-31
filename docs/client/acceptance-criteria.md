@@ -7,7 +7,7 @@
 | 目的 | システムを完成として受け入れるための確認条件を合意する |
 | 主な読者 | 依頼者、受付担当者、開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](requirements.md)、[トレーサビリティ表](../development/traceability-matrix.md) |
+| 関連文書 | [要件定義書](requirements.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation-plan.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 文書の位置づけ | 暫定要件を検証可能にするため並行作成した受入条件案。Issue #6の結果を反映後に合意する |
 | 状態 | In Review |
@@ -56,4 +56,4 @@
 
 ## 承認
 
-Issue #5では本書を最終承認せず、技術検証が必要な条件とPoCの評価方法・合格基準を確認する。Issue #6の結果を要件定義書と本書へ反映した後、別途作成する最終承認Issueで確認依頼と承認結果を記録する。承認後に状態、承認日、承認記録を更新する。要件定義書と本書が承認されるまで本番アプリケーションの実装を開始しない。
+Issue #5では本書を最終承認せず、[技術検証計画書](../development/technical-validation-plan.md)で技術検証が必要な条件、評価方法、合格基準を確認する。Issue #6は同計画の明示的な承認まで開始しない。Issue #6の結果を要件定義書と本書へ反映した後、別途作成する最終承認Issueで確認依頼と承認結果を記録する。承認後に状態、承認日、承認記録を更新する。要件定義書と本書が承認されるまで本番アプリケーションの実装を開始しない。

@@ -7,7 +7,7 @@
 | 目的 | システムに必要な機能、品質、運用上の条件を合意する |
 | 主な読者 | 依頼者、受付担当者、運用担当者、開発担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [プロジェクト概要書](project-overview.md)、[受入条件書](acceptance-criteria.md)、[トレーサビリティ表](../development/traceability-matrix.md) |
+| 関連文書 | [プロジェクト概要書](project-overview.md)、[受入条件書](acceptance-criteria.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation-plan.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 文書の位置づけ | 技術的実現可能性の検証前に作成した暫定要件。Issue #6の結果を反映後に確定する |
 | 状態 | In Review |
@@ -155,7 +155,7 @@
 ## 承認条件
 
 - 依頼者が決定済み要件、対象外、追加要望、未決定事項の区分を確認する。
-- Issue #5で技術検証が必要な要件、評価方法、合格基準、PoC実施可否を確認する。
+- Issue #5で[技術検証計画書](../development/technical-validation-plan.md)を確認し、技術検証が必要な要件、評価方法、合格基準、PoC実施可否を合意する。
 - 承認されたIssue #6の調査・PoCを完了し、結果と要件への影響を反映する。
 - [受入条件書](acceptance-criteria.md)を検証結果に合わせて更新し、要件との対応を確認する。
 - 技術検証後に別途作成する最終承認Issueへ、承認結果を記録する。
