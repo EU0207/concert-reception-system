@@ -10,7 +10,7 @@
 | 記載する内容 | 工程、成果物、管理方法、承認ゲート、変更管理 |
 | 記載しない内容 | 個別機能の仕様、未決定の技術構成 |
 | 関連文書 | [ドキュメント案内](../document-guide.md)、[技術検証計画書](technical-validation-plan.md)、[ADR案内](decisions/adr-guide.md) |
-| 関連Issue | [#1](https://github.com/EU0207/concert-reception-system/issues/1)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
+| 関連Issue | [#1](https://github.com/EU0207/concert-reception-system/issues/1)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#10](https://github.com/EU0207/concert-reception-system/issues/10) |
 | 状態 | Draft |
 | 承認情報 | 未承認 |
 
@@ -35,6 +35,9 @@
 - 重要な判断はADRで記録します。
 - Issueは独立した目的と確認可能な完了条件を持つ作業単位で作成し、数分で終わる付随作業は親Issueに含めます。
 - 直近で確実な作業だけを具体化し、技術や要件が未決定の遠い工程は推測で細分化しません。
+- Web画面では `.github/ISSUE_TEMPLATE/task.yml` の作業フォームを使用し、Project「コンサート受付システム開発」へ自動登録します。
+- GitHub CLIでIssueを作成する場合は、`gh issue create --project "コンサート受付システム開発"` のようにProjectを明示します。
+- ProjectではIssueを作業カードとして管理し、Pull Requestを重複登録しません。変更状況はIssueの `Linked pull requests` から確認します。
 
 ## GitHub Projectsの状態
 
@@ -44,6 +47,8 @@
 | 進行中 | 担当者が作業を開始している |
 | レビュー | 文書確認、Pull Requestレビュー、または依頼者確認を待っている |
 | 完了 | 完了条件を満たし、必要な文書更新と統合が完了している |
+
+Issue作成時は `Todo`、ブランチで作業を始めた時は `進行中`、Pull Requestまたは依頼者確認を待つ時は `レビュー` へ更新します。Pull Requestがmainへ統合され、Issueの完了条件を満たしたことを確認してから `完了` とします。IssueをCloseしただけでProject更新を省略しません。
 
 ## 工程承認
 
