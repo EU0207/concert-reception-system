@@ -9,8 +9,8 @@
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
 | 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md) |
 | 関連Issue | [#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
-| 状態 | In Review |
-| 承認情報 | 未承認。Issue #6は依頼者が本計画を明示的に承認するまで着手不可 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-01に依頼者が本計画とIssue #6の調査段階開始を承認。PoCは未承認 |
 
 ## 結論
 
@@ -147,6 +147,6 @@ PoCは本番アプリケーションを作る作業ではない。画面、デ�
 
 ## 残る承認
 
-- 本書をIssue #5の技術検証計画として承認するか。
-- 承認後、Issue #6のうち `RES-001`～`RES-004` の調査段階を開始してよいか。
-- `POC-001`～`POC-004` は調査結果の確認後に改めて承認する。
+- 本書はIssue #5の技術検証計画として承認済みである。
+- Issue #6のうち `RES-001`～`RES-004` の調査段階は開始承認済みである。
+- `POC-001`～`POC-004` は未承認であり、調査結果の確認後に改めて承認を得る。
