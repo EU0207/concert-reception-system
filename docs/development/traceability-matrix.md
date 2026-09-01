@@ -20,7 +20,7 @@
 | 要件ID | 質問・確認ID | 受入条件ID | 設計ID | テストケースID | 状態 |
 |---|---|---|---|---|---|
 | REQ-B-001 | INT-Q-001、INT-Q-002 | AC-004、AC-010 | 未登録 | 未登録 | In Review |
-| REQ-B-002 | INT-Q-003、INT-Q-022、CONF-002 | AC-018 | 未登録 | 未登録 | In Review |
+| REQ-B-002 | INT-Q-003、INT-Q-022、CONF-002、CONF-017 | AC-018 | 未登録 | 未登録 | In Review |
 | REQ-B-003 | INT-Q-009、INT-Q-036 | AC-002 | 未登録 | 未登録 | In Review |
 | REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | 未登録 | 未登録 | In Review |
 | REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | 未登録 | 未登録 | In Review |
@@ -47,25 +47,33 @@
 | REQ-F-021 | INT-Q-016、INT-Q-029 | AC-009 | 未登録 | 未登録 | In Review |
 | REQ-F-022 | INT-Q-016、INT-Q-040 | AC-009 | 未登録 | 未登録 | In Review |
 | REQ-F-023 | INT-Q-016、INT-Q-025 | AC-009 | 未登録 | 未登録 | In Review |
-| REQ-F-024 | INT-Q-025、INT-Q-039 | AC-013 | 未登録 | 未登録 | In Review |
+| REQ-F-024 | INT-Q-025、INT-Q-039、CONF-018 | AC-013 | 未登録 | 未登録 | In Review |
 | REQ-F-025 | INT-Q-025 | AC-013 | 未登録 | 未登録 | In Review |
 | REQ-F-026 | INT-Q-027 | AC-007、AC-014 | 未登録 | 未登録 | In Review |
 | REQ-F-027 | INT-Q-014、INT-Q-027 | AC-007、AC-014 | 未登録 | 未登録 | In Review |
 | REQ-F-028 | INT-Q-028 | AC-014 | 未登録 | 未登録 | In Review |
 | REQ-F-029 | INT-Q-031、INT-Q-040 | AC-003 | 未登録 | 未登録 | In Review |
-| REQ-F-030 | INT-Q-018～INT-Q-021、INT-Q-037、INT-Q-038 | AC-015 | 未登録 | 未登録 | In Review |
+| REQ-F-030 | INT-Q-018～INT-Q-021、INT-Q-037、INT-Q-038、CONF-003 | AC-015 | 未登録 | 未登録 | In Review |
 | REQ-F-031 | INT-Q-019、INT-Q-028 | AC-014 | 未登録 | 未登録 | In Review |
+| REQ-F-032 | INT-Q-008、INT-Q-011、RQ-001、CONF-007、CONF-014 | AC-022 | 未登録 | 未登録 | In Review |
+| REQ-F-033 | INT-Q-006、INT-Q-007、RQ-002、CONF-007、CONF-010 | AC-023 | 未登録 | 未登録 | In Review |
+| REQ-F-034 | INT-Q-013、INT-Q-029、RQ-003、CONF-007、CONF-008 | AC-024 | 未登録 | 未登録 | In Review |
+| REQ-F-035 | INT-Q-017、INT-Q-036、INT-Q-039、RQ-004、CONF-007、CONF-011 | AC-025 | 未登録 | 未登録 | In Review |
+| REQ-F-036 | INT-Q-009、INT-Q-036、RQ-005、CONF-007、CONF-015 | AC-026 | 未登録 | 未登録 | In Review |
+| REQ-F-037 | INT-Q-004、INT-Q-031、RQ-006、CONF-007、CONF-009 | AC-027 | 未登録 | 未登録 | In Review |
 | REQ-NF-001 | INT-Q-002、INT-Q-012、INT-Q-022 | AC-004、AC-018 | 未登録 | 未登録 | In Review |
 | REQ-NF-002 | INT-Q-003、INT-Q-018、INT-Q-022、INT-Q-037 | AC-015、AC-018 | 未登録 | 未登録 | In Review |
 | REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034、CONF-005 | AC-015 | 未登録 | 未登録 | In Review |
 | REQ-NF-004 | INT-Q-020、INT-Q-021、INT-Q-026、INT-Q-038 | AC-011、AC-015 | 未登録 | 未登録 | In Review |
-| REQ-NF-005 | INT-Q-006、INT-Q-007 | AC-016 | 未登録 | 未登録 | In Review |
+| REQ-NF-005 | INT-Q-006、INT-Q-007、CONF-010 | AC-016 | 未登録 | 未登録 | In Review |
 | REQ-NF-006 | INT-Q-007、INT-Q-014、INT-Q-017 | AC-006、AC-016 | 未登録 | 未登録 | In Review |
 | REQ-NF-007 | INT-Q-030 | AC-004 | 未登録 | 未登録 | In Review |
 | REQ-NF-008 | INT-Q-016、INT-Q-040 | AC-009 | 未登録 | 未登録 | In Review |
 | REQ-NF-009 | INT-Q-032、INT-Q-040 | AC-017 | 未登録 | 未登録 | In Review |
-| REQ-NF-010 | INT-Q-033、INT-Q-041、INT-Q-042 | AC-020 | 未登録 | 未登録 | In Review |
+| REQ-NF-010 | INT-Q-033、INT-Q-041、INT-Q-042、CONF-012、CONF-017 | AC-020 | 未登録 | 未登録 | In Review |
 | REQ-NF-011 | INT-Q-042 | AC-020 | 未登録 | 未登録 | In Review |
+| REQ-NF-012 | INT-Q-006、INT-Q-007、RQ-002、CONF-010 | AC-023 | 未登録 | 未登録 | In Review |
+| REQ-NF-013 | INT-Q-037、CONF-012 | AC-015、AC-018 | 未登録 | 未登録 | In Review |
 
 ## 制約の対応表
 
@@ -79,9 +87,9 @@
 
 ## 追加要望・未決定事項の追跡
 
-- 追加要望 `RQ-001`～`RQ-006` と未決定事項 `TBD-001`～`TBD-013` は、[要件定義書](../client/requirements.md#追加要望採用方針決定詳細未決定)で質問IDと対応付けて管理する。
-- `CONF-007` により、追加要望はすべて要件・受入条件の最終承認前に正式要件化する方針が決定している。詳細確認後に新しい要件ID・受入条件IDを発行し、本表へ追加する。既存要件へ無言で混在させない。
-- 追加要望の詳細確認時期とPoCへの影響は[技術検証計画書](technical-validation-plan.md#追加要望の確定方法)で追跡する。
+- 追加要望 `RQ-001`～`RQ-006` と未決定事項 `TBD-001`～`TBD-013` は、[要件定義書](../client/requirements.md#追加要望の正式要件化)で質問IDと対応付けて管理する。
+- `CONF-007`～`CONF-015` により、追加要望は詳細確認を終え、新しい要件ID・受入条件IDを付けて本表へ追加した。要望IDは由来として保持する。
+- 正式要件化した追加要望のPoCへの影響は[技術検証計画書](technical-validation-plan.md#追加要望の正式要件化結果)で追跡する。
 - 未決定事項の決定により要件または受入条件が変わる場合は、関連Issue、変更理由、影響先を記録する。
 
 ## 技術的実現可能性確認との対応
@@ -90,11 +98,13 @@
 
 | 検証区分 | 検証ID | 主な関連要件 | 主な受入条件 | 検証Issue | 結果・証跡 | 状態 |
 |---|---|---|---|---|---|---|
-| 対応端末・カメラ・ブラウザ | RES-001、POC-003 | REQ-F-008、REQ-F-009、REQ-F-030、REQ-NF-002 | AC-004、AC-015 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-001結果](technical-feasibility-research.md#res-001-対応環境とブラウザ機能) | 調査完了・PoC未承認 |
-| 完全オフライン受付・復旧後統合 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-NF-003、REQ-NF-004 | AC-011、AC-015 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合) | 調査完了・PoC未承認 |
-| QR判定性能・受付処理量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
-| 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-NF-005、REQ-NF-006 | AC-009、AC-013、AC-014、AC-016 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護) | 調査完了・PoC未承認 |
+| 対応端末・カメラ・電子チケット | RES-001、POC-003 | REQ-F-008、REQ-F-009、REQ-F-030、REQ-F-032、REQ-NF-002 | AC-004、AC-015、AC-022 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-001結果](technical-feasibility-research.md#res-001-対応環境とブラウザ機能) | 調査完了・PoC未承認 |
+| 完全オフライン受付・復旧後統合・連絡 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004 | AC-011、AC-015、AC-024、AC-027 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合) | 調査完了・PoC未承認 |
+| QR判定性能・受付処理量・通信量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002、REQ-NF-013 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | PoC未承認 |
+| 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-012 | AC-009、AC-013、AC-014、AC-016、AC-023 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護) | 調査完了・PoC未承認 |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
+| 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-NF-013 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | PoC未承認 |
+| グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 机上レビュー未実施 |
 
 ## Issue #5の確認事項との対応
 
@@ -111,7 +121,18 @@
 | 確認ID | 決定内容 | 関連する未決定事項・要望 | 主な関連要件・受入条件 | 記録先 |
 |---|---|---|---|---|
 | CONF-006 | Firebase系を第一PoC候補、Cloudflare系を不適合時の代替候補とし、Firebase Authenticationと開催ごとの共有パスフレーズを先に評価する | TBD-002～TBD-004、TBD-012 | REQ-F-017、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-NF-004～REQ-NF-006、REQ-NF-010、REQ-NF-011／AC-011、AC-013～AC-016、AC-020 | [技術実現可能性調査報告書](technical-feasibility-research.md#依頼者の判断記録と残る事項) |
-| CONF-007 | `RQ-001`～`RQ-006` を最終承認前にすべて正式要件化する | RQ-001～RQ-006 | 新しい要件ID・受入条件IDは詳細確認後に発行 | [要件定義書](../client/requirements.md#追加要望採用方針決定詳細未決定) |
+| CONF-007 | `RQ-001`～`RQ-006` を最終承認前にすべて正式要件化する | RQ-001～RQ-006 | REQ-F-032～REQ-F-037、REQ-NF-012／AC-022～AC-027 | [要件定義書](../client/requirements.md#追加要望の正式要件化) |
+| CONF-008 | 再読取り理由・任意メモを追記し、同じ公演の全スタッフで共有する | RQ-003 | REQ-F-034／AC-024 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-009 | 全スタッフ連絡、重要既読、オフライン未共有、一時管理者の投稿を扱う | RQ-006 | REQ-F-037／AC-027 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-010 | 公演単位の任意テキスト項目を主担当・代理だけが扱い、公演後1か月で値を削除する | RQ-002 | REQ-F-033、REQ-NF-005、REQ-NF-012／AC-023 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-011 | 簡易座席表と会場画像の上限・事前取得・代替表示を定める | RQ-004 | REQ-F-035／AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-012 | 同期5秒目標・10秒上限、当日20MB以下、費用0円とする | TBD-007、TBD-009 | REQ-NF-010、REQ-NF-013／AC-015、AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-013 | iPhone 17、iPhone 13 mini、Galaxy Z Fold8を実機対象とする | TBD-001 | REQ-F-008、REQ-F-030、REQ-F-032、REQ-F-035／AC-004、AC-015、AC-022、AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-014 | A6縦PDF電子チケット、個別・一括ZIP、通常提示、確認コード、必要時生成を採用する | RQ-001 | REQ-F-032／AC-022 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-015 | 最大10人のグループ配置と個人客の名簿順・ランダム配置、手動固定・取消しを採用する | RQ-005 | REQ-F-036／AC-026 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-016 | 個別認証・開催前準備を必須とし、締め処理後に端末データを削除する | TBD-003、TBD-004 | REQ-F-028、REQ-F-031、REQ-NF-012／AC-014、AC-023 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-017 | 2027年以降、1日1公演、1公演最大500枚、費用0円を前提とする | TBD-009 | REQ-B-002、REQ-NF-010／AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-018 | 公演後に残す基本データへ公演時点の会場名・住所を追加する | TBD-008、REQ-F-024 | AC-013 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 
 ## 更新ルール
 
