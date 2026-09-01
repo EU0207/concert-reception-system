@@ -7,7 +7,7 @@
 | 目的 | 質問・決定事項から要件、受入条件、将来の設計・テストまでの対応を追跡する |
 | 主な読者 | 開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 文書の位置づけ | 暫定要件・受入条件案の対応を示す。技術検証結果と確定要件を順次追記する |
 | 状態 | In Review |
@@ -86,15 +86,15 @@
 
 ## 技術的実現可能性確認との対応
 
-実施条件と合格基準は[技術検証計画書](technical-validation-plan.md)に記載する。Issue #6は計画の明示的な承認まで未着手とする。
+実施条件と合格基準は[技術検証計画書](technical-validation-plan.md)、調査結果は[技術実現可能性調査報告書](technical-feasibility-research.md)に記載する。Issue #6の調査段階は承認済みであり、PoCは別の明示的な承認まで開始しない。
 
 | 検証区分 | 検証ID | 主な関連要件 | 主な受入条件 | 検証Issue | 結果・証跡 | 状態 |
 |---|---|---|---|---|---|---|
-| 対応端末・カメラ・ブラウザ | RES-001、POC-003 | REQ-F-008、REQ-F-009、REQ-F-030、REQ-NF-002 | AC-004、AC-015 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
-| 完全オフライン受付・復旧後統合 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-NF-003、REQ-NF-004 | AC-011、AC-015 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
+| 対応端末・カメラ・ブラウザ | RES-001、POC-003 | REQ-F-008、REQ-F-009、REQ-F-030、REQ-NF-002 | AC-004、AC-015 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-001結果](technical-feasibility-research.md#res-001-対応環境とブラウザ機能) | 調査完了・PoC未承認 |
+| 完全オフライン受付・復旧後統合 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-NF-003、REQ-NF-004 | AC-011、AC-015 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合) | 調査完了・PoC未承認 |
 | QR判定性能・受付処理量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
-| 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-NF-005、REQ-NF-006 | AC-009、AC-013、AC-014、AC-016 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
-| 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
+| 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-NF-005、REQ-NF-006 | AC-009、AC-013、AC-014、AC-016 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護) | 調査完了・PoC未承認 |
+| 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
 
 ## Issue #5の確認事項との対応
 
