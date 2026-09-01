@@ -41,6 +41,7 @@
 | 用語集 | [glossary.md](development/glossary.md) | 専門用語の意味を統一する | 全関係者 | 全工程 | 新しい用語の使用時 | Draft |
 | トレーサビリティ表 | [traceability-matrix.md](development/traceability-matrix.md) | 質問・要件・受入条件の対応を追跡する | 開発担当者、確認担当者 | 要件定義工程以降 | 関連成果物の変更時 | In Review |
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 依頼者、開発担当者、確認担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
+| 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 依頼者、開発担当者、確認担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
 | ADR案内 | [adr-guide.md](development/decisions/adr-guide.md) | 重要な判断の記録方法を定める | 開発担当者 | 重要な判断の発生時 | 運用変更時 | Draft |
 
 ## テンプレート
