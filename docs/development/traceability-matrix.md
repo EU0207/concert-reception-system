@@ -15,12 +15,12 @@
 
 ## 決定済み要件の対応表
 
-設計IDとテストケースIDは各工程で追加する。質問IDの `INT-Q-` は省略せず正式IDとして読む。
+設計IDとテストケースIDは各工程で追加する。質問IDの `INT-Q-` とIssue #5の確認ID `CONF-` は省略せず正式IDとして読む。
 
-| 要件ID | 質問ID | 受入条件ID | 設計ID | テストケースID | 状態 |
+| 要件ID | 質問・確認ID | 受入条件ID | 設計ID | テストケースID | 状態 |
 |---|---|---|---|---|---|
 | REQ-B-001 | INT-Q-001、INT-Q-002 | AC-004、AC-010 | 未登録 | 未登録 | In Review |
-| REQ-B-002 | INT-Q-003、INT-Q-022 | AC-018 | 未登録 | 未登録 | In Review |
+| REQ-B-002 | INT-Q-003、INT-Q-022、CONF-002 | AC-018 | 未登録 | 未登録 | In Review |
 | REQ-B-003 | INT-Q-009、INT-Q-036 | AC-002 | 未登録 | 未登録 | In Review |
 | REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | 未登録 | 未登録 | In Review |
 | REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | 未登録 | 未登録 | In Review |
@@ -57,7 +57,7 @@
 | REQ-F-031 | INT-Q-019、INT-Q-028 | AC-014 | 未登録 | 未登録 | In Review |
 | REQ-NF-001 | INT-Q-002、INT-Q-012、INT-Q-022 | AC-004、AC-018 | 未登録 | 未登録 | In Review |
 | REQ-NF-002 | INT-Q-003、INT-Q-018、INT-Q-022、INT-Q-037 | AC-015、AC-018 | 未登録 | 未登録 | In Review |
-| REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034 | AC-015 | 未登録 | 未登録 | In Review |
+| REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034、CONF-005 | AC-015 | 未登録 | 未登録 | In Review |
 | REQ-NF-004 | INT-Q-020、INT-Q-021、INT-Q-026、INT-Q-038 | AC-011、AC-015 | 未登録 | 未登録 | In Review |
 | REQ-NF-005 | INT-Q-006、INT-Q-007 | AC-016 | 未登録 | 未登録 | In Review |
 | REQ-NF-006 | INT-Q-007、INT-Q-014、INT-Q-017 | AC-006、AC-016 | 未登録 | 未登録 | In Review |
@@ -69,18 +69,19 @@
 
 ## 制約の対応表
 
-| 制約ID | 質問ID | 確認先 | 状態 |
+| 制約ID | 質問・確認ID | 確認先 | 状態 |
 |---|---|---|---|
 | CON-001 | INT-Q-018、INT-Q-019 | AC-014、AC-015 | In Review |
 | CON-002 | INT-Q-020 | AC-015 | In Review |
 | CON-003 | INT-Q-021、INT-Q-032 | AC-021 | In Review |
-| CON-004 | INT-Q-032、INT-Q-034 | AC-015、AC-017、AC-021 | In Review |
+| CON-004 | INT-Q-032、INT-Q-034、CONF-003 | AC-015、AC-017、AC-021 | In Review |
 | CON-005 | INT-Q-032、INT-Q-043 | AC-021 | In Review |
 
 ## 追加要望・未決定事項の追跡
 
 - 追加要望 `RQ-001`～`RQ-006` と未決定事項 `TBD-001`～`TBD-013` は、[要件定義書](../client/requirements.md#追加要望採否優先度詳細が未決定)で質問IDと対応付けて管理する。
 - 追加要望を採用した場合は新しい要件ID・受入条件IDを発行し、本表へ追加する。既存要件へ無言で混在させない。
+- 追加要望の採否手順、確認時期、技術候補への将来影響は[技術検証計画書](technical-validation-plan.md#追加要望の確定方法)で追跡する。
 - 未決定事項の決定により要件または受入条件が変わる場合は、関連Issue、変更理由、影響先を記録する。
 
 ## 技術的実現可能性確認との対応
@@ -94,6 +95,16 @@
 | QR判定性能・受付処理量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
 | 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-NF-005、REQ-NF-006 | AC-009、AC-013、AC-014、AC-016 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | 承認待ち |
+
+## Issue #5の確認事項との対応
+
+| 確認ID | 決定内容 | 関連する未決定事項・要件 | 関連受入条件 | 記録先 |
+|---|---|---|---|---|
+| CONF-001 | 代表的なiPhone・SafariとAndroid・Chromeを対象とする | TBD-001、REQ-F-008、REQ-F-030 | AC-004、AC-015 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-002 | 500人の処理は30分以内を合格値とする | REQ-B-002、REQ-NF-001、REQ-NF-002 | AC-015、AC-018 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-003 | 6つ以上の独立環境で確認し、実機確認は最大3台とする | CON-004、REQ-F-030、REQ-NF-002 | AC-015、AC-018 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-004 | 調査とPoCを分けて承認する | TBD-001～TBD-004、TBD-012 | 未該当 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-005 | 回収不能端末だけに残る未統合記録の損失を許容し、紙記録等で照合する | REQ-NF-003 | AC-015 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 
 ## 更新ルール
 
