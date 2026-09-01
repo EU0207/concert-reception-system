@@ -2,6 +2,7 @@ name: 作業
 description: 開発、文書作成、調査、確認などの作業を登録します
 title: "[Task] "
 labels: []
+projects: ["EU0207/1"]
 body:
   - type: markdown
     attributes:
