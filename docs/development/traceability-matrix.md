@@ -7,7 +7,7 @@
 | 目的 | 質問・決定事項から要件、受入条件、将来の設計・テストまでの対応を追跡する |
 | 主な読者 | 開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 文書の位置づけ | 暫定要件・受入条件案の対応を示す。技術検証結果と確定要件を順次追記する |
 | 状態 | In Review |
@@ -99,12 +99,12 @@
 | 検証区分 | 検証ID | 主な関連要件 | 主な受入条件 | 検証Issue | 結果・証跡 | 状態 |
 |---|---|---|---|---|---|---|
 | 対応端末・カメラ・電子チケット | RES-001、POC-003 | REQ-F-008、REQ-F-009、REQ-F-030、REQ-F-032、REQ-NF-002 | AC-004、AC-015、AC-022 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-001結果](technical-feasibility-research.md#res-001-対応環境とブラウザ機能) | 調査完了・PoC未承認 |
-| 完全オフライン受付・復旧後統合・連絡 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004 | AC-011、AC-015、AC-024、AC-027 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合)、[POC-001開始承認依頼](poc-001-approval-request.md) | 調査・事前具体化完了、PoC開始承認待ち |
+| 完全オフライン受付・復旧後統合・連絡 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004 | AC-011、AC-015、AC-024、AC-027 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合)、[POC-001実施結果](poc-001-result.md) | POC-001合格・結果確認待ち |
 | QR判定性能・受付処理量・通信量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002、REQ-NF-013 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | PoC未承認 |
 | 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-012 | AC-009、AC-013、AC-014、AC-016、AC-023 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護) | 調査完了・PoC未承認 |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
 | 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-NF-013 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | PoC未承認 |
-| グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認待ち |
+| グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認済み |
 
 ## Issue #5の確認事項との対応
 
@@ -134,6 +134,7 @@
 | CONF-017 | 2027年以降、1日1公演、1公演最大500枚、費用0円を前提とする | TBD-009 | REQ-B-002、REQ-NF-010／AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-019 | 開発用Firebaseと依頼者所有の本番環境を分離し、初期設定・引継ぎ・通常運用の管理負担を抑える | TBD-010、TBD-012 | REQ-NF-009、REQ-NF-011／AC-017、AC-020 | [POC-001開始承認依頼書](poc-001-approval-request.md#googleアカウントと環境の分離) |
 | CONF-018 | 公演後に残す基本データへ公演時点の会場名・住所を追加する | TBD-008、REQ-F-024 | AC-013 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-020 | 検証専用FirebaseプロジェクトをPOC-005終了確認まで保持し、各PoC終了時に架空データ・不要利用者を削除し、全PoC終了後に本体を1回削除する | TBD-012 | REQ-NF-010、REQ-NF-011／AC-020 | [POC-001実施結果報告書](poc-001-result.md#外部資源の終了処理) |
 
 ## 更新ルール
 
