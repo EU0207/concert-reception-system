@@ -132,6 +132,7 @@
 | CONF-015 | 最大10人のグループ配置と個人客の名簿順・ランダム配置、手動固定・取消しを採用する | RQ-005 | REQ-F-036／AC-026 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-016 | 個別認証・開催前準備を必須とし、締め処理後に端末データを削除する | TBD-003、TBD-004 | REQ-F-028、REQ-F-031、REQ-NF-012／AC-014、AC-023 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-017 | 2027年以降、1日1公演、1公演最大500枚、費用0円を前提とする | TBD-009 | REQ-B-002、REQ-NF-010／AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-019 | 開発用Firebaseと依頼者所有の本番環境を分離し、初期設定・引継ぎ・通常運用の管理負担を抑える | TBD-010、TBD-012 | REQ-NF-009、REQ-NF-011／AC-017、AC-020 | [POC-001開始承認依頼書](poc-001-approval-request.md#googleアカウントと環境の分離) |
 | CONF-018 | 公演後に残す基本データへ公演時点の会場名・住所を追加する | TBD-008、REQ-F-024 | AC-013 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 
 ## 更新ルール
