@@ -31,6 +31,7 @@
 | 初回要件ヒアリング議事録 | [2026-08-30-initial-requirements-interview.md](client/meeting-notes/2026-08-30-initial-requirements-interview.md) | 初回ヒアリングの正式な回答・決定事項を質問ID単位で記録する | 依頼者、受付担当者、運用担当者、開発担当者 | 初回ヒアリング時 | 訂正が承認された時 | Approved |
 | 要件定義書 | [requirements.md](client/requirements.md) | 必要な機能と条件を合意する | 依頼者、開発担当者 | 要件定義工程 | 要件の追加・変更時 | In Review |
 | 受入条件書 | [acceptance-criteria.md](client/acceptance-criteria.md) | 完成と判断する条件を合意する | 依頼者、開発担当者 | 要件定義工程 | 要件・確認方法の変更時 | In Review |
+| Firebase初期設定・引継ぎ手順書 | [firebase-initial-setup-guide.md](client/firebase-initial-setup-guide.md) | 本番環境の所有、初期設定、権限返却を非技術者にも分かる形で案内する | 依頼者、後任管理者、技術担当者 | Firebase候補の検証時 | 採用・本番構成・画面変更時 | Draft |
 | 打合せ記録 | [meeting-notes-guide.md](client/meeting-notes/meeting-notes-guide.md) | 確認事項と合意事項を記録する | 依頼者、開発担当者 | 打合せ実施時 | 記録の訂正時 | Draft |
 
 ## 開発者向け文書
@@ -42,8 +43,9 @@
 | トレーサビリティ表 | [traceability-matrix.md](development/traceability-matrix.md) | 質問・要件・受入条件の対応を追跡する | 開発担当者、確認担当者 | 要件定義工程以降 | 関連成果物の変更時 | In Review |
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 依頼者、開発担当者、確認担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
 | 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 依頼者、開発担当者、確認担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
-| RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 依頼者、開発担当者、確認担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | In Review |
-| POC-001開始承認依頼書 | [poc-001-approval-request.md](development/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | In Review |
+| RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 依頼者、開発担当者、確認担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
+| POC-001開始承認依頼書 | [poc-001-approval-request.md](development/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | Approved |
+| POC-001実施結果報告書 | [poc-001-result.md](development/poc-001-result.md) | 完全オフライン受付と復旧後統合の検証結果、制約、次の判断材料を記録する | 依頼者、開発担当者、確認担当者 | POC-001完了時 | 結果確認、終了処理、次の判断時 | In Review |
 | ADR案内 | [adr-guide.md](development/decisions/adr-guide.md) | 重要な判断の記録方法を定める | 開発担当者 | 重要な判断の発生時 | 運用変更時 | Draft |
 
 ## テンプレート

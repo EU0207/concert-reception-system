@@ -10,8 +10,8 @@
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 関連ID | POC-001、TBD-002、REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004、AC-011、AC-015、AC-024、AC-027 |
 | 調査日 | 2026-09-02 |
-| 状態 | In Review |
-| 承認情報 | 未承認。依頼者の明示承認まで`.gitignore`変更、依存関係追加、外部接続、PoCコード作成を開始しない |
+| 状態 | Approved |
+| 承認情報 | 2026-09-02に依頼者が本書を確認し、`POC-001`に限って開始を明示承認。[Issue #6の記録](https://github.com/EU0207/concert-reception-system/issues/6#issuecomment-5507443520)。2026-09-03に検証プロジェクトの保持方針を追加承認 |
 
 ## 承認を依頼する範囲
 
@@ -156,7 +156,10 @@ Firebase Hosting、Cloud Functions、Cloud Storage、Analytics、App Checkは使
 3. Service Workerを解除し、PoC用Cache Storageだけを削除する。ブラウザのサイトデータ画面でも対象オリジンが空であることを確認する。
 4. オンライン状態で匿名利用者を削除し、削除できなかったUIDはFirebase Consoleで対象を照合して削除する。サインアウト後、Firebase Auth用ブラウザ保存を含むサイトデータを削除する。
 5. Firestoreの`pocRuns/{runId}`以下をFirebase CLIで再帰削除する。親文書削除だけではサブコレクションが残るため、削除後にコレクションが空であることをConsoleと読取り結果で確認する。
-6. 検証用データが不要と確認された後、専用Firestoreデータベースを削除する。さらにIssue #6の証跡採取後、依頼者へ専用FirebaseプロジェクトIDと影響を示して削除確認を取り、Firebase Consoleからプロジェクトを削除する。
+6. 各PoC終了時に、そのPoCの架空データと不要な認証利用者だけを削除し、件数0を確認する。Web App、Firestoreデータベース、Rulesを含む検証専用プロジェクト本体は`POC-005`の終了確認まで保持する。
+7. 全PoCの終了確認後、依頼者へ専用FirebaseプロジェクトIDと影響を示して削除確認を取り、Firebase Consoleからプロジェクトを1回だけ削除する。
+
+この保持方針は2026-09-03の依頼者判断による。プロジェクト作成上限への影響を抑えるためであり、`POC-002`以降の開始承認や、未承認サービス・設定の追加を意味しない。各PoCは実行パス等でデータを分離し、前のPoCのデータを残したまま次へ進まない。
 7. プロジェクト削除直後にサービスへアクセスできないことを確認する。Google Cloudでは30日以内に復元可能で、その後に完全削除されるため、削除日と30日後の確認予定日を記録する。
 8. ローカルエミュレーターを停止し、PoC専用export、ログ、Playwright raw artifacts、`node_modules`、`dist`、`coverage`を絶対パス確認後に削除する。共有キャッシュや他プロジェクトの資源は削除しない。
 9. 再現手順、集計結果、合否、使用量、削除確認の要約は正式な検証証跡としてGit管理に残す。PoCコードとブランチの廃棄はIssue #6終了時に別途対象と影響を確認する。
@@ -216,7 +219,7 @@ firebase-export/
 test-results/
 playwright-report/
 blob-report/
-playwright/.auth/
+**/playwright/.auth/
 poc/POC-001/artifacts/raw/
 ```
 
