@@ -10,8 +10,8 @@
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 関連ID | POC-001、TBD-002、REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004、AC-011、AC-015、AC-024、AC-027 |
 | 調査日 | 2026-09-02 |
-| 状態 | In Review |
-| 承認情報 | 未承認。依頼者の明示承認まで`.gitignore`変更、依存関係追加、外部接続、PoCコード作成を開始しない |
+| 状態 | Approved |
+| 承認情報 | 2026-09-02に依頼者が本書を確認し、`POC-001`に限って開始を明示承認。[Issue #6の記録](https://github.com/EU0207/concert-reception-system/issues/6#issuecomment-5507443520) |
 
 ## 承認を依頼する範囲
 
@@ -216,7 +216,7 @@ firebase-export/
 test-results/
 playwright-report/
 blob-report/
-playwright/.auth/
+**/playwright/.auth/
 poc/POC-001/artifacts/raw/
 ```
 

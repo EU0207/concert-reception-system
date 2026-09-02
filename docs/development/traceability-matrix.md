@@ -99,12 +99,12 @@
 | 検証区分 | 検証ID | 主な関連要件 | 主な受入条件 | 検証Issue | 結果・証跡 | 状態 |
 |---|---|---|---|---|---|---|
 | 対応端末・カメラ・電子チケット | RES-001、POC-003 | REQ-F-008、REQ-F-009、REQ-F-030、REQ-F-032、REQ-NF-002 | AC-004、AC-015、AC-022 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-001結果](technical-feasibility-research.md#res-001-対応環境とブラウザ機能) | 調査完了・PoC未承認 |
-| 完全オフライン受付・復旧後統合・連絡 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004 | AC-011、AC-015、AC-024、AC-027 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合)、[POC-001開始承認依頼](poc-001-approval-request.md) | 調査・事前具体化完了、PoC開始承認待ち |
+| 完全オフライン受付・復旧後統合・連絡 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004 | AC-011、AC-015、AC-024、AC-027 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合)、[POC-001開始承認依頼](poc-001-approval-request.md) | 調査・事前具体化完了、POC-001実施中 |
 | QR判定性能・受付処理量・通信量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002、REQ-NF-013 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | PoC未承認 |
 | 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-012 | AC-009、AC-013、AC-014、AC-016、AC-023 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護) | 調査完了・PoC未承認 |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
 | 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-NF-013 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | PoC未承認 |
-| グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認待ち |
+| グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認済み |
 
 ## Issue #5の確認事項との対応
 
