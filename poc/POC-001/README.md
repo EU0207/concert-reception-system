@@ -57,3 +57,7 @@ E2Eはいずれも、6環境、架空QR 500件、508イベントの復旧後統�
 ## 現在の依存関係監査
 
 2026-09-02の初回`npm audit --audit-level=high`ではHigh/Criticalは0件、`firebase-tools`の推移依存にModerateが5件あった。強制修正は`firebase-tools`のメジャー相当変更を伴うため行わず、外部接続前にも再確認する。
+
+## 外部資源の終了状態
+
+2026-09-03に実FirebaseのPOC-001実行パスと匿名利用者12件を削除し、Firestoreイベント0件、匿名利用者0件を確認した。検証専用プロジェクト本体、Web App、Firestoreデータベース、RulesはPOC-005終了確認まで保持する。POC-002以降はそれぞれ別途明示承認を得るまで使用しない。
