@@ -10,7 +10,7 @@
 | 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md) |
 | 関連Issue | [#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | Approved |
-| 承認情報 | 2026-09-01にIssue #6の調査段階、2026-09-02に追加要望の詳細と本計画の更新を依頼者が承認。PoCは未承認 |
+| 承認情報 | 2026-09-01にIssue #6の調査段階、2026-09-02に追加要望とRES-005を依頼者が承認。2026-09-02にPOC-001だけ開始承認。POC-002～POC-005は未承認 |
 
 ## 結論
 
@@ -161,4 +161,5 @@ PoCは本番アプリケーションを作る作業ではない。画面、デ�
 - 本書はIssue #5の技術検証計画として承認済みである。
 - Issue #6のうち `RES-001`～`RES-004` の調査段階は開始承認済みである。
 - 調査結果に基づくPoC候補の絞込みは承認済みだが、技術採用を意味しない。
-- `POC-001`～`POC-005` は未承認であり、外部サービス、依存関係、作成資源、削除方法を提示して改めて明示承認を得るまで開始しない。
+- `POC-001`は[開始承認依頼書](poc-001-approval-request.md)の範囲に限って2026-09-02に開始承認済みである。
+- `POC-002`～`POC-005` は未承認であり、`POC-001`の結果と対象条件を提示して改めて明示承認を得るまで開始しない。

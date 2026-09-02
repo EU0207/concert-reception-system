@@ -1,2 +1,30 @@
 # Local-only notes. Ignore this directory at any depth.
 **/private-notes/
+
+# Secrets and machine-local configuration
+.env
+.env.*
+!.env.example
+*.local
+poc/POC-001/.firebaserc
+!poc/POC-001/.firebaserc.example
+
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+*.log
+
+# Firebase local state and emulator exports
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+firebase-export/
+
+# Playwright temporary and sensitive state
+test-results/
+playwright-report/
+blob-report/
+**/playwright/.auth/
+poc/POC-001/artifacts/raw/
