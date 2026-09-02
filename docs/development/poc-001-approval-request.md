@@ -68,7 +68,7 @@ React、Vue等のUIフレームワーク、QR解析ライブラリ、暗号化�
 
 ## 作成する外部資源
 
-依頼者のGoogleアカウントで、PoC専用と識別できる名称を付ける。正確なプロジェクトIDは作成前にIssue #6へ記録し、既存または本番用プロジェクトを流用しない。
+開発者のGoogleアカウントで、PoC専用と識別できる名称を付ける。正確なプロジェクトIDは作成前にIssue #6へ記録し、既存または本番用プロジェクトを流用しない。PoCプロジェクトを本番へ移行または流用せず、検証終了後に削除する。
 
 | 資源 | 設定 | 保存されるもの | 作成しないもの |
 |---|---|---|---|
@@ -78,6 +78,42 @@ React、Vue等のUIフレームワーク、QR解析ライブラリ、暗号化�
 | Firebase Authentication | Anonymous providerだけを有効化 | 6環境分以上の匿名UID、作成・最終利用メタデータ | メール、電話番号、実在アカウント |
 
 Firebase Hosting、Cloud Functions、Cloud Storage、Analytics、App Checkは使用しない。ローカル静的サーバーとエミュレーターで不足することが判明した場合、勝手に資源を追加せず理由と影響を提示して再承認を得る。
+
+## Googleアカウントと環境の分離
+
+### 管理主体
+
+| 環境 | Googleアカウント・所有者 | 用途 | 納品時の扱い |
+|---|---|---|---|
+| ローカルエミュレーター | 開発者のローカル環境 | 外部接続前の検証 | PoC専用データを削除し、共有キャッシュは残す |
+| POC-001 Firebaseプロジェクト | 開発者のGoogleアカウントをOwnerとする専用プロジェクト | 架空データによる技術検証だけ | 証跡採取後に削除し、本番へ移行しない |
+| 将来の本番Firebaseプロジェクト | 依頼者が指定する管理用GoogleアカウントをOwnerとする別プロジェクト | 承認済みシステムの本番運用 | 依頼者が継続所有し、開発者の一時権限は納品時に削除する |
+
+- 開発者のGoogleアカウント名、メールアドレス、ログイン情報、Firebase CLI認証トークンは、GitHub、ソース、文書、Issue、ログ、スクリーンショットへ保存しない。
+- `firebase login`の認証状態は開発者端末のユーザープロファイル内で管理し、リポジトリへコピーしない。CI用の長期トークンとサービスアカウント鍵はPOC-001では作成しない。
+- Firebase Web Appの設定値とFirebase用APIキーは、Firebase公式説明ではプロジェクト識別用で公開を前提としており、データ認可には使用されない。ただし、開発・本番の誤接続と公開物への環境情報混入を防ぐため、本プロジェクトでは環境変数で分離し、実値をGitへ保存しない。
+- データの保護はAPIキーの秘匿ではなく、Firebase Authentication、Firestore Security Rules、必要に応じて将来評価するApp Checkで行う。
+
+### 本番導入時の役割分担案
+
+本番利用時に依頼者だけでFirebaseの技術設定を行うことは前提にしない。依頼者が所有権を保持し、開発者が一時的な権限で設定を支援する。
+
+| 担当 | 実施内容 |
+|---|---|
+| 依頼者 | 管理用Googleアカウントの用意、復旧方法と2段階認証の確認、利用条件の確認、本番プロジェクトのOwner保持、開発者の一時招待と納品時の削除、重要通知の受領 |
+| 開発者 | 画面共有または手順書による作成支援、承認済みリージョン・無料プラン・Firestore・Authentication・Security Rules・Web Appの設定、接続確認、設定記録、操作説明 |
+| 共同確認 | Sparkプランと請求先未接続、使用サービス、権限一覧、データ保存先、バックアップ・削除方法、緊急時の連絡先、開発者権限削除後の動作 |
+
+依頼者が本番プロジェクトを作成してOwnerとなった後、開発者を設定期間だけEditorとして招待する単純な方法を第一案とする。Editorは広い変更権限を持つため、招待先メールアドレスを画面上で照合し、期間を限定し、設定完了後はViewerへ下げて引継ぎ確認を行った後に削除する。設計工程では必要権限を再確認し、より狭い定義済みロールだけで設定できる場合はそちらを優先する。開発者をOwnerにせず、請求設定を変更できる権限も渡さない。
+
+### 依頼者向け案内
+
+- 初回設定は、画面名・押す場所・期待表示をスクリーンショット付きで示す1回限りの手順書とチェックリストを用意する。秘密情報や実在のメールアドレスを画像へ含めない。
+- アカウント作成、Owner確認、開発者招待・削除など依頼者本人だけが行う操作は、画面共有で支援できる手順にする。
+- 公演作成、利用者管理、事前準備、締め処理など通常運用はアプリの管理画面から行い、日常的にFirebase Consoleを操作しない設計を基本とする。
+- 年1回でも実施できる開催前チェック、無料プラン・使用量・重要通知の確認、障害時の連絡先を運用手順へまとめる。
+- 本番環境の設定値は環境別テンプレートと検証コマンドで確認できるようにし、手入力項目を最小化する。自動化がOwner権限や秘密情報を過剰に要求する場合は採用しない。
+- この役割分担と案内方法は設計・リリース工程の成果物へ引き継ぎ、依頼者による受入確認の対象にする。
 
 ## 保存データ
 
@@ -224,6 +260,8 @@ poc/POC-001/artifacts/raw/
 | [Delete Firestore data](https://firebase.google.com/docs/firestore/manage-data/delete-data) | 親文書削除ではサブコレクションが残ること、CLI再帰削除の利用量 |
 | [Firebase CLI reference](https://firebase.google.com/docs/cli) | Firestore文書・データベースの削除コマンド |
 | [Delete Firebase project](https://support.google.com/firebase/answer/9137886) | プロジェクト削除の影響と30日以内の復元可能期間 |
+| [Firebase IAM basic roles](https://firebase.google.com/docs/projects/iam/roles-basic) | Owner、Editor、Viewerの権限差とOwner維持の重要性 |
+| [Firebase API keys](https://firebase.google.com/docs/projects/api-keys) | Firebase用APIキーはプロジェクト識別用で公開前提であり、認可はSecurity Rules等で行うこと |
 | [Playwright isolation](https://playwright.dev/docs/browser-contexts) | BrowserContextごとにStorage等が分離されること |
 | [idb](https://github.com/jakearchibald/idb) | IndexedDBに近いAPI、対応ブラウザ、型付き利用 |
 

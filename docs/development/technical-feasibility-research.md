@@ -24,6 +24,7 @@
 - `RQ-001`～`RQ-006` は詳細確認を終え、`REQ-F-032`～`REQ-F-037`、`REQ-NF-012`、`AC-022`～`AC-027` として正式要件化した。これらを反映したPoCは未承認である。
 - `RES-005`は架空の12ケースで机上レビューを行い、割当結果または未割当理由を一意に説明できたため合格とした。共通の優先規則は最終要件承認時の確認対象とする。
 - `POC-001`の依存関係、専用Firebase資源、保存データ、削除手順、無料枠内の停止上限、`.gitignore`更新案を具体化した。PoC開始は引き続き未承認である。
+- 開発用Firebaseは開発者アカウントの専用プロジェクト、本番は依頼者がOwnerとなる別プロジェクトに分離する。アカウント情報をGitへ保存せず、本番設定は手順書と一時権限による開発者支援で管理負担を抑える。
 
 ## 調査結果一覧
 
@@ -234,6 +235,9 @@
 | SRC-033 | ブラウザ環境分離 | [Playwright: Isolation](https://playwright.dev/docs/browser-contexts) | BrowserContextごとのStorage等の分離 |
 | SRC-034 | IndexedDB補助 | [idb](https://github.com/jakearchibald/idb) | IndexedDBに近いAPI、対応ブラウザ、型付き操作 |
 | SRC-035 | Firestore配置先 | [Firebase: Cloud Firestore locations](https://firebase.google.com/docs/firestore/locations) | `asia-northeast1`が東京リージョンであること |
+| SRC-036 | Firebase権限 | [Firebase: Owner, Editor, and Viewer roles](https://firebase.google.com/docs/projects/iam/roles-basic) | Ownerの管理責任、Editorの変更権限、Viewerの参照権限 |
+| SRC-037 | Firebase APIキー | [Firebase: Manage API keys](https://firebase.google.com/docs/projects/api-keys) | APIキーは識別用で公開前提、認可はSecurity Rules等で行うこと |
+| SRC-038 | Firebase CLI認証 | [Firebase CLI reference](https://firebase.google.com/docs/cli) | ローカルGoogleログイン、トークン管理、環境別プロジェクト指定 |
 
 ## 未実施事項
 
