@@ -12,6 +12,7 @@ poc/POC-001/.firebaserc
 # Dependencies and generated output
 node_modules/
 dist/
+dev-dist/
 coverage/
 *.log
 

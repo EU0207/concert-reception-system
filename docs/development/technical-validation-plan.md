@@ -7,7 +7,7 @@
 | 目的 | Issue #5のレビュー結果を記録し、Issue #6で実施する調査・PoCの範囲、順序、評価方法、合格基準を合意する |
 | 主な読者 | 依頼者、開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md) |
 | 関連Issue | [#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | Approved |
 | 承認情報 | 2026-09-01にIssue #6の調査段階、2026-09-02に追加要望とRES-005を依頼者が承認。2026-09-02にPOC-001だけ開始承認。POC-002～POC-005は未承認 |
@@ -91,6 +91,7 @@ PoCは本番アプリケーションを作る作業ではない。画面、デ�
 
 - Issue #6のPoC段階は、依頼者が更新後の対象、合格基準、外部サービス、依存関係、削除方法を確認して明示的に承認するまで開始しない。
 - `POC-001`の具体的な承認対象は[POC-001開始承認依頼書](poc-001-approval-request.md)に記載し、同書への明示承認をIssue #6へ記録する。
+- `POC-001`は2026-09-02にローカルエミュレーターと専用実Firebaseの両方で合格した。結果と制約は[POC-001実施結果報告書](poc-001-result.md)に記載する。
 - 架空データだけを使用し、実在する来場者情報を使用しない。
 - APIキー、認証情報、個人情報をリポジトリへ保存しない。
 - 外部サービスへの接続、依存関係の追加、契約、課金は、必要性と影響を説明して個別承認を得るまで行わない。
