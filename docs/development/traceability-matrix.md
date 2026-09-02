@@ -134,6 +134,7 @@
 | CONF-017 | 2027年以降、1日1公演、1公演最大500枚、費用0円を前提とする | TBD-009 | REQ-B-002、REQ-NF-010／AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-019 | 開発用Firebaseと依頼者所有の本番環境を分離し、初期設定・引継ぎ・通常運用の管理負担を抑える | TBD-010、TBD-012 | REQ-NF-009、REQ-NF-011／AC-017、AC-020 | [POC-001開始承認依頼書](poc-001-approval-request.md#googleアカウントと環境の分離) |
 | CONF-018 | 公演後に残す基本データへ公演時点の会場名・住所を追加する | TBD-008、REQ-F-024 | AC-013 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-020 | 検証専用FirebaseプロジェクトをPOC-005終了確認まで保持し、各PoC終了時に架空データ・不要利用者を削除し、全PoC終了後に本体を1回削除する | TBD-012 | REQ-NF-010、REQ-NF-011／AC-020 | [POC-001実施結果報告書](poc-001-result.md#外部資源の終了処理) |
 
 ## 更新ルール
 
