@@ -4,10 +4,10 @@
 
 | 項目 | 内容 |
 |---|---|
-| 目的 | Issue #6の調査段階 `RES-001`～`RES-004` の結果を記録し、PoC対象を選択できる状態にする |
+| 目的 | Issue #6の調査段階 `RES-001`～`RES-005` の結果を記録し、PoC対象を選択できる状態にする |
 | 主な読者 | 依頼者、開発担当者、確認担当者 |
-| 調査日 | 2026-09-01 |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[トレーサビリティ表](traceability-matrix.md) |
+| 調査日 | 2026-09-01～2026-09-02 |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[トレーサビリティ表](traceability-matrix.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | In Review |
 | 承認情報 | 2026-09-01に調査結果に基づく第一PoC候補を依頼者が確認。技術選定、PoC、本番実装は未実施 |
@@ -22,6 +22,9 @@
 - 端末内データはブラウザ保存だけでは機密性を保証できない。保存項目の最小化、アプリケーション層での暗号化候補、認証情報の安全な保持、統合確認後の削除をPoC条件として具体化する必要がある。
 - 無料枠は現在想定する1日1公演・1公演500人、6つ以上の独立環境、年1～2回、利用者約10人の規模で成立する可能性が高い。ただし、利用量、料金、無料枠はPoC承認前、採用前、各開催前に再確認する。
 - `RQ-001`～`RQ-006` は詳細確認を終え、`REQ-F-032`～`REQ-F-037`、`REQ-NF-012`、`AC-022`～`AC-027` として正式要件化した。これらを反映したPoCは未承認である。
+- `RES-005`は架空の12ケースで机上レビューを行い、割当結果または未割当理由を一意に説明できたため合格とした。共通の優先規則は最終要件承認時の確認対象とする。
+- `POC-001`の依存関係、専用Firebase資源、保存データ、削除手順、無料枠内の停止上限、`.gitignore`更新案を具体化した。PoC開始は引き続き未承認である。
+- 開発用Firebaseは開発者アカウントの専用プロジェクト、本番は依頼者がOwnerとなる別プロジェクトに分離する。アカウント情報をGitへ保存せず、本番設定は手順書と一時権限による開発者支援で管理負担を抑える。
 
 ## 調査結果一覧
 
@@ -33,6 +36,11 @@
 | RES-002 | P0 | 条件付き合格 | 管理サービス方式と独自同期方式の双方にPoC可能な候補がある | 6つ以上の独立環境でイベント統合、競合、再読取りメモ、スタッフ連絡、再送、欠落を確認する | TBD-002、REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004、AC-011、AC-015、AC-024、AC-027 |
 | RES-003 | P1 | 条件付き合格 | 認証、役割制御、失効、暗号化の候補はあるが、オフライン時の失効とブラウザ保存の限界が残る | 個別認証、権限停止、任意項目の端末配布、端末内暗号化、鍵、締め処理後削除を確認する | TBD-003、TBD-004、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-012、AC-009、AC-013、AC-014、AC-023 |
 | RES-004 | P1 | 合格 | 費用0円で開始できる候補が複数あり、想定規模は公表無料枠内に収まる可能性が高い | PoC承認前に最新料金と契約条件を再確認し、無料枠超過時の停止手順を決める | TBD-009、TBD-012、REQ-NF-010、REQ-NF-011、AC-020 |
+| RES-005 | P1 | 合格 | 最大10人、上限超過、連続席不足、特別席・確保席、並び順、手動操作、発券後変更の12ケースで期待結果を一意に説明できた | 共通の優先規則を最終要件承認時に確認し、入力と期待結果をAC-026の自動テストへ引き継ぐ | REQ-F-036、RQ-005、AC-026、CONF-015 |
+
+## RES-005 自動座席配置
+
+[RES-005自動座席配置机上レビュー記録](res-005-seat-allocation-desk-review.md)に、架空の席・来場者を使った12ケース、共通の優先規則、期待する割当・未割当理由、履歴、AC-026への引継ぎを記録した。PoCコード、依存関係、外部サービスは使用していない。
 
 ## RES-001 対応環境とブラウザ機能
 
@@ -220,11 +228,21 @@
 | SRC-026 | Supabase停止 | [Supabase: Free project pausing](https://supabase.com/docs/guides/platform/free-project-pausing) | 低活動時の一時停止 |
 | SRC-027 | Supabase同期 | [Supabase: Postgres Changes](https://supabase.com/docs/guides/realtime/postgres-changes) / [Realtime troubleshooting](https://supabase.com/docs/guides/troubleshooting/realtime-postgres-changes-troubleshooting) | 購読、再照会が必要な間隙 |
 | SRC-028 | Supabase認証 | [Supabase JavaScript Auth](https://supabase.com/docs/reference/javascript/auth) / [User sessions](https://supabase.com/docs/guides/auth/sessions) | ブラウザでの既定セッション保存 |
+| SRC-029 | Firebaseローカル検証 | [Firebase: Local Emulator Suite](https://firebase.google.com/docs/emulator-suite/install_and_configure) | 必要なNode.js・JDK・CLI、エミュレーターデータのexport |
+| SRC-030 | Firestore削除 | [Firebase: Delete data](https://firebase.google.com/docs/firestore/manage-data/delete-data) / [Firebase CLI](https://firebase.google.com/docs/cli) | サブコレクションを含む再帰削除、データベース削除 |
+| SRC-031 | Firebaseプロジェクト削除 | [Firebase Help: Delete your project](https://support.google.com/firebase/answer/9137886) | 削除の影響と30日以内の復元可能期間 |
+| SRC-032 | Node.js LTS | [Node.js Releases](https://nodejs.org/en/about/previous-releases) | Node.js 24のLTS状態 |
+| SRC-033 | ブラウザ環境分離 | [Playwright: Isolation](https://playwright.dev/docs/browser-contexts) | BrowserContextごとのStorage等の分離 |
+| SRC-034 | IndexedDB補助 | [idb](https://github.com/jakearchibald/idb) | IndexedDBに近いAPI、対応ブラウザ、型付き操作 |
+| SRC-035 | Firestore配置先 | [Firebase: Cloud Firestore locations](https://firebase.google.com/docs/firestore/locations) | `asia-northeast1`が東京リージョンであること |
+| SRC-036 | Firebase権限 | [Firebase: Owner, Editor, and Viewer roles](https://firebase.google.com/docs/projects/iam/roles-basic) | Ownerの管理責任、Editorの変更権限、Viewerの参照権限 |
+| SRC-037 | Firebase APIキー | [Firebase: Manage API keys](https://firebase.google.com/docs/projects/api-keys) | APIキーは識別用で公開前提、認可はSecurity Rules等で行うこと |
+| SRC-038 | Firebase CLI認証 | [Firebase CLI reference](https://firebase.google.com/docs/cli) | ローカルGoogleログイン、トークン管理、環境別プロジェクト指定 |
 
 ## 未実施事項
 
-- `RES-005` と `POC-001`～`POC-005` の実行
+- `POC-001`～`POC-005` の実行
 - QR解析ライブラリ、フレームワーク、外部サービス、認証方式、暗号化方式の採用
 - 外部サービスのアカウント・プロジェクト作成、接続、契約、課金
-- 依存関係の追加、PoCコード、本番アプリケーションの作成
+- `.gitignore`のPoC用拡張、依存関係の追加、PoCコード、本番アプリケーションの作成
 - Issue #6のPoC開始承認と、PoC結果に基づく要件・受入条件の最終調整
