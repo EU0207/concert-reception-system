@@ -94,7 +94,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
       <div class="form-grid">
         <label>機種<select id="device-model"><option>iPhone 17</option><option>iPhone 13 mini</option><option>Galaxy Z Fold8</option></select></label>
         <label>OS版<input id="os-version" placeholder="例: iOS 26.6.1" /></label>
-        <label>ブラウザー版<input id="browser-version" placeholder="例: Safari 26.6" /></label>
+        <label>ブラウザー情報（自動）<input id="browser-version" readonly /></label>
         <label>紙の成功回数<input id="paper-scans" type="number" min="0" value="0" /></label>
         <label>別画面の成功回数<input id="screen-scans" type="number" min="0" value="0" /></label>
         <label>最大読取り時間(ms)<input id="maximum-scan-ms" type="number" min="0" value="0" /></label>
@@ -132,6 +132,23 @@ const offlineStatus = byId<HTMLParagraphElement>("offline-status");
 const scanResult = byId<HTMLDivElement>("scan-result");
 const nextButton = byId<HTMLButtonElement>("next-scan");
 const ticketPreview = byId<HTMLDivElement>("ticket-preview");
+const deviceModel = byId<HTMLSelectElement>("device-model");
+const browserVersion = byId<HTMLInputElement>("browser-version");
+
+function detectedBrowserInfo(model: DeviceResult["deviceModel"]): string {
+  if (model.startsWith("iPhone")) return "Safari（iOS標準・OS版に準拠）";
+  const chromeVersion = navigator.userAgent.match(/(?:Chrome|CriOS)\/([\d.]+)/)?.[1];
+  return chromeVersion
+    ? `Chrome ${chromeVersion}（自動取得）`
+    : "Chrome（Android標準・詳細版は自動取得不可）";
+}
+
+function updateBrowserInfo(): void {
+  browserVersion.value = detectedBrowserInfo(deviceModel.value as DeviceResult["deviceModel"]);
+}
+
+deviceModel.addEventListener("change", updateBrowserInfo);
+updateBrowserInfo();
 
 registerSW({
   immediate: true,
@@ -286,7 +303,7 @@ function readDeviceResult(): DeviceResult {
   const value = (id: string) => byId<HTMLInputElement>(id).value;
   const checked = (id: string) => byId<HTMLInputElement>(id).checked;
   return {
-    deviceModel: byId<HTMLSelectElement>("device-model").value as DeviceResult["deviceModel"],
+    deviceModel: deviceModel.value as DeviceResult["deviceModel"],
     osVersion: value("os-version"),
     browserVersion: value("browser-version"),
     paperScans: Number(value("paper-scans")),
