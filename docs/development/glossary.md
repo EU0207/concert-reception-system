@@ -51,6 +51,7 @@
 | 締め処理 | 公演終了、全送信確認、管理者確認の後に、公演を終了状態とし端末データ削除へ進む操作 |
 | PoC | Proof of Conceptの略。技術方式を採用または本番実装する前に、限定した範囲で実現可能性や制約を確認する検証 |
 | Firebase | Googleが提供するアプリ開発向けサービス群。本件のPOC-001では認証とCloud Firestoreだけを検証した |
+| Firebase Hostingプレビューチャネル | live公開を変更せず、期限付きの公開URLへ静的Webアプリを配信して確認するFirebase Hostingの機能 |
 | Firebase Console | Firebaseのプロジェクト、利用サービス、権限などをブラウザで管理する画面 |
 | Cloud Firestore | Firebaseで利用できる文書形式のデータベース |
 | Sparkプラン | Firebaseの請求先登録を必要としない無料プラン。無料枠超過時の利用継続を保証するものではない |

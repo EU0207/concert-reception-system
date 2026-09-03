@@ -9,8 +9,8 @@
 | 実施日 | 2026-09-03 |
 | 関連文書 | [技術検証計画書](technical-validation-plan.md)、[開始承認依頼書](poc-002-approval-request.md)、[検証集計](../../poc/POC-002/artifacts/poc-002-verification-summary.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
-| 状態 | In Review |
-| 承認情報 | POC-002の開始は承認済み。結果、技術採用、POC-003以降、本番実装は未承認 |
+| 状態 | Approved |
+| 承認情報 | POC-002の開始は承認済み。2026-09-03に依頼者が結果を確認し、PR #16のmain統合を承認。技術採用、POC-003以降、本番実装はこの結果承認に含まない |
 
 ## 結論
 

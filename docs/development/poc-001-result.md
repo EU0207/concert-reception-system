@@ -9,8 +9,8 @@
 | 実施日 | 2026-09-02 |
 | 関連文書 | [技術検証計画書](technical-validation-plan.md)、[開始承認依頼書](poc-001-approval-request.md)、[Firebase初期設定・引継ぎ手順書](../client/firebase-initial-setup-guide.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
-| 状態 | In Review |
-| 承認情報 | POC-001の開始は承認済み。2026-09-03に検証プロジェクト保持方針を依頼者が決定。結果、技術採用、POC-002以降、本番実装は未承認 |
+| 状態 | Approved |
+| 承認情報 | POC-001の開始は承認済み。2026-09-03に検証プロジェクト保持方針を依頼者が決定し、結果を確認してPR #14のmain統合を承認。技術採用、後続PoC、本番実装はこの結果承認に含まない |
 
 ## 結論
 
@@ -93,7 +93,7 @@ Firebase Hosting、Cloud Functions、Cloud Storage、Analytics、App Check、Ide
 - オフライン中の端末間では重複受付を即時に防止できず、復旧後の競合対応が必要である。
 - 実運用性能、共有10秒上限、当日通信量20MB以下は`POC-002`で別途確認する必要がある。
 - 端末内個人情報の暗号化と締め処理後削除は`POC-004`の対象である。
-- Firebaseの採用、POC-002以降、本番プロジェクト作成は未承認である。
+- Firebaseの採用、本番プロジェクト作成は未承認である。後続PoCはそれぞれ個別承認を必要とする。
 
 ## 外部資源の終了処理
 
