@@ -1,0 +1,58 @@
+# POC-003 実機QR・電子チケット
+
+## 位置づけ
+
+Issue #6で2026-09-03に明示承認された`POC-003`専用の技術検証である。本番アプリケーションではなく、すべて架空データを使用する。範囲、依存関係、外部資源、保存・削除、費用は[POC-003開始承認依頼書](../../docs/development/poc-003-approval-request.md)に従う。
+
+## 確認対象
+
+- SafariとChromeの実機カメラによるQR読取り
+- 「次へ」前の連続読取り防止と、オフラインIndexedDB保存
+- iPhone 17、iPhone 13 mini、Galaxy Z Fold8外側・内側画面
+- A6縦1ページPDF、紙・別端末画面からの読取り
+- 確認コード、座席変更時のQR維持、紛失再発行時の旧QR拒否
+- 主担当・代理だけの500人分ZIP生成
+
+認証強度、実際の権限制御、Firestore同期、暗号化、本番利用は対象外である。
+
+## 固定した直接依存関係
+
+| パッケージ | 版 | 用途 | ライセンス |
+|---|---:|---|---|
+| `@zxing/browser` | 0.2.1 | 実機カメラ入力 | MIT |
+| `@zxing/library` | 0.23.0 | QR解析 | Apache-2.0 |
+| `idb` | 8.0.3 | IndexedDB操作 | ISC |
+| `jszip` | 3.10.1 | 500件PDFのZIP化 | MIT OR GPL-3.0-or-later |
+| `pdf-lib` | 1.17.1 | A6 PDF生成 | MIT |
+| `qrcode` | 1.5.4 | 架空QR生成 | MIT |
+
+完全な依存関係は`package-lock.json`で固定する。Firebase SDKは実行時依存へ追加せず、`firebase-tools`は期限付きHosting配信にだけ使う。直接依存のライセンスはローカルに導入された各`package.json`で確認済みである。`npm audit`による外部照合は、依存関係情報をnpmレジストリへ送信するため、明示許可を得てから実施する。HighまたはCriticalが検出された場合は配信を停止する。
+
+## ローカル確認
+
+```powershell
+npm install
+npm test
+npm run build
+npm run test:e2e
+```
+
+実Firebase設定はアプリへ含めない。Hosting配信にはローカルFirebase CLIの認証状態と明示的な`--project`指定だけを使う。
+
+## 外部配信
+
+ローカル確認後、liveではなく1日期限のプレビューチャネルだけへ配信する。実施日を含む正確なチャネルIDを記録する。
+
+```powershell
+firebase hosting:channel:deploy poc-003-YYYYMMDD --expires 1d --project PROJECT_ID
+```
+
+試験終了後、同じチャネルIDだけを照合して削除する。プレビューURLは公開URLなので、架空データ以外を入力・表示しない。
+
+## 実機結果
+
+各実機は画面内の確認票を完了し、`FAKE-P003-device-result-...json`を保存して開発担当者へ渡す。操作順は[POC-003実機確認手順書](../../docs/development/poc-003-device-test-guide.md)に従う。
+
+## 終了処理
+
+実機結果を受領後、プレビューチャネル、各端末のPOC-003サイトデータ・カメラ許可、`FAKE-P003-`で始まるダウンロード、生の自動試験成果物を限定削除する。Firebaseプロジェクトと既定HostingサイトはPOC-005終了確認まで保持する。
