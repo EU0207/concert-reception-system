@@ -51,6 +51,19 @@ firebase hosting:channel:deploy poc-003-YYYYMMDD --expires 1d --project PROJECT_
 
 試験終了後、同じチャネルIDだけを照合して削除する。プレビューURLは公開URLなので、架空データ以外を入力・表示しない。
 
+### 2026-09-03 配信記録
+
+| 項目 | 記録 |
+|---|---|
+| Firebaseプロジェクト | `crs-poc-001-20260902-01` |
+| Hostingサイト | `crs-poc-001-20260902-01`（既存の既定サイト） |
+| プレビューチャネル | `poc-003-20260903` |
+| 配信回数 | 2回（初回配信後、入口のキャッシュ制御修正で再配信） |
+| 有効期限 | 2026-09-04 21:02:29（JST） |
+| 外部確認 | HTTP 200、想定タイトル、JavaScript入口、`Cache-Control: no-store, no-cache`を確認 |
+
+プレビューURLは実機確認担当者へ直接共有する。期限終了または試験終了時に、このチャネルだけを照合して削除する。
+
 ## 実機結果
 
 各実機は画面内の確認票を完了し、`FAKE-P003-device-result-...json`を保存して開発担当者へ渡す。操作順は[POC-003実機確認手順書](../../docs/development/poc-003-device-test-guide.md)に従う。
