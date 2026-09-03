@@ -1,0 +1,33 @@
+{
+  "name": "concert-reception-poc-002",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "POC-002: reception performance, synchronization latency, and network usage",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "packageManager": "npm@12.0.2",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "emulators": "firebase emulators:start --only auth,firestore",
+    "emulators:test": "firebase emulators:exec --only auth,firestore \"npm run test:e2e\""
+  },
+  "dependencies": {
+    "firebase": "12.18.0",
+    "idb": "8.0.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "fake-indexeddb": "6.2.5",
+    "firebase-tools": "15.28.2",
+    "typescript": "7.0.2",
+    "vite": "8.2.2",
+    "vite-plugin-pwa": "1.3.0",
+    "vitest": "4.1.11"
+  }
+}

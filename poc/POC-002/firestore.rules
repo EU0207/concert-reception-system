@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    match /pocRuns/{runId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'runId', 'performanceId', 'createdAt', 'syntheticDataOnly'
+        ])
+        && request.resource.data.runId == runId
+        && request.resource.data.syntheticDataOnly == true;
+      allow update, delete: if false;
+
+      match /events/{eventId} {
+        allow read: if signedIn();
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly([
+            'eventId', 'runId', 'performanceId', 'eventType', 'deviceId',
+            'actorId', 'authUid', 'clientOccurredAt', 'serverReceivedAt', 'payload'
+          ])
+          && request.resource.data.eventId == eventId
+          && request.resource.data.runId == runId
+          && request.resource.data.authUid == request.auth.uid;
+        allow update, delete: if false;
+      }
+    }
+  }
+}
