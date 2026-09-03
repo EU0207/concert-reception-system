@@ -10,6 +10,8 @@ poc/POC-001/.firebaserc
 !poc/POC-001/.firebaserc.example
 poc/POC-002/.firebaserc
 !poc/POC-002/.firebaserc.example
+poc/POC-003/.firebaserc
+!poc/POC-003/.firebaserc.example
 
 # Dependencies and generated output
 node_modules/
@@ -34,4 +36,7 @@ blob-report/
 poc/POC-001/artifacts/raw/
 poc/POC-002/artifacts/raw/
 poc/POC-002/profiles/
+poc/POC-003/artifacts/raw/
+poc/POC-003/downloads/
+poc/POC-003/device-evidence/
 *.netlog.json
