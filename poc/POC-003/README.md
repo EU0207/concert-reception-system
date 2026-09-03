@@ -26,7 +26,9 @@ Issue #6で2026-09-03に明示承認された`POC-003`専用の技術検証で�
 | `pdf-lib` | 1.17.1 | A6 PDF生成 | MIT |
 | `qrcode` | 1.5.4 | 架空QR生成 | MIT |
 
-完全な依存関係は`package-lock.json`で固定する。Firebase SDKは実行時依存へ追加せず、`firebase-tools`は期限付きHosting配信にだけ使う。直接依存のライセンスはローカルに導入された各`package.json`で確認済みである。`npm audit`による外部照合は、依存関係情報をnpmレジストリへ送信するため、明示許可を得てから実施する。HighまたはCriticalが検出された場合は配信を停止する。
+完全な依存関係は`package-lock.json`で固定する。Firebase SDKは実行時依存へ追加せず、`firebase-tools`は期限付きHosting配信にだけ使う。直接依存のライセンスはローカルに導入された各`package.json`で確認済みである。
+
+2026-09-03に依頼者の明示許可を得て`npm audit --audit-level=high`を実行し、High 0件、Critical 0件を確認した。Moderateは8件で、いずれも配信用の開発依存`firebase-tools`またはその間接依存に関係する。監査が示す強制修正は`firebase-tools`の版を巻き戻すため適用せず、CLIをアプリへ同梱しないこと、期限付きプレビューの配信時だけ使用することで分離する。
 
 ## ローカル確認
 
