@@ -5,6 +5,11 @@ test.describe.configure({ timeout: 360_000 });
 test("generates tickets, decodes QR, enforces rules, and remains usable offline", async ({ page, context }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "実機QR・電子チケット確認" })).toBeVisible();
+  await expect(page.locator("#browser-version")).toHaveAttribute("readonly", "");
+  await expect(page.locator("#browser-version")).toHaveValue("Safari（iOS標準・OS版に準拠）");
+  await page.locator("#device-model").selectOption({ label: "Galaxy Z Fold8" });
+  await expect(page.locator("#browser-version")).toHaveValue(/Chrome/);
+  await page.locator("#device-model").selectOption({ label: "iPhone 17" });
   await page.evaluate(() => window.__poc003.prepare());
 
   const ticketCount = await page.evaluate(async () => (await window.__poc003.listTickets()).length);
