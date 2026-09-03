@@ -8,12 +8,15 @@
 *.local
 poc/POC-001/.firebaserc
 !poc/POC-001/.firebaserc.example
+poc/POC-002/.firebaserc
+!poc/POC-002/.firebaserc.example
 
 # Dependencies and generated output
 node_modules/
 dist/
 dev-dist/
 coverage/
+*.tsbuildinfo
 *.log
 
 # Firebase local state and emulator exports
@@ -29,3 +32,6 @@ playwright-report/
 blob-report/
 **/playwright/.auth/
 poc/POC-001/artifacts/raw/
+poc/POC-002/artifacts/raw/
+poc/POC-002/profiles/
+*.netlog.json

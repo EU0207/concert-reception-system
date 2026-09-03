@@ -46,7 +46,8 @@
 | RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 依頼者、開発担当者、確認担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
 | POC-001開始承認依頼書 | [poc-001-approval-request.md](development/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | Approved |
 | POC-001実施結果報告書 | [poc-001-result.md](development/poc-001-result.md) | 完全オフライン受付と復旧後統合の検証結果、制約、次の判断材料を記録する | 依頼者、開発担当者、確認担当者 | POC-001完了時 | 結果確認、終了処理、次の判断時 | In Review |
-| POC-002開始承認依頼書 | [poc-002-approval-request.md](development/poc-002-approval-request.md) | 性能・通信量PoC開始前に測定方法、再利用、外部資源、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-002承認前 | 測定条件または承認状態の変更時 | In Review |
+| POC-002開始承認依頼書 | [poc-002-approval-request.md](development/poc-002-approval-request.md) | 性能・通信量PoC開始前に測定方法、再利用、外部資源、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-002承認前 | 測定条件または承認状態の変更時 | Approved |
+| POC-002実施結果報告書 | [poc-002-result.md](development/poc-002-result.md) | QR判定後の受付性能、同期、通信量の検証結果、制約、終了処理を記録する | 依頼者、開発担当者、確認担当者 | POC-002完了時 | 結果確認、次の判断時 | In Review |
 | ADR案内 | [adr-guide.md](development/decisions/adr-guide.md) | 重要な判断の記録方法を定める | 開発担当者 | 重要な判断の発生時 | 運用変更時 | Draft |
 
 ## テンプレート
