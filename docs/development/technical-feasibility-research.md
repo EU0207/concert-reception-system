@@ -7,7 +7,7 @@
 | 目的 | Issue #6の調査段階 `RES-001`～`RES-005` の結果を記録し、PoC対象を選択できる状態にする |
 | 主な読者 | 依頼者、開発担当者、確認担当者 |
 | 調査日 | 2026-09-01～2026-09-02 |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[トレーサビリティ表](traceability-matrix.md) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[トレーサビリティ表](traceability-matrix.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | In Review |
 | 承認情報 | 2026-09-01に第一PoC候補、2026-09-02にRES-005とPOC-001開始を依頼者が確認。技術採用、本番実装は未承認 |
@@ -27,6 +27,7 @@
 - 開発用Firebaseは開発者アカウントの専用プロジェクト、本番は依頼者がOwnerとなる別プロジェクトに分離する。アカウント情報をGitへ保存せず、本番設定は手順書と一時権限による開発者支援で管理負担を抑える。
 - `POC-001`は、6分離環境、架空QR 500件、復旧後508イベント統合、競合、再読取り、重要連絡・既読、1環境停止後の継続を、ローカルエミュレーターと実Firebaseの両方で確認し合格した。これはFirebase方式の限定した成立性であり、技術採用や`POC-002`以降の合格ではない。
 - POC-001終了時にFirestoreの架空データと匿名利用者を削除して残存0件を確認した。検証専用Firebaseプロジェクト本体は、プロジェクト作成上限への影響を抑えるためPOC-005終了確認まで保持し、全PoC終了後に1回だけ削除する。
+- `POC-002`はPOC-001の固定依存関係と既存Firebase資源だけを再利用し、デコード済み架空QR以降の判定、500件処理、共有時間、Chromium外部ソケット通信量を測る案を具体化した。追加パッケージ、追加サービス、課金は不要であり、開始は未承認である。
 
 ## 調査結果一覧
 
