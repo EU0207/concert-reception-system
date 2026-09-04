@@ -130,13 +130,13 @@ describe("Firebase Authentication and Security Rules", () => {
 
     await expect(getDoc(doc(clients.receptionist!.db, "poc004Runs", runId, "publicRecords", "ticket"))).resolves.toMatchObject({ exists: expect.any(Function) });
     await expect(getDoc(doc(clients.deputy!.db, "poc004Runs", runId, "restrictedFields", "visitor"))).resolves.toMatchObject({ exists: expect.any(Function) });
-    await expect(getDoc(doc(clients.receptionist!.db, "poc004Runs", runId, "restrictedFields", "visitor"))).rejects.toThrow(/permission/i);
-    await expect(getDoc(doc(clients.temporary!.db, "poc004Runs", runId, "restrictedFields", "visitor"))).rejects.toThrow(/permission/i);
+    await expect(getDoc(doc(clients.receptionist!.db, "poc004Runs", runId, "restrictedFields", "visitor"))).rejects.toMatchObject({ code: "permission-denied" });
+    await expect(getDoc(doc(clients.temporary!.db, "poc004Runs", runId, "restrictedFields", "visitor"))).rejects.toMatchObject({ code: "permission-denied" });
   });
 
   it("lets temporary administrators manage public work but not memberships", async () => {
     await expect(setDoc(doc(clients.temporary!.db, "poc004Runs", runId, "publicRecords", "temporary-note"), { value: "FAKE" })).resolves.toBeUndefined();
-    await expect(updateDoc(doc(clients.temporary!.db, "poc004Runs", runId, "members", clients.receptionist!.uid), { active: false })).rejects.toThrow(/permission/i);
+    await expect(updateDoc(doc(clients.temporary!.db, "poc004Runs", runId, "members", clients.receptionist!.uid), { active: false })).rejects.toMatchObject({ code: "permission-denied" });
   });
 
   it("blocks expired restricted values", async () => {
@@ -144,18 +144,18 @@ describe("Firebase Authentication and Security Rules", () => {
       ciphertext: "FAKE-CIPHERTEXT",
       expiresAt: Timestamp.fromDate(new Date(Date.now() - 1_000))
     });
-    await expect(getDoc(doc(clients.owner!.db, "poc004Runs", runId, "restrictedFields", "expired"))).rejects.toThrow(/permission/i);
+    await expect(getDoc(doc(clients.owner!.db, "poc004Runs", runId, "restrictedFields", "expired"))).rejects.toMatchObject({ code: "permission-denied" });
   });
 
   it("stops a lost-device account after the active flag reaches the server", async () => {
     await expect(getDoc(doc(clients.lost!.db, "poc004Runs", runId, "publicRecords", "ticket"))).resolves.toBeDefined();
     await updateDoc(doc(clients.owner!.db, "poc004Runs", runId, "members", clients.lost!.uid), { active: false });
-    await expect(getDoc(doc(clients.lost!.db, "poc004Runs", runId, "publicRecords", "ticket"))).rejects.toThrow(/permission/i);
+    await expect(getDoc(doc(clients.lost!.db, "poc004Runs", runId, "publicRecords", "ticket"))).rejects.toMatchObject({ code: "permission-denied" });
   });
 
   it("keeps audit events append-only for non-cleanup operations", async () => {
     const auditRef = doc(clients.owner!.db, "poc004Runs", runId, "auditEvents", "owner-audit");
     await setDoc(auditRef, { actorUid: clients.owner!.uid, action: "FAKE-CLOSE", createdAt: Timestamp.now() });
-    await expect(updateDoc(auditRef, { action: "CHANGED" })).rejects.toThrow(/permission/i);
+    await expect(updateDoc(auditRef, { action: "CHANGED" })).rejects.toMatchObject({ code: "permission-denied" });
   });
 });
