@@ -61,6 +61,7 @@ firebase hosting:channel:deploy poc-003-YYYYMMDD --expires 1d --project PROJECT_
 | 配信回数 | 3回（初回、入口のキャッシュ制御修正、ブラウザー情報の自動表示） |
 | 有効期限 | 2026-09-04 23:33:30（JST） |
 | 外部確認 | HTTP 200、想定タイトル、JavaScript入口、`Cache-Control: no-store, no-cache`を確認 |
+| 追加承認 | 2026-09-03、保存済み受付記録数の表示修正に限り4回目の配信を承認。費用、外部サービス、保存データは変更しない |
 
 プレビューURLは実機確認担当者へ直接共有する。期限終了または試験終了時に、このチャネルだけを照合して削除する。
 
