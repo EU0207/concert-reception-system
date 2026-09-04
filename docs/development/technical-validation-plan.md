@@ -10,7 +10,7 @@
 | 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実機確認手順書](poc-003-device-test-guide.md)、[POC-003実施結果報告書](poc-003-result.md) |
 | 関連Issue | [#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | Approved |
-| 承認情報 | 2026-09-01にIssue #6の調査段階、2026-09-02に追加要望とRES-005を依頼者が承認。2026-09-02にPOC-001、2026-09-03にPOC-002とPOC-003をそれぞれ対象限定で開始承認。POC-003結果は2026-09-04に確認済み。POC-004は進行意思を確認し具体条件のレビュー待ち、POC-005は未承認 |
+| 承認情報 | 2026-09-01にIssue #6の調査段階、2026-09-02に追加要望とRES-005を依頼者が承認。2026-09-02にPOC-001、2026-09-03にPOC-002とPOC-003、2026-09-04にPOC-004をそれぞれ対象限定で開始承認。POC-003結果は2026-09-04に確認済み。POC-005は未承認 |
 
 ## 結論
 
@@ -171,5 +171,5 @@ PoCは本番アプリケーションを作る作業ではない。画面、デ�
 - `POC-002`は[開始承認依頼書](poc-002-approval-request.md)の範囲に限って2026-09-03に開始承認済みである。
 - `POC-002`の実施は完了し、2026-09-03に依頼者が結果を確認した。
 - `POC-003`は自動試験と指定3端末で合格し、プレビューチャネル、ローカル生証跡、3台の端末内データ・権限・対象ダウンロードを限定削除済みである。[実施結果報告書](poc-003-result.md)は2026-09-04に依頼者確認済みである。
-- `POC-004`は依頼者から進行意思を受け、[開始承認依頼書](poc-004-approval-request.md)で具体条件を提示する。依頼者がその内容を確認して対象限定で明示承認するまで、実装と外部接続を開始しない。
+- `POC-004`は[開始承認依頼書](poc-004-approval-request.md)の範囲に限って2026-09-04に開始承認済みである。
 - `POC-005`は未承認であり、対象条件を提示して改めて明示承認を得るまで開始しない。
