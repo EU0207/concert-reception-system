@@ -1,0 +1,33 @@
+{
+  "name": "concert-reception-poc-004",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "POC-004: authentication, authorization, encrypted local data and cleanup",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "packageManager": "npm@12.0.2",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:e2e": "playwright test",
+    "emulators": "firebase emulators:start --only auth,firestore",
+    "emulators:test": "firebase emulators:exec --only auth,firestore \"npm run test:integration\""
+  },
+  "dependencies": {
+    "firebase": "12.18.0",
+    "idb": "8.0.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "fake-indexeddb": "6.2.5",
+    "firebase-tools": "15.28.2",
+    "typescript": "7.0.2",
+    "vite": "8.2.2",
+    "vite-plugin-pwa": "1.3.0",
+    "vitest": "4.1.11"
+  }
+}

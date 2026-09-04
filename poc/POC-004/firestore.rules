@@ -1,0 +1,75 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function run(runId) {
+      return get(/databases/$(database)/documents/poc004Runs/$(runId)).data;
+    }
+
+    function membership(runId) {
+      return get(/databases/$(database)/documents/poc004Runs/$(runId)/members/$(request.auth.uid)).data;
+    }
+
+    function activeMember(runId) {
+      return signedIn()
+        && membership(runId).active == true
+        && membership(runId).eventId == run(runId).eventId
+        && (!('expiresAt' in membership(runId)) || membership(runId).expiresAt > request.time);
+    }
+
+    function permanentAdmin(runId) {
+      return activeMember(runId)
+        && membership(runId).role in ['owner', 'deputy'];
+    }
+
+    function anyAdmin(runId) {
+      return activeMember(runId)
+        && membership(runId).role in ['owner', 'deputy', 'temporaryAdmin'];
+    }
+
+    match /poc004Runs/{runId} {
+      allow read: if activeMember(runId);
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['runId', 'eventId', 'ownerUid', 'syntheticDataOnly', 'createdAt'])
+        && request.resource.data.runId == runId
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.syntheticDataOnly == true;
+      allow update: if permanentAdmin(runId);
+      allow delete: if signedIn() && resource.data.ownerUid == request.auth.uid;
+
+      match /members/{uid} {
+        allow read: if request.auth.uid == uid || permanentAdmin(runId);
+        allow create: if signedIn() && (
+          (request.auth.uid == uid
+            && uid == run(runId).ownerUid
+            && request.resource.data.role == 'owner')
+          || permanentAdmin(runId)
+        );
+        allow update, delete: if permanentAdmin(runId);
+      }
+
+      match /publicRecords/{recordId} {
+        allow read: if activeMember(runId);
+        allow create, update, delete: if anyAdmin(runId);
+      }
+
+      match /restrictedFields/{recordId} {
+        allow read: if permanentAdmin(runId)
+          && resource.data.expiresAt > request.time;
+        allow create, update, delete: if permanentAdmin(runId);
+      }
+
+      match /auditEvents/{auditId} {
+        allow read: if permanentAdmin(runId);
+        allow create: if activeMember(runId)
+          && request.resource.data.actorUid == request.auth.uid;
+        allow update: if false;
+        allow delete: if permanentAdmin(runId);
+      }
+    }
+  }
+}
