@@ -7,7 +7,7 @@
 | 目的 | Issue #6の調査段階 `RES-001`～`RES-005` の結果を記録し、PoC対象を選択できる状態にする |
 | 主な読者 | 依頼者、開発担当者、確認担当者 |
 | 調査日 | 2026-09-01～2026-09-02 |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実機確認手順書](poc-003-device-test-guide.md)、[トレーサビリティ表](traceability-matrix.md) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実機確認手順書](poc-003-device-test-guide.md)、[POC-003実施結果報告書](poc-003-result.md)、[トレーサビリティ表](traceability-matrix.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | In Review |
 | 承認情報 | 2026-09-01に第一PoC候補、2026-09-02にRES-005とPOC-001開始を依頼者が確認。技術採用、本番実装は未承認 |
@@ -30,7 +30,7 @@
 - `POC-002`はPOC-001の固定依存関係と既存Firebase資源だけを再利用し、デコード済み架空QR以降の判定、500件処理、共有時間、Chromium外部ソケット通信量を測る案を具体化し、2026-09-03にPOC-002だけ開始承認を得た。追加パッケージ、追加サービス、課金は行わない。
 - `POC-002`はローカルと実Firebaseで合格した。実Firebaseでは通常判定最大3.0ミリ秒、オンライン共有最大273.63ミリ秒、環境別外部通信量最大23,866 bytesで、全件反復取得はなかった。これはChromiumとデコード済み文字列による限定結果であり、実機・カメラ・実回線は未判定である。
 - POC-002終了時にFirestoreの架空イベント530件・親文書と匿名利用者6件を限定削除し、残存0件を確認した。検証専用Firebaseプロジェクト本体は保持する。
-- `POC-003`はQR解析6パッケージ、既存Hostingサイトの1日期限プレビューチャネル、3実機の物理操作、保存・限定削除、無料停止上限を具体化し、2026-09-03にPOC-003だけ開始承認を得た。ローカル自動試験は合格し、外部配信前の確認と実機確認を残して実施中である。
+- `POC-003`は自動試験と指定3端末で主要基準に合格し、Hostingプレビューチャネルを限定削除した。全端末で10秒上限を満たしたが2秒目標は未達で、紙は画面より遅い傾向があった。iPhone 13 miniとGalaxy Z Fold8の具体的なOS・ブラウザー版、各端末の終了時削除は確認待ちである。
 
 ## 調査結果一覧
 
@@ -247,7 +247,7 @@
 
 ## 未実施事項
 
-- `POC-003`の外部配信前確認、3機種の実機確認、終了処理、結果報告
+- `POC-003`の未記録版番号、端末内削除、結果確認
 - `POC-004`・`POC-005`の実行
 - 全PoC終了後の検証専用Firebaseプロジェクト本体の削除
 - QR解析ライブラリ、フレームワーク、外部サービス、認証方式、暗号化方式の採用
