@@ -7,7 +7,7 @@
 | 目的 | Issue #5のレビュー結果を記録し、Issue #6で実施する調査・PoCの範囲、順序、評価方法、合格基準を合意する |
 | 主な読者 | 依頼者、開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実機確認手順書](poc-003-device-test-guide.md) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実機確認手順書](poc-003-device-test-guide.md)、[POC-003実施結果報告書](poc-003-result.md) |
 | 関連Issue | [#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | Approved |
 | 承認情報 | 2026-09-01にIssue #6の調査段階、2026-09-02に追加要望とRES-005を依頼者が承認。2026-09-02にPOC-001、2026-09-03にPOC-002とPOC-003をそれぞれ対象限定で開始承認。POC-004・POC-005は未承認 |
@@ -170,5 +170,5 @@ PoCは本番アプリケーションを作る作業ではない。画面、デ�
 - `POC-001`は[開始承認依頼書](poc-001-approval-request.md)の範囲に限って2026-09-02に開始承認済みである。
 - `POC-002`は[開始承認依頼書](poc-002-approval-request.md)の範囲に限って2026-09-03に開始承認済みである。
 - `POC-002`の実施は完了し、2026-09-03に依頼者が結果を確認した。
-- `POC-003`は[開始承認依頼書](poc-003-approval-request.md)の範囲に限って2026-09-03に開始承認済みであり、ローカル自動試験合格後の外部配信前確認と実機確認を残して実施中である。
+- `POC-003`は自動試験と指定3端末の主要基準に合格し、プレビューチャネルを削除済みである。具体的なOS・ブラウザー版の補完と端末内削除の確認後、[実施結果報告書](poc-003-result.md)のレビューを依頼する。
 - `POC-004`・`POC-005`は未承認であり、対象条件を提示して改めて明示承認を得るまで開始しない。

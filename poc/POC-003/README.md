@@ -71,4 +71,4 @@ firebase hosting:channel:deploy poc-003-YYYYMMDD --expires 1d --project PROJECT_
 
 ## 終了処理
 
-実機結果を受領後、プレビューチャネル、各端末のPOC-003サイトデータ・カメラ許可、`FAKE-P003-`で始まるダウンロード、生の自動試験成果物を限定削除する。Firebaseプロジェクトと既定HostingサイトはPOC-005終了確認まで保持する。
+実機結果受領後、プレビューチャネルを削除してURLのHTTP 404を確認し、`artifacts/raw/`内の集計済み3ファイルを限定削除して残存0件を確認した。各端末のPOC-003サイトデータ・カメラ許可と、`FAKE-P003-`で始まるダウンロードは依頼者の削除確認待ちである。Firebaseプロジェクトと既定HostingサイトはPOC-005終了確認まで保持する。
