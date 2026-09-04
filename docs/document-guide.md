@@ -48,7 +48,9 @@
 | POC-001実施結果報告書 | [poc-001-result.md](development/poc-001-result.md) | 完全オフライン受付と復旧後統合の検証結果、制約、次の判断材料を記録する | 依頼者、開発担当者、確認担当者 | POC-001完了時 | 結果確認、終了処理、次の判断時 | Approved |
 | POC-002開始承認依頼書 | [poc-002-approval-request.md](development/poc-002-approval-request.md) | 性能・通信量PoC開始前に測定方法、再利用、外部資源、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-002承認前 | 測定条件または承認状態の変更時 | Approved |
 | POC-002実施結果報告書 | [poc-002-result.md](development/poc-002-result.md) | QR判定後の受付性能、同期、通信量の検証結果、制約、終了処理を記録する | 依頼者、開発担当者、確認担当者 | POC-002完了時 | 結果確認、次の判断時 | Approved |
-| POC-003開始承認依頼書 | [poc-003-approval-request.md](development/poc-003-approval-request.md) | 実機・カメラ・電子チケットPoC開始前に依存関係、HTTPS配信、実機協力、保存・削除、費用を確認する | 依頼者、開発担当者、実機確認担当者 | POC-003承認前 | 対象、実機、配信条件または承認状態の変更時 | In Review |
+| POC-003開始承認依頼書 | [poc-003-approval-request.md](development/poc-003-approval-request.md) | 実機・カメラ・電子チケットPoC開始前に依存関係、HTTPS配信、実機協力、保存・削除、費用を確認する | 依頼者、開発担当者、実機確認担当者 | POC-003承認前 | 対象、実機、配信条件または承認状態の変更時 | Approved |
+| POC-003実機確認手順書 | [poc-003-device-test-guide.md](development/poc-003-device-test-guide.md) | IT開発経験がない確認担当者が3機種のQR読取り、オフライン動作、結果出力、端末内データ削除を確認する | 依頼者、実機確認担当者 | POC-003実機確認時 | 操作手順、対象機種、確認項目の変更時 | Draft |
+| POC-003実施結果報告書 | [poc-003-result.md](development/poc-003-result.md) | 指定実機のQR読取り、電子チケット、オフライン保持、終了処理の結果と制約を記録する | 依頼者、開発担当者、確認担当者 | POC-003終了時 | 版番号、削除確認、結果承認時 | Approved |
 | ADR案内 | [adr-guide.md](development/decisions/adr-guide.md) | 重要な判断の記録方法を定める | 開発担当者 | 重要な判断の発生時 | 運用変更時 | Draft |
 
 ## テンプレート

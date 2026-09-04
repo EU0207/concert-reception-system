@@ -7,10 +7,10 @@
 | 目的 | Issue #5のレビュー結果を記録し、Issue #6で実施する調査・PoCの範囲、順序、評価方法、合格基準を合意する |
 | 主な読者 | 依頼者、開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[開発計画書](project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実機確認手順書](poc-003-device-test-guide.md)、[POC-003実施結果報告書](poc-003-result.md) |
 | 関連Issue | [#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | Approved |
-| 承認情報 | 2026-09-01にIssue #6の調査段階、2026-09-02に追加要望とRES-005を依頼者が承認。2026-09-02にPOC-001、2026-09-03にPOC-002だけ開始承認。POC-003は開始希望を受領したが具体内容の明示承認待ち。POC-004・POC-005は未承認 |
+| 承認情報 | 2026-09-01にIssue #6の調査段階、2026-09-02に追加要望とRES-005を依頼者が承認。2026-09-02にPOC-001、2026-09-03にPOC-002とPOC-003をそれぞれ対象限定で開始承認。POC-004・POC-005は未承認 |
 
 ## 結論
 
@@ -94,7 +94,7 @@ PoCは本番アプリケーションを作る作業ではない。画面、デ�
 - `POC-001`は2026-09-02にローカルエミュレーターと専用実Firebaseの両方で合格した。結果と制約は[POC-001実施結果報告書](poc-001-result.md)に記載する。
 - `POC-002`の測定方法、再利用範囲、外部資源、保存・削除、停止上限は[POC-002開始承認依頼書](poc-002-approval-request.md)で具体化し、2026-09-03にPOC-002だけ開始承認を得た。
 - `POC-002`は2026-09-03にローカルエミュレーターと専用実Firebaseの両方で合格した。結果と制約は[POC-002実施結果報告書](poc-002-result.md)に記載する。
-- `POC-003`の追加依存関係、Hosting一時配信、実機協力、保存・削除、費用は[POC-003開始承認依頼書](poc-003-approval-request.md)で具体化した。同書への明示承認まで実装・配信・実機カメラ利用を開始しない。
+- `POC-003`の追加依存関係、Hosting一時配信、実機協力、保存・削除、費用は[POC-003開始承認依頼書](poc-003-approval-request.md)で具体化し、2026-09-03にPOC-003だけ開始承認を得た。実機操作は[POC-003実機確認手順書](poc-003-device-test-guide.md)に従う。
 - 架空データだけを使用し、実在する来場者情報を使用しない。
 - APIキー、認証情報、個人情報をリポジトリへ保存しない。
 - 外部サービスへの接続、依存関係の追加、契約、課金は、必要性と影響を説明して個別承認を得るまで行わない。
@@ -170,5 +170,5 @@ PoCは本番アプリケーションを作る作業ではない。画面、デ�
 - `POC-001`は[開始承認依頼書](poc-001-approval-request.md)の範囲に限って2026-09-02に開始承認済みである。
 - `POC-002`は[開始承認依頼書](poc-002-approval-request.md)の範囲に限って2026-09-03に開始承認済みである。
 - `POC-002`の実施は完了し、2026-09-03に依頼者が結果を確認した。
-- `POC-003`は開始希望を受領し、[開始承認依頼書](poc-003-approval-request.md)の内容確認待ちである。明示承認まで実装・配信・実機カメラ利用を開始しない。
+- `POC-003`は自動試験と指定3端末で合格し、プレビューチャネル、ローカル生証跡、3台の端末内データ・権限・対象ダウンロードを限定削除済みである。[実施結果報告書](poc-003-result.md)のレビューを依頼する。
 - `POC-004`・`POC-005`は未承認であり、対象条件を提示して改めて明示承認を得るまで開始しない。
