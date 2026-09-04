@@ -53,7 +53,8 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
         <button id="next-scan" disabled>次へ</button>
       </div>
       <div id="scan-result" class="result neutral" role="status" aria-live="polite">未読取り</div>
-      <p id="scan-metrics">読取り標本: 0件</p>
+      <p id="scan-metrics">今回の読取り標本: 0件</p>
+      <p id="reception-count">端末に保存済みの受付記録: 確認中…</p>
       <details>
         <summary>カメラが使えない場合の確認コード</summary>
         <label>確認コード <input id="confirmation-code" value="P30001" maxlength="6" /></label>
@@ -167,6 +168,12 @@ async function prepare(): Promise<void> {
   const tickets = await repository.listTickets();
   currentTicket = tickets[0];
   prepareStatus.textContent = `架空チケット ${tickets.length}件を端末へ準備済みです。`;
+  await refreshReceptionCount();
+}
+
+async function refreshReceptionCount(): Promise<void> {
+  const count = await repository.receptionCount();
+  byId<HTMLParagraphElement>("reception-count").textContent = `端末に保存済みの受付記録: ${count}件`;
 }
 
 async function showTicket(ticket = currentTicket): Promise<void> {
@@ -185,6 +192,7 @@ async function acceptDecoded(qrToken: string): Promise<ReturnType<ScanGate["deci
   const decision = gate.decide(tickets, qrToken);
   if (decision.status === "locked") return decision;
   await repository.recordReception(qrToken, decision.status as QrResolution["status"]);
+  await refreshReceptionCount();
   const duration = performance.now() - scanStartedAt;
   scanDurations.push(duration);
   nextButton.disabled = false;
@@ -197,7 +205,7 @@ async function acceptDecoded(qrToken: string): Promise<ReturnType<ScanGate["deci
     scanResult.textContent = `× 登録のないQRです / ${duration.toFixed(0)}ms`;
   }
   const maximum = Math.max(...scanDurations);
-  byId<HTMLParagraphElement>("scan-metrics").textContent = `読取り標本: ${scanDurations.length}件 / 最大 ${maximum.toFixed(0)}ms`;
+  byId<HTMLParagraphElement>("scan-metrics").textContent = `今回の読取り標本: ${scanDurations.length}件 / 最大 ${maximum.toFixed(0)}ms`;
   return decision;
 }
 
@@ -296,6 +304,7 @@ byId("delete-local").addEventListener("click", async () => {
   await Promise.all(cacheKeys.filter((key) => key.includes("poc-003")).map((key) => caches.delete(key)));
   const registrations = await navigator.serviceWorker?.getRegistrations();
   await Promise.all((registrations ?? []).map((registration) => registration.unregister()));
+  byId<HTMLParagraphElement>("reception-count").textContent = "端末に保存済みの受付記録: 0件";
   byId<HTMLParagraphElement>("delete-status").textContent = "POC-003のIndexedDB、該当キャッシュ、Service Workerを削除しました。";
 });
 

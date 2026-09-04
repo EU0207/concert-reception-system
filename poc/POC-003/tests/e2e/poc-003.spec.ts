@@ -61,5 +61,10 @@ test("generates tickets, decodes QR, enforces rules, and remains usable offline"
   await expect(page.getByRole("heading", { name: "実機QR・電子チケット確認" })).toBeVisible();
   const offlineDecision = await page.evaluate(() => window.__poc003.acceptDecoded("FAKE-P003-QR-0010-V1"));
   expect(offlineDecision.status).toBe("accepted");
-  expect(await page.evaluate(() => window.__poc003.receptionCount())).toBeGreaterThan(0);
+  const savedReceptionCount = await page.evaluate(() => window.__poc003.receptionCount());
+  expect(savedReceptionCount).toBeGreaterThan(0);
+  await page.reload();
+  await expect(page.locator("#reception-count")).toHaveText(
+    `端末に保存済みの受付記録: ${savedReceptionCount}件`
+  );
 });
