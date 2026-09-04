@@ -9,12 +9,12 @@
 | 実施日 | 2026-09-03～2026-09-04 |
 | 関連文書 | [技術検証計画書](technical-validation-plan.md)、[開始承認依頼書](poc-003-approval-request.md)、[実機確認手順書](poc-003-device-test-guide.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
-| 状態 | Draft |
+| 状態 | In Review |
 | 承認情報 | POC-003の開始と3回までの配信は2026-09-03に承認済み。保存済み受付記録数の表示修正に限る4回目の配信は2026-09-03に追加承認済み。POC-004以降、技術採用、本番実装は未承認 |
 
 ## 結論
 
-`POC-003`は主要な機能・性能基準に対して**条件付き合格**と判定する。
+`POC-003`は承認済みの機能・性能基準に対して**合格**と判定する。
 
 - iPhone 17、iPhone 13 mini、Galaxy Z Fold8で、紙5回・別端末画面5回のQR読取りに成功した。
 - 最大読取り時間は4,432～9,800ミリ秒で、全端末が10秒上限を満たした。ただし2秒目標は全端末で未達だった。
@@ -22,8 +22,9 @@
 - Galaxy Z Fold8は外側・内側画面と開閉後の状態保持を確認した。
 - A6縦PDF、確認コード、座席変更時のQR維持、再発行時の旧QR無効化、500件ZIPと役割制御は自動試験で合格した。
 - 紙はPC画面表示より読取りに時間を要した。高品質・高精細、100%、画質低下モードを避ける印刷案内を`REQ-F-032`、`AC-022`、実機手順へ追加した。
-- iPhone 13 miniとGalaxy Z Fold8はOS・ブラウザーの具体的な版番号が未記録であり、版番号確認までは対応環境の最終判定を保留する。
+- iPhone 13 miniはiOS 26.6.1、Galaxy Z Fold8は依頼者確認と公式最新情報に基づきAndroid 17として記録した。GalaxyのChromeは端末から「最新」と報告され、一般Stableの公式基準版を併記した。
 - Hostingプレビューチャネルは削除し、URLが404となること、`live`チャネルが残ることを確認した。
+- 3台のサイトデータ、カメラ許可、対象ダウンロードの限定削除完了を依頼者が確認した。
 
 この結果は、架空データによる指定3端末の限定検証である。QR解析ライブラリ、Firebase、本番構成の採用、すべての印刷機・照明・回線での性能を保証しない。
 
@@ -45,8 +46,8 @@
 | 端末 | OS・ブラウザー | 紙 | 別画面 | 最大時間 | 10秒上限 | 2秒目標 |
 |---|---|---:|---:|---:|---|---|
 | iPhone 17 | iOS 26.6.1、Safari（iOS標準） | 5/5 | 5/5 | 4,432 ms | 合格 | 未達 |
-| iPhone 13 mini | 具体的なiOS版未記録、Safari（iOS標準） | 5/5 | 5/5 | 9,800 ms | 合格 | 未達 |
-| Galaxy Z Fold8 | 具体的なAndroid・Chrome版未記録 | 5/5 | 5/5 | 9,358 ms | 合格 | 未達 |
+| iPhone 13 mini | iOS 26.6.1、Safari（iOS標準） | 5/5 | 5/5 | 9,800 ms | 合格 | 未達 |
+| Galaxy Z Fold8 | Android 17、Chrome最新（端末申告） | 5/5 | 5/5 | 9,358 ms | 合格 | 未達 |
 
 | 確認項目 | iPhone 17 | iPhone 13 mini | Galaxy Z Fold8 |
 |---|---|---|---|
@@ -57,6 +58,12 @@
 | Fold8外側・内側・開閉後保持 | 対象外 | 対象外 | 合格 |
 
 実機結果JSONは個人情報を含まず、機種、版、回数、最大時間、真偽値、空の備考、記録時刻だけだった。リポジトリには生JSONを保存せず、本書へ集計値だけを転記した。
+
+2026-09-04時点で、Android DevelopersはAndroid 17を入手可能な現行版として案内しているため、依頼者の「端末は現時点の最新版」との確認を合わせてGalaxy Z Fold8をAndroid 17として記録した。Chrome Releasesは2026-09-03にAndroid向け一般Stable 152.0.7977.82を公開し、Chrome 153は一部利用者向けEarly Stableとして段階配信中としている。このため、実機の厳密なChromeビルドは推測せず「Chrome最新（端末申告）」とし、一般Stable基準を152.0.7977.82とする。
+
+- [Android Developers: Get Android 17](https://developer.android.com/about/versions/17/get)
+- [Chrome Releases: Chrome for Android Update（152.0.7977.82）](https://chromereleases.googleblog.com/2026/09/chrome-for-android-update.html)
+- [Chrome Releases: Early Stable 153.0.8010.27](https://chromereleases.googleblog.com/2026/09/chrome-for-android-update_0758867545.html)
 
 ## 紙QRの観察結果
 
@@ -102,13 +109,12 @@
 | `live`チャネル | 一覧に残存することを確認し、変更・削除していない |
 | Firestore・Authentication・Storage | POC-003では未使用。追加データ・利用者なし |
 | 課金 | カード登録、Blaze変更、有料契約、自動更新なし |
-| 端末内データ・権限・ダウンロード | 各実機での限定削除確認待ち |
+| 端末内データ・権限・ダウンロード | 2026-09-04に依頼者が3台すべての限定削除完了を確認 |
 | ローカル生証跡 | `poc/POC-003/artifacts/raw/`内の集計済み3ファイルだけを限定削除し、残存0件を確認 |
 
-## 未完了事項と次の判断
+## 残るリスクと次の判断
 
-- iPhone 13 miniの具体的なiOSバージョンを記録する。
-- Galaxy Z Fold8の具体的なAndroidバージョンとChromeバージョンを記録する。
-- 各実機でPOC-003のサイトデータ、カメラ許可、`FAKE-P003-`ダウンロードを限定削除し、完了を確認する。
+- Galaxy Z Fold8のChromeは最新版との申告と一般Stable基準を記録したが、実機の厳密なビルド番号は直接確認していない。
+- 全端末が10秒上限内である一方、2秒目標は未達であり、紙QRの出力品質、焦点案内、QR描画方法を本番設計前に改善する。
 - 依頼者が結果、制約、未達目標を確認した後に本書を`Approved`とする。
 - `POC-004`以降は未承認であり、別の開始承認まで実施しない。
