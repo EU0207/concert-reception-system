@@ -10,8 +10,8 @@
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 関連ID | POC-004、TBD-003、TBD-004、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、AC-009、AC-013、AC-014、AC-016、AC-023、CONF-016、CONF-020 |
 | 調査日 | 2026-09-04 |
-| 状態 | Draft |
-| 承認情報 | 2026-09-04に依頼者からPOC-004を進める意思表示あり。本書の具体的な対象と制約は未確認のため、実装・外部接続の開始承認は未完了 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-04に依頼者がPR #19と本書を確認し、`POC-004`に限って開始を明示承認。`POC-005`、技術採用、本番実装は未承認 |
 
 ## 結論
 
