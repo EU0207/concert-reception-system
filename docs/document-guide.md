@@ -52,6 +52,7 @@
 | POC-003実機確認手順書 | [poc-003-device-test-guide.md](development/poc-003-device-test-guide.md) | IT開発経験がない確認担当者が3機種のQR読取り、オフライン動作、結果出力、端末内データ削除を確認する | 依頼者、実機確認担当者 | POC-003実機確認時 | 操作手順、対象機種、確認項目の変更時 | Draft |
 | POC-003実施結果報告書 | [poc-003-result.md](development/poc-003-result.md) | 指定実機のQR読取り、電子チケット、オフライン保持、終了処理の結果と制約を記録する | 依頼者、開発担当者、確認担当者 | POC-003終了時 | 版番号、削除確認、結果承認時 | Approved |
 | POC-004開始承認依頼書 | [poc-004-approval-request.md](development/poc-004-approval-request.md) | 個別認証、権限制御、暗号化、期限、端末削除PoCの開始前に外部資源、保存・削除、費用と制約を確認する | 依頼者、開発担当者、確認担当者 | POC-004承認前 | 対象、Firebase設定、削除方式または承認状態の変更時 | Approved |
+| POC-004実施結果報告書 | [poc-004-result.md](development/poc-004-result.md) | 個別認証、役割制御、暗号化、期限、端末削除の結果と0円条件で残る制約を記録する | 依頼者、開発担当者、確認担当者 | POC-004終了時 | 結果確認、要件調整、次の判断時 | In Review |
 | ADR案内 | [adr-guide.md](development/decisions/adr-guide.md) | 重要な判断の記録方法を定める | 開発担当者 | 重要な判断の発生時 | 運用変更時 | Draft |
 
 ## テンプレート
