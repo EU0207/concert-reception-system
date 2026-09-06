@@ -72,7 +72,7 @@
 | REQ-NF-009 | INT-Q-032、INT-Q-040 | AC-017 | 未登録 | 未登録 | In Review |
 | REQ-NF-010 | INT-Q-033、INT-Q-041、INT-Q-042、CONF-012、CONF-017 | AC-020 | 未登録 | 未登録 | In Review |
 | REQ-NF-011 | INT-Q-042 | AC-020 | 未登録 | 未登録 | In Review |
-| REQ-NF-012 | INT-Q-006、INT-Q-007、RQ-002、CONF-010 | AC-023 | 未登録 | 未登録 | In Review |
+| REQ-NF-012 | INT-Q-006、INT-Q-007、RQ-002、CONF-010、CONF-021 | AC-023 | 未登録 | 未登録 | In Review |
 | REQ-NF-013 | INT-Q-037、CONF-012 | AC-015、AC-018 | 未登録 | 未登録 | In Review |
 
 ## 制約の対応表
@@ -101,7 +101,7 @@
 | 対応端末・カメラ・電子チケット | RES-001、POC-003 | REQ-F-008、REQ-F-009、REQ-F-030、REQ-F-032、REQ-NF-002 | AC-004、AC-015、AC-022 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-001結果](technical-feasibility-research.md#res-001-対応環境とブラウザ機能)、[POC-003開始承認依頼](poc-003-approval-request.md)、[POC-003実施結果](poc-003-result.md) | POC-003合格・終了処理・結果確認済み |
 | 完全オフライン受付・復旧後統合・連絡 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004 | AC-011、AC-015、AC-024、AC-027 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合)、[POC-001実施結果](poc-001-result.md) | POC-001合格・依頼者確認済み |
 | QR判定性能・受付処理量・通信量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002、REQ-NF-013 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-002開始承認依頼](poc-002-approval-request.md)、[POC-002実施結果](poc-002-result.md) | POC-002合格・依頼者確認済み |
-| 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-012 | AC-009、AC-013、AC-014、AC-016、AC-023 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護)、[POC-004開始承認依頼](poc-004-approval-request.md) | POC-004開始承認済み・実施中 |
+| 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-012 | AC-009、AC-013、AC-014、AC-016、AC-023 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護)、[POC-004開始承認依頼](poc-004-approval-request.md)、[POC-004実施結果](poc-004-result.md) | POC-004合格・依頼者確認済み。REQ-NF-012は期限後の削除案内方式へ調整 |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
 | 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-NF-013 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | 未登録 | PoC未承認 |
 | グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認済み |
@@ -125,6 +125,7 @@
 | CONF-008 | 再読取り理由・任意メモを追記し、同じ公演の全スタッフで共有する | RQ-003 | REQ-F-034／AC-024 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-009 | 全スタッフ連絡、重要既読、オフライン未共有、一時管理者の投稿を扱う | RQ-006 | REQ-F-037／AC-027 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-010 | 公演単位の任意テキスト項目を主担当・代理だけが扱い、公演後1か月で値を削除する | RQ-002 | REQ-F-033、REQ-NF-005、REQ-NF-012／AC-023 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-021 | 任意項目値の1か月後の無人自動削除は必須とせず、期限後に管理画面で削除を案内して主担当・代理管理者に削除させる | RQ-002 | REQ-NF-012／AC-023 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録)、[POC-004実施結果](poc-004-result.md) |
 | CONF-011 | 簡易座席表と会場画像の上限・事前取得・代替表示を定める | RQ-004 | REQ-F-035／AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-012 | 同期5秒目標・10秒上限、当日20MB以下、費用0円とする | TBD-007、TBD-009 | REQ-NF-010、REQ-NF-013／AC-015、AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-013 | iPhone 17、iPhone 13 mini、Galaxy Z Fold8を実機対象とする | TBD-001 | REQ-F-008、REQ-F-030、REQ-F-032、REQ-F-035／AC-004、AC-015、AC-022、AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
