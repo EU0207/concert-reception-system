@@ -61,6 +61,9 @@
 | REQ-F-035 | INT-Q-017、INT-Q-036、INT-Q-039、RQ-004、CONF-007、CONF-011 | AC-025 | 未登録 | 未登録 | In Review |
 | REQ-F-036 | INT-Q-009、INT-Q-036、RQ-005、CONF-007、CONF-015 | AC-026 | 未登録 | 未登録 | In Review |
 | REQ-F-037 | INT-Q-004、INT-Q-031、RQ-006、CONF-007、CONF-009 | AC-027 | 未登録 | 未登録 | In Review |
+| REQ-F-038 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | 未登録 | 未登録 | In Review |
+| REQ-F-039 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | 未登録 | 未登録 | In Review |
+| REQ-F-040 | INT-Q-021、INT-Q-025、INT-Q-031、INT-Q-042、CONF-016、CONF-024 | AC-028 | 未登録 | 未登録 | In Review |
 | REQ-NF-001 | INT-Q-002、INT-Q-012、INT-Q-022 | AC-004、AC-018 | 未登録 | 未登録 | In Review |
 | REQ-NF-002 | INT-Q-003、INT-Q-018、INT-Q-022、INT-Q-037 | AC-015、AC-018 | 未登録 | 未登録 | In Review |
 | REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034、CONF-005 | AC-015 | 未登録 | 未登録 | In Review |
@@ -74,6 +77,8 @@
 | REQ-NF-011 | INT-Q-042 | AC-020 | 未登録 | 未登録 | In Review |
 | REQ-NF-012 | INT-Q-006、INT-Q-007、RQ-002、CONF-010、CONF-021 | AC-023 | 未登録 | 未登録 | In Review |
 | REQ-NF-013 | INT-Q-037、CONF-012 | AC-015、AC-018 | 未登録 | 未登録 | In Review |
+| REQ-NF-014 | CONF-023 | AC-025 | 未登録 | 未登録 | In Review |
+| REQ-NF-015 | INT-Q-019、INT-Q-021、INT-Q-025、INT-Q-042、CONF-016、CONF-024 | AC-028 | 未登録 | 未登録 | In Review |
 
 ## 制約の対応表
 
@@ -84,6 +89,7 @@
 | CON-003 | INT-Q-021、INT-Q-032 | AC-021 | In Review |
 | CON-004 | INT-Q-032、INT-Q-034、CONF-003 | AC-015、AC-017、AC-021 | In Review |
 | CON-005 | INT-Q-032、INT-Q-043 | AC-021 | In Review |
+| CON-006 | INT-Q-019、INT-Q-021、INT-Q-042、CONF-024 | AC-028 | In Review |
 
 ## 追加要望・未決定事項の追跡
 
@@ -101,7 +107,7 @@
 | 対応端末・カメラ・電子チケット | RES-001、POC-003 | REQ-F-008、REQ-F-009、REQ-F-030、REQ-F-032、REQ-NF-002 | AC-004、AC-015、AC-022 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-001結果](technical-feasibility-research.md#res-001-対応環境とブラウザ機能)、[POC-003開始承認依頼](poc-003-approval-request.md)、[POC-003実施結果](poc-003-result.md) | POC-003合格・終了処理・結果確認済み |
 | 完全オフライン受付・復旧後統合・連絡 | RES-002、POC-001 | REQ-F-017、REQ-F-030、REQ-F-034、REQ-F-037、REQ-NF-003、REQ-NF-004 | AC-011、AC-015、AC-024、AC-027 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-002結果](technical-feasibility-research.md#res-002-完全オフライン受付と復旧後統合)、[POC-001実施結果](poc-001-result.md) | POC-001合格・依頼者確認済み |
 | QR判定性能・受付処理量・通信量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002、REQ-NF-013 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-002開始承認依頼](poc-002-approval-request.md)、[POC-002実施結果](poc-002-result.md) | POC-002合格・依頼者確認済み |
-| 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-012 | AC-009、AC-013、AC-014、AC-016、AC-023 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護)、[POC-004開始承認依頼](poc-004-approval-request.md)、[POC-004実施結果](poc-004-result.md) | POC-004合格・依頼者確認済み。REQ-NF-012は期限後の削除案内方式へ調整 |
+| 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-F-040、REQ-NF-005、REQ-NF-006、REQ-NF-012、REQ-NF-015 | AC-009、AC-013、AC-014、AC-016、AC-023、AC-028 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護)、[POC-004開始承認依頼](poc-004-approval-request.md)、[POC-004実施結果](poc-004-result.md) | POC-004で削除手段・暗号化・権限停止を確認済み。自動削除連携・端末別追跡はAC-028で本番受入予定 |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
 | 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-F-038、REQ-F-039、REQ-NF-013、REQ-NF-014 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-005開始承認依頼](poc-005-approval-request.md)、[POC-005実機確認手順](poc-005-device-check-guide.md)、[POC-005実施結果](poc-005-result.md)、[本番UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md) | 自動試験・3台の依頼者確認合格。追加配信した表示修正の確認待ち。本番向け追加要望は画面設計へ引継ぎ済み |
 | グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認済み |
@@ -129,6 +135,7 @@
 | CONF-011 | 簡易座席表と会場画像の上限・事前取得・代替表示を定める | RQ-004 | REQ-F-035／AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-022 | 会場画像を1枚ずつ大きく表示して前後操作・横方向スワイプ・拡大縮小を行い、PCの座席間隔は席寸法を変えず隣接する10席単位の間だけに設ける | RQ-004 | REQ-F-035／AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録)、[POC-005実施結果](poc-005-result.md#実機確認で見つかった表示課題) |
 | CONF-023 | 本番画面では画像の中央基準縮小、画像下の前後・件数・ズーム操作、短い切替アニメーション、会場ごとの列名・列別席数設定、画像と座席表の階・区画連動、選択席の下部固定表示を扱う | RQ-004 | REQ-F-038、REQ-F-039、REQ-NF-014／AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録)、[本番UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md) |
+| CONF-024 | 締め処理を起点に各端末が次回オンライン・起動時に対象公演データを自動削除し、削除完了まで次公演を開始させず、管理画面で端末別状態を追跡する。接続・起動されない端末は権限停止、暗号化、鍵の非保存、回収・手動削除で対応する | TBD-004 | REQ-F-040、REQ-NF-015、CON-006／AC-028 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録)、[POC-004実施結果](poc-004-result.md) |
 | CONF-012 | 同期5秒目標・10秒上限、当日20MB以下、費用0円とする | TBD-007、TBD-009 | REQ-NF-010、REQ-NF-013／AC-015、AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-013 | iPhone 17、iPhone 13 mini、Galaxy Z Fold8を実機対象とする | TBD-001 | REQ-F-008、REQ-F-030、REQ-F-032、REQ-F-035／AC-004、AC-015、AC-022、AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-014 | A6縦PDF電子チケット、個別・一括ZIP、通常提示、確認コード、必要時生成を採用する | RQ-001 | REQ-F-032／AC-022 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
