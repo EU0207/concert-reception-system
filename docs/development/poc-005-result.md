@@ -81,7 +81,7 @@
 | `poc-005-20260907`プレビューチャネル | 完了 | 2026-09-08に限定削除。チャネル一覧から消え、確認URLがHTTP 404であることを確認した |
 | Firebase `live`チャネル | 保持 | チャネル一覧に残っていることを確認した。削除・変更していない |
 | ローカル生成物 | 完了 | POC-005配下の`.firebase`、`artifacts`、`dist`、`generated-assets`、`test-results`だけを削除した。追跡対象のソース、設定例、再現手順、試験コードは保持した |
-| 検証Firebaseプロジェクト本体 | 別承認待ち | [削除承認依頼書](firebase-test-project-deletion-approval-request.md)で対象・影響・復元可能期間を提示し、実行直前の別確認を得た場合だけ削除する。本番へは転用しない |
+| 検証Firebaseプロジェクト本体 | 削除承認済み・実行待ち | [削除承認依頼書](firebase-test-project-deletion-approval-request.md)を2026-09-08に依頼者が承認した。対象が`ACTIVE`、請求状態が`BILLING_ENABLED=false`であることを再確認済み。端末データと結果JSONの削除確認後に実行する |
 
 ## 現時点の判断
 
