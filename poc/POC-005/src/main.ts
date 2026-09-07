@@ -16,6 +16,9 @@ let floor: Seat["floor"] = "1階";
 let direction: "asc" | "desc" = "asc";
 let fallbackOnly = false;
 let imageObjectUrls: string[] = [];
+let preparedImages: Array<{ label: string; url: string }> = [];
+let currentImageIndex = 0;
+let imageZoom = 1;
 
 registerSW({
   immediate: true,
@@ -53,7 +56,17 @@ app.innerHTML = `
       </div>
       <button id="fallback-button" class="secondary" aria-pressed="false">画像なしの代替一覧を確認</button>
       <div id="offline-warning" class="message notice" hidden>画像を表示できません。受付は下の座席一覧で継続できます。</div>
-      <div id="image-gallery" class="image-gallery"></div>
+      <div id="image-viewer" class="image-viewer">
+        <button id="previous-image" class="image-arrow" aria-label="前の画像">←</button>
+        <div id="image-gallery" class="image-gallery"></div>
+        <button id="next-image" class="image-arrow" aria-label="次の画像">→</button>
+      </div>
+      <div id="image-toolbar" class="image-toolbar">
+        <strong id="image-position">0 / 0</strong>
+        <button id="zoom-out" class="secondary" aria-label="画像を縮小">−</button>
+        <button id="zoom-reset" class="secondary">100%</button>
+        <button id="zoom-in" class="secondary" aria-label="画像を拡大">＋</button>
+      </div>
       <div class="legend"><span><i class="general"></i>一般</span><span><i class="wheelchair"></i>車椅子</span><span><i class="companion"></i>同伴者</span><span><i class="blocked"></i>使用不可</span><span><i class="held"></i>確保済み</span><span><i class="current"></i>現在席</span></div>
       <div id="seat-map" class="seat-map" aria-label="座席表"></div>
       <div id="fallback-list" class="fallback-list"></div>
@@ -120,10 +133,16 @@ element<HTMLSelectElement>("seat-select").addEventListener("change", (event) => 
 element<HTMLButtonElement>("fallback-button").addEventListener("click", () => {
   fallbackOnly = !fallbackOnly;
   element<HTMLButtonElement>("fallback-button").setAttribute("aria-pressed", String(fallbackOnly));
-  element("image-gallery").hidden = fallbackOnly;
+  element("image-viewer").hidden = fallbackOnly;
+  element("image-toolbar").hidden = fallbackOnly;
   element("offline-warning").hidden = !fallbackOnly;
   renderSeats();
 });
+element<HTMLButtonElement>("previous-image").addEventListener("click", () => changeImage(-1));
+element<HTMLButtonElement>("next-image").addEventListener("click", () => changeImage(1));
+element<HTMLButtonElement>("zoom-out").addEventListener("click", () => setImageZoom(imageZoom - 0.25));
+element<HTMLButtonElement>("zoom-reset").addEventListener("click", () => setImageZoom(1));
+element<HTMLButtonElement>("zoom-in").addEventListener("click", () => setImageZoom(imageZoom + 0.25));
 element<HTMLSelectElement>("device-model").addEventListener("change", renderDeviceSpecificChecks);
 element<HTMLButtonElement>("export-button").addEventListener("click", () => void exportResult());
 element<HTMLInputElement>("delete-confirmation").addEventListener("input", (event) => {
@@ -199,7 +218,7 @@ function renderSeats(): void {
   const selected = seats.find((seat) => seat.id === selectedSeatId);
   const seatHtml = visible.map((seat) => {
     const current = seat.id === selectedSeatId;
-    return `<button class="seat kind-${seat.kind}${current ? " selected" : ""}" data-seat-id="${seat.id}" aria-current="${current ? "true" : "false"}" title="${seat.floor} ${seat.section} ${seat.row}列 ${seat.number}番 ${seat.kind}"><span>${current ? "★" : seat.number}</span><small>${current ? "現在席" : `${seat.row}列`}</small></button>`;
+    return `<button class="seat kind-${seat.kind}${current ? " selected" : ""}${seat.row % 2 === 1 ? " row-break" : ""}" data-seat-id="${seat.id}" aria-current="${current ? "true" : "false"}" title="${seat.floor} ${seat.section} ${seat.row}列 ${seat.number}番 ${seat.kind}"><span>${current ? "★" : seat.number}</span><small>${current ? "現在席" : `${seat.row}列`}</small></button>`;
   }).join("");
   element("seat-map").innerHTML = seatHtml;
   for (const button of element("seat-map").querySelectorAll<HTMLButtonElement>("[data-seat-id]")) {
@@ -218,21 +237,47 @@ function renderSeats(): void {
 async function renderImages(state: PreparationState): Promise<void> {
   for (const url of imageObjectUrls) URL.revokeObjectURL(url);
   imageObjectUrls = [];
+  preparedImages = [];
   const cache = await caches.open(state.cacheName);
-  const cards: string[] = [];
   for (const image of state.images) {
     const response = await cache.match(image.url);
     if (!response) {
       fallbackOnly = true;
       element("offline-warning").hidden = false;
-      element("image-gallery").hidden = true;
+      element("image-viewer").hidden = true;
+      element("image-toolbar").hidden = true;
       return;
     }
     const url = URL.createObjectURL(await response.blob());
     imageObjectUrls.push(url);
-    cards.push(`<figure><img src="${url}" alt="${image.label}（架空の合成画像）" loading="lazy"/><figcaption>${image.label}</figcaption></figure>`);
+    preparedImages.push({ label: image.label, url });
   }
-  element("image-gallery").innerHTML = cards.join("");
+  currentImageIndex = Math.min(currentImageIndex, preparedImages.length - 1);
+  renderCurrentImage();
+}
+
+function changeImage(offset: number): void {
+  if (preparedImages.length === 0) return;
+  currentImageIndex = (currentImageIndex + offset + preparedImages.length) % preparedImages.length;
+  imageZoom = 1;
+  renderCurrentImage();
+}
+
+function setImageZoom(value: number): void {
+  imageZoom = Math.min(2.5, Math.max(0.75, value));
+  renderCurrentImage();
+}
+
+function renderCurrentImage(): void {
+  const image = preparedImages[currentImageIndex];
+  if (!image) {
+    element("image-gallery").innerHTML = "";
+    element("image-position").textContent = "0 / 0";
+    return;
+  }
+  element("image-gallery").innerHTML = `<figure><img src="${image.url}" alt="${image.label}（架空の合成画像）" style="width:${imageZoom * 100}%"/><figcaption>${image.label}</figcaption></figure>`;
+  element("image-position").textContent = `${currentImageIndex + 1} / ${preparedImages.length}`;
+  element<HTMLButtonElement>("zoom-reset").textContent = `${Math.round(imageZoom * 100)}%`;
 }
 
 function renderNetworkState(): void {
@@ -291,6 +336,7 @@ async function deleteLocalData(): Promise<void> {
     seats = createFakeSeats();
     element("prepare-badge").textContent = "未準備";
     element("prepare-badge").classList.remove("complete");
+    preparedImages = [];
     element("image-gallery").innerHTML = "";
     element("summary").innerHTML = "<div><dt>状態</dt><dd>削除済み・再度事前取得が必要です</dd></div>";
     element("delete-message").className = "message success";

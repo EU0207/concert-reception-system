@@ -4,8 +4,14 @@ test("事前取得後に完全オフラインで座席表と5画像を復元す�
   await page.goto("/");
   await page.getByRole("button", { name: "座席と画像を事前取得" }).click();
   await expect(page.getByText("事前取得が完了しました。機内モードの確認へ進めます。")).toBeVisible();
-  await expect(page.locator("#image-gallery img")).toHaveCount(5);
+  await expect(page.locator("#image-gallery img")).toHaveCount(1);
+  await expect(page.locator("#image-position")).toHaveText("1 / 5");
+  await page.getByRole("button", { name: "次の画像" }).click();
+  await expect(page.locator("#image-position")).toHaveText("2 / 5");
+  await page.getByRole("button", { name: "画像を拡大" }).click();
+  await expect(page.getByRole("button", { name: "125%" })).toBeVisible();
   await expect(page.locator("#seat-map .seat")).toHaveCount(300);
+  await expect(page.locator("#seat-map .seat.row-break")).toHaveCount(160);
   await page.reload();
   await expect(page.getByText("準備完了")).toBeVisible();
   await context.setOffline(true);
@@ -19,7 +25,7 @@ test("事前取得後に完全オフラインで座席表と5画像を復元す�
     }
   });
   expect(uncachedNetworkFailed).toBe(true);
-  await expect(page.locator("#image-gallery img")).toHaveCount(5);
+  await expect(page.locator("#image-gallery img")).toHaveCount(1);
   await expect(page.locator("#seat-map .seat.selected")).toContainText("現在席");
   await context.setOffline(false);
 });
