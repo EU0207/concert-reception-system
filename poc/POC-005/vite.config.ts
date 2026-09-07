@@ -5,7 +5,7 @@ export default defineConfig({
   publicDir: "generated-assets",
   plugins: [
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
       includeAssets: ["icon.svg"],
       manifest: {
         name: "Concert Reception POC-005",
