@@ -37,7 +37,8 @@ button { min-height: 44px; border: 0; border-radius: 10px; padding: .7rem 1rem; 
 .controls label, .result-grid label { display: grid; gap: .35rem; font-weight: 700; }
 select, input, textarea { width: 100%; min-height: 44px; border: 1px solid #8b989a; border-radius: 8px; padding: .55rem; background: #fff; }
 .image-viewer { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .7rem; margin-top: 1rem; }
-.image-gallery { min-height: 300px; max-height: 72vh; overflow: auto; background: #f7f3e8; border-radius: 12px; }
+.image-gallery { min-height: 300px; max-height: 72vh; overflow: auto; background: #f7f3e8; border-radius: 12px; touch-action: pan-y; }
+.image-gallery.zoomed { touch-action: pan-x pan-y; }
 .image-gallery figure { min-width: 100%; margin: 0; }
 .image-gallery img { display: block; max-width: none; height: auto; transition: width .15s; }
 .image-gallery figcaption { position: sticky; left: 0; width: fit-content; padding: .6rem; font-weight: 700; }
@@ -53,9 +54,9 @@ select, input, textarea { width: 100%; min-height: 44px; border: 1px solid #8b98
 .blocked { background: #bbc0c2; }
 .held { background: #f4a261; }
 .current { background: #e9c46a; outline: 3px solid #bd2f2d; }
-.seat-map { display: grid; grid-template-columns: repeat(20, minmax(42px, 1fr)); gap: .35rem; overflow-x: auto; padding: .55rem; background: #f7f3e8; border-radius: 12px; }
+.seat-map { display: grid; grid-template-columns: repeat(10, minmax(42px, 1fr)) .75rem repeat(10, minmax(42px, 1fr)); gap: .35rem; overflow-x: auto; padding: .55rem; background: #f7f3e8; border-radius: 12px; }
 .seat { min-height: 48px; padding: .2rem; border: 2px solid #617175; background: #fff; color: #17252a; font-size: .75rem; }
-.seat.row-break { margin-bottom: .6rem; }
+.seat-divider { width: .75rem; }
 .seat small { display: block; font-size: .6rem; }
 .kind-車椅子 { background: #96d5eb; }
 .kind-同伴者 { background: #cce8b5; }
@@ -76,11 +77,9 @@ footer { text-align: center; padding: 2rem; color: #536568; }
   .panel { border-radius: 12px; }
   .section-heading { align-items: flex-start; }
   .seat-map { grid-template-columns: repeat(10, minmax(42px, 1fr)); }
-  .seat.row-break { margin-bottom: 0; }
-  .image-viewer { grid-template-columns: 1fr; position: relative; }
-  .image-arrow { position: absolute; z-index: 2; width: 44px; height: 52px; }
-  .image-arrow:first-child { left: .4rem; }
-  .image-arrow:last-child { right: .4rem; }
+  .seat-divider { display: none; }
+  .image-viewer { grid-template-columns: auto minmax(0, 1fr) auto; gap: .3rem; }
+  .image-arrow { width: 38px; height: 52px; }
   .image-gallery { min-height: 220px; max-height: 65vh; }
   .controls { grid-template-columns: 1fr; }
   .hero { padding: 1.4rem 1rem; }

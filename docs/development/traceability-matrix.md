@@ -103,7 +103,7 @@
 | QR判定性能・受付処理量・通信量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002、REQ-NF-013 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-002開始承認依頼](poc-002-approval-request.md)、[POC-002実施結果](poc-002-result.md) | POC-002合格・依頼者確認済み |
 | 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-012 | AC-009、AC-013、AC-014、AC-016、AC-023 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護)、[POC-004開始承認依頼](poc-004-approval-request.md)、[POC-004実施結果](poc-004-result.md) | POC-004合格・依頼者確認済み。REQ-NF-012は期限後の削除案内方式へ調整 |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
-| 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-NF-013 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-005開始承認依頼](poc-005-approval-request.md)、[POC-005実機確認手順](poc-005-device-check-guide.md)、[POC-005実施結果](poc-005-result.md) | 自動試験・配信先スモーク合格、指定3実機確認待ち |
+| 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-NF-013 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-005開始承認依頼](poc-005-approval-request.md)、[POC-005実機確認手順](poc-005-device-check-guide.md)、[POC-005実施結果](poc-005-result.md) | 自動試験合格。端末申告受領、端末直接証跡と表示修正版の実機確認待ち |
 | グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認済み |
 
 ## Issue #5の確認事項との対応
@@ -127,6 +127,7 @@
 | CONF-010 | 公演単位の任意テキスト項目を主担当・代理だけが扱い、公演後1か月で値を削除する | RQ-002 | REQ-F-033、REQ-NF-005、REQ-NF-012／AC-023 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-021 | 任意項目値の1か月後の無人自動削除は必須とせず、期限後に管理画面で削除を案内して主担当・代理管理者に削除させる | RQ-002 | REQ-NF-012／AC-023 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録)、[POC-004実施結果](poc-004-result.md) |
 | CONF-011 | 簡易座席表と会場画像の上限・事前取得・代替表示を定める | RQ-004 | REQ-F-035／AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
+| CONF-022 | 会場画像を1枚ずつ大きく表示して前後操作・横方向スワイプ・拡大縮小を行い、PCの座席間隔は席寸法を変えず隣接する10席単位の間だけに設ける | RQ-004 | REQ-F-035／AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録)、[POC-005実施結果](poc-005-result.md#実機確認で見つかった表示課題) |
 | CONF-012 | 同期5秒目標・10秒上限、当日20MB以下、費用0円とする | TBD-007、TBD-009 | REQ-NF-010、REQ-NF-013／AC-015、AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-013 | iPhone 17、iPhone 13 mini、Galaxy Z Fold8を実機対象とする | TBD-001 | REQ-F-008、REQ-F-030、REQ-F-032、REQ-F-035／AC-004、AC-015、AC-022、AC-025 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-014 | A6縦PDF電子チケット、個別・一括ZIP、通常提示、確認コード、必要時生成を採用する | RQ-001 | REQ-F-032／AC-022 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
