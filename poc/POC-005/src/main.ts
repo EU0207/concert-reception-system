@@ -19,6 +19,7 @@ let imageObjectUrls: string[] = [];
 let preparedImages: Array<{ label: string; url: string }> = [];
 let currentImageIndex = 0;
 let imageZoom = 1;
+let swipeStart: { x: number; y: number } | undefined;
 
 registerSW({
   immediate: true,
@@ -143,6 +144,17 @@ element<HTMLButtonElement>("next-image").addEventListener("click", () => changeI
 element<HTMLButtonElement>("zoom-out").addEventListener("click", () => setImageZoom(imageZoom - 0.25));
 element<HTMLButtonElement>("zoom-reset").addEventListener("click", () => setImageZoom(1));
 element<HTMLButtonElement>("zoom-in").addEventListener("click", () => setImageZoom(imageZoom + 0.25));
+element("image-gallery").addEventListener("pointerdown", (event) => {
+  if (imageZoom === 1) swipeStart = { x: event.clientX, y: event.clientY };
+});
+element("image-gallery").addEventListener("pointerup", (event) => {
+  if (!swipeStart || imageZoom !== 1) return;
+  const horizontal = event.clientX - swipeStart.x;
+  const vertical = event.clientY - swipeStart.y;
+  swipeStart = undefined;
+  if (Math.abs(horizontal) >= 50 && Math.abs(horizontal) > Math.abs(vertical) * 1.2) changeImage(horizontal < 0 ? 1 : -1);
+});
+element("image-gallery").addEventListener("pointercancel", () => { swipeStart = undefined; });
 element<HTMLSelectElement>("device-model").addEventListener("change", renderDeviceSpecificChecks);
 element<HTMLButtonElement>("export-button").addEventListener("click", () => void exportResult());
 element<HTMLInputElement>("delete-confirmation").addEventListener("input", (event) => {
@@ -216,9 +228,10 @@ function renderSeatSelector(): void {
 function renderSeats(): void {
   const visible = orderSeats(seats.filter((seat) => seat.floor === floor), direction);
   const selected = seats.find((seat) => seat.id === selectedSeatId);
-  const seatHtml = visible.map((seat) => {
+  const seatHtml = visible.flatMap((seat, index) => {
     const current = seat.id === selectedSeatId;
-    return `<button class="seat kind-${seat.kind}${current ? " selected" : ""}${seat.row % 2 === 1 ? " row-break" : ""}" data-seat-id="${seat.id}" aria-current="${current ? "true" : "false"}" title="${seat.floor} ${seat.section} ${seat.row}列 ${seat.number}番 ${seat.kind}"><span>${current ? "★" : seat.number}</span><small>${current ? "現在席" : `${seat.row}列`}</small></button>`;
+    const button = `<button class="seat kind-${seat.kind}${current ? " selected" : ""}" data-seat-id="${seat.id}" aria-current="${current ? "true" : "false"}" title="${seat.floor} ${seat.section} ${seat.row}列 ${seat.number}番 ${seat.kind}"><span>${current ? "★" : seat.number}</span><small>${current ? "現在席" : `${seat.row}列`}</small></button>`;
+    return (index + 1) % 20 === 10 ? [button, '<span class="seat-divider" aria-hidden="true"></span>'] : [button];
   }).join("");
   element("seat-map").innerHTML = seatHtml;
   for (const button of element("seat-map").querySelectorAll<HTMLButtonElement>("[data-seat-id]")) {
@@ -276,6 +289,7 @@ function renderCurrentImage(): void {
     return;
   }
   element("image-gallery").innerHTML = `<figure><img src="${image.url}" alt="${image.label}（架空の合成画像）" style="width:${imageZoom * 100}%"/><figcaption>${image.label}</figcaption></figure>`;
+  element("image-gallery").classList.toggle("zoomed", imageZoom !== 1);
   element("image-position").textContent = `${currentImageIndex + 1} / ${preparedImages.length}`;
   element<HTMLButtonElement>("zoom-reset").textContent = `${Math.round(imageZoom * 100)}%`;
 }

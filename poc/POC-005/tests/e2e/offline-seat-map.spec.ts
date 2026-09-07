@@ -8,10 +8,13 @@ test("事前取得後に完全オフラインで座席表と5画像を復元す�
   await expect(page.locator("#image-position")).toHaveText("1 / 5");
   await page.getByRole("button", { name: "次の画像" }).click();
   await expect(page.locator("#image-position")).toHaveText("2 / 5");
+  await page.locator("#image-gallery").dispatchEvent("pointerdown", { clientX: 300, clientY: 120, pointerType: "touch" });
+  await page.locator("#image-gallery").dispatchEvent("pointerup", { clientX: 100, clientY: 125, pointerType: "touch" });
+  await expect(page.locator("#image-position")).toHaveText("3 / 5");
   await page.getByRole("button", { name: "画像を拡大" }).click();
   await expect(page.getByRole("button", { name: "125%" })).toBeVisible();
   await expect(page.locator("#seat-map .seat")).toHaveCount(300);
-  await expect(page.locator("#seat-map .seat.row-break")).toHaveCount(160);
+  await expect(page.locator("#seat-map .seat-divider")).toHaveCount(15);
   await page.reload();
   await expect(page.getByText("準備完了")).toBeVisible();
   await context.setOffline(true);
