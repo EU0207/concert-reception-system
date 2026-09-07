@@ -14,6 +14,8 @@ poc/POC-003/.firebaserc
 !poc/POC-003/.firebaserc.example
 poc/POC-004/.firebaserc
 !poc/POC-004/.firebaserc.example
+poc/POC-005/.firebaserc
+!poc/POC-005/.firebaserc.example
 
 # Dependencies and generated output
 node_modules/
@@ -44,4 +46,7 @@ poc/POC-003/device-evidence/
 poc/POC-004/artifacts/raw/
 poc/POC-004/profiles/
 poc/POC-004/firebase-export/
+poc/POC-005/generated-assets/
+poc/POC-005/artifacts/raw/
+poc/POC-005/device-evidence/
 *.netlog.json

@@ -53,7 +53,9 @@
 | POC-003実施結果報告書 | [poc-003-result.md](development/poc-003-result.md) | 指定実機のQR読取り、電子チケット、オフライン保持、終了処理の結果と制約を記録する | 依頼者、開発担当者、確認担当者 | POC-003終了時 | 版番号、削除確認、結果承認時 | Approved |
 | POC-004開始承認依頼書 | [poc-004-approval-request.md](development/poc-004-approval-request.md) | 個別認証、権限制御、暗号化、期限、端末削除PoCの開始前に外部資源、保存・削除、費用と制約を確認する | 依頼者、開発担当者、確認担当者 | POC-004承認前 | 対象、Firebase設定、削除方式または承認状態の変更時 | Approved |
 | POC-004実施結果報告書 | [poc-004-result.md](development/poc-004-result.md) | 個別認証、役割制御、暗号化、期限、端末削除の結果と0円条件で残る制約を記録する | 依頼者、開発担当者、確認担当者 | POC-004終了時 | 結果確認、要件調整、次の判断時 | Approved |
-| POC-005開始承認依頼書 | [poc-005-approval-request.md](development/poc-005-approval-request.md) | 座席表・会場画像の事前取得、完全オフライン表示、実機確認の開始前に外部資源、保存・削除、費用を確認する | 依頼者、開発担当者、実機確認担当者 | POC-005承認前 | 対象、画像上限、実機、配信・削除条件の変更時 | In Review |
+| POC-005開始承認依頼書 | [poc-005-approval-request.md](development/poc-005-approval-request.md) | 座席表・会場画像の事前取得、完全オフライン表示、実機確認の開始前に外部資源、保存・削除、費用を確認する | 依頼者、開発担当者、実機確認担当者 | POC-005承認前 | 対象、画像上限、実機、配信・削除条件の変更時 | Approved |
+| POC-005実機確認手順 | [poc-005-device-check-guide.md](development/poc-005-device-check-guide.md) | 3機種で事前取得、完全オフライン、現在席、代替一覧、Fold開閉を確認する | 依頼者、実機確認担当者 | POC-005実機確認時 | 確認URL、画面手順、対象端末の変更時 | In Review |
+| POC-005実施結果報告書 | [poc-005-result.md](development/poc-005-result.md) | 自動試験、指定3実機、配信、費用、終了処理とAC-025判定を記録する | 依頼者、開発担当者、確認担当者 | POC-005実施中・終了時 | 実機結果、削除確認、最終判定時 | In Review |
 | ADR案内 | [adr-guide.md](development/decisions/adr-guide.md) | 重要な判断の記録方法を定める | 開発担当者 | 重要な判断の発生時 | 運用変更時 | Draft |
 
 ## テンプレート
