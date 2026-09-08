@@ -109,7 +109,7 @@
 | QR判定性能・受付処理量・通信量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002、REQ-NF-013 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-002開始承認依頼](poc-002-approval-request.md)、[POC-002実施結果](poc-002-result.md) | POC-002合格・依頼者確認済み |
 | 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-F-040、REQ-NF-005、REQ-NF-006、REQ-NF-012、REQ-NF-015 | AC-009、AC-013、AC-014、AC-016、AC-023、AC-028 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護)、[POC-004開始承認依頼](poc-004-approval-request.md)、[POC-004実施結果](poc-004-result.md) | POC-004で削除手段・暗号化・権限停止を確認済み。自動削除連携・端末別追跡はAC-028で本番受入予定 |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
-| 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-F-038、REQ-F-039、REQ-NF-013、REQ-NF-014 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-005開始承認依頼](poc-005-approval-request.md)、[POC-005実機確認手順](poc-005-device-check-guide.md)、[POC-005実施結果](poc-005-result.md)、[本番UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md) | POC-005検証範囲合格・プレビューチャネル削除済み。端末データ削除とプロジェクト本体の別承認待ち。本番向け追加要望は画面設計へ引継ぎ済み |
+| 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-F-038、REQ-F-039、REQ-NF-013、REQ-NF-014 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-005開始承認依頼](poc-005-approval-request.md)、[POC-005実機確認手順](poc-005-device-check-guide.md)、[POC-005実施結果](poc-005-result.md)、[本番UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[Firebaseプロジェクト削除結果](firebase-test-project-deletion-approval-request.md#実行結果) | POC-005検証範囲合格・依頼者確認済み。端末、結果JSON、プレビューチャネル、ローカル生成物の削除と検証Firebaseプロジェクトへの削除要求完了。本番向け追加要望は画面設計へ引継ぎ済み |
 | グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認済み |
 
 ## Issue #5の確認事項との対応
@@ -144,7 +144,7 @@
 | CONF-017 | 2027年以降、1日1公演、1公演最大500枚、費用0円を前提とする | TBD-009 | REQ-B-002、REQ-NF-010／AC-018、AC-020 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-019 | 開発用Firebaseと依頼者所有の本番環境を分離し、初期設定・引継ぎ・通常運用の管理負担を抑える | TBD-010、TBD-012 | REQ-NF-009、REQ-NF-011／AC-017、AC-020 | [POC-001開始承認依頼書](poc-001-approval-request.md#googleアカウントと環境の分離) |
 | CONF-018 | 公演後に残す基本データへ公演時点の会場名・住所を追加する | TBD-008、REQ-F-024 | AC-013 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
-| CONF-020 | 検証専用FirebaseプロジェクトをPOC-005終了確認まで保持し、各PoC終了時に架空データ・不要利用者を削除し、全PoC終了後に本体を1回削除する | TBD-012 | REQ-NF-010、REQ-NF-011／AC-020 | [POC-001実施結果報告書](poc-001-result.md#外部資源の終了処理) |
+| CONF-020 | 検証専用FirebaseプロジェクトをPOC-005終了確認まで保持し、各PoC終了時に架空データ・不要利用者を削除し、全PoC終了後に本体を1回削除する | TBD-012 | REQ-NF-010、REQ-NF-011／AC-020 | [POC-001実施結果報告書](poc-001-result.md#外部資源の終了処理)、[Firebaseプロジェクト削除結果](firebase-test-project-deletion-approval-request.md#実行結果) |
 
 ## 更新ルール
 
