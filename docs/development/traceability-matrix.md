@@ -7,8 +7,8 @@
 | 目的 | 質問・決定事項から要件、受入条件、将来の設計・テストまでの対応を追跡する |
 | 主な読者 | 開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実施結果報告書](poc-003-result.md) |
-| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実施結果報告書](poc-003-result.md) |
+| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23) |
 | 文書の位置づけ | 暫定要件・受入条件案の対応を示す。技術検証結果と確定要件を順次追記する |
 | 状態 | In Review |
 | 承認情報 | 未承認 |
@@ -64,6 +64,7 @@
 | REQ-F-038 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | 未登録 | 未登録 | In Review |
 | REQ-F-039 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | 未登録 | 未登録 | In Review |
 | REQ-F-040 | INT-Q-021、INT-Q-025、INT-Q-031、INT-Q-042、CONF-016、CONF-024 | AC-028 | 未登録 | 未登録 | In Review |
+| REQ-F-041 | INT-Q-011、INT-Q-016、INT-Q-023、INT-Q-027、CONF-025 | AC-029 | 未登録 | 未登録 | In Review |
 | REQ-NF-001 | INT-Q-002、INT-Q-012、INT-Q-022 | AC-004、AC-018 | 未登録 | 未登録 | In Review |
 | REQ-NF-002 | INT-Q-003、INT-Q-018、INT-Q-022、INT-Q-037 | AC-015、AC-018 | 未登録 | 未登録 | In Review |
 | REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034、CONF-005 | AC-015 | 未登録 | 未登録 | In Review |
@@ -79,6 +80,11 @@
 | REQ-NF-013 | INT-Q-037、CONF-012 | AC-015、AC-018 | 未登録 | 未登録 | In Review |
 | REQ-NF-014 | CONF-023 | AC-025 | 未登録 | 未登録 | In Review |
 | REQ-NF-015 | INT-Q-019、INT-Q-021、INT-Q-025、INT-Q-042、CONF-016、CONF-024 | AC-028 | 未登録 | 未登録 | In Review |
+| REQ-NF-016 | INT-Q-019、INT-Q-028、INT-Q-040、CONF-016、CONF-026 | AC-030 | 未登録 | 未登録 | In Review |
+| REQ-NF-017 | INT-Q-006、INT-Q-014、INT-Q-016、INT-Q-027、CONF-026 | AC-030 | 未登録 | 未登録 | In Review |
+| REQ-NF-018 | INT-Q-016、INT-Q-032、INT-Q-040、INT-Q-042、CONF-026 | AC-031 | 未登録 | 未登録 | In Review |
+| REQ-NF-019 | INT-Q-019、INT-Q-032、INT-Q-040～INT-Q-043、CONF-019、CONF-026 | AC-031 | 未登録 | 未登録 | In Review |
+| REQ-NF-020 | INT-Q-030～INT-Q-032、INT-Q-040、CONF-023、CONF-026 | AC-032 | 未登録 | 未登録 | In Review |
 
 ## 制約の対応表
 
@@ -145,6 +151,13 @@
 | CONF-019 | 開発用Firebaseと依頼者所有の本番環境を分離し、初期設定・引継ぎ・通常運用の管理負担を抑える | TBD-010、TBD-012 | REQ-NF-009、REQ-NF-011／AC-017、AC-020 | [POC-001開始承認依頼書](poc-001-approval-request.md#googleアカウントと環境の分離) |
 | CONF-018 | 公演後に残す基本データへ公演時点の会場名・住所を追加する | TBD-008、REQ-F-024 | AC-013 | [技術検証計画書](technical-validation-plan.md#依頼者の回答記録) |
 | CONF-020 | 検証専用FirebaseプロジェクトをPOC-005終了確認まで保持し、各PoC終了時に架空データ・不要利用者を削除し、全PoC終了後に本体を1回削除する | TBD-012 | REQ-NF-010、REQ-NF-011／AC-020 | [POC-001実施結果報告書](poc-001-result.md#外部資源の終了処理)、[Firebaseプロジェクト削除結果](firebase-test-project-deletion-approval-request.md#実行結果) |
+
+## Issue #23の確認事項との対応
+
+| 確認ID | 決定内容 | 関連する未決定事項・要望 | 主な関連要件・受入条件 | 記録先 |
+|---|---|---|---|---|
+| CONF-025 | 公演中は未受付・来場済みを扱い、管理者だけが座席表・一覧から手動受付と理由付き訂正を行う。初回受付を上書きせず、オフライン変更と競合も履歴化し、締め時の未受付を未来場とする | 来場状態の手動変更 | REQ-F-041／AC-029 | [要件定義書](../client/requirements.md)、[本番設計引継ぎ事項](production-security-ui-ux-notes.md#来場状態の扱い) |
+| CONF-026 | セキュリティを要件・設計・実装・試験・運用で継続して扱い、認証、セッション、サーバー側権限、入力保護、秘密情報、依存関係、復旧、障害対応を確認する。UI/UXは実装前の操作見本と実装中の対象実機レビューで調整する | 本番セキュリティ・UI/UX | REQ-NF-016～REQ-NF-020／AC-030～AC-032 | [本番設計引継ぎ事項](production-security-ui-ux-notes.md) |
 
 ## 更新ルール
 
