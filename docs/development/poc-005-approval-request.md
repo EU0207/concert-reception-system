@@ -10,8 +10,8 @@
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 関連ID | POC-005、TBD-001、REQ-F-035、REQ-NF-010、REQ-NF-011、REQ-NF-013、RQ-004、AC-020、AC-025、CONF-011～CONF-013、CONF-019、CONF-020 |
 | 調査日 | 2026-09-07 |
-| 状態 | In Review |
-| 承認情報 | 未承認。本文の確認後にPOC-005だけの明示承認が必要。技術採用、本番実装、本番Firebase環境は承認対象外 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-07、依頼者が[Issue #6の記録](https://github.com/EU0207/concert-reception-system/issues/6#issuecomment-5568483287)のとおりPOC-005に限って開始を明示承認。技術採用、本番実装、本番Firebase環境は承認対象外 |
 
 ## 結論
 
