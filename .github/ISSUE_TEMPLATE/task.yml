@@ -24,6 +24,17 @@ body:
     validations:
       required: true
   - type: textarea
+    id: requester_confirmation
+    attributes:
+      label: 依頼者への確認・承認
+      description: 依頼者の判断が必要な事項を箇条書きで記載してください。不要な場合は「なし」と記載してください。
+      value: |
+        **依頼者に確認してください**
+
+        - なし
+    validations:
+      required: true
+  - type: textarea
     id: tasks
     attributes:
       label: 作業内容
