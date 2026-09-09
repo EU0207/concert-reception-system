@@ -42,4 +42,6 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 
 ## ADR一覧
 
-現時点では、確定したADRはありません。
+| ADR | 判断対象 | 状態 | 関連Issue |
+|---|---|---|---|
+| [ADR-001](ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | Proposed | [#25](https://github.com/EU0207/concert-reception-system/issues/25) |
