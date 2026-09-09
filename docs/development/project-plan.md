@@ -10,7 +10,7 @@
 | 記載する内容 | 工程、成果物、管理方法、承認ゲート、変更管理 |
 | 記載しない内容 | 個別機能の仕様、未決定の技術構成 |
 | 関連文書 | [ドキュメント案内](../document-guide.md)、[技術検証計画書](technical-validation-plan.md)、[ADR案内](decisions/adr-guide.md) |
-| 関連Issue | [#1](https://github.com/EU0207/concert-reception-system/issues/1)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#10](https://github.com/EU0207/concert-reception-system/issues/10)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#25](https://github.com/EU0207/concert-reception-system/issues/25) |
+| 関連Issue | [#1](https://github.com/EU0207/concert-reception-system/issues/1)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#10](https://github.com/EU0207/concert-reception-system/issues/10)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#25](https://github.com/EU0207/concert-reception-system/issues/25)、[#31](https://github.com/EU0207/concert-reception-system/issues/31) |
 | 状態 | Draft |
 | 承認情報 | 未承認 |
 
@@ -66,7 +66,7 @@ Issue作成時は `Todo`、ブランチで作業を始めた時は `進行中`�
 
 暫定要件と受入条件案はIssue #5でレビューし、技術調査・PoCの対象、評価方法、合格基準、実施可否を確認します。Issue #6の調査段階と`POC-001`～`POC-005`は個別承認済みです。`POC-001`～`POC-005`は実施と結果確認を完了し、`POC-005`は2026-09-08に検証範囲を合格と判定しました。同日、検証用の端末データ、結果JSON、プレビューチャネル、ローカル生成物の削除と、Firebaseプロジェクトへの削除要求までの終了操作も完了しました。PoCは、外部サービス、依存関係、作成資源、保存データ、削除方法、費用0円である根拠を提示し、依頼者が明示的に承認した後だけ実施します。
 
-Issue #6の完了後、Issue #23とPR #24で要件定義書と受入条件書を確定し、2026-09-09に承認記録を残してmainへ統合しました。次はIssue #25で製品基盤候補を比較し、ADRを承認した後に基本設計へ進みます。設計とリリース前にも、それぞれ対象工程の承認用Issueを作成します。
+Issue #6の完了後、Issue #23とPR #24で要件定義書と受入条件書を確定し、2026-09-09に承認記録を残してmainへ統合しました。Issue #25とPR #26では製品基盤をADR-001として承認・統合しました。Issue #31で基本設計の成果物、依存関係、追跡方法、承認順序を定め、後続の設計Issueへ分割します。基本設計一式と主要画面の操作見本が揃った時点で設計工程の承認Issueを進め、承認前に本番アプリケーションコードを実装しません。リリース前にも対象工程の承認用Issueを作成します。
 
 ## 技術調査・PoC
 
