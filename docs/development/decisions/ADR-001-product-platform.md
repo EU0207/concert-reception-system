@@ -10,13 +10,14 @@
 | 関連Issue | [#25](https://github.com/EU0207/concert-reception-system/issues/25) |
 | 関連ID | TBD-002、TBD-003、TBD-004、TBD-011、TBD-012、REQ-NF-002～REQ-NF-004、REQ-NF-010～REQ-NF-021、AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 |
 | 調査基準日 | 2026-09-09 |
-| 状態 | In Review |
-| ADR状態 | Proposed |
-| 決定日 | 未決定 |
+| 状態 | Approved |
+| ADR状態 | Accepted |
+| 決定日 | 2026-09-09 |
+| 承認情報 | 2026-09-09に依頼者が、確認事項1～3について推奨案をすべて承認（CONF-033） |
 
-## 結論案
+## 決定
 
-次の構成を推奨する。これは承認依頼前の提案であり、まだ採用決定ではない。
+次の構成を採用する。
 
 - スマートフォンとPCのブラウザーで動くPWAとする。
 - TypeScriptを使用し、画面、業務処理、端末保存、外部サービス接続を分離する。
@@ -104,9 +105,9 @@ POC-001～POC-004では、PWA、IndexedDB、Firebase Authentication、Cloud Fire
 | Firebase出力・復旧 | Firestoreの管理エクスポート／インポートは課金有効化とCloud Storageが必要。TTL、PITR、管理バックアップも無料枠対象外 | Spark限定ではアプリ機能による出力・再取込、端末イベント、紙資料を組み合わせる | [Export and import data](https://firebase.google.com/docs/firestore/manage-data/export-import)、[Firestore pricing](https://firebase.google.com/docs/firestore/pricing) |
 | Cloudflare代替 | Workers Freeは1日100,000要求、D1 Freeは1日500万行読取り・100,000行書込み、1DB 500MB、7日Time Travel。上限超過時は当日中の要求が失敗する | 代替採用時は独自認証・同期・再試行の追加検証と運用設計が必要 | [Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)、[D1 limits](https://developers.cloudflare.com/d1/platform/limits/)、[D1 Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/) |
 
-## 提案する決定
+## 採用結果
 
-候補Aを採用し、候補Bを見直し時の代替、候補Cを緊急時の補助手段とすることを提案する。
+候補Aを採用し、候補Bを見直し時の代替、候補Cを緊急時の補助手段とする。
 
 このADRの承認で決めるのは製品基盤の方針までとし、次は含めない。
 
@@ -116,11 +117,13 @@ POC-001～POC-004では、PWA、IndexedDB、Firebase Authentication、Cloud Fire
 - 本番コード実装
 - 公開ライセンスの採用
 
-## 承認前に確認する事項
+## 確認済み事項
 
-1. 本番の依頼者と、将来このシステムを利用する各主催者が、それぞれ自分で所有するGoogleアカウントとFirebaseプロジェクトを準備する前提を受け入れられるか。
-2. 費用0円を優先し、Firestoreの課金必須バックアップ機能を使わず、アプリの出力・再取込と紙資料による復旧を採用する方針でよいか。
-3. Spark無料枠や提供条件が要件に合わなくなった場合、無断で有料化せず、運用停止または候補Bへの見直しを行う方針でよいか。
+1. 本番の依頼者と、将来このシステムを利用する各主催者は、それぞれ自分で所有するGoogleアカウントとFirebaseプロジェクトを準備する。
+2. 費用0円を優先し、Firestoreの課金必須バックアップ機能を使わず、アプリの出力・再取込と紙資料による復旧を採用する。
+3. Spark無料枠や提供条件が要件に合わなくなった場合、無断で有料化せず、運用停止または候補Bへの見直しを行う。
+
+上記3点は2026-09-09に依頼者がすべて推奨案どおり承認した（CONF-033）。
 
 ## 影響
 
