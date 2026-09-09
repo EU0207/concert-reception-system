@@ -47,6 +47,7 @@
 - 直近で確実な作業だけを具体化し、技術や要件が未決定の遠い工程は推測で細分化しません。
 - Web画面では `.github/ISSUE_TEMPLATE/task.yml` の作業フォームを使用し、Project「コンサート受付システム開発」へ自動登録します。
 - GitHub CLIでIssueを作成する場合は、`gh issue create --project "コンサート受付システム開発"` のようにProjectを明示します。
+- Issue作成後と状態変更時は、`scripts/set-project-status.ps1`を使用してProjectへの登録、状態変更、再取得確認を一度に行います。
 - ProjectではIssueを作業カードとして管理し、Pull Requestを重複登録しません。変更状況はIssueの `Linked pull requests` から確認します。
 
 ## GitHub Projectsの状態
@@ -58,7 +59,7 @@
 | レビュー | 文書確認、Pull Requestレビュー、または依頼者確認を待っている |
 | 完了 | 完了条件を満たし、必要な文書更新と統合が完了している |
 
-Issue作成時は `Todo`、ブランチで作業を始めた時は `進行中`、Pull Requestまたは依頼者確認を待つ時は `レビュー` へ更新します。Pull Requestがmainへ統合され、Issueの完了条件を満たしたことを確認してから `完了` とします。IssueをCloseしただけでProject更新を省略しません。
+Issue作成時は `Todo`、ブランチで作業を始めた時は `進行中`、Pull Requestまたは依頼者確認を待つ時は `レビュー` へ更新します。Pull Requestがmainへ統合され、Issueの完了条件を満たしたことを確認してから `完了` とします。IssueをCloseしただけでProject更新を省略しません。完了報告前にIssue、Pull Request、Projectを再取得し、状態の一致を確認します。
 
 ## 工程承認
 
