@@ -166,6 +166,13 @@
 | CONF-030 | 第三者利用でも依頼者環境と情報を分離する方針を示した | 公開目的と利用範囲はCONF-031で修正 | REQ-B-006、REQ-NF-021、TBD-011／AC-033 | [要件定義書](../client/requirements.md) |
 | CONF-031 | 公開目的を第三者評価に限定し、評価者は架空データとローカルまたは評価専用環境を使用する。第三者向け本番利用、利用許諾、個別サポート、動作保証は要件に含めない | 公開リポジトリ・評価環境分離 | REQ-B-006、REQ-NF-021、TBD-011／AC-033 | [要件定義書](../client/requirements.md)、[本番設計引継ぎ事項](production-security-ui-ux-notes.md#公開リポジトリと評価環境の分離) |
 | CONF-032 | 現時点では公開ライセンスを採用しないが、将来採用しても個人コンサート主催者が分かりやすく使え、各主催者の環境・データが分離される構成をゴールとする | 将来の公開・操作性・環境分離 | REQ-B-006、REQ-NF-021、TBD-011／AC-033 | [要件定義書](../client/requirements.md)、[本番設計引継ぎ事項](production-security-ui-ux-notes.md#公開リポジトリと評価環境の分離) |
+| CONF-033 | PWA＋Firebase＋IndexedDBイベント方式、環境所有者ごとのFirebase分離、アプリ出力による復旧、無料条件不適合時の停止・再検討を採用した | 製品基盤の技術選定 | TBD-002～TBD-004、TBD-011、TBD-012／AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 | [ADR-001](decisions/ADR-001-product-platform.md) |
+
+## ADRとの対応
+
+| ADR | 判断対象 | 関連要件・未決定事項 | 関連受入条件 | 状態 |
+|---|---|---|---|---|
+| [ADR-001](decisions/ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | TBD-002～TBD-004、TBD-011、TBD-012、REQ-NF-002～REQ-NF-004、REQ-NF-010～REQ-NF-021 | AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 | Accepted |
 
 ## 更新ルール
 
