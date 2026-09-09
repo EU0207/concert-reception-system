@@ -68,6 +68,7 @@
 | テンプレート | ファイル | 用途 |
 |---|---|---|
 | 一般文書 | [document-template.md](templates/document-template.md) | 新しい正式文書の共通書式 |
+| 承認依頼書 | [approval-request-template.md](templates/approval-request-template.md) | 依頼者への承認対象、理由、影響、対象外、回答方法の提示 |
 | 打合せ記録 | [meeting-note-template.md](templates/meeting-note-template.md) | 打合せ内容と合意事項の記録 |
 | 要件 | [requirement-template.md](templates/requirement-template.md) | 機能要件・非機能要件の記録 |
 | テストケース | [test-case-template.md](templates/test-case-template.md) | 将来のテスト仕様作成時に使用 |
