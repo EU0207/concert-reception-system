@@ -24,7 +24,7 @@
 | REQ-B-003 | INT-Q-009、INT-Q-036 | AC-002 | 未登録 | 未登録 | In Review |
 | REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | 未登録 | 未登録 | In Review |
 | REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | 未登録 | 未登録 | In Review |
-| REQ-B-006 | CONF-030 | AC-033 | 未登録 | 未登録 | In Review |
+| REQ-B-006 | CONF-030、CONF-031 | AC-033 | 未登録 | 未登録 | In Review |
 | REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028 | AC-001 | 未登録 | 未登録 | In Review |
 | REQ-F-002 | INT-Q-009、INT-Q-026 | AC-001 | 未登録 | 未登録 | In Review |
 | REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | 未登録 | 未登録 | In Review |
@@ -86,7 +86,7 @@
 | REQ-NF-018 | INT-Q-016、INT-Q-032、INT-Q-040、INT-Q-042、CONF-026 | AC-031 | 未登録 | 未登録 | In Review |
 | REQ-NF-019 | INT-Q-019、INT-Q-032、INT-Q-040～INT-Q-043、CONF-019、CONF-026 | AC-031、AC-033 | 未登録 | 未登録 | In Review |
 | REQ-NF-020 | INT-Q-030～INT-Q-032、INT-Q-040、CONF-023、CONF-026、CONF-029 | AC-032 | 未登録 | 未登録 | In Review |
-| REQ-NF-021 | INT-Q-042、CONF-030 | AC-033 | 未登録 | 未登録 | In Review |
+| REQ-NF-021 | INT-Q-042、CONF-030、CONF-031 | AC-033 | 未登録 | 未登録 | In Review |
 
 ## 制約の対応表
 
@@ -163,7 +163,8 @@
 | CONF-027 | 初期版の譲渡対象外、保存データの利用目的と削除希望対応、印刷業者向けExcel、主担当を窓口とする保守方針を確定する | 最終承認前の業務・出力・運用方針 | REQ-F-005、REQ-F-024、CON-005／AC-002、AC-013、AC-021 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md) |
 | CONF-028 | 毎回異なる元名簿を自動対応付けせず、システムの公演用Excelテンプレートへ1人1行で値を合わせ、会場に応じた座席列を使用し、数式は値として貼り付ける | 名簿取込方式 | REQ-F-001、REQ-F-033／AC-001、AC-023 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md) |
 | CONF-029 | スクロールしない専用カメラモードで読み取り、判定画面がカメラを覆って「次へ」まで追加読取りを停止する | QR読取り画面 | REQ-F-008、REQ-F-009、REQ-NF-020／AC-004、AC-032 | [要件定義書](../client/requirements.md)、[本番設計引継ぎ事項](production-security-ui-ux-notes.md#専用カメラモード) |
-| CONF-030 | 第三者が依頼者と分離した自分専用環境へ設定して個人コンサートで利用でき、依頼者情報を公開物に含めず、第三者サポート等を保証しない | 公開配布・環境分離 | REQ-B-006、REQ-NF-021、TBD-011／AC-033 | [要件定義書](../client/requirements.md)、[本番設計引継ぎ事項](production-security-ui-ux-notes.md#公開配布と環境分離) |
+| CONF-030 | 第三者利用でも依頼者環境と情報を分離する方針を示した | 公開目的と利用範囲はCONF-031で修正 | REQ-B-006、REQ-NF-021、TBD-011／AC-033 | [要件定義書](../client/requirements.md) |
+| CONF-031 | 公開目的を第三者による評価の評価に限定し、評価者は架空データとローカルまたは評価専用環境を使用する。第三者向け本番利用、利用許諾、個別サポート、動作保証は要件に含めない | 公開リポジトリ・評価環境分離 | REQ-B-006、REQ-NF-021、TBD-011／AC-033 | [要件定義書](../client/requirements.md)、[本番設計引継ぎ事項](production-security-ui-ux-notes.md#公開リポジトリと評価環境の分離) |
 
 ## 更新ルール
 
