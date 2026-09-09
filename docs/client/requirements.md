@@ -9,9 +9,9 @@
 | 正式情報 | [承認済み初回要件ヒアリング議事録](meeting-notes/2026-08-30-initial-requirements-interview.md) |
 | 関連文書 | [プロジェクト概要書](project-overview.md)、[受入条件書](acceptance-criteria.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation-plan.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](../development/production-security-ui-ux-notes.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23) |
-| 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映した最終レビュー対象。Issue #23で承認後に確定する |
-| 状態 | In Review |
-| 承認情報 | 未承認。承認済み議事録の決定事項を反映したレビュー対象版 |
+| 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映し、Issue #23で承認された確定要件 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-09に依頼者が、PR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`に含まれる本書、未決定事項の区分、残るリスクを明示承認 |
 
 ## 結論と前提
 
@@ -190,3 +190,7 @@
 - [受入条件書](acceptance-criteria.md)を検証結果に合わせて更新し、要件との対応を確認する。
 - 技術検証後に別途作成する最終承認Issueへ、承認結果を記録する。
 - 本書と受入条件書が承認されるまで、アプリケーションコードの実装を開始しない（INT-Q-035）。
+
+## 承認記録
+
+2026-09-09に依頼者が、PR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`に含まれる本書、[受入条件書](acceptance-criteria.md)、未決定事項の区分、残るリスクを明示承認した。受入条件の合格判定、mainへの統合、後続工程の設計・実装、技術・外部サービスの採用は、この承認に含まれない。

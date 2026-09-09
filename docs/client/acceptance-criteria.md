@@ -9,9 +9,9 @@
 | 正式情報 | [承認済み初回要件ヒアリング議事録](meeting-notes/2026-08-30-initial-requirements-interview.md) |
 | 関連文書 | [要件定義書](requirements.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation-plan.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](../development/production-security-ui-ux-notes.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23) |
-| 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映した最終レビュー対象。Issue #23で承認後に確定する |
-| 状態 | In Review |
-| 承認情報 | 未承認。承認済み議事録を元に作成したレビュー対象版 |
+| 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映し、Issue #23で承認された受入条件 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-09に依頼者が、PR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`に含まれる本書、未決定事項の区分、残るリスクを明示承認 |
 
 ## 確認方針
 
@@ -80,4 +80,4 @@
 
 ## 承認
 
-Issue #5では本書を最終承認せず、[技術検証計画書](../development/technical-validation-plan.md)で技術検証が必要な条件、評価方法、合格基準を確認した。Issue #6の調査・PoC結果と追加確認を反映し、Issue #23で要件定義書と本書の最終確認、承認範囲、承認日を記録する。承認後に状態、承認日、承認記録を更新する。要件定義書と本書が承認されるまで詳細設計と本番アプリケーションの実装を開始しない。
+Issue #5では本書を最終承認せず、[技術検証計画書](../development/technical-validation-plan.md)で技術検証が必要な条件、評価方法、合格基準を確認した。その後、Issue #6の調査・PoC結果と追加確認を反映し、2026-09-09に依頼者が、PR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`に含まれる[要件定義書](requirements.md)、本書、未決定事項の区分、残るリスクを明示承認した。33件の受入条件は完成時の合否基準として承認されたものであり、現時点の合格判定ではない。mainへの統合、後続工程の設計・実装、技術・外部サービスの採用は、この承認に含まれない。
