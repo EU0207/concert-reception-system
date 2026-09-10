@@ -6,8 +6,8 @@
 |---|---|
 | 目的 | 承認済み要件とADR-001を、実装前にレビュー可能な基本設計へ展開するため、成果物、設計範囲、依存関係、追跡方法、承認順序を定める |
 | 主な読者 | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 |
-| 前提 | 要件定義書と受入条件書はApproved、ADR-001はAcceptedであり、本番アプリケーションコードの実装は設計承認後に開始する |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[ADR-001](decisions/ADR-001-product-platform.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[本番座席表・会場画像UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[開発計画書](project-plan.md) |
+| 前提 | 要件定義書と受入条件書は`CONF-034`を含めApproved、ADR-001とADR-002はAcceptedであり、本番アプリケーションコードの実装は基本設計承認後に開始する |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[ADR-001](decisions/ADR-001-product-platform.md)、[ADR-002案](decisions/ADR-002-quota-emergency-response.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[本番座席表・会場画像UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[開発計画書](project-plan.md) |
 | 関連Issue | 親Issue [#31](https://github.com/EU0207/concert-reception-system/issues/31)、後続Issue #32～#38、#41、#43、#44 |
 | 状態 | In Review |
 | 承認情報 | 未承認 |
@@ -42,7 +42,7 @@
 | BD-06 | 画面・画面遷移・操作見本 | 情報設計、業務フロー、主要画面、通常・エラー・オフライン・再試行、専用カメラ、座席・会場画像、状態訂正、準備、締め処理の操作見本 | 本番画面コード、最終的な視覚装飾 |
 | BD-07 | Excel・QR・PDF・CSV・帳票設計 | 取込テンプレートと検証、QR内容・有効性・確認コード、電子チケット、印刷業者向けExcel、CSV、当日運営表、匿名集計、出力権限と一時生成物 | 実ファイル生成ライブラリの追加、実在データ |
 | BD-08 | 運用・監視・締め・復旧設計 | 公演準備、端末準備、利用量確認、当日切替、障害、紛失、問い合わせ、締め、端末削除追跡、データ返却、バックアップ・再取込、引継ぎ | 本番運用の実施、外部サービス契約 |
-| BD-09 | テスト方針 | 設計レビュー、単体・結合・システム・セキュリティ・受入テストの分担、対象環境、架空データ、証跡、合否、受入条件33件への割当 | 個別テストケースと本番相当試験の実施 |
+| BD-09 | テスト方針 | 設計レビュー、単体・結合・システム・セキュリティ・受入テストの分担、対象環境、架空データ、証跡、合否、受入条件34件への割当 | 個別テストケースと本番相当試験の実施 |
 | BD-10 | 基本設計承認記録 | `BD-01`～`BD-09`の整合性、主要操作見本、未決定事項、残存リスク、実装開始条件の一括確認と承認記録 | 個別設計の代替、実装承認 |
 
 ## 後続Issue
@@ -68,16 +68,16 @@
 
 | 設計ID | 主な要件ID | 主な受入条件ID | 未決定・確認ID |
 |---|---|---|---|
-| BD-01 | REQ-B-001～REQ-B-006、REQ-F-030、REQ-NF-002～REQ-NF-004、REQ-NF-009～REQ-NF-011、REQ-NF-013、REQ-NF-019、REQ-NF-021 | AC-015、AC-017、AC-018、AC-020、AC-021、AC-031、AC-033 | TBD-002、TBD-011、TBD-012、CONF-031～CONF-033 |
-| BD-02 | REQ-F-003～REQ-F-007、REQ-F-010、REQ-F-012～REQ-F-025、REQ-F-028、REQ-F-033～REQ-F-041、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、REQ-NF-015、REQ-NF-018 | AC-002、AC-003、AC-005、AC-007～AC-013、AC-023～AC-029、AC-031 | TBD-004、TBD-008、CONF-024、CONF-025 |
-| BD-03 | REQ-F-010、REQ-F-015～REQ-F-017、REQ-F-021、REQ-F-030、REQ-F-034、REQ-F-037、REQ-F-040、REQ-F-041、REQ-NF-001～REQ-NF-004、REQ-NF-013、REQ-NF-015 | AC-004、AC-005、AC-009、AC-011、AC-015、AC-018、AC-024、AC-027～AC-029 | TBD-002、CONF-012、CONF-024、CONF-025 |
-| BD-04 | REQ-F-012、REQ-F-013、REQ-F-018、REQ-F-023～REQ-F-028、REQ-F-031～REQ-F-033、REQ-F-036、REQ-F-037、REQ-F-040、REQ-F-041、REQ-NF-016～REQ-NF-019 | AC-007、AC-009、AC-012～AC-014、AC-022、AC-023、AC-026～AC-031、AC-033 | TBD-003、CONF-016、CONF-019、CONF-024、CONF-026 |
-| BD-05 | REQ-F-011、REQ-F-021～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-F-040、REQ-NF-005、REQ-NF-006、REQ-NF-010～REQ-NF-012、REQ-NF-015～REQ-NF-019、REQ-NF-021 | AC-006、AC-009、AC-013～AC-016、AC-020、AC-023、AC-028、AC-030、AC-031、AC-033 | TBD-003、TBD-004、TBD-011、TBD-012、CONF-026、CONF-033 |
-| BD-06 | REQ-F-001～REQ-F-017、REQ-F-019、REQ-F-022～REQ-F-025、REQ-F-029、REQ-F-034～REQ-F-041、REQ-NF-001、REQ-NF-006、REQ-NF-007、REQ-NF-009、REQ-NF-014、REQ-NF-015、REQ-NF-020、REQ-NF-021 | AC-001～AC-011、AC-013、AC-017、AC-019、AC-023～AC-029、AC-032、AC-033 | TBD-005、TBD-008、CONF-022、CONF-023、CONF-025、CONF-029、CONF-032 |
-| BD-07 | REQ-F-001～REQ-F-005、REQ-F-018、REQ-F-020、REQ-F-024、REQ-F-032、REQ-F-033、REQ-NF-005、REQ-NF-006、REQ-NF-012、REQ-NF-018 | AC-001、AC-002、AC-012、AC-013、AC-016、AC-022、AC-023、AC-031 | TBD-005、TBD-006、CONF-014、CONF-027、CONF-028 |
-| BD-08 | REQ-B-005、REQ-F-020、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-F-040、REQ-NF-003、REQ-NF-008～REQ-NF-011、REQ-NF-015、REQ-NF-016、REQ-NF-018、REQ-NF-019、REQ-NF-021 | AC-009、AC-013～AC-015、AC-017、AC-020、AC-021、AC-028、AC-030、AC-031、AC-033 | TBD-001、TBD-008、TBD-010、TBD-012、CONF-019、CONF-024、CONF-027 |
-| BD-09 | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-041、REQ-NF-001～REQ-NF-021 | AC-001～AC-033 | TBD-001～TBD-013、CONF-033 |
-| BD-10 | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-041、REQ-NF-001～REQ-NF-021 | AC-001～AC-033 | 基本設計で残った全確認事項 |
+| BD-01 | REQ-B-001～REQ-B-006、REQ-F-020、REQ-F-030、REQ-F-042、REQ-NF-002～REQ-NF-004、REQ-NF-009～REQ-NF-011、REQ-NF-013、REQ-NF-019～REQ-NF-021 | AC-015、AC-017、AC-018、AC-020、AC-021、AC-031、AC-033、AC-034 | TBD-002、TBD-011、TBD-012、CONF-031～CONF-034 |
+| BD-02 | REQ-F-003～REQ-F-007、REQ-F-010、REQ-F-012～REQ-F-025、REQ-F-028、REQ-F-033～REQ-F-042、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、REQ-NF-015、REQ-NF-018～REQ-NF-020 | AC-002、AC-003、AC-005、AC-007～AC-013、AC-023～AC-029、AC-031、AC-034 | TBD-004、TBD-008、CONF-024、CONF-025、CONF-034 |
+| BD-03 | REQ-F-010、REQ-F-015～REQ-F-017、REQ-F-021、REQ-F-030、REQ-F-034、REQ-F-037、REQ-F-040～REQ-F-042、REQ-NF-001～REQ-NF-004、REQ-NF-010、REQ-NF-013、REQ-NF-015、REQ-NF-019、REQ-NF-020 | AC-004、AC-005、AC-009、AC-011、AC-015、AC-018、AC-024、AC-027～AC-029、AC-034 | TBD-002、CONF-012、CONF-024、CONF-025、CONF-034 |
+| BD-04 | REQ-F-012、REQ-F-013、REQ-F-018、REQ-F-023～REQ-F-028、REQ-F-031～REQ-F-033、REQ-F-036、REQ-F-037、REQ-F-040～REQ-F-042、REQ-NF-016～REQ-NF-019 | AC-007、AC-009、AC-012～AC-014、AC-022、AC-023、AC-026～AC-031、AC-033、AC-034 | TBD-003、CONF-016、CONF-019、CONF-024、CONF-026、CONF-034 |
+| BD-05 | REQ-F-011、REQ-F-021～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-F-040、REQ-F-042、REQ-NF-005、REQ-NF-006、REQ-NF-010～REQ-NF-012、REQ-NF-015～REQ-NF-019、REQ-NF-021 | AC-006、AC-009、AC-013～AC-016、AC-020、AC-023、AC-028、AC-030、AC-031、AC-033、AC-034 | TBD-003、TBD-004、TBD-011、TBD-012、CONF-026、CONF-033、CONF-034 |
+| BD-06 | REQ-F-001～REQ-F-017、REQ-F-019、REQ-F-022～REQ-F-025、REQ-F-029、REQ-F-034～REQ-F-042、REQ-NF-001、REQ-NF-006、REQ-NF-007、REQ-NF-009、REQ-NF-014、REQ-NF-015、REQ-NF-019～REQ-NF-021 | AC-001～AC-011、AC-013、AC-017、AC-019、AC-023～AC-029、AC-032～AC-034 | TBD-005、TBD-008、CONF-022、CONF-023、CONF-025、CONF-029、CONF-032、CONF-034 |
+| BD-07 | REQ-F-001～REQ-F-005、REQ-F-018、REQ-F-020、REQ-F-024、REQ-F-032、REQ-F-033、REQ-F-042、REQ-NF-005、REQ-NF-006、REQ-NF-012、REQ-NF-018～REQ-NF-020 | AC-001、AC-002、AC-012、AC-013、AC-016、AC-022、AC-023、AC-031、AC-034 | TBD-005、TBD-006、CONF-014、CONF-027、CONF-028、CONF-034 |
+| BD-08 | REQ-B-005、REQ-F-020、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-F-040、REQ-F-042、REQ-NF-003、REQ-NF-008～REQ-NF-011、REQ-NF-015、REQ-NF-016、REQ-NF-018～REQ-NF-021 | AC-009、AC-013～AC-015、AC-017、AC-020、AC-021、AC-028、AC-030～AC-034 | TBD-001、TBD-008、TBD-010、TBD-012、CONF-019、CONF-024、CONF-027、CONF-034 |
+| BD-09 | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-042、REQ-NF-001～REQ-NF-021 | AC-001～AC-034 | TBD-001～TBD-013、CONF-033、CONF-034 |
+| BD-10 | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-042、REQ-NF-001～REQ-NF-021 | AC-001～AC-034 | 基本設計で残った全確認事項 |
 
 制約`CON-001`～`CON-006`は`BD-01`、`BD-03`、`BD-08`、`BD-09`で追跡する。後続Issueの作成時は、この表から対象IDを本文へ転記し、成果物完成時にトレーサビリティ表の設計IDを詳細項目IDへ更新する。
 
@@ -127,7 +127,7 @@
 | QR判定2秒目標と30分受付 | 読取り停止範囲、処理時間計測点、印刷品質案内、実機・人を含む試験 | BD-06、BD-07、BD-09 |
 | 接続されない端末の物理消去不能 | 暗号化、鍵非保存、権限停止、未確認表示、回収・手動削除 | BD-04、BD-05、BD-08、BD-09 |
 | 任意項目の期限後削除が手動 | 期限後閲覧拒否、削除案内、監査、残件確認 | BD-02、BD-05、BD-06、BD-08 |
-| 無料枠・提供条件の変更 | 利用量確認、開催前確認、停止判断、代替方式の再ADR | BD-01、BD-08、BD-09 |
+| 無料枠・提供条件の変更 | 利用量確認、開催前の予備印刷、管理者1名による紙・手動課金判断、端末別未送信一覧、復旧統合 | BD-01、BD-02～BD-04、BD-06～BD-09 |
 | 本番セキュリティ未確認 | 脅威・権限・秘密情報・復旧設計と直接APIを含む試験割当 | BD-04、BD-05、BD-09 |
 | 本番UI/UX未確認 | 実装前操作見本と実装後のPC・対象3実機レビュー | BD-06、BD-09、BD-10 |
 | 公開評価用の誤接続・権利確認 | 既定接続禁止、安全停止、環境分離、公開前検査、依存関係採用ゲート | BD-01、BD-05、BD-08、BD-09 |

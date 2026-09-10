@@ -45,3 +45,4 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 | ADR | 判断対象 | 状態 | 関連Issue |
 |---|---|---|---|
 | [ADR-001](ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | Accepted | [#25](https://github.com/EU0207/concert-reception-system/issues/25) |
+| [ADR-002](ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | Accepted | [#32](https://github.com/EU0207/concert-reception-system/issues/32) |
