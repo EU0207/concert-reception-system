@@ -9,9 +9,9 @@
 | 正式情報 | [承認済み初回要件ヒアリング議事録](meeting-notes/2026-08-30-initial-requirements-interview.md) |
 | 関連文書 | [要件定義書](requirements.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation-plan.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](../development/production-security-ui-ux-notes.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#32](https://github.com/EU0207/concert-reception-system/issues/32) |
-| 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映し、Issue #23で承認された受入条件へIssue #32の変更案を変更管理として追記した文書 |
-| 状態 | In Review |
-| 承認情報 | 2026-09-09に依頼者がPR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`を承認。2026-09-10の変更案は`CONF-034`として依頼者確認待ち |
+| 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映し、Issue #23で承認された受入条件へIssue #32の承認済み変更を追記した文書 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-09に依頼者がPR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`を承認。2026-09-11に開発者を連絡窓口として`CONF-034`とAC-034の依頼者承認を受領 |
 
 ## 確認方針
 
@@ -82,4 +82,4 @@
 
 ## 承認
 
-Issue #5では本書を最終承認せず、[技術検証計画書](../development/technical-validation-plan.md)で技術検証が必要な条件、評価方法、合格基準を確認した。その後、Issue #6の調査・PoC結果と追加確認を反映し、2026-09-09に依頼者が、PR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`に含まれる[要件定義書](requirements.md)、本書、未決定事項の区分、残るリスクを明示承認した。AC-001～AC-033は完成時の合否基準として承認されたものであり、現時点の合格判定ではない。AC-034は`CONF-034`とともに依頼者確認待ちである。mainへの統合、後続工程の設計・実装、技術・外部サービスの採用は、この承認に含まれない。
+Issue #5では本書を最終承認せず、[技術検証計画書](../development/technical-validation-plan.md)で技術検証が必要な条件、評価方法、合格基準を確認した。その後、Issue #6の調査・PoC結果と追加確認を反映し、2026-09-09に依頼者が、PR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`に含まれる[要件定義書](requirements.md)、本書、未決定事項の区分、残るリスクを明示承認した。2026-09-11に開発者を連絡窓口として`CONF-034`とAC-034の依頼者承認を受領した。AC-001～AC-034は完成時の合否基準として承認されたものであり、現時点の合格判定ではない。mainへの統合、後続工程の設計・実装は、この承認に含まれない。
