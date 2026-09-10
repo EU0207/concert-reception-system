@@ -171,16 +171,16 @@
 
 ## Issue #32の確認事項との対応
 
-| 確認ID | 確認案 | 関連する未決定事項・要望 | 主な関連要件・受入条件 | 記録先 |
+| 確認ID | 決定内容 | 関連する未決定事項・要望 | 主な関連要件・受入条件 | 記録先 |
 |---|---|---|---|---|
-| CONF-034（依頼者確認待ち） | 通常運用は無料枠を使う。公演中のFirebase上限時は、プロジェクト作成者である管理者1名が紙運用または同一プロジェクトへの手動課金を現場判断し、新プロジェクトへは移行しない。開催前に予備印刷を促し、各端末自身の未送信一覧を席番号と表示用チケット番号中心の簡潔なリストで確認できるようにする | 無料枠上限時の継続・費用・紙転記 | REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020／AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[ADR-002案](decisions/ADR-002-quota-emergency-response.md)、[システム構成・環境分離設計](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[本番UI/UX引継ぎ事項](production-security-ui-ux-notes.md#uiux設計方針) |
+| CONF-034 | 通常運用は無料枠を使う。公演中のFirebase上限時は、プロジェクト作成者である管理者1名が紙運用または同一プロジェクトへの手動課金を現場判断し、新プロジェクトへは移行しない。開催前に予備印刷を促し、各端末自身の未送信一覧を席番号と表示用チケット番号中心の簡潔なリストで確認できるようにする | 無料枠上限時の継続・費用・紙転記 | REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020／AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[システム構成・環境分離設計](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[本番UI/UX引継ぎ事項](production-security-ui-ux-notes.md#uiux設計方針) |
 
 ## ADRとの対応
 
 | ADR | 判断対象 | 関連要件・未決定事項 | 関連受入条件 | 状態 |
 |---|---|---|---|---|
 | [ADR-001](decisions/ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | TBD-002～TBD-004、TBD-011、TBD-012、REQ-NF-002～REQ-NF-004、REQ-NF-010～REQ-NF-021 | AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 | Accepted |
-| [ADR-002](decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | TBD-009、TBD-012、REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020 | AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | Proposed |
+| [ADR-002](decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | TBD-009、TBD-012、REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020 | AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | Accepted |
 
 ## 更新ルール
 
