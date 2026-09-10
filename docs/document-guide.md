@@ -63,6 +63,7 @@
 | ADR案内 | [adr-guide.md](development/decisions/adr-guide.md) | 重要な判断の記録方法を定める | 開発担当者 | 重要な判断の発生時 | 運用変更時 | Draft |
 | ADR-001 製品基盤と外部サービス | [ADR-001-product-platform.md](development/decisions/ADR-001-product-platform.md) | 製品基盤候補、外部サービス、費用、同期、環境分離を比較し、採用案を提示する | 依頼者、開発担当者、保守担当者 | 技術選定時 | 採用判断、提供条件、要件の変更時 | Approved |
 | 基本設計計画書 | [basic-design-plan.md](development/basic-design-plan.md) | 基本設計の成果物、対象、依存関係、追跡方法、承認順序を定める | 依頼者、設計担当者、開発担当者、テスト担当者 | 基本設計開始時 | 設計分割、依存関係、承認ゲートの変更時 | In Review |
+| システム構成・環境分離設計 | [system-architecture.md](development/system-architecture.md) | PWA、端末保存、Firebase、ファイル、環境、設定、配布の責務と境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 構成、環境、接続、外部サービス、配布方式の変更時 | In Review |
 
 ## テンプレート
 
