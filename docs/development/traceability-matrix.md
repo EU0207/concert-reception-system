@@ -7,8 +7,8 @@
 | 目的 | 質問・決定事項から要件、受入条件、将来の設計・テストまでの対応を追跡する |
 | 主な読者 | 開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[基本設計計画書](basic-design-plan.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実施結果報告書](poc-003-result.md) |
-| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#31](https://github.com/EU0207/concert-reception-system/issues/31) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[基本設計計画書](basic-design-plan.md)、[システム構成・環境分離設計](system-architecture.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実施結果報告書](poc-003-result.md) |
+| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#31](https://github.com/EU0207/concert-reception-system/issues/31)、[#32](https://github.com/EU0207/concert-reception-system/issues/32) |
 | 文書の位置づけ | 承認済み要件と受入条件を、確認記録、技術検証、ADR、基本設計、将来のテストへ追跡する |
 | 状態 | In Review |
 | 承認情報 | 未承認 |
@@ -19,12 +19,12 @@
 
 | 要件ID | 質問・確認ID | 受入条件ID | 設計ID | テストケースID | 状態 |
 |---|---|---|---|---|---|
-| REQ-B-001 | INT-Q-001、INT-Q-002 | AC-004、AC-010 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-B-002 | INT-Q-003、INT-Q-022、CONF-002、CONF-017 | AC-018 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-B-003 | INT-Q-009、INT-Q-036 | AC-002 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-B-006 | CONF-030～CONF-032 | AC-033 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-B-001 | INT-Q-001、INT-Q-002 | AC-004、AC-010 | [BD-01-01～BD-01-03](system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
+| REQ-B-002 | INT-Q-003、INT-Q-022、CONF-002、CONF-017 | AC-018 | [BD-01-02、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
+| REQ-B-003 | INT-Q-009、INT-Q-036 | AC-002 | [BD-01-02、BD-01-03](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
+| REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | [BD-01-01、BD-01-02](system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
+| REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
+| REQ-B-006 | CONF-030～CONF-032 | AC-033 | [BD-01-04～BD-01-08](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
 | REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028 | AC-001 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-002 | INT-Q-009、INT-Q-026 | AC-001 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
@@ -54,7 +54,7 @@
 | REQ-F-027 | INT-Q-014、INT-Q-027 | AC-007、AC-014 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-028 | INT-Q-028 | AC-014 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-029 | INT-Q-031、INT-Q-040 | AC-003 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-030 | INT-Q-018～INT-Q-021、INT-Q-037、INT-Q-038、CONF-003 | AC-015 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-030 | INT-Q-018～INT-Q-021、INT-Q-037、INT-Q-038、CONF-003 | AC-015 | [BD-01-02、BD-01-03、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
 | REQ-F-031 | INT-Q-019、INT-Q-028 | AC-014 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-032 | INT-Q-008、INT-Q-011、RQ-001、CONF-007、CONF-014 | AC-022 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-033 | INT-Q-006、INT-Q-007、RQ-002、CONF-007、CONF-010、CONF-028 | AC-023 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
@@ -66,38 +66,39 @@
 | REQ-F-039 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-040 | INT-Q-021、INT-Q-025、INT-Q-031、INT-Q-042、CONF-016、CONF-024 | AC-028 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-041 | INT-Q-011、INT-Q-016、INT-Q-023、INT-Q-027、CONF-025 | AC-029 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-042 | CONF-034 | AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
 | REQ-NF-001 | INT-Q-002、INT-Q-012、INT-Q-022 | AC-004、AC-018 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-002 | INT-Q-003、INT-Q-018、INT-Q-022、INT-Q-037 | AC-015、AC-018 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034、CONF-005 | AC-015 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-004 | INT-Q-020、INT-Q-021、INT-Q-026、INT-Q-038 | AC-011、AC-015 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-NF-002 | INT-Q-003、INT-Q-018、INT-Q-022、INT-Q-037 | AC-015、AC-018 | [BD-01-02、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
+| REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034、CONF-005 | AC-015 | [BD-01-01、BD-01-03、BD-01-09](system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
+| REQ-NF-004 | INT-Q-020、INT-Q-021、INT-Q-026、INT-Q-038 | AC-011、AC-015 | [BD-01-03](system-architecture.md#bd-01-03-端末保存とオンライン共有の境界) | 未登録 | In Review |
 | REQ-NF-005 | INT-Q-006、INT-Q-007、CONF-010 | AC-016 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-006 | INT-Q-007、INT-Q-014、INT-Q-017 | AC-006、AC-016 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-007 | INT-Q-030 | AC-004 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-008 | INT-Q-016、INT-Q-040 | AC-009 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-009 | INT-Q-032、INT-Q-040 | AC-017 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-010 | INT-Q-033、INT-Q-041、INT-Q-042、CONF-012、CONF-017 | AC-020 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-011 | INT-Q-042 | AC-020、AC-031、AC-033 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-NF-009 | INT-Q-032、INT-Q-040 | AC-017 | [BD-01-02、BD-01-05、BD-01-10](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
+| REQ-NF-010 | INT-Q-033、INT-Q-041、INT-Q-042、CONF-012、CONF-017、CONF-034 | AC-020、AC-034 | [BD-01-09](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
+| REQ-NF-011 | INT-Q-042 | AC-020、AC-031、AC-033 | [BD-01-05、BD-01-09](system-architecture.md#bd-01-05-環境分離) | 未登録 | In Review |
 | REQ-NF-012 | INT-Q-006、INT-Q-007、RQ-002、CONF-010、CONF-021 | AC-023 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-013 | INT-Q-037、CONF-012 | AC-015、AC-018 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-NF-013 | INT-Q-037、CONF-012 | AC-015、AC-018 | [BD-01-03、BD-01-09](system-architecture.md#bd-01-03-端末保存とオンライン共有の境界) | 未登録 | In Review |
 | REQ-NF-014 | CONF-023 | AC-025 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-015 | INT-Q-019、INT-Q-021、INT-Q-025、INT-Q-042、CONF-016、CONF-024 | AC-028 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-016 | INT-Q-019、INT-Q-028、INT-Q-040、CONF-016、CONF-026 | AC-030 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-017 | INT-Q-006、INT-Q-014、INT-Q-016、INT-Q-027、CONF-026 | AC-030 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-018 | INT-Q-016、INT-Q-032、INT-Q-040、INT-Q-042、CONF-026 | AC-031 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-019 | INT-Q-019、INT-Q-032、INT-Q-040～INT-Q-043、CONF-019、CONF-026 | AC-031、AC-033 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-020 | INT-Q-030～INT-Q-032、INT-Q-040、CONF-023、CONF-026、CONF-029 | AC-032 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-021 | INT-Q-032、INT-Q-042、CONF-030～CONF-032 | AC-033 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-NF-019 | INT-Q-019、INT-Q-032、INT-Q-040～INT-Q-043、CONF-019、CONF-026、CONF-034 | AC-031、AC-033、AC-034 | [BD-01-04～BD-01-06、BD-01-09、BD-01-10](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
+| REQ-NF-020 | INT-Q-030～INT-Q-032、INT-Q-040、CONF-023、CONF-026、CONF-029、CONF-034 | AC-032、AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
+| REQ-NF-021 | INT-Q-032、INT-Q-042、CONF-030～CONF-032 | AC-033 | [BD-01-04、BD-01-05、BD-01-08](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
 
 ## 制約の対応表
 
-| 制約ID | 質問・確認ID | 確認先 | 状態 |
-|---|---|---|---|
-| CON-001 | INT-Q-018、INT-Q-019 | AC-014、AC-015 | In Review |
-| CON-002 | INT-Q-020 | AC-015 | In Review |
-| CON-003 | INT-Q-021、INT-Q-032 | AC-021 | In Review |
-| CON-004 | INT-Q-032、INT-Q-034、CONF-003 | AC-015、AC-017、AC-021 | In Review |
-| CON-005 | INT-Q-032、INT-Q-043、CONF-027 | AC-021 | In Review |
-| CON-006 | INT-Q-019、INT-Q-021、INT-Q-042、CONF-024 | AC-028 | In Review |
+| 制約ID | 質問・確認ID | 確認先 | 設計ID | 状態 |
+|---|---|---|---|---|
+| CON-001 | INT-Q-018、INT-Q-019 | AC-014、AC-015 | [BD-01-01、BD-01-03、BD-01-05](system-architecture.md#bd-01-01-システムコンテキスト) | In Review |
+| CON-002 | INT-Q-020 | AC-015 | [BD-01-03、BD-01-09](system-architecture.md#bd-01-03-端末保存とオンライン共有の境界) | In Review |
+| CON-003 | INT-Q-021、INT-Q-032 | AC-021 | [BD-01-01、BD-01-09](system-architecture.md#bd-01-01-システムコンテキスト) | In Review |
+| CON-004 | INT-Q-032、INT-Q-034、CONF-003 | AC-015、AC-017、AC-021 | [BD-01-02、BD-01-03、BD-01-05](system-architecture.md#bd-01-02-コンポーネントと責務) | In Review |
+| CON-005 | INT-Q-032、INT-Q-043、CONF-027 | AC-021 | [BD-01-08、BD-01-10](system-architecture.md#bd-01-08-公開評価と第三者資産のゲート) | In Review |
+| CON-006 | INT-Q-019、INT-Q-021、INT-Q-042、CONF-024 | AC-028 | [BD-01-03、BD-01-05、BD-01-09](system-architecture.md#bd-01-03-端末保存とオンライン共有の境界) | In Review |
 
 ## 追加要望・未決定事項の追跡
 
@@ -168,11 +169,18 @@
 | CONF-032 | 現時点では公開ライセンスを採用しないが、将来採用しても個人コンサート主催者が分かりやすく使え、各主催者の環境・データが分離される構成をゴールとする | 将来の公開・操作性・環境分離 | REQ-B-006、REQ-NF-021、TBD-011／AC-033 | [要件定義書](../client/requirements.md)、[本番設計引継ぎ事項](production-security-ui-ux-notes.md#公開リポジトリと評価環境の分離) |
 | CONF-033 | PWA＋Firebase＋IndexedDBイベント方式、環境所有者ごとのFirebase分離、アプリ出力による復旧、無料条件不適合時の停止・再検討を採用した | 製品基盤の技術選定 | TBD-002～TBD-004、TBD-011、TBD-012／AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 | [ADR-001](decisions/ADR-001-product-platform.md) |
 
+## Issue #32の確認事項との対応
+
+| 確認ID | 決定内容 | 関連する未決定事項・要望 | 主な関連要件・受入条件 | 記録先 |
+|---|---|---|---|---|
+| CONF-034 | 通常運用は無料枠を使う。公演中のFirebase上限時は、プロジェクト作成者である管理者1名が紙運用または同一プロジェクトへの手動課金を現場判断し、新プロジェクトへは移行しない。開催前に予備印刷を促し、各端末自身の未送信一覧を席番号と表示用チケット番号中心の簡潔なリストで確認できるようにする | 無料枠上限時の継続・費用・紙転記 | REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020／AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[システム構成・環境分離設計](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[本番UI/UX引継ぎ事項](production-security-ui-ux-notes.md#uiux設計方針) |
+
 ## ADRとの対応
 
 | ADR | 判断対象 | 関連要件・未決定事項 | 関連受入条件 | 状態 |
 |---|---|---|---|---|
 | [ADR-001](decisions/ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | TBD-002～TBD-004、TBD-011、TBD-012、REQ-NF-002～REQ-NF-004、REQ-NF-010～REQ-NF-021 | AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 | Accepted |
+| [ADR-002](decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | TBD-009、TBD-012、REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020 | AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | Accepted |
 
 ## 更新ルール
 
