@@ -30,6 +30,8 @@
 
 ## BD-01-01 システムコンテキスト
 
+### システムコンテキスト図
+
 ```mermaid
 flowchart LR
     visitor[来場者\n紙・電子チケットを提示]
@@ -55,31 +57,36 @@ flowchart LR
 
 ## BD-01-02 コンポーネントと責務
 
+次の図は処理の時間順ではなく、各構成要素の責務と連携先を示す。矢印のラベルは、連携先へ渡す情報または依頼する処理を表す。
+
+### コンポーネント構成図
+
 ```mermaid
 flowchart TB
     subgraph Device[信頼済み利用端末のブラウザー]
-        UI[画面・操作見本]
-        APP[業務ユースケース]
-        DOMAIN[業務規則・現在状態導出]
-        LOCAL[端末リポジトリ\nIndexedDB]
-        SYNC[同期アダプター]
-        AUTH[認証アダプター]
-        FILE[ファイル入出力アダプター]
-        SW[Service Worker\n静的資産キャッシュ]
-        CONFIG[起動設定検証]
-        UI --> APP --> DOMAIN
-        APP --> LOCAL
-        APP --> SYNC
-        APP --> AUTH
-        APP --> FILE
-        CONFIG --> AUTH
-        CONFIG --> SYNC
+        UI(画面・操作見本)
+        APP(業務ユースケース)
+        DOMAIN(業務規則・現在状態導出)
+        LOCAL(端末リポジトリ<br/>IndexedDB)
+        SYNC(同期アダプター)
+        AUTH(認証アダプター)
+        FILE(ファイル入出力アダプター)
+        SW(Service Worker<br/>静的資産キャッシュ)
+        CONFIG(起動設定検証)
+        UI -->|受付・管理操作を依頼| APP
+        APP -->|受付可否・競合等の判断を依頼| DOMAIN
+        APP -->|イベントの保存・データの読込みを依頼| LOCAL
+        APP -->|イベントの送受信を依頼| SYNC
+        APP -->|ログイン・認証状態の確認を依頼| AUTH
+        APP -->|Excel取込み・帳票出力を依頼| FILE
+        CONFIG -->|検証済み接続設定を渡す| AUTH
+        CONFIG -->|検証済み接続設定を渡す| SYNC
     end
 
     subgraph Firebase[環境専用Firebaseプロジェクト]
-        HOSTING[Firebase Hosting]
-        FBAUTH[Firebase Authentication]
-        STORE[Cloud Firestore]
+        HOSTING(Firebase Hosting)
+        FBAUTH(Firebase Authentication)
+        STORE(Cloud Firestore)
     end
 
     HOSTING -->|PWA・環境設定を配信| CONFIG
@@ -87,6 +94,47 @@ flowchart TB
     AUTH <-->|ログイン・認証状態| FBAUTH
     SYNC <-->|変更不能イベント・共有データ| STORE
     LOCAL <-->|未送信・事前取得・端末状態| SYNC
+
+    classDef deviceComponent fill:#E8F1FF,stroke:#2457A6,stroke-width:2px,color:#111111
+    classDef firebaseComponent fill:#EAF7EA,stroke:#2E7D32,stroke-width:2px,color:#111111
+    class UI,APP,DOMAIN,LOCAL,SYNC,AUTH,FILE,SW,CONFIG deviceComponent
+    class HOSTING,FBAUTH,STORE firebaseComponent
+```
+
+- 青い角丸の箱: 利用端末のブラウザー内で動くコンポーネント
+- 緑の角丸の箱: 環境専用Firebaseプロジェクトのコンポーネント
+- 矢印上の白い四角: コンポーネント間で渡す情報または依頼する処理の説明
+
+### シーケンス図（QR受付時の主な処理順）
+
+次の図は、QRを読み取って受付結果を端末へ保存し、オンライン時にFirestoreへ送るまでの基本的な時間順を示す。詳細な再送・競合処理はBD-03で定める。
+
+```mermaid
+sequenceDiagram
+    actor Staff as 受付担当者
+    participant UI as 画面
+    participant APP as 業務ユースケース
+    participant DOMAIN as 業務規則
+    participant LOCAL as 端末リポジトリ
+    participant SYNC as 同期アダプター
+    participant STORE as Cloud Firestore
+
+    Staff->>UI: QRを読み取る
+    UI->>APP: 受付操作を依頼する
+    APP->>DOMAIN: 受付可否と競合候補を確認する
+    DOMAIN-->>APP: 判定結果を返す
+    APP->>LOCAL: 受付イベントを先に保存する
+    LOCAL-->>APP: 端末保存完了を返す
+    APP-->>UI: 受付結果を表示する
+
+    alt オンラインで送信可能
+        APP->>SYNC: 未送信イベントの送信を依頼する
+        SYNC->>STORE: イベントを追記する
+        STORE-->>SYNC: 送信結果を返す
+        SYNC->>LOCAL: 送信状態を更新する
+    else オフラインまたはサービス停止
+        APP-->>UI: 未送信件数と受付継続可否を表示する
+    end
 ```
 
 | 構成要素 | 責務 | 保持・処理しないもの | 後続設計 |
