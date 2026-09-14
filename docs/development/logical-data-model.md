@@ -69,22 +69,36 @@
 
 ```mermaid
 erDiagram
-    PERFORMANCE ||--|| VENUE_SNAPSHOT : fixes
-    PERFORMANCE ||--o{ SEAT : has
-    PERFORMANCE ||--o{ ATTENDEE : has
-    PERFORMANCE ||--o{ ROLE_ASSIGNMENT : authorizes
-    PERFORMANCE ||--o{ DEVICE_ASSIGNMENT : prepares
-    PERFORMANCE ||--o{ OPERATION_EVENT : records
-    PERFORMANCE ||--o{ STAFF_NOTICE : shares
-    ATTENDEE ||--o| TICKET : receives
-    ATTENDEE o|--o| SEAT : occupies
-    ATTENDEE ||--o{ CUSTOM_FIELD_VALUE : has
-    CUSTOM_FIELD_DEFINITION ||--o{ CUSTOM_FIELD_VALUE : defines
-    TICKET ||--o{ QR_CREDENTIAL : versions
-    OPERATION_EVENT }o--o| ATTENDEE : targets
-    OPERATION_EVENT }o--o| TICKET : targets
-    OPERATION_EVENT }o--o| SEAT : targets
-    STAFF_NOTICE ||--o{ NOTICE_ACKNOWLEDGEMENT : receives
+    PERFORMANCE["PERFORMANCE<br/>公演"]
+    VENUE_SNAPSHOT["VENUE_SNAPSHOT<br/>公演時点の会場情報"]
+    SEAT["SEAT<br/>座席"]
+    ATTENDEE["ATTENDEE<br/>来場者"]
+    ROLE_ASSIGNMENT["ROLE_ASSIGNMENT<br/>役割割当"]
+    DEVICE_ASSIGNMENT["DEVICE_ASSIGNMENT<br/>端末割当"]
+    OPERATION_EVENT["OPERATION_EVENT<br/>操作履歴"]
+    STAFF_NOTICE["STAFF_NOTICE<br/>スタッフ連絡"]
+    TICKET["TICKET<br/>チケット"]
+    CUSTOM_FIELD_VALUE["CUSTOM_FIELD_VALUE<br/>任意項目値"]
+    CUSTOM_FIELD_DEFINITION["CUSTOM_FIELD_DEFINITION<br/>任意項目定義"]
+    QR_CREDENTIAL["QR_CREDENTIAL<br/>QR資格"]
+    NOTICE_ACKNOWLEDGEMENT["NOTICE_ACKNOWLEDGEMENT<br/>連絡確認記録"]
+
+    PERFORMANCE ||--|| VENUE_SNAPSHOT : "fixes / 固定する"
+    PERFORMANCE ||--o{ SEAT : "has / 持つ"
+    PERFORMANCE ||--o{ ATTENDEE : "has / 持つ"
+    PERFORMANCE ||--o{ ROLE_ASSIGNMENT : "authorizes / 権限を割り当てる"
+    PERFORMANCE ||--o{ DEVICE_ASSIGNMENT : "prepares / 準備する"
+    PERFORMANCE ||--o{ OPERATION_EVENT : "records / 記録する"
+    PERFORMANCE ||--o{ STAFF_NOTICE : "shares / 共有する"
+    ATTENDEE ||--o| TICKET : "receives / 受け取る"
+    ATTENDEE o|--o| SEAT : "occupies / 使用する"
+    ATTENDEE ||--o{ CUSTOM_FIELD_VALUE : "has / 持つ"
+    CUSTOM_FIELD_DEFINITION ||--o{ CUSTOM_FIELD_VALUE : "defines / 定義する"
+    TICKET ||--o{ QR_CREDENTIAL : "versions / 版を持つ"
+    OPERATION_EVENT }o--o| ATTENDEE : "targets / 対象とする"
+    OPERATION_EVENT }o--o| TICKET : "targets / 対象とする"
+    OPERATION_EVENT }o--o| SEAT : "targets / 対象とする"
+    STAFF_NOTICE ||--o{ NOTICE_ACKNOWLEDGEMENT : "receives / 受け取る"
 ```
 
 #### 図の見方
@@ -97,16 +111,6 @@ erDiagram
 | `o|` | 0件 | 1件 | 関係しない場合があるが、最大1件まで関係する |
 | `o{` | 0件 | 複数件 | 関係しない場合も、複数件関係する場合もある |
 | `|{` | 1件 | 複数件 | 必ず1件以上関係する |
-
-| 図中の名前 | 日本語 |
-|---|---|
-| `PERFORMANCE` | 公演 |
-| `VENUE_SNAPSHOT` | 公演時点の会場情報 |
-| `ATTENDEE` | 来場者 |
-| `SEAT` | 座席 |
-| `TICKET` | チケット |
-| `QR_CREDENTIAL` | QR資格 |
-| `OPERATION_EVENT` | 操作履歴 |
 
 例えば、`PERFORMANCE ||--o{ SEAT`は、公演と座席の関係を示す。座席側の`o{`から「1つの公演には0件以上の座席がある」、公演側の`||`から「1つの座席は必ず1つの公演に所属する」と読む。
 
