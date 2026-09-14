@@ -56,7 +56,7 @@
 | POC-005開始承認依頼書 | [poc-005-approval-request.md](development/poc-005-approval-request.md) | 座席表・会場画像の事前取得、完全オフライン表示、実機確認の開始前に外部資源、保存・削除、費用を確認する | 依頼者、開発担当者、実機確認担当者 | POC-005承認前 | 対象、画像上限、実機、配信・削除条件の変更時 | Approved |
 | POC-005実機確認手順 | [poc-005-device-check-guide.md](development/poc-005-device-check-guide.md) | 3機種で事前取得、完全オフライン、現在席、代替一覧、Fold開閉を確認する | 依頼者、実機確認担当者 | POC-005実機確認時 | 確認URL、画面手順、対象端末の変更時 | In Review |
 | POC-005実施結果報告書 | [poc-005-result.md](development/poc-005-result.md) | 自動試験、指定3実機、配信、費用、終了処理とAC-025判定を記録する | 依頼者、開発担当者、確認担当者 | POC-005実施中・終了時 | 実機結果、削除確認、最終判定時 | Approved |
-| 本番座席表・会場画像UI/UX引継ぎ事項 | [production-seat-map-ui-ux-notes.md](development/production-seat-map-ui-ux-notes.md) | POC-005で得た画像操作、座席構成、階連動、選択席表示の本番要件を画面設計へ引き継ぐ | 依頼者、画面設計担当者、開発担当者 | POC-005終了前、画面設計時 | 本番画面案のレビュー、UI要望変更時 | In Review |
+| 本番座席表・会場画像UI/UX引継ぎ事項 | [production-seat-map-ui-ux-notes.md](development/production-seat-map-ui-ux-notes.md) | 画像操作、座席番号、欠番、スペースセル、階連動、選択席表示の本番要件を画面・帳票・テスト設計へ引き継ぐ | 依頼者、画面設計担当者、開発担当者 | POC-005終了前、画面・帳票・テスト設計時 | 本番画面案のレビュー、座席表要件変更時 | In Review |
 | 検証用Firebaseプロジェクト削除承認依頼書 | [firebase-test-project-deletion-approval-request.md](development/firebase-test-project-deletion-approval-request.md) | 全PoC終了後の検証用Firebaseプロジェクト本体について、削除対象、影響、復元条件、承認方法を確認する | 依頼者、開発担当者 | プロジェクト本体の削除前 | 資源状態、復元条件、削除結果の変更時 | Approved |
 | 本番セキュリティ・UI/UX設計引継ぎ事項 | [production-security-ui-ux-notes.md](development/production-security-ui-ux-notes.md) | 来場状態の訂正、本番セキュリティ、主要画面のUI/UXを設計・実装・試験・運用へ引き継ぐ | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 要件最終確認前、設計開始時 | 要件承認、技術選定、画面レビュー、試験結果の変更時 | In Review |
 | 要件・受入条件 最終レビュー兼承認依頼書 | [requirements-final-review.md](development/requirements-final-review.md) | PoC反映、未決定事項、残るリスク、承認対象と承認範囲をIssue #23で確認する | 依頼者、開発担当者、確認担当者 | 要件最終確認時 | 承認結果、対象コミット、残るリスクの変更時 | Approved |
@@ -65,7 +65,7 @@
 | ADR-002 Firebase上限時の緊急継続方式 | [ADR-002-quota-emergency-response.md](development/decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用、手動課金、未送信確認、復旧方式を決める | 依頼者、管理者、設計担当者、開発担当者、運用担当者 | 上限時の運用方針決定時 | 料金、権限、紙運用、復旧方式の変更時 | Approved |
 | 基本設計計画書 | [basic-design-plan.md](development/basic-design-plan.md) | 基本設計の成果物、対象、依存関係、追跡方法、承認順序を定める | 依頼者、設計担当者、開発担当者、テスト担当者 | 基本設計開始時 | 設計分割、依存関係、承認ゲートの変更時 | In Review |
 | システム構成・環境分離設計 | [system-architecture.md](development/system-architecture.md) | PWA、端末保存、Firebase、ファイル、環境、設定、配布の責務と境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 構成、環境、接続、外部サービス、配布方式の変更時 | In Review |
-| 論理データモデル・データフロー・ライフサイクル設計 | [logical-data-model.md](development/logical-data-model.md) | 業務データの意味、関係、正本、生成・共有・出力・削除経路を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | データ項目、関係、配布範囲、保存・削除方針の変更時 | In Review |
+| 論理データモデル・データフロー・ライフサイクル設計 | [logical-data-model.md](development/logical-data-model.md) | 座席と配置セルを含む業務データの意味、関係、正本、生成・共有・出力・削除経路を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | データ項目、関係、配布範囲、保存・削除方針の変更時 | In Review |
 
 ## テンプレート
 
