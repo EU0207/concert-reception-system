@@ -7,8 +7,8 @@
 | 目的 | 質問・決定事項から要件、受入条件、将来の設計・テストまでの対応を追跡する |
 | 主な読者 | 開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[基本設計計画書](basic-design-plan.md)、[システム構成・環境分離設計](system-architecture.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実施結果報告書](poc-003-result.md) |
-| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#31](https://github.com/EU0207/concert-reception-system/issues/31)、[#32](https://github.com/EU0207/concert-reception-system/issues/32) |
+| 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[基本設計計画書](basic-design-plan.md)、[システム構成・環境分離設計](system-architecture.md)、[論理データモデル・データフロー・ライフサイクル設計](logical-data-model.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実施結果報告書](poc-003-result.md) |
+| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#31](https://github.com/EU0207/concert-reception-system/issues/31)、[#32](https://github.com/EU0207/concert-reception-system/issues/32)、[#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#38](https://github.com/EU0207/concert-reception-system/issues/38)、[#43](https://github.com/EU0207/concert-reception-system/issues/43) |
 | 文書の位置づけ | 承認済み要件と受入条件を、確認記録、技術検証、ADR、基本設計、将来のテストへ追跡する |
 | 状態 | In Review |
 | 承認情報 | 未承認 |
@@ -27,66 +27,66 @@
 | REQ-B-006 | CONF-030～CONF-032 | AC-033 | [BD-01-04～BD-01-08](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
 | REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028 | AC-001 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-002 | INT-Q-009、INT-Q-026 | AC-001 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-004 | INT-Q-010、INT-Q-036 | AC-002 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-005 | INT-Q-008、INT-Q-031、CONF-027 | AC-002 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-006 | INT-Q-004、INT-Q-007、INT-Q-031 | AC-003 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-007 | INT-Q-017、INT-Q-031、INT-Q-036 | AC-003 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-03、BD-02-06、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-004 | INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-005 | INT-Q-008、INT-Q-031、CONF-027 | AC-002 | [BD-02-06、BD-02-07](logical-data-model.md#bd-02-06-データフロー) | 未登録 | In Review |
+| REQ-F-006 | INT-Q-004、INT-Q-007、INT-Q-031 | AC-003 | [BD-02-02、BD-02-04、BD-02-05](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-007 | INT-Q-017、INT-Q-031、INT-Q-036 | AC-003 | [BD-02-02～BD-02-05](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-F-008 | INT-Q-012、INT-Q-019、CONF-029 | AC-004、AC-032 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-009 | INT-Q-012、CONF-029 | AC-004、AC-032 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-010 | INT-Q-013、INT-Q-029 | AC-005 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-010 | INT-Q-013、INT-Q-029 | AC-005 | [BD-02-04、BD-02-05](logical-data-model.md#bd-02-04-変更不能イベント) | 未登録 | In Review |
 | REQ-F-011 | INT-Q-014、INT-Q-044 | AC-006 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-012 | INT-Q-015、INT-Q-044 | AC-007、AC-019 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-013 | INT-Q-011、INT-Q-015 | AC-007、AC-019 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-014 | INT-Q-017、INT-Q-030 | AC-008、AC-019 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-015 | INT-Q-016 | AC-009、AC-019 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-016 | INT-Q-023 | AC-010 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-017 | INT-Q-023、INT-Q-026、INT-Q-037、INT-Q-038 | AC-011 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-018 | INT-Q-024、INT-Q-039 | AC-012 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-019 | INT-Q-024 | AC-010 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-020 | INT-Q-021、INT-Q-024、INT-Q-043 | AC-012、AC-021 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-021 | INT-Q-016、INT-Q-029 | AC-009 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-022 | INT-Q-016、INT-Q-040 | AC-009 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-023 | INT-Q-016、INT-Q-025 | AC-009 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-024 | INT-Q-025、INT-Q-039、CONF-018、CONF-027 | AC-013 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-025 | INT-Q-025 | AC-013 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-012 | INT-Q-015、INT-Q-044 | AC-007、AC-019 | [BD-02-02、BD-02-04、BD-02-05](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-013 | INT-Q-011、INT-Q-015 | AC-007、AC-019 | [BD-02-04～BD-02-06](logical-data-model.md#bd-02-04-変更不能イベント) | 未登録 | In Review |
+| REQ-F-014 | INT-Q-017、INT-Q-030 | AC-008、AC-019 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-015 | INT-Q-016 | AC-009、AC-019 | [BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント) | 未登録 | In Review |
+| REQ-F-016 | INT-Q-023 | AC-010 | [BD-02-05、BD-02-07](logical-data-model.md#bd-02-05-現在状態と競合候補) | 未登録 | In Review |
+| REQ-F-017 | INT-Q-023、INT-Q-026、INT-Q-037、INT-Q-038 | AC-011 | [BD-02-04、BD-02-05、BD-02-09](logical-data-model.md#bd-02-04-変更不能イベント) | 未登録 | In Review |
+| REQ-F-018 | INT-Q-024、INT-Q-039 | AC-012 | [BD-02-06～BD-02-08](logical-data-model.md#bd-02-06-データフロー) | 未登録 | In Review |
+| REQ-F-019 | INT-Q-024 | AC-010 | [BD-02-05、BD-02-07、BD-02-08](logical-data-model.md#bd-02-05-現在状態と競合候補) | 未登録 | In Review |
+| REQ-F-020 | INT-Q-021、INT-Q-024、INT-Q-043 | AC-012、AC-021 | [BD-02-06～BD-02-08](logical-data-model.md#bd-02-06-データフロー) | 未登録 | In Review |
+| REQ-F-021 | INT-Q-016、INT-Q-029 | AC-009 | [BD-02-03、BD-02-04、BD-02-08](logical-data-model.md#bd-02-03-識別子参照履歴スナップショット) | 未登録 | In Review |
+| REQ-F-022 | INT-Q-016、INT-Q-040 | AC-009 | [BD-02-05、BD-02-08](logical-data-model.md#bd-02-05-現在状態と競合候補) | 未登録 | In Review |
+| REQ-F-023 | INT-Q-016、INT-Q-025 | AC-009 | [BD-02-08、BD-02-09](logical-data-model.md#bd-02-08-保存期間無効化完全削除) | 未登録 | In Review |
+| REQ-F-024 | INT-Q-025、INT-Q-039、CONF-018、CONF-027 | AC-013 | [BD-02-03、BD-02-07、BD-02-08](logical-data-model.md#bd-02-03-識別子参照履歴スナップショット) | 未登録 | In Review |
+| REQ-F-025 | INT-Q-025 | AC-013 | [BD-02-08、BD-02-09](logical-data-model.md#bd-02-08-保存期間無効化完全削除) | 未登録 | In Review |
 | REQ-F-026 | INT-Q-027 | AC-007、AC-014 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-027 | INT-Q-014、INT-Q-027 | AC-007、AC-014 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-028 | INT-Q-028 | AC-014 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-028 | INT-Q-028 | AC-014 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-F-029 | INT-Q-031、INT-Q-040 | AC-003 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-030 | INT-Q-018～INT-Q-021、INT-Q-037、INT-Q-038、CONF-003 | AC-015 | [BD-01-02、BD-01-03、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
 | REQ-F-031 | INT-Q-019、INT-Q-028 | AC-014 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-032 | INT-Q-008、INT-Q-011、RQ-001、CONF-007、CONF-014 | AC-022 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-033 | INT-Q-006、INT-Q-007、RQ-002、CONF-007、CONF-010、CONF-028 | AC-023 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-034 | INT-Q-013、INT-Q-029、RQ-003、CONF-007、CONF-008 | AC-024 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-035 | INT-Q-017、INT-Q-036、INT-Q-039、RQ-004、CONF-007、CONF-011 | AC-025 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-036 | INT-Q-009、INT-Q-036、RQ-005、CONF-007、CONF-015 | AC-026 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-037 | INT-Q-004、INT-Q-031、RQ-006、CONF-007、CONF-009 | AC-027 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-038 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-039 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-040 | INT-Q-021、INT-Q-025、INT-Q-031、INT-Q-042、CONF-016、CONF-024 | AC-028 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-041 | INT-Q-011、INT-Q-016、INT-Q-023、INT-Q-027、CONF-025 | AC-029 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-042 | CONF-034 | AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
+| REQ-F-033 | INT-Q-006、INT-Q-007、RQ-002、CONF-007、CONF-010、CONF-028 | AC-023 | [BD-02-02、BD-02-06～BD-02-08](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-034 | INT-Q-013、INT-Q-029、RQ-003、CONF-007、CONF-008 | AC-024 | [BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント) | 未登録 | In Review |
+| REQ-F-035 | INT-Q-017、INT-Q-036、INT-Q-039、RQ-004、CONF-007、CONF-011、CONF-035 | AC-025 | [BD-02-02、BD-02-03、BD-02-07、BD-02-09、BD-02-10](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06・BD-07・BD-09初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-036 | INT-Q-009、INT-Q-036、RQ-005、CONF-007、CONF-015 | AC-026 | [BD-02-02、BD-02-04、BD-02-05](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-037 | INT-Q-004、INT-Q-031、RQ-006、CONF-007、CONF-009 | AC-027 | [BD-02-02、BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-038 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023、CONF-035 | AC-025 | [BD-02-02、BD-02-03、BD-02-07、BD-02-09、BD-02-10](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06・BD-07・BD-09初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-039 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | [BD-02-02、BD-02-03、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-040 | INT-Q-021、INT-Q-025、INT-Q-031、INT-Q-042、CONF-016、CONF-024 | AC-028 | [BD-02-02、BD-02-04、BD-02-06、BD-02-08](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-041 | INT-Q-011、INT-Q-016、INT-Q-023、INT-Q-027、CONF-025 | AC-029 | [BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント) | 未登録 | In Review |
+| REQ-F-042 | CONF-034 | AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[BD-02-04、BD-02-06～BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント) | 未登録 | In Review |
 | REQ-NF-001 | INT-Q-002、INT-Q-012、INT-Q-022 | AC-004、AC-018 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-002 | INT-Q-003、INT-Q-018、INT-Q-022、INT-Q-037 | AC-015、AC-018 | [BD-01-02、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
 | REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034、CONF-005 | AC-015 | [BD-01-01、BD-01-03、BD-01-09](system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
 | REQ-NF-004 | INT-Q-020、INT-Q-021、INT-Q-026、INT-Q-038 | AC-011、AC-015 | [BD-01-03](system-architecture.md#bd-01-03-端末保存とオンライン共有の境界) | 未登録 | In Review |
-| REQ-NF-005 | INT-Q-006、INT-Q-007、CONF-010 | AC-016 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-006 | INT-Q-007、INT-Q-014、INT-Q-017 | AC-006、AC-016 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-NF-005 | INT-Q-006、INT-Q-007、CONF-010 | AC-016 | [BD-02-02、BD-02-06、BD-02-07、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-NF-006 | INT-Q-007、INT-Q-014、INT-Q-017 | AC-006、AC-016 | [BD-02-06、BD-02-07、BD-02-09](logical-data-model.md#bd-02-06-データフロー) | 未登録 | In Review |
 | REQ-NF-007 | INT-Q-030 | AC-004 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-008 | INT-Q-016、INT-Q-040 | AC-009 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-NF-008 | INT-Q-016、INT-Q-040 | AC-009 | [BD-02-08、BD-02-09](logical-data-model.md#bd-02-08-保存期間無効化完全削除) | 未登録 | In Review |
 | REQ-NF-009 | INT-Q-032、INT-Q-040 | AC-017 | [BD-01-02、BD-01-05、BD-01-10](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
 | REQ-NF-010 | INT-Q-033、INT-Q-041、INT-Q-042、CONF-012、CONF-017、CONF-034 | AC-020、AC-034 | [BD-01-09](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
 | REQ-NF-011 | INT-Q-042 | AC-020、AC-031、AC-033 | [BD-01-05、BD-01-09](system-architecture.md#bd-01-05-環境分離) | 未登録 | In Review |
-| REQ-NF-012 | INT-Q-006、INT-Q-007、RQ-002、CONF-010、CONF-021 | AC-023 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-NF-012 | INT-Q-006、INT-Q-007、RQ-002、CONF-010、CONF-021 | AC-023 | [BD-02-02、BD-02-07～BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-NF-013 | INT-Q-037、CONF-012 | AC-015、AC-018 | [BD-01-03、BD-01-09](system-architecture.md#bd-01-03-端末保存とオンライン共有の境界) | 未登録 | In Review |
 | REQ-NF-014 | CONF-023 | AC-025 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-015 | INT-Q-019、INT-Q-021、INT-Q-025、INT-Q-042、CONF-016、CONF-024 | AC-028 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-NF-015 | INT-Q-019、INT-Q-021、INT-Q-025、INT-Q-042、CONF-016、CONF-024 | AC-028 | [BD-02-07～BD-02-09](logical-data-model.md#bd-02-07-保存先配布範囲出力可否) | 未登録 | In Review |
 | REQ-NF-016 | INT-Q-019、INT-Q-028、INT-Q-040、CONF-016、CONF-026 | AC-030 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-017 | INT-Q-006、INT-Q-014、INT-Q-016、INT-Q-027、CONF-026 | AC-030 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-018 | INT-Q-016、INT-Q-032、INT-Q-040、INT-Q-042、CONF-026 | AC-031 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-NF-019 | INT-Q-019、INT-Q-032、INT-Q-040～INT-Q-043、CONF-019、CONF-026、CONF-034 | AC-031、AC-033、AC-034 | [BD-01-04～BD-01-06、BD-01-09、BD-01-10](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
-| REQ-NF-020 | INT-Q-030～INT-Q-032、INT-Q-040、CONF-023、CONF-026、CONF-029、CONF-034 | AC-032、AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
+| REQ-NF-018 | INT-Q-016、INT-Q-032、INT-Q-040、INT-Q-042、CONF-026 | AC-031 | [BD-02-04、BD-02-07～BD-02-09](logical-data-model.md#bd-02-04-変更不能イベント) | 未登録 | In Review |
+| REQ-NF-019 | INT-Q-019、INT-Q-032、INT-Q-040～INT-Q-043、CONF-019、CONF-026、CONF-034 | AC-031、AC-033、AC-034 | [BD-01-04～BD-01-06、BD-01-09、BD-01-10](system-architecture.md#bd-01-04-起動設定と安全停止)、[BD-02-06～BD-02-10](logical-data-model.md#bd-02-06-データフロー) | 未登録 | In Review |
+| REQ-NF-020 | INT-Q-030～INT-Q-032、INT-Q-040、CONF-023、CONF-026、CONF-029、CONF-034 | AC-032、AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[BD-02-05～BD-02-07](logical-data-model.md#bd-02-05-現在状態と競合候補) | 未登録 | In Review |
 | REQ-NF-021 | INT-Q-032、INT-Q-042、CONF-030～CONF-032 | AC-033 | [BD-01-04、BD-01-05、BD-01-08](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
 
 ## 制約の対応表
@@ -118,7 +118,7 @@
 | QR判定性能・受付処理量・通信量 | POC-002 | REQ-B-002、REQ-NF-001、REQ-NF-002、REQ-NF-013 | AC-004、AC-015、AC-018 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-002開始承認依頼](poc-002-approval-request.md)、[POC-002実施結果](poc-002-result.md) | POC-002合格・依頼者確認済み |
 | 端末内データ保護・削除・権限停止 | RES-003、POC-004 | REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-F-040、REQ-NF-005、REQ-NF-006、REQ-NF-012、REQ-NF-015 | AC-009、AC-013、AC-014、AC-016、AC-023、AC-028 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-003結果](technical-feasibility-research.md#res-003-認証権限端末内データ保護)、[POC-004開始承認依頼](poc-004-approval-request.md)、[POC-004実施結果](poc-004-result.md) | POC-004で削除手段・暗号化・権限停止を確認済み。自動削除連携・端末別追跡はAC-028で本番受入予定 |
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
-| 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-F-038、REQ-F-039、REQ-NF-013、REQ-NF-014 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-005開始承認依頼](poc-005-approval-request.md)、[POC-005実機確認手順](poc-005-device-check-guide.md)、[POC-005実施結果](poc-005-result.md)、[本番UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[Firebaseプロジェクト削除結果](firebase-test-project-deletion-approval-request.md#実行結果) | POC-005検証範囲合格・依頼者確認済み。端末、結果JSON、プレビューチャネル、ローカル生成物の削除と検証Firebaseプロジェクトへの削除要求完了。本番向け追加要望は画面設計へ引継ぎ済み |
+| 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-F-038、REQ-F-039、REQ-NF-013、REQ-NF-014 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-005開始承認依頼](poc-005-approval-request.md)、[POC-005実機確認手順](poc-005-device-check-guide.md)、[POC-005実施結果](poc-005-result.md)、[本番UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[Firebaseプロジェクト削除結果](firebase-test-project-deletion-approval-request.md#実行結果) | POC-005検証範囲合格・依頼者確認済み。`CONF-035`で追加した任意接頭部・開始番号・欠番・スペースセルはPoC対象外であり、BD-06・BD-07・BD-09へ引継ぎ済み |
 | グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認済み |
 
 ## Issue #5の確認事項との対応
@@ -174,6 +174,7 @@
 | 確認ID | 決定内容 | 関連する未決定事項・要望 | 主な関連要件・受入条件 | 記録先 |
 |---|---|---|---|---|
 | CONF-034 | 通常運用は無料枠を使う。公演中のFirebase上限時は、プロジェクト作成者である管理者1名が紙運用または同一プロジェクトへの手動課金を現場判断し、新プロジェクトへは移行しない。開催前に予備印刷を促し、各端末自身の未送信一覧を席番号と表示用チケット番号中心の簡潔なリストで確認できるようにする | 無料枠上限時の継続・費用・紙転記 | REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020／AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[システム構成・環境分離設計](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[本番UI/UX引継ぎ事項](production-security-ui-ux-notes.md#uiux設計方針) |
+| CONF-035 | 座席番号に英字・数字の接頭部と任意の開始番号・欠番を使用し、存在しない番号を補完しない。通路等は座席ではないスペースセルとして配置し、割当・QR・空席数・座席数の対象外とする。欠番とスペースセルを区別し、管理者が公演前にプレビューして実会場と照合後に確定する | 座席番号・欠番・スペースセル・確定前照合 | REQ-F-035、REQ-F-038／AC-025 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[論理データモデル](logical-data-model.md#bd-02-02-論理エンティティと関係)、[本番座席表・会場画像UI/UX設計引継ぎ事項](production-seat-map-ui-ux-notes.md#座席構成の設定) |
 
 ## ADRとの対応
 
