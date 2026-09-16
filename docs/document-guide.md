@@ -67,7 +67,7 @@
 | システム構成・環境分離設計 | [system-architecture.md](development/system-architecture.md) | PWA、端末保存、Firebase、ファイル、環境、設定、配布の責務と境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 構成、環境、接続、外部サービス、配布方式の変更時 | In Review |
 | 論理データモデル・データフロー・ライフサイクル設計 | [logical-data-model.md](development/logical-data-model.md) | 座席と配置セルを含む業務データの意味、関係、正本、生成・共有・出力・削除経路を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | データ項目、関係、配布範囲、保存・削除方針の変更時 | In Review |
 | オフライン同期・競合設計 | [offline-sync-conflict-design.md](development/offline-sync-conflict-design.md) | 端末先行保存、差分同期、再送、冪等性、状態導出、競合解消、紙照合、回収不能端末と締めの境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 同期、競合、紙照合、締め境界、外部サービス交換方式の変更時 | In Review |
-| 認証・役割・権限設計 | [authentication-authorization-design.md](development/authentication-authorization-design.md) | 個別認証、4役割、端末、セッション、オフライン許可、端末ID停止、隔離送信、Security Rulesへ渡す権限境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 認証方式、役割、権限、端末、セッション、外部サービス交換方式の変更時 | In Review |
+| 認証・役割・権限設計 | [authentication-authorization-design.md](development/authentication-authorization-design.md) | 個別認証、4役割、端末、セッション、オフライン許可、解除可能な端末停止、端末廃止・データ削除、隔離送信、Security Rulesへ渡す権限境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 認証方式、役割、権限、端末、セッション、外部サービス交換方式の変更時 | In Review |
 
 ## テンプレート
 
