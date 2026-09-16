@@ -52,7 +52,7 @@
 | REQ-F-025 | INT-Q-025 | AC-013 | [BD-02-08、BD-02-09](logical-data-model.md#bd-02-08-保存期間無効化完全削除)、[BD-04-04、BD-04-06、BD-04-10](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
 | REQ-F-026 | INT-Q-027 | AC-007、AC-014 | [BD-04-03、BD-04-04](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
 | REQ-F-027 | INT-Q-014、INT-Q-027 | AC-007、AC-014 | [BD-04-03、BD-04-04](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
-| REQ-F-028 | INT-Q-028 | AC-014 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-02、BD-04-03、BD-04-07、BD-04-08](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定) | 未登録 | In Review |
+| REQ-F-028 | INT-Q-028 | AC-014 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-02、BD-04-03、BD-04-07、BD-04-08、BD-04-10](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定) | 未登録 | In Review |
 | REQ-F-029 | INT-Q-031、INT-Q-040 | AC-003 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-030 | INT-Q-018～INT-Q-021、INT-Q-037、INT-Q-038、CONF-003 | AC-015 | [BD-01-02、BD-01-03、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務)、[BD-03-01～BD-03-05、BD-03-08](offline-sync-conflict-design.md#bd-03-01-同期対象と正本) | 未登録 | In Review |
 | REQ-F-031 | INT-Q-019、INT-Q-028 | AC-014 | [BD-04-03、BD-04-07、BD-04-08](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
