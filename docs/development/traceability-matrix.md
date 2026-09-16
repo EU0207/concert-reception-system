@@ -52,10 +52,10 @@
 | REQ-F-025 | INT-Q-025 | AC-013 | [BD-02-08、BD-02-09](logical-data-model.md#bd-02-08-保存期間無効化完全削除)、[BD-04-04、BD-04-06、BD-04-10](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
 | REQ-F-026 | INT-Q-027 | AC-007、AC-014 | [BD-04-03、BD-04-04](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
 | REQ-F-027 | INT-Q-014、INT-Q-027 | AC-007、AC-014 | [BD-04-03、BD-04-04](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
-| REQ-F-028 | INT-Q-028 | AC-014 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-02、BD-04-03、BD-04-08](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定) | 未登録 | In Review |
+| REQ-F-028 | INT-Q-028 | AC-014 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-02、BD-04-03、BD-04-07、BD-04-08](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定) | 未登録 | In Review |
 | REQ-F-029 | INT-Q-031、INT-Q-040 | AC-003 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-030 | INT-Q-018～INT-Q-021、INT-Q-037、INT-Q-038、CONF-003 | AC-015 | [BD-01-02、BD-01-03、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務)、[BD-03-01～BD-03-05、BD-03-08](offline-sync-conflict-design.md#bd-03-01-同期対象と正本) | 未登録 | In Review |
-| REQ-F-031 | INT-Q-019、INT-Q-028 | AC-014 | [BD-04-03、BD-04-08](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
+| REQ-F-031 | INT-Q-019、INT-Q-028 | AC-014 | [BD-04-03、BD-04-07、BD-04-08](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
 | REQ-F-032 | INT-Q-008、INT-Q-011、RQ-001、CONF-007、CONF-014 | AC-022 | [BD-04-04](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
 | REQ-F-033 | INT-Q-006、INT-Q-007、RQ-002、CONF-007、CONF-010、CONF-028 | AC-023 | [BD-02-02、BD-02-06～BD-02-08](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-04、BD-04-05](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
 | REQ-F-034 | INT-Q-013、INT-Q-029、RQ-003、CONF-007、CONF-008 | AC-024 | [BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント)、[BD-03-02、BD-03-06、BD-03-07](offline-sync-conflict-design.md#bd-03-02-共通イベント形式と識別) | 未登録 | In Review |
@@ -75,18 +75,18 @@
 | REQ-NF-006 | INT-Q-007、INT-Q-014、INT-Q-017 | AC-006、AC-016 | [BD-02-06、BD-02-07、BD-02-09](logical-data-model.md#bd-02-06-データフロー) | 未登録 | In Review |
 | REQ-NF-007 | INT-Q-030 | AC-004 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-008 | INT-Q-016、INT-Q-040 | AC-009 | [BD-02-08、BD-02-09](logical-data-model.md#bd-02-08-保存期間無効化完全削除) | 未登録 | In Review |
-| REQ-NF-009 | INT-Q-032、INT-Q-040 | AC-017 | [BD-01-02、BD-01-05、BD-01-10](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
+| REQ-NF-009 | INT-Q-032、INT-Q-040 | AC-017 | [BD-01-02、BD-01-05、BD-01-10](system-architecture.md#bd-01-02-コンポーネントと責務)、[BD-04-02、BD-04-07](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定) | 未登録 | In Review |
 | REQ-NF-010 | INT-Q-033、INT-Q-041、INT-Q-042、CONF-012、CONF-017、CONF-034 | AC-020、AC-034 | [BD-01-09](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[BD-03-09、BD-03-12](offline-sync-conflict-design.md#bd-03-09-firebase上限紙運用復旧統合) | 未登録 | In Review |
 | REQ-NF-011 | INT-Q-042 | AC-020、AC-031、AC-033 | [BD-01-05、BD-01-09](system-architecture.md#bd-01-05-環境分離) | 未登録 | In Review |
 | REQ-NF-012 | INT-Q-006、INT-Q-007、RQ-002、CONF-010、CONF-021 | AC-023 | [BD-02-02、BD-02-07～BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-NF-013 | INT-Q-037、CONF-012 | AC-015、AC-018 | [BD-01-03、BD-01-09](system-architecture.md#bd-01-03-端末保存とオンライン共有の境界)、[BD-03-05、BD-03-11](offline-sync-conflict-design.md#bd-03-05-差分受信と収束) | 未登録 | In Review |
 | REQ-NF-014 | CONF-023 | AC-025 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-015 | INT-Q-019、INT-Q-021、INT-Q-025、INT-Q-042、CONF-016、CONF-024 | AC-028 | [BD-02-07～BD-02-09](logical-data-model.md#bd-02-07-保存先配布範囲出力可否)、[BD-03-10、BD-03-12](offline-sync-conflict-design.md#bd-03-10-端末停止回収不能締め処理) | 未登録 | In Review |
-| REQ-NF-016 | INT-Q-019、INT-Q-028、INT-Q-040、CONF-016、CONF-026 | AC-030 | [BD-04-01、BD-04-02、BD-04-06、BD-04-09](authentication-authorization-design.md#bd-04-01-認証方式と識別子) | 未登録 | In Review |
+| REQ-NF-016 | INT-Q-019、INT-Q-028、INT-Q-040、CONF-016、CONF-026 | AC-030 | [BD-04-01、BD-04-02、BD-04-06、BD-04-07、BD-04-09](authentication-authorization-design.md#bd-04-01-認証方式と識別子) | 未登録 | In Review |
 | REQ-NF-017 | INT-Q-006、INT-Q-014、INT-Q-016、INT-Q-027、CONF-026 | AC-030 | [BD-04-04、BD-04-05、BD-04-11](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
 | REQ-NF-018 | INT-Q-016、INT-Q-032、INT-Q-040、INT-Q-042、CONF-026 | AC-031 | [BD-02-04、BD-02-07～BD-02-09](logical-data-model.md#bd-02-04-変更不能イベント)、[BD-04-10、BD-04-11](authentication-authorization-design.md#bd-04-10-監査と高影響操作) | 未登録 | In Review |
 | REQ-NF-019 | INT-Q-019、INT-Q-032、INT-Q-040～INT-Q-043、CONF-019、CONF-026、CONF-034 | AC-031、AC-033、AC-034 | [BD-01-04～BD-01-06、BD-01-09、BD-01-10](system-architecture.md#bd-01-04-起動設定と安全停止)、[BD-02-06～BD-02-10](logical-data-model.md#bd-02-06-データフロー)、[BD-03-09～BD-03-12](offline-sync-conflict-design.md#bd-03-09-firebase上限紙運用復旧統合)、[BD-04-02、BD-04-08、BD-04-10、BD-04-12](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定) | 未登録 | In Review |
-| REQ-NF-020 | INT-Q-030～INT-Q-032、INT-Q-040、CONF-023、CONF-026、CONF-029、CONF-034 | AC-032、AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[BD-02-05～BD-02-07](logical-data-model.md#bd-02-05-現在状態と競合候補)、[BD-03-03、BD-03-07、BD-03-09～BD-03-11](offline-sync-conflict-design.md#bd-03-03-端末キューと保存状態) | 未登録 | In Review |
+| REQ-NF-020 | INT-Q-030～INT-Q-032、INT-Q-040、CONF-023、CONF-026、CONF-029、CONF-034 | AC-032、AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[BD-02-05～BD-02-07](logical-data-model.md#bd-02-05-現在状態と競合候補)、[BD-03-03、BD-03-07、BD-03-09～BD-03-11](offline-sync-conflict-design.md#bd-03-03-端末キューと保存状態)、[BD-04-02、BD-04-07](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定) | 未登録 | In Review |
 | REQ-NF-021 | INT-Q-032、INT-Q-042、CONF-030～CONF-032 | AC-033 | [BD-01-04、BD-01-05、BD-01-08](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
 
 ## 制約の対応表
