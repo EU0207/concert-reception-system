@@ -6,6 +6,17 @@
 .env.*
 !.env.example
 *.local
+*.pem
+*.key
+*service-account*.json
+*firebase-adminsdk*.json
+google-services.json
+GoogleService-Info.plist
+**/firebase-client-config.json
+**/firebase-client-config.*.json
+**/real-data/
+**/production-data/
+**/client-data/
 poc/POC-001/.firebaserc
 !poc/POC-001/.firebaserc.example
 poc/POC-002/.firebaserc
@@ -37,6 +48,8 @@ test-results/
 playwright-report/
 blob-report/
 **/playwright/.auth/
+**/auth-state/
+**/storage-state*.json
 poc/POC-001/artifacts/raw/
 poc/POC-002/artifacts/raw/
 poc/POC-002/profiles/
