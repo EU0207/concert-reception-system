@@ -7,7 +7,7 @@
 | 目的 | 利用者を個別に識別し、現在の役割、公演、端末、操作、データ区分に応じた最小権限をオンライン・オフラインで一貫して判断する基本方式を定める |
 | 主な読者 | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 |
 | 前提 | 要件定義書と受入条件書は`CONF-034`を含めApproved、ADR-001とADR-002はAccepted、BD-01～BD-03はmainへ統合済みである。入力保護、暗号化、鍵、脅威対策の詳細はBD-05で定める |
-| 関連文書 | [基本設計計画書](basic-design-plan.md)、[システム構成・環境分離設計](system-architecture.md)、[論理データモデル・データフロー・ライフサイクル設計](logical-data-model.md)、[オフライン同期・競合設計](offline-sync-conflict-design.md)、[ADR-001](decisions/ADR-001-product-platform.md)、[POC-004実施結果](poc-004-result.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md) |
+| 関連文書 | [基本設計計画書](basic-design-plan.md)、[システム構成・環境分離設計](system-architecture.md)、[論理データモデル・データフロー・ライフサイクル設計](logical-data-model.md)、[オフライン同期・競合設計](offline-sync-conflict-design.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[ADR-001](decisions/ADR-001-product-platform.md)、[POC-004実施結果](poc-004-result.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md) |
 | 関連Issue | [#35](https://github.com/EU0207/concert-reception-system/issues/35) |
 | 設計ID | BD-04、BD-04-01～BD-04-12 |
 | 関連ID | REQ-F-012、REQ-F-013、REQ-F-018、REQ-F-023～REQ-F-028、REQ-F-031～REQ-F-033、REQ-F-036、REQ-F-037、REQ-F-040～REQ-F-042、REQ-NF-016～REQ-NF-019、AC-007、AC-009、AC-012～AC-014、AC-022、AC-023、AC-026～AC-031、AC-033、AC-034、TBD-003、CONF-016、CONF-019、CONF-024、CONF-026、CONF-034 |

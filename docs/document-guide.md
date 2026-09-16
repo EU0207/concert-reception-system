@@ -68,6 +68,7 @@
 | 論理データモデル・データフロー・ライフサイクル設計 | [logical-data-model.md](development/logical-data-model.md) | 座席と配置セルを含む業務データの意味、関係、正本、生成・共有・出力・削除経路を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | データ項目、関係、配布範囲、保存・削除方針の変更時 | In Review |
 | オフライン同期・競合設計 | [offline-sync-conflict-design.md](development/offline-sync-conflict-design.md) | 端末先行保存、差分同期、再送、冪等性、状態導出、競合解消、紙照合、回収不能端末と締めの境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 同期、競合、紙照合、締め境界、外部サービス交換方式の変更時 | In Review |
 | 認証・役割・権限設計 | [authentication-authorization-design.md](development/authentication-authorization-design.md) | 初期主担当Google UID、UID・公演単位の役割、複数端末と追加端末関連付け、1回限りの招待、公演限定スタッフの短期パスワード、端末単位の事前準備・オフライン許可、4役割、セッション、端末停止・廃止、隔離送信、Security Rulesへ渡す権限境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 認証方式、役割、権限、端末、セッション、外部サービス交換方式の変更時 | In Review |
+| セキュリティ・プライバシー設計 | [security-privacy-design.md](development/security-privacy-design.md) | 信頼境界、Security Rules、1回限りリンク、端末暗号化と鍵、Web保護、秘密情報・ログ、公開物、依存関係、インシデント対応を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 脅威、認可、暗号化、鍵、外部サービス、公開・依存ゲートの変更時 | In Review |
 
 ## テンプレート
 
