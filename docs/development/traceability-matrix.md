@@ -8,7 +8,7 @@
 | 主な読者 | 開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
 | 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[基本設計計画書](basic-design-plan.md)、[システム構成・環境分離設計](system-architecture.md)、[論理データモデル・データフロー・ライフサイクル設計](logical-data-model.md)、[オフライン同期・競合設計](offline-sync-conflict-design.md)、[認証・役割・権限設計](authentication-authorization-design.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実施結果報告書](poc-003-result.md) |
-| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#31](https://github.com/EU0207/concert-reception-system/issues/31)、[#32](https://github.com/EU0207/concert-reception-system/issues/32)、[#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#34](https://github.com/EU0207/concert-reception-system/issues/34)、[#35](https://github.com/EU0207/concert-reception-system/issues/35)、[#36](https://github.com/EU0207/concert-reception-system/issues/36)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#38](https://github.com/EU0207/concert-reception-system/issues/38)、[#43](https://github.com/EU0207/concert-reception-system/issues/43) |
+| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#31](https://github.com/EU0207/concert-reception-system/issues/31)、[#32](https://github.com/EU0207/concert-reception-system/issues/32)、[#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#34](https://github.com/EU0207/concert-reception-system/issues/34)、[#35](https://github.com/EU0207/concert-reception-system/issues/35)、[#36](https://github.com/EU0207/concert-reception-system/issues/36)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#38](https://github.com/EU0207/concert-reception-system/issues/38)、[#43](https://github.com/EU0207/concert-reception-system/issues/43)、[#57](https://github.com/EU0207/concert-reception-system/issues/57) |
 | 文書の位置づけ | 承認済み要件と受入条件を、確認記録、技術検証、ADR、基本設計、将来のテストへ追跡する |
 | 状態 | In Review |
 | 承認情報 | 未承認 |
@@ -21,16 +21,16 @@
 |---|---|---|---|---|---|
 | REQ-B-001 | INT-Q-001、INT-Q-002 | AC-004、AC-010 | [BD-01-01～BD-01-03](system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
 | REQ-B-002 | INT-Q-003、INT-Q-022、CONF-002、CONF-017 | AC-018 | [BD-01-02、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
-| REQ-B-003 | INT-Q-009、INT-Q-036 | AC-002 | [BD-01-02、BD-01-03](system-architecture.md#bd-01-02-コンポーネントと責務) | 未登録 | In Review |
+| REQ-B-003 | INT-Q-009、INT-Q-036、CONF-037 | AC-002、AC-035 | [BD-01-02、BD-01-03](system-architecture.md#bd-01-02-コンポーネントと責務)、[BD-02-02、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | [BD-01-01、BD-01-02](system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
 | REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
 | REQ-B-006 | CONF-030～CONF-032 | AC-033 | [BD-01-04～BD-01-08](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
 | REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028 | AC-001 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
-| REQ-F-002 | INT-Q-009、INT-Q-026 | AC-001 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-002 | INT-Q-009、INT-Q-026、CONF-037 | AC-001、AC-035 | [BD-02-09](logical-data-model.md#bd-02-09-不変条件と検証規則) | 未登録 | In Review |
 | REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-03、BD-02-06、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-F-004 | INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-F-005 | INT-Q-008、INT-Q-031、CONF-027 | AC-002 | [BD-02-06、BD-02-07](logical-data-model.md#bd-02-06-データフロー) | 未登録 | In Review |
-| REQ-F-006 | INT-Q-004、INT-Q-007、INT-Q-031 | AC-003 | [BD-02-02、BD-02-04、BD-02-05](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
+| REQ-F-006 | INT-Q-004、INT-Q-007、INT-Q-031、CONF-037 | AC-003、AC-036 | [BD-02-02、BD-02-04、BD-02-05](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-F-007 | INT-Q-017、INT-Q-031、INT-Q-036 | AC-003 | [BD-02-02～BD-02-05](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-F-008 | INT-Q-012、INT-Q-019、CONF-029 | AC-004、AC-032 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-009 | INT-Q-012、CONF-029 | AC-004、AC-032 | [BD初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
@@ -65,8 +65,11 @@
 | REQ-F-038 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023、CONF-035 | AC-025 | [BD-02-02、BD-02-03、BD-02-07、BD-02-09、BD-02-10](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06・BD-07・BD-09初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-039 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | [BD-02-02、BD-02-03、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
 | REQ-F-040 | INT-Q-021、INT-Q-025、INT-Q-031、INT-Q-042、CONF-016、CONF-024、CONF-036 | AC-028 | [BD-02-02、BD-02-04、BD-02-06～BD-02-08](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-03-03、BD-03-10、BD-03-11](offline-sync-conflict-design.md#bd-03-03-端末キューと保存状態)、[BD-04-04、BD-04-06、BD-04-08、BD-04-10](authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[BD-05-02、BD-05-04、BD-05-11](security-privacy-design.md#bd-05-02-firestoreの認可とデータ境界) | 未登録 | In Review |
-| REQ-F-041 | INT-Q-011、INT-Q-016、INT-Q-023、INT-Q-027、CONF-025 | AC-029 | [BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント)、[BD-03-06、BD-03-07](offline-sync-conflict-design.md#bd-03-06-順序と現在状態の導出)、[BD-04-04、BD-04-07](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
+| REQ-F-041 | INT-Q-011、INT-Q-016、INT-Q-023、INT-Q-027、CONF-025、CONF-037 | AC-029、AC-035 | [BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント)、[BD-03-06、BD-03-07](offline-sync-conflict-design.md#bd-03-06-順序と現在状態の導出)、[BD-04-04、BD-04-07](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
 | REQ-F-042 | CONF-034 | AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[BD-02-04、BD-02-06～BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント)、[BD-03-03、BD-03-04、BD-03-09～BD-03-12](offline-sync-conflict-design.md#bd-03-03-端末キューと保存状態)、[BD-04-03、BD-04-04、BD-04-10](authentication-authorization-design.md#bd-04-03-役割範囲有効期間)、[BD-05-08、BD-05-11](security-privacy-design.md#bd-05-08-ログ監査プライバシー) | 未登録 | In Review |
+| REQ-F-043 | CONF-037 | AC-035 | [BD-02-02、BD-02-04、BD-02-05、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06・BD-07・BD-09初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-044 | CONF-037 | AC-036 | [BD-02-02、BD-02-04、BD-02-05、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06・BD-09初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
+| REQ-F-045 | CONF-037 | AC-037 | [BD-02-07、BD-02-10](logical-data-model.md#bd-02-07-保存先配布範囲出力可否)、[BD-07・BD-09初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-NF-001 | INT-Q-002、INT-Q-012、INT-Q-022 | AC-004、AC-018 | [BD-03-05、BD-03-11](offline-sync-conflict-design.md#bd-03-05-差分受信と収束) | 未登録 | In Review |
 | REQ-NF-002 | INT-Q-003、INT-Q-018、INT-Q-022、INT-Q-037 | AC-015、AC-018 | [BD-01-02、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務)、[BD-03-05、BD-03-11](offline-sync-conflict-design.md#bd-03-05-差分受信と収束) | 未登録 | In Review |
 | REQ-NF-003 | INT-Q-019、INT-Q-022、INT-Q-034、CONF-005 | AC-015 | [BD-01-01、BD-01-03、BD-01-09](system-architecture.md#bd-01-01-システムコンテキスト)、[BD-03-08、BD-03-10](offline-sync-conflict-design.md#bd-03-08-主なシーケンス) | 未登録 | In Review |
@@ -181,6 +184,12 @@
 | 確認ID | 決定内容 | 関連する未決定事項・要望 | 主な関連要件・受入条件 | 記録先 |
 |---|---|---|---|---|
 | CONF-036 | スタッフへ認証以外の暗号用パスフレーズを要求せず、公演・端末専用の非抽出CryptoKeyをIndexedDBへ保存する。完全オフライン中は停止検知まで不正利用され得る残存リスクを受容し、オンライン接続・回線復旧時は通常操作より先にサーバーの端末状態を確認する。停止時は鍵・暗号文を保持して画面非表示の隔離送信だけを許可し、停止解除後は同じ鍵を再利用する。鍵は全件受領後の締めまたは端末廃止・データ削除で公演データと一緒に削除する。共有パスフレーズ・PBKDF2・KEK方式は本番不採用とし、POC-004の過去事実は維持する | TBD-003、TBD-004 | REQ-F-031、REQ-F-040、REQ-NF-015、CON-006／AC-028、AC-030 | [要件定義書](../client/requirements.md#承認記録)、[受入条件書](../client/acceptance-criteria.md)、[論理データモデル](logical-data-model.md#bd-02-07-保存先配布範囲出力可否)、[認証・役割・権限設計](authentication-authorization-design.md#bd-04-08-停止紛失期限切れログアウト)、[セキュリティ・プライバシー設計](security-privacy-design.md#bd-05-04-端末内暗号化と鍵管理) |
+
+## Issue #57の確認事項との対応
+
+| 確認ID | 決定内容 | 関連する未決定事項・要望 | 主な関連要件・受入条件 | 記録先 |
+|---|---|---|---|---|
+| CONF-037 | 1人の購入者名を複数席へ登録し、席ごとに別のチケットとQRを発行する。交付方法と準備状態を席ごとに管理し、確認付きの個別・一斉操作と到達日時を扱う。購入者名を保持したまま座席表示名を変更でき、座席番号版と座席表示名版の座席表を出力する | 複数席購入、チケット準備、代理来場、座席表出力 | REQ-B-003、REQ-F-002、REQ-F-006、REQ-F-041、REQ-F-043～REQ-F-045／AC-035～AC-037 | [要件定義書](../client/requirements.md#承認記録)、[受入条件書](../client/acceptance-criteria.md)、[論理データモデル](logical-data-model.md#bd-02-02-論理エンティティと関係)、[座席表UI/UX引継ぎ](production-seat-map-ui-ux-notes.md#購入者名と座席表示名)、[セキュリティ・UI/UX引継ぎ](production-security-ui-ux-notes.md#チケット準備状態の表示と操作) |
 
 ## ADRとの対応
 
