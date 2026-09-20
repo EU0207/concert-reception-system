@@ -209,6 +209,7 @@
 | 主担当・代理管理者だけが一般受付担当者を期限付き一時管理者へ任命する。対象端末はオンラインで最小限の差分データを追加準備し、最新役割版と端末の準備済み役割版が一致した後に一時管理者用操作を開始する。期限切れ・解除後は未送信を保持し、受領後に追加データを削除または利用不能にする | REQ-F-028、REQ-F-031、REQ-NF-012、REQ-NF-015、REQ-NF-017、REQ-NF-018／AC-014、AC-023、AC-030、AC-031 | [BD-04](authentication-authorization-design.md#当日の一時管理者任命)、[BD-05](security-privacy-design.md#bd-05-02-firestoreの認可とデータ境界)、[BD-06](screen-flow-wireframe-design.md#bd-06-11-スタッフ端末管理)、[BD-08・BD-09初期割当](basic-design-plan.md#成果物と設計範囲) |
 | 基本設計のワイヤーフレームは、情報・操作と画面状態・権限制御を定め、最終的な視覚仕様を固定しない。基本設計承認後、本番実装前に架空データの操作可能なUIモックを作成し、開発者と依頼者がPC・スマートフォンで確認する。Firebase接続、実データ保存、本番の認証・同期は対象外とする | REQ-NF-007、REQ-NF-009、REQ-NF-014、REQ-NF-020／AC-032 | [BD-06](screen-flow-wireframe-design.md#基本設計承認後の操作可能なuiモック)、[基本設計計画書](basic-design-plan.md#基本設計承認後のuiモック工程)、[開発計画書](project-plan.md#開発工程) |
 | 受付画面の通信状態は上部の小さな表示で案内し、接続変化だけでは確認ダイアログを表示しない。短時間の変動では通知を反復せず、通常表示を閉じない。回線復旧時の端末・公演状態確認は安全上必要な例外として維持し、確認処理と案内を重複させない | REQ-NF-004、REQ-NF-007、REQ-NF-020／AC-011、AC-032 | [BD-06](screen-flow-wireframe-design.md#共通ヘッダー)、[BD-09初期割当](basic-design-plan.md#成果物と設計範囲) |
+| 現在公演を切替候補より強く表示する。会場席編集、席配置、会場席管理には全方向へ移動できる座席キャンバスを使用する。グループ配置は必要席数を確認してから確定する。通信状態を固定表示し、対応端末の受付カメラではライトを操作できるようにする | REQ-F-006、REQ-F-008、REQ-F-035、REQ-F-038、REQ-F-039、REQ-F-041、REQ-F-043、REQ-F-044、REQ-F-046、REQ-NF-007、REQ-NF-009、REQ-NF-014、REQ-NF-020／AC-003、AC-004、AC-010、AC-025、AC-032、AC-035、AC-036、AC-038 | [BD-06](screen-flow-wireframe-design.md#bd-06-08-会場席の編集と席配置)、[BD-09初期割当](basic-design-plan.md#成果物と設計範囲)、[#37](https://github.com/EU0207/concert-reception-system/issues/37) |
 
 ## ADRとの対応
 
