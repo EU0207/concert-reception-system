@@ -69,7 +69,7 @@
 | オフライン同期・競合設計 | [offline-sync-conflict-design.md](development/offline-sync-conflict-design.md) | 端末先行保存、差分同期、再送、冪等性、状態導出を定める。公演・端末ごとの同期分離、競合解消、紙照合、締めの境界を扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 同期、競合、紙照合、締め境界、外部サービス交換方式の変更時 | In Review |
 | 認証・役割・権限設計 | [authentication-authorization-design.md](development/authentication-authorization-design.md) | 初期主担当Google UID、UID・公演単位の役割、複数端末と追加端末関連付け、1回限りの招待、公演限定スタッフの短期パスワード、端末単位の事前準備・オフライン許可、4役割、セッション、端末停止・廃止、隔離送信、Security Rulesへ渡す権限境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 認証方式、役割、権限、端末、セッション、外部サービス交換方式の変更時 | In Review |
 | セキュリティ・プライバシー設計 | [security-privacy-design.md](development/security-privacy-design.md) | 信頼境界、Security Rules、1回限りリンク、端末暗号化と鍵、Web保護、秘密情報・ログ、公開物、依存関係、インシデント対応を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 脅威、認可、暗号化、鍵、外部サービス、公開・依存ゲートの変更時 | In Review |
-| 画面・画面遷移・操作見本設計 | [screen-flow-wireframe-design.md](development/screen-flow-wireframe-design.md) | 公演シリーズ、コピー、公演切替を含む準備画面を定める。当日受付、端末管理、終了処理の情報構造、画面遷移、主要操作見本を扱う | 依頼者、画面設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 業務フロー、画面、権限、状態、利用者向け文言の変更時 | In Review |
+| 画面・画面遷移・操作見本設計 | [screen-flow-wireframe-design.md](development/screen-flow-wireframe-design.md) | 公演シリーズ、コピー、公演切替を含む準備画面を定める。当日受付、座席キャンバス、端末管理、終了処理の情報構造、画面遷移、主要操作見本を扱う | 依頼者、画面設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 業務フロー、画面、権限、状態、利用者向け文言の変更時 | In Review |
 
 ## テンプレート
 
