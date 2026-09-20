@@ -10,7 +10,7 @@
 | 記載する内容 | 業務用語、開発用語、略語の意味 |
 | 記載しない内容 | 個別機能の詳細仕様 |
 | 関連文書 | [ドキュメント案内](../document-guide.md) |
-| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#57](https://github.com/EU0207/concert-reception-system/issues/57) |
+| 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#57](https://github.com/EU0207/concert-reception-system/issues/57)、[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
 | 状態 | Draft |
 | 承認情報 | 未承認 |
 
@@ -55,7 +55,9 @@
 | メールアドレス列挙 | ログインや再設定画面の応答差から、特定のメールアドレスが登録済みか第三者に推測されること |
 | スクリプト注入 | 入力値等へ不正なプログラムを混ぜ、他の利用者の画面で実行させようとする攻撃。一般にXSSとも呼ばれる |
 | CSP | Content Security Policyの略。ブラウザーが実行・読込みできるスクリプト、通信先、画像等を制限し、スクリプト注入の影響を抑えるHTTP応答方針 |
-| App Check | 正規のアプリからの要求である可能性を検査して不正クライアントを減らすFirebaseの追加防御。本人認証やSecurity Rulesの代替ではない |
+| App Check | 正規のアプリからの要求である可能性を検査し、不正クライアントを減らすFirebaseの追加防御。本人認証やSecurity Rulesの代替ではない。本システムではWeb向けreCAPTCHA Enterpriseプロバイダーを第一候補とする |
+| App Checkトークン | App Checkの判定後に発行され、保護対象サービスへの要求へ付与される値。本システムではFirestore要求ごとの使い捨てにせず、有効期間内で再利用する |
+| reCAPTCHA評価 | Webアプリの操作リスクをスコア方式で判定する処理。App Check向けの方式では、通常利用者へ画像選択等の課題を要求しない |
 | URLフラグメント | URLの`#`以降の部分。通常のHTTP要求やリファラーへ送られない性質を利用し、本設計では1回限りトークンの受渡しに用いる |
 | ダイジェスト | 元の値から一方向ハッシュで得る照合値。本設計では招待等のトークン平文をサーバーへ保存しないために用いる |
 | CryptoKey | Web Crypto APIが暗号処理に使用する鍵オブジェクト。本システムでは公演・端末単位のAES-GCM 256ビット鍵を非抽出として生成し、IndexedDBへ保存する |
