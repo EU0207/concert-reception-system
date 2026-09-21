@@ -11,7 +11,7 @@
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#32](https://github.com/EU0207/concert-reception-system/issues/32)、[#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#36](https://github.com/EU0207/concert-reception-system/issues/36)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#38](https://github.com/EU0207/concert-reception-system/issues/38)、[#57](https://github.com/EU0207/concert-reception-system/issues/57) |
 | 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映し、Issue #23で承認された要件へIssue #32、Issue #33、Issue #36～Issue #38、Issue #57で受領した承認済み変更を追記した文書 |
 | 状態 | Approved |
-| 承認情報 | 2026-09-09に依頼者がPR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`を承認。2026-09-11に`CONF-034`、2026-09-15に`CONF-035`、2026-09-17に`CONF-036`、2026-09-18に`CONF-037`・`CONF-038`、2026-09-19に`CONF-039`、2026-09-20に`CONF-040`、2026-09-21に`CONF-041`～`CONF-043`の依頼者承認を、開発者を連絡窓口として受領 |
+| 承認情報 | 2026-09-09に依頼者がPR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`を承認。2026-09-11に`CONF-034`、2026-09-15に`CONF-035`、2026-09-17に`CONF-036`、2026-09-18に`CONF-037`・`CONF-038`、2026-09-19に`CONF-039`、2026-09-20に`CONF-040`、2026-09-21に`CONF-041`～`CONF-044`の依頼者承認を、開発者を連絡窓口として受領 |
 
 ## 結論と前提
 
@@ -221,3 +221,5 @@
 2026-09-21に開発者を依頼者との連絡窓口として、出力画面とデータ形式の扱いについて依頼者の正式回答を受領した。通常CSVと任意項目選択CSVは補助出力として残し、出力画面ではPDF・Excelを優先表示する。JSONは通常出力へ表示せず、バックアップ・復旧・移行用途として後続設計で検討する。`CONF-042`として記録する。
 
 2026-09-21に開発者を依頼者との連絡窓口として、購入者名の文字数とエラー処理について依頼者の正式回答を受領した。購入者名は前後の空白を除去した後、内部の空白を含めて1～50文字とする。50文字を超える場合は省略せず、取込・入力エラーとして修正を求める。座席表示名は空白を除いて最大6文字のままとする。`CONF-043`として記録する。
+
+2026-09-21に開発者を依頼者との連絡窓口として、AC-015の6つ以上の独立した受付環境を、6台の物理端末だけで実測することは必須としないことについて依頼者の正式回答を受領した。端末固有の確認は最大3台の実機で行い、残りは独立したブラウザープロファイルまたは自動試験クライアントで再現できる。6環境以上での受付継続、統合、競合および1環境停止後の継続という合格条件は変更しない。`CONF-044`として記録する。
