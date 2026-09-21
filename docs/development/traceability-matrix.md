@@ -206,7 +206,7 @@
 
 ## 設計工程の開発者判断
 
-2026-09-19と2026-09-20に、既存要件と受入条件を具体化する開発者判断を追加した。依頼者回答または要件変更としては扱わない。
+2026-09-19から2026-09-21に、既存要件と受入条件を具体化する開発者判断を追加した。依頼者回答または要件変更としては扱わない。
 
 | 判断内容 | 既存要件・受入条件 | 反映先 |
 |---|---|---|
@@ -216,6 +216,7 @@
 | 公開画面と招待URLの初期表示ではFirestoreへ接続しない。認証・メール確認後、最初のFirestore要求より前にApp Checkを初期化する。Rulesは未認証と明らかな不正を確認用読取り前に拒否し、App Checkトークンを有効期間内で再利用する | REQ-NF-003、REQ-NF-004、REQ-NF-010、REQ-NF-016、REQ-NF-019、REQ-NF-020／AC-011、AC-020、AC-030～AC-034 | [BD-05](security-privacy-design.md#bd-05-02-firestoreの認可とデータ境界)、[BD-06](screen-flow-wireframe-design.md#bd-06-05-招待登録練習端末準備)、[BD-08・BD-09初期割当](basic-design-plan.md#成果物と設計範囲)、[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
 | `CONF-040`に基づき、信頼済み端末は通信不能、App Check利用不能、一時的なトークン更新失敗だけでは新規受付を止めない。App Checkトークン取得とサーバー状態確認の両方が成功するまでオフライン保存を続ける。画面は復旧済みと誤認させず、確認済みのロック条件を優先する | REQ-F-020、REQ-F-031、REQ-NF-003、REQ-NF-004、REQ-NF-015、REQ-NF-020／AC-011、AC-014、AC-015、AC-028、AC-030、AC-032 | [BD-05](security-privacy-design.md#オフライン継続とオンライン復旧)、[BD-06](screen-flow-wireframe-design.md#共通ヘッダー)、[BD-08・BD-09初期割当](basic-design-plan.md#成果物と設計範囲)、[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
 | 現在公演を切替候補より強く表示する。会場席編集、席配置、会場席管理には全方向へ移動できる座席キャンバスを使用する。グループ配置は必要席数を確認してから確定する。通信状態を固定表示し、対応端末の受付カメラではライトを操作できるようにする | REQ-F-006、REQ-F-008、REQ-F-035、REQ-F-038、REQ-F-039、REQ-F-041、REQ-F-043、REQ-F-044、REQ-F-046、REQ-NF-007、REQ-NF-009、REQ-NF-014、REQ-NF-020／AC-003、AC-004、AC-010、AC-025、AC-032、AC-035、AC-036、AC-038 | [BD-06](screen-flow-wireframe-design.md#bd-06-08-会場席の編集と席配置)、[BD-09初期割当](basic-design-plan.md#成果物と設計範囲)、[#37](https://github.com/EU0207/concert-reception-system/issues/37) |
+| お客様情報と座席系の保存型編集画面では、未保存変更がある状態で移動する前に確認ダイアログを表示する。保存して移動、保存せず移動、編集を続けるから選択し、保存失敗時は入力を保持する。ブラウザー終了時は標準警告の制約に従い、強制終了時の警告や自動復元は保証しない | REQ-F-001、REQ-F-006、REQ-F-035、REQ-F-038、REQ-F-043、REQ-NF-007、REQ-NF-008、REQ-NF-014／AC-001、AC-003、AC-025、AC-032、AC-035 | [BD-06](screen-flow-wireframe-design.md#未保存変更の離脱確認)、[基本設計計画書](basic-design-plan.md#基本設計承認後のuiモック工程)、[BD-09初期割当](basic-design-plan.md#要件受入条件の割当) |
 
 ## ADRとの対応
 
