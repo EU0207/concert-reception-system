@@ -7,10 +7,10 @@
 | 目的 | POC-005の確認とその後の依頼者要望で得た、本番座席表・会場画像画面への要件と設計時の確認事項を引き継ぐ |
 | 主な読者 | 依頼者、画面設計担当者、開発担当者、確認担当者 |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#38](https://github.com/EU0207/concert-reception-system/issues/38)、[#43](https://github.com/EU0207/concert-reception-system/issues/43)、[#57](https://github.com/EU0207/concert-reception-system/issues/57) |
-| 関連ID | REQ-F-035、REQ-F-038、REQ-F-039、REQ-F-041、REQ-F-043、REQ-F-045、REQ-NF-014、AC-025、AC-035、AC-037、CONF-022、CONF-023、CONF-035、CONF-037、CONF-041 |
+| 関連ID | REQ-F-001、REQ-F-002、REQ-F-035、REQ-F-038、REQ-F-039、REQ-F-041、REQ-F-043、REQ-F-045、REQ-NF-014、AC-001、AC-025、AC-035、AC-037、CONF-022、CONF-023、CONF-035、CONF-037、CONF-041、CONF-043 |
 | 状態 | In Review |
 | 適用範囲 | 本番画面の設計・実装。POC-005画面の追加変更は対象外 |
-| 承認情報 | 座席番号等は2026-09-15に`CONF-035`、購入者名・座席表示名・座席表出力は2026-09-18に`CONF-037`として依頼者承認済み。2026-09-21に`CONF-041`として、Excel追加、舞台と席番号の配置、座席表示名の上限、確保済み席、初期印刷設定を依頼者承認済み |
+| 承認情報 | 座席番号等は2026-09-15に`CONF-035`、購入者名・座席表示名・座席表出力は2026-09-18に`CONF-037`として依頼者承認済み。2026-09-21に`CONF-041`として、Excel追加、舞台と席番号の配置、座席表示名の上限、確保済み席、初期印刷設定を依頼者承認済み。同日に`CONF-043`として購入者名の1～50文字、前後空白除去、超過時エラーを依頼者承認済み |
 
 ## 結論
 
@@ -61,6 +61,8 @@ POC-005は技術的実現可能性の確認用であり、本番画面の最終U
 ## 購入者名と座席表示名
 
 - 同じ購入者が複数席を購入した場合は、購入者名を各席へ登録する。
+- 購入者名は前後の空白を除去した後、内部の空白を含めて1～50文字とする。
+- 50文字を超える購入者名は省略せず、取込・入力エラーとして修正を求める。
 - 同じ購入者名であることだけを重複エラーにしない。
 - 1席ごとに別のチケットとQRコードを発行する。
 - 座席表示名の初期値は購入者名とし、席ごとに変更できるようにする。
