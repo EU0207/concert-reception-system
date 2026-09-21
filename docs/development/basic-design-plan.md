@@ -6,7 +6,7 @@
 |---|---|
 | 目的 | 承認済み要件とADR-001を、実装前にレビュー可能な基本設計へ展開するため、成果物、設計範囲、依存関係、追跡方法、承認順序を定める |
 | 主な読者 | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 |
-| 前提 | 要件定義書と受入条件書は`CONF-041`を含めApproved、ADR-001とADR-002はAcceptedである。基本設計承認前は本番アプリケーションコードを実装せず、承認後はUIモックの確認を経て本番実装へ進む |
+| 前提 | 要件定義書と受入条件書は`CONF-042`を含めApproved、ADR-001とADR-002はAcceptedである。基本設計承認前は本番アプリケーションコードを実装せず、承認後はUIモックの確認を経て本番実装へ進む |
 | 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[ADR-001](decisions/ADR-001-product-platform.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md)、[Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[本番座席表・会場画像UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[開発計画書](project-plan.md) |
 | 関連Issue | 親Issue [#31](https://github.com/EU0207/concert-reception-system/issues/31)、後続Issue #32～#38、#41、#43、#44、更新Issue [#50](https://github.com/EU0207/concert-reception-system/issues/50)・[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
 | 状態 | In Review |
@@ -41,8 +41,8 @@
 | BD-05 | セキュリティ・プライバシー設計 | 信頼境界と脅威、Security Rules、App Check、公開画面のFirestore非接続、役割変更時の最小データ配布を定める。1回限りリンク、入力・出力保護、端末暗号化と鍵を扱う。CSP・PWAキャッシュ、秘密情報、監査、ログマスキングも定める。秘密情報・禁止ファイル・公開物検査、PR確認、依存関係、インシデント対応も扱う | 有償診断、秘密情報の発行、本番設定変更、自動化の実装 |
 | BD-06 | 画面・画面遷移・操作見本 | 情報設計、画面一覧、レスポンシブ方針を定める。受付開始・停止、公演切替、端末準備、一時管理者の任命・解除を扱う。座席キャンバス、受付カメラ、状態訂正、停止・削除、締め処理の操作見本を定める | 本番画面コード、最終的な視覚装飾 |
 | BD-07 | Excel・QR・PDF・CSV・帳票設計 | 取込テンプレートと検証、QR内容・有効性・確認コード、電子チケット、印刷業者向けExcel、CSV、当日運営表、座席番号版・座席表示名版の座席表、匿名集計、出力権限と一時生成物 | 実ファイル生成ライブラリの追加、実在データ |
-| BD-08 | 運用・監視・締め・復旧設計 | 公演準備、端末準備、利用量確認、当日の一時管理者任命・解除、当日切替、公演翌日の確認を扱う。未同期受領後の削除、端末廃止・管理者強制削除、未起動端末の次回誘導を定める。障害、紛失端末の停止・解除、暗号化データ保持、隔離記録照合、差分復帰も扱う。Firestore・App Check利用量、評価枠異常、正規端末の誤拒否、紙切替・復旧を追加する。問い合わせ、締め、端末削除追跡、データ返却、バックアップ・再取込、引継ぎも対象とする | 本番運用の実施、外部サービス契約 |
-| BD-09 | テスト方針 | テストの分担、対象環境、架空データを定める。手動受付開始・停止、一時管理者任命、オフライン中の状態変更、複数公演の切替を扱う。未認証画面のFirestore非接続、App Check、Rules早期拒否も扱う。座席キャンバス、通信状態表示、カメラライトを含め、証跡、合否、受入条件39件への割当を定める | 個別テストケースと本番相当試験の実施 |
+| BD-08 | 運用・監視・締め・復旧設計 | 公演準備、端末準備、利用量確認、当日の一時管理者任命・解除、当日切替、公演翌日の確認を扱う。未同期受領後の削除、端末廃止・管理者強制削除、未起動端末の次回誘導を定める。障害、紛失端末の停止・解除、暗号化データ保持、隔離記録照合、差分復帰も扱う。Firestore・App Check利用量、評価枠異常、正規端末の誤拒否、紙切替・復旧を追加する。問い合わせ、締め、端末削除追跡、データ返却、バックアップ・再取込、引継ぎも対象とする。バックアップ・復旧・移行用JSONの採否と安全条件も検討する | 本番運用の実施、外部サービス契約 |
+| BD-09 | テスト方針 | テストの分担、対象環境、架空データを定める。手動受付開始・停止、一時管理者任命、オフライン中の状態変更、複数公演の切替を扱う。未認証画面のFirestore非接続、App Check、Rules早期拒否も扱う。座席キャンバス、通信状態表示、カメラライトを含め、証跡、合否、受入条件39件への割当を定める。バックアップ・復旧・移行形式の破損、欠落、改変、形式版不一致、重複取込、途中失敗と切戻しも対象とする | 個別テストケースと本番相当試験の実施 |
 | BD-10 | 基本設計承認記録 | `BD-01`～`BD-09`の整合性、主要操作見本、未決定事項、残存リスク、外部サービス交換時に残せる部分と交換部分、実装開始条件の一括確認と承認記録 | 個別設計の代替、Cloudflare等の代替基盤の先行実装、実装承認 |
 
 ## 後続Issue
@@ -69,14 +69,14 @@
 | 設計ID | 主な要件ID | 主な受入条件ID | 未決定・確認ID |
 |---|---|---|---|
 | BD-01 | REQ-B-001～REQ-B-006、REQ-F-020、REQ-F-030、REQ-F-042、REQ-NF-002～REQ-NF-004、REQ-NF-009～REQ-NF-011、REQ-NF-013、REQ-NF-019～REQ-NF-021 | AC-015、AC-017、AC-018、AC-020、AC-021、AC-031、AC-033、AC-034 | TBD-002、TBD-011、TBD-012、CONF-031～CONF-034 |
-| BD-02 | REQ-F-002～REQ-F-007、REQ-F-010、REQ-F-012～REQ-F-025、REQ-F-028、REQ-F-033～REQ-F-047、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、REQ-NF-015、REQ-NF-018～REQ-NF-020 | AC-002、AC-003、AC-005、AC-007～AC-013、AC-023～AC-031、AC-034～AC-039 | TBD-004、TBD-008、CONF-024、CONF-025、CONF-034～CONF-039 |
+| BD-02 | REQ-F-002～REQ-F-007、REQ-F-010、REQ-F-012～REQ-F-025、REQ-F-028、REQ-F-033～REQ-F-047、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、REQ-NF-015、REQ-NF-018～REQ-NF-020 | AC-002、AC-003、AC-005、AC-007～AC-013、AC-023～AC-031、AC-034～AC-039 | TBD-004、TBD-008、CONF-024、CONF-025、CONF-034～CONF-039、CONF-041、CONF-042 |
 | BD-03 | REQ-F-010、REQ-F-015～REQ-F-017、REQ-F-021、REQ-F-030、REQ-F-034、REQ-F-037、REQ-F-040～REQ-F-042、REQ-F-046、REQ-F-047、REQ-NF-001～REQ-NF-004、REQ-NF-010、REQ-NF-013、REQ-NF-015、REQ-NF-019、REQ-NF-020 | AC-004、AC-005、AC-009、AC-011、AC-015、AC-018、AC-024、AC-027～AC-029、AC-034、AC-038、AC-039 | TBD-002、CONF-012、CONF-024、CONF-025、CONF-034、CONF-038、CONF-039 |
 | BD-04 | REQ-F-012、REQ-F-013、REQ-F-018、REQ-F-023～REQ-F-028、REQ-F-031～REQ-F-033、REQ-F-036、REQ-F-037、REQ-F-040～REQ-F-042、REQ-F-046、REQ-F-047、REQ-NF-015～REQ-NF-020 | AC-007、AC-009、AC-012～AC-014、AC-022、AC-023、AC-026～AC-031、AC-033、AC-034、AC-038、AC-039 | TBD-003、CONF-016、CONF-019、CONF-024、CONF-026、CONF-034、CONF-036、CONF-038、CONF-039 |
 | BD-05 | REQ-F-011、REQ-F-021～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-F-040、REQ-F-042、REQ-F-046、REQ-NF-004～REQ-NF-006、REQ-NF-010～REQ-NF-012、REQ-NF-015～REQ-NF-021 | AC-006、AC-009、AC-013～AC-016、AC-020、AC-023、AC-028、AC-030、AC-031、AC-033、AC-034、AC-038 | TBD-003、TBD-004、TBD-011、TBD-012、CONF-026、CONF-033、CONF-034、CONF-036、CONF-038、CONF-040 |
-| BD-06 | REQ-F-001～REQ-F-017、REQ-F-019、REQ-F-022～REQ-F-025、REQ-F-029、REQ-F-034～REQ-F-044、REQ-F-046、REQ-F-047、REQ-NF-001、REQ-NF-004、REQ-NF-006、REQ-NF-007、REQ-NF-009、REQ-NF-014、REQ-NF-015、REQ-NF-019～REQ-NF-021 | AC-001～AC-011、AC-013、AC-017、AC-019、AC-023～AC-030、AC-032～AC-036、AC-038、AC-039 | TBD-005、TBD-008、CONF-022、CONF-023、CONF-025、CONF-029、CONF-032、CONF-034～CONF-040 |
-| BD-07 | REQ-F-001～REQ-F-005、REQ-F-018、REQ-F-020、REQ-F-024、REQ-F-032、REQ-F-033、REQ-F-035、REQ-F-038、REQ-F-042、REQ-F-043、REQ-F-045、REQ-NF-005、REQ-NF-006、REQ-NF-012、REQ-NF-018～REQ-NF-020 | AC-001、AC-002、AC-012、AC-013、AC-016、AC-022、AC-023、AC-025、AC-031、AC-034、AC-035、AC-037 | TBD-005、TBD-006、CONF-014、CONF-027、CONF-028、CONF-034、CONF-035、CONF-037 |
-| BD-08 | REQ-B-005、REQ-F-020、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-F-040、REQ-F-042、REQ-F-046、REQ-NF-003、REQ-NF-004、REQ-NF-008～REQ-NF-011、REQ-NF-015、REQ-NF-016、REQ-NF-018～REQ-NF-021 | AC-009、AC-013～AC-015、AC-017、AC-020、AC-021、AC-028、AC-030～AC-034、AC-038 | TBD-001、TBD-008、TBD-010、TBD-012、CONF-019、CONF-024、CONF-027、CONF-034、CONF-036、CONF-038、CONF-040 |
-| BD-09 | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021 | AC-001～AC-039 | TBD-001～TBD-013、CONF-033～CONF-040 |
+| BD-06 | REQ-F-001～REQ-F-018、REQ-F-019、REQ-F-022～REQ-F-025、REQ-F-029、REQ-F-033～REQ-F-044、REQ-F-045～REQ-F-047、REQ-NF-001、REQ-NF-004、REQ-NF-006、REQ-NF-007、REQ-NF-009、REQ-NF-014、REQ-NF-015、REQ-NF-019～REQ-NF-021 | AC-001～AC-013、AC-017、AC-019、AC-023～AC-030、AC-032～AC-039 | TBD-005、TBD-008、CONF-022、CONF-023、CONF-025、CONF-029、CONF-032、CONF-034～CONF-042 |
+| BD-07 | REQ-F-001～REQ-F-005、REQ-F-018、REQ-F-020、REQ-F-024、REQ-F-032、REQ-F-033、REQ-F-035、REQ-F-038、REQ-F-042、REQ-F-043、REQ-F-045、REQ-NF-005、REQ-NF-006、REQ-NF-012、REQ-NF-018～REQ-NF-020 | AC-001、AC-002、AC-012、AC-013、AC-016、AC-022、AC-023、AC-025、AC-031、AC-034、AC-035、AC-037 | TBD-005、TBD-006、CONF-014、CONF-027、CONF-028、CONF-034、CONF-035、CONF-037、CONF-041、CONF-042 |
+| BD-08 | REQ-B-005、REQ-F-020、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-F-040、REQ-F-042、REQ-F-046、REQ-NF-003、REQ-NF-004、REQ-NF-008～REQ-NF-011、REQ-NF-015、REQ-NF-016、REQ-NF-018～REQ-NF-021 | AC-009、AC-013～AC-015、AC-017、AC-020、AC-021、AC-028、AC-030～AC-034、AC-038 | TBD-001、TBD-008、TBD-010、TBD-012、CONF-019、CONF-024、CONF-027、CONF-034、CONF-036、CONF-038、CONF-040、CONF-042 |
+| BD-09 | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021 | AC-001～AC-039 | TBD-001～TBD-013、CONF-033～CONF-042 |
 | BD-10 | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021 | AC-001～AC-039 | 基本設計で残った全確認事項 |
 
 制約`CON-001`～`CON-006`は`BD-01`、`BD-03`、`BD-08`、`BD-09`で追跡する。後続Issueの作成時は、この表から対象IDを本文へ転記し、成果物完成時にトレーサビリティ表の設計IDを詳細項目IDへ更新する。
@@ -133,6 +133,7 @@
 | 無料枠・提供条件の変更 | 利用量確認、開催前の予備印刷、管理者1名による紙・手動課金判断、端末別未送信一覧、復旧統合 | BD-01、BD-02～BD-04、BD-06～BD-09 |
 | 未認証訪問者・単純なBotによるFirestore利用枠消費 | 公開画面のFirestore非接続、App Check、Rulesの早期拒否、評価数監視。高度なBotと大規模DDoSは完全防止の対象外とする | BD-05、BD-06、BD-08～BD-10 |
 | App Check・サーバー確認の一時障害中に端末停止等を検知できない | `CONF-040`に基づき、有効な準備済み端末はオフライン保存を継続する。App Checkトークン取得とサーバー状態確認の両方が成功してからオンラインへ戻す。明示的な不正判定、停止、役割失効、許可期限切れを確認した場合はロックする | BD-05、BD-06、BD-08～BD-10 |
+| バックアップ・復旧・移行用JSONの採否と形式が未決定 | 通常出力へJSONを表示しない。対象データ、形式版、整合性、暗号化、保存期限、再取込権限、切戻しをBD-08で決定し、BD-09で試験へ割り当てる | BD-07～BD-10 |
 | Firebaseの恒久的な利用不能または要件不適合 | Firebase固有部分を交換可能な境界へ限定し、データ出力・再取込、認証再設定、移行検証、切戻しを新しいADRで判断できる設計とする。代替基盤は先行実装しない | BD-01、BD-03、BD-04、BD-07～BD-10、ADR-001見直し条件 |
 | 本番セキュリティ未確認 | 脅威・権限・秘密情報・復旧設計と直接APIを含む試験割当 | BD-04、BD-05、BD-09 |
 | 本番UI/UX未確認 | 基本設計の操作見本、承認後の操作可能なUIモック、本番実装中のPC・対象3実機レビュー | BD-06、BD-09、BD-10、UIモックIssue |

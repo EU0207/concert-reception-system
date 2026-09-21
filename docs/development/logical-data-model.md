@@ -6,11 +6,11 @@
 |---|---|
 | 目的 | 承認済み要件とBD-01の責務境界を、データの意味、関係、生成・更新・保持・削除経路へ展開する |
 | 主な読者 | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 |
-| 前提 | 要件定義書と受入条件書は`CONF-041`を含めApproved、ADR-001とADR-002はAccepted、BD-01はIn Reviewである |
+| 前提 | 要件定義書と受入条件書は`CONF-042`を含めApproved、ADR-001とADR-002はAccepted、BD-01はIn Reviewである |
 | 関連文書 | [システム構成・環境分離設計](system-architecture.md)、[基本設計計画書](basic-design-plan.md)、[要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[トレーサビリティ表](traceability-matrix.md) |
 | 関連Issue | [#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#38](https://github.com/EU0207/concert-reception-system/issues/38) |
 | 設計ID | BD-02、BD-02-01～BD-02-10 |
-| 関連ID | REQ-F-002～REQ-F-007、REQ-F-010、REQ-F-012～REQ-F-025、REQ-F-028、REQ-F-033～REQ-F-047、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、REQ-NF-015、REQ-NF-018～REQ-NF-020、AC-002、AC-003、AC-005、AC-007～AC-013、AC-023～AC-031、AC-034～AC-039、TBD-004、TBD-008、CONF-024、CONF-025、CONF-034～CONF-041 |
+| 関連ID | REQ-F-002～REQ-F-007、REQ-F-010、REQ-F-012～REQ-F-025、REQ-F-028、REQ-F-033～REQ-F-047、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、REQ-NF-015、REQ-NF-018～REQ-NF-020、AC-002、AC-003、AC-005、AC-007～AC-013、AC-023～AC-031、AC-034～AC-039、TBD-004、TBD-008、CONF-024、CONF-025、CONF-034～CONF-042 |
 | 状態 | In Review |
 | 承認情報 | 未承認。基本設計一式はBD-10で確認する |
 
@@ -269,6 +269,8 @@ flowchart LR
 | 出力・削除記録 | 保存 | 自端末の必要分 | 権限内の必要分 | 保存 | 個人情報を含めない範囲 | 監査確認用 |
 
 「保存」は論理上の必要性を示す。`CONF-036`により非抽出CryptoKeyのIndexedDB保存だけは本番方式として確定し、鍵素材をFirestore、Cache Storage、ログ、出力へ複製しない。他の暗号詳細、Firebase Storage採用、物理文書分割は本表だけでは決定しない。会場画像の本番保存方式はBD-05とBD-07で、費用・アクセス制御・事前取得を満たす方式を決める。BD-01でFirebase Storageは未採用のため、必要なら影響をADRへ戻す。
+
+`CONF-042`により、PDF・Excelは主要出力、通常CSVと任意項目選択CSVは補助出力として扱う。JSONは通常出力へ含めず、バックアップ・復旧・移行で必要となる論理データ範囲と再取込境界をBD-08で検討する。
 
 ## BD-02-08 保存期間、無効化、完全削除
 
