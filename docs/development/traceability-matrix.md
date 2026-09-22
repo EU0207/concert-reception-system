@@ -209,7 +209,7 @@
 
 ## 設計工程の開発者判断
 
-2026-09-19から2026-09-21に、既存要件と受入条件を具体化する開発者判断を追加した。依頼者回答または要件変更としては扱わない。
+2026-09-19から2026-09-22に、既存要件と受入条件を具体化する開発者判断を追加した。依頼者回答または要件変更としては扱わない。
 
 | 判断内容 | 既存要件・受入条件 | 反映先 |
 |---|---|---|
@@ -221,6 +221,7 @@
 | 現在公演を切替候補より強く表示する。会場席編集、席配置、会場席管理には全方向へ移動できる座席キャンバスを使用する。グループ配置は必要席数を確認してから確定する。通信状態を固定表示し、対応端末の受付カメラではライトを操作できるようにする | REQ-F-006、REQ-F-008、REQ-F-035、REQ-F-038、REQ-F-039、REQ-F-041、REQ-F-043、REQ-F-044、REQ-F-046、REQ-NF-007、REQ-NF-009、REQ-NF-014、REQ-NF-020／AC-003、AC-004、AC-010、AC-025、AC-032、AC-035、AC-036、AC-038 | [BD-06](screen-flow-wireframe-design.md#bd-06-08-会場席の編集と席配置)、[BD-09初期割当](basic-design-plan.md#成果物と設計範囲)、[#37](https://github.com/EU0207/concert-reception-system/issues/37) |
 | お客様情報と座席系の保存型編集画面では、未保存変更がある状態で移動する前に確認ダイアログを表示する。保存して移動、保存せず移動、編集を続けるから選択する。保存失敗・版競合時は入力を画面メモリー上に保持し、移動しない。ブラウザー再読込み・終了時は対応環境で標準警告を使用するが、自動保存・復元は保証しない | REQ-F-001、REQ-F-006、REQ-F-035、REQ-F-038、REQ-F-043、REQ-NF-007、REQ-NF-008、REQ-NF-014／AC-001、AC-003、AC-025、AC-032、AC-035 | [BD-06](screen-flow-wireframe-design.md#未保存変更の離脱確認)、[基本設計計画書](basic-design-plan.md#基本設計承認後のuiモック工程)、[BD-09初期割当](basic-design-plan.md#要件受入条件の割当) |
 | 公演前の名簿・お客様情報・座席編集は、編集中の内容を画面メモリーだけに保持し、`保存`、`下書きを保存`、`編集内容を確定`または`決定`の明示操作でFirestoreへ送る。入力・席選択・座席移動・端末内帳票生成ではFirestoreへ書き込まない。版情報と同期カーソルで取得済みデータを再利用し、保存時の版競合は自動上書きしない。当日受付は端末先行保存後に速やかに差分同期する例外とする | REQ-F-001、REQ-F-002、REQ-F-006、REQ-F-018、REQ-F-030、REQ-F-033、REQ-F-035、REQ-F-038、REQ-F-043、REQ-F-045、REQ-NF-003、REQ-NF-004、REQ-NF-013、REQ-NF-014／AC-001、AC-003、AC-012、AC-015、AC-025、AC-032、AC-035、AC-037 | [BD-03](offline-sync-conflict-design.md#公演前編集の保存境界)、[BD-06](screen-flow-wireframe-design.md#未保存変更の離脱確認)、[BD-07](file-output-report-design.md#bd-07-12-外部サービス交換と後続設計)、[BD-08・BD-09初期割当](basic-design-plan.md#firestore消費量を抑える設計のbd-09確認項目) |
+| 端末準備後に名簿、座席、座席表示名等の確定済み公演データ版が更新された場合、影響端末を`差分更新待ち`にする。端末登録、カメラ練習、CryptoKey生成は維持し、オンラインで変更分だけを取得する。件数、データ版、参照整合性、保存結果の成功後に`準備完了`へ戻す。版不一致中は本番受付を拒否し、更新不能時は代替端末または紙へ切り替える。端末基盤、認可、互換性、整合性に問題がある場合だけ`再準備必要`とする | REQ-F-001、REQ-F-006、REQ-F-031、REQ-F-035、REQ-F-038、REQ-F-043、REQ-NF-003、REQ-NF-004、REQ-NF-013、REQ-NF-015、REQ-NF-016、REQ-NF-020／AC-001、AC-003、AC-014、AC-015、AC-025、AC-030、AC-032、AC-035 | [BD-04](authentication-authorization-design.md#bd-04-07-端末準備とオフライン許可)、[BD-06](screen-flow-wireframe-design.md#準備完了後の確定データ更新)、[BD-08](operations-recovery-design.md#bd-08-03-初期環境招待端末準備)、[BD-09初期割当](basic-design-plan.md#firestore消費量を抑える設計のbd-09確認項目) |
 | 日常運用は管理画面中心とし、外部コンソールは環境所有者による所有、利用量、App Check、料金確認に限定する。公演前確認、障害分類、紙切替、復旧、締め、削除、問い合わせ、引継ぎを担当と時点で定める。JSONは通常出力へ表示せず、秘密情報と端末CryptoKeyを含まない暗号化バックアップとして扱う | REQ-B-005、REQ-F-020、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-F-040、REQ-F-042、REQ-NF-003、REQ-NF-008～REQ-NF-011、REQ-NF-015、REQ-NF-016、REQ-NF-018～REQ-NF-021／AC-009、AC-013～AC-015、AC-017、AC-020、AC-021、AC-028、AC-030、AC-031、AC-033、AC-034 | [BD-08](operations-recovery-design.md#bd-08-01-運用役割と記録)、[#41](https://github.com/EU0207/concert-reception-system/issues/41) |
 
 ## ADRとの対応
