@@ -15,7 +15,7 @@
 
 ## 決定済み要件の対応表
 
-基本設計の初期割当は[基本設計計画書](basic-design-plan.md#要件受入条件の割当)の`BD-01`～`BD-10`で管理する。`BD-09-03`で[AC-001～AC-039の試験方針](test-strategy.md#bd-09-03-受入条件への割当)を割り当てた。各基本設計を作成した時に、本表の設計IDを成果物内の詳細項目IDへ更新する。テストケースIDはテスト設計工程で追加する。質問IDの `INT-Q-` と確認ID `CONF-` は省略せず正式IDとして読む。
+基本設計の初期割当は[基本設計計画書](basic-design-plan.md#要件受入条件の割当)の`BD-01`～`BD-10`で管理する。`BD-09-03`で[AC-001～AC-039の試験方針](test-strategy.md#bd-09-03-受入条件への割当)を割り当てた。[BD-10](basic-design-final-review.md)で設計一式と承認条件を確認する。各基本設計を作成した時に、本表の設計IDを成果物内の詳細項目IDへ更新する。テストケースIDはテスト設計工程で追加する。質問IDの `INT-Q-` と確認ID `CONF-` は省略せず正式IDとして読む。
 
 | 要件ID | 質問・確認ID | 受入条件ID | 設計ID | テストケースID | 状態 |
 |---|---|---|---|---|---|
@@ -235,6 +235,7 @@
 |---|---|---|---|---|
 | [ADR-001](decisions/ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | TBD-002～TBD-004、TBD-011、TBD-012、REQ-NF-002～REQ-NF-004、REQ-NF-010～REQ-NF-021 | AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 | Accepted |
 | [ADR-002](decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | TBD-009、TBD-012、REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020 | AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | Accepted |
+| [ADR-003案](decisions/ADR-003-role-based-auth-providers.md) | 初期主担当のGoogleログインと公演限定スタッフの個別メール・パスワードを比較。ADR-001との差は未解決 | TBD-003、TBD-011、TBD-012、REQ-F-026～REQ-F-028、REQ-NF-016、REQ-NF-017 | AC-014、AC-030、AC-031 | Proposed |
 
 ## 更新ルール
 
