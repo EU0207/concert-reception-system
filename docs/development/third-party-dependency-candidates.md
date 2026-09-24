@@ -1,0 +1,43 @@
+# 第三者資産・依存関係の候補台帳
+
+## この文書について
+
+| 項目 | 内容 |
+|---|---|
+| 目的 | `TBD-011`の実装開始前確認として、PoCで使った直接依存を候補として把握し、本番採用前に必要な権利・安全性・費用確認を明示する |
+| 主な読者 | 開発者、設計担当者、レビュー担当者 |
+| 前提 | PoCの依存関係は本番採用済みではない。基本設計は未承認であり、本書の作成で依存関係を追加しない |
+| 関連文書 | [BD-05の依存関係ゲート](security-privacy-design.md#bd-05-10-依存関係と第三者資産)、[BD-10](basic-design-final-review.md)、[基本設計計画書](basic-design-plan.md) |
+| 関連Issue | [#44](https://github.com/EU0207/concert-reception-system/issues/44) |
+| 関連ID | TBD-011、TBD-012、REQ-NF-019、AC-031、AC-033 |
+| 状態 | In Review |
+| 確認日 | 2026-09-24 |
+| 結論 | 候補とPoCでの固定版、インストール済みパッケージの自己申告ライセンス、直接候補版の公開アドバイザリーを一次照合した。権利・安全性・費用の採用判定は未完了 |
+
+## PoC由来の直接依存候補
+
+下表の版は[POC-001](../../poc/POC-001/package.json)、[POC-003](../../poc/POC-003/package.json)、[POC-004](../../poc/POC-004/package.json)、[POC-005](../../poc/POC-005/package.json)の直接依存から確認したPoC時点の値である。ライセンス欄は各PoCのインストール済み`node_modules`内の`package.json`に記載された識別子であり、ライセンス本文と再配布条件の最終確認ではない。名称と版は実装時の採用案ではない。
+
+| 区分 | 候補とPoC版 | 用途の候補 | 自己申告ライセンス |
+|---|---|---|---|
+| 配信対象候補 | `firebase@12.18.0` | 認証・Firestore接続 | Apache-2.0 |
+| 配信対象候補 | `idb@8.0.3` | IndexedDB操作 | ISC |
+| 配信対象候補 | `@zxing/browser@0.2.1`、`@zxing/library@0.23.0` | QR読取り | MIT、Apache-2.0 |
+| 配信対象候補 | `jszip@3.10.1` | ZIP出力 | MIT OR GPL-3.0-or-later |
+| 配信対象候補 | `pdf-lib@1.17.1` | PDF生成 | MIT |
+| 配信対象候補 | `qrcode@1.5.4` | QR生成 | MIT |
+| 開発・試験候補 | `typescript@7.0.2`、`vite@8.2.2`、`vite-plugin-pwa@1.3.0` | 型検査、ビルド、PWA | Apache-2.0、MIT、MIT |
+| 開発・試験候補 | `@playwright/test@1.62.1`、`vitest@4.1.11` | 自動試験 | Apache-2.0、MIT |
+| 開発・試験候補 | `fake-indexeddb@6.2.5`、`firebase-tools@15.28.2`、`@types/qrcode@1.5.6` | 模擬DB、エミュレーター、型定義 | Apache-2.0、MIT、MIT |
+
+2026-09-24に[GitHubの公開アドバイザリーAPI](https://docs.github.com/en/rest/security-advisories/global-advisories)で上表の各直接候補版に影響するGitHub-reviewedのnpmアドバイザリーを照会し、該当0件だった。既知の影響版を使う照会でAPIの絞込みが機能することも確認した。これは直接候補版に対する当日の限定結果であり、推移依存や未掲載の問題がないことを保証しない。[npmの監査手順](https://docs.npmjs.com/auditing-package-dependencies-for-security-vulnerabilities/)に沿った採用版のロックファイル全体の監査は未実施である。
+
+## 採用前に残る確認
+
+1. 本番で本当に必要な直接依存と版を、機能ごとに絞る。PoCの一覧を一括採用しない。
+2. 採用版の配布元、ライセンス本文、著作権表示、再配布条件、生成物へ含まれる範囲を確認する。`jszip`の二重ライセンスは選択する条件と配布物を明記する。
+3. 固定版と推移依存の一覧、既知脆弱性、更新状況を採用時点の情報で調べる。High/Criticalや未解決の問題は採用せず、代替または例外判断へ戻す。
+4. ブラウザーからの外部送信先と費用条件を確認する。ライブラリの利用料金とFirebase等のサービス料金を混同せず、新規有料契約を追加しない。
+5. 採用するPRでロックファイル、ライセンス、脆弱性、配信物を再確認し、公開前に成果物全体を点検する。
+
+現段階では推移依存、既知脆弱性、配布物、費用条件の採用判定を完了していない。`TBD-011`は未完了とし、基本設計の実装開始条件を満たしたと記録しない。
