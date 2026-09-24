@@ -75,6 +75,7 @@
 | 運用・監視・締め・削除・復旧設計 | [operations-recovery-design.md](development/operations-recovery-design.md) | 公演準備、利用量・App Check監視、障害・紙切替、復旧、締め、端末削除、削除希望、暗号化JSONバックアップ、引継ぎを定める | 依頼者、主担当、代理管理者、環境所有者、開発担当者、テスト担当者、運用担当者 | 基本設計時、公演準備時、障害・復旧時 | 運用役割、監視、費用、復旧、削除、外部サービス、引継ぎの変更時 | In Review |
 | テスト方針 | [test-strategy.md](development/test-strategy.md) | 受入条件39件の試験レベル、環境、架空データ、証跡、判定、PoC証跡との境界を定める | 依頼者、開発者、テスト担当者、運用担当者 | 基本設計時、個別ケース作成時 | 要件、受入条件、試験環境、判定方法の変更時 | In Review |
 | 基本設計一式レビュー・承認依頼書 | [basic-design-final-review.md](development/basic-design-final-review.md) | BD-01～BD-09の整合、操作見本、Firebase交換境界、未決定事項、承認条件を一式で確認する | 依頼者、開発者、設計担当者、テスト担当者、運用担当者 | BD-10の一括レビュー時 | 指摘、依頼者回答、ADR、承認対象コミットの変更時 | In Review |
+| 第三者資産・依存関係の候補台帳 | [third-party-dependency-candidates.md](development/third-party-dependency-candidates.md) | PoC由来の候補とTBD-011の採用前確認事項を記録する | 開発者、設計担当者、レビュー担当者 | BD-10と依存採用前 | 候補、版、権利、安全性、費用の確認時 | In Review |
 
 ## テンプレート
 

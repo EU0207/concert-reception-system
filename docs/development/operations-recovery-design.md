@@ -10,7 +10,7 @@
 | 関連文書 | [基本設計計画書](basic-design-plan.md)、[システム構成・環境分離設計](system-architecture.md)、[オフライン同期・競合設計](offline-sync-conflict-design.md)、[認証・役割・権限設計](authentication-authorization-design.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md)、[Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md) |
 | 関連Issue | [#41](https://github.com/EU0207/concert-reception-system/issues/41) |
 | 設計ID | BD-08、BD-08-01～BD-08-14 |
-| 関連ID | REQ-B-005、REQ-F-001、REQ-F-002、REQ-F-006、REQ-F-018、REQ-F-020、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-F-033、REQ-F-035、REQ-F-038、REQ-F-040、REQ-F-042、REQ-F-043、REQ-F-045、REQ-F-046、REQ-NF-003、REQ-NF-004、REQ-NF-008～REQ-NF-011、REQ-NF-013～REQ-NF-016、REQ-NF-018～REQ-NF-021、AC-001、AC-003、AC-009、AC-012～AC-015、AC-017、AC-020、AC-021、AC-025、AC-028、AC-030～AC-035、AC-037、AC-038、TBD-001、TBD-008、TBD-010、TBD-012、CONF-019、CONF-024、CONF-027、CONF-034、CONF-036、CONF-038、CONF-040、CONF-042、CONF-044～CONF-046 |
+| 関連ID | REQ-B-005、REQ-F-001、REQ-F-002、REQ-F-006、REQ-F-018、REQ-F-020、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-F-033、REQ-F-035、REQ-F-038、REQ-F-040、REQ-F-042、REQ-F-043、REQ-F-045、REQ-F-046、REQ-NF-003、REQ-NF-004、REQ-NF-008～REQ-NF-011、REQ-NF-013～REQ-NF-016、REQ-NF-018～REQ-NF-021、AC-001、AC-003、AC-009、AC-012～AC-015、AC-017、AC-020、AC-021、AC-025、AC-028、AC-030～AC-035、AC-037、AC-038、TBD-001、TBD-008、TBD-010、TBD-012、CONF-019、CONF-024、CONF-027、CONF-034、CONF-036、CONF-038、CONF-040、CONF-042、CONF-044～CONF-047 |
 | 状態 | In Review |
 | 承認情報 | 未承認。基本設計一式はBD-10で確認する |
 
@@ -69,6 +69,10 @@ JSONは通常出力へ表示せず、バックアップ・復旧・移行専用�
 初期主担当は、環境所有者がGoogleアカウント、2段階認証、Firebase UID、対象環境を照合して明示割当する。最初にログインした利用者を主担当へ自動昇格しない。開発担当者へ一時権限を付与した場合は、設定完了後に環境所有者が不要な権限を削除し、所有者、プロジェクトID、担当、確認日だけを引継ぎ台帳へ残す。秘密情報は記載しない。
 
 公演限定スタッフへの招待は、公演前日までを目安に本人が普段確認できるメール、LINEまたはSMSで送る。アプリ外の送付経路には1回限りリンクだけを記載し、パスワードを併記しない。宛先誤りは招待を失効して再発行し、期限切れまたは未使用も新しい招待へ置き換える。管理者はパスワードを設定、閲覧、再通知しない。
+
+`CONF-047`に基づき、公演前日までに本人がログインまたは再認証の成功を確認する。準備済みの受付端末を確認のためにサインアウトさせず、必要なら別の安全なブラウザー環境で確認する。失念した場合は、本人がメールを受信できるオンライン環境で期限付き再設定を行い、対象公演の役割と端末準備状態を再確認する。管理者はパスワードを預からず、他サービスと同一のパスワードを推奨しない。短いパスワードでも失念と不正ログインの危険は残る。
+
+当日に再ログインが必要で本人がパスワードを思い出せない場合は、メール再設定と本人確認ができるかを先に確かめる。オフライン中または短時間で安全に復旧できない時は、元端末の未送信記録を消さず、別の準備済み端末へ担当を替える。代替端末がなければ当日運営表を使った紙受付へ切り替え、復旧後に記録を照合する。失念を理由に共有アカウントや管理者の仮パスワードを使わない。
 
 端末準備はBD-04の項目別状態を使用する。主担当・代理管理者は次をスタッフ・端末単位で確認する。
 
