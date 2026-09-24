@@ -116,7 +116,7 @@ Firebaseが将来利用不能または要件不適合になった場合の設計
 
 2026-09-24に[Googleログインの公式手順](https://firebase.google.com/docs/auth/web/google-signin)、[再認証API](https://firebase.google.com/docs/reference/js/auth)、[アカウントリンク](https://firebase.google.com/docs/auth/web/account-linking)、[Firebase料金表](https://firebase.google.com/pricing)を照合した。Googleプロバイダーの有効化、Googleアカウントでのログイン、再認証、明示的な資格情報リンクは公式機能として提供される。Sparkプランには支払方法なしで利用できるAuthenticationの範囲がある。これらは設計可能性の確認であり、実プロジェクトでの設定、対象端末の動作、同一メール・別UID、リンク失敗時の復旧、無料枠内での運用を検証した結果ではない。Google側の2段階認証実施をFirebaseのIDトークンだけで保証しない。
 
-当日の再ログインと失念についてはBD-04、BD-08、BD-09へ条件と試験対象を割り当てた。ADR-001とADR-003の認証方式の差は解消した。[第三者資産候補台帳](third-party-dependency-candidates.md)はPoCの直接依存と自己申告ライセンスを把握した段階であり、`TBD-011`の採用前確認は未完了である。基本設計承認前に残るのは、候補資産の権利・安全性・費用の見込みと、最終承認対象コミットの固定である。Firebase実環境の設定や対象実機での動作検証は、基本設計承認後の実装・受入工程へ割り当て、承認前に外部環境を作成しない。
+当日の再ログインと失念についてはBD-04、BD-08、BD-09へ条件と試験対象を割り当てた。ADR-001とADR-003の認証方式の差は解消した。[第三者資産候補台帳](third-party-dependency-candidates.md)ではPoC由来の直接依存とライセンス原文を一次確認し、開発者はJSZipのMIT側選択方針を確認した。`TBD-011`は採用予定の部品と版、推移依存、安全性、配布物、外部送信先、サービス費用の見込みが未確定である。基本設計承認前にはこれらの見込みと最終承認対象コミットの固定が残る。Firebase実環境の設定や対象実機での動作検証は、基本設計承認後の実装・受入工程へ割り当て、承認前に外部環境を作成しない。
 
 | 記録項目 | 現在値 |
 |---|---|
