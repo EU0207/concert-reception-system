@@ -6,40 +6,40 @@
 |---|---|
 | 目的 | BD-10としてBD-01～BD-09の整合、主要操作見本、未決定事項、実装開始条件を一式で確認し、依頼者と開発者の判断を記録する |
 | 主な読者 | 依頼者、開発者、設計担当者、テスト担当者、運用担当者 |
-| 前提 | [要件定義書](../client/requirements.md)と[受入条件書](../client/acceptance-criteria.md)は`CONF-046`までApproved。[ADR-001](decisions/ADR-001-product-platform.md)と[ADR-002](decisions/ADR-002-quota-emergency-response.md)はAccepted。BD-01～BD-09はmainへ統合済みだが未承認 |
+| 前提 | [要件定義書](../client/requirements.md)と[受入条件書](../client/acceptance-criteria.md)は`CONF-046`までApproved。[ADR-001](decisions/ADR-001-product-platform.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[ADR-003](decisions/ADR-003-role-based-auth-providers.md)はAccepted。BD-01～BD-09はPR #67で一式として承認 |
 | 関連文書 | [基本設計計画書](basic-design-plan.md)、[トレーサビリティ表](traceability-matrix.md)、[ADR-003](decisions/ADR-003-role-based-auth-providers.md)、[第三者資産候補台帳](third-party-dependency-candidates.md)、[文書一覧](../document-guide.md) |
 | 関連Issue | [#44](https://github.com/EU0207/concert-reception-system/issues/44) |
 | 設計ID | BD-10、BD-10-01～BD-10-06 |
 | 対象ID | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021、CON-001～CON-006、AC-001～AC-039、TBD-001～TBD-013、CONF-033～CONF-047 |
-| 状態 | In Review |
-| 承認情報 | `CONF-047`で依頼者の業務確認を受領。ADR-003はAccepted。`TBD-011`の実装開始前ゲートを確認済み。最終承認対象コミットと承認日は未確定のため基本設計は未承認 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、`CONF-047`の依頼者業務確認、ADR-003のAccepted、`TBD-011`の実装開始前ゲート完了を確認。開発者がPR #67をレビューOKとし、設計内容コミット`0f455cc`を承認対象として基本設計一式を承認 |
 
 ## 結論
 
-基本設計9成果物と主要操作見本について、依頼者は`CONF-047`で内容を確認してOKと回答した。役割別ログインと公演限定スタッフのパスワード条件も回答済みである。認証プロバイダーの差はADR-003で解消した。`TBD-011`の実装開始前ゲートは候補版の一次調査で完了した。最終承認対象コミットと承認日は未確定のため、基本設計をApprovedへ変更せず、本番アプリケーションコードの実装を開始しない。
+基本設計9成果物と主要操作見本について、依頼者は`CONF-047`で内容を確認してOKと回答した。役割別ログインと公演限定スタッフのパスワード条件も回答済みである。認証プロバイダーの差はADR-003で解消した。`TBD-011`の実装開始前ゲートは候補版の一次調査で完了した。開発者によるPR #67のレビューOKを受け、基本設計一式を承認した。次は別Issueで操作可能なUIモックを確認し、その結果を反映するまで本番アプリケーションコードの実装を開始しない。
 
-本書は承認結果の先取りではない。確認事項への回答と技術ゲートの結果を記録し、必要な設計修正をレビューした後に、対象コミットを固定して承認を求める。基本設計一式を承認しても、次は別Issueの操作可能なUIモックであり、本番実装へ直接進まない。
+本書は`CONF-047`の依頼者回答、開発者の技術確認、PR #67のレビュー結果、承認対象を記録する。次は別Issueの操作可能なUIモックであり、本番実装へ直接進まない。
 
 ## BD-10-01 レビュー対象と整合確認
 
 | 設計ID | 成果物 | 主な確認対象 | 現在の状態 |
 |---|---|---|---|
-| BD-01 | [システム構成・環境分離設計](system-architecture.md) | PWA、Firebase、IndexedDB、公開評価、環境別の安全停止 | In Review |
-| BD-02 | [論理データモデル](logical-data-model.md) | 公演・座席・チケット・イベントの正本、配布、保存・削除 | In Review |
-| BD-03 | [オフライン同期・競合設計](offline-sync-conflict-design.md) | 変更不能イベント、再送、冪等性、状態導出、差分、競合 | In Review |
-| BD-04 | [認証・役割・権限設計](authentication-authorization-design.md) | UID・公演・端末・期限、4役割、停止・解除・廃止 | In Review |
-| BD-05 | [セキュリティ・プライバシー設計](security-privacy-design.md) | Security Rules、App Check、CryptoKey、公開物・依存ゲート | In Review |
-| BD-06 | [画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md) | 公演準備、当日受付、管理、例外、操作見本 | In Review |
-| BD-07 | [Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md) | 入出力形式、QR、印刷、権限、安全な一時生成 | In Review |
-| BD-08 | [運用・監視・締め・削除・復旧設計](operations-recovery-design.md) | 公演前確認、障害・紙切替、締め、暗号化JSON、引継ぎ | In Review |
-| BD-09 | [テスト方針](test-strategy.md) | AC-001～AC-039、環境、証跡、異常、実機、移行試験 | In Review |
+| BD-01 | [システム構成・環境分離設計](system-architecture.md) | PWA、Firebase、IndexedDB、公開評価、環境別の安全停止 | Approved |
+| BD-02 | [論理データモデル](logical-data-model.md) | 公演・座席・チケット・イベントの正本、配布、保存・削除 | Approved |
+| BD-03 | [オフライン同期・競合設計](offline-sync-conflict-design.md) | 変更不能イベント、再送、冪等性、状態導出、差分、競合 | Approved |
+| BD-04 | [認証・役割・権限設計](authentication-authorization-design.md) | UID・公演・端末・期限、4役割、停止・解除・廃止 | Approved |
+| BD-05 | [セキュリティ・プライバシー設計](security-privacy-design.md) | Security Rules、App Check、CryptoKey、公開物・依存ゲート | Approved |
+| BD-06 | [画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md) | 公演準備、当日受付、管理、例外、操作見本 | Approved |
+| BD-07 | [Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md) | 入出力形式、QR、印刷、権限、安全な一時生成 | Approved |
+| BD-08 | [運用・監視・締め・削除・復旧設計](operations-recovery-design.md) | 公演前確認、障害・紙切替、締め、暗号化JSON、引継ぎ | Approved |
+| BD-09 | [テスト方針](test-strategy.md) | AC-001～AC-039、環境、証跡、異常、実機、移行試験 | Approved |
 
 確認済みの事実は次のとおりである。
 
-- mainのBD-01～BD-09はすべて`In Review`であり、設計ID、対象、確認欄を持つ。BD-06の対象IDは文書末尾の対応表で管理している。
+- BD-01～BD-09はすべて`Approved`であり、設計ID、対象、確認欄を持つ。BD-06の対象IDは文書末尾の対応表で管理している。
 - [トレーサビリティ表](traceability-matrix.md#決定済み要件の対応表)にはREQ-B 6件、REQ-F 47件、REQ-NF 21件の計74行があり、IDの欠落・重複はない。制約6件は別表で追跡する。
 - BD-09にはAC-001～AC-039の39行があり、IDの欠落・重複はない。PoCの証跡と本番相当構成の受入判定を区別している。
-- 9成果物のローカル文書リンク81件は、参照先ファイルの存在を確認した。リンク先の節と設計内容の適合は本PRレビューでも確認する。
+- 9成果物のローカル文書リンク81件は、参照先ファイルの存在を確認した。リンク先の節と設計内容の適合もPR #67のレビューで確認した。
 - ADR-001とADR-002はAcceptedである。ADR-003も`CONF-047`と公式資料の照合を根拠にAcceptedとし、ADR-001の認証方式部分だけを置換した。
 
 ## BD-10-02 主要操作見本の業務レビュー
@@ -116,16 +116,16 @@ Firebaseが将来利用不能または要件不適合になった場合の設計
 
 2026-09-24に[Googleログインの公式手順](https://firebase.google.com/docs/auth/web/google-signin)、[再認証API](https://firebase.google.com/docs/reference/js/auth)、[アカウントリンク](https://firebase.google.com/docs/auth/web/account-linking)、[Firebase料金表](https://firebase.google.com/pricing)を照合した。Googleプロバイダーの有効化、Googleアカウントでのログイン、再認証、明示的な資格情報リンクは公式機能として提供される。Sparkプランには支払方法なしで利用できるAuthenticationの範囲がある。これらは設計可能性の確認であり、実プロジェクトでの設定、対象端末の動作、同一メール・別UID、リンク失敗時の復旧、無料枠内での運用を検証した結果ではない。Google側の2段階認証実施をFirebaseのIDトークンだけで保証しない。
 
-当日の再ログインと失念についてはBD-04、BD-08、BD-09へ条件と試験対象を割り当てた。ADR-001とADR-003の認証方式の差は解消した。[第三者資産候補台帳](third-party-dependency-candidates.md)でPoCの固定版を用いた権利・安全性・通信先・費用の見込みを確認し、`TBD-011`の実装開始前ゲートを完了した。開発者はJSZipのMIT側選択方針を確認済みである。基本設計承認前には最終承認対象コミットの固定と最終レビューが残る。Firebase実環境の設定、採用する依存版の監査、対象実機の動作検証は承認後の実装・受入工程へ割り当て、承認前に外部環境を作成しない。
+当日の再ログインと失念についてはBD-04、BD-08、BD-09へ条件と試験対象を割り当てた。ADR-001とADR-003の認証方式の差は解消した。[第三者資産候補台帳](third-party-dependency-candidates.md)でPoCの固定版を用いた権利・安全性・通信先・費用の見込みを確認し、`TBD-011`の実装開始前ゲートを完了した。開発者はJSZipのMIT側選択方針を確認済みである。Firebase実環境の設定、採用する依存版の監査、対象実機の動作検証は後続の実装・受入工程へ割り当てる。
 
 | 記録項目 | 現在値 |
 |---|---|
 | レビュー基準のmainコミット | `611f592f6ebb46b6b41b79fafc988caf5e900044`（PR #66統合後） |
-| 最終承認対象コミット | 未確定。指摘反映後に固定する |
+| 最終承認対象コミット | `0f455cc50a2de34310c8507861665063afcf2074`（PR #67の設計内容。承認記録の追記は後続コミット） |
 | 依頼者による業務確認 | 2026-09-24に開発者が「依頼者の回答」と明示して伝達した`CONF-047`を受領。9成果物・操作見本はOK。役割別ログインと現行パスワード条件も回答済み |
 | 開発者による技術確認 | 本書の整合監査と公式資料の一次照合を実施し、ADR-003をAcceptedとした。TBD-011の実装開始前の見込み確認を完了。実際の依存版・配信物、実環境・対象端末の検証は承認後の工程 |
-| 基本設計一式の承認日 | 未記録 |
-| 後続PR・Issue | 承認結果に合わせて記録する |
+| 基本設計一式の承認日 | 2026-09-24。開発者によるPR #67のレビューOKを受領。依頼者の業務確認は`CONF-047` |
+| 後続PR・Issue | PR #67、Issue #44。次工程のUIモックは別Issueで扱う |
 
 **依頼者に確認してください**
 
@@ -134,4 +134,4 @@ Firebaseが将来利用不能または要件不適合になった場合の設計
 **開発者が確認してください**
 
 - `TBD-011`の実装開始前ゲートの根拠と後続ゲートを確認してください。対象端末・App Checkの変動条件は導入と受入試験で確認し、依頼者の回答を代理で確定しないでください。
-- BD-10-03のFirebase交換境界とBD-10-05の承認条件が満たされた後に、文書状態、承認日、対象コミットを更新してください。
+- 承認済みの設計内容に変更が生じた場合は、影響する要件、受入条件、ADR、設計、試験を変更管理で確認してください。

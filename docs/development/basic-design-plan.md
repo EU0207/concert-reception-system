@@ -9,8 +9,8 @@
 | 前提 | 要件定義書と受入条件書は`CONF-046`を含めApproved、ADR-001とADR-002はAcceptedである。基本設計承認前は本番アプリケーションコードを実装せず、承認後はUIモックの確認を経て本番実装へ進む |
 | 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[ADR-001](decisions/ADR-001-product-platform.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md)、[Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[本番座席表・会場画像UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[開発計画書](project-plan.md) |
 | 関連Issue | 親Issue [#31](https://github.com/EU0207/concert-reception-system/issues/31)、後続Issue #32～#38、#41、#43、#44、更新Issue [#50](https://github.com/EU0207/concert-reception-system/issues/50)・[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
-| 状態 | In Review |
-| 承認情報 | 未承認 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc` |
 
 ## 結論
 
@@ -128,7 +128,7 @@ BD-09では同期アダプターの呼出し回数を自動計測し、少なく
 | 区分 | 現在の扱い | 決定する成果物・ゲート |
 |---|---|---|
 | TBD-001 対応版 | 製品の対象機種は確定済み。OS・ブラウザー版は変動するため設計時に固定しない | BD-08、BD-09で確認手順を定め、リリース前・各開催前に再確認 |
-| TBD-002～TBD-004 製品方式 | 基盤方針はADR-001で採用済み。データ、同期、認証、保存、暗号化、鍵、復旧の具体方式は未承認 | BD-02～BD-05、BD-08で決定し、重要な別案が生じた場合はADR追加 |
+| TBD-002～TBD-004 製品方式 | 基盤方針はADR-001で採用済み。データ、同期、認証、保存、暗号化、鍵、復旧の具体方式はBD-02～BD-05、BD-08で設計し、基本設計一式として承認済み | 重要な別案が生じた場合は変更管理とADR追加 |
 | TBD-005、TBD-006 | 業務方式と出力形式は確定済み。列順、入力例、寸法、見本が未決定 | BD-06、BD-07で操作見本・帳票見本を作成して確認 |
 | TBD-008、TBD-010 | 業務方針は確定済み。案内場所、削除希望、問い合わせ、引継ぎ手順が未決定 | BD-06、BD-08で決定 |
 | TBD-011 公開範囲・権利 | 公開ライセンスは採用しない。評価目的、環境分離、三段階の依存関係・公開物ゲートはBD-01・BD-05で具体化済み。BD-10で候補版の権利・安全性・外部通信・費用の見込みを確認し、実装開始前ゲートを完了した | 各依存追加PRで実際の版と配信物を確認し、公開前に成果物全体を再確認する |

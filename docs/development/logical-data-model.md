@@ -6,13 +6,13 @@
 |---|---|
 | 目的 | 承認済み要件とBD-01の責務境界を、データの意味、関係、生成・更新・保持・削除経路へ展開する |
 | 主な読者 | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 |
-| 前提 | 要件定義書と受入条件書は`CONF-046`を含めApproved、ADR-001とADR-002はAccepted、BD-01はIn Reviewである |
+| 前提 | 要件定義書と受入条件書は`CONF-046`を含めApproved、ADR-001とADR-002はAccepted。BD-01は基本設計一式としてApprovedである |
 | 関連文書 | [システム構成・環境分離設計](system-architecture.md)、[基本設計計画書](basic-design-plan.md)、[要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[トレーサビリティ表](traceability-matrix.md) |
 | 関連Issue | [#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#38](https://github.com/EU0207/concert-reception-system/issues/38) |
 | 設計ID | BD-02、BD-02-01～BD-02-10 |
 | 関連ID | REQ-F-001～REQ-F-007、REQ-F-010、REQ-F-012～REQ-F-025、REQ-F-028、REQ-F-033～REQ-F-047、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、REQ-NF-015、REQ-NF-018～REQ-NF-020、AC-001～AC-003、AC-005、AC-007～AC-013、AC-023～AC-031、AC-034～AC-039、TBD-004、TBD-008、CONF-024、CONF-025、CONF-034～CONF-043、CONF-046 |
-| 状態 | In Review |
-| 承認情報 | 未承認。基本設計一式はBD-10で確認する |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc` |
 
 ## 結論
 
