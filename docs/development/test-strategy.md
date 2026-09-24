@@ -6,13 +6,13 @@
 |---|---|
 | 目的 | BD-09として、承認済み要件と受入条件39件を再現可能な試験へ展開する責任、環境、データ、証跡、判定の方針を定める |
 | 主な読者 | 依頼者、開発者、テスト担当者、運用担当者 |
-| 前提 | [要件定義書](../client/requirements.md)と[受入条件書](../client/acceptance-criteria.md)は`CONF-046`までApproved。[ADR-001](decisions/ADR-001-product-platform.md)と[ADR-002](decisions/ADR-002-quota-emergency-response.md)はAccepted。BD-01～BD-08はmainへ統合済みだが、基本設計一式の承認前である |
+| 前提 | [要件定義書](../client/requirements.md)と[受入条件書](../client/acceptance-criteria.md)は`CONF-046`までApproved。[ADR-001](decisions/ADR-001-product-platform.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[ADR-003](decisions/ADR-003-role-based-auth-providers.md)はAccepted。BD-01～BD-08は基本設計一式としてApprovedである |
 | 関連文書 | [基本設計計画書](basic-design-plan.md)、[トレーサビリティ表](traceability-matrix.md)、[システム構成](system-architecture.md)、[データモデル](logical-data-model.md)、[同期・競合](offline-sync-conflict-design.md)、[認証・権限](authentication-authorization-design.md)、[セキュリティ](security-privacy-design.md)、[画面](screen-flow-wireframe-design.md)、[帳票](file-output-report-design.md)、[運用・復旧](operations-recovery-design.md) |
 | 関連Issue | [#43](https://github.com/EU0207/concert-reception-system/issues/43) |
 | 設計ID | BD-09、BD-09-01～BD-09-10 |
-| 関連ID | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021、CON-001～CON-006、AC-001～AC-039、TBD-001～TBD-013、CONF-033～CONF-046 |
-| 状態 | In Review |
-| 承認情報 | 未承認。BD-10で基本設計一式として確認する |
+| 関連ID | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021、CON-001～CON-006、AC-001～AC-039、TBD-001～TBD-013、CONF-033～CONF-047 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc` |
 
 ## 結論
 
@@ -116,6 +116,10 @@ AC-001、AC-002、AC-012、AC-022、AC-023、AC-037では、形式版、境界�
 ### 認証、端末、時刻
 
 AC-014、AC-028、AC-030、AC-038、AC-039では、初期主担当UIDの明示割当、同一UIDのPC・スマートフォン利用、端末ごとの承認・準備・停止を確認する。追加端末QR・リンクと招待は、同時使用、再利用、期限切れ、別UID、別公演、改変、メール未確認で拒否する。公演限定スタッフのパスワードは6・20文字を受け付け、5・21文字、数字や英字の欠落、推測容易値を拒否する。認証に成功しても役割・端末・公演の認可を別に試す。
+
+`CONF-047`の認証・当日継続試験では、主担当・代理管理者が各自のGoogleアカウントでログインし、異なるUIDへ各公演役割を明示割当できることを確認する。一般受付担当者・臨時管理者は各自の確認済みメールで招待を受け、個別パスワードを使う。Google側の再認証、同一メールの別UID、資格情報リンク失敗、追加端末の承認失敗では自動昇格や別公演閲覧を許さない。Googleログインのポップアップまたはリダイレクト経路は対象ブラウザーで確認し、第三者ストレージを制限した環境で失敗した場合も権限を誤付与しない。
+
+公演前に本人が再認証を確認し、パスワード失念時に本人のメール再設定で復旧できることを試す。準備済み端末の通信断、App Check確認失敗、一時的なトークン更新失敗では、それだけを理由にサインアウトせず、有効なオフライン許可内で受付を続ける。明示ログアウト、認証情報漏えいによる失効、保存領域消去、許可期限切れは別に試す。当日に再ログインが必要で失念した場合、オンライン再設定に失敗またはオフラインなら元端末の未送信を保持し、準備済み代替端末または紙へ切り替える。復旧後は未送信と紙の重複・欠落を照合する。6文字の設定可能性を「失念なし」や不正ログイン防止の合格証拠にはしない。
 
 会場タイムゾーンで公演日前後と翌日23:59:59の直前・到達・直後を確認し、端末のタイムゾーン変更や時刻ずれで許可が延長されないことを確認する。準備後の確定データ更新では`差分更新待ち`の間の受付拒否、変更分取得後の`準備完了`復帰を確認する。端末登録、カメラ練習、CryptoKey生成を通常の差分更新で繰り返さない。欠損、改変、版非互換等だけを`再準備必要`へ送る。
 
