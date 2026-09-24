@@ -208,7 +208,7 @@
 | CONF-044 | AC-015の6つ以上の独立した受付環境は6台の物理端末を必須としない。端末固有の確認は最大3台の実機で行い、残りは保存領域、識別子、接続状態および同期状態を分離したブラウザープロファイルまたは自動試験クライアントで再現できる。6環境以上での受付継続・統合・競合確認という合格条件は維持する | 6環境試験、実機範囲、試験クライアント | REQ-F-030、REQ-NF-002～REQ-NF-004、REQ-NF-013／AC-015 | [要件定義書](../client/requirements.md#承認記録)、[受入条件書](../client/acceptance-criteria.md)、[オフライン同期・競合設計](offline-sync-conflict-design.md#bd-03-11-エラー分類観測性能引渡し)、[BD-09初期割当](basic-design-plan.md#firestore消費量を抑える設計のbd-09確認項目) |
 | CONF-045 | 環境所有者を役割表の先頭に置く。環境所有者と主担当は同一人物が兼務できるが、Firebase環境の所有・料金・課金・所有権引継ぎと、公演準備・受付・締め・問い合わせの責務を設計上分離する。将来の担当者変更・権限委任でも境界を維持し、兼務時も高影響操作の再認証、確認、記録を省略しない | 環境所有者、主担当、兼務、責務分離、引継ぎ、高影響操作 | REQ-NF-010、REQ-NF-019／AC-020、AC-031 | [要件定義書](../client/requirements.md#承認記録)、[受入条件書](../client/acceptance-criteria.md)、[BD-08](operations-recovery-design.md#bd-08-01-運用役割と記録)、[用語集](glossary.md) |
 | CONF-046 | 役割名「一時管理者」を「臨時管理者」へ変更する。役割は主担当、代理管理者、臨時管理者、一般受付担当者の4種類とする。臨時管理者は主担当または代理管理者が当日だけ任命し、追加準備後に許可された当日管理操作を行う。主担当引継ぎ、環境設定、課金は不可とし、既存の権限、有効期限、処理内容は変更しない | 臨時管理者、役割名称、当日任命、追加準備 | REQ-F-028、REQ-F-037、REQ-F-047、REQ-NF-012／AC-014、AC-027、AC-039 | [要件定義書](../client/requirements.md#承認記録)、[受入条件書](../client/acceptance-criteria.md)、[BD-04](authentication-authorization-design.md#当日の臨時管理者任命)、[BD-05](security-privacy-design.md#bd-05-02-firestoreの認可とデータ境界)、[BD-06](screen-flow-wireframe-design.md#bd-06-11-スタッフ端末管理)、[BD-08](operations-recovery-design.md#bd-08-01-運用役割と記録)、[用語集](glossary.md) |
-| CONF-047 | BD-01～BD-09と主要操作見本の内容を確認してOK。主担当・代理管理者は各自のGoogleアカウント、一般受付担当者・臨時管理者は各自のメールとパスワードを使う。スタッフのパスワードは6～20文字・英字数字必須を維持し、短いパスワードの残存リスクを理解したうえで当日の運用しやすさを優先する。失念リスクはゼロとせず、条件変更時だけ変更管理で扱う | BD-10一括業務確認、役割別認証、当日再ログイン、パスワード条件 | TBD-003、REQ-NF-016、REQ-NF-017／AC-014、AC-030、AC-031、AC-032 | [BD-10回答記録](basic-design-final-review.md#bd-10-06-回答と承認の記録)、[ADR-003案](decisions/ADR-003-role-based-auth-providers.md)、[BD-04](authentication-authorization-design.md#bd-04-09-パスワード失敗再設定)、[BD-08](operations-recovery-design.md#bd-08-03-初期環境招待端末準備)、[BD-09](test-strategy.md) |
+| CONF-047 | BD-01～BD-09と主要操作見本の内容を確認してOK。主担当・代理管理者は各自のGoogleアカウント、一般受付担当者・臨時管理者は各自のメールとパスワードを使う。スタッフのパスワードは6～20文字・英字数字必須を維持し、短いパスワードの残存リスクを理解したうえで当日の運用しやすさを優先する。失念リスクはゼロとせず、条件変更時だけ変更管理で扱う | BD-10一括業務確認、役割別認証、当日再ログイン、パスワード条件 | TBD-003、REQ-NF-016、REQ-NF-017／AC-014、AC-030、AC-031、AC-032 | [BD-10回答記録](basic-design-final-review.md#bd-10-06-回答と承認の記録)、[ADR-003](decisions/ADR-003-role-based-auth-providers.md)、[BD-04](authentication-authorization-design.md#bd-04-09-パスワード失敗再設定)、[BD-08](operations-recovery-design.md#bd-08-03-初期環境招待端末準備)、[BD-09](test-strategy.md) |
 
 ## 設計工程の開発者判断
 
@@ -236,7 +236,7 @@
 |---|---|---|---|---|
 | [ADR-001](decisions/ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | TBD-002～TBD-004、TBD-011、TBD-012、REQ-NF-002～REQ-NF-004、REQ-NF-010～REQ-NF-021 | AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 | Accepted |
 | [ADR-002](decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | TBD-009、TBD-012、REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020 | AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | Accepted |
-| [ADR-003案](decisions/ADR-003-role-based-auth-providers.md) | 初期主担当のGoogleログインと公演限定スタッフの個別メール・パスワードを比較。ADR-001との差は未解決 | TBD-003、TBD-011、TBD-012、REQ-F-026～REQ-F-028、REQ-NF-016、REQ-NF-017 | AC-014、AC-030、AC-031 | Proposed |
+| [ADR-003](decisions/ADR-003-role-based-auth-providers.md) | 主担当・代理管理者の個別Googleログインと公演限定スタッフの個別メール・パスワードを採用。ADR-001の認証方式部分を置換 | TBD-003、TBD-011、TBD-012、REQ-F-026～REQ-F-028、REQ-NF-016、REQ-NF-017 | AC-014、AC-030、AC-031 | Accepted |
 
 ## 更新ルール
 

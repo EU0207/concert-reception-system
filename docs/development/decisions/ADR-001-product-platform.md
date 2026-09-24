@@ -14,7 +14,7 @@
 | ADR状態 | Accepted |
 | 決定日 | 2026-09-09 |
 | 承認情報 | 2026-09-09に依頼者が、確認事項1～3について推奨案をすべて承認（CONF-033） |
-| 後続判断 | 公演中のFirebase上限時に限る紙運用・手動課金の例外を[ADR-002](ADR-002-quota-emergency-response.md)でAcceptedとして追加。通常運用を無料とする本ADRの判断は維持する。認証プロバイダーの差は[ADR-003案](ADR-003-role-based-auth-providers.md)で検討中であり、本ADRの決定は未変更 |
+| 後続判断 | 公演中のFirebase上限時に限る紙運用・手動課金の例外を[ADR-002](ADR-002-quota-emergency-response.md)でAcceptedとして追加。通常運用を無料とする本ADRの判断は維持する。全役割のメール・パスワード認証という部分だけは[ADR-003](ADR-003-role-based-auth-providers.md)で役割別方式に置換する |
 
 ## 決定
 
