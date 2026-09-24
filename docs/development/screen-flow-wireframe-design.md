@@ -6,14 +6,14 @@
 |---|---|
 | 目的 | BD-06として、利用者別の情報設計、画面一覧、画面遷移、主要操作見本を定める |
 | 主な読者 | 依頼者、画面設計担当者、開発担当者、テスト担当者、運用担当者 |
-| 前提 | 要件定義書と受入条件書は`CONF-046`を含めApproved、BD-01～BD-05はIn Reviewである |
+| 前提 | 要件定義書と受入条件書は`CONF-046`を含めApproved、BD-01～BD-05は基本設計一式としてApprovedである |
 | 関連文書 | [基本設計計画書](basic-design-plan.md)、[論理データモデル](logical-data-model.md)、[オフライン同期・競合設計](offline-sync-conflict-design.md)、[認証・役割・権限設計](authentication-authorization-design.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[座席表UI/UX引継ぎ](production-seat-map-ui-ux-notes.md)、[セキュリティ・UI/UX引継ぎ](production-security-ui-ux-notes.md) |
 | 関連Issue | [#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#57](https://github.com/EU0207/concert-reception-system/issues/57)、[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
 | 設計ID | BD-06、BD-06-01～BD-06-15 |
-| 状態 | In Review |
+| 状態 | Approved |
 | 対象 | 本番画面の情報構造、遷移、状態表示、操作見本、レスポンシブ基準 |
 | 対象外 | 本番画面コード、最終的な色・書体・画像素材、帳票の印刷寸法、実装後の実機試験 |
-| 承認情報 | 未承認。BD-10で主要操作見本を基本設計一式として依頼者に確認する |
+| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc` |
 
 ## 結論
 
