@@ -6,13 +6,13 @@
 |---|---|
 | 目的 | BD-09として、承認済み要件と受入条件39件を再現可能な試験へ展開する責任、環境、データ、証跡、判定の方針を定める |
 | 主な読者 | 依頼者、開発者、テスト担当者、運用担当者 |
-| 前提 | [要件定義書](../client/requirements.md)と[受入条件書](../client/acceptance-criteria.md)は`CONF-046`までApproved。[ADR-001](decisions/ADR-001-product-platform.md)と[ADR-002](decisions/ADR-002-quota-emergency-response.md)はAccepted。BD-01～BD-08はmainへ統合済みだが、基本設計一式の承認前である |
+| 前提 | [要件定義書](../client/requirements.md)と[受入条件書](../client/acceptance-criteria.md)は`CONF-046`までApproved。[ADR-001](decisions/ADR-001-product-platform.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[ADR-003](decisions/ADR-003-role-based-auth-providers.md)はAccepted。BD-01～BD-08は基本設計一式としてApprovedである |
 | 関連文書 | [基本設計計画書](basic-design-plan.md)、[トレーサビリティ表](traceability-matrix.md)、[システム構成](system-architecture.md)、[データモデル](logical-data-model.md)、[同期・競合](offline-sync-conflict-design.md)、[認証・権限](authentication-authorization-design.md)、[セキュリティ](security-privacy-design.md)、[画面](screen-flow-wireframe-design.md)、[帳票](file-output-report-design.md)、[運用・復旧](operations-recovery-design.md) |
 | 関連Issue | [#43](https://github.com/EU0207/concert-reception-system/issues/43) |
 | 設計ID | BD-09、BD-09-01～BD-09-10 |
 | 関連ID | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021、CON-001～CON-006、AC-001～AC-039、TBD-001～TBD-013、CONF-033～CONF-047 |
-| 状態 | In Review |
-| 承認情報 | 未承認。BD-10で基本設計一式として確認する |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc` |
 
 ## 結論
 

@@ -11,8 +11,8 @@
 | 関連Issue | [#35](https://github.com/EU0207/concert-reception-system/issues/35) |
 | 設計ID | BD-04、BD-04-01～BD-04-12 |
 | 関連ID | REQ-F-012、REQ-F-013、REQ-F-018、REQ-F-023～REQ-F-028、REQ-F-031～REQ-F-033、REQ-F-036、REQ-F-037、REQ-F-040～REQ-F-042、REQ-F-046、REQ-F-047、REQ-NF-015～REQ-NF-020、AC-007、AC-009、AC-012～AC-014、AC-022、AC-023、AC-026～AC-031、AC-033、AC-034、AC-038、AC-039、TBD-003、CONF-016、CONF-019、CONF-024、CONF-026、CONF-034、CONF-036、CONF-038、CONF-039、CONF-046、CONF-047 |
-| 状態 | In Review |
-| 承認情報 | 未承認。基本設計一式はBD-10で承認する |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc` |
 
 ## 結論
 
