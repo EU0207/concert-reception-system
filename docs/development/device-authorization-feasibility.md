@@ -26,6 +26,17 @@ Firebaseの[Firestore Rules Request](https://firebase.google.com/docs/reference/
 | C：端末IDを要求へ入れ、Rulesで端末文書を参照する | 端末IDが改変できない必要がある | 現行設計に近い | 同じUIDの停止端末が有効端末IDを指定できる | 不採用 |
 | D：利用者アカウント全体を停止する | 端末個別停止の要件を変更する | 現行の静的構成で単純 | 有効端末も停止し、当日の継続に影響する | 依頼者が要件を変更した場合だけ再検討 |
 
+### 候補Aの実行基盤と費用境界
+
+| 実行基盤 | 公式条件 | この設計への影響 | 現時点の判定 |
+|---|---|---|---|
+| Firebase Cloud Functions | [本番へデプロイするにはBlazeが必要](https://firebase.google.com/docs/functions/get-started) | カード登録なしの現行条件と合わない。請求有効化の承認が必要 | 現行条件では採用不可 |
+| Cloudflare Workers Free | [1日10万リクエスト、1要求10msのCPU上限](https://developers.cloudflare.com/workers/platform/pricing/) | 別サービスのアカウント、秘密情報、監視、障害対応を追加する。本人トークンと端末署名を検証し、全業務APIを経由させる必要がある | 無料・カード登録なしで運用できるか、10ms内で検証できるか未確認 |
+
+Cloudflare Workersを使う場合の技術境界は、利用者の[Firebase IDトークンをサーバーで検証](https://firebase.google.com/docs/auth/admin/verify-id-tokens)し、端末の非抽出鍵による要求ごとの署名を検証した後、停止状態と役割を確認することである。Firestoreへのサーバー資格による[RESTアクセスは利用者のSecurity Rulesではなくアプリケーション権限で動く](https://docs.cloud.google.com/firestore/native/docs/use-rest-api)ため、Workerが公演・役割・操作対象の認可を全て実装しなければならない。秘密鍵等は[WorkerのSecret](https://developers.cloudflare.com/workers/configuration/secrets/)に置き、Gitと配信物へ入れない。これは候補の境界整理であり、方式の採用や安全性を示すものではない。
+
+静的PWAからFirestoreへ直接アクセスする読取り・書込み経路を残すと、停止端末がそちらを使って迂回できる。候補Aでは直接経路をRulesで拒否し、オフライン記録の送信と隔離処理を含む全経路を検証対象にする。この変更はBD-01～BD-05、BD-09、ADR-001の構成と費用条件に影響する。最小の変更で済むと推測して採用しない。
+
 ## 限定技術検証
 
 方式採用前に、架空アカウントと独立した端末A・Bで次を試す。端末IDを画面で変更する試験だけでは足りず、直接API要求でも確認する。
@@ -40,7 +51,7 @@ Firebaseの[Firestore Rules Request](https://firebase.google.com/docs/reference/
 
 ## 次の判断
 
-現行要件を維持する場合は候補Aの具体構成と費用をADRで比較し、依頼者の費用条件と整合するか確認する。無料・カード登録なしの条件を維持したまま同等の保証が可能な別案が見つかれば、同じ限定技術検証で比較する。成立する方式がない場合は、端末個別停止または費用条件の変更案を影響とともに依頼者へ提示する。
+現行要件を維持する場合は候補Aの具体構成と費用をADRで比較し、依頼者の費用条件と整合するか確認する。Cloudflare Workers Free案は外部サービス追加と全面API化の影響が大きく、カード登録条件、CPU制限、端末署名の検証、直接Firestore迂回の拒否を限定技術検証するまで成立扱いにしない。成立する方式がない場合は、端末個別停止または費用条件の変更案を影響とともに依頼者へ提示する。
 
 **依頼者に確認してください**
 
@@ -51,3 +62,4 @@ Firebaseの[Firestore Rules Request](https://firebase.google.com/docs/reference/
 | 日付 | 変更内容 |
 |---|---|
 | 2026-09-25 | 現行方式の成立性、候補、限定技術検証条件を記録 |
+| 2026-09-25 | Firebase FunctionsとCloudflare Workers Freeの費用・認可境界を公式資料で照合。採用と限定技術検証は未了 |
