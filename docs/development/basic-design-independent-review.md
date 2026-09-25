@@ -11,7 +11,7 @@
 | レビュー対象 | mainのコミット `8790f24fbf691fac7eaa2fd550916ca965626ce2` に含まれる要件・基本設計文書 |
 | 評価基準 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、承認済み確認事項 |
 | 関連文書 | [基本設計計画書](basic-design-plan.md)、[基本設計一式レビュー・承認依頼書](basic-design-final-review.md)、[トレーサビリティ表](traceability-matrix.md)、[用語集](glossary.md) |
-| 関連Issue | 既存の基本設計承認：[Issue #44](https://github.com/EU0207/concert-reception-system/issues/44)。是正対応：[Issue #70～#76](https://github.com/EU0207/concert-reception-system/issues/70) |
+| 関連Issue | 既存の基本設計承認：[Issue #44](https://github.com/EU0207/concert-reception-system/issues/44)。是正対応は下表のIssue #70～#76で追跡する |
 | 状態 | Draft |
 | 承認情報 | 未承認。本書はレビュー所見であり、是正方針や要件変更の承認ではない |
 
@@ -167,20 +167,20 @@
 
 ## 1. Critical・Majorの一覧と対応管理
 
-本表の対応状態は本レビューの指摘に対する状態であり、既存の設計承認IssueやProjectの状態とは別である。対応Issueを登録した。C-04は現行要件を優先する設計修正を行い、再レビューを待つ。他の指摘は未対応である。
+本表の対応状態は本レビューの指摘に対する状態であり、既存の設計承認IssueやProjectの状態とは別である。対応Issueを登録し、各是正案をDraft PRへ分けた。C-04は現行要件を優先する設計修正を行った。他の指摘は方式検証、依頼者回答、横断再レビューが残る。
 
 | ID | 重要度 | 解決すべき内容 | 主な確認先 | 対応状態 |
 |---|---|---|---|---|
-| C-01 | Critical | サーバーが要求元端末を検証する方式 | 開発者 | [#71](https://github.com/EU0207/concert-reception-system/issues/71)・未対応 |
-| C-02 | Critical | 詳細履歴の自動削除の実行方式 | 開発者、依頼者 | [#72](https://github.com/EU0207/concert-reception-system/issues/72)・未対応 |
-| C-03 | Critical | 無料条件に適合する会場画像の保存・配布 | 開発者 | [#73](https://github.com/EU0207/concert-reception-system/issues/73)・未対応 |
+| C-01 | Critical | サーバーが要求元端末を検証する方式 | 開発者 | [#71](https://github.com/EU0207/concert-reception-system/issues/71)・方式未決定 |
+| C-02 | Critical | 詳細履歴の自動削除の実行方式 | 開発者、依頼者 | [#72](https://github.com/EU0207/concert-reception-system/issues/72)・方式と依頼者回答待ち |
+| C-03 | Critical | 無料条件に適合する会場画像の保存・配布 | 開発者 | [#73](https://github.com/EU0207/concert-reception-system/issues/73)・候補検証待ち |
 | C-04 | Critical | 未受領データの強制削除と保全要件の矛盾 | 開発者、依頼者 | [#70](https://github.com/EU0207/concert-reception-system/issues/70)・設計修正済み、再レビュー待ち |
-| M-01 | Major | 詳細履歴削除後の来場実績の正本 | 開発者 | [#72](https://github.com/EU0207/concert-reception-system/issues/72)・未対応 |
-| M-02 | Major | 公演終了後・期限後の管理権限 | 開発者 | [#74](https://github.com/EU0207/concert-reception-system/issues/74)・未対応 |
-| M-03 | Major | 座席変更・QR再発行の並行処理 | 開発者 | [#75](https://github.com/EU0207/concert-reception-system/issues/75)・未対応 |
-| M-04 | Major | 未配置客の登録から自動配置までの流れ | 開発者 | [#75](https://github.com/EU0207/concert-reception-system/issues/75)・未対応 |
-| M-05 | Major | 全管理端末喪失時の復旧 | 開発者 | [#74](https://github.com/EU0207/concert-reception-system/issues/74)・未対応 |
-| M-06 | Major | バックアップの取得・保持・削除運用 | 開発者、依頼者 | [#72](https://github.com/EU0207/concert-reception-system/issues/72)・未対応 |
+| M-01 | Major | 詳細履歴削除後の来場実績の正本 | 開発者 | [#72](https://github.com/EU0207/concert-reception-system/issues/72)・是正案レビュー待ち |
+| M-02 | Major | 公演終了後・期限後の管理権限 | 開発者 | [#74](https://github.com/EU0207/concert-reception-system/issues/74)・是正案レビュー待ち |
+| M-03 | Major | 座席変更・QR再発行の並行処理 | 開発者、依頼者 | [#75](https://github.com/EU0207/concert-reception-system/issues/75)・運用確認待ち |
+| M-04 | Major | 未配置客の登録から自動配置までの流れ | 開発者 | [#75](https://github.com/EU0207/concert-reception-system/issues/75)・是正案レビュー待ち |
+| M-05 | Major | 全管理端末喪失時の復旧 | 開発者 | [#74](https://github.com/EU0207/concert-reception-system/issues/74)・C-01方式待ち |
+| M-06 | Major | バックアップの取得・保持・削除運用 | 開発者、依頼者 | [#72](https://github.com/EU0207/concert-reception-system/issues/72)・依頼者回答待ち |
 | Q-01 | Question | 当日現金受領と購入済みの意味 | 依頼者 | [#76](https://github.com/EU0207/concert-reception-system/issues/76)・回答待ち |
 
 対応完了は、単に文言を追記した時点ではなく、該当する問題を解消し、関連する要件・設計・試験への影響を確認した時点で判断する。実装が必要な検証は結果を別途記録し、本書だけで合格扱いにしない。
@@ -193,6 +193,24 @@
 | 変更文書 | BD-04、BD-06、BD-08、BD-09、基本設計計画書 |
 | 確認結果 | 設計上、未送信・隔離対象が残る場合はデータとCryptoKeyを保持し、削除未確認・締め不可を維持する条件に統一した。文書横断の静的照合結果はIssue #70に記録する |
 | 残る判断 | 依頼者に例外の業務上の必要性を確認する。回答前に現行要件を変更しない。C-01の端末認可方式は別Issue #71で検証する |
+
+### 指摘ID別の是正案と残作業
+
+以下のPRはすべてDraftであり、基本設計の再承認または受入試験合格を意味しない。確認結果は文書・公式資料の照合であり、限定技術検証と実機試験は別途行う。
+
+| ID | 対応方針・変更文書 | 現時点の確認結果 | 残る判断 |
+|---|---|---|---|
+| C-01 | [PR #78](https://github.com/EU0207/concert-reception-system/pull/78)：端末所持検証の候補比較、BD-04・BD-05の未解決注記 | 現行の同一UIDとクライアント指定端末IDだけでは個別停止を保証できない | サーバー方式、費用、直接APIでの限定技術検証 |
+| C-02 | [PR #80](https://github.com/EU0207/concert-reception-system/pull/80)：無操作期間の削除候補、BD-08の未解決注記 | 静的PWAだけでは無操作期間の削除を実行できない | 依頼者回答、実行基盤、許容遅延、REQ-F-025・AC-013への影響 |
+| C-03 | [PR #79](https://github.com/EU0207/concert-reception-system/pull/79)：画像分割保存を第一候補とし、BD-02へ注記 | 1文書上限と無料枠を公式資料で照合した | 容量・Rules・配布・削除の技術検証、C-01の認可方式 |
+| C-04 | [PR #77](https://github.com/EU0207/concert-reception-system/pull/77)：BD-04・BD-06・BD-08・BD-09の受領前削除経路を除去 | 文書横断の静的照合を実施した | 依頼者回答、再レビュー、実装後のAC-028試験 |
+| M-01 | [PR #80](https://github.com/EU0207/concert-reception-system/pull/80)：詳細履歴削除前の最小実績確定案 | イベント削除後は現在状態を再計算できないことを整理した | C-02の期限条件、実績正本の採用、復元試験 |
+| M-02 | [PR #82](https://github.com/EU0207/concert-reception-system/pull/82)：公演後管理権限と画面経路 | 当日権限と長期管理を分ける案をBD-03・BD-04・BD-06・BD-08・BD-09へ記録した | M-01の実績正本、再レビュー |
+| M-03 | [PR #81](https://github.com/EU0207/concert-reception-system/pull/81)：座席・QRをオンライン版確認、通信断時は紙対応 | REQ-NF-004のオフライン必須範囲を確認した | 依頼者の業務確認、競合と旧QRの実機試験 |
+| M-04 | [PR #81](https://github.com/EU0207/concert-reception-system/pull/81)：席番号なしの配置対象を通常取込と別経路で登録 | REQ-F-001の席番号必須を維持して一連の配置経路を設計した | UIモック、AC-026の連続試験 |
+| M-05 | [PR #82](https://github.com/EU0207/concert-reception-system/pull/82)：所有者による全管理端末喪失時の復旧経路 | BD-08-12の誤参照を修正し、本人確認と旧端末停止を明記した | C-01と一体の初回端末承認方式と技術検証 |
+| M-06 | [PR #80](https://github.com/EU0207/concert-reception-system/pull/80)：取得時点、旧世代破棄、復元拒否の案 | 削除済み情報を含む古い世代の復元リスクを整理した | 復旧可能範囲・保管期限の依頼者回答 |
+| Q-01 | [PR #83](https://github.com/EU0207/concert-reception-system/pull/83)：依頼者確認依頼書 | 未入金発券の有無は未回答と明記した | 依頼者回答、必要な要件・受入条件・設計変更 |
 
 ## 2. 詳細設計へ進む前に決定すべき未決事項
 
