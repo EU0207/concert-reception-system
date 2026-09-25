@@ -76,6 +76,7 @@
 | テスト方針 | [test-strategy.md](development/test-strategy.md) | 受入条件39件の試験レベル、環境、架空データ、証跡、判定、PoC証跡との境界を定める | 依頼者、開発者、テスト担当者、運用担当者 | 基本設計時、個別ケース作成時 | 要件、受入条件、試験環境、判定方法の変更時 | Approved |
 | 基本設計一式レビュー・承認依頼書 | [basic-design-final-review.md](development/basic-design-final-review.md) | BD-01～BD-09の整合、操作見本、Firebase交換境界、未決定事項、承認条件を一式で確認する | 依頼者、開発者、設計担当者、テスト担当者、運用担当者 | BD-10の一括レビュー時 | 指摘、依頼者回答、ADR、承認対象コミットの変更時 | Approved |
 | 第三者資産・依存関係の候補台帳 | [third-party-dependency-candidates.md](development/third-party-dependency-candidates.md) | PoC由来の候補とTBD-011の採用前確認事項を記録する | 開発者、設計担当者、レビュー担当者 | BD-10と依存採用前 | 候補、版、権利、安全性、費用の確認時 | Approved |
+| 基本設計 第三者品質レビュー記録 | [basic-design-independent-review.md](development/basic-design-independent-review.md) | 要件を基準とする独立レビューの指摘、未決事項、詳細設計への移行判定を記録する | 開発者、設計担当者、依頼者 | 基本設計の再レビュー時 | 指摘回答、是正方針の決定、再レビュー時 | Draft |
 
 ## テンプレート
 
