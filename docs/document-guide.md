@@ -64,8 +64,10 @@
 | ADR-001 製品基盤と外部サービス | [ADR-001-product-platform.md](development/decisions/ADR-001-product-platform.md) | 製品基盤候補、外部サービス、費用、同期、環境分離を比較し、採用案を提示する | 依頼者、開発担当者、保守担当者 | 技術選定時 | 採用判断、提供条件、要件の変更時 | Approved |
 | ADR-002 Firebase上限時の緊急継続方式 | [ADR-002-quota-emergency-response.md](development/decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用、手動課金、未送信確認、復旧方式を決める | 依頼者、管理者、設計担当者、開発担当者、運用担当者 | 上限時の運用方針決定時 | 料金、権限、紙運用、復旧方式の変更時 | Approved |
 | ADR-003 役割別の本人認証プロバイダー | [ADR-003-role-based-auth-providers.md](development/decisions/ADR-003-role-based-auth-providers.md) | ADR-001の全役割メール・パスワード方式を役割別方式へ置換する | 依頼者、開発者、設計担当者、運用担当者 | BD-10の整合確認時 | 認証方式、費用、アカウント運用の判断時 | Approved |
-| C-01 端末単位認可の成立性調査 | [device-authorization-feasibility.md](development/device-authorization-feasibility.md) | 同じUIDの複数端末を個別停止する方式と検証条件を整理する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 技術検証、費用条件、認可方式の決定時 | Draft |
-| C-03 会場画像の共有保存方式調査 | [venue-image-storage-feasibility.md](development/venue-image-storage-feasibility.md) | 会場画像の保存、配布、削除と無料条件を比較する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 方式の技術検証と採用判断時 | Draft |
+| C-01 端末単位認可の成立性調査 | [device-authorization-feasibility.md](development/device-authorization-feasibility.md) | 同じUIDの複数端末を個別停止する方式と検証条件を整理する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 技術検証、費用条件、認可方式の決定時 | In Review |
+| C-03 会場画像の共有保存方式調査 | [venue-image-storage-feasibility.md](development/venue-image-storage-feasibility.md) | 会場画像の保存、配布、削除と無料条件を比較する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 方式の技術検証と採用判断時 | In Review |
+| C-01・C-03 限定技術検証結果 | [poc-006-result.md](development/poc-006-result.md) | 端末別停止と画像最大容量配布の成立範囲・残存リスクを記録する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 方式選定と実装後試験の分離確認時 | In Review |
+| 第三者品質レビュー再レビュー | [basic-design-remediation-re-review.md](development/basic-design-remediation-re-review.md) | 11件の対応、確認結果、残る判断を統合して判定する | 依頼者、開発者、設計担当者 | 是正案の統合時 | 基本設計の変更承認時 | In Review |
 | C-02・M-01・M-06 履歴削除と復旧の是正案 | [retention-backup-remediation.md](development/retention-backup-remediation.md) | 詳細履歴削除、確定実績、バックアップ世代を整合させる | 依頼者、開発者、設計担当者、運用担当者 | 第三者品質レビュー是正時 | 依頼者回答、方式採用、再レビュー時 | Draft |
 | 基本設計計画書 | [basic-design-plan.md](development/basic-design-plan.md) | 基本設計の成果物、対象、依存関係、追跡方法、承認順序を定める | 依頼者、設計担当者、開発担当者、テスト担当者 | 基本設計開始時 | 設計分割、依存関係、承認ゲートの変更時 | Approved |
 | 基本設計 第三者レビュー是正の確認依頼書 | [basic-design-remediation-confirmation-request.md](development/basic-design-remediation-confirmation-request.md) | 指摘への業務回答と再レビュー条件を依頼者へ確認する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 依頼者回答、方式判断、再レビュー時 | Draft |
