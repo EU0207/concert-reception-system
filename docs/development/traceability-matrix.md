@@ -127,6 +127,7 @@
 | 継続費用・外部サービス | RES-004 | REQ-NF-010、REQ-NF-011 | AC-020 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-004結果](technical-feasibility-research.md#res-004-費用と外部サービス条件) | 調査完了・結果確認待ち |
 | 座席表・会場画像のオフライン表示 | POC-005 | REQ-F-035、REQ-F-038、REQ-F-039、REQ-NF-013、REQ-NF-014 | AC-025 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [POC-005開始承認依頼](poc-005-approval-request.md)、[POC-005実機確認手順](poc-005-device-check-guide.md)、[POC-005実施結果](poc-005-result.md)、[本番UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[Firebaseプロジェクト削除結果](firebase-test-project-deletion-approval-request.md#実行結果) | POC-005検証範囲合格・依頼者確認済み。`CONF-035`で追加した任意接頭部・開始番号・欠番・スペースセルはPoC対象外であり、BD-06・BD-07・BD-09へ引継ぎ済み |
 | グループ・個人客の自動座席配置 | RES-005 | REQ-F-036 | AC-026 | [#6](https://github.com/EU0207/concert-reception-system/issues/6) | [RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md) | 机上レビュー合格・依頼者確認済み |
+| 端末別停止と画像分割配布 | POC-006 | REQ-F-031、REQ-F-035、REQ-NF-017 | AC-025、AC-030 | [#71](https://github.com/EU0207/concert-reception-system/issues/71)、[#73](https://github.com/EU0207/concert-reception-system/issues/73) | [POC-006結果](poc-006-result.md)、[ADR-005](decisions/ADR-005-device-principal-authorization.md)、[ADR-006](decisions/ADR-006-firestore-image-storage.md) | 架空データのエミュレーター限定検証を実施。本番方式と受入合格は未承認 |
 
 ## Issue #5の確認事項との対応
 
@@ -239,6 +240,9 @@
 | [ADR-001](decisions/ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | TBD-002～TBD-004、TBD-011、TBD-012、REQ-NF-002～REQ-NF-004、REQ-NF-010～REQ-NF-021 | AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033 | Accepted |
 | [ADR-002](decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | TBD-009、TBD-012、REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020 | AC-012、AC-015、AC-020、AC-021、AC-032、AC-034 | Accepted |
 | [ADR-003](decisions/ADR-003-role-based-auth-providers.md) | 主担当・代理管理者の個別Googleログインと公演限定スタッフの個別メール・パスワードを採用。ADR-001の認証方式部分を置換 | TBD-003、TBD-011、TBD-012、REQ-F-026～REQ-F-028、REQ-NF-016、REQ-NF-017 | AC-014、AC-030、AC-031 | Accepted |
+| [ADR-004](decisions/ADR-004-retention-and-exceptional-close.md) | 詳細履歴の案内・手動削除、紛失端末の例外締め | REQ-F-025、REQ-F-040、REQ-NF-015 | AC-013、AC-028 | Proposed |
+| [ADR-005](decisions/ADR-005-device-principal-authorization.md) | 端末別Authと本人Authの結合 | REQ-F-031、REQ-NF-017 | AC-030 | Proposed |
+| [ADR-006](decisions/ADR-006-firestore-image-storage.md) | 会場画像の固定枠分割保存 | REQ-F-035 | AC-025 | Proposed |
 
 ## 更新ルール
 

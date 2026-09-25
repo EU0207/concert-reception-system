@@ -48,3 +48,5 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 | [ADR-002](ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | Accepted | [#32](https://github.com/EU0207/concert-reception-system/issues/32) |
 | [ADR-003](ADR-003-role-based-auth-providers.md) | 管理者と公演限定スタッフの認証プロバイダー | Accepted | [#44](https://github.com/EU0207/concert-reception-system/issues/44) |
 | [ADR-004](ADR-004-retention-and-exceptional-close.md) | 詳細履歴の削除案内と紛失端末がある公演の例外締め | Proposed | [#70](https://github.com/EU0207/concert-reception-system/issues/70)、[#72](https://github.com/EU0207/concert-reception-system/issues/72) |
+| [ADR-005](ADR-005-device-principal-authorization.md) | 端末別認証主体と本人認証の結合 | Proposed | [#71](https://github.com/EU0207/concert-reception-system/issues/71) |
+| [ADR-006](ADR-006-firestore-image-storage.md) | 会場画像の固定枠分割保存 | Proposed | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
