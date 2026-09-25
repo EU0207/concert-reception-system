@@ -142,15 +142,28 @@ $null = Invoke-GhRestJson -ApiArguments @(
     '-f', "fields[][value]=$($statusOption.id)"
 )
 
-$verifiedItem = Get-ProjectItem
-if ($null -eq $verifiedItem) {
-    throw "Project item was not found during verification: Issue #$IssueNumber"
+$verifiedItem = $null
+$verifiedStatus = $null
+for ($attempt = 1; $attempt -le 5; $attempt++) {
+    $verifiedItem = Get-ProjectItem
+    if ($null -ne $verifiedItem) {
+        $verifiedStatus = @($verifiedItem.fields) |
+            Where-Object { $_.id -eq $statusField.id } |
+            Select-Object -First 1
+        if ($null -ne $verifiedStatus -and
+            $null -ne $verifiedStatus.value -and
+            $verifiedStatus.value.name.raw -eq $Status) {
+            break
+        }
+    }
+    if ($attempt -lt 5) {
+        Start-Sleep -Seconds 2
+    }
 }
-
-$verifiedStatus = @($verifiedItem.fields) |
-    Where-Object { $_.id -eq $statusField.id } |
-    Select-Object -First 1
-if ($null -eq $verifiedStatus -or $null -eq $verifiedStatus.value -or $verifiedStatus.value.name.raw -ne $Status) {
+if ($null -eq $verifiedItem -or
+    $null -eq $verifiedStatus -or
+    $null -eq $verifiedStatus.value -or
+    $verifiedStatus.value.name.raw -ne $Status) {
     throw "Project status verification failed: Issue #$IssueNumber"
 }
 
