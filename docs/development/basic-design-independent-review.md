@@ -167,7 +167,7 @@
 
 ## 1. Critical・Majorの一覧と対応管理
 
-本表の対応状態は本レビューの指摘に対する状態であり、既存の設計承認IssueやProjectの状態とは別である。対応Issueを登録し、各是正案をDraft PRへ分けた。2026-09-25に`CONF-048`としてC-02、C-04、M-03、M-06、Q-01の依頼者回答を受領し、[PR #83](https://github.com/EU0207/concert-reception-system/pull/83)で要件・受入条件と関連設計へ反映した。技術検証、PR間の統合、横断再レビューは残る。
+本表の対応状態は本レビューの指摘に対する状態であり、既存の設計承認IssueやProjectの状態とは別である。対応Issueを登録し、各是正案をDraft PRへ分けた。2026-09-25に`CONF-048`としてC-02、C-04、M-03、M-06、Q-01の依頼者回答を受領した。M-06の保管期限については同日の`CONF-049`で追加回答を受領した。[PR #83](https://github.com/EU0207/concert-reception-system/pull/83)で要件・受入条件と関連設計へ反映した。技術検証、PR間の統合、横断再レビューは残る。
 
 | ID | 重要度 | 解決すべき内容 | 主な確認先 | 対応状態 |
 |---|---|---|---|---|
@@ -180,7 +180,7 @@
 | M-03 | Major | 座席変更・QR再発行の並行処理 | 開発者、依頼者 | [#75](https://github.com/EU0207/concert-reception-system/issues/75)・オンライン限定と紙対応を`CONF-048`で回答済み |
 | M-04 | Major | 未配置客の登録から自動配置までの流れ | 開発者 | [#75](https://github.com/EU0207/concert-reception-system/issues/75)・是正案レビュー待ち |
 | M-05 | Major | 全管理端末喪失時の復旧 | 開発者 | [#74](https://github.com/EU0207/concert-reception-system/issues/74)・C-01方式待ち |
-| M-06 | Major | バックアップの取得・保持・削除運用 | 開発者、依頼者 | [#72](https://github.com/EU0207/concert-reception-system/issues/72)・取得時点は`CONF-048`で回答済み。保管期間は未決定 |
+| M-06 | Major | バックアップの取得・保持・削除運用 | 開発者、依頼者 | [#72](https://github.com/EU0207/concert-reception-system/issues/72)・取得時点は`CONF-048`、保管期限は`CONF-049`で回答済み。設計再レビュー待ち |
 | Q-01 | Question | 当日現金受領と購入済みの意味 | 依頼者 | [#76](https://github.com/EU0207/concert-reception-system/issues/76)・未入金交付と独立チェックを`CONF-048`で回答済み |
 
 対応完了は、単に文言を追記した時点ではなく、該当する問題を解消し、関連する要件・設計・試験への影響を確認した時点で判断する。実装が必要な検証は結果を別途記録し、本書だけで合格扱いにしない。
@@ -201,7 +201,7 @@
 | ID | 対応方針・変更文書 | 現時点の確認結果 | 残る判断 |
 |---|---|---|---|
 | C-01 | [PR #78](https://github.com/EU0207/concert-reception-system/pull/78)：端末所持検証の候補比較、BD-04・BD-05の未解決注記 | 現行の同一UIDとクライアント指定端末IDだけでは個別停止を保証できない | サーバー方式、費用、直接APIでの限定技術検証 |
-| C-02 | [PR #83](https://github.com/EU0207/concert-reception-system/pull/83)：`CONF-048`に従い、REQ-F-025・AC-013を案内と手動削除へ変更。[PR #80](https://github.com/EU0207/concert-reception-system/pull/80)の旧候補は整合修正が必要 | 無人時の実行基盤は不要と依頼者が回答した | 案内の次回起動時表示、権限、再レビュー、AC-013の実装後試験 |
+| C-02 | [PR #83](https://github.com/EU0207/concert-reception-system/pull/83)：`CONF-048`に従い、REQ-F-025・AC-013を案内と手動削除へ変更。[PR #80](https://github.com/EU0207/concert-reception-system/pull/80)の是正案も整合修正済み | 無人時の実行基盤は不要と依頼者が回答した | 案内の次回起動時表示、権限、再レビュー、AC-013の実装後試験 |
 | C-03 | [PR #79](https://github.com/EU0207/concert-reception-system/pull/79)：画像分割保存を第一候補とし、BD-02へ注記 | 1文書上限と無料枠を公式資料で照合した | 容量・Rules・配布・削除の技術検証、C-01の認可方式 |
 | C-04 | [PR #77](https://github.com/EU0207/concert-reception-system/pull/77)：受領前削除経路を除去。[PR #83](https://github.com/EU0207/concert-reception-system/pull/83)：紛失端末の例外締めをREQ-F-040・AC-028と設計に追加 | `CONF-048`で紛失端末があっても締められる必要を確認した | 2 PRの統合、C-01方式、再レビュー、AC-028の実装後試験 |
 | M-01 | [PR #80](https://github.com/EU0207/concert-reception-system/pull/80)：詳細履歴削除前の最小実績確定案 | イベント削除後は現在状態を再計算できないことを整理した | C-02の期限条件、実績正本の採用、復元試験 |
@@ -209,23 +209,23 @@
 | M-03 | [PR #81](https://github.com/EU0207/concert-reception-system/pull/81)：座席・QRをオンライン版確認、通信断時は紙対応 | `CONF-048`で推奨案を受領した | 競合と旧QRの実装後試験、再レビュー |
 | M-04 | [PR #81](https://github.com/EU0207/concert-reception-system/pull/81)：席番号なしの配置対象を通常取込と別経路で登録 | REQ-F-001の席番号必須を維持して一連の配置経路を設計した | UIモック、AC-026の連続試験 |
 | M-05 | [PR #82](https://github.com/EU0207/concert-reception-system/pull/82)：所有者による全管理端末喪失時の復旧経路 | BD-08-12の誤参照を修正し、本人確認と旧端末停止を明記した | C-01と一体の初回端末承認方式と技術検証 |
-| M-06 | [PR #80](https://github.com/EU0207/concert-reception-system/pull/80)：取得時点、旧世代破棄、復元拒否の案 | 公演前確定後と締め後の取得を`CONF-048`で回答済み | 復旧可能範囲・保管期限の回答、古い世代の復元試験 |
+| M-06 | [PR #80](https://github.com/EU0207/concert-reception-system/pull/80)：取得時点、保管期限、旧世代破棄、復元拒否の案。[PR #83](https://github.com/EU0207/concert-reception-system/pull/83)：REQ-NF-019・AC-031・トレーサビリティを更新 | 公演前確定後と締め後の取得は`CONF-048`、次公演締め後までの保持は`CONF-049`で回答済み | PR間の統合、架空データでの復元試験、再レビュー、実装後の受入試験 |
 | Q-01 | [PR #83](https://github.com/EU0207/concert-reception-system/pull/83)：`CONF-048`、REQ-F-044・AC-036、BD-02・BD-06・BD-07・BD-09を変更 | 未入金での発行・交付と独立チェックの業務回答を記録した | UIモックの操作確認、再レビュー、実装後のAC-036試験 |
 
 ## 2. 詳細設計へ進む前に決定すべき未決事項
 
-以下の元の質問に対し、2026-09-25に開発者が`CONF-048`として依頼者回答を伝達した。回答は[依頼者回答記録](basic-design-remediation-client-response.md)へ残した。要件・受入条件の変更案はPR #83でレビュー中である。
+以下の元の質問に対し、2026-09-25に開発者が`CONF-048`と`CONF-049`として依頼者回答を伝達した。回答は[依頼者回答記録](basic-design-remediation-client-response.md)へ残した。要件・受入条件の変更案はPR #83でレビュー中である。
 
 **開発者が確認してください**
 
 - C-01～C-03の技術方式と無料条件の成立性を確認してください。画面設計だけでは保証できないため、必要範囲の技術検証と判断記録を用意してください。
 - C-04の文書間矛盾を解消してください。M-01～M-05は担当実装者が異なっても同じ動作になるよう、データ、権限、業務フローを確定してください。
 - 各指摘に対応する受入条件を具体化してください。既存ACへのID割当だけでは、今回の境界条件を検証できません。
-- M-06のバックアップ運用を、依頼者の回答と整合させてください。方式を確定した後、是正対応Issueと変更文書を本書へ記録してください。
+- M-06のバックアップ運用を、`CONF-049`の保管期限と照合し、旧世代の破棄と復元拒否を架空データで検証してください。
 
 **依頼者に確認してください**
 
-- M-06：バックアップの保管期限と復旧可能な最古の時点を確認してください。`CONF-048`では取得時点だけが確定しました。推奨案は次の公演の締め後バックアップ取得まで保管することです。
+- なし。M-06の保管期限は`CONF-049`で回答済みです。
 
 回答済みの元の質問は[確認依頼書](basic-design-remediation-confirmation-request.md)に保存している。
 
