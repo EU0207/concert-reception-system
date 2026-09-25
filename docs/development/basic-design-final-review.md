@@ -11,8 +11,8 @@
 | 関連Issue | [#44](https://github.com/EU0207/concert-reception-system/issues/44) |
 | 設計ID | BD-10、BD-10-01～BD-10-06 |
 | 対象ID | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021、CON-001～CON-006、AC-001～AC-039、TBD-001～TBD-013、CONF-033～CONF-047 |
-| 状態 | Approved |
-| 承認情報 | 2026-09-24、`CONF-047`の依頼者業務確認、ADR-003のAccepted、`TBD-011`の実装開始前ゲート完了を確認。開発者がPR #67をレビューOKとし、設計内容コミット`0f455cc`を承認対象として基本設計一式を承認 |
+| 状態 | In Review |
+| 承認情報 | 2026-09-24、`CONF-047`の依頼者業務確認、ADR-003のAccepted、`TBD-011`の実装開始前ゲート完了を確認し、PR #67の設計内容コミット`0f455cc`を承認。`CONF-048`による改訂はIssue #68でレビュー中 |
 
 ## 結論
 
@@ -20,23 +20,25 @@
 
 本書は`CONF-047`の依頼者回答、開発者の技術確認、PR #67のレビュー結果、承認対象を記録する。次は別Issueの操作可能なUIモックであり、本番実装へ直接進まない。
 
+2026-09-24に`CONF-048`として、初回名簿取込の席番号、当日の個別席追加、回収不能端末の例外終了について依頼者の正式回答を受領した。変更中の設計と受入条件はIssue #68でレビューする。PR #67による既存の承認記録は履歴として保持し、改訂がmainへ統合されるまでは新しい設計内容を承認済み版と混同しない。
+
 ## BD-10-01 レビュー対象と整合確認
 
 | 設計ID | 成果物 | 主な確認対象 | 現在の状態 |
 |---|---|---|---|
 | BD-01 | [システム構成・環境分離設計](system-architecture.md) | PWA、Firebase、IndexedDB、公開評価、環境別の安全停止 | Approved |
-| BD-02 | [論理データモデル](logical-data-model.md) | 公演・座席・チケット・イベントの正本、配布、保存・削除 | Approved |
-| BD-03 | [オフライン同期・競合設計](offline-sync-conflict-design.md) | 変更不能イベント、再送、冪等性、状態導出、差分、競合 | Approved |
-| BD-04 | [認証・役割・権限設計](authentication-authorization-design.md) | UID・公演・端末・期限、4役割、停止・解除・廃止 | Approved |
+| BD-02 | [論理データモデル](logical-data-model.md) | 公演・座席・チケット・イベントの正本、配布、保存・削除 | In Review |
+| BD-03 | [オフライン同期・競合設計](offline-sync-conflict-design.md) | 変更不能イベント、再送、冪等性、状態導出、差分、競合 | In Review |
+| BD-04 | [認証・役割・権限設計](authentication-authorization-design.md) | UID・公演・端末・期限、4役割、停止・解除・廃止 | In Review |
 | BD-05 | [セキュリティ・プライバシー設計](security-privacy-design.md) | Security Rules、App Check、CryptoKey、公開物・依存ゲート | Approved |
-| BD-06 | [画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md) | 公演準備、当日受付、管理、例外、操作見本 | Approved |
-| BD-07 | [Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md) | 入出力形式、QR、印刷、権限、安全な一時生成 | Approved |
-| BD-08 | [運用・監視・締め・削除・復旧設計](operations-recovery-design.md) | 公演前確認、障害・紙切替、締め、暗号化JSON、引継ぎ | Approved |
-| BD-09 | [テスト方針](test-strategy.md) | AC-001～AC-039、環境、証跡、異常、実機、移行試験 | Approved |
+| BD-06 | [画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md) | 公演準備、当日受付、管理、例外、操作見本 | In Review |
+| BD-07 | [Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md) | 入出力形式、QR、印刷、権限、安全な一時生成 | In Review |
+| BD-08 | [運用・監視・締め・削除・復旧設計](operations-recovery-design.md) | 公演前確認、障害・紙切替、締め、暗号化JSON、引継ぎ | In Review |
+| BD-09 | [テスト方針](test-strategy.md) | AC-001～AC-039、環境、証跡、異常、実機、移行試験 | In Review |
 
 確認済みの事実は次のとおりである。
 
-- BD-01～BD-09はすべて`Approved`であり、設計ID、対象、確認欄を持つ。BD-06の対象IDは文書末尾の対応表で管理している。
+- BD-01～BD-09はPR #67で一式承認済みである。`CONF-048`の改訂対象はIssue #68のレビュー中であり、設計ID、対象、確認欄を維持する。BD-06の対象IDは文書末尾の対応表で管理している。
 - [トレーサビリティ表](traceability-matrix.md#決定済み要件の対応表)にはREQ-B 6件、REQ-F 47件、REQ-NF 21件の計74行があり、IDの欠落・重複はない。制約6件は別表で追跡する。
 - BD-09にはAC-001～AC-039の39行があり、IDの欠落・重複はない。PoCの証跡と本番相当構成の受入判定を区別している。
 - 9成果物のローカル文書リンク81件は、参照先ファイルの存在を確認した。リンク先の節と設計内容の適合もPR #67のレビューで確認した。
