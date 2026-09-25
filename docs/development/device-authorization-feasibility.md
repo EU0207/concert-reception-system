@@ -9,7 +9,7 @@
 | 対象 | 第三者品質レビュー C-01、REQ-F-031、REQ-NF-017、AC-030 |
 | 関連Issue | [#71](https://github.com/EU0207/concert-reception-system/issues/71) |
 | 状態 | In Review |
-| 承認情報 | 未承認。[ADR-005](decisions/ADR-005-device-principal-authorization.md)の採用判断と基本設計の変更承認が必要 |
+| 承認情報 | [ADR-005](decisions/ADR-005-device-principal-authorization.md)は`CONF-051`で採用。基本設計一式の変更承認と実装後試験は未了 |
 
 ## 結論
 
@@ -53,7 +53,7 @@ Cloudflare Workersを使う場合の技術境界は、利用者の[Firebase ID�
 
 ## 次の判断
 
-候補Bを[ADR-005](decisions/ADR-005-device-principal-authorization.md)で提案する。Cloudflare Workers Free案は外部サービス追加と全面API化の影響が大きく、CPU制限、端末署名、直接Firestore迂回の拒否を実環境で検証するまで成立扱いにしない。端末資格複製時の運用を含め、統合基本設計の変更承認時に判断する。
+候補Bを[ADR-005](decisions/ADR-005-device-principal-authorization.md)で採用した。Cloudflare Workers Free案は外部サービス追加と全面API化の影響が大きく、CPU制限、端末署名、直接Firestore迂回の拒否を実環境で検証するまで成立扱いにしない。端末資格複製時の運用を含め、統合基本設計の変更承認時に残存リスクを確認する。
 
 **依頼者に確認してください**
 

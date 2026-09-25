@@ -13,7 +13,9 @@
 
 ## 結論
 
-画像本体の保存方式として、Firestoreの複数文書にバイナリを分割する案を第一候補とする。Firestoreの[1文書上限は1MiB](https://firebase.google.com/docs/firestore/quotas)であり、5MB画像を1文書に保存できない。一方、[Sparkの無料枠](https://firebase.google.com/pricing)には保存量1GiB、1日あたりの読取り5万件・書込み2万件、月間転送10GiBがある。下記の固定35分割なら、画像25MBを6端末へ1回ずつ配布する概算は210文書読取り、約150MBの転送である。通信プロトコル、メタデータ、Rules参照、再取得、複数公演は別途加算する。
+現行の5MB上限を維持する場合、画像本体の保存方式としてFirestoreの複数文書にバイナリを分割する案を第一候補とする。Firestoreの[1文書上限は1MiB](https://firebase.google.com/docs/firestore/quotas)であり、5MB画像を1文書に保存できない。一方、[Sparkの無料枠](https://firebase.google.com/pricing)には保存量1GiB、1日あたりの読取り5万件・書込み2万件、月間転送10GiBがある。下記の固定35分割なら、画像25MBを6端末へ1回ずつ配布する概算は210文書読取り、約150MBの転送である。通信プロトコル、メタデータ、Rules参照、再取得、複数公演は別途加算する。
+
+`CONF-051`では「スマートフォンで拡大して見える程度」を画質条件とし、200KB/枚で無料枠に収まるか質問された。200KB/枚なら5枚で約1MB、6端末に各1回配布して約6MBであり、画像本体の概算としては無料枠に十分小さい。画像1枚を1文書にでき、分割処理も省ける可能性がある。ただし、200KBで実画像が読めるか、1枚の上限を200KBに変えてよいかは未確認であり、現行の5MB上限と検証済み分割案を直ちに置き換えない。[ADR-006](decisions/ADR-006-firestore-image-storage.md)で両案を比較する。
 
 [Cloud Storage for FirebaseはBlazeが必要](https://firebase.google.com/docs/storage/faqs-storage-changes-announced-sept-2024)であり、現在のカード登録なし条件には合わない。画像をFirebase Hostingの公開資産へ置く案は、役割別の非公開配布と管理画面からの登録を満たさない。
 
