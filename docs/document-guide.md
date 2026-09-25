@@ -65,6 +65,7 @@
 | ADR-002 Firebase上限時の緊急継続方式 | [ADR-002-quota-emergency-response.md](development/decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用、手動課金、未送信確認、復旧方式を決める | 依頼者、管理者、設計担当者、開発担当者、運用担当者 | 上限時の運用方針決定時 | 料金、権限、紙運用、復旧方式の変更時 | Approved |
 | ADR-003 役割別の本人認証プロバイダー | [ADR-003-role-based-auth-providers.md](development/decisions/ADR-003-role-based-auth-providers.md) | ADR-001の全役割メール・パスワード方式を役割別方式へ置換する | 依頼者、開発者、設計担当者、運用担当者 | BD-10の整合確認時 | 認証方式、費用、アカウント運用の判断時 | Approved |
 | C-01 端末単位認可の成立性調査 | [device-authorization-feasibility.md](development/device-authorization-feasibility.md) | 同じUIDの複数端末を個別停止する方式と検証条件を整理する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 技術検証、費用条件、認可方式の決定時 | Draft |
+| C-03 会場画像の共有保存方式調査 | [venue-image-storage-feasibility.md](development/venue-image-storage-feasibility.md) | 会場画像の保存、配布、削除と無料条件を比較する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 方式の技術検証と採用判断時 | Draft |
 | 基本設計計画書 | [basic-design-plan.md](development/basic-design-plan.md) | 基本設計の成果物、対象、依存関係、追跡方法、承認順序を定める | 依頼者、設計担当者、開発担当者、テスト担当者 | 基本設計開始時 | 設計分割、依存関係、承認ゲートの変更時 | Approved |
 | システム構成・環境分離設計 | [system-architecture.md](development/system-architecture.md) | PWA、端末保存、Firebase、ファイル、環境、設定、配布の責務と境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 構成、環境、接続、外部サービス、配布方式の変更時 | Approved |
 | 論理データモデル・データフロー・ライフサイクル設計 | [logical-data-model.md](development/logical-data-model.md) | 公演シリーズと独立した公演を定める。座席、購入者名、座席表示名、チケット準備を含む業務データの意味、関係、正本、生成・共有・出力・削除経路を扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | データ項目、関係、配布範囲、保存・削除方針の変更時 | Approved |
