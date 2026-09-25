@@ -12,7 +12,7 @@
 | 設計ID | BD-05、BD-05-01～BD-05-12 |
 | 関連ID | REQ-F-011、REQ-F-021～REQ-F-025、REQ-F-028、REQ-F-031、REQ-F-033、REQ-F-040、REQ-F-042、REQ-F-046、REQ-NF-003～REQ-NF-006、REQ-NF-010～REQ-NF-012、REQ-NF-015～REQ-NF-021、AC-006、AC-009、AC-011、AC-013～AC-016、AC-020、AC-023、AC-028、AC-030～AC-034、AC-038、TBD-003、TBD-004、TBD-011、TBD-012、CONF-006、CONF-024、CONF-026、CONF-033、CONF-034、CONF-036、CONF-038、CONF-040、CONF-046 |
 | 状態 | Approved |
-| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc` |
+| 承認情報 | 2026-09-24、PR #67の設計内容コミット`0f455cc`を基本設計一式として承認。2026-09-26、`CONF-054`でPR #84の設計内容コミット`c52b22706759af92f3a9a9646d6ec39df0616cfc`の是正変更を承認。既存承認は[変更承認記録](basic-design-remediation-approval.md)と区別する |
 
 ## 結論
 
@@ -51,6 +51,8 @@
 信頼境界は、利用者、ブラウザー/PWA、端末保存領域、Firebase Authentication、Firestore、Hosting、Git/GitHub、管理者の運用に分ける。ブラウザーとネットワークから届く値、URL、ファイル、Firestore文書、キャッシュ、外部ライブラリは信頼済みとみなさない。Firebaseのクライアント設定値は一般に配信される識別設定であって認可秘密ではないが、本番・依頼者固有設定の誤接続を避けるためリポジトリへ固定せず環境別に注入する。
 
 ## BD-05-02 Firestoreの認可とデータ境界
+
+第三者品質レビューC-01の端末IDなりすましに対し、[POC-006](poc-006-result.md)では端末別匿名Auth UIDと本人Authのセッション証跡を照合する候補を限定検証した。以下の端末承認確認は要求条件を表す。クライアント指定の端末IDだけで成立するとみなさず、業務要求の`request.auth.uid`を端末資格として、本人対応、役割、セッション、停止状態を照合する。[ADR-005](decisions/ADR-005-device-principal-authorization.md)は変更承認待ちである。
 
 Security Rulesは既定拒否とし、公開読取りを許可するコレクションを作らない。許可する読取り・作成・更新・削除は、データ区分ごとに列挙する。
 
