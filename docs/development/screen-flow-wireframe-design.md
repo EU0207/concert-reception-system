@@ -10,10 +10,10 @@
 | 関連文書 | [基本設計計画書](basic-design-plan.md)、[論理データモデル](logical-data-model.md)、[オフライン同期・競合設計](offline-sync-conflict-design.md)、[認証・役割・権限設計](authentication-authorization-design.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[座席表UI/UX引継ぎ](production-seat-map-ui-ux-notes.md)、[セキュリティ・UI/UX引継ぎ](production-security-ui-ux-notes.md) |
 | 関連Issue | [#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#57](https://github.com/EU0207/concert-reception-system/issues/57)、[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
 | 設計ID | BD-06、BD-06-01～BD-06-15 |
-| 状態 | In Review |
+| 状態 | Approved |
 | 対象 | 本番画面の情報構造、遷移、状態表示、操作見本、レスポンシブ基準 |
 | 対象外 | 本番画面コード、最終的な色・書体・画像素材、帳票の印刷寸法、実装後の実機試験 |
-| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc`。`CONF-048`の文書改訂はIssue #68でレビュー中 |
+| 承認情報 | 2026-09-24、PR #67の設計内容コミット`0f455cc`を基本設計一式として承認。2026-09-26、`CONF-054`でPR #84の設計内容コミット`c52b22706759af92f3a9a9646d6ec39df0616cfc`の是正変更を承認。既存承認は[変更承認記録](basic-design-remediation-approval.md)と区別する。 |
 
 ## 結論
 

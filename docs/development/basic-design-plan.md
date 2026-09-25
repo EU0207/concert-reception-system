@@ -9,8 +9,8 @@
 | 前提 | 要件定義書と受入条件書は`CONF-046`を含めApproved、ADR-001とADR-002はAcceptedである。基本設計承認前は本番アプリケーションコードを実装せず、承認後はUIモックの確認を経て本番実装へ進む |
 | 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[トレーサビリティ表](traceability-matrix.md)、[ADR-001](decisions/ADR-001-product-platform.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md)、[Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[本番座席表・会場画像UI/UX引継ぎ事項](production-seat-map-ui-ux-notes.md)、[開発計画書](project-plan.md) |
 | 関連Issue | 親Issue [#31](https://github.com/EU0207/concert-reception-system/issues/31)、後続Issue #32～#38、#41、#43、#44、更新Issue [#50](https://github.com/EU0207/concert-reception-system/issues/50)・[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
-| 状態 | In Review |
-| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc`。`CONF-048`の文書改訂はIssue #68でレビュー中 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、PR #67の設計内容コミット`0f455cc`を基本設計一式として承認。2026-09-26、`CONF-054`でPR #84の設計内容コミット`c52b22706759af92f3a9a9646d6ec39df0616cfc`の是正変更を承認。既存承認は[変更承認記録](basic-design-remediation-approval.md)と区別する |
 
 ## 結論
 

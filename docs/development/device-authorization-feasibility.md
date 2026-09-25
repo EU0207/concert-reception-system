@@ -9,7 +9,7 @@
 | 対象 | 第三者品質レビュー C-01、REQ-F-031、REQ-NF-017、AC-030 |
 | 関連Issue | [#71](https://github.com/EU0207/concert-reception-system/issues/71) |
 | 状態 | In Review |
-| 承認情報 | [ADR-005](decisions/ADR-005-device-principal-authorization.md)は`CONF-051`で採用。基本設計一式の変更承認と実装後試験は未了 |
+| 承認情報 | [ADR-005](decisions/ADR-005-device-principal-authorization.md)は`CONF-051`で採用。基本設計一式の変更承認は`CONF-054`で受領。実装後試験は未了 |
 
 ## 結論
 

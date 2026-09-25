@@ -11,8 +11,8 @@
 | 関連Issue | [#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#38](https://github.com/EU0207/concert-reception-system/issues/38) |
 | 設計ID | BD-02、BD-02-01～BD-02-10 |
 | 関連ID | REQ-F-001～REQ-F-007、REQ-F-010、REQ-F-012～REQ-F-025、REQ-F-028、REQ-F-033～REQ-F-047、REQ-NF-005、REQ-NF-006、REQ-NF-008、REQ-NF-012、REQ-NF-015、REQ-NF-018～REQ-NF-020、AC-001～AC-003、AC-005、AC-007～AC-013、AC-023～AC-031、AC-034～AC-039、TBD-004、TBD-008、CONF-024、CONF-025、CONF-034～CONF-043、CONF-046 |
-| 状態 | In Review |
-| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc`。`CONF-048`の文書改訂はIssue #68でレビュー中 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、PR #67の設計内容コミット`0f455cc`を基本設計一式として承認。2026-09-26、`CONF-054`でPR #84の設計内容コミット`c52b22706759af92f3a9a9646d6ec39df0616cfc`の是正変更を承認。既存承認は[変更承認記録](basic-design-remediation-approval.md)と区別する |
 
 ## 結論
 
@@ -271,7 +271,7 @@ flowchart LR
 | 出力ファイル本体 | 保存しない | 一時生成だけ | 一時生成だけ | 一時生成だけ | 利用者が明示保存 | 利用者が明示保存 |
 | 出力・削除記録 | 保存 | 自端末の必要分 | 権限内の必要分 | 保存 | 個人情報を含めない範囲 | 監査確認用 |
 
-「保存」は論理上の必要性を示す。`CONF-036`により非抽出CryptoKeyのIndexedDB保存だけは本番方式として確定し、鍵素材をFirestore、Cache Storage、ログ、出力へ複製しない。会場画像は最新の`CONF-053`で1枚1MB、最大5枚とし、[ADR-006](decisions/ADR-006-firestore-image-storage.md)に従ってFirestore固定5枠・2バンク・1画像1文書で保存する。[POC-006](poc-006-result.md)でRulesの容量境界と6取得元への配布を限定検証した。実画像の拡大時可読性、復号検査、実サービスの文書サイズ、オフライン表示、C-01の正式認可との結合は実装後に確認する。基本設計一式の変更承認は未了である。
+「保存」は論理上の必要性を示す。`CONF-036`により非抽出CryptoKeyのIndexedDB保存だけは本番方式として確定し、鍵素材をFirestore、Cache Storage、ログ、出力へ複製しない。会場画像は最新の`CONF-053`で1枚1MB、最大5枚とし、[ADR-006](decisions/ADR-006-firestore-image-storage.md)に従ってFirestore固定5枠・2バンク・1画像1文書で保存する。[POC-006](poc-006-result.md)でRulesの容量境界と6取得元への配布を限定検証した。実画像の拡大時可読性、復号検査、実サービスの文書サイズ、オフライン表示、C-01の正式認可との結合は実装後に確認する。基本設計一式の変更承認は`CONF-054`で受領した。
 
 `CONF-042`により、PDF・Excelは主要出力、通常CSVと任意項目選択CSVは補助出力として扱う。JSONは通常出力へ含めず、バックアップ・復旧・移行で必要となる論理データ範囲と再取込境界をBD-08で検討する。
 
