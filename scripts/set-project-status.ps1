@@ -123,7 +123,12 @@ if ($null -eq $item) {
         '-f', 'type=Issue',
         '-F', "id=$($issueData.id)"
     )
-    $item = $addedItem.value
+    # The REST endpoint may return the created item directly or wrap it in value.
+    $item = if ($addedItem.PSObject.Properties.Name -contains 'value') {
+        $addedItem.value
+    } else {
+        $addedItem
+    }
 }
 
 if ($null -eq $item) {
