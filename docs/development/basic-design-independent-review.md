@@ -209,7 +209,7 @@
 | M-01 | [PR #80](https://github.com/EU0207/concert-reception-system/pull/80)：詳細履歴削除前の最小実績確定案 | イベント削除後は現在状態を再計算できないことを整理した | C-02の期限条件、実績正本の採用、復元試験 |
 | M-02 | [PR #82](https://github.com/EU0207/concert-reception-system/pull/82)：公演後管理権限と画面経路 | 当日権限と長期管理を分ける案をBD-03・BD-04・BD-06・BD-08・BD-09へ記録した | M-01の実績正本、再レビュー |
 | M-03 | [PR #81](https://github.com/EU0207/concert-reception-system/pull/81)：座席・QRをオンライン版確認、通信断時は紙対応 | `CONF-049`で推奨案を受領した | 競合と旧QRの実装後試験、再レビュー |
-| M-04 | [PR #81](https://github.com/EU0207/concert-reception-system/pull/81)：席番号なしの配置対象を通常取込と別経路で登録 | REQ-F-001の席番号必須を維持して一連の配置経路を設計した | UIモック、AC-026の連続試験 |
+| M-04 | [PR #81](https://github.com/EU0207/concert-reception-system/pull/81)の当初案は別経路。統合時に承認済み`CONF-048`へ合わせ、初回名簿の席未割当行を同じ来場者IDで配置対象にした | REQ-F-001・AC-001とBD-02・BD-06・BD-07・BD-09の経路を統一した | UIモック、AC-001・AC-026の連続試験 |
 | M-05 | [PR #82](https://github.com/EU0207/concert-reception-system/pull/82)：所有者による全管理端末喪失時の復旧経路 | BD-08-12の誤参照を修正し、本人確認と旧端末停止を明記した | C-01と一体の初回端末承認方式と技術検証 |
 | M-06 | [PR #80](https://github.com/EU0207/concert-reception-system/pull/80)：取得時点、保管期限、旧世代破棄、復元拒否の案。[PR #83](https://github.com/EU0207/concert-reception-system/pull/83)：REQ-NF-019・AC-031・トレーサビリティを更新 | 公演前確定後と締め後の取得は`CONF-049`、次公演締め後までの保持は`CONF-050`で回答済み | PR間の統合、架空データでの復元試験、再レビュー、実装後の受入試験 |
 | Q-01 | [PR #83](https://github.com/EU0207/concert-reception-system/pull/83)：`CONF-049`、REQ-F-044・AC-036、BD-02・BD-06・BD-07・BD-09を変更 | 未入金での発行・交付と独立チェックの業務回答を記録した | UIモックの操作確認、再レビュー、実装後のAC-036試験 |
