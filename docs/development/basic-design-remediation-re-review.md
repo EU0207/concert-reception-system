@@ -12,20 +12,20 @@
 
 ## 判定の前提
 
-2026-09-25の`CONF-048`・`CONF-049`を[依頼者回答記録](basic-design-remediation-client-response.md)で確認した。7件のDraft PRに分散していた変更を統合し、重複と矛盾を照合した。C-01・C-03は[POC-006](poc-006-result.md)で架空データの限定検証を行った。ここでの「設計上確認」は受入条件の実装後合格を意味しない。基本設計の変更承認、操作可能なUIモック、本番実装、受入試験は後続ゲートである。
+2026-09-25の`CONF-049`・`CONF-050`を[依頼者回答記録](basic-design-remediation-client-response.md)で確認した。7件のDraft PRに分散していた変更を統合し、重複と矛盾を照合した。C-01・C-03は[POC-006](poc-006-result.md)で架空データの限定検証を行った。ここでの「設計上確認」は受入条件の実装後合格を意味しない。基本設計の変更承認、操作可能なUIモック、本番実装、受入試験は後続ゲートである。
 
 | ID | 対応方針と変更文書 | 確認結果 | 残る判断・後続条件 |
 |---|---|---|---|
 | C-01 | [端末認可調査](device-authorization-feasibility.md)、[ADR-005](decisions/ADR-005-device-principal-authorization.md)、BD-04・BD-05 | POC-006で別端末資格のA停止後、Aの読書き・BのIDを指定する作成を拒否。Bは継続 | ADRと変更承認。端末資格複製、隔離送信、全業務Rules、実機をAC-030で確認 |
-| C-02 | [ADR-004](decisions/ADR-004-retention-and-exceptional-close.md)、[履歴削除案](retention-backup-remediation.md)、REQ-F-025・AC-013、BD-02・BD-08 | `CONF-048`で無人時の自動削除を廃止。次回起動時に残存理由を案内し、管理者が手動削除 | 要件変更承認。案内の再表示、対象件数、削除失敗を実装後AC-013で確認 |
+| C-02 | [ADR-004](decisions/ADR-004-retention-and-exceptional-close.md)、[履歴削除案](retention-backup-remediation.md)、REQ-F-025・AC-013、BD-02・BD-08 | `CONF-049`で無人時の自動削除を廃止。次回起動時に残存理由を案内し、管理者が手動削除 | 要件変更承認。案内の再表示、対象件数、削除失敗を実装後AC-013で確認 |
 | C-03 | [画像方式調査](venue-image-storage-feasibility.md)、[ADR-006](decisions/ADR-006-firestore-image-storage.md)、BD-02・BD-05 | POC-006で固定2バンク、5枚×5MB、6取得元、上限外拒否、版切替と旧分割削除を確認 | ADRと変更承認。実画像、途中失敗、C-01正式認可、実機オフライン表示をAC-025で確認 |
-| C-04 | [ADR-004](decisions/ADR-004-retention-and-exceptional-close.md)、REQ-F-040・AC-028、BD-04・BD-06・BD-08 | `CONF-048`に従い未受領記録の強制削除を除去。紛失端末の停止、紙照合、損失記録で例外締めを設計。次公演の利用を許可 | 要件変更承認。締め後発見した端末の記録は自動加算せず照合。実装後AC-028で確認 |
+| C-04 | [ADR-004](decisions/ADR-004-retention-and-exceptional-close.md)、REQ-F-040・AC-028、BD-04・BD-06・BD-08 | `CONF-049`に従い未受領記録の強制削除を除去。紛失端末の停止、紙照合、損失記録で例外締めを設計。次公演の利用を許可 | 要件変更承認。締め後発見した端末の記録は自動加算せず照合。実装後AC-028で確認 |
 | M-01 | [履歴削除案](retention-backup-remediation.md)、BD-02・BD-08 | 詳細履歴削除前に公演・来場者別の最小実績と同一版の集計を確定し、削除後の正本とする | 削除前後の件数一致、例外締めの欠落表示、公演後訂正を架空データと実装後AC-013で確認 |
 | M-02 | [公演後の管理設計](operations-recovery-design.md)、BD-03・BD-04・BD-06・BD-09 | 当日受付経路と公演後管理経路を分け、オンライン再認証・理由・対象確認を要求 | UIモックで再ログインから閲覧、訂正、削除まで確認。実装後の権限試験 |
-| M-03 | [オフライン競合設計](offline-sync-conflict-design.md)、BD-04・BD-06・BD-09 | `CONF-048`で座席変更・QR再発行をオンライン限定とし、通信断時は紙で対応 | 版競合、旧QR、回線断の実装後AC-002・AC-003試験 |
+| M-03 | [オフライン競合設計](offline-sync-conflict-design.md)、BD-04・BD-06・BD-09 | `CONF-049`で座席変更・QR再発行をオンライン限定とし、通信断時は紙で対応 | 版競合、旧QR、回線断の実装後AC-002・AC-003試験 |
 | M-04 | [画面遷移](screen-flow-wireframe-design.md)、[取込設計](file-output-report-design.md)、BD-02・BD-09 | 席番号必須の通常取込を維持。未配置客は別経路で登録し、配置案確認から確定・発券まで接続 | UIモックと実装後AC-026の一連操作で確認 |
 | M-05 | [運用・復旧設計](operations-recovery-design.md)、BD-04・BD-09、ADR-005 | 全管理端末喪失時、所有者本人確認から旧資格停止、最初の新端末承認、再認証へ進む | C-01正式Rulesへの接続と架空アカウントの復旧試験。所有者資格も喪失した場合は紙・技術支援 |
-| M-06 | [履歴・バックアップ案](retention-backup-remediation.md)、REQ-NF-019・AC-031、BD-08・BD-09 | `CONF-048`で公演前確定後と締め後の取得、`CONF-049`で次公演締め後まで保持を確認。削除済み情報を含む旧世代は復元禁止 | 2公演の世代切替、旧世代破棄、復元拒否を架空データと実装後AC-031で確認 |
+| M-06 | [履歴・バックアップ案](retention-backup-remediation.md)、REQ-NF-019・AC-031、BD-08・BD-09 | `CONF-049`で公演前確定後と締め後の取得、`CONF-050`で次公演締め後まで保持を確認。削除済み情報を含む旧世代は復元禁止 | 2公演の世代切替、旧世代破棄、復元拒否を架空データと実装後AC-031で確認 |
 | Q-01 | [依頼者回答](basic-design-remediation-client-response.md)、REQ-F-044・AC-036、BD-02・BD-06・BD-07・BD-09 | 未入金での発行・交付あり。支払・発行・交付を独立チェックとし、チェック状態で並べ替える | UIモックと実装後AC-036で未入金交付、各列ソート、状態変更を確認 |
 
 ## 横断整合の確認
@@ -40,7 +40,7 @@
 | 管理端末2台が通信断中に同じ席を別客へ割当てようとする | 座席変更とQR再発行は実行させず、紙対応へ移す | M-03 |
 | 客Sは未入金だがチケットは発行・交付済み | 支払だけ未チェック、発行・交付はチェック済みで表示・並べ替えできる | Q-01 |
 
-- 要件と受入条件は`CONF-048`・`CONF-049`を基に改訂案を作成し、[トレーサビリティ](traceability-matrix.md)へ対応付けた。変更承認は未了である。
+- 要件と受入条件は`CONF-049`・`CONF-050`を基に改訂案を作成し、[トレーサビリティ](traceability-matrix.md)へ対応付けた。変更承認は未了である。
 - C-01の端末Auth UIDは本人UIDと別である。既存BD-04・BD-05の「同じUIDと端末ID」の記述は旧承認時の内容を含むため、詳細設計では[ADR-005](decisions/ADR-005-device-principal-authorization.md)の認可契約へ全面展開する。
 - C-03の画像試験は架空バイト列と試験用の簡易役割Rulesを用いた。C-01の正式な公演・役割・端末条件は未結合である。
 - C-02の削除は無人時に実行しない。C-04の例外締めは紛失端末内の未受領データを消さない。M-01の実績正本は例外締め時の欠落可能性を表示する。
