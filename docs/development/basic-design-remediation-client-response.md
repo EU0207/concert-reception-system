@@ -8,8 +8,8 @@
 | 主な読者 | 依頼者、開発者、設計担当者、テスト担当者 |
 | 関連文書 | [第三者レビュー記録](basic-design-independent-review.md)、[確認依頼書](basic-design-remediation-confirmation-request.md)、[要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md) |
 | 関連Issue | [#70](https://github.com/EU0207/concert-reception-system/issues/70)、[#72](https://github.com/EU0207/concert-reception-system/issues/72)、[#75](https://github.com/EU0207/concert-reception-system/issues/75)、[#76](https://github.com/EU0207/concert-reception-system/issues/76) |
-| 状態 | In Review |
-| 承認情報 | 2026-09-25の業務回答を`CONF-049`・`CONF-050`、2026-09-26のADR回答を`CONF-051`～`CONF-053`として記録する。ADRの採用判断と、是正後の基本設計一式の変更承認は区別する |
+| 状態 | Approved |
+| 承認情報 | 2026-09-25の業務回答を`CONF-049`・`CONF-050`、2026-09-26のADR回答を`CONF-051`～`CONF-053`として記録。是正後の基本設計一式は`CONF-054`で別途変更承認。 |
 
 ## CONF-049 依頼者から伝達された回答
 
@@ -54,6 +54,10 @@ C-04の回答は未受領データの強制削除を求めていない。例外�
 2026-09-26に開発者が「依頼者より、やっぱり１枚1MBが良い」と明示して回答を伝達した。`CONF-052`の200KB上限は履歴として保持し、最新の上限を1枚1MB（1,000,000バイト）、最大5枚、合計5MB（5,000,000バイト）に変更する。スマートフォンで拡大したときに必要な文字と配置が読めるという`CONF-051`の画質条件は維持する。1MBを超える画像は拒否し、容量内で読めない画像は調整するか座席一覧を代替表示する。
 
 画像本体だけなら5枚で最大5MB、6端末が各1回取得して最大30MBである。Firestoreの1文書上限1MiB（1,048,576バイト）には、1,000,000バイトの画像と少量のメタデータを収められる見込みであり、POC-006で限定確認した。実サービスの使用量と実画像の可読性は未確認である。ADR-006の容量上限、要件、受入条件、設計案を本回答に合わせて改訂する。基本設計一式の変更承認とAC-025の実装後合格は別判定とする。
+
+## CONF-054 是正後の基本設計一式の変更承認
+
+2026-09-26に開発者が統合PRと依頼者回答の一致を確認し、依頼者が「変更承認します」と回答したことを伝達した。承認対象、従来の承認との区別、後続試験は[変更承認記録](basic-design-remediation-approval.md)に記す。
 
 **依頼者に確認してください**
 

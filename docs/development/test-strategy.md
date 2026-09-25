@@ -11,8 +11,8 @@
 | 関連Issue | [#43](https://github.com/EU0207/concert-reception-system/issues/43) |
 | 設計ID | BD-09、BD-09-01～BD-09-10 |
 | 関連ID | REQ-B-001～REQ-B-006、REQ-F-001～REQ-F-047、REQ-NF-001～REQ-NF-021、CON-001～CON-006、AC-001～AC-039、TBD-001～TBD-013、CONF-033～CONF-047 |
-| 状態 | In Review |
-| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc`。`CONF-048`の文書改訂はIssue #68でレビュー中 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、PR #67の設計内容コミット`0f455cc`を基本設計一式として承認。2026-09-26、`CONF-054`でPR #84の設計内容コミット`c52b22706759af92f3a9a9646d6ec39df0616cfc`の是正変更を承認。既存承認は[変更承認記録](basic-design-remediation-approval.md)と区別する |
 
 ## 結論
 

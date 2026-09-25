@@ -11,8 +11,8 @@
 | 関連Issue | [#34](https://github.com/EU0207/concert-reception-system/issues/34) |
 | 設計ID | BD-03、BD-03-01～BD-03-12 |
 | 関連ID | REQ-F-001、REQ-F-002、REQ-F-006、REQ-F-010、REQ-F-015～REQ-F-018、REQ-F-021、REQ-F-030、REQ-F-033～REQ-F-035、REQ-F-037、REQ-F-038、REQ-F-040～REQ-F-047、REQ-NF-001～REQ-NF-004、REQ-NF-010、REQ-NF-013～REQ-NF-015、REQ-NF-019、REQ-NF-020、AC-001、AC-003～AC-005、AC-009、AC-011、AC-012、AC-015、AC-018、AC-024、AC-025、AC-027～AC-029、AC-032、AC-034、AC-035、AC-037～AC-039、CON-001～CON-006、TBD-002、CONF-012、CONF-024、CONF-025、CONF-034、CONF-038、CONF-039、CONF-044 |
-| 状態 | In Review |
-| 承認情報 | 2026-09-24、BD-10で基本設計一式として承認。承認対象はPR #67の設計内容コミット `0f455cc`。`CONF-048`の文書改訂はIssue #68でレビュー中 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-24、PR #67の設計内容コミット`0f455cc`を基本設計一式として承認。2026-09-26、`CONF-054`でPR #84の設計内容コミット`c52b22706759af92f3a9a9646d6ec39df0616cfc`の是正変更を承認。既存承認は[変更承認記録](basic-design-remediation-approval.md)と区別する |
 
 ## 結論
 

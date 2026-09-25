@@ -10,8 +10,8 @@
 | 関連文書 | [要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[基本設計計画書](basic-design-plan.md)、[システム構成・環境分離設計](system-architecture.md)、[論理データモデル・データフロー・ライフサイクル設計](logical-data-model.md)、[オフライン同期・競合設計](offline-sync-conflict-design.md)、[認証・役割・権限設計](authentication-authorization-design.md)、[セキュリティ・プライバシー設計](security-privacy-design.md)、[画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md)、[Excel・QR・PDF・CSV・帳票設計](file-output-report-design.md)、[運用・監視・締め・削除・復旧設計](operations-recovery-design.md)、[ADR-002](decisions/ADR-002-quota-emergency-response.md)、[技術検証計画書](technical-validation-plan.md)、[技術実現可能性調査報告書](technical-feasibility-research.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](production-security-ui-ux-notes.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実施結果報告書](poc-003-result.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#31](https://github.com/EU0207/concert-reception-system/issues/31)、[#32](https://github.com/EU0207/concert-reception-system/issues/32)、[#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#34](https://github.com/EU0207/concert-reception-system/issues/34)、[#35](https://github.com/EU0207/concert-reception-system/issues/35)、[#36](https://github.com/EU0207/concert-reception-system/issues/36)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#38](https://github.com/EU0207/concert-reception-system/issues/38)、[#43](https://github.com/EU0207/concert-reception-system/issues/43)、[#57](https://github.com/EU0207/concert-reception-system/issues/57)、[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
 | 文書の位置づけ | 承認済み要件と受入条件を、確認記録、技術検証、ADR、基本設計、将来のテストへ追跡する |
-| 状態 | In Review |
-| 承認情報 | 未承認 |
+| 状態 | Approved |
+| 承認情報 | 2026-09-26、`CONF-054`によるPR #84の是正変更承認を[変更承認記録](basic-design-remediation-approval.md)に記録。実装後の試験結果は未判定。 |
 
 ## 決定済み要件の対応表
 
@@ -216,6 +216,7 @@
 | CONF-051 | ADR-004・005は了承。会場画像はスマートフォンで拡大して読める程度でよい。200KBの無料枠について質問。容量上限は後続の`CONF-053`が最新 | C-01～C-04 | REQ-F-025、REQ-F-031、REQ-F-035、REQ-F-040／AC-013、AC-025、AC-028、AC-030 | [依頼者回答](basic-design-remediation-client-response.md)、[ADR-004](decisions/ADR-004-retention-and-exceptional-close.md)、[ADR-005](decisions/ADR-005-device-principal-authorization.md)、[ADR-006](decisions/ADR-006-firestore-image-storage.md) |
 | CONF-052 | 依頼者が一度、会場画像1枚200KBを上限としてよいと回答。`CONF-053`で1MBへ変更 | C-03 | REQ-F-035／AC-025 | [依頼者回答](basic-design-remediation-client-response.md)、[ADR-006](decisions/ADR-006-firestore-image-storage.md)、[POC-006](poc-006-result.md) |
 | CONF-053 | 依頼者が会場画像1枚1MBを希望。最大5枚、合計5MB。実画像の拡大時可読性はAC-025で確認 | C-03 | REQ-F-035／AC-025 | [依頼者回答](basic-design-remediation-client-response.md)、[ADR-006](decisions/ADR-006-firestore-image-storage.md)、[POC-006](poc-006-result.md)、[BD-09](test-strategy.md) |
+| CONF-054 | 開発者が統合PRと依頼者回答の一致を確認し、依頼者が第三者レビュー是正後の要件・受入条件・基本設計一式の変更を承認 | C-01～C-04、M-01～M-06、Q-01 | PR #84で改訂した要件・受入条件・基本設計 | [変更承認記録](basic-design-remediation-approval.md)、[再レビュー表](basic-design-remediation-re-review.md) |
 
 ## 設計工程の開発者判断
 

@@ -9,7 +9,7 @@
 | 対象 | 第三者品質レビュー C-03、REQ-F-035、AC-025 |
 | 関連Issue | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
 | 状態 | In Review |
-| 承認情報 | [ADR-006](decisions/ADR-006-firestore-image-storage.md)は最新の`CONF-053`とPOC-006の追加検証を根拠に改訂。基本設計一式の変更承認と実画像の受入試験は未了 |
+| 承認情報 | [ADR-006](decisions/ADR-006-firestore-image-storage.md)は最新の`CONF-053`とPOC-006の追加検証を根拠に改訂。基本設計一式の変更承認は`CONF-054`で受領。実画像の受入試験は未了 |
 
 ## 結論
 

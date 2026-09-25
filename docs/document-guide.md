@@ -29,8 +29,8 @@
 | プロジェクト概要書 | [project-overview.md](client/project-overview.md) | 背景、目的、対象範囲を共有する | 依頼者、開発担当者 | プロジェクト開始時 | 目的や範囲の変更時 | In Review |
 | 初回要件ヒアリング質問票 | [initial-interview-questionnaire.md](client/initial-interview-questionnaire.md) | QRコード受付の要件と受入条件に必要な確認事項を整理する | 依頼者、受付担当者、運用担当者、開発担当者 | 初回ヒアリング前 | 質問または確認範囲の変更時 | Draft |
 | 初回要件ヒアリング議事録 | [2026-08-30-initial-requirements-interview.md](client/meeting-notes/2026-08-30-initial-requirements-interview.md) | 初回ヒアリングの正式な回答・決定事項を質問ID単位で記録する | 依頼者、受付担当者、運用担当者、開発担当者 | 初回ヒアリング時 | 訂正が承認された時 | Approved |
-| 要件定義書 | [requirements.md](client/requirements.md) | 必要な機能と条件を合意する | 依頼者、開発担当者 | 要件定義工程 | 要件の追加・変更時 | In Review |
-| 受入条件書 | [acceptance-criteria.md](client/acceptance-criteria.md) | 完成と判断する条件を合意する | 依頼者、開発担当者 | 要件定義工程 | 要件・確認方法の変更時 | In Review |
+| 要件定義書 | [requirements.md](client/requirements.md) | 必要な機能と条件を合意する | 依頼者、開発担当者 | 要件定義工程 | 要件の追加・変更時 | Approved |
+| 受入条件書 | [acceptance-criteria.md](client/acceptance-criteria.md) | 完成と判断する条件を合意する | 依頼者、開発担当者 | 要件定義工程 | 要件・確認方法の変更時 | Approved |
 | Firebase初期設定・引継ぎ手順書 | [firebase-initial-setup-guide.md](client/firebase-initial-setup-guide.md) | 本番環境の所有、初期設定、権限返却を非技術者にも分かる形で案内する | 依頼者、後任管理者、技術担当者 | Firebase候補の検証時 | 採用・本番構成・画面変更時 | Draft |
 | 打合せ記録 | [meeting-notes-guide.md](client/meeting-notes/meeting-notes-guide.md) | 確認事項と合意事項を記録する | 依頼者、開発担当者 | 打合せ実施時 | 記録の訂正時 | Draft |
 
@@ -40,7 +40,7 @@
 |---|---|---|---|---|---|---|
 | 開発計画書 | [project-plan.md](development/project-plan.md) | 工程、成果物、進捗管理方法を定める | 開発担当者、依頼者 | プロジェクト開始時 | 計画変更時 | Draft |
 | 用語集 | [glossary.md](development/glossary.md) | 専門用語の意味を統一する | 全関係者 | 全工程 | 新しい用語の使用時 | Draft |
-| トレーサビリティ表 | [traceability-matrix.md](development/traceability-matrix.md) | 質問・要件・受入条件の対応を追跡する | 開発担当者、確認担当者 | 要件定義工程以降 | 関連成果物の変更時 | In Review |
+| トレーサビリティ表 | [traceability-matrix.md](development/traceability-matrix.md) | 質問・要件・受入条件の対応を追跡する | 開発担当者、確認担当者 | 要件定義工程以降 | 関連成果物の変更時 | Approved |
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 依頼者、開発担当者、確認担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
 | 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 依頼者、開発担当者、確認担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
 | RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 依頼者、開発担当者、確認担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
@@ -64,27 +64,27 @@
 | ADR-001 製品基盤と外部サービス | [ADR-001-product-platform.md](development/decisions/ADR-001-product-platform.md) | 製品基盤候補、外部サービス、費用、同期、環境分離を比較し、採用案を提示する | 依頼者、開発担当者、保守担当者 | 技術選定時 | 採用判断、提供条件、要件の変更時 | Approved |
 | ADR-002 Firebase上限時の緊急継続方式 | [ADR-002-quota-emergency-response.md](development/decisions/ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用、手動課金、未送信確認、復旧方式を決める | 依頼者、管理者、設計担当者、開発担当者、運用担当者 | 上限時の運用方針決定時 | 料金、権限、紙運用、復旧方式の変更時 | Approved |
 | ADR-003 役割別の本人認証プロバイダー | [ADR-003-role-based-auth-providers.md](development/decisions/ADR-003-role-based-auth-providers.md) | ADR-001の全役割メール・パスワード方式を役割別方式へ置換する | 依頼者、開発者、設計担当者、運用担当者 | BD-10の整合確認時 | 認証方式、費用、アカウント運用の判断時 | Approved |
-| 基本設計計画書 | [basic-design-plan.md](development/basic-design-plan.md) | 基本設計の成果物、対象、依存関係、追跡方法、承認順序を定める | 依頼者、設計担当者、開発担当者、テスト担当者 | 基本設計開始時 | 設計分割、依存関係、承認ゲートの変更時 | In Review |
 | C-01 端末単位認可の成立性調査 | [device-authorization-feasibility.md](development/device-authorization-feasibility.md) | 同じUIDの複数端末を個別停止する方式と検証条件を整理する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 技術検証、費用条件、認可方式の決定時 | In Review |
 | C-03 会場画像の共有保存方式調査 | [venue-image-storage-feasibility.md](development/venue-image-storage-feasibility.md) | 会場画像の保存、配布、削除と無料条件を比較する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 方式の技術検証と採用判断時 | In Review |
 | C-01・C-03 限定技術検証結果 | [poc-006-result.md](development/poc-006-result.md) | 端末別停止と画像1MB配布の成立範囲・残存リスクを記録する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 方式選定と実装後試験の分離確認時 | In Review |
-| 第三者品質レビュー再レビュー | [basic-design-remediation-re-review.md](development/basic-design-remediation-re-review.md) | 11件の対応、確認結果、残る判断を統合して判定する | 依頼者、開発者、設計担当者 | 是正案の統合時 | 基本設計の変更承認時 | In Review |
+| 第三者品質レビュー再レビュー | [basic-design-remediation-re-review.md](development/basic-design-remediation-re-review.md) | 11件の対応、確認結果、残る判断を統合して判定する | 依頼者、開発者、設計担当者 | 是正案の統合時 | 基本設計の変更承認時 | Approved |
+| 基本設計 第三者レビュー是正の変更承認記録 | [basic-design-remediation-approval.md](development/basic-design-remediation-approval.md) | CONF-054の承認対象と後続試験を従来の承認と区別して記録する | 依頼者、開発者、設計担当者、テスト担当者 | 是正後の変更承認時 | 承認対象または後続条件の変更時 | Approved |
 | C-02・M-01・M-06 履歴削除と復旧の是正案 | [retention-backup-remediation.md](development/retention-backup-remediation.md) | 詳細履歴削除、確定実績、バックアップ世代を整合させる | 依頼者、開発者、設計担当者、運用担当者 | 第三者品質レビュー是正時 | 依頼者回答、方式採用、再レビュー時 | Draft |
 | 基本設計計画書 | [basic-design-plan.md](development/basic-design-plan.md) | 基本設計の成果物、対象、依存関係、追跡方法、承認順序を定める | 依頼者、設計担当者、開発担当者、テスト担当者 | 基本設計開始時 | 設計分割、依存関係、承認ゲートの変更時 | Approved |
 | 基本設計 第三者レビュー是正の確認依頼書 | [basic-design-remediation-confirmation-request.md](development/basic-design-remediation-confirmation-request.md) | 指摘への業務回答と再レビュー条件を依頼者へ確認する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 依頼者回答、方式判断、再レビュー時 | Draft |
-| 基本設計 第三者レビュー指摘への依頼者回答記録 | [basic-design-remediation-client-response.md](development/basic-design-remediation-client-response.md) | CONF-049～CONF-053の回答、設計への反映、残る判断を追跡する | 依頼者、開発者、設計担当者、テスト担当者 | 第三者品質レビュー是正時 | 要件・設計・受入条件の反映と再レビュー時 | In Review |
+| 基本設計 第三者レビュー指摘への依頼者回答記録 | [basic-design-remediation-client-response.md](development/basic-design-remediation-client-response.md) | CONF-049～CONF-054の回答、設計への反映、残る判断を追跡する | 依頼者、開発者、設計担当者、テスト担当者 | 第三者品質レビュー是正時 | 要件・設計・受入条件の反映と再レビュー時 | Approved |
 | ADR-004 詳細履歴の削除案内と例外締め | [ADR-004-retention-and-exceptional-close.md](development/decisions/ADR-004-retention-and-exceptional-close.md) | C-02・C-04の候補、採用理由、未検証事項を記録する | 依頼者、開発者、設計担当者、運用担当者 | 基本設計の是正時 | 再レビューと方式判断時 | Accepted |
 | ADR-005 端末別認証主体と本人認証の結合 | [ADR-005-device-principal-authorization.md](development/decisions/ADR-005-device-principal-authorization.md) | C-01の認可方式と検証条件を記録する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 認可方式または残存リスクの変更時 | Accepted |
 | ADR-006 会場画像のFirestore保存方式 | [ADR-006-firestore-image-storage.md](development/decisions/ADR-006-firestore-image-storage.md) | C-03の旧5MB分割案と採用した1MB単一文書案を比較する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 実画像の画質・容量上限の変更時 | Accepted |
 | システム構成・環境分離設計 | [system-architecture.md](development/system-architecture.md) | PWA、端末保存、Firebase、ファイル、環境、設定、配布の責務と境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 構成、環境、接続、外部サービス、配布方式の変更時 | Approved |
-| 論理データモデル・データフロー・ライフサイクル設計 | [logical-data-model.md](development/logical-data-model.md) | 公演シリーズと独立した公演を定める。座席、購入者名、座席表示名、チケット準備を含む業務データの意味、関係、正本、生成・共有・出力・削除経路を扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | データ項目、関係、配布範囲、保存・削除方針の変更時 | In Review |
-| オフライン同期・競合設計 | [offline-sync-conflict-design.md](development/offline-sync-conflict-design.md) | 端末先行保存、差分同期、再送、冪等性、状態導出を定める。公演前編集の明示保存、版競合、読取り再利用、公演・端末ごとの同期分離、紙照合、締めの境界を扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 同期、競合、編集保存、紙照合、締め境界、外部サービス交換方式の変更時 | In Review |
-| 認証・役割・権限設計 | [authentication-authorization-design.md](development/authentication-authorization-design.md) | 初期主担当Google UID、UID・公演単位の役割、複数端末と追加端末関連付け、1回限りの招待、公演限定スタッフの短期パスワード、端末単位の事前準備・オフライン許可、4役割、セッション、端末停止・廃止、隔離送信、Security Rulesへ渡す権限境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 認証方式、役割、権限、端末、セッション、外部サービス交換方式の変更時 | In Review |
+| 論理データモデル・データフロー・ライフサイクル設計 | [logical-data-model.md](development/logical-data-model.md) | 公演シリーズと独立した公演を定める。座席、購入者名、座席表示名、チケット準備を含む業務データの意味、関係、正本、生成・共有・出力・削除経路を扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | データ項目、関係、配布範囲、保存・削除方針の変更時 | Approved |
+| オフライン同期・競合設計 | [offline-sync-conflict-design.md](development/offline-sync-conflict-design.md) | 端末先行保存、差分同期、再送、冪等性、状態導出を定める。公演前編集の明示保存、版競合、読取り再利用、公演・端末ごとの同期分離、紙照合、締めの境界を扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 同期、競合、編集保存、紙照合、締め境界、外部サービス交換方式の変更時 | Approved |
+| 認証・役割・権限設計 | [authentication-authorization-design.md](development/authentication-authorization-design.md) | 初期主担当Google UID、UID・公演単位の役割、複数端末と追加端末関連付け、1回限りの招待、公演限定スタッフの短期パスワード、端末単位の事前準備・オフライン許可、4役割、セッション、端末停止・廃止、隔離送信、Security Rulesへ渡す権限境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 認証方式、役割、権限、端末、セッション、外部サービス交換方式の変更時 | Approved |
 | セキュリティ・プライバシー設計 | [security-privacy-design.md](development/security-privacy-design.md) | 信頼境界、Security Rules、App Check、公開画面のFirestore非接続を定める。1回限りリンク、端末暗号化と鍵、Web保護を扱う。秘密情報・ログ、公開物、依存関係、インシデント対応も扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 脅威、認可、暗号化、鍵、外部サービス、公開・依存ゲートの変更時 | Approved |
-| 画面・画面遷移・操作見本設計 | [screen-flow-wireframe-design.md](development/screen-flow-wireframe-design.md) | 公演準備と当日運用の画面を定める。座席キャンバス、下書き保存・確定、未保存変更の離脱確認、端末・終了処理の情報構造を扱う。主要操作見本と非技術的なエラー案内も定める | 依頼者、画面設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 業務フロー、画面、権限、状態、利用者向け文言の変更時 | In Review |
-| Excel・QR・PDF・CSV・帳票設計 | [file-output-report-design.md](development/file-output-report-design.md) | 名簿取込、QR、電子チケット、PDF・Excelの主要出力、CSVの補助出力、当日運営表、座席表の形式を定める。取得済みデータからの端末内生成、安全な入出力、バックアップ・復旧・移行形式の後続設計境界も扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 入出力項目、形式、権限、印刷条件、安全対策の変更時 | In Review |
-| 運用・監視・締め・削除・復旧設計 | [operations-recovery-design.md](development/operations-recovery-design.md) | 公演準備、利用量・App Check監視、障害・紙切替、復旧、締め、端末削除、削除希望、暗号化JSONバックアップ、引継ぎを定める | 依頼者、主担当、代理管理者、環境所有者、開発担当者、テスト担当者、運用担当者 | 基本設計時、公演準備時、障害・復旧時 | 運用役割、監視、費用、復旧、削除、外部サービス、引継ぎの変更時 | In Review |
-| テスト方針 | [test-strategy.md](development/test-strategy.md) | 受入条件39件の試験レベル、環境、架空データ、証跡、判定、PoC証跡との境界を定める | 依頼者、開発者、テスト担当者、運用担当者 | 基本設計時、個別ケース作成時 | 要件、受入条件、試験環境、判定方法の変更時 | In Review |
+| 画面・画面遷移・操作見本設計 | [screen-flow-wireframe-design.md](development/screen-flow-wireframe-design.md) | 公演準備と当日運用の画面を定める。座席キャンバス、下書き保存・確定、未保存変更の離脱確認、端末・終了処理の情報構造を扱う。主要操作見本と非技術的なエラー案内も定める | 依頼者、画面設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 業務フロー、画面、権限、状態、利用者向け文言の変更時 | Approved |
+| Excel・QR・PDF・CSV・帳票設計 | [file-output-report-design.md](development/file-output-report-design.md) | 名簿取込、QR、電子チケット、PDF・Excelの主要出力、CSVの補助出力、当日運営表、座席表の形式を定める。取得済みデータからの端末内生成、安全な入出力、バックアップ・復旧・移行形式の後続設計境界も扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 入出力項目、形式、権限、印刷条件、安全対策の変更時 | Approved |
+| 運用・監視・締め・削除・復旧設計 | [operations-recovery-design.md](development/operations-recovery-design.md) | 公演準備、利用量・App Check監視、障害・紙切替、復旧、締め、端末削除、削除希望、暗号化JSONバックアップ、引継ぎを定める | 依頼者、主担当、代理管理者、環境所有者、開発担当者、テスト担当者、運用担当者 | 基本設計時、公演準備時、障害・復旧時 | 運用役割、監視、費用、復旧、削除、外部サービス、引継ぎの変更時 | Approved |
+| テスト方針 | [test-strategy.md](development/test-strategy.md) | 受入条件39件の試験レベル、環境、架空データ、証跡、判定、PoC証跡との境界を定める | 依頼者、開発者、テスト担当者、運用担当者 | 基本設計時、個別ケース作成時 | 要件、受入条件、試験環境、判定方法の変更時 | Approved |
 | 基本設計一式レビュー・承認依頼書 | [basic-design-final-review.md](development/basic-design-final-review.md) | BD-01～BD-09の整合、操作見本、Firebase交換境界、未決定事項、承認条件を一式で確認する | 依頼者、開発者、設計担当者、テスト担当者、運用担当者 | BD-10の一括レビュー時 | 指摘、依頼者回答、ADR、承認対象コミットの変更時 | In Review |
 | 第三者資産・依存関係の候補台帳 | [third-party-dependency-candidates.md](development/third-party-dependency-candidates.md) | PoC由来の候補とTBD-011の採用前確認事項を記録する | 開発者、設計担当者、レビュー担当者 | BD-10と依存採用前 | 候補、版、権利、安全性、費用の確認時 | Approved |
 | 基本設計 第三者品質レビュー記録 | [basic-design-independent-review.md](development/basic-design-independent-review.md) | 要件を基準とする独立レビューの指摘、未決事項、詳細設計への移行判定を記録する | 開発者、設計担当者、依頼者 | 基本設計の再レビュー時 | 指摘回答、是正方針の決定、再レビュー時 | Draft |
