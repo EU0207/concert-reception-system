@@ -138,5 +138,39 @@ service cloud.firestore {
           && validChunk(chunk) && bank == imageMeta(showId, slot).draftBank;
       }
     }
+
+    // 200 KB案の限定検証。既存の5 MB分割試験を残して比較する。
+    function compactImageMeta(showId, slot) {
+      return get(/databases/$(database)/documents/poc006CompactShows/$(showId)/images/$(slot)).data;
+    }
+
+    match /poc006CompactShows/{showId}/images/{slot} {
+      allow get: if isStaff() && validSlot(slot);
+      allow list: if false;
+      allow create, update: if isAdmin() && validSlot(slot)
+        && request.resource.data.keys().hasOnly(['activeBank', 'draftBank', 'activeVersion', 'draftVersion'])
+        && request.resource.data.activeBank in ['0', '1']
+        && request.resource.data.draftBank in ['0', '1']
+        && request.resource.data.activeBank != request.resource.data.draftBank
+        && request.resource.data.activeVersion is int
+        && request.resource.data.draftVersion is int;
+      allow delete: if isAdmin() && validSlot(slot);
+
+      match /banks/{bank} {
+        allow get: if isStaff() && validSlot(slot) && validBank(bank)
+          && bank == compactImageMeta(showId, slot).activeBank;
+        allow list: if false;
+        allow create, update: if isAdmin() && validSlot(slot) && validBank(bank)
+          && bank == compactImageMeta(showId, slot).draftBank
+          && request.resource.data.keys().hasOnly(['version', 'mimeType', 'payload'])
+          && request.resource.data.version == compactImageMeta(showId, slot).draftVersion
+          && request.resource.data.mimeType in ['image/png', 'image/jpeg']
+          && request.resource.data.payload is bytes
+          && request.resource.data.payload.size() > 0
+          && request.resource.data.payload.size() <= 200000;
+        allow delete: if isAdmin() && validSlot(slot) && validBank(bank)
+          && bank == compactImageMeta(showId, slot).draftBank;
+      }
+    }
   }
 }

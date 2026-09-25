@@ -271,7 +271,7 @@ flowchart LR
 | 出力ファイル本体 | 保存しない | 一時生成だけ | 一時生成だけ | 一時生成だけ | 利用者が明示保存 | 利用者が明示保存 |
 | 出力・削除記録 | 保存 | 自端末の必要分 | 権限内の必要分 | 保存 | 個人情報を含めない範囲 | 監査確認用 |
 
-「保存」は論理上の必要性を示す。`CONF-036`により非抽出CryptoKeyのIndexedDB保存だけは本番方式として確定し、鍵素材をFirestore、Cache Storage、ログ、出力へ複製しない。他の暗号詳細、画像の物理保存は本表だけでは決定しない。会場画像は[共有保存方式調査](venue-image-storage-feasibility.md)と[POC-006](poc-006-result.md)でFirestore固定5枠・2バンク・各7分割を第一候補とする。実画像の検査、オフライン表示、C-01の端末認可との結合は実装後に確認する。[ADR-006](decisions/ADR-006-firestore-image-storage.md)は変更承認待ちである。
+「保存」は論理上の必要性を示す。`CONF-036`により非抽出CryptoKeyのIndexedDB保存だけは本番方式として確定し、鍵素材をFirestore、Cache Storage、ログ、出力へ複製しない。会場画像は`CONF-052`で1枚200KB、最大5枚とし、[ADR-006](decisions/ADR-006-firestore-image-storage.md)に従ってFirestore固定5枠・2バンク・1画像1文書で保存する。[POC-006](poc-006-result.md)でRulesの容量境界と6取得元への配布を限定検証した。実画像の拡大時可読性、復号検査、オフライン表示、C-01の正式認可との結合は実装後に確認する。基本設計一式の変更承認は未了である。
 
 `CONF-042`により、PDF・Excelは主要出力、通常CSVと任意項目選択CSVは補助出力として扱う。JSONは通常出力へ含めず、バックアップ・復旧・移行で必要となる論理データ範囲と再取込境界をBD-08で検討する。
 

@@ -80,6 +80,22 @@ function chunkPath(slot, bank, chunk) {
   return `${imagePath(slot)}/banks/${bank}/chunks/${chunk}`;
 }
 
+function compactImagePath(slot) {
+  return `poc006CompactShows/${showId}/images/${slot}`;
+}
+
+function compactBankPath(slot, bank) {
+  return `${compactImagePath(slot)}/banks/${bank}`;
+}
+
+function compactFields(version, payload, mimeType = 'image/png') {
+  return {
+    version: { integerValue: String(version) },
+    mimeType: { stringValue: mimeType },
+    payload: { bytesValue: payload.toString('base64') }
+  };
+}
+
 function expectStatus(result, status, label) {
   assert.equal(result.status, status, `${label}: ${JSON.stringify(result.body)}`);
 }
@@ -190,6 +206,36 @@ for (let chunk = 0; chunk < 7; chunk++) {
   expectStatus(await firestore('DELETE', chunkPath(0, '1', chunk), admin), 200, `old version delete ${chunk}`);
 }
 
+expectStatus(await firestore('PATCH', compactImagePath(5), admin, metaFields('0', '1', 0, 1)), 403, 'compact sixth image denied');
+for (let slot = 0; slot < 5; slot++) {
+  expectStatus(await firestore('PATCH', compactImagePath(slot), admin, metaFields('0', '1', 0, 1)), 200, `compact metadata slot ${slot}`);
+}
+expectStatus(await firestore('PATCH', compactBankPath(0, '1'), admin, compactFields(1, Buffer.alloc(200001))), 403, 'compact oversize denied');
+expectStatus(await firestore('PATCH', compactBankPath(0, '1'), admin, compactFields(1, small, 'application/pdf')), 403, 'compact PDF metadata denied');
+expectStatus(await firestore('PATCH', compactBankPath(0, '1'), staff[0], compactFields(1, small)), 403, 'compact staff write denied');
+expectStatus(await firestore('GET', compactBankPath(0, '1'), staff[0]), 403, 'compact draft read denied');
+
+const compactExpected = [];
+for (let slot = 0; slot < 5; slot++) {
+  const payload = randomBytes(200000);
+  compactExpected.push(createHash('sha256').update(payload).digest('hex'));
+  expectStatus(await firestore('PATCH', compactBankPath(slot, '1'), admin, compactFields(1, payload)), 200, `compact write slot ${slot}`);
+  expectStatus(await firestore('PATCH', compactImagePath(slot), admin, metaFields('1', '0', 1, 2)), 200, `compact publish slot ${slot}`);
+}
+for (let device = 0; device < 6; device++) {
+  for (let slot = 0; slot < 5; slot++) {
+    const result = await firestore('GET', compactBankPath(slot, '1'), staff[device]);
+    expectStatus(result, 200, `compact device ${device} slot ${slot}`);
+    const payload = Buffer.from(result.body.fields.payload.bytesValue, 'base64');
+    assert.equal(payload.length, 200000);
+    assert.equal(createHash('sha256').update(payload).digest('hex'), compactExpected[slot]);
+  }
+}
+expectStatus(await firestore('PATCH', compactBankPath(0, '0'), admin, compactFields(2, Buffer.from('FAKE-new-compact'))), 200, 'compact new version');
+expectStatus(await firestore('PATCH', compactImagePath(0), admin, metaFields('0', '1', 2, 3)), 200, 'compact publish new version');
+expectStatus(await firestore('GET', compactBankPath(0, '1'), staff[0]), 403, 'compact old version read denied');
+expectStatus(await firestore('DELETE', compactBankPath(0, '1'), admin), 200, 'compact old version deleted');
+
 const sdkConfig = { apiKey: 'demo-api-key', projectId: project, authDomain: `${project}.firebaseapp.com` };
 const humanApp = initializeApp(sdkConfig, `poc006-human-${randomUUID()}`);
 const deviceApp = initializeApp(sdkConfig, `poc006-device-${randomUUID()}`);
@@ -221,4 +267,4 @@ assert.equal((await getDoc(doc(deviceDb, `${deviceShow}/records/FAKE-B`))).exist
 await assert.rejects(getDoc(doc(humanDb, `${deviceShow}/records/FAKE-B`)), 'human UID alone cannot bypass device proof');
 await Promise.all([deleteApp(humanApp), deleteApp(deviceApp)]);
 
-console.log(JSON.stringify({ result: 'PASS', showId, deviceAuth: 'A stopped and B continues under one human UID', secondaryFirebaseApp: 'verified', imageBytes: 25000000, writeCount, readCount, deliveredBytes: 150000000, distinctStaffTokens: staff.length, oldVersionChunksDeleted: 7 }));
+console.log(JSON.stringify({ result: 'PASS', showId, deviceAuth: 'A stopped and B continues under one human UID', secondaryFirebaseApp: 'verified', imageBytes: 25000000, writeCount, readCount, deliveredBytes: 150000000, distinctStaffTokens: staff.length, oldVersionChunksDeleted: 7, compactImageBytes: 1000000, compactReads: 30, compactDeliveredBytes: 6000000, compactOldBankDeleted: true }));
