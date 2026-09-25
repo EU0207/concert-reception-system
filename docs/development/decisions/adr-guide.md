@@ -49,4 +49,4 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 | [ADR-003](ADR-003-role-based-auth-providers.md) | 管理者と公演限定スタッフの認証プロバイダー | Accepted | [#44](https://github.com/EU0207/concert-reception-system/issues/44) |
 | [ADR-004](ADR-004-retention-and-exceptional-close.md) | 詳細履歴の削除案内と紛失端末がある公演の例外締め | Accepted（CONF-051） | [#70](https://github.com/EU0207/concert-reception-system/issues/70)、[#72](https://github.com/EU0207/concert-reception-system/issues/72) |
 | [ADR-005](ADR-005-device-principal-authorization.md) | 端末別認証主体と本人認証の結合 | Accepted（CONF-051） | [#71](https://github.com/EU0207/concert-reception-system/issues/71) |
-| [ADR-006](ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存 | Accepted（CONF-052） | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
+| [ADR-006](ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存 | Accepted（最新上限CONF-053） | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
