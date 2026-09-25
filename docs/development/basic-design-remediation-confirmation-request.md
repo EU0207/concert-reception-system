@@ -8,12 +8,12 @@
 | 主な読者 | 依頼者、開発者、設計担当者 |
 | 関連文書 | [第三者品質レビュー記録](basic-design-independent-review.md)、[要件定義書](../client/requirements.md)、[受入条件書](../client/acceptance-criteria.md)、[基本設計計画書](basic-design-plan.md) |
 | 関連Issue | [#70](https://github.com/EU0207/concert-reception-system/issues/70)、[#72](https://github.com/EU0207/concert-reception-system/issues/72)、[#75](https://github.com/EU0207/concert-reception-system/issues/75)、[#76](https://github.com/EU0207/concert-reception-system/issues/76) |
-| 状態 | Draft |
-| 承認情報 | 未承認。依頼者回答は未受領 |
+| 状態 | In Review |
+| 承認情報 | 2026-09-25に開発者から`CONF-048`として5件の依頼者回答を受領。回答内容は[回答記録](basic-design-remediation-client-response.md)を参照。設計再承認は未了 |
 
 ## 結論
 
-次の確認事項は、現在の要件を変更するか、業務手順を確定するために必要である。回答前に開発者の推奨案を依頼者の承認済み判断として扱わない。依頼者への連絡窓口は開発者とし、回答を指摘ID、確認ID、Issueコメントまたは議事録へ結び付ける。
+以下は`CONF-048`を受領する前に依頼者へ提示した確認事項である。回答と残る判断は[依頼者回答記録](basic-design-remediation-client-response.md)で管理する。元の質問は回答の経緯として保持する。
 
 ## 確認・承認先
 
@@ -51,3 +51,4 @@
 | 日付 | 変更内容 |
 |---|---|
 | 2026-09-25 | 依頼者への確認事項と再レビュー判定を整理 |
+| 2026-09-25 | `CONF-048`の回答先を明示し、元の質問を経緯として保持 |
