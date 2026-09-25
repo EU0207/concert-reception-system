@@ -1,0 +1,176 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == 'admin@poc006.example.invalid';
+    }
+
+    function isStaff() {
+      return request.auth != null
+        && (request.auth.token.email == 'admin@poc006.example.invalid'
+          || request.auth.token.email.matches('staff[0-5]@poc006\\.example\\.invalid'));
+    }
+
+    function validSlot(slot) {
+      return slot in ['0', '1', '2', '3', '4'];
+    }
+
+    function validBank(bank) {
+      return bank in ['0', '1'];
+    }
+
+    function validChunk(chunk) {
+      return chunk in ['0', '1', '2', '3', '4', '5', '6'];
+    }
+
+    function chunkLimit(chunk) {
+      return chunk == '6' ? 500000 : 750000;
+    }
+
+    function imageMeta(showId, slot) {
+      return get(/databases/$(database)/documents/poc006Shows/$(showId)/images/$(slot)).data;
+    }
+
+    match /poc006GatewayOnly/{recordId} {
+      allow read, write: if false;
+    }
+
+    function deviceAssignment(showId) {
+      return get(/databases/$(database)/documents/poc006DeviceShows/$(showId)/devices/$(request.auth.uid)).data;
+    }
+
+    function humanRole(showId, humanUid) {
+      return get(/databases/$(database)/documents/poc006DeviceShows/$(showId)/roles/$(humanUid)).data;
+    }
+
+    function deviceSession(showId) {
+      return get(/databases/$(database)/documents/poc006DeviceShows/$(showId)/sessions/$(request.auth.uid)).data;
+    }
+
+    function activeDevice(showId) {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && deviceAssignment(showId).active == true
+        && deviceAssignment(showId).deviceUid == request.auth.uid
+        && deviceSession(showId).active == true
+        && deviceSession(showId).humanUid == deviceAssignment(showId).humanUid
+        && deviceSession(showId).expiresAt > request.time
+        && humanRole(showId, deviceAssignment(showId).humanUid).active == true
+        && humanRole(showId, deviceAssignment(showId).humanUid).role in ['owner', 'receptionist'];
+    }
+
+    function elevatedAdmin(showId) {
+      return activeDevice(showId)
+        && humanRole(showId, deviceAssignment(showId).humanUid).role == 'owner'
+        && deviceSession(showId).elevatedUntil > request.time;
+    }
+
+    match /poc006DeviceShows/{showId} {
+      match /roles/{humanUid} {
+        allow read, write: if isAdmin();
+      }
+
+      match /devices/{deviceUid} {
+        allow read: if isAdmin();
+        allow create, delete: if isAdmin();
+        allow update: if isAdmin() || (
+          elevatedAdmin(showId)
+          && request.resource.data.keys().hasOnly(['active', 'deviceUid', 'humanUid'])
+          && request.resource.data.deviceUid == resource.data.deviceUid
+          && request.resource.data.humanUid == resource.data.humanUid
+          && request.resource.data.active is bool
+        );
+      }
+
+      match /sessions/{deviceUid} {
+        allow read: if isAdmin();
+        allow create, update: if request.auth != null
+          && request.auth.token.firebase.sign_in_provider != 'anonymous'
+          && request.resource.data.keys().hasOnly(['active', 'humanUid', 'expiresAt', 'elevatedUntil'])
+          && request.resource.data.active is bool
+          && request.resource.data.humanUid == request.auth.uid
+          && request.resource.data.expiresAt is timestamp
+          && request.resource.data.expiresAt > request.time
+          && request.resource.data.expiresAt <= request.time + duration.value(12, 'h')
+          && request.resource.data.elevatedUntil is timestamp
+          && request.resource.data.elevatedUntil <= request.time + duration.value(15, 'm')
+          && (request.resource.data.elevatedUntil <= request.time
+            || request.auth.token.auth_time * 1000 > request.time.toMillis() - 900000)
+          && get(/databases/$(database)/documents/poc006DeviceShows/$(showId)/devices/$(deviceUid)).data.humanUid == request.auth.uid;
+        allow delete: if false;
+      }
+
+      match /records/{recordId} {
+        allow get: if activeDevice(showId);
+        allow list: if false;
+        allow create: if activeDevice(showId)
+          && request.resource.data.keys().hasOnly(['deviceUid', 'value'])
+          && request.resource.data.deviceUid == request.auth.uid;
+        allow update, delete: if false;
+      }
+    }
+
+    match /poc006Shows/{showId}/images/{slot} {
+      allow get: if isStaff() && validSlot(slot);
+      allow list: if false;
+      allow create, update: if isAdmin() && validSlot(slot)
+        && request.resource.data.keys().hasOnly(['activeBank', 'draftBank', 'activeVersion', 'draftVersion'])
+        && request.resource.data.activeBank in ['0', '1']
+        && request.resource.data.draftBank in ['0', '1']
+        && request.resource.data.activeBank != request.resource.data.draftBank
+        && request.resource.data.activeVersion is int
+        && request.resource.data.draftVersion is int;
+      allow delete: if isAdmin() && validSlot(slot);
+
+      match /banks/{bank}/chunks/{chunk} {
+        allow get: if isStaff() && validSlot(slot) && validBank(bank)
+          && validChunk(chunk) && bank == imageMeta(showId, slot).activeBank;
+        allow list: if false;
+        allow create, update: if isAdmin() && validSlot(slot) && validBank(bank)
+          && validChunk(chunk) && bank == imageMeta(showId, slot).draftBank
+          && request.resource.data.keys().hasOnly(['version', 'payload'])
+          && request.resource.data.version == imageMeta(showId, slot).draftVersion
+          && request.resource.data.payload is bytes
+          && request.resource.data.payload.size() <= chunkLimit(chunk);
+        allow delete: if isAdmin() && validSlot(slot) && validBank(bank)
+          && validChunk(chunk) && bank == imageMeta(showId, slot).draftBank;
+      }
+    }
+
+    // CONF-053の1 MB案。既存の5 MB分割試験を比較用に残す。
+    function compactImageMeta(showId, slot) {
+      return get(/databases/$(database)/documents/poc006CompactShows/$(showId)/images/$(slot)).data;
+    }
+
+    match /poc006CompactShows/{showId}/images/{slot} {
+      allow get: if isStaff() && validSlot(slot);
+      allow list: if false;
+      allow create, update: if isAdmin() && validSlot(slot)
+        && request.resource.data.keys().hasOnly(['activeBank', 'draftBank', 'activeVersion', 'draftVersion'])
+        && request.resource.data.activeBank in ['0', '1']
+        && request.resource.data.draftBank in ['0', '1']
+        && request.resource.data.activeBank != request.resource.data.draftBank
+        && request.resource.data.activeVersion is int
+        && request.resource.data.draftVersion is int;
+      allow delete: if isAdmin() && validSlot(slot);
+
+      match /banks/{bank} {
+        allow get: if isStaff() && validSlot(slot) && validBank(bank)
+          && bank == compactImageMeta(showId, slot).activeBank;
+        allow list: if false;
+        allow create, update: if isAdmin() && validSlot(slot) && validBank(bank)
+          && bank == compactImageMeta(showId, slot).draftBank
+          && request.resource.data.keys().hasOnly(['version', 'mimeType', 'payload'])
+          && request.resource.data.version == compactImageMeta(showId, slot).draftVersion
+          && request.resource.data.mimeType in ['image/png', 'image/jpeg']
+          && request.resource.data.payload is bytes
+          && request.resource.data.payload.size() > 0
+          && request.resource.data.payload.size() <= 1000000;
+        allow delete: if isAdmin() && validSlot(slot) && validBank(bank)
+          && bank == compactImageMeta(showId, slot).draftBank;
+      }
+    }
+  }
+}
