@@ -139,7 +139,7 @@ service cloud.firestore {
       }
     }
 
-    // 200 KB案の限定検証。既存の5 MB分割試験を残して比較する。
+    // CONF-053の1 MB案。既存の5 MB分割試験を比較用に残す。
     function compactImageMeta(showId, slot) {
       return get(/databases/$(database)/documents/poc006CompactShows/$(showId)/images/$(slot)).data;
     }
@@ -167,7 +167,7 @@ service cloud.firestore {
           && request.resource.data.mimeType in ['image/png', 'image/jpeg']
           && request.resource.data.payload is bytes
           && request.resource.data.payload.size() > 0
-          && request.resource.data.payload.size() <= 200000;
+          && request.resource.data.payload.size() <= 1000000;
         allow delete: if isAdmin() && validSlot(slot) && validBank(bank)
           && bank == compactImageMeta(showId, slot).draftBank;
       }

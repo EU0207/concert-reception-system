@@ -210,14 +210,21 @@ expectStatus(await firestore('PATCH', compactImagePath(5), admin, metaFields('0'
 for (let slot = 0; slot < 5; slot++) {
   expectStatus(await firestore('PATCH', compactImagePath(slot), admin, metaFields('0', '1', 0, 1)), 200, `compact metadata slot ${slot}`);
 }
-expectStatus(await firestore('PATCH', compactBankPath(0, '1'), admin, compactFields(1, Buffer.alloc(200001))), 403, 'compact oversize denied');
+expectStatus(await firestore('PATCH', compactBankPath(0, '1'), admin, compactFields(1, Buffer.alloc(1000001))), 403, 'compact oversize denied');
 expectStatus(await firestore('PATCH', compactBankPath(0, '1'), admin, compactFields(1, small, 'application/pdf')), 403, 'compact PDF metadata denied');
 expectStatus(await firestore('PATCH', compactBankPath(0, '1'), staff[0], compactFields(1, small)), 403, 'compact staff write denied');
 expectStatus(await firestore('GET', compactBankPath(0, '1'), staff[0]), 403, 'compact draft read denied');
 
 const compactExpected = [];
+const compactDocumentNameSize = compactBankPath(0, '1').split('/').reduce((total, segment) => total + Buffer.byteLength(segment, 'utf8') + 1, 16);
+const compactDocumentSize = compactDocumentNameSize
+  + Buffer.byteLength('version', 'utf8') + 1 + 8
+  + Buffer.byteLength('mimeType', 'utf8') + 1 + Buffer.byteLength('image/png', 'utf8') + 1
+  + Buffer.byteLength('payload', 'utf8') + 1 + 1000000
+  + 32;
+assert.ok(compactDocumentSize < 1048576, `compact document exceeds Firestore limit: ${compactDocumentSize}`);
 for (let slot = 0; slot < 5; slot++) {
-  const payload = randomBytes(200000);
+  const payload = randomBytes(1000000);
   compactExpected.push(createHash('sha256').update(payload).digest('hex'));
   expectStatus(await firestore('PATCH', compactBankPath(slot, '1'), admin, compactFields(1, payload)), 200, `compact write slot ${slot}`);
   expectStatus(await firestore('PATCH', compactImagePath(slot), admin, metaFields('1', '0', 1, 2)), 200, `compact publish slot ${slot}`);
@@ -227,7 +234,7 @@ for (let device = 0; device < 6; device++) {
     const result = await firestore('GET', compactBankPath(slot, '1'), staff[device]);
     expectStatus(result, 200, `compact device ${device} slot ${slot}`);
     const payload = Buffer.from(result.body.fields.payload.bytesValue, 'base64');
-    assert.equal(payload.length, 200000);
+    assert.equal(payload.length, 1000000);
     assert.equal(createHash('sha256').update(payload).digest('hex'), compactExpected[slot]);
   }
 }
@@ -267,4 +274,4 @@ assert.equal((await getDoc(doc(deviceDb, `${deviceShow}/records/FAKE-B`))).exist
 await assert.rejects(getDoc(doc(humanDb, `${deviceShow}/records/FAKE-B`)), 'human UID alone cannot bypass device proof');
 await Promise.all([deleteApp(humanApp), deleteApp(deviceApp)]);
 
-console.log(JSON.stringify({ result: 'PASS', showId, deviceAuth: 'A stopped and B continues under one human UID', secondaryFirebaseApp: 'verified', imageBytes: 25000000, writeCount, readCount, deliveredBytes: 150000000, distinctStaffTokens: staff.length, oldVersionChunksDeleted: 7, compactImageBytes: 1000000, compactReads: 30, compactDeliveredBytes: 6000000, compactOldBankDeleted: true }));
+console.log(JSON.stringify({ result: 'PASS', showId, deviceAuth: 'A stopped and B continues under one human UID', secondaryFirebaseApp: 'verified', imageBytes: 25000000, writeCount, readCount, deliveredBytes: 150000000, distinctStaffTokens: staff.length, oldVersionChunksDeleted: 7, compactImageBytes: 5000000, compactDocumentSize, compactReads: 30, compactDeliveredBytes: 30000000, compactOldBankDeleted: true }));
