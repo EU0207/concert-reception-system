@@ -40,6 +40,7 @@ const initialPeople = [{
   issued: false,
   delivered: false
 }];
+// 画面の仮データと表示状態をここに集める。再読み込みすると初期値に戻る。
 const S = {
   screen: 'home',
   history: [],
@@ -269,6 +270,7 @@ function modal() {
   let m = S.modal;
   return `<div class="modalwrap"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><h2 id="modal-title">${esc(m.title)}</h2><div>${m.body}</div><div class="row">${m.buttons.map(b => btn(b.label, b.action, b.style || 'secondary')).join('')}</div></section></div>`;
 }
+// S の現在値から画面を組み立て直す。操作後の再表示はここに集約する。
 function render() {
   document.title = `${screens[S.screen]} · UIモック`;
   $('app').innerHTML = `<div class="shell">${nav()}<main class="main">${header()}<div class="content">${body()}</div></main></div>${modal()}${S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''}`;
@@ -286,6 +288,7 @@ function closeModal() {
   S.modal = null;
   render();
 }
+// 画面移動の入口。未保存の編集があれば、移動前に扱いを選んでもらう。
 function go(target, force = false, fromBrowser = false) {
   if (S.dirty && !force && editable.has(S.screen) && target !== S.screen) {
     openModal('変更が保存されていません', '<p>この画面で変更した内容があります。</p>', [{
@@ -318,6 +321,7 @@ function go(target, force = false, fromBrowser = false) {
   S.noticeOpen = false;
   render();
 }
+// 保存済みの写しを更新する。版競合の模擬状態では入力を保持して移動を止める。
 function save() {
   if (S.conflict) {
     openModal('版競合が発生しました', `<p>共有先は版 ${S.version + 1} です。入力内容は画面内に保持しています。確認後、再度保存してください。</p>`, [{
@@ -359,6 +363,7 @@ function confirmAction(title, body, action, danger = false) {
     action: 'modalClose'
   }]);
 }
+// ボタンの data-action を操作ごとの処理へ振り分ける。
 function handle(action) {
   if (!action) return;
   if (screens[action] && action !== 'messages') return go(action);
@@ -625,6 +630,7 @@ function handle(action) {
       return;
   }
 }
+// 再描画で作り直されるボタンも受け付けられるよう、クリックをまとめて処理する。
 document.addEventListener('click', e => {
   let seat = e.target.closest('[data-seat]');
   if (seat) {
@@ -643,6 +649,7 @@ document.addEventListener('click', e => {
   let act = e.target.closest('[data-action]');
   if (act) handle(act.dataset.action);
 });
+// 入力中は画面全体を再描画せず、S と未保存表示だけを更新して入力位置を保つ。
 document.addEventListener('input', e => {
   if (e.target.dataset.form) {
     S.form[e.target.dataset.form] = e.target.value;
@@ -685,6 +692,7 @@ window.addEventListener('beforeunload', e => {
     e.returnValue = '';
   }
 });
+// ブラウザーの戻る操作も go() に通し、未保存確認を共通化する。
 window.addEventListener('popstate', e => {
   let target = e.state?.screen || 'day';
   if (S.dirty && editable.has(S.screen)) {
@@ -695,6 +703,7 @@ window.addEventListener('popstate', e => {
   }
   go(target, true, true);
 });
+// 起動時に履歴の起点を登録し、初期状態の S で最初の画面を表示する。
 window.history.replaceState({
   screen: 'home'
 }, '', '#home');
