@@ -64,6 +64,7 @@ Vite、QR読取り、PDF生成などのライブラリは、PoCで候補を検�
 | `docs/development/` | ADR、基本設計、テスト方針、技術検証結果 |
 | `docs/templates/` | 文書とテストケースのテンプレート |
 | `poc/` | 技術検証用の限定コードと自動試験 |
+| `mock/` | 架空データによる操作可能なUIモック |
 
 実在する来場者の氏名や受付情報は保存していません。PoCと試験には架空データを使用しています。
 
@@ -74,6 +75,8 @@ Vite、QR読取り、PDF生成などのライブラリは、PoCで候補を検�
 - [基本設計計画書](docs/development/basic-design-plan.md)
 - [システム構成・環境分離設計](docs/development/system-architecture.md)
 - [画面・画面遷移・操作見本設計](docs/development/screen-flow-wireframe-design.md)
+- [UIモック操作手順](mock/README.md)
+- [UIモック確認記録](docs/development/ui-mock-review.md)
 - [テスト方針](docs/development/test-strategy.md)
 - [ドキュメント案内](docs/document-guide.md)
 
