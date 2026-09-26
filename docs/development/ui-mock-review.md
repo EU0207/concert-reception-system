@@ -7,7 +7,7 @@
 | 目的 | Issue #85のUIモックについて、操作確認の範囲、結果、未確認事項を記録する |
 | 主な読者 | 開発者、依頼者、設計担当者 |
 | 前提 | 基本設計一式と`CONF-054`の是正変更は承認済み。モックには架空データだけを使用する |
-| 関連文書 | [画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md)、[基本設計計画書](basic-design-plan.md)、[受入条件書](../client/acceptance-criteria.md)、[モック操作手順](../../mock/README.md) |
+| 関連文書 | [画面・画面遷移・操作見本設計](screen-flow-wireframe-design.md)、[基本設計計画書](basic-design-plan.md)、[受入条件書](../client/acceptance-criteria.md)、[モック操作手順](../../mock/mock-guide.md) |
 | 関連Issue | [#85](https://github.com/EU0207/concert-reception-system/issues/85) |
 | 状態 | In Review |
 
