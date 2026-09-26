@@ -75,7 +75,7 @@ Vite、QR読取り、PDF生成などのライブラリは、PoCで候補を検�
 - [基本設計計画書](docs/development/basic-design-plan.md)
 - [システム構成・環境分離設計](docs/development/system-architecture.md)
 - [画面・画面遷移・操作見本設計](docs/development/screen-flow-wireframe-design.md)
-- [UIモック操作手順](mock/README.md)
+- [UIモック操作手順](mock/mock-guide.md)
 - [UIモック確認記録](docs/development/ui-mock-review.md)
 - [テスト方針](docs/development/test-strategy.md)
 - [ドキュメント案内](docs/document-guide.md)
