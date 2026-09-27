@@ -218,6 +218,7 @@
 | CONF-053 | 依頼者が会場画像1枚1MBを希望。最大5枚、合計5MB。実画像の拡大時可読性はAC-025で確認 | C-03 | REQ-F-035／AC-025 | [依頼者回答](basic-design-remediation-client-response.md)、[ADR-006](decisions/ADR-006-firestore-image-storage.md)、[POC-006](poc-006-result.md)、[BD-09](test-strategy.md) |
 | CONF-054 | 開発者が統合PRと依頼者回答の一致を確認し、依頼者が第三者レビュー是正後の要件・受入条件・基本設計一式の変更を承認 | C-01～C-04、M-01～M-06、Q-01 | PR #84で改訂した要件・受入条件・基本設計 | [変更承認記録](basic-design-remediation-approval.md)、[再レビュー表](basic-design-remediation-re-review.md) |
 | CONF-055 | QR受付から受付ホームへ、会場席編集から遷移元の確認画面へ戻す。重要連絡を先頭に置き、その後を新しい順に並べる。公演終了・締めを重大操作として強調する | FB-01、FB-06、FB-07 | AC-004、AC-025、AC-027、AC-028／BD-06-01、BD-06-06、BD-06-08、BD-06-13 | [依頼者回答](ui-mock-client-response.md#conf-055-依頼者から伝達された回答)、[UIモック確認記録](ui-mock-review.md) |
+| CONF-056 | 回復不能な操作だけを重大操作とし、実行前に2回確認する。未読は連絡行の左端マークで示し、管理者向けの既読管理は設けない | FB-06、FB-07 | AC-009、AC-027、AC-028／BD-06-01、BD-06-04、BD-06-13 | [依頼者回答](ui-mock-client-response.md#conf-056-重大操作と連絡の既読表示)、[UIモック確認記録](ui-mock-review.md) |
 
 ## 設計工程の開発者判断
 
