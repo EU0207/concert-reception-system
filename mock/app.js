@@ -224,7 +224,7 @@ function people() {
 
   return page('来場者管理', `
     <div class="card stack people-card">
-      <div class="notice">初回取込では席番号が空欄でも登録できます。未配置の方にはチケットとQRを発行できません。不参加の切替は席と発行記録を消しません。</div>
+      <div class="notice">初回取込では席番号が空欄でも登録できます。未配置の方にはチケットとQRを発行できません。購入者名は名前を押して修正できます。不参加にすると席配置と発行・送付の表示を解除します（モックのみ）。</div>
       <details>
         <summary>大量の名簿を試す（モック専用）</summary>
         <p class="small muted">架空の行を加えて500件にします。再読み込みで元に戻ります。</p>
@@ -299,15 +299,15 @@ const systemCheckIds = new Set(['payment', 'issued', 'delivered']);
 
 function tickets() {
   const checks = Object.entries(checkLabels);
-  const rows = [...S.people];
+  const rows = S.people.filter(p => !p.inactive);
   if (S.sort === 'seat') rows.sort((x, y) => (x.seat || 'ZZ').localeCompare(y.seat || 'ZZ'));
   else rows.sort((x, y) => Number(x[S.sort]) - Number(y[S.sort]) || (x.seat || 'ZZ').localeCompare(y.seat || 'ZZ'));
   if (S.sortReverse) rows.reverse();
 
   const headers = checks.map(([key, label]) => `<th scope="col" class="${systemCheckIds.has(key) ? 'system-check-head' : ''}">${esc(label)}${systemCheckIds.has(key) ? '<small>固定</small>' : ''}</th>`).join('');
-  const rowHtml = rows.map(p => `<tr class="${p.inactive ? 'inactive-row' : ''}">
+  const rowHtml = rows.map(p => `<tr>
     <td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td>
-    <td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td>
+    <td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}</td>
     <td>${p.seat || '<span class="pill warn">未配置</span>'}</td>
     <td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>
     ${checks.map(([key, label]) => `<td><button class="${p[key] ? 'pill' : 'secondary'} ${systemCheckIds.has(key) ? 'system-check-button' : ''}" data-check="${p.id}:${key}" aria-label="${esc(p.name)}の${esc(label)}を${p[key] ? '未済み' : '済み'}にする">${p[key] ? '✓ 済' : '□ 未'}</button></td>`).join('')}
@@ -317,7 +317,7 @@ function tickets() {
   const archivedItems = S.archivedCustomChecks.map(item => `<div class="row"><span>${esc(item.label)}</span>${btn('戻す', `restoreCustom:${item.id}`)}</div>`).join('');
 
   return page('チケット準備', `<div class="card stack">
-    <div class="notice">緑色の「固定」項目は名前の変更・削除ができません。確認用項目は追加・変更・削除できます。チェック操作で決済・発送・送信は行いません。</div>
+    <div class="notice">不参加の方はこの一覧から除外します。来場者管理で確認・復帰できます。緑色の「固定」項目は名前の変更・削除ができません。確認用項目は追加・変更・削除できます。チェック操作で決済・発送・送信は行いません。</div>
     <details class="custom-checks" ${S.customChecksOpen ? 'open' : ''}><summary>確認用チェック項目を管理</summary>
       <p class="small muted">確認用項目はシステムの判定に使いません。削除してもモック内では元に戻せます。</p>
       <div class="row"><input id="custom-check-name" aria-label="追加する確認用項目名" placeholder="例：連絡済み" maxlength="20">${btn('項目を追加', 'addCustomCheck', 'primary')}</div>
@@ -326,7 +326,7 @@ function tickets() {
     </details>
     <div class="row"><label class="field">並べ替え<select data-sort><option value="seat" ${S.sort === 'seat' ? 'selected' : ''}>席番号</option>${checks.map(([key, label]) => `<option value="${key}" ${S.sort === key ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select></label>${btn(S.sortReverse ? '降順' : '昇順', 'sortReverse')}</div>
     <div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${headers}<th>案内</th></tr></thead><tbody>${rowHtml}</tbody></table></div>
-    <div class="row">選択 ${S.selectedIds.size}件 <select id="bulk-field">${checks.map(([key, label]) => `<option value="${key}">${esc(label)}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div>
+    <div class="row">選択 ${rows.filter(p => S.selectedIds.has(p.id)).length}件 <select id="bulk-field">${checks.map(([key, label]) => `<option value="${key}">${esc(label)}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div>
   </div>`, '未入金のまま発行・送付した状態も確認できます。');
 }
 
@@ -569,11 +569,13 @@ function handle(action) {
         ['来場予定', buyer.inactive ? '不参加' : '来場予定'],
         ['座席表示名', buyer.label],
         ['席番号', buyer.seat || '未配置'],
+        ...(buyer.previousAssignment ? [['不参加前の席・発行状態（モック）', `${buyer.previousAssignment.seat}・${buyer.previousAssignment.issued ? '発行済み' : '未発行'}・${buyer.previousAssignment.delivered ? '送付済み' : '未送付'}`]] : []),
         ['案内', buyer.note || '－']
       ];
       const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
       return openModal('来場者情報', body, [
         { label: '閉じる', action: 'modalClose' },
+        { label: '購入者名を変更', action: `editBuyerName:${buyer.id}` },
         { label: buyer.inactive ? '来場予定に戻す' : '不参加にする', action: `toggleInactive:${buyer.id}` }
       ]);
     }
@@ -593,19 +595,62 @@ function handle(action) {
     const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
     return openModal('チケット準備の詳細', body, [{ label: '閉じる', action: 'modalClose' }]);
   }
+  if (action.startsWith('editBuyerName:')) {
+    const person = S.people.find(p => p.id === +action.slice(14));
+    if (!person) return;
+    return openModal('購入者名を変更', `<label class="field">購入者名<input id="buyer-name-edit" value="${esc(person.name)}" maxlength="50"></label><p class="small muted">前後の空白を除いた1～50文字。変更後は保存してください。</p>`, [
+      { label: '詳細へ戻る', action: `showBuyer:${person.id}` },
+      { label: '変更する', action: `applyBuyerName:${person.id}`, style: 'primary' }
+    ]);
+  }
+  if (action.startsWith('applyBuyerName:')) {
+    const person = S.people.find(p => p.id === +action.slice(15));
+    const name = $('buyer-name-edit')?.value.trim() || '';
+    if (!person || !name || name.length > 50) return toast('購入者名は前後の空白を除いた1～50文字にしてください');
+    if (person.name !== name) {
+      person.name = name;
+      S.dirty = true;
+    }
+    return handle(`showBuyer:${person.id}`);
+  }
   if (action.startsWith('toggleInactive:')) {
     const person = S.people.find(p => p.id === +action.slice(15));
     if (!person) return;
     const next = person.inactive ? '来場予定に戻す' : '不参加にする';
-    return openModal('来場予定を変更', `<p>${esc(person.name)}を「${next}」にします。席配置と発行の記録は変更しません。</p>`, [
+    const impact = person.inactive ? '席や発行状態は自動では戻りません。' : person.seat ? `既に${esc(person.seat)}へ席配置済みです。よろしいですか？席配置を解除します。${person.issued || person.delivered ? '発行済み・送付済みの表示も解除します。' : ''}` : 'チケット準備の一覧から除外します。';
+    return openModal('来場予定を変更', `<p>${esc(person.name)}を「${next}」にします。${impact}</p>`, [
       { label: '詳細へ戻る', action: `showBuyer:${person.id}` },
-      { label: next, action: `applyInactive:${person.id}`, style: 'primary' }
+      { label: next, action: `applyInactive:${person.id}`, style: person.seat ? 'dangerbtn' : 'primary' }
     ]);
   }
   if (action.startsWith('applyInactive:')) {
     const person = S.people.find(p => p.id === +action.slice(14));
     if (!person) return;
+    if (!person.inactive && person.seat) {
+      // 発行済みの席は実運用ではQRの無効化が必要。モックでは確認を重ねて状態だけ試す。
+      if (person.issued || person.delivered) {
+        return openModal('発行済みチケットの扱いを確認', `<p>${esc(person.name)}の${esc(person.seat)}を解除し、発行済み・送付済みの表示を未済みに戻します。実際のQR無効化や履歴保存は行いません。</p>`, [
+          { label: '戻る', action: `toggleInactive:${person.id}` },
+          { label: '解除して不参加にする', action: `confirmInactive:${person.id}`, style: 'dangerbtn' }
+        ]);
+      }
+      return handle(`confirmInactive:${person.id}`);
+    }
     person.inactive = !person.inactive;
+    if (person.inactive) S.selectedIds.delete(person.id);
+    S.modal = null;
+    S.dirty = true;
+    return render();
+  }
+  if (action.startsWith('confirmInactive:')) {
+    const person = S.people.find(p => p.id === +action.slice(16));
+    if (!person || person.inactive) return;
+    person.previousAssignment = { seat: person.seat, issued: person.issued, delivered: person.delivered };
+    person.seat = '';
+    person.issued = false;
+    person.delivered = false;
+    person.inactive = true;
+    S.selectedIds.delete(person.id);
     S.modal = null;
     S.dirty = true;
     return render();
@@ -687,7 +732,8 @@ function handle(action) {
     if (!Object.hasOwn(checkLabels, key)) return;
     S.selectedIds.forEach(id => {
       const person = S.people.find(p => p.id === id);
-      if (person) person[key] = true;
+      if (!person || person.inactive) return;
+      person[key] = true;
       const saved = S.savedPeople.find(p => p.id === id);
       if (saved) saved[key] = true;
     });
@@ -893,9 +939,10 @@ function handle(action) {
       {
         let k = $('bulk-field').value;
         if (!Object.hasOwn(checkLabels, k)) return;
-        if (!S.selectedIds.size) return toast('対象を選択してください');
-        if (k === 'issued' && [...S.selectedIds].some(id => !S.people.find(p => p.id === id).seat)) return toast('席未割当の方には発行できません');
-        return confirmAction('一斉チェック', `対象 ${S.selectedIds.size}件の「${esc(checkLabels[k])}」を済みにします。`, `bulkDo:${k}`);
+        const selected = S.people.filter(p => !p.inactive && S.selectedIds.has(p.id));
+        if (!selected.length) return toast('対象を選択してください');
+        if (k === 'issued' && selected.some(p => !p.seat)) return toast('席未割当の方には発行できません');
+        return confirmAction('一斉チェック', `対象 ${selected.length}件の「${esc(checkLabels[k])}」を済みにします。`, `bulkDo:${k}`);
       }
 
     case 'invite':
@@ -1049,7 +1096,7 @@ document.addEventListener('click', e => {
   if (check) {
     let [id, k] = check.dataset.check.split(':'),
       p = S.people.find(x => x.id === +id);
-    if (!p || !Object.hasOwn(checkLabels, k)) return;
+    if (!p || p.inactive || !Object.hasOwn(checkLabels, k)) return;
     if (k === 'issued' && !p.seat && !p.issued) return toast('席未割当の方には発行できません');
     return confirmAction(`${checkLabels[k]}を変更`, `${esc(p.name)} · ${p.seat || '席未割当'}：${p[k] ? '済み → 未済み' : '未済み → 済み'}。他のチェック項目は変更しません。`, `checkConfirm:${id}:${k}`);
   }
