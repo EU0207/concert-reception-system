@@ -359,6 +359,16 @@ h3 {
 .selection-strip .row {
   gap:6px
 }
+.seat-actions {
+  display:flex;
+  gap:4px;
+  margin-left:auto
+}
+.seat-actions button {
+  min-height:44px;
+  padding:8px 9px;
+  white-space:nowrap
+}
 .canvas-outer {
   height:430px;
   overflow:auto;
@@ -414,7 +424,7 @@ h3 {
 .seat strong {
   font-size:.9rem
 }
-.seat.selected {
+.seat.selected,.gapcell.selected {
   outline:4px solid #e0a529;
   border-color:#805d0f
 }
@@ -429,6 +439,9 @@ h3 {
   border-style:dashed;
   background:#edf3eb;
   color:#66796d
+}
+.gapcell[data-seat] {
+  cursor:pointer
 }
 .venue {
   height:230px;
@@ -609,6 +622,14 @@ h3 {
 
 }
 @media(max-width:520px) {
+  .selection-strip {
+  padding:8px;
+  gap:6px 8px
+}
+.seat-actions button {
+  padding:7px 6px;
+  font-size:.86rem
+}
   .top .identity {
   font-size:.67rem;
   max-width:155px
