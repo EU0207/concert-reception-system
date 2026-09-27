@@ -219,12 +219,13 @@
 | CONF-054 | 開発者が統合PRと依頼者回答の一致を確認し、依頼者が第三者レビュー是正後の要件・受入条件・基本設計一式の変更を承認 | C-01～C-04、M-01～M-06、Q-01 | PR #84で改訂した要件・受入条件・基本設計 | [変更承認記録](basic-design-remediation-approval.md)、[再レビュー表](basic-design-remediation-re-review.md) |
 | CONF-055 | QR受付から受付ホームへ、会場席編集から遷移元の確認画面へ戻す。重要連絡を先頭に置き、その後を新しい順に並べる。公演終了・締めを重大操作として強調する | FB-01、FB-06、FB-07 | AC-004、AC-025、AC-027、AC-028／BD-06-01、BD-06-06、BD-06-08、BD-06-13 | [依頼者回答](ui-mock-client-response.md#conf-055-依頼者から伝達された回答)、[UIモック確認記録](ui-mock-review.md) |
 | CONF-056 | 回復不能な操作だけを重大操作とし、実行前に2回確認する。未読は連絡行の左端マークで示し、管理者向けの既読管理は設けない | FB-06、FB-07 | AC-009、AC-027、AC-028／BD-06-01、BD-06-04、BD-06-13 | [依頼者回答](ui-mock-client-response.md#conf-056-重大操作と連絡の既読表示)、[UIモック確認記録](ui-mock-review.md) |
+| CONF-057 | 端末保存を前提に、QR受付中断後の復帰方法の具体化を開発側へ委ねる。保存失敗や二重計上の許容は含まない | FB-11 | AC-004、AC-005、AC-015／BD-03、BD-06-06、BD-09 | [依頼者回答](ui-mock-client-response.md#conf-057-qr受付中断時の扱い)、[対策設計](qr-reception-recovery-review.md)、[#92](https://github.com/EU0207/concert-reception-system/issues/92) |
 
-## UIモック工程の未承認課題
+## UIモック工程の設計課題
 
 | 指摘ID | 既存要件・受入条件 | 既存設計と追加確認先 | 状態 |
 |---|---|---|---|
-| FB-11 | REQ-F-008～REQ-F-010、REQ-NF-004／AC-004、AC-005、AC-011、AC-015 | [BD-03の端末保存と冪等再送](offline-sync-conflict-design.md)、[中断・誤更新への対策案](qr-reception-recovery-review.md)、[#92](https://github.com/EU0207/concert-reception-system/issues/92) | 開発者指摘。復帰画面と追加試験は依頼者未確認 |
+| FB-11 | REQ-F-008～REQ-F-010、REQ-NF-004／AC-004、AC-005、AC-011、AC-015 | [BD-03の端末保存と冪等再送](offline-sync-conflict-design.md)、[中断・誤更新への対策設計](qr-reception-recovery-review.md)、[#92](https://github.com/EU0207/concert-reception-system/issues/92) | `CONF-057`で開発側へ具体化を委任。文書はIn Review、実装・試験は未実施 |
 
 ## 設計工程の開発者判断
 
