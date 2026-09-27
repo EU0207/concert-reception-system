@@ -6,7 +6,8 @@ const initialPeople = [{
   seat: 'A-12',
   note: '受付時に案内事項を確認する（架空の例）',
   method: '電子チケット',
-  purchase: true,
+  contact: true,
+  inactive: false,
   payment: false,
   issued: true,
   delivered: false
@@ -17,8 +18,9 @@ const initialPeople = [{
   seat: '',
   note: '',
   method: '未選択',
-  purchase: true,
-  payment: false,
+  contact: true,
+  inactive: false,
+  payment: true,
   issued: false,
   delivered: false
 }, {
@@ -28,7 +30,8 @@ const initialPeople = [{
   seat: 'A-14',
   note: '',
   method: '紙チケット',
-  purchase: true,
+  contact: true,
+  inactive: false,
   payment: true,
   issued: true,
   delivered: true
@@ -39,7 +42,8 @@ const initialPeople = [{
   seat: '',
   note: '',
   method: '電子チケット',
-  purchase: false,
+  contact: true,
+  inactive: true,
   payment: false,
   issued: false,
   delivered: false
@@ -211,12 +215,12 @@ function people() {
   const rows = S.people.slice(start, start + S.peoplePageSize);
   const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.note ? '要確認' : '－'}</td></tr>`;
+    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}<button class="textbtn participation-toggle" data-action="toggleInactive:${p.id}">${p.inactive ? '来場予定に戻す' : '不参加にする'}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.note ? '要確認' : '－'}</td></tr>`;
   }).join('');
 
   return page('来場者管理', `
     <div class="card stack people-card">
-      <div class="notice">初回取込では席番号が空欄でも登録できます。未配置の方にはチケットとQRを発行できません。</div>
+      <div class="notice">初回取込では席番号が空欄でも登録できます。未配置の方にはチケットとQRを発行できません。不参加の切替は席と発行記録を消しません。</div>
       <details>
         <summary>大量の名簿を試す（モック専用）</summary>
         <p class="small muted">架空の行を加えて500件にします。再読み込みで元に戻ります。</p>
@@ -273,15 +277,15 @@ function seats() {
 }
 
 function placement() {
-  const unplaced = S.people.filter(p => !p.seat);
-  const candidates = unplaced.filter(p => S.placementFilter === 'all' || p.purchase === (S.placementFilter === 'confirmed'));
+  const unplaced = S.people.filter(p => !p.seat && !p.inactive);
+  const candidates = unplaced.filter(p => S.placementFilter === 'all' || p.payment === (S.placementFilter === 'confirmed'));
   const selectedPerson = candidates.find(p => p.id === S.personToPlace) || candidates[0];
 
-  return page('お客様を席に配置', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><h3>席未割当 ${unplaced.length}件</h3><label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>購入確定済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>購入未確定</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>未配置の全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。購入確定と入金確認は別の状態です。</p>${selectedPerson ? `<label class="field">配置する方<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>この条件に合う未配置の方はいません。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
+  return page('お客様を席に配置', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><h3>席未割当 ${unplaced.length}件</h3><label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>入金確認済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>入金未確認</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>来場予定の未配置全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。不参加の方は候補から除外します。</p>${selectedPerson ? `<label class="field">配置する方<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>この条件に合う未配置の方はいません。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
 }
 
 const checkLabels = {
-  purchase: '購入確定',
+  contact: '連絡済み',
   payment: '入金確認',
   issued: '発行済み',
   delivered: '交付済み'
@@ -294,7 +298,7 @@ function tickets() {
   return page('チケット準備', `<div class="card stack"><div class="row"><label class="field">並べ替え<select data-sort>${Object.entries({
     seat: '席番号',
     ...checkLabels
-  }).map(([k, v]) => `<option value="${k}" ${S.sort === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>${btn(S.sortReverse ? '降順' : '昇順', 'sortReverse')}</div><div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${Object.values(checkLabels).map(x => `<th>${x}</th>`).join('')}<th>案内</th></tr></thead><tbody>${a.map(p => `<tr><td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td><td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}</td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>${Object.keys(checkLabels).map(k => `<td><button class="${p[k] ? 'pill' : 'secondary'}" data-check="${p.id}:${k}">${p[k] ? '✓ 済' : '□ 未'}</button></td>`).join('')}<td>${p.note ? `<button class="textbtn" data-action="showTicketPerson:${p.id}">要確認</button>` : '－'}</td></tr>`).join('')}</tbody></table></div><div class="row">選択 ${S.selectedIds.size}件 <select id="bulk-field">${Object.entries(checkLabels).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div><div class="notice">4項目は独立しています。チェック操作で決済、発送、メール送信は行いません。</div></div>`, '未入金のまま発行・交付した状態も確認できます。');
+  }).map(([k, v]) => `<option value="${k}" ${S.sort === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>${btn(S.sortReverse ? '降順' : '昇順', 'sortReverse')}</div><div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${Object.values(checkLabels).map(x => `<th>${x}</th>`).join('')}<th>案内</th></tr></thead><tbody>${a.map(p => `<tr class="${p.inactive ? 'inactive-row' : ''}"><td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td><td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>${Object.keys(checkLabels).map(k => `<td><button class="${p[k] ? 'pill' : 'secondary'}" data-check="${p.id}:${k}">${p[k] ? '✓ 済' : '□ 未'}</button></td>`).join('')}<td>${p.note ? `<button class="textbtn" data-action="showTicketPerson:${p.id}">要確認</button>` : '－'}</td></tr>`).join('')}</tbody></table></div><div class="row">選択 ${S.selectedIds.size}件 <select id="bulk-field">${Object.entries(checkLabels).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div><div class="notice">4項目は独立しています。チェック操作で決済、発送、メール送信は行いません。</div></div>`, '未入金のまま発行・交付した状態も確認できます。');
 }
 
 function staff() {
@@ -533,6 +537,7 @@ function handle(action) {
       const details = [
         ['番号', number],
         ['購入者名', buyer.name],
+        ['来場予定', buyer.inactive ? '不参加' : '来場予定'],
         ['座席表示名', buyer.label],
         ['席番号', buyer.seat || '未配置'],
         ['案内', buyer.note || '－']
@@ -547,6 +552,7 @@ function handle(action) {
     if (!person) return;
     const details = [
       ['購入者名', person.name],
+      ['来場予定', person.inactive ? '不参加' : '来場予定'],
       ['席番号', person.seat || '未配置'],
       ['交付方法', person.method],
       ...Object.entries(checkLabels).map(([key, label]) => [label, person[key] ? '済み' : '未済み']),
@@ -554,6 +560,20 @@ function handle(action) {
     ];
     const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
     return openModal('チケット準備の詳細', body, [{ label: '閉じる', action: 'modalClose' }]);
+  }
+  if (action.startsWith('toggleInactive:')) {
+    const person = S.people.find(p => p.id === +action.slice(15));
+    if (!person) return;
+    const next = person.inactive ? '来場予定に戻す' : '不参加にする';
+    return confirmAction('来場予定を変更', `${esc(person.name)}を「${next}」にします。席配置と発行の記録は変更しません。`, `applyInactive:${person.id}`);
+  }
+  if (action.startsWith('applyInactive:')) {
+    const person = S.people.find(p => p.id === +action.slice(14));
+    if (!person) return;
+    person.inactive = !person.inactive;
+    S.modal = null;
+    S.dirty = true;
+    return render();
   }
   if (action.startsWith('scan:')) {
     if (S.noticeOpen) return toast('連絡を閉じてから読取りを再開してください');
@@ -600,7 +620,8 @@ function handle(action) {
         seat: '',
         note: '',
         method: '未選択',
-        purchase: false,
+        contact: false,
+        inactive: false,
         payment: false,
         issued: false,
         delivered: false
@@ -768,7 +789,7 @@ function handle(action) {
         return confirmAction('一斉チェック', `対象 ${S.selectedIds.size}件の「${checkLabels[k]}」を済みにします。`, `bulkDo:${k}`);
       }
 
-    case 'bulkDo:purchase':
+    case 'bulkDo:contact':
     case 'bulkDo:payment':
     case 'bulkDo:issued':
     case 'bulkDo:delivered':
@@ -956,7 +977,7 @@ document.addEventListener('input', e => {
 document.addEventListener('change', e => {
   if (e.target.dataset.placementFilter !== undefined) {
     S.placementFilter = e.target.value;
-    const candidates = S.people.filter(p => !p.seat && (S.placementFilter === 'all' || p.purchase === (S.placementFilter === 'confirmed')));
+    const candidates = S.people.filter(p => !p.seat && !p.inactive && (S.placementFilter === 'all' || p.payment === (S.placementFilter === 'confirmed')));
     if (!candidates.some(p => p.id === S.personToPlace)) S.personToPlace = candidates[0]?.id ?? null;
     return render();
   }
