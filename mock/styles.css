@@ -344,7 +344,13 @@ h3 {
   background:#edf3eb;
   touch-action:pan-x pan-y
 }
+.seatmap-extent {
+  position:relative
+}
 .seatmap {
+  position:absolute;
+  top:0;
+  left:0;
   transform-origin:top left;
   min-width:850px;
   min-height:510px;
