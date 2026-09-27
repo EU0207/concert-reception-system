@@ -342,6 +342,9 @@ h3 {
   min-height:38px;
   padding:6px 10px
 }
+.people-page-controls {
+  flex-basis:100%
+}
 .people-table-viewport {
   max-height:min(58vh,560px);
   overflow-x:scroll;

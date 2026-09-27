@@ -60,6 +60,7 @@ const S = {
   peoplePage: 1,
   seat: 'A-12',
   personToPlace: 2,
+  placementFilter: 'confirmed',
   zoom: 1,
   imageZoom: 1,
   imageIndex: 1,
@@ -210,9 +211,11 @@ function people() {
         <div class="row people-pages">
           <label>表示件数 <select data-people-size><option value="50" ${S.peoplePageSize === 50 ? 'selected' : ''}>50件</option><option value="100" ${S.peoplePageSize === 100 ? 'selected' : ''}>100件</option></select></label>
           <span>${S.people.length ? start + 1 : 0}～${start + rows.length} / ${S.people.length}件</span>
-          ${btn('前へ', 'peoplePrev', 'secondary', currentPage === 1 ? 'disabled' : '')}
-          <span>${currentPage} / ${pageCount}ページ</span>
-          ${btn('次へ', 'peopleNext', 'secondary', currentPage === pageCount ? 'disabled' : '')}
+          <div class="row people-page-controls">
+            ${btn('前へ', 'peoplePrev', 'secondary', currentPage === 1 ? 'disabled' : '')}
+            <span>${currentPage} / ${pageCount}ページ</span>
+            ${btn('次へ', 'peopleNext', 'secondary', currentPage === pageCount ? 'disabled' : '')}
+          </div>
         </div>
         <div class="row">${btn('保存', 'save', 'primary')}${btn('席に配置する', 'placement')}<div id="state-status">${editStatus()}</div></div>
       </div>
@@ -255,9 +258,11 @@ function seats() {
 }
 
 function placement() {
-  let unplaced = S.people.filter(p => !p.seat);
-  let selectedPerson = unplaced.find(p => p.id === S.personToPlace) || unplaced[0];
-  return page('お客様を席に配置', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><h3>席未割当 ${unplaced.length}件</h3>${unplaced.length ? `<label class="field">配置する方<select id="person-to-place">${unplaced.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>すべて配置済みです。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
+  const unplaced = S.people.filter(p => !p.seat);
+  const candidates = unplaced.filter(p => S.placementFilter === 'all' || p.purchase === (S.placementFilter === 'confirmed'));
+  const selectedPerson = candidates.find(p => p.id === S.personToPlace) || candidates[0];
+
+  return page('お客様を席に配置', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><h3>席未割当 ${unplaced.length}件</h3><label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>購入確定済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>購入未確定</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>未配置の全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。購入確定と入金確認は別の状態です。</p>${selectedPerson ? `<label class="field">配置する方<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>この条件に合う未配置の方はいません。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
 }
 
 const checkLabels = {
@@ -892,6 +897,12 @@ document.addEventListener('input', e => {
 });
 
 document.addEventListener('change', e => {
+  if (e.target.dataset.placementFilter !== undefined) {
+    S.placementFilter = e.target.value;
+    const candidates = S.people.filter(p => !p.seat && (S.placementFilter === 'all' || p.purchase === (S.placementFilter === 'confirmed')));
+    if (!candidates.some(p => p.id === S.personToPlace)) S.personToPlace = candidates[0]?.id ?? null;
+    return render();
+  }
   if (e.target.dataset.peopleSize !== undefined) {
     S.peoplePageSize = +e.target.value;
     S.peoplePage = 1;
