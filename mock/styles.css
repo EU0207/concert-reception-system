@@ -341,8 +341,19 @@ h3 {
   gap:16px;
   align-items:start
 }
+.stage>.settings-card {
+  grid-column:1;
+  grid-row:1/3
+}
+.stage>.selection-strip {
+  grid-column:2;
+  grid-row:1
+}
+.stage>.canvas-card {
+  grid-column:2;
+  grid-row:2
+}
 .selection-strip {
-  grid-column:1/-1;
   display:flex;
   align-items:center;
   flex-wrap:wrap;
@@ -359,10 +370,16 @@ h3 {
 .selection-strip .row {
   gap:6px
 }
+.selection-details {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px
+}
 .seat-actions {
   display:flex;
   gap:4px;
-  margin-left:auto
+  flex-basis:100%
 }
 .seat-actions button {
   min-height:44px;
@@ -605,6 +622,10 @@ h3 {
 .grid,.grid.two,.formgrid,.stage {
   grid-template-columns:1fr
 }
+.stage>.settings-card,.stage>.selection-strip,.stage>.canvas-card {
+  grid-column:1;
+  grid-row:auto
+}
 .selection-strip {
   position:sticky;
   top:62px;
@@ -612,6 +633,9 @@ h3 {
 }
 .stage.panel-bottom>.settings-card {
   order:2
+}
+.stage.panel-bottom>.selection-strip {
+  order:0
 }
 .stage.panel-bottom>.canvas-card {
   order:1
