@@ -65,6 +65,10 @@ const S = {
   version: 12,
   draftVersion: 12,
   people: structuredClone(initialPeople),
+  customCheckIds: ['contact'],
+  archivedCustomChecks: [],
+  nextCustomCheckId: 1,
+  customChecksOpen: false,
   peoplePageSize: 50,
   peoplePage: 1,
   seat: 'A-12',
@@ -286,19 +290,44 @@ function placement() {
 
 const checkLabels = {
   contact: '連絡済み',
-  payment: '入金確認',
+  payment: '購入済み',
   issued: '発行済み',
-  delivered: '交付済み'
+  delivered: '送付済み'
 };
 
+const systemCheckIds = new Set(['payment', 'issued', 'delivered']);
+
 function tickets() {
-  let a = [...S.people];
-  if (S.sort === 'seat') a.sort((x, y) => (x.seat || 'ZZ').localeCompare(y.seat || 'ZZ'));else a.sort((x, y) => Number(x[S.sort]) - Number(y[S.sort]) || (x.seat || 'ZZ').localeCompare(y.seat || 'ZZ'));
-  if (S.sortReverse) a.reverse();
-  return page('チケット準備', `<div class="card stack"><div class="row"><label class="field">並べ替え<select data-sort>${Object.entries({
-    seat: '席番号',
-    ...checkLabels
-  }).map(([k, v]) => `<option value="${k}" ${S.sort === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>${btn(S.sortReverse ? '降順' : '昇順', 'sortReverse')}</div><div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${Object.values(checkLabels).map(x => `<th>${x}</th>`).join('')}<th>案内</th></tr></thead><tbody>${a.map(p => `<tr class="${p.inactive ? 'inactive-row' : ''}"><td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td><td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>${Object.keys(checkLabels).map(k => `<td><button class="${p[k] ? 'pill' : 'secondary'}" data-check="${p.id}:${k}">${p[k] ? '✓ 済' : '□ 未'}</button></td>`).join('')}<td>${p.note ? `<button class="textbtn" data-action="showTicketPerson:${p.id}">要確認</button>` : '－'}</td></tr>`).join('')}</tbody></table></div><div class="row">選択 ${S.selectedIds.size}件 <select id="bulk-field">${Object.entries(checkLabels).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div><div class="notice">4項目は独立しています。チェック操作で決済、発送、メール送信は行いません。</div></div>`, '未入金のまま発行・交付した状態も確認できます。');
+  const checks = Object.entries(checkLabels);
+  const rows = [...S.people];
+  if (S.sort === 'seat') rows.sort((x, y) => (x.seat || 'ZZ').localeCompare(y.seat || 'ZZ'));
+  else rows.sort((x, y) => Number(x[S.sort]) - Number(y[S.sort]) || (x.seat || 'ZZ').localeCompare(y.seat || 'ZZ'));
+  if (S.sortReverse) rows.reverse();
+
+  const headers = checks.map(([key, label]) => `<th scope="col" class="${systemCheckIds.has(key) ? 'system-check-head' : ''}">${esc(label)}${systemCheckIds.has(key) ? '<small>固定</small>' : ''}</th>`).join('');
+  const rowHtml = rows.map(p => `<tr class="${p.inactive ? 'inactive-row' : ''}">
+    <td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td>
+    <td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td>
+    <td>${p.seat || '<span class="pill warn">未配置</span>'}</td>
+    <td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>
+    ${checks.map(([key, label]) => `<td><button class="${p[key] ? 'pill' : 'secondary'} ${systemCheckIds.has(key) ? 'system-check-button' : ''}" data-check="${p.id}:${key}" aria-label="${esc(p.name)}の${esc(label)}を${p[key] ? '未済み' : '済み'}にする">${p[key] ? '✓ 済' : '□ 未'}</button></td>`).join('')}
+    <td>${p.note ? `<button class="textbtn" data-action="showTicketPerson:${p.id}">要確認</button>` : '－'}</td>
+  </tr>`).join('');
+  const customItems = S.customCheckIds.map(id => `<div class="row"><strong>${esc(checkLabels[id])}</strong>${btn('名前を変更', `renameCustom:${id}`)}${btn('削除', `removeCustom:${id}`)}</div>`).join('');
+  const archivedItems = S.archivedCustomChecks.map(item => `<div class="row"><span>${esc(item.label)}</span>${btn('戻す', `restoreCustom:${item.id}`)}</div>`).join('');
+
+  return page('チケット準備', `<div class="card stack">
+    <div class="notice">緑色の「固定」項目は名前の変更・削除ができません。確認用項目は追加・変更・削除できます。チェック操作で決済・発送・送信は行いません。</div>
+    <details class="custom-checks" ${S.customChecksOpen ? 'open' : ''}><summary>確認用チェック項目を管理</summary>
+      <p class="small muted">確認用項目はシステムの判定に使いません。削除してもモック内では元に戻せます。</p>
+      <div class="row"><input id="custom-check-name" aria-label="追加する確認用項目名" placeholder="例：連絡済み" maxlength="20">${btn('項目を追加', 'addCustomCheck', 'primary')}</div>
+      ${customItems || '<p class="small muted">確認用項目はありません。</p>'}
+      ${archivedItems ? `<details><summary>削除した項目を戻す</summary>${archivedItems}</details>` : ''}
+    </details>
+    <div class="row"><label class="field">並べ替え<select data-sort><option value="seat" ${S.sort === 'seat' ? 'selected' : ''}>席番号</option>${checks.map(([key, label]) => `<option value="${key}" ${S.sort === key ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select></label>${btn(S.sortReverse ? '降順' : '昇順', 'sortReverse')}</div>
+    <div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${headers}<th>案内</th></tr></thead><tbody>${rowHtml}</tbody></table></div>
+    <div class="row">選択 ${S.selectedIds.size}件 <select id="bulk-field">${checks.map(([key, label]) => `<option value="${key}">${esc(label)}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div>
+  </div>`, '未入金のまま発行・送付した状態も確認できます。');
 }
 
 function staff() {
@@ -595,9 +624,69 @@ function handle(action) {
   if (action.startsWith('checkConfirm:')) {
     let [id, k] = action.slice(13).split(':');
     let p = S.people.find(x => x.id === +id);
+    if (!p || !Object.hasOwn(checkLabels, k)) return;
     p[k] = !p[k];
+    const saved = S.savedPeople.find(person => person.id === +id);
+    if (saved) saved[k] = p[k];
     S.modal = null;
     return toast(`${checkLabels[k]}を${p[k] ? '済み' : '未済み'}にしました`);
+  }
+  if (action.startsWith('saveCustomRename:')) {
+    const id = action.slice(17);
+    if (!S.customCheckIds.includes(id)) return;
+    const label = $('custom-check-rename')?.value.trim() || '';
+    if (!label || label.length > 20) return toast('項目名は1～20文字にしてください');
+    if (Object.entries(checkLabels).some(([key, value]) => key !== id && value === label)) return toast('同じ名前の項目があります');
+    checkLabels[id] = label;
+    S.customChecksOpen = true;
+    S.modal = null;
+    return render();
+  }
+  if (action.startsWith('renameCustom:')) {
+    const id = action.slice(13);
+    if (!S.customCheckIds.includes(id)) return;
+    S.customChecksOpen = true;
+    return openModal('確認用項目の名前を変更', `<label class="field">項目名<input id="custom-check-rename" value="${esc(checkLabels[id])}" maxlength="20"></label>`, [{ label: '変更する', action: `saveCustomRename:${id}`, style: 'primary' }, { label: '戻る', action: 'modalClose' }]);
+  }
+  if (action.startsWith('removeCustom:')) {
+    const id = action.slice(13);
+    if (!S.customCheckIds.includes(id)) return;
+    S.customChecksOpen = true;
+    return confirmAction('確認用項目を削除', `「${esc(checkLabels[id])}」を一覧から外します。モック内では元に戻せます。`, `removeCustomDo:${id}`);
+  }
+  if (action.startsWith('removeCustomDo:')) {
+    const id = action.slice(15);
+    if (!S.customCheckIds.includes(id)) return;
+    S.archivedCustomChecks.push({ id, label: checkLabels[id] });
+    S.customCheckIds = S.customCheckIds.filter(key => key !== id);
+    delete checkLabels[id];
+    if (S.sort === id) S.sort = 'seat';
+    S.customChecksOpen = true;
+    S.modal = null;
+    return render();
+  }
+  if (action.startsWith('restoreCustom:')) {
+    const id = action.slice(14);
+    const item = S.archivedCustomChecks.find(entry => entry.id === id);
+    if (!item) return;
+    if (Object.values(checkLabels).includes(item.label)) return toast('同じ名前の項目があります');
+    checkLabels[id] = item.label;
+    S.customCheckIds.push(id);
+    S.archivedCustomChecks = S.archivedCustomChecks.filter(entry => entry.id !== id);
+    S.customChecksOpen = true;
+    return render();
+  }
+  if (action.startsWith('bulkDo:')) {
+    const key = action.slice(7);
+    if (!Object.hasOwn(checkLabels, key)) return;
+    S.selectedIds.forEach(id => {
+      const person = S.people.find(p => p.id === id);
+      if (person) person[key] = true;
+      const saved = S.savedPeople.find(p => p.id === id);
+      if (saved) saved[key] = true;
+    });
+    S.modal = null;
+    return toast(`${checkLabels[key]}を更新しました`);
   }
   switch (action) {
     case 'menuOpen':
@@ -608,6 +697,19 @@ function handle(action) {
       S.drawerOpen = false;
       render();
       return document.querySelector('.menu-toggle')?.focus();
+
+    case 'addCustomCheck': {
+      const label = $('custom-check-name')?.value.trim() || '';
+      if (!label || label.length > 20) return toast('項目名は1～20文字にしてください');
+      if (Object.values(checkLabels).includes(label)) return toast('同じ名前の項目があります');
+      const id = `custom${S.nextCustomCheckId++}`;
+      checkLabels[id] = label;
+      S.customCheckIds.push(id);
+      S.people.forEach(person => person[id] = false);
+      S.savedPeople.forEach(person => person[id] = false);
+      S.customChecksOpen = true;
+      return render();
+    }
 
     case 'sample500': {
       const nextId = Math.max(...S.people.map(p => p.id)) + 1;
@@ -784,20 +886,10 @@ function handle(action) {
     case 'bulk':
       {
         let k = $('bulk-field').value;
+        if (!Object.hasOwn(checkLabels, k)) return;
         if (!S.selectedIds.size) return toast('対象を選択してください');
         if (k === 'issued' && [...S.selectedIds].some(id => !S.people.find(p => p.id === id).seat)) return toast('席未割当の方には発行できません');
-        return confirmAction('一斉チェック', `対象 ${S.selectedIds.size}件の「${checkLabels[k]}」を済みにします。`, `bulkDo:${k}`);
-      }
-
-    case 'bulkDo:contact':
-    case 'bulkDo:payment':
-    case 'bulkDo:issued':
-    case 'bulkDo:delivered':
-      {
-        let k = action.slice(7);
-        S.selectedIds.forEach(id => S.people.find(p => p.id === id)[k] = true);
-        S.modal = null;
-        return toast(`${checkLabels[k]}を更新しました`);
+        return confirmAction('一斉チェック', `対象 ${S.selectedIds.size}件の「${esc(checkLabels[k])}」を済みにします。`, `bulkDo:${k}`);
       }
 
     case 'invite':
@@ -951,6 +1043,7 @@ document.addEventListener('click', e => {
   if (check) {
     let [id, k] = check.dataset.check.split(':'),
       p = S.people.find(x => x.id === +id);
+    if (!p || !Object.hasOwn(checkLabels, k)) return;
     if (k === 'issued' && !p.seat && !p.issued) return toast('席未割当の方には発行できません');
     return confirmAction(`${checkLabels[k]}を変更`, `${esc(p.name)} · ${p.seat || '席未割当'}：${p[k] ? '済み → 未済み' : '未済み → 済み'}。他のチェック項目は変更しません。`, `checkConfirm:${id}:${k}`);
   }
@@ -1004,7 +1097,10 @@ document.addEventListener('change', e => {
     render();
   }
   if (e.target.dataset.method) {
-    S.people.find(p => p.id === +e.target.dataset.method).method = e.target.value;
+    const id = +e.target.dataset.method;
+    S.people.find(p => p.id === id).method = e.target.value;
+    const saved = S.savedPeople.find(p => p.id === id);
+    if (saved) saved.method = e.target.value;
     toast('交付方法を変更しました（模擬）');
   }
   if (e.target.dataset.select) {
@@ -1013,6 +1109,10 @@ document.addEventListener('change', e => {
     render();
   }
 });
+
+document.addEventListener('toggle', e => {
+  if (e.target.matches('.custom-checks')) S.customChecksOpen = e.target.open;
+}, true);
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && S.drawerOpen) handle('menuClose');

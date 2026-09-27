@@ -368,8 +368,40 @@ h3 {
   color:#48635b;
   background:#f5f8f5
 }
+.table th.system-check-head {
+  background:#d6ebe3;
+  color:#164d40
+}
+.system-check-head small {
+  display:block;
+  font-weight:700
+}
+.system-check-button.secondary {
+  border:2px solid #27745f;
+  color:#145443;
+  background:#f0f8f3
+}
+.system-check-button.pill {
+  border:2px solid #145443;
+  color:#fff;
+  background:#176b51
+}
 .table button {
   min-height:38px
+}
+.custom-checks {
+  padding:12px;
+  border:1px solid #c8d7cf;
+  border-radius:9px
+}
+.custom-checks>.row,.custom-checks>details,.custom-checks>.small {
+  margin-top:10px
+}
+.custom-checks input {
+  width:min(100%,320px);
+  padding:8px;
+  border:1px solid #b9cac2;
+  border-radius:8px
 }
 .table .inactive-row td,.table .inactive-row th.row-number {
   background:#e8ece9;
