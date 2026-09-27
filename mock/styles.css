@@ -321,6 +321,76 @@ h3 {
 .table button {
   min-height:38px
 }
+.people-toolbar {
+  position:sticky;
+  top:68px;
+  z-index:3;
+  display:grid;
+  gap:8px;
+  padding:8px 0;
+  background:#fff;
+  border-bottom:1px solid #dce4dc
+}
+.people-pages {
+  font-size:.84rem
+}
+.people-pages select {
+  min-height:38px;
+  margin-left:4px
+}
+.people-pages button {
+  min-height:38px;
+  padding:6px 10px
+}
+.people-table-viewport {
+  max-height:min(58vh,560px);
+  overflow-x:scroll;
+  overflow-y:auto;
+  scrollbar-gutter:stable;
+  border:1px solid #dce4dc;
+  border-radius:8px
+}
+.people-table {
+  min-width:580px;
+  table-layout:fixed
+}
+.people-table .buyer-col {width:38%}
+.people-table .label-col {width:24%}
+.people-table .seat-col {width:19%}
+.people-table .note-col {width:19%}
+.people-table th,.people-table td {
+  padding:6px 8px
+}
+.people-table thead th {
+  position:sticky;
+  top:0;
+  z-index:1
+}
+.buyer-name {
+  display:block;
+  width:100%;
+  max-width:220px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:left;
+  color:#086e60;
+  background:transparent;
+  border:0;
+  padding:6px 0;
+  text-decoration:underline
+}
+.seat-label-input {
+  width:7.5em;
+  max-width:100%;
+  padding:7px;
+  border:1px solid #b9cac2;
+  border-radius:8px
+}
+.full-name {
+  overflow-wrap:anywhere;
+  white-space:normal
+}
 .checks {
   display:flex;
   gap:12px;
@@ -621,6 +691,9 @@ h3 {
 }
 .grid,.grid.two,.formgrid,.stage {
   grid-template-columns:1fr
+}
+.people-toolbar {
+  top:62px
 }
 .stage>.settings-card,.stage>.selection-strip,.stage>.canvas-card {
   grid-column:1;
