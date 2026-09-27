@@ -196,7 +196,7 @@ function people() {
   const rows = S.people.slice(start, start + S.peoplePageSize);
   const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="${name}" aria-label="購入者名 ${name} を全文表示">${name}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.id === 1 ? '要確認' : '－'}</td></tr>`;
+    return `<tr><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.id === 1 ? '要確認' : '－'}</td></tr>`;
   }).join('');
 
   return page('来場者管理', `
@@ -509,7 +509,18 @@ function handle(action) {
   if (screens[action] && action !== 'messages') return go(action);
   if (action.startsWith('showBuyer:')) {
     const buyer = S.people.find(p => p.id === +action.slice(10));
-    if (buyer) return openModal('購入者名', `<p class="full-name">${esc(buyer.name)}</p>`, [{ label: '閉じる', action: 'modalClose' }]);
+    if (buyer) {
+      const number = S.people.indexOf(buyer) + 1;
+      const details = [
+        ['番号', number],
+        ['購入者名', buyer.name],
+        ['座席表示名', buyer.label],
+        ['席番号', buyer.seat || '未配置'],
+        ['案内', buyer.id === 1 ? '要確認' : '－']
+      ];
+      const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
+      return openModal('来場者情報', body, [{ label: '閉じる', action: 'modalClose' }]);
+    }
     return;
   }
   if (action.startsWith('scan:')) {
