@@ -371,6 +371,18 @@ h3 {
 .table button {
   min-height:38px
 }
+.table .inactive-row td,.table .inactive-row th.row-number {
+  background:#e8ece9;
+  color:#52645e
+}
+.table .inactive-row .buyer-name {
+  color:#52645e
+}
+.participation-toggle {
+  display:block;
+  padding:4px 0;
+  text-align:left
+}
 .people-toolbar {
   position:sticky;
   top:68px;
@@ -421,6 +433,9 @@ h3 {
   background:#fff;
   font-size:.84rem;
   font-variant-numeric:tabular-nums
+}
+.people-table tbody .inactive-row .row-number {
+  background:#e8ece9
 }
 .people-table thead th {
   position:sticky;
