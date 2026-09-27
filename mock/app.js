@@ -195,7 +195,7 @@ function seatTiles() {
 }
 
 function canvas() {
-  return `<div class="canvas-outer" id="canvas">${seatTiles()}</div><div class="row" style="margin-top:9px">${btn('－', 'zoomOut')}${btn('＋', 'zoomIn')}${btn('現在区画へ戻る', 'resetCanvas')}${btn('選択席へ戻る', 'focusSeat')}</div>`;
+  return `<div class="canvas-outer" id="canvas"><div class="seatmap-extent">${seatTiles()}</div></div><div class="row" style="margin-top:9px">${btn('－', 'zoomOut')}${btn('＋', 'zoomIn')}${btn('標準倍率で左上へ', 'resetCanvas')}${btn('選択席へ戻る', 'focusSeat')}</div>`;
 }
 
 function seats() {
@@ -306,10 +306,35 @@ function modal() {
   return `<div class="modalwrap"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><h2 id="modal-title">${esc(m.title)}</h2><div>${m.body}</div><div class="row">${m.buttons.map(b => btn(b.label, b.action, b.style || 'secondary')).join('')}</div></section></div>`;
 }
 
+function sizeCanvas() {
+  const canvas = $('canvas');
+  const map = canvas?.querySelector('.seatmap');
+  const extent = canvas?.querySelector('.seatmap-extent');
+  if (!map || !extent) return;
+
+  extent.style.width = `${map.offsetWidth * S.zoom}px`;
+  extent.style.height = `${map.offsetHeight * S.zoom}px`;
+}
+
+function focusSelectedSeat() {
+  const canvas = $('canvas');
+  const seat = canvas?.querySelector('.seat.selected');
+  if (!seat) return;
+
+  const viewport = canvas.getBoundingClientRect();
+  const selected = seat.getBoundingClientRect();
+  canvas.scrollTo({
+    left: canvas.scrollLeft + selected.left - viewport.left - (canvas.clientWidth - selected.width) / 2,
+    top: canvas.scrollTop + selected.top - viewport.top - (canvas.clientHeight - selected.height) / 2,
+    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+  });
+}
+
 // S の現在値から画面を組み立て直す。操作後の再表示はここに集約する。
 function render() {
   document.title = `${screens[S.screen]} · UIモック`;
   $('app').innerHTML = `<div class="shell">${nav()}<main class="main">${header()}<div class="content">${body()}</div></main></div>${modal()}${S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''}`;
+  sizeCanvas();
   if (S.modal) document.querySelector('.modal button')?.focus();
 }
 
@@ -538,18 +563,11 @@ function handle(action) {
 
     case 'resetCanvas':
       S.zoom = 1;
-      return render();
+      render();
+      return $('canvas')?.scrollTo({ left: 0, top: 0 });
 
     case 'focusSeat':
-      {
-        let el = $('canvas');
-        if (el) el.scrollTo({
-          left: 300,
-          top: 70,
-          behavior: 'smooth'
-        });
-        return;
-      }
+      return focusSelectedSeat();
 
     case 'panelPosition':
       S.panelBottom = !S.panelBottom;
@@ -742,8 +760,12 @@ function handle(action) {
 document.addEventListener('click', e => {
   let seat = e.target.closest('[data-seat]');
   if (seat) {
+    const canvas = $('canvas');
+    const scrollLeft = canvas?.scrollLeft ?? 0;
+    const scrollTop = canvas?.scrollTop ?? 0;
     S.seat = seat.dataset.seat;
-    return render();
+    render();
+    return $('canvas')?.scrollTo({ left: scrollLeft, top: scrollTop });
   }
 
   let screen = e.target.closest('[data-screen]');
