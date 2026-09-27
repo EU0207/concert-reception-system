@@ -205,7 +205,7 @@ function canvas() {
 }
 
 function seats() {
-  return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span>${editStatus()}</div><section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `<label class="field">区画<select><option>1階 A列</option></select></label><div class="row">${btn('欠番にする', 'makeGap')}${btn('空間を追加', 'makeSpace')}</div><div class="row">${btn('下書きを保存', 'saveDraft', 'primary')}${btn('編集内容を確定', 'confirmFinalize')}</div><div class="row">${btn('共有先の版変更を再現', 'simulateConflict')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, 'キャンバスを縦横に動かし、席を選択してください。');
+  return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span>${editStatus()}</div><section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `<label class="field">区画<select><option>1階 A列</option></select></label><div class="row">${btn('欠番にする', 'makeGap')}${btn('空間を追加', 'makeSpace')}</div><div class="row">${btn('下書きを保存', 'saveDraft', 'primary')}${btn('編集内容を確定', 'confirmFinalize')}</div><details><summary>保存エラーを試す（モック専用）</summary><p class="small muted">他の人が先に保存した状態を作ります。その後「下書きを保存」を押すと、保存できない場合の案内を確認できます。実際の共有先は変更しません。</p>${btn('他の人が先に保存した状態にする', 'simulateConflict')}</details><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, 'キャンバスを縦横に動かし、席を選択してください。');
 }
 
 function placement() {
@@ -400,8 +400,8 @@ function go(target, force = false, fromBrowser = false) {
 // 保存済みの写しを更新する。版競合の模擬状態では入力を保持して移動を止める。
 function save() {
   if (S.conflict) {
-    openModal('版競合が発生しました', `<p>共有先は版 ${S.version + 1} です。入力内容は画面内に保持しています。確認後、再度保存してください。</p>`, [{
-      label: '現在の版を確認',
+    openModal('他の人が先に保存したため、保存できません', `<p>共有先は版 ${S.version + 1} です。この画面の編集内容は残っています。保存エラーの再現を解除し、内容を見直してから保存してください。</p>`, [{
+      label: '再現を解除する',
       action: 'resolveConflict',
       style: 'primary'
     }, {
@@ -537,13 +537,13 @@ function handle(action) {
     case 'simulateConflict':
       S.conflict = true;
       S.dirty = true;
-      return toast('共有先の版が進んだ状態を再現しました');
+      return toast('他の人が先に保存した状態にしました。「下書きを保存」でエラーを確認できます');
 
     case 'resolveConflict':
       S.version++;
       S.conflict = false;
       S.modal = null;
-      return toast('現在の版を確認しました。入力を見直して保存してください');
+      return toast('保存エラーの再現を解除しました。編集内容を見直して保存してください');
 
     case 'switchShow':
       return confirmAction('公演を切り替える', `現在：${esc(S.form.title)}（未送信 ${S.unsent}件）／切替先：秋のコンサート 2日目（未送信 0件）。現在公演の記録は保持します。`, `switchDo`);
