@@ -194,9 +194,9 @@ function people() {
   S.peoplePage = currentPage;
   const start = (currentPage - 1) * S.peoplePageSize;
   const rows = S.people.slice(start, start + S.peoplePageSize);
-  const rowHtml = rows.map(p => {
+  const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="${name}" aria-label="購入者名 ${name} を全文表示">${name}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.id === 1 ? '要確認' : '－'}</td></tr>`;
+    return `<tr><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="${name}" aria-label="購入者名 ${name} を全文表示">${name}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.id === 1 ? '要確認' : '－'}</td></tr>`;
   }).join('');
 
   return page('来場者管理', `
@@ -221,8 +221,8 @@ function people() {
       </div>
       <div class="people-table-viewport" data-page="${currentPage}" data-page-size="${S.peoplePageSize}" role="region" aria-label="来場者一覧。横方向にもスクロールできます" tabindex="0">
         <table class="table people-table">
-          <colgroup><col class="buyer-col"><col class="label-col"><col class="seat-col"><col class="note-col"></colgroup>
-          <thead><tr><th>購入者名</th><th>座席表示名</th><th>席番号</th><th>案内</th></tr></thead>
+          <colgroup><col class="number-col"><col class="buyer-col"><col class="label-col"><col class="seat-col"><col class="note-col"></colgroup>
+          <thead><tr><th scope="col">番号</th><th scope="col">購入者名</th><th scope="col">座席表示名</th><th scope="col">席番号</th><th scope="col">案内</th></tr></thead>
           <tbody>${rowHtml}</tbody>
         </table>
       </div>

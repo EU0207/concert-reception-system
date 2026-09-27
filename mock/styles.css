@@ -354,15 +354,23 @@ h3 {
   border-radius:8px
 }
 .people-table {
-  min-width:580px;
+  min-width:600px;
   table-layout:fixed
 }
-.people-table .buyer-col {width:38%}
+.people-table .number-col {width:8%}
+.people-table .buyer-col {width:34%}
 .people-table .label-col {width:24%}
-.people-table .seat-col {width:19%}
-.people-table .note-col {width:19%}
+.people-table .seat-col {width:17%}
+.people-table .note-col {width:17%}
 .people-table th,.people-table td {
   padding:6px 8px
+}
+.people-table tbody .row-number {
+  text-align:right;
+  color:#526965;
+  background:#fff;
+  font-size:.84rem;
+  font-variant-numeric:tabular-nums
 }
 .people-table thead th {
   position:sticky;
