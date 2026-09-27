@@ -45,6 +45,7 @@ const initialPeople = [{
 const S = {
   screen: 'home',
   history: [],
+  drawerOpen: false,
   role: '主担当',
   online: true,
   unread: 3,
@@ -146,13 +147,23 @@ function toast(message) {
 function header() {
   let day = dayScreens.has(S.screen),
     back = day && S.screen !== 'day';
-  return `<header class="top"><div class="top-left">${back ? `<button class="iconbtn" data-action="back" aria-label="前の画面へ戻る">←</button>` : ''}<div class="identity"><strong>${esc(S.form.title)}</strong>2027/10/10 · ${esc(S.role)}</div></div><div class="top-right">${day && S.screen !== 'result' ? `<button class="iconbtn" data-action="messages" aria-label="スタッフ連絡、未読${S.unread}件">♧${S.unread ? `<span class="badge">${S.unread > 9 ? '9+' : S.unread}</span>` : ''}</button>` : ''}<button class="iconbtn" data-action="connection" aria-label="通信状態を確認">${S.online ? '◉' : '⊘'}</button></div></header>`;
+  return `<header class="top"><div class="top-left"><button class="iconbtn menu-toggle" data-action="menuOpen" aria-label="メニューを開く" aria-controls="app-menu" aria-expanded="${S.drawerOpen}">☰</button>${back ? `<button class="iconbtn" data-action="back" aria-label="前の画面へ戻る">←</button>` : ''}<div class="identity"><strong>${esc(S.form.title)}</strong>2027/10/10 · ${esc(S.role)}</div></div><div class="top-right">${day && S.screen !== 'result' ? `<button class="iconbtn" data-action="messages" aria-label="スタッフ連絡、未読${S.unread}件">♧${S.unread ? `<span class="badge">${S.unread > 9 ? '9+' : S.unread}</span>` : ''}</button>` : ''}<button class="iconbtn" data-action="connection" aria-label="通信状態を確認">${S.online ? '◉' : '⊘'}</button></div></header>`;
 }
 
 function nav() {
   let admin = ['主担当', '代理管理者'].includes(S.role);
   let groups = admin ? [['公演準備', ['home', 'prep', 'people', 'seats', 'placement', 'tickets']], ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]] : [['担当公演', ['home', 'device', 'day', 'venue', ...(S.role === '臨時管理者' ? ['management'] : [])]]];
-  return `<aside class="side"><div class="brand">受付システム <small>操作確認用 UIモック</small></div><nav>${groups.map(([g, ids]) => `<span class="group">${g}</span>${ids.map(id => `<button data-screen="${id}" class="${S.screen === id ? 'active' : ''}" ${S.screen === id ? 'aria-current="page"' : ''}>${screens[id]}</button>`).join('')}`).join('')}</nav></aside>`;
+  return `<aside class="side ${S.drawerOpen ? 'open' : ''}" id="app-menu" aria-label="画面メニュー"><div class="side-heading"><div class="brand">受付システム <small>操作確認用 UIモック</small></div><button class="iconbtn menu-close" data-action="menuClose" aria-label="メニューを閉じる">×</button></div><nav>${groups.map(([g, ids]) => `<span class="group">${g}</span>${ids.map(id => `<button data-screen="${id}" class="${S.screen === id ? 'active' : ''}" ${S.screen === id ? 'aria-current="page"' : ''}>${screens[id]}</button>`).join('')}`).join('')}</nav></aside>`;
+}
+
+function backTarget() {
+  return S.screen === 'camera' ? 'day' : S.history.at(-1) || 'day';
+}
+
+function breadcrumb() {
+  if (!dayScreens.has(S.screen) || S.screen === 'day') return '';
+  const target = backTarget();
+  return `<nav class="breadcrumbs" aria-label="現在位置"><button data-action="back">${esc(screens[target])}</button><span aria-hidden="true">›</span><span aria-current="page">${esc(screens[S.screen])}</span></nav>`;
 }
 
 function page(title, body, subtitle = '', actions = '') {
@@ -395,14 +406,17 @@ function render() {
   const previousTable = document.querySelector('.people-table-viewport');
   const previousTablePosition = S.screen === 'people' && previousTable?.dataset.page === String(S.peoplePage) && previousTable.dataset.pageSize === String(S.peoplePageSize) ? { left: previousTable.scrollLeft, top: previousTable.scrollTop } : null;
   document.title = `${screens[S.screen]} · UIモック`;
-  $('app').innerHTML = `<div class="shell">${nav()}<main class="main">${header()}<div class="content">${body()}</div></main></div>${modal()}${S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''}`;
+  $('app').innerHTML = `<div class="shell">${nav()}<main class="main" ${S.drawerOpen ? 'inert' : ''}>${header()}<div class="content">${breadcrumb()}${body()}</div></main></div>${S.drawerOpen ? '<button class="drawer-backdrop" data-action="menuClose" tabindex="-1" aria-label="メニューを閉じる"></button>' : ''}${modal()}${S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''}`;
+  document.body.classList.toggle('menu-open', S.drawerOpen);
   sizeCanvas();
   if (previousPosition) $('canvas')?.scrollTo(previousPosition);
   if (previousTablePosition) document.querySelector('.people-table-viewport')?.scrollTo(previousTablePosition);
   if (S.modal) document.querySelector('.modal button')?.focus();
+  else if (S.drawerOpen) document.querySelector('.menu-close')?.focus();
 }
 
 function openModal(title, body, buttons) {
+  S.drawerOpen = false;
   S.modal = {
     title,
     body,
@@ -417,7 +431,8 @@ function closeModal() {
 }
 
 // 画面移動の入口。未保存の編集があれば、移動前に扱いを選んでもらう。
-function go(target, force = false, fromBrowser = false) {
+function go(target, force = false, fromBrowser = false, recordHistory = true) {
+  S.drawerOpen = false;
   if (S.dirty && !force && editable.has(S.screen) && target !== S.screen) {
     openModal('変更が保存されていません', '<p>この画面で変更した内容があります。</p>', [{
       label: '保存して移動',
@@ -442,7 +457,7 @@ function go(target, force = false, fromBrowser = false) {
   if (target === 'camera') S.camera = true;
 
   if (target !== S.screen) {
-    S.history.push(S.screen);
+    if (recordHistory) S.history.push(S.screen);
     if (!fromBrowser) window.history.pushState({
       screen: target
     }, '', `#${target}`);
@@ -548,6 +563,15 @@ function handle(action) {
     return toast(`${checkLabels[k]}を${p[k] ? '済み' : '未済み'}にしました`);
   }
   switch (action) {
+    case 'menuOpen':
+      S.drawerOpen = true;
+      return render();
+
+    case 'menuClose':
+      S.drawerOpen = false;
+      render();
+      return document.querySelector('.menu-toggle')?.focus();
+
     case 'sample500': {
       const nextId = Math.max(...S.people.map(p => p.id)) + 1;
       const missing = 500 - S.people.length;
@@ -580,7 +604,11 @@ function handle(action) {
       return closeModal();
 
     case 'back':
-      return go(S.history.pop() || 'day');
+      {
+        const target = backTarget();
+        S.history.pop();
+        return go(target, false, false, false);
+      }
 
     case 'connection':
       return openModal('通信状態', `<p>${S.online ? '◉ オンライン' : '⊘ オフライン'}</p><p>未送信 ${S.unsent}件。${S.online ? '共有先へ接続中' : '受付記録はこの端末に保存する想定です。'}</p><p>表示確認用：実際の通信・保存はありません。</p>`, [{
@@ -943,6 +971,17 @@ document.addEventListener('change', e => {
   if (e.target.dataset.select) {
     let id = +e.target.dataset.select;
     e.target.checked ? S.selectedIds.add(id) : S.selectedIds.delete(id);
+    render();
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && S.drawerOpen) handle('menuClose');
+});
+
+window.addEventListener('resize', () => {
+  if (S.drawerOpen && window.innerWidth > 900) {
+    S.drawerOpen = false;
     render();
   }
 });
