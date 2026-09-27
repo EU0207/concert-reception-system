@@ -4,6 +4,7 @@ const initialPeople = [{
   name: '架空 太郎',
   label: '架空A',
   seat: 'A-12',
+  note: '受付時に案内事項を確認する（架空の例）',
   method: '電子チケット',
   purchase: true,
   payment: false,
@@ -14,6 +15,7 @@ const initialPeople = [{
   name: '見本 花子',
   label: '見本B',
   seat: '',
+  note: '',
   method: '未選択',
   purchase: true,
   payment: false,
@@ -24,6 +26,7 @@ const initialPeople = [{
   name: '例示 三郎',
   label: '例示C',
   seat: 'A-14',
+  note: '',
   method: '紙チケット',
   purchase: true,
   payment: true,
@@ -34,6 +37,7 @@ const initialPeople = [{
   name: '架空 四郎',
   label: '架空D',
   seat: '',
+  note: '',
   method: '電子チケット',
   purchase: false,
   payment: false,
@@ -207,7 +211,7 @@ function people() {
   const rows = S.people.slice(start, start + S.peoplePageSize);
   const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.id === 1 ? '要確認' : '－'}</td></tr>`;
+    return `<tr><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.note ? '要確認' : '－'}</td></tr>`;
   }).join('');
 
   return page('来場者管理', `
@@ -290,7 +294,7 @@ function tickets() {
   return page('チケット準備', `<div class="card stack"><div class="row"><label class="field">並べ替え<select data-sort>${Object.entries({
     seat: '席番号',
     ...checkLabels
-  }).map(([k, v]) => `<option value="${k}" ${S.sort === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>${btn(S.sortReverse ? '降順' : '昇順', 'sortReverse')}</div><div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${Object.values(checkLabels).map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${a.map(p => `<tr><td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td><td>${esc(p.name)}</td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>${Object.keys(checkLabels).map(k => `<td><button class="${p[k] ? 'pill' : 'secondary'}" data-check="${p.id}:${k}">${p[k] ? '✓ 済' : '□ 未'}</button></td>`).join('')}</tr>`).join('')}</tbody></table></div><div class="row">選択 ${S.selectedIds.size}件 <select id="bulk-field">${Object.entries(checkLabels).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div><div class="notice">4項目は独立しています。チェック操作で決済、発送、メール送信は行いません。</div></div>`, '未入金のまま発行・交付した状態も確認できます。');
+  }).map(([k, v]) => `<option value="${k}" ${S.sort === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>${btn(S.sortReverse ? '降順' : '昇順', 'sortReverse')}</div><div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${Object.values(checkLabels).map(x => `<th>${x}</th>`).join('')}<th>案内</th></tr></thead><tbody>${a.map(p => `<tr><td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td><td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}</td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>${Object.keys(checkLabels).map(k => `<td><button class="${p[k] ? 'pill' : 'secondary'}" data-check="${p.id}:${k}">${p[k] ? '✓ 済' : '□ 未'}</button></td>`).join('')}<td>${p.note ? `<button class="textbtn" data-action="showTicketPerson:${p.id}">要確認</button>` : '－'}</td></tr>`).join('')}</tbody></table></div><div class="row">選択 ${S.selectedIds.size}件 <select id="bulk-field">${Object.entries(checkLabels).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div><div class="notice">4項目は独立しています。チェック操作で決済、発送、メール送信は行いません。</div></div>`, '未入金のまま発行・交付した状態も確認できます。');
 }
 
 function staff() {
@@ -531,12 +535,25 @@ function handle(action) {
         ['購入者名', buyer.name],
         ['座席表示名', buyer.label],
         ['席番号', buyer.seat || '未配置'],
-        ['案内', buyer.id === 1 ? '要確認' : '－']
+        ['案内', buyer.note || '－']
       ];
       const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
       return openModal('来場者情報', body, [{ label: '閉じる', action: 'modalClose' }]);
     }
     return;
+  }
+  if (action.startsWith('showTicketPerson:')) {
+    const person = S.people.find(p => p.id === +action.slice(17));
+    if (!person) return;
+    const details = [
+      ['購入者名', person.name],
+      ['席番号', person.seat || '未配置'],
+      ['交付方法', person.method],
+      ...Object.entries(checkLabels).map(([key, label]) => [label, person[key] ? '済み' : '未済み']),
+      ['案内・例外情報', person.note || 'なし']
+    ];
+    const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
+    return openModal('チケット準備の詳細', body, [{ label: '閉じる', action: 'modalClose' }]);
   }
   if (action.startsWith('scan:')) {
     if (S.noticeOpen) return toast('連絡を閉じてから読取りを再開してください');
@@ -581,6 +598,7 @@ function handle(action) {
         name: i === 0 ? '架空見本 長い購入者名の省略表示を確認するための架空の名前' : `架空購入者 ${String(nextId + i).padStart(3, '0')}`,
         label: `見本${i + 1}`,
         seat: '',
+        note: '',
         method: '未選択',
         purchase: false,
         payment: false,
