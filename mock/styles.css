@@ -410,11 +410,6 @@ h3 {
 .table .inactive-row .buyer-name {
   color:#52645e
 }
-.participation-toggle {
-  display:block;
-  padding:4px 0;
-  text-align:left
-}
 .people-toolbar {
   position:sticky;
   top:68px;

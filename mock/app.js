@@ -219,7 +219,7 @@ function people() {
   const rows = S.people.slice(start, start + S.peoplePageSize);
   const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}<button class="textbtn participation-toggle" data-action="toggleInactive:${p.id}">${p.inactive ? '来場予定に戻す' : '不参加にする'}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.note ? '要確認' : '－'}</td></tr>`;
+    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.note ? '要確認' : '－'}</td></tr>`;
   }).join('');
 
   return page('来場者管理', `
@@ -572,7 +572,10 @@ function handle(action) {
         ['案内', buyer.note || '－']
       ];
       const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
-      return openModal('来場者情報', body, [{ label: '閉じる', action: 'modalClose' }]);
+      return openModal('来場者情報', body, [
+        { label: '閉じる', action: 'modalClose' },
+        { label: buyer.inactive ? '来場予定に戻す' : '不参加にする', action: `toggleInactive:${buyer.id}` }
+      ]);
     }
     return;
   }
@@ -594,7 +597,10 @@ function handle(action) {
     const person = S.people.find(p => p.id === +action.slice(15));
     if (!person) return;
     const next = person.inactive ? '来場予定に戻す' : '不参加にする';
-    return confirmAction('来場予定を変更', `${esc(person.name)}を「${next}」にします。席配置と発行の記録は変更しません。`, `applyInactive:${person.id}`);
+    return openModal('来場予定を変更', `<p>${esc(person.name)}を「${next}」にします。席配置と発行の記録は変更しません。</p>`, [
+      { label: '詳細へ戻る', action: `showBuyer:${person.id}` },
+      { label: next, action: `applyInactive:${person.id}`, style: 'primary' }
+    ]);
   }
   if (action.startsWith('applyInactive:')) {
     const person = S.people.find(p => p.id === +action.slice(14));
