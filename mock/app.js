@@ -290,7 +290,7 @@ function placement() {
 
 const checkLabels = {
   contact: '連絡済み',
-  payment: '購入済み',
+  payment: '入金済み',
   issued: '発行済み',
   delivered: '送付済み'
 };
