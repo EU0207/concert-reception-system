@@ -56,6 +56,8 @@ const S = {
   version: 12,
   draftVersion: 12,
   people: structuredClone(initialPeople),
+  peoplePageSize: 50,
+  peoplePage: 1,
   seat: 'A-12',
   personToPlace: 2,
   zoom: 1,
@@ -65,6 +67,7 @@ const S = {
   sort: 'seat',
   sortReverse: false,
   panelBottom: false,
+  placementPanelBottom: false,
   panelCollapsed: false,
   camera: false,
   light: false,
@@ -185,7 +188,43 @@ function info() {
 }
 
 function people() {
-  return page('来場者管理', `<div class="card stack"><div class="notice">初回取込では席番号が空欄でも登録できます。未配置の方にはチケットとQRを発行できません。</div><div class="tablewrap"><table class="table"><thead><tr><th>購入者名</th><th>座席表示名</th><th>席番号</th><th>案内</th></tr></thead><tbody>${S.people.map(p => `<tr><td>${esc(p.name)}</td><td><input aria-label="${esc(p.name)}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.id === 1 ? '要確認' : '－'}</td></tr>`).join('')}</tbody></table></div>${status()}<div class="row">${btn('保存', 'save', 'primary')}${btn('席に配置する', 'placement')}</div></div>`, '購入者名と座席表示名を分けて確認します。');
+  const pageCount = Math.max(1, Math.ceil(S.people.length / S.peoplePageSize));
+  const currentPage = Math.min(S.peoplePage, pageCount);
+  S.peoplePage = currentPage;
+  const start = (currentPage - 1) * S.peoplePageSize;
+  const rows = S.people.slice(start, start + S.peoplePageSize);
+  const rowHtml = rows.map(p => {
+    const name = esc(p.name);
+    return `<tr><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="${name}" aria-label="購入者名 ${name} を全文表示">${name}</button></td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.id === 1 ? '要確認' : '－'}</td></tr>`;
+  }).join('');
+
+  return page('来場者管理', `
+    <div class="card stack people-card">
+      <div class="notice">初回取込では席番号が空欄でも登録できます。未配置の方にはチケットとQRを発行できません。</div>
+      <details>
+        <summary>大量の名簿を試す（モック専用）</summary>
+        <p class="small muted">架空の行を加えて500件にします。再読み込みで元に戻ります。</p>
+        ${btn('500件の表示を試す', 'sample500', 'secondary', S.people.length >= 500 ? 'disabled' : '')}
+      </details>
+      <div class="people-toolbar">
+        <div class="row people-pages">
+          <label>表示件数 <select data-people-size><option value="50" ${S.peoplePageSize === 50 ? 'selected' : ''}>50件</option><option value="100" ${S.peoplePageSize === 100 ? 'selected' : ''}>100件</option></select></label>
+          <span>${S.people.length ? start + 1 : 0}～${start + rows.length} / ${S.people.length}件</span>
+          ${btn('前へ', 'peoplePrev', 'secondary', currentPage === 1 ? 'disabled' : '')}
+          <span>${currentPage} / ${pageCount}ページ</span>
+          ${btn('次へ', 'peopleNext', 'secondary', currentPage === pageCount ? 'disabled' : '')}
+        </div>
+        <div class="row">${btn('保存', 'save', 'primary')}${btn('席に配置する', 'placement')}<div id="state-status">${editStatus()}</div></div>
+      </div>
+      <div class="people-table-viewport" data-page="${currentPage}" data-page-size="${S.peoplePageSize}" role="region" aria-label="来場者一覧。横方向にもスクロールできます" tabindex="0">
+        <table class="table people-table">
+          <colgroup><col class="buyer-col"><col class="label-col"><col class="seat-col"><col class="note-col"></colgroup>
+          <thead><tr><th>購入者名</th><th>座席表示名</th><th>席番号</th><th>案内</th></tr></thead>
+          <tbody>${rowHtml}</tbody>
+        </table>
+      </div>
+      <small class="muted">表は左右にスクロールできます。</small>
+    </div>`, '購入者名と座席表示名を分けて確認します。');
 }
 
 function seatTiles() {
@@ -218,7 +257,7 @@ function seats() {
 function placement() {
   let unplaced = S.people.filter(p => !p.seat);
   let selectedPerson = unplaced.find(p => p.id === S.personToPlace) || unplaced[0];
-  return page('お客様を席に配置', `<div class="stage"><section class="card stack settings-card"><h3>席未割当 ${unplaced.length}件</h3>${unplaced.length ? `<label class="field">配置する方<select id="person-to-place">${unplaced.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>すべて配置済みです。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div></section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
+  return page('お客様を席に配置', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><h3>席未割当 ${unplaced.length}件</h3>${unplaced.length ? `<label class="field">配置する方<select id="person-to-place">${unplaced.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>すべて配置済みです。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
 }
 
 const checkLabels = {
@@ -348,10 +387,13 @@ function focusSelectedSeat() {
 function render() {
   const previousCanvas = $('canvas');
   const previousPosition = previousCanvas?.dataset.canvasScreen === S.screen ? { left: previousCanvas.scrollLeft, top: previousCanvas.scrollTop } : null;
+  const previousTable = document.querySelector('.people-table-viewport');
+  const previousTablePosition = S.screen === 'people' && previousTable?.dataset.page === String(S.peoplePage) && previousTable.dataset.pageSize === String(S.peoplePageSize) ? { left: previousTable.scrollLeft, top: previousTable.scrollTop } : null;
   document.title = `${screens[S.screen]} · UIモック`;
   $('app').innerHTML = `<div class="shell">${nav()}<main class="main">${header()}<div class="content">${body()}</div></main></div>${modal()}${S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''}`;
   sizeCanvas();
   if (previousPosition) $('canvas')?.scrollTo(previousPosition);
+  if (previousTablePosition) document.querySelector('.people-table-viewport')?.scrollTo(previousTablePosition);
   if (S.modal) document.querySelector('.modal button')?.focus();
 }
 
@@ -460,6 +502,11 @@ function confirmAction(title, body, action, danger = false) {
 function handle(action) {
   if (!action) return;
   if (screens[action] && action !== 'messages') return go(action);
+  if (action.startsWith('showBuyer:')) {
+    const buyer = S.people.find(p => p.id === +action.slice(10));
+    if (buyer) return openModal('購入者名', `<p class="full-name">${esc(buyer.name)}</p>`, [{ label: '閉じる', action: 'modalClose' }]);
+    return;
+  }
   if (action.startsWith('scan:')) {
     if (S.noticeOpen) return toast('連絡を閉じてから読取りを再開してください');
     S.result = action.split(':')[1];
@@ -485,6 +532,34 @@ function handle(action) {
     return toast(`${checkLabels[k]}を${p[k] ? '済み' : '未済み'}にしました`);
   }
   switch (action) {
+    case 'sample500': {
+      const nextId = Math.max(...S.people.map(p => p.id)) + 1;
+      const missing = 500 - S.people.length;
+      if (missing <= 0) return;
+      S.people.push(...Array.from({ length: missing }, (_, i) => ({
+        id: nextId + i,
+        name: i === 0 ? '架空見本 長い購入者名の省略表示を確認するための架空の名前' : `架空購入者 ${String(nextId + i).padStart(3, '0')}`,
+        label: `見本${i + 1}`,
+        seat: '',
+        method: '未選択',
+        purchase: false,
+        payment: false,
+        issued: false,
+        delivered: false
+      })));
+      S.peoplePage = 1;
+      S.dirty = true;
+      return render();
+    }
+
+    case 'peoplePrev':
+      S.peoplePage = Math.max(1, S.peoplePage - 1);
+      return render();
+
+    case 'peopleNext':
+      S.peoplePage = Math.min(Math.max(1, Math.ceil(S.people.length / S.peoplePageSize)), S.peoplePage + 1);
+      return render();
+
     case 'modalClose':
       return closeModal();
 
@@ -587,7 +662,8 @@ function handle(action) {
       return focusSelectedSeat();
 
     case 'panelPosition':
-      S.panelBottom = !S.panelBottom;
+      if (S.screen === 'placement') S.placementPanelBottom = !S.placementPanelBottom;
+      else S.panelBottom = !S.panelBottom;
       return render();
 
     case 'panelCollapse':
@@ -816,6 +892,11 @@ document.addEventListener('input', e => {
 });
 
 document.addEventListener('change', e => {
+  if (e.target.dataset.peopleSize !== undefined) {
+    S.peoplePageSize = +e.target.value;
+    S.peoplePage = 1;
+    return render();
+  }
   if (e.target.id === 'person-to-place') {
     S.personToPlace = +e.target.value;
     $('selected-person-name').textContent = S.people.find(p => p.id === S.personToPlace)?.name || '対象なし';
