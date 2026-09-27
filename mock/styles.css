@@ -330,6 +330,28 @@ h3 {
 .tablewrap {
   overflow:auto
 }
+.people-table-viewport,.canvas-outer,.tablewrap {
+  scrollbar-color:#486d63 #e2ebe5;
+  scrollbar-width:auto
+}
+.people-table-viewport::-webkit-scrollbar,.canvas-outer::-webkit-scrollbar,.tablewrap::-webkit-scrollbar {
+  width:12px;
+  height:12px
+}
+.people-table-viewport::-webkit-scrollbar-track,.canvas-outer::-webkit-scrollbar-track,.tablewrap::-webkit-scrollbar-track {
+  background:#e2ebe5
+}
+.people-table-viewport::-webkit-scrollbar-thumb,.canvas-outer::-webkit-scrollbar-thumb,.tablewrap::-webkit-scrollbar-thumb {
+  background:#486d63;
+  border:2px solid #e2ebe5;
+  border-radius:8px
+}
+.people-table-viewport::-webkit-scrollbar-thumb:hover,.canvas-outer::-webkit-scrollbar-thumb:hover,.tablewrap::-webkit-scrollbar-thumb:hover {
+  background:#28574c
+}
+.people-table-viewport::-webkit-scrollbar-corner,.canvas-outer::-webkit-scrollbar-corner,.tablewrap::-webkit-scrollbar-corner {
+  background:#e2ebe5
+}
 .table {
   width:100%;
   border-collapse:collapse;
@@ -511,6 +533,7 @@ h3 {
 .canvas-outer {
   height:430px;
   overflow:auto;
+  scrollbar-gutter:stable;
   border:1px solid #bfd0c7;
   border-radius:12px;
   background:#edf3eb;
