@@ -89,9 +89,9 @@ const S = {
 S.savedForm = structuredClone(S.form);
 S.savedPeople = structuredClone(S.people);
 S.gapSeats = new Set();
-S.spaceSeats = new Set();
+S.spaceSeats = new Set(['A-21', 'A-39']);
 S.savedGapSeats = new Set();
-S.savedSpaceSeats = new Set();
+S.savedSpaceSeats = new Set(S.spaceSeats);
 
 const screens = {
   home: '公演一覧',
@@ -188,24 +188,25 @@ function seatTiles() {
     for (let c = 0; c < 8; c++) {
       let n = 10 + r * 8 + c,
         key = `A-${n}`;
-      if (r === 1 && c === 3 || r === 3 && c === 5 || S.spaceSeats.has(key)) {
-        tiles.push('<div class="gapcell">空間</div>');
+      let selected = S.seat === key;
+      let cellType = S.spaceSeats.has(key) ? '空間' : S.gapSeats.has(key) ? '欠番' : '';
+      if (cellType) {
+        tiles.push(S.screen === 'seats' ? `<button class="gapcell ${selected ? 'selected' : ''}" data-seat="${key}" aria-label="${cellType}セル ${key}">${cellType}</button>` : `<div class="gapcell">${cellType}</div>`);
         continue;
       }
       let p = S.people.find(x => x.seat === key);
-      let selected = S.seat === key;
-      tiles.push(`<button class="seat ${selected ? 'selected' : ''} ${p ? '' : 'empty'} ${S.arrived === key ? 'arrived' : ''}" data-seat="${key}" aria-label="席 ${key}${p ? ', ' + p.label : ''}"><strong>${key}</strong><span>${S.gapSeats.has(key) ? '欠番' : p ? esc(p.label) : '空席'}</span>${S.arrived === key ? '<span>✓ 来場済み</span>' : ''}</button>`);
+      tiles.push(`<button class="seat ${selected ? 'selected' : ''} ${p ? '' : 'empty'} ${S.arrived === key ? 'arrived' : ''}" data-seat="${key}" aria-label="席 ${key}${p ? ', ' + p.label : ''}"><strong>${key}</strong><span>${p ? esc(p.label) : '空席'}</span>${S.arrived === key ? '<span>✓ 来場済み</span>' : ''}</button>`);
     }
   }
   return `<div class="seatmap" style="transform:scale(${S.zoom})"><div class="stage-label">舞台</div>${tiles.join('')}</div>`;
 }
 
 function canvas() {
-  return `<div class="canvas-outer" id="canvas"><div class="seatmap-extent">${seatTiles()}</div></div><div class="row" style="margin-top:9px">${btn('－', 'zoomOut')}${btn('＋', 'zoomIn')}${btn('標準倍率で左上へ', 'resetCanvas')}${btn('選択席へ戻る', 'focusSeat')}</div>`;
+  return `<div class="canvas-outer" id="canvas" data-canvas-screen="${S.screen}"><div class="seatmap-extent">${seatTiles()}</div></div><div class="row" style="margin-top:9px">${btn('－', 'zoomOut')}${btn('＋', 'zoomIn')}${btn('標準倍率で左上へ', 'resetCanvas')}${btn('選択席へ戻る', 'focusSeat')}</div>`;
 }
 
 function seats() {
-  return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span>${editStatus()}</div><section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `<label class="field">区画<select><option>1階 A列</option></select></label><div class="row">${btn('欠番にする', 'makeGap')}${btn('空間を追加', 'makeSpace')}</div><div class="row">${btn('下書きを保存', 'saveDraft', 'primary')}${btn('編集内容を確定', 'confirmFinalize')}</div><details><summary>保存エラーを試す（モック専用）</summary><p class="small muted">他の人が先に保存した状態を作ります。その後「下書きを保存」を押すと、保存できない場合の案内を確認できます。実際の共有先は変更しません。</p>${btn('他の人が先に保存した状態にする', 'simulateConflict')}</details><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, 'キャンバスを縦横に動かし、席を選択してください。');
+  return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><div class="selection-strip"><span>選択 <strong>${esc(S.seat)}</strong></span><div class="seat-actions">${btn('席に', 'makeSeat')}${btn('欠番に', 'makeGap')}${btn('空間に', 'makeSpace')}</div>${editStatus()}</div><section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `<label class="field">区画<select><option>1階 A列</option></select></label><div class="row">${btn('下書きを保存', 'saveDraft', 'primary')}${btn('編集内容を確定', 'confirmFinalize')}</div><details><summary>保存エラーを試す（モック専用）</summary><p class="small muted">他の人が先に保存した状態を作ります。その後「下書きを保存」を押すと、保存できない場合の案内を確認できます。実際の共有先は変更しません。</p>${btn('他の人が先に保存した状態にする', 'simulateConflict')}</details><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, 'キャンバスを縦横に動かし、席を選択してください。');
 }
 
 function placement() {
@@ -325,7 +326,7 @@ function sizeCanvas() {
 
 function focusSelectedSeat() {
   const canvas = $('canvas');
-  const seat = canvas?.querySelector('.seat.selected');
+  const seat = canvas?.querySelector('[data-seat].selected');
   if (!seat) return;
 
   const viewport = canvas.getBoundingClientRect();
@@ -339,9 +340,12 @@ function focusSelectedSeat() {
 
 // S の現在値から画面を組み立て直す。操作後の再表示はここに集約する。
 function render() {
+  const previousCanvas = $('canvas');
+  const previousPosition = previousCanvas?.dataset.canvasScreen === S.screen ? { left: previousCanvas.scrollLeft, top: previousCanvas.scrollTop } : null;
   document.title = `${screens[S.screen]} · UIモック`;
   $('app').innerHTML = `<div class="shell">${nav()}<main class="main">${header()}<div class="content">${body()}</div></main></div>${modal()}${S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''}`;
   sizeCanvas();
+  if (previousPosition) $('canvas')?.scrollTo(previousPosition);
   if (S.modal) document.querySelector('.modal button')?.focus();
 }
 
@@ -584,20 +588,24 @@ function handle(action) {
       S.panelCollapsed = !S.panelCollapsed;
       return render();
 
+    case 'makeSeat':
     case 'makeGap':
     case 'makeSpace':
-      if (S.people.some(p => p.seat === S.seat)) return toast('配置済みの席は空間や欠番にできません');
+      if (action !== 'makeSeat' && S.people.some(p => p.seat === S.seat)) return toast('配置済みの席は空間や欠番にできません');
+      if (action === 'makeSeat' && !S.gapSeats.has(S.seat) && !S.spaceSeats.has(S.seat)) return toast('すでに席です');
       S.gapSeats.delete(S.seat);
       S.spaceSeats.delete(S.seat);
-      (action === 'makeGap' ? S.gapSeats : S.spaceSeats).add(S.seat);
+      if (action === 'makeGap') S.gapSeats.add(S.seat);
+      if (action === 'makeSpace') S.spaceSeats.add(S.seat);
       S.dirty = true;
-      return toast(`${S.seat}を${action === 'makeGap' ? '欠番' : '空間'}にしました`);
+      return toast(`${S.seat}を${action === 'makeGap' ? '欠番' : action === 'makeSpace' ? '空間' : '席'}にしました`);
 
     case 'place':
       {
         let id = +$('person-to-place')?.value,
           p = S.people.find(x => x.id === id);
         if (!p) return;
+        if (S.gapSeats.has(S.seat) || S.spaceSeats.has(S.seat)) return toast('配置できる席を選択してください');
         if (S.people.some(x => x.seat === S.seat)) return toast('この席には既に配置されています');
         p.seat = S.seat;
         S.dirty = true;
@@ -767,12 +775,8 @@ function handle(action) {
 document.addEventListener('click', e => {
   let seat = e.target.closest('[data-seat]');
   if (seat) {
-    const canvas = $('canvas');
-    const scrollLeft = canvas?.scrollLeft ?? 0;
-    const scrollTop = canvas?.scrollTop ?? 0;
     S.seat = seat.dataset.seat;
-    render();
-    return $('canvas')?.scrollTo({ left: scrollLeft, top: scrollTop });
+    return render();
   }
 
   let screen = e.target.closest('[data-screen]');
