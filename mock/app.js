@@ -57,6 +57,7 @@ const S = {
   draftVersion: 12,
   people: structuredClone(initialPeople),
   seat: 'A-12',
+  personToPlace: 2,
   zoom: 1,
   imageZoom: 1,
   imageIndex: 1,
@@ -147,7 +148,7 @@ function header() {
 function nav() {
   let admin = ['主担当', '代理管理者'].includes(S.role);
   let groups = admin ? [['公演準備', ['home', 'prep', 'people', 'seats', 'placement', 'tickets']], ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]] : [['担当公演', ['home', 'device', 'day', 'venue', ...(S.role === '臨時管理者' ? ['management'] : [])]]];
-  return `<aside class="side"><div class="brand">受付システム <small>操作確認用 UIモック</small></div><nav>${groups.map(([g, ids]) => `<span class="group">${g}</span>${ids.map(id => `<button data-screen="${id}" class="${S.screen === id ? 'active' : ''}">${screens[id]}</button>`).join('')}`).join('')}</nav></aside>`;
+  return `<aside class="side"><div class="brand">受付システム <small>操作確認用 UIモック</small></div><nav>${groups.map(([g, ids]) => `<span class="group">${g}</span>${ids.map(id => `<button data-screen="${id}" class="${S.screen === id ? 'active' : ''}" ${S.screen === id ? 'aria-current="page"' : ''}>${screens[id]}</button>`).join('')}`).join('')}</nav></aside>`;
 }
 
 function page(title, body, subtitle = '', actions = '') {
@@ -156,6 +157,11 @@ function page(title, body, subtitle = '', actions = '') {
 
 function status() {
   return `<div class="row" id="state-status"><span class="pill ${S.online ? '' : 'warn'}">${S.online ? '◉ オンライン' : '⊘ オフライン'}</span><span class="pill neutral">未送信 ${S.unsent}件</span>${S.dirty ? '<span class="pill warn">未保存</span>' : ''}${S.conflict ? '<span class="pill danger">版競合</span>' : ''}</div>`;
+}
+
+function editStatus() {
+  if (!S.dirty && !S.conflict) return '';
+  return `<div class="row">${S.dirty ? '<span class="pill warn">未保存</span>' : ''}${S.conflict ? '<span class="pill danger">版競合</span>' : ''}</div>`;
 }
 
 function home() {
@@ -199,12 +205,13 @@ function canvas() {
 }
 
 function seats() {
-  return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><section class="card stack"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `<label class="field">区画<select><option>1階 A列</option></select></label><p>選択中：<strong>${esc(S.seat)}</strong></p><div class="row">${btn('欠番にする', 'makeGap')}${btn('空間を追加', 'makeSpace')}</div><div class="row">${btn('下書きを保存', 'saveDraft', 'primary')}${btn('編集内容を確定', 'confirmFinalize')}</div><div class="row">${btn('共有先の版変更を再現', 'simulateConflict')}</div>${status()}<div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section><section class="card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, 'キャンバスを縦横に動かし、席を選択してください。');
+  return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span>${editStatus()}</div><section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `<label class="field">区画<select><option>1階 A列</option></select></label><div class="row">${btn('欠番にする', 'makeGap')}${btn('空間を追加', 'makeSpace')}</div><div class="row">${btn('下書きを保存', 'saveDraft', 'primary')}${btn('編集内容を確定', 'confirmFinalize')}</div><div class="row">${btn('共有先の版変更を再現', 'simulateConflict')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, 'キャンバスを縦横に動かし、席を選択してください。');
 }
 
 function placement() {
   let unplaced = S.people.filter(p => !p.seat);
-  return page('お客様を席に配置', `<div class="stage"><section class="card stack"><h3>席未割当 ${unplaced.length}件</h3>${unplaced.length ? `<label class="field">配置する方<select id="person-to-place">${unplaced.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>すべて配置済みです。</p>'}<div class="notice">選択席：${esc(S.seat)}</div><div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div>${status()}</section><section class="card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
+  let selectedPerson = unplaced.find(p => p.id === S.personToPlace) || unplaced[0];
+  return page('お客様を席に配置', `<div class="stage"><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card stack settings-card"><h3>席未割当 ${unplaced.length}件</h3>${unplaced.length ? `<label class="field">配置する方<select id="person-to-place">${unplaced.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>すべて配置済みです。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div></section><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
 }
 
 const checkLabels = {
@@ -799,6 +806,10 @@ document.addEventListener('input', e => {
 });
 
 document.addEventListener('change', e => {
+  if (e.target.id === 'person-to-place') {
+    S.personToPlace = +e.target.value;
+    $('selected-person-name').textContent = S.people.find(p => p.id === S.personToPlace)?.name || '対象なし';
+  }
   if (e.target.dataset.role !== undefined) {
     S.role = e.target.value;
     render();
