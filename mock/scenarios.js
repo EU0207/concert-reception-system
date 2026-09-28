@@ -219,7 +219,11 @@ staff = function () {
 };
 device = function () { return staff(); };
 const baseNav = nav;
-nav = function () { return baseNav().replace(/<button data-screen="device"[\s\S]*?<\/button>/, ''); };
+nav = function () {
+  const html = baseNav();
+  const link = html.includes('data-screen="staff"') ? '' : `<button data-screen="staff" class="${S.screen === 'staff' ? 'active' : ''}" ${S.screen === 'staff' ? 'aria-current="page"' : ''}>スタッフ・端末</button>`;
+  return html.replace(/<button data-screen="device"[\s\S]*?<\/button>/, link);
+};
 const baseVenue = venue;
 venue = function () { return baseVenue().replace(/<details open>[\s\S]*?<\/details>/, venueImage()); };
 management = function () {
