@@ -9,7 +9,9 @@
 | 前提 | [BD-03](offline-sync-conflict-design.md)の端末内原子的保存と、イベントIDによる冪等再送は承認済み |
 | 結論 | `CONF-057`を受け、復旧時に端末保存の状態を確認する。保存済み結果を確認するまで次の読取りを止める |
 | 関連ID | FB-11、REQ-F-008～REQ-F-010、REQ-NF-004、AC-004、AC-005、AC-011、AC-015、BD-03、BD-06、BD-09 |
-| 状態 | In Review |
+| 状態 | Approved |
+
+2026-09-28、[CONF-060](ui-mock-client-response.md#conf-060-追加修正変更の包括承認)でここまでの追加変更を包括承認として受領した。本書は[本番引継ぎ台帳](ui-mock-production-handoff.md)のMCT-11・MHD-04に対応する承認済み設計とする。詳細な保存形式と実装後試験は引き続き未完了である。
 
 2026-09-27、開発者から[依頼者回答`CONF-057`](ui-mock-client-response.md#conf-057-qr受付中断時の扱い)が伝達された。端末保存を前提とする復帰方法は開発側へ委ねられたため、本書の方法を[#92](https://github.com/EU0207/concert-reception-system/issues/92)の設計判断とする。実装済みまたは試験合格とは扱わない。
 
