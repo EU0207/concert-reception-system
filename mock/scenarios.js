@@ -13,7 +13,7 @@ function createLayout(sample = false) {
     type: sample && ![11, 29].includes(i) ? 'seat' : sample ? 'space' : 'unset',
     code: sample ? `A-${10 + i}` : ''
   }));
-  return { rows: 5, cols: 8, direction: 'horizontal', sample, cells,
+  return { rows: 5, cols: 8, direction: 'horizontal', reverse: false, sample, cells,
     names: Array.from({ length: 30 }, (_, i) => columnName(i)),
     starts: Array(30).fill(1), nextId: 40 };
 }
@@ -40,7 +40,7 @@ S.moveHistory = [];
 S.placementMode = 'place';
 S.imageOpen = false;
 function resetGridDraft() {
-  S.gridDraft = structuredClone({ rows: S.layout.rows, cols: S.layout.cols, direction: S.layout.direction, names: S.layout.names, starts: S.layout.sample ? Array(30).fill(10) : S.layout.starts });
+  S.gridDraft = structuredClone({ rows: S.layout.rows, cols: S.layout.cols, direction: S.layout.direction, reverse: S.layout.reverse, names: S.layout.names, starts: S.layout.sample ? Array(30).fill(10) : S.layout.starts });
   S.gridPending = false;
 }
 resetGridDraft();
@@ -65,6 +65,8 @@ function numberLayout(layout) {
     let number = layout.starts[group];
     const cells = layout.cells.filter(c => (layout.direction === 'horizontal' ? c.row : c.col) === group)
       .sort((a, b) => layout.direction === 'horizontal' ? a.col - b.col : a.row - b.row);
+    // 列名の並びは維持し、各列内の番号を振る順序だけを反転する。
+    if (layout.reverse) cells.reverse();
     for (const c of cells) c.code = ['seat', 'gap'].includes(c.type) ? `${layout.names[group]}-${number++}` : '';
   }
 }
@@ -141,7 +143,8 @@ seats = function () {
   return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `
     <div class="row">${btn('配置済みの例', 'scenario:sample', S.scenario === 'sample' ? 'primary' : '')}${btn('新規会場の例', 'scenario:new', S.scenario === 'new' ? 'primary' : '')}</div>
     <p class="small muted">ドラッグで移動。範囲選択は始点と終点を順にタップします。席・欠番だけが番号を消費します。</p>
-    <div class="row"><label class="field">縦<input id="grid-rows" type="number" min="1" max="30" value="${esc(d.rows)}"></label><label class="field">横<input id="grid-cols" type="number" min="1" max="30" value="${esc(d.cols)}"></label><label class="field">列の並び<select id="grid-direction"><option value="horizontal" ${d.direction === 'horizontal' ? 'selected' : ''}>横方向</option><option value="vertical" ${d.direction === 'vertical' ? 'selected' : ''}>縦方向</option></select></label></div>
+    <div class="row"><label class="field">縦<input id="grid-rows" type="number" min="1" max="30" value="${esc(d.rows)}"></label><label class="field">横<input id="grid-cols" type="number" min="1" max="30" value="${esc(d.cols)}"></label></div>
+    <div class="row numbering-settings"><label class="field">列の並び<select id="grid-direction"><option value="horizontal" ${d.direction === 'horizontal' ? 'selected' : ''}>横方向</option><option value="vertical" ${d.direction === 'vertical' ? 'selected' : ''}>縦方向</option></select></label><label class="field">席番の順序<select id="grid-order"><option value="forward" ${!d.reverse ? 'selected' : ''}>${d.direction === 'horizontal' ? '左から' : '上から'}</option><option value="reverse" ${d.reverse ? 'selected' : ''}>${d.direction === 'horizontal' ? '右から' : '下から'}</option></select></label></div>
     <details><summary>列名・開始番号（配置済みの例を変更すると全体を再採番）</summary><div class="column-settings">${Array.from({ length: Math.min(30, Math.max(0, groups)) }, (_, i) => `<label>${i + 1}列 <input data-column-name="${i}" value="${esc(d.names[i])}" aria-label="${i + 1}列の名前"><input data-column-start="${i}" type="number" min="1" value="${esc(d.starts[i])}" aria-label="${i + 1}列の開始番号"></label>`).join('')}</div></details>
     ${btn('設定を反映', 'gridSettings')}<div class="row">${btn('下書きを保存', 'saveDraft', 'primary draft-button')}${btn('編集内容を確定', 'confirmFinalize', 'primary')}${btn('保存状態に戻す', 'discardEditor')}</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section>
     <div class="selection-strip"><div class="selection-details"><span>選択 <strong>${esc(selectedCell()?.code || '未採番セル')}</strong></span><span class="pill neutral">${selectedCellState()}</span><span>${S.cells.size}セル</span><select data-selection-mode aria-label="選択方法"><option value="single" ${S.selectionMode === 'single' ? 'selected' : ''}>個別</option><option value="multiple" ${S.selectionMode === 'multiple' ? 'selected' : ''}>複数</option><option value="range" ${S.selectionMode === 'range' ? 'selected' : ''}>範囲（始点→終点）</option></select>${S.rangeStart ? '<small>終点を選んでください</small>' : ''}</div><div class="seat-actions">${Object.entries(cellTypes).map(([key, text]) => btn(`${text}に`, `cellType:${key}`)).join('')}</div>${editStatus()}</div><div class="seat-workspace"><section class="card reference-card">${venueImage()}<small class="muted">画像を見比べて配置できます。拡大後はドラッグ・スワイプで移動できます。</small></section><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div></div>`, '空の会場と配置済みの会場で編集を試せます。');
@@ -293,6 +296,7 @@ handle = function (action) {
     const rows = +$('grid-rows').value, cols = +$('grid-cols').value;
     if (![rows, cols].every(n => Number.isInteger(n) && n >= 1 && n <= 30)) return toast('縦横は1〜30の整数を指定してください');
     const l = structuredClone(S.layout); l.sample = false; l.rows = rows; l.cols = cols; l.direction = $('grid-direction').value;
+    l.reverse = $('grid-order').value === 'reverse';
     l.names = [...S.gridDraft.names]; l.starts = S.gridDraft.starts.map(Number);
     for (const input of document.querySelectorAll('[data-column-name]')) l.names[+input.dataset.columnName] = input.value.trim();
     for (const input of document.querySelectorAll('[data-column-start]')) l.starts[+input.dataset.columnStart] = +input.value;
@@ -419,6 +423,7 @@ document.addEventListener('click', e => {
 }, true);
 document.addEventListener('change', e => {
   if (e.target.id === 'grid-direction') { S.gridDraft.direction = e.target.value; S.gridPending = true; S.dirty = true; render(); }
+  if (e.target.id === 'grid-order') { S.gridDraft.reverse = e.target.value === 'reverse'; S.gridPending = true; S.dirty = true; render(); }
   if (e.target.dataset.method) {
     const p = S.savedEditor.people.find(p => p.id === +e.target.dataset.method);
     if (p) p.method = e.target.value;
