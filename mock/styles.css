@@ -963,11 +963,11 @@ h3 {
 .image-content { min-width: 100%; min-height: 100%; }
 .image-content svg { display: block; }
 .seat-workspace { grid-column: 2; grid-row: 2; display: grid; gap: 16px; min-width: 0; }
-.reference-card { min-width: 0; }
-.reference-card .image-pan { height: clamp(180px, 24vh, 280px); margin: 12px 0; }
+.selection-image { width: 100%; min-width: 0; }
+.selection-image .image-pan { height: clamp(180px, 24vh, 280px); margin: 12px 0; }
 .person-details dd { white-space: pre-wrap; }
 @media (min-width: 901px) {
-  .reference-card:has(details[open]) { position: sticky; top: 76px; z-index: 2; }
+  .stage > .selection-strip { position: sticky; top: 76px; z-index: 3; align-self: start; }
 }
 @media (max-width: 900px) {
   .stage > .seat-workspace { grid-column: 1; grid-row: auto; }
