@@ -66,7 +66,6 @@ const S = {
   draftVersion: 12,
   people: structuredClone(initialPeople),
   customCheckIds: ['contact'],
-  archivedCustomChecks: [],
   nextCustomCheckId: 1,
   customChecksOpen: false,
   peoplePageSize: 50,
@@ -314,15 +313,13 @@ function tickets() {
     <td>${p.note ? `<button class="textbtn" data-action="showTicketPerson:${p.id}">要確認</button>` : '－'}</td>
   </tr>`).join('');
   const customItems = S.customCheckIds.map(id => `<div class="row"><strong>${esc(checkLabels[id])}</strong>${btn('名前を変更', `renameCustom:${id}`)}${btn('削除', `removeCustom:${id}`)}</div>`).join('');
-  const archivedItems = S.archivedCustomChecks.map(item => `<div class="row"><span>${esc(item.label)}</span>${btn('戻す', `restoreCustom:${item.id}`)}</div>`).join('');
 
   return page('チケット準備', `<div class="card stack">
     <div class="notice">不参加の方はこの一覧から除外します。来場者管理で確認・復帰できます。緑色の「固定」項目は名前の変更・削除ができません。確認用項目は追加・変更・削除できます。チェック操作で決済・発送・送信は行いません。</div>
     <details class="custom-checks" ${S.customChecksOpen ? 'open' : ''}><summary>確認用チェック項目を管理</summary>
-      <p class="small muted">確認用項目はシステムの判定に使いません。削除してもモック内では元に戻せます。</p>
+      <p class="small muted">確認用項目はシステムの判定に使いません。</p>
       <div class="row"><input id="custom-check-name" aria-label="追加する確認用項目名" placeholder="例：連絡済み" maxlength="20">${btn('項目を追加', 'addCustomCheck', 'primary')}</div>
       ${customItems || '<p class="small muted">確認用項目はありません。</p>'}
-      ${archivedItems ? `<details><summary>削除した項目を戻す</summary>${archivedItems}</details>` : ''}
     </details>
     <div class="row"><label class="field">並べ替え<select data-sort><option value="seat" ${S.sort === 'seat' ? 'selected' : ''}>席番号</option>${checks.map(([key, label]) => `<option value="${key}" ${S.sort === key ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select></label>${btn(S.sortReverse ? '降順' : '昇順', 'sortReverse')}</div>
     <div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${headers}<th>案内</th></tr></thead><tbody>${rowHtml}</tbody></table></div>
@@ -703,28 +700,16 @@ function handle(action) {
     const id = action.slice(13);
     if (!S.customCheckIds.includes(id)) return;
     S.customChecksOpen = true;
-    return confirmAction('確認用項目を削除', `「${esc(checkLabels[id])}」を一覧から外します。モック内では元に戻せます。`, `removeCustomDo:${id}`);
+    return confirmAction('確認用項目を削除', `「${esc(checkLabels[id])}」を一覧から外します。この画面からは戻せません。`, `removeCustomDo:${id}`);
   }
   if (action.startsWith('removeCustomDo:')) {
     const id = action.slice(15);
     if (!S.customCheckIds.includes(id)) return;
-    S.archivedCustomChecks.push({ id, label: checkLabels[id] });
     S.customCheckIds = S.customCheckIds.filter(key => key !== id);
     delete checkLabels[id];
     if (S.sort === id) S.sort = 'seat';
     S.customChecksOpen = true;
     S.modal = null;
-    return render();
-  }
-  if (action.startsWith('restoreCustom:')) {
-    const id = action.slice(14);
-    const item = S.archivedCustomChecks.find(entry => entry.id === id);
-    if (!item) return;
-    if (Object.values(checkLabels).includes(item.label)) return toast('同じ名前の項目があります');
-    checkLabels[id] = item.label;
-    S.customCheckIds.push(id);
-    S.archivedCustomChecks = S.archivedCustomChecks.filter(entry => entry.id !== id);
-    S.customChecksOpen = true;
     return render();
   }
   if (action.startsWith('bulkDo:')) {
