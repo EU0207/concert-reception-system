@@ -126,14 +126,14 @@ selectedCellState = function () {
 
 seatTiles = function () {
   const l = S.layout;
-  return `<div class="seatmap editable-map" style="transform:scale(${S.zoom});grid-template-columns:repeat(${l.cols},82px);grid-template-rows:repeat(${l.rows},78px)">${l.cells.map(c => {
+  return `<div class="seatmap editable-map" style="transform:scale(${S.zoom});grid-template-columns:90px repeat(${l.cols},82px);grid-template-rows:repeat(${l.rows},78px)"><div class="stage-label" style="grid-row:1/${l.rows + 1};grid-column:1">舞台</div>${l.cells.map(c => {
     const p = S.people.find(p => p.seat && p.cellId === c.id);
-    return `<button class="seat cell-${c.type} ${S.cells.has(c.id) && S.screen === 'seats' || S.cell === c.id ? 'selected' : ''}" data-cell="${c.id}" data-seat="${esc(c.code)}" aria-label="${esc(c.code || `${c.row + 1}行${c.col + 1}列`)} ${cellTypes[c.type]}"><strong>${esc(c.code || cellTypes[c.type])}</strong><span>${p ? esc(p.label) : cellTypes[c.type]}</span></button>`;
+    return `<button class="seat cell-${c.type} ${S.cells.has(c.id) && S.screen === 'seats' || S.cell === c.id ? 'selected' : ''}" style="grid-column:${c.col + 2};grid-row:${c.row + 1}" data-cell="${c.id}" data-seat="${esc(c.code)}" aria-label="${esc(c.code || `${c.row + 1}行${c.col + 1}列`)} ${cellTypes[c.type]}"><strong>${esc(c.code || cellTypes[c.type])}</strong><span>${p ? esc(p.label) : cellTypes[c.type]}</span></button>`;
   }).join('')}</div>`;
 };
 
 function venueImage() {
-  return `<details data-venue-image ${S.imageOpen ? 'open' : ''}><summary>架空の会場画像</summary><div class="venue image-pan" data-pan><div style="width:${900 * S.imageZoom}px;height:${270 * S.imageZoom}px">${venueSvg()}</div></div><div class="row">${btn('画像 −', 'imageOut')}${btn('画像 ＋', 'imageIn')}${btn('前の画像', 'prevImage')}${btn('次の画像', 'nextImage')}<span>${S.imageIndex}/2</span></div></details>`;
+  return `<details data-venue-image ${S.imageOpen ? 'open' : ''}><summary>架空の会場画像</summary><div class="venue image-pan" data-pan><div class="image-content" style="width:${S.imageZoom * 100}%;height:${S.imageZoom * 100}%">${venueSvg()}</div></div><div class="row">${btn('画像 −', 'imageOut')}${btn('画像 ＋', 'imageIn')}${btn('前の画像', 'prevImage')}${btn('次の画像', 'nextImage')}<span>${S.imageIndex}/2</span></div></details>`;
 }
 
 seats = function () {
@@ -143,8 +143,8 @@ seats = function () {
     <p class="small muted">ドラッグで移動。範囲選択は始点と終点を順にタップします。席・欠番だけが番号を消費します。</p>
     <div class="row"><label class="field">縦<input id="grid-rows" type="number" min="1" max="30" value="${esc(d.rows)}"></label><label class="field">横<input id="grid-cols" type="number" min="1" max="30" value="${esc(d.cols)}"></label><label class="field">列の並び<select id="grid-direction"><option value="horizontal" ${d.direction === 'horizontal' ? 'selected' : ''}>横方向</option><option value="vertical" ${d.direction === 'vertical' ? 'selected' : ''}>縦方向</option></select></label></div>
     <details><summary>列名・開始番号（配置済みの例を変更すると全体を再採番）</summary><div class="column-settings">${Array.from({ length: Math.min(30, Math.max(0, groups)) }, (_, i) => `<label>${i + 1}列 <input data-column-name="${i}" value="${esc(d.names[i])}" aria-label="${i + 1}列の名前"><input data-column-start="${i}" type="number" min="1" value="${esc(d.starts[i])}" aria-label="${i + 1}列の開始番号"></label>`).join('')}</div></details>
-    ${btn('設定を反映', 'gridSettings')}${venueImage()}<div class="row">${btn('下書きを保存', 'saveDraft', 'primary draft-button')}${btn('編集内容を確定', 'confirmFinalize', 'primary')}${btn('保存状態に戻す', 'discardEditor')}</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section>
-    <div class="selection-strip"><div class="selection-details"><span>選択 <strong>${esc(selectedCell()?.code || '未採番セル')}</strong></span><span class="pill neutral">${selectedCellState()}</span><span>${S.cells.size}セル</span><select data-selection-mode aria-label="選択方法"><option value="single" ${S.selectionMode === 'single' ? 'selected' : ''}>個別</option><option value="multiple" ${S.selectionMode === 'multiple' ? 'selected' : ''}>複数</option><option value="range" ${S.selectionMode === 'range' ? 'selected' : ''}>範囲（始点→終点）</option></select>${S.rangeStart ? '<small>終点を選んでください</small>' : ''}</div><div class="seat-actions">${Object.entries(cellTypes).map(([key, text]) => btn(`${text}に`, `cellType:${key}`)).join('')}</div>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '空の会場と配置済みの会場で編集を試せます。');
+    ${btn('設定を反映', 'gridSettings')}<div class="row">${btn('下書きを保存', 'saveDraft', 'primary draft-button')}${btn('編集内容を確定', 'confirmFinalize', 'primary')}${btn('保存状態に戻す', 'discardEditor')}</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section>
+    <div class="selection-strip"><div class="selection-details"><span>選択 <strong>${esc(selectedCell()?.code || '未採番セル')}</strong></span><span class="pill neutral">${selectedCellState()}</span><span>${S.cells.size}セル</span><select data-selection-mode aria-label="選択方法"><option value="single" ${S.selectionMode === 'single' ? 'selected' : ''}>個別</option><option value="multiple" ${S.selectionMode === 'multiple' ? 'selected' : ''}>複数</option><option value="range" ${S.selectionMode === 'range' ? 'selected' : ''}>範囲（始点→終点）</option></select>${S.rangeStart ? '<small>終点を選んでください</small>' : ''}</div><div class="seat-actions">${Object.entries(cellTypes).map(([key, text]) => btn(`${text}に`, `cellType:${key}`)).join('')}</div>${editStatus()}</div><div class="seat-workspace"><section class="card reference-card">${venueImage()}<small class="muted">画像を見比べて配置できます。拡大後はドラッグ・スワイプで移動できます。</small></section><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div></div>`, '空の会場と配置済みの会場で編集を試せます。');
 };
 
 const baseSave = save;
@@ -160,7 +160,7 @@ resetDraft = function () {
     if (!selectedCell()) S.cell = S.layout.cells[0].id;
     S.cells = new Set([S.cell]); syncAssignments(); S.dirty = false; S.conflict = false;
     resetGridDraft();
-  } else baseReset();
+  } else { baseReset(); syncAssignments(); }
 };
 
 const basePlacement = placement;
