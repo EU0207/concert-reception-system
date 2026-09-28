@@ -272,6 +272,13 @@ h3 {
 .primary:hover {
   background:#07584f
 }
+.primary.draft-button {
+  background:#2d8174;
+  border-color:#2d8174
+}
+.primary.draft-button:hover {
+  background:#246d62
+}
 .secondary {
   background:#fff;
   border:1px solid #8eb0a6;
