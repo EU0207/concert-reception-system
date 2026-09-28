@@ -290,8 +290,8 @@ function placement() {
 const checkLabels = {
   contact: '連絡済み',
   payment: '入金済み',
-  issued: '発行済み',
-  delivered: '送付済み'
+  issued: '券発行済み',
+  delivered: '券送付済み'
 };
 
 const systemCheckIds = new Set(['payment', 'issued', 'delivered']);
@@ -566,7 +566,7 @@ function handle(action) {
         ['来場予定', buyer.inactive ? '不参加' : '来場予定'],
         ['座席表示名', buyer.label],
         ['席番号', buyer.seat || '未配置'],
-        ...(buyer.previousAssignment ? [['不参加前の席・発行状態（モック）', `${buyer.previousAssignment.seat}・${buyer.previousAssignment.issued ? '発行済み' : '未発行'}・${buyer.previousAssignment.delivered ? '送付済み' : '未送付'}`]] : []),
+        ...(buyer.previousAssignment ? [['不参加前の席・発行状態（モック）', `${buyer.previousAssignment.seat}・${buyer.previousAssignment.issued ? checkLabels.issued : '未発行'}・${buyer.previousAssignment.delivered ? checkLabels.delivered : '未送付'}`]] : []),
         ['案内', buyer.note || '－']
       ];
       const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
@@ -614,7 +614,7 @@ function handle(action) {
     const person = S.people.find(p => p.id === +action.slice(15));
     if (!person) return;
     const next = person.inactive ? '来場予定に戻す' : '不参加にする';
-    const impact = person.inactive ? '席や発行状態は自動では戻りません。' : person.seat ? `既に${esc(person.seat)}へ席配置済みです。よろしいですか？席配置を解除します。${person.issued || person.delivered ? '発行済み・送付済みの表示も解除します。' : ''}` : 'チケット準備の一覧から除外します。';
+    const impact = person.inactive ? '席や発行状態は自動では戻りません。' : person.seat ? `既に${esc(person.seat)}へ席配置済みです。よろしいですか？席配置を解除します。${person.issued || person.delivered ? '券発行済み・券送付済みの表示も解除します。' : ''}` : 'チケット準備の一覧から除外します。';
     return openModal('来場予定を変更', `<p>${esc(person.name)}を「${next}」にします。${impact}</p>`, [
       { label: '詳細へ戻る', action: `showBuyer:${person.id}` },
       { label: next, action: `applyInactive:${person.id}`, style: person.seat ? 'dangerbtn' : 'primary' }
@@ -626,7 +626,7 @@ function handle(action) {
     if (!person.inactive && person.seat) {
       // 発行済みの席は実運用ではQRの無効化が必要。モックでは確認を重ねて状態だけ試す。
       if (person.issued || person.delivered) {
-        return openModal('発行済みチケットの扱いを確認', `<p>${esc(person.name)}の${esc(person.seat)}を解除し、発行済み・送付済みの表示を未済みに戻します。実際のQR無効化や履歴保存は行いません。</p>`, [
+        return openModal('発行済みチケットの扱いを確認', `<p>${esc(person.name)}の${esc(person.seat)}を解除し、券発行済み・券送付済みの表示を未済みに戻します。実際のQR無効化や履歴保存は行いません。</p>`, [
           { label: '戻る', action: `toggleInactive:${person.id}` },
           { label: '解除して不参加にする', action: `confirmInactive:${person.id}`, style: 'dangerbtn' }
         ]);
