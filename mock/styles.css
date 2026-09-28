@@ -920,3 +920,44 @@ h3 {
 }
 
 }
+:root {
+  scrollbar-color: #687f89 #e4ecef;
+}
+
+.editable-map {
+  min-width: 0;
+  min-height: 0;
+  width: max-content;
+  height: max-content;
+  user-select: none;
+}
+
+.editable-map .seat { min-width: 0; }
+.editable-map .cell-unset { background: #edf1f4; color: #53616b; }
+.editable-map .cell-gap { background: #f6e5dc; color: #7a4933; }
+.editable-map .cell-space { background: white; color: #71818b; border-style: dashed; }
+.editable-map .cell-aisle { background: #d5e8f8; color: #225a80; }
+.editable-map .selected { outline: 3px solid #197d74; outline-offset: -3px; }
+.column-settings { display: grid; gap: 8px; }
+.column-settings label { display: flex; align-items: center; gap: 8px; }
+.column-settings input { width: 85px; min-width: 0; }
+.settings-card input[type=number] { width: 80px; }
+.image-pan { overflow: auto; cursor: grab; touch-action: pan-x pan-y; }
+.settings-card, .settings-card details { min-width: 0; max-width: 100%; }
+.settings-card { grid-template-columns: minmax(0, 1fr); }
+.image-pan { width: 100%; min-width: 0; max-width: 100%; }
+.settings-card .row, .settings-card .field { min-width: 0; }
+.image-pan svg { width: 100%; height: 100%; }
+.notice-row { display: flex; text-align: left; gap: 12px; width: 100%; }
+.notice-row strong { display: block; margin-top: 5px; }
+.unread-mark { width: 20px; flex-shrink: 0; color: #197d74; }
+.notice-row.is-read { color: #52606a; }
+.move-settings { margin-bottom: 15px; }
+.camera-result { position: fixed; inset: 0; z-index: 100; background: #101d27b8; display: grid; place-items: center; animation: result-in 160ms ease-out; }
+.camera-result .result { position: static; width: min(90vw, 560px); min-height: 360px; height: auto; padding: 28px; border-radius: 18px; background: white; color: #183b37; }
+.camera-result .result.danger { color: #a32c39; }
+.camera-result.closing { animation: result-out 160ms ease-in forwards; }
+.modalwrap { z-index: 120; }
+@keyframes result-in { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+@keyframes result-out { to { opacity: 0; transform: scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .camera-result, .camera-result.closing { animation: none; } }

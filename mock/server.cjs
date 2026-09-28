@@ -1,4 +1,4 @@
-// Serve only the three static mock files to devices on the same local network.
+// Serve only the static mock assets to devices on the same local network.
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -8,6 +8,7 @@ const files = new Map([
   ['/index.html', ['index.html', 'text/html; charset=utf-8']],
   ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
   ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
+  ['/scenarios.js', ['scenarios.js', 'text/javascript; charset=utf-8']],
 ]);
 const port = Number(process.env.MOCK_PORT || 8765);
 
