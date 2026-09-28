@@ -63,7 +63,7 @@ const initialPeople = [{
   id: 6,
   name: '例示 六花',
   label: '例示F',
-  seat: 'A-16',
+  seat: '',
   note: '紙チケットの手渡し予定を確認する（架空の例）',
   method: '紙チケット',
   contact: false,
@@ -248,7 +248,7 @@ function people() {
   const rows = S.people.slice(start, start + S.peoplePageSize);
   const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td>${p.note ? '要確認' : '－'}</td></tr>`;
+    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td><button class="textbtn" data-action="editNote:${p.id}" aria-label="${name}の案内を編集">${p.note ? '要確認・編集' : '追加'}</button></td></tr>`;
   }).join('');
 
   return page('来場者管理', `
@@ -608,10 +608,32 @@ function handle(action) {
       return openModal('来場者情報', body, [
         { label: '閉じる', action: 'modalClose' },
         { label: '購入者名を変更', action: `editBuyerName:${buyer.id}` },
+        { label: '案内を編集', action: `editNote:${buyer.id}` },
         { label: buyer.inactive ? '来場予定に戻す' : '不参加にする', action: `toggleInactive:${buyer.id}` }
       ]);
     }
     return;
+  }
+  if (action.startsWith('editNote:')) {
+    const person = S.people.find(p => p.id === +action.split(':')[1]);
+    if (!person) return;
+    return openModal('案内を編集', `<p>${esc(person.name)}</p><label class="field">受付時の案内・特別対応（200文字以内）<textarea id="person-note" rows="5" maxlength="200">${esc(person.note)}</textarea></label><p class="small muted">変更を反映した後、来場者管理の「保存」で保存してください。空欄にすると案内を解除します。</p>`, [
+      { label: '変更を反映', action: `applyNote:${person.id}`, style: 'primary' },
+      { label: 'キャンセル', action: 'modalClose' }
+    ]);
+  }
+  if (action.startsWith('applyNote:')) {
+    const person = S.people.find(p => p.id === +action.split(':')[1]);
+    const input = $('person-note');
+    if (!person || !input) return;
+    const value = input.value.trim();
+    if (value.length > 200) {
+      input.setCustomValidity('案内は200文字以内で入力してください');
+      input.reportValidity();
+      return;
+    }
+    if (person.note !== value) { person.note = value; S.dirty = true; }
+    return closeModal();
   }
   if (action.startsWith('showTicketPerson:')) {
     const person = S.people.find(p => p.id === +action.slice(17));
@@ -1127,6 +1149,10 @@ document.addEventListener('click', e => {
 
 // 入力中は画面全体を再描画せず、S と未保存表示だけを更新して入力位置を保つ。
 document.addEventListener('input', e => {
+  if (e.target.id === 'person-note') {
+    e.target.setCustomValidity('');
+    return;
+  }
   if (e.target.dataset.form) {
     S.form[e.target.dataset.form] = e.target.value;
     S.dirty = true;

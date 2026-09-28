@@ -958,6 +958,19 @@ h3 {
 .image-pan { width: 100%; min-width: 0; max-width: 100%; }
 .settings-card .row, .settings-card .field { min-width: 0; }
 .image-pan svg { width: 100%; height: 100%; }
+.image-content { min-width: 100%; min-height: 100%; }
+.image-content svg { display: block; }
+.seat-workspace { grid-column: 2; grid-row: 2; display: grid; gap: 16px; min-width: 0; }
+.reference-card { min-width: 0; }
+.reference-card .image-pan { height: clamp(180px, 24vh, 280px); margin: 12px 0; }
+.person-details dd { white-space: pre-wrap; }
+@media (min-width: 901px) {
+  .reference-card:has(details[open]) { position: sticky; top: 76px; z-index: 2; }
+}
+@media (max-width: 900px) {
+  .stage > .seat-workspace { grid-column: 1; grid-row: auto; }
+  .stage.panel-bottom > .seat-workspace { order: 1; }
+}
 .notice-row { display: flex; text-align: left; gap: 12px; width: 100%; }
 .notice-row strong { display: block; margin-top: 5px; }
 .unread-mark { width: 20px; flex-shrink: 0; color: #197d74; }

@@ -58,10 +58,12 @@ test('新規会場・番号消費・種別往復・列方向・固定ID・保存
 });
 
 test('発行済み保護・未発行配置解除の確認・配置を含む復元', () => {
-  const { run: r } = harness();
+  const { run: r, inputs } = harness();
   r("S.screen='seats'; handle('cellType:space')");
   assert.equal(r('selectedCell().type'), 'seat');
   assert.match(r('S.toast'), /発行済み/);
+  inputs['person-to-place'] = { value: '6' };
+  r("S.screen='placement'; S.cell='cell-6'; syncAssignments(); handle('place'); save(); S.screen='seats'");
   r("S.cell='cell-6'; S.cells=new Set([S.cell]); handle('cellType:gap')");
   assert.equal(r('S.people[5].seat'), 'A-16');
   r("handle('cancelLayout')");
@@ -108,11 +110,35 @@ test('席移動・交換は確定時のみ・発行済み理由・重複なし�
   r("handle('cancelMove')"); assert.equal(r('S.people[2].seat'), 'A-14');
   r('proposeMove()'); h.inputs['move-reason'].value = '案内変更'; r('commitMove()');
   assert.equal(r('S.people[0].seat'), 'A-14'); assert.equal(r('S.people[2].seat'), 'A-12');
-  assert.equal(r('new Set(S.people.filter(p=>p.seat).map(p=>p.seat)).size'), 3);
+  assert.equal(r('new Set(S.people.filter(p=>p.seat).map(p=>p.seat)).size'), 2);
   r('resetDraft()'); assert.equal(r('S.people[0].seat'), 'A-12');
+  h.inputs['person-to-place'] = { value: '6' };
+  r("S.cell='cell-6'; syncAssignments(); handle('place')");
   h.inputs['move-person'].value = '6'; r("S.cell='cell-0'; syncAssignments(); proposeMove(); commitMove()");
   assert.equal(r('S.people[5].seat'), 'A-10');
   r("S.cell='cell-11'; syncAssignments(); proposeMove()"); assert.equal(r('S.pendingMove'), null);
+});
+
+test('6人目は未配置・案内の編集取消し・保存破棄・空欄解除・表示への反映', () => {
+  const { run: r, inputs } = harness();
+  assert.equal(r('S.people[5].seat'), '');
+  assert.equal(r('S.people[5].payment'), true);
+  r("S.screen='people'; handle('editNote:2')");
+  inputs['person-note'] = { value: '架空の案内\n手渡しを確認', setCustomValidity() {}, reportValidity() {} };
+  r("handle('modalClose')"); assert.equal(r('S.people[1].note'), '');
+  r("handle('editNote:2'); handle('applyNote:2')");
+  assert.equal(r('S.people[1].note'), '架空の案内\n手渡しを確認');
+  assert.equal(r('S.dirty'), true);
+  assert.match(r('people()'), /要確認・編集/);
+  r('resetDraft()'); assert.equal(r('S.people[1].note'), '');
+  assert.equal(r('S.people[0].cellId'), 'cell-2');
+  r("handle('editNote:2'); handle('applyNote:2'); save()");
+  inputs['person-note'].value = ''; r("handle('editNote:2'); handle('applyNote:2')");
+  assert.equal(r('S.people[1].note'), '');
+  r('resetDraft()'); assert.equal(r('S.people[1].note'), '架空の案内\n手渡しを確認');
+  r("handle('showTicketPerson:2')"); assert.match(r('S.modal.body'), /手渡しを確認/);
+  r("handle('editNote:2')"); inputs['person-note'].value = 'あ'.repeat(201);
+  r("handle('applyNote:2')"); assert.equal(r('S.people[1].note'), '架空の案内\n手渡しを確認');
 });
 
 test('端末操作の対象限定・停止解除・未送信削除拒否・2回確認・申請', () => {
