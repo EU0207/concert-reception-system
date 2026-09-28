@@ -40,6 +40,7 @@ test('新規会場・番号消費・種別往復・列方向・固定ID・保存
   r("save(); S.cells=new Set(['cell-0']); handle('cellType:space'); resetDraft()");
   assert.equal(r("S.layout.cells[0].type"), 'seat');
   h.inputs['grid-rows'] = { value: '6' }; h.inputs['grid-cols'] = { value: '9' }; h.inputs['grid-direction'] = { value: 'vertical' };
+  h.inputs['grid-order'] = { value: 'forward' };
   r("S.gridDraft.names[0]='前'; S.gridDraft.starts[0]=7");
   r("handle('gridSettings')");
   assert.equal(r('S.layout.cells.length'), 54);
@@ -55,6 +56,35 @@ test('新規会場・番号消費・種別往復・列方向・固定ID・保存
   assert.match(r('S.modal.title'), /切り替える/);
   r("handle('scenarioDiscard:sample')");
   assert.equal(r('S.people[0].seat'), 'A-12');
+});
+
+test('逆順採番・番号消費・固定ID・保存破棄・配置保護', () => {
+  const h = harness(), r = h.run;
+  r("S.screen='seats'; switchScenario('new'); S.layout=createLayout(false); S.layout.cells.forEach(c=>c.type='seat'); S.layout.cells[1].type='gap'; S.layout.cells[2].type='space'; S.layout.cells[3].type='aisle'; S.layout.cells[4].type='unset'; numberLayout(S.layout); resetGridDraft(); save()");
+  h.inputs['grid-rows'] = { value: '5' }; h.inputs['grid-cols'] = { value: '8' };
+  h.inputs['grid-direction'] = { value: 'horizontal' }; h.inputs['grid-order'] = { value: 'reverse' };
+  r("handle('gridSettings')");
+  assert.equal(r("S.layout.cells[7].code"), 'A-1');
+  assert.equal(r("S.layout.cells[1].code"), 'A-4');
+  assert.equal(r("S.layout.cells[0].code"), 'A-5');
+  assert.equal(r("S.layout.cells[2].code"), '');
+  assert.equal(r("S.cell"), 'cell-0');
+  r('resetDraft()'); assert.equal(r('S.layout.reverse'), false);
+  h.inputs['grid-direction'].value = 'vertical';
+  r("handle('gridSettings'); save(); S.cells=new Set(['cell-32']); handle('cellType:space')");
+  assert.equal(r("S.layout.cells[24].code"), 'A-1');
+  r('resetDraft()');
+  assert.equal(r("S.layout.cells[32].code"), 'A-1');
+  assert.equal(r("S.layout.cells[0].code"), 'A-5');
+  assert.equal(r('S.layout.reverse'), true);
+  h.inputs['person-to-place'] = { value: '6' };
+  r("S.screen='placement'; S.cell='cell-0'; syncAssignments(); handle('place'); save(); S.screen='seats'");
+  h.inputs['grid-order'].value = 'forward'; r("handle('gridSettings')");
+  assert.equal(r('S.layout.reverse'), true);
+  assert.match(r('S.modal.title'), /配置を解除/);
+  r("handle('cancelLayout'); S.people[5].issued=true; handle('gridSettings')");
+  assert.equal(r('S.layout.reverse'), true);
+  assert.match(r('S.toast'), /発行済み/);
 });
 
 test('発行済み保護・未発行配置解除の確認・配置を含む復元', () => {
