@@ -207,6 +207,26 @@ test('一般受付は管理メニュー非表示・自身の端末だけ削除�
   assert.doesNotMatch(r('staff()'), /data-action="device:erase:1"/);
 });
 
+test('結果の初回表示だけアニメーション・理由と例外の確認後も結果を維持', () => {
+  for (const [result, action, commit] of [['duplicate', 'reason', 'reasonDo'], ['invalid', 'exception', 'exceptionDo']]) {
+    const h = harness(), r = h.run;
+    r(`S.screen='camera'; handle('scan:${result}')`);
+    assert.match(r('camera()'), /camera-result entering/);
+    r("document.querySelector = selector => selector === '.camera-result' ? {} : null");
+    r(`handle('${action}')`); assert.ok(r('S.modal'));
+    assert.doesNotMatch(r('camera()'), /camera-result entering/);
+    r(`handle('${commit}')`);
+    assert.equal(r('S.modal'), null); assert.equal(r('S.cameraResult'), true);
+    assert.equal(r('S.result'), result); assert.equal(h.timers.size, 0);
+    assert.doesNotMatch(r('camera()'), /camera-result entering/);
+    r("handle('scan:success')"); assert.equal(r('S.result'), result);
+    r("handle('next')"); assert.match(r('camera()'), /camera-result closing/);
+    h.tick(160); h.tick(500);
+    r("document.querySelector = () => null; handle('scan:success')");
+    assert.match(r('camera()'), /camera-result entering/);
+  }
+});
+
 test('結果中の追加読取り拒否・終了後500ms・離脱時タイマー破棄', () => {
   const h = harness(), r = h.run;
   r("S.screen='camera'; S.online=false; handle('scan:success'); handle('scan:success')");

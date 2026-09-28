@@ -979,11 +979,12 @@ h3 {
 .unread-mark { width: 20px; flex-shrink: 0; color: #197d74; }
 .notice-row.is-read { color: #52606a; }
 .move-settings { margin-bottom: 15px; }
-.camera-result { position: fixed; inset: 0; z-index: 100; background: #101d27b8; display: grid; place-items: center; animation: result-in 160ms ease-out; }
+.camera-result { position: fixed; inset: 0; z-index: 100; background: #101d27b8; display: grid; place-items: center; }
+.camera-result.entering { animation: result-in 160ms ease-out; }
 .camera-result .result { position: static; width: min(90vw, 560px); min-height: 360px; height: auto; padding: 28px; border-radius: 18px; background: white; color: #183b37; }
 .camera-result .result.danger { color: #a32c39; }
 .camera-result.closing { animation: result-out 160ms ease-in forwards; }
 .modalwrap { z-index: 120; }
 @keyframes result-in { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
 @keyframes result-out { to { opacity: 0; transform: scale(.96); } }
-@media (prefers-reduced-motion: reduce) { .camera-result, .camera-result.closing { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .camera-result, .camera-result.entering, .camera-result.closing { animation: none; } }

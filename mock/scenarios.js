@@ -267,7 +267,9 @@ go = function (target, ...args) {
 };
 const baseCamera = camera, baseResult = result;
 camera = function () {
-  return `${baseCamera().replace('架空QRの判定を選んで試してください', S.cameraWaiting ? '読取り再開を待っています…' : '架空QRの判定を選んで試してください')}<p>${btn('会場席を確認', 'venue')}</p>${S.cameraResult ? `<div class="camera-result ${S.cameraClosing ? 'closing' : ''}" role="dialog" aria-modal="true" aria-label="受付結果">${baseResult()}</div>` : ''}`;
+  // 確認ダイアログや通知で再表示しても、表示中の受付結果には入場アニメーションを付け直さない。
+  const entering = !document.querySelector('.camera-result');
+  return `${baseCamera().replace('架空QRの判定を選んで試してください', S.cameraWaiting ? '読取り再開を待っています…' : '架空QRの判定を選んで試してください')}<p>${btn('会場席を確認', 'venue')}</p>${S.cameraResult ? `<div class="camera-result ${S.cameraClosing ? 'closing' : entering ? 'entering' : ''}" role="dialog" aria-modal="true" aria-label="受付結果">${baseResult()}</div>` : ''}`;
 };
 const baseRender = render;
 render = function () {
