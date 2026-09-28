@@ -47,7 +47,37 @@ const initialPeople = [{
   payment: false,
   issued: false,
   delivered: false
+}, {
+  id: 5,
+  name: '見本 五郎',
+  label: '見本E',
+  seat: '',
+  note: '',
+  method: '電子チケット',
+  contact: true,
+  inactive: false,
+  payment: false,
+  issued: false,
+  delivered: false
+}, {
+  id: 6,
+  name: '例示 六花',
+  label: '例示F',
+  seat: 'A-16',
+  note: '紙チケットの手渡し予定を確認する（架空の例）',
+  method: '紙チケット',
+  contact: false,
+  inactive: false,
+  payment: true,
+  issued: false,
+  delivered: false
 }];
+
+const sampleDevices = [
+  { id: 1, name: '見本端末 01', role: '主担当', current: true },
+  { id: 2, name: '見本端末 02', role: '一般受付担当者', current: false },
+  { id: 3, name: '見本端末 03', role: '代理管理者', current: false }
+];
 
 // 画面の仮データと表示状態をここに集める。再読み込みすると初期値に戻る。
 const S = {
@@ -328,7 +358,12 @@ function tickets() {
 }
 
 function staff() {
-  return page('スタッフ・端末', `<div class="grid two"><section class="card stack"><h3>スタッフ招待</h3><p>架空の招待先：staff@example.com</p><span class="pill ${S.invited ? '' : 'warn'}">${S.invited ? '招待済み' : '未招待'}</span>${btn('招待を作成', 'invite', 'primary')}</section><section class="card stack"><h3>端末の承認</h3><p>見本端末 01 · 一般受付担当者</p><span class="pill ${S.approved ? '' : 'warn'}">${S.approved ? '承認済み' : '承認待ち'}</span>${btn('端末を承認', 'approve', 'primary')}</section></div><div class="card" style="margin-top:16px"><h3>事前準備</h3><p>本人・役割・端末、アプリ・データ、カメラ・練習、オフライン準備を確認します。</p>${btn('端末事前準備へ', 'device', 'primary')}</div>`, '招待、端末承認、準備を順に確認します。');
+  const deviceCards = sampleDevices.map(device => {
+    const state = device.current ? `${S.approved ? '承認済み' : '承認待ち'}・${S.prepared ? '準備完了' : '未準備'}` : device.id === 2 ? (S.stopped ? '停止中・未同期あり' : '承認済み・稼働中') : '承認済み・差分更新待ち';
+    return `<section class="card stack"><div class="row"><h3>${device.name}</h3>${device.current ? '<span class="pill">この端末（ダミー）</span>' : ''}</div><p>利用者の役割：${device.role}</p><span class="pill ${device.id === 2 && S.stopped ? 'danger' : 'neutral'}">${state}</span>${device.current ? btn('端末を承認', 'approve', 'primary', S.approved ? 'disabled' : '') : device.id === 2 ? btn('停止・記録を確認', 'management') : '<p class="small muted">公演データの更新後、差分取得が必要な端末の例です。</p>'}</section>`;
+  }).join('');
+
+  return page('スタッフ・端末', `<section class="card stack"><h3>スタッフ招待</h3><p>架空の招待先：staff@example.com</p><span class="pill ${S.invited ? '' : 'warn'}">${S.invited ? '招待済み' : '未招待'}</span>${btn('招待を作成', 'invite', 'primary')}</section><h3 style="margin-top:16px">端末一覧（ダミー3台）</h3><div class="grid">${deviceCards}</div><div class="card" style="margin-top:16px"><h3>この端末の事前準備</h3><p>本人・役割・端末、アプリ・データ、カメラ・練習、オフライン準備を確認します。</p>${btn('端末事前準備へ', 'device', 'primary')}</div>`, '招待、端末承認、準備を順に確認します。端末識別はすべて架空です。');
 }
 
 function device() {
