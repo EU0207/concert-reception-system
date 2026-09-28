@@ -1217,9 +1217,7 @@ window.addEventListener('popstate', e => {
   go(target, true, true);
 });
 
-// 起動時に履歴の起点を登録し、初期状態の S で最初の画面を表示する。
+// 起動時に履歴の起点を登録する。scenarios.js の初期化後に初回表示する。
 window.history.replaceState({
   screen: 'home'
 }, '', '#home');
-
-render();

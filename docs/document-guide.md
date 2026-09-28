@@ -85,6 +85,7 @@
 | UIモック確認記録 | [ui-mock-review.md](development/ui-mock-review.md) | 主要画面の操作確認手順、初期結果、依頼者確認事項と実装後試験への引継ぎを記録する | 依頼者、開発者、設計担当者 | UIモック工程 | 操作確認結果と設計への反映時 | In Review |
 | UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock-client-response.md) | モックの指摘に対する依頼者回答とCONF-060の包括承認を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | 依頼者回答の伝達時 | Approved |
 | UIモック変更の本番引継ぎ台帳 | [ui-mock-production-handoff.md](development/ui-mock-production-handoff.md) | FB-01～33の採用内容、モック有無、設計・受入条件の追補、本番試験と作業Issueを対応付ける | 開発者、設計担当者、テスト担当者、依頼者 | UIモック承認後から本番受入まで | 設計・実装・試験の進捗変更時 | Approved |
+| 静的UIモック充実の確認記録 | [ui-mock-static-review.md](development/ui-mock-static-review.md) | 座席編集、個別既読、席替え、端末管理、カメラの操作確認と本番残作業を記録する | 開発者、設計担当者、テスト担当者 | UIモック工程 | 静的モックの対応・確認結果変更時 | In Review |
 | QR受付中断・誤更新への対策設計 | [qr-reception-recovery-review.md](development/qr-reception-recovery-review.md) | 受付保存中の中断からの復帰と二重計上防止について、既存設計と追加試験条件を整理する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | #92の確認・設計反映時 | Approved |
 | Excel・QR・PDF・CSV・帳票設計 | [file-output-report-design.md](development/file-output-report-design.md) | 名簿取込、QR、電子チケット、PDF・Excelの主要出力、CSVの補助出力、当日運営表、座席表の形式を定める。取得済みデータからの端末内生成、安全な入出力、バックアップ・復旧・移行形式の後続設計境界も扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 入出力項目、形式、権限、印刷条件、安全対策の変更時 | Approved |
 | 運用・監視・締め・削除・復旧設計 | [operations-recovery-design.md](development/operations-recovery-design.md) | 公演準備、利用量・App Check監視、障害・紙切替、復旧、締め、端末削除、削除希望、暗号化JSONバックアップ、引継ぎを定める | 依頼者、主担当、代理管理者、環境所有者、開発担当者、テスト担当者、運用担当者 | 基本設計時、公演準備時、障害・復旧時 | 運用役割、監視、費用、復旧、削除、外部サービス、引継ぎの変更時 | Approved |
