@@ -40,11 +40,17 @@ test('新規会場・番号消費・種別往復・列方向・固定ID・保存
   r("save(); S.cells=new Set(['cell-0']); handle('cellType:space'); resetDraft()");
   assert.equal(r("S.layout.cells[0].type"), 'seat');
   h.inputs['grid-rows'] = { value: '6' }; h.inputs['grid-cols'] = { value: '9' }; h.inputs['grid-direction'] = { value: 'vertical' };
+  r("S.gridDraft.names[0]='前'; S.gridDraft.starts[0]=7");
   r("handle('gridSettings')");
   assert.equal(r('S.layout.cells.length'), 54);
+  assert.equal(r("S.layout.cells[0].code"), '前-7');
   assert.equal(r("S.layout.cells.find(c=>c.id==='cell-1').code"), 'B-1');
   h.inputs['grid-rows'].value = '31'; r("handle('gridSettings')");
   assert.equal(r('S.layout.rows'), 6);
+  r('S.gridPending=true'); assert.equal(r('save()'), false); r('S.gridPending=false');
+  h.inputs['grid-rows'].value = '30'; h.inputs['grid-cols'].value = '30'; r("handle('gridSettings')");
+  assert.equal(r('S.layout.cells.length'), 900);
+  assert.equal(r('new Set(S.layout.cells.map(c=>c.id)).size'), 900);
   r("switchScenario('sample')");
   assert.match(r('S.modal.title'), /切り替える/);
   r("handle('scenarioDiscard:sample')");
@@ -115,7 +121,7 @@ test('端末操作の対象限定・停止解除・未送信削除拒否・2回�
   r("deviceAction('resume',2,true)"); assert.equal(r('S.devices[1].stopped'), false);
   r("deviceAction('erase',2,true)"); assert.equal(r('S.devices[1].erased'), false);
   r("handle('device:erase:3')"); assert.match(r('S.modal.title'), /1\/2/);
-  r("handle('deviceEraseAgain:3')"); assert.match(r('S.modal.title'), /2\/2/); assert.equal(r('S.devices[2].erased'), false);
+  r("handle('deviceAgain:erase:3')"); assert.match(r('S.modal.title'), /2\/2/); assert.equal(r('S.devices[2].erased'), false);
   r("handle('deviceCommit:erase:3')"); assert.equal(r('S.devices[2].erased'), true);
   r("handle('registerDevice')"); assert.equal(r('S.devices[3].approval'), 'pending');
   r("deviceAction('approve',4,true)"); assert.equal(r('S.devices[3].approval'), 'approved');
