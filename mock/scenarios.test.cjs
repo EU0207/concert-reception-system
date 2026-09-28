@@ -184,6 +184,29 @@ test('端末操作の対象限定・停止解除・未送信削除拒否・2回�
   assert.equal(r('S.devices.filter(d=>d.current).length'), 1);
 });
 
+test('一般受付は管理メニュー非表示・自身の端末だけ削除・未送信保護', () => {
+  const { run: r } = harness();
+  r("S.role='一般受付担当者'");
+  assert.doesNotMatch(r('nav()'), /data-screen="staff"|data-screen="device"/);
+  assert.match(r('nav()'), /data-screen="other"/);
+  r("go('staff')"); assert.equal(r('S.screen'), 'other');
+  assert.match(r('body()'), /この端末のデータを削除/);
+  r("handle('registerDevice'); handle('linkDevice'); deviceAction('approve',3,true); deviceAction('erase',3,true); deviceAction('stop',1,true)");
+  assert.equal(r('S.devices.length'), 3);
+  assert.equal(r('S.devices[2].approval'), 'pending');
+  assert.equal(r('S.devices[2].erased'), false);
+  assert.equal(r('S.devices[0].stopped'), false);
+  r("S.devices[0].unsent=1; handle('device:erase:1')");
+  assert.match(r('S.modal.title'), /削除できません/);
+  r("S.devices[0].unsent=0; handle('device:erase:1')"); assert.match(r('S.modal.title'), /1\/2/);
+  r("handle('deviceAgain:erase:1')"); assert.match(r('S.modal.title'), /2\/2/);
+  assert.equal(r('S.devices[0].erased'), false);
+  r("handle('deviceCommit:erase:1')"); assert.equal(r('S.devices[0].erased'), true);
+  assert.doesNotMatch(r('other()'), /data-action="device:erase/);
+  r("S.role='主担当'"); assert.match(r('nav()'), /data-screen="staff"/);
+  assert.doesNotMatch(r('staff()'), /data-action="device:erase:1"/);
+});
+
 test('結果中の追加読取り拒否・終了後500ms・離脱時タイマー破棄', () => {
   const h = harness(), r = h.run;
   r("S.screen='camera'; S.online=false; handle('scan:success'); handle('scan:success')");
