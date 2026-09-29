@@ -979,7 +979,10 @@ h3 {
 .notice-row strong { display: block; margin-top: 5px; }
 .unread-mark { width: 20px; flex-shrink: 0; color: #197d74; }
 .notice-row.is-read { color: #52606a; }
-.move-settings { margin-bottom: 15px; }
+.placement-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; border-bottom: 2px solid #bfd0c7; }
+.placement-tabs [role=tab] { border: 0; border-radius: 8px 8px 0 0; background: #edf3f0; color: #526b65; padding: 10px 6px; border-bottom: 3px solid transparent; }
+.placement-tabs [role=tab] span { display: block; font-size: .78rem; margin-top: 4px; }
+.placement-tabs [aria-selected=true] { background: #e0f0e9; color: #086e60; border-bottom-color: #086e60; font-weight: 700; }
 .camera-result { position: fixed; inset: 0; z-index: 100; background: #101d27b8; display: grid; place-items: center; }
 .camera-result.entering { animation: result-in 160ms ease-out; }
 .camera-result .result { position: static; width: min(90vw, 560px); min-height: 360px; height: auto; padding: 28px; border-radius: 18px; background: white; color: #183b37; }
