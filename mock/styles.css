@@ -602,7 +602,7 @@ h3 {
   display:grid;
   grid-template-columns:110px repeat(8,74px);
   grid-template-rows:repeat(5,72px);
-  gap:8px;
+  gap:6px;
   width:max-content
 }
 .stage-label {
