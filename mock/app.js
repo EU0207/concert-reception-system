@@ -145,7 +145,7 @@ const screens = {
   info: '公演基本情報',
   people: '来場者管理',
   seats: '会場席の編集',
-  placement: 'お客様を席に配置',
+  placement: 'お客様の席を設定',
   tickets: 'チケット準備',
   staff: 'スタッフ・端末',
   device: '端末事前準備',
@@ -224,7 +224,7 @@ function editStatus() {
 function selectedCellState() {
   if (S.spaceSeats.has(S.seat)) return '空間';
   if (S.gapSeats.has(S.seat)) return '欠番';
-  return S.people.some(p => p.seat === S.seat) ? '配置済み' : '空席';
+  return S.people.some(p => p.seat === S.seat) ? '席設定済み' : '空席';
 }
 
 function home() {
@@ -233,7 +233,7 @@ function home() {
 }
 
 function prep() {
-  let items = [['1 公演情報と会場', 'info', '公演名・会場情報を入力'], ['2 お客様情報', 'people', '架空名簿を確認'], ['3 会場席', 'seats', '席と空間を編集'], ['4 座席配置', 'placement', '未配置客を席へ配置'], ['5 チケット準備', 'tickets', '独立した4項目を確認'], ['6 スタッフ・端末', 'staff', '招待・準備を確認']];
+  let items = [['1 公演情報と会場', 'info', '公演名・会場情報を入力'], ['2 お客様情報', 'people', '架空名簿を確認'], ['3 会場席', 'seats', '席と空間を編集'], ['4 座席設定', 'placement', '席未設定のお客様に席を割り当てる'], ['5 チケット準備', 'tickets', '独立した4項目を確認'], ['6 スタッフ・端末', 'staff', '招待・準備を確認']];
   return page('公演準備', `<div class="grid">${items.map(([n, id, d]) => `<section class="card action"><div class="eyebrow">準備手順</div><h3>${n}</h3><p>${d}</p>${btn('開く', id, 'secondary')}</section>`).join('')}</div><div class="card" style="margin-top:16px"><h3>当日の開始</h3><p>公演状態：<strong>${S.started ? '当日運用中' : '準備中'}</strong>。開催時刻だけでは受付を開始しません。</p>${btn(S.started ? '受付を停止して準備に戻す' : '受付を開始', 'toggleStart', 'primary')} ${btn('スタッフ連絡を見る', 'messages')}</div>`, '準備の順番と各画面への導線を確認します。');
 }
 
@@ -249,12 +249,12 @@ function people() {
   const rows = S.people.slice(start, start + S.peoplePageSize);
   const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">未配置</span>'}</td><td><button class="textbtn" data-action="editNote:${p.id}" aria-label="${name}の案内を編集">${p.note ? '要確認・編集' : '追加'}</button></td></tr>`;
+    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">席未設定</span>'}</td><td><button class="textbtn" data-action="editNote:${p.id}" aria-label="${name}の案内を編集">${p.note ? '要確認・編集' : '追加'}</button></td></tr>`;
   }).join('');
 
   return page('来場者管理', `
     <div class="card stack people-card">
-      <div class="notice">初回取込では席番号が空欄でも登録できます。未配置の方にはチケットとQRを発行できません。購入者名は名前を押して修正できます。不参加にすると席配置と発行・送付の表示を解除します（モックのみ）。</div>
+      <div class="notice">初回取込では席番号が空欄でも登録できます。席未設定の方にはチケットとQRを発行できません。購入者名は名前を押して修正できます。不参加にすると席設定と発行・送付の表示を解除します（モックのみ）。</div>
       <details>
         <summary>大量の名簿を試す（モック専用）</summary>
         <p class="small muted">架空の行を加えて500件にします。再読み込みで元に戻ります。</p>
@@ -270,7 +270,7 @@ function people() {
             ${btn('次へ', 'peopleNext', 'secondary', currentPage === pageCount ? 'disabled' : '')}
           </div>
         </div>
-        <div class="row">${btn('保存', 'save', 'primary')}${btn('席に配置する', 'placement')}<div id="state-status">${editStatus()}</div></div>
+        <div class="row">${btn('保存', 'save', 'primary')}${btn('お客様の席を設定', 'placement')}<div id="state-status">${editStatus()}</div></div>
       </div>
       <div class="people-table-viewport" data-page="${currentPage}" data-page-size="${S.peoplePageSize}" role="region" aria-label="来場者一覧。横方向にもスクロールできます" tabindex="0">
         <table class="table people-table">
@@ -320,7 +320,7 @@ function placement() {
   const candidates = unplaced.filter(p => S.placementFilter === 'all' || p.payment === (S.placementFilter === 'confirmed'));
   const selectedPerson = candidates.find(p => p.id === S.personToPlace) || candidates[0];
 
-  return page('お客様を席に配置', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><h3>席未割当 ${unplaced.length}件</h3><label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>入金確認済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>入金未確認</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>来場予定の未配置全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。不参加の方は候補から除外します。</p>${selectedPerson ? `<label class="field">配置する方<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>この条件に合う未配置の方はいません。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '未配置客から発券までの操作を確認します。');
+  return page('お客様の席を設定', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><h3>席未設定 ${unplaced.length}件</h3><label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>入金確認済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>入金未確認</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>来場予定の席未設定全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。不参加の方は候補から除外します。</p>${selectedPerson ? `<label class="field">席を設定するお客様<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「この席に設定」を押します。</p>${btn('この席に設定', 'place', 'primary')}` : '<p>この条件に合う席未設定の方はいません。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('席設定を確定', 'confirmFinalize', 'primary')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '席未設定のお客様から発券までの操作を確認します。');
 }
 
 const checkLabels = {
@@ -343,7 +343,7 @@ function tickets() {
   const rowHtml = rows.map(p => `<tr>
     <td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td>
     <td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}</td>
-    <td>${p.seat || '<span class="pill warn">未配置</span>'}</td>
+    <td>${p.seat || '<span class="pill warn">席未設定</span>'}</td>
     <td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>
     ${checks.map(([key, label]) => `<td><button class="${p[key] ? 'pill' : 'secondary'} ${systemCheckIds.has(key) ? 'system-check-button' : ''}" data-check="${p.id}:${key}" aria-label="${esc(p.name)}の${esc(label)}を${p[key] ? '未済み' : '済み'}にする">${p[key] ? '✓ 済' : '□ 未'}</button></td>`).join('')}
     <td>${p.note ? `<button class="textbtn" data-action="showTicketPerson:${p.id}">要確認</button>` : '－'}</td>
@@ -408,7 +408,7 @@ function venueSvg() {
 function venue() {
   let p = S.people.find(x => x.seat === S.seat),
     admin = S.role !== '一般受付担当者';
-  return page('会場席管理', `<div class="card stack"><div class="row between"><strong>未受付 42 / 来場済み 258</strong><div class="row">${btn('座席表', 'mapView', S.view === 'map' ? 'primary' : 'secondary')}${btn('一覧', 'listView', S.view === 'list' ? 'primary' : 'secondary')}</div></div><details open><summary>会場画像を表示／隠す</summary><div class="venue"><div style="width:100%;height:100%;transform:scale(${S.imageZoom})">${venueSvg()}</div></div><div class="venue-controls">${btn('前の画像', 'prevImage')}${btn('次の画像', 'nextImage')}<span>${S.imageIndex}/2</span>${btn('縮小', 'imageOut')}${btn('拡大', 'imageIn')}</div><small>図解用の架空画像。実画像の取得は行いません。</small></details>${S.view === 'map' ? canvas() : `<div class="tablewrap"><table class="table"><thead><tr><th>席番号</th><th>座席表示名</th><th>状態</th></tr></thead><tbody>${S.people.filter(x => x.seat).map(x => `<tr><td><button data-seat="${x.seat}" class="textbtn">${x.seat}</button></td><td>${esc(x.label)}</td><td>${S.arrived === x.seat ? '来場済み' : '未受付'}</td></tr>`).join('')}</tbody></table></div>`}<div class="preview"><strong>選択中：${esc(S.seat)}</strong><p>状態：${S.arrived === S.seat ? '来場済み' : '未受付'} · 座席表示名：${p ? esc(p.label) : '未割当'}</p>${admin ? `<p>購入者名：${p ? esc(p.name) : '－'}</p><div class="row">${btn('座席表示名を変更', 'changeLabel')}${btn(S.arrived === S.seat ? '未受付へ訂正' : '手動受付', 'manual', 'primary')}</div>` : ''}</div></div>`, '一般受付担当者では直接編集操作と購入者名を表示しません。');
+  return page('会場席管理', `<div class="card stack"><div class="row between"><strong>未受付 42 / 来場済み 258</strong><div class="row">${btn('座席表', 'mapView', S.view === 'map' ? 'primary' : 'secondary')}${btn('一覧', 'listView', S.view === 'list' ? 'primary' : 'secondary')}</div></div><details open><summary>会場画像を表示／隠す</summary><div class="venue"><div style="width:100%;height:100%;transform:scale(${S.imageZoom})">${venueSvg()}</div></div><div class="venue-controls">${btn('前の画像', 'prevImage')}${btn('次の画像', 'nextImage')}<span>${S.imageIndex}/2</span>${btn('縮小', 'imageOut')}${btn('拡大', 'imageIn')}</div><small>図解用の架空画像。実画像の取得は行いません。</small></details>${S.view === 'map' ? canvas() : `<div class="tablewrap"><table class="table"><thead><tr><th>席番号</th><th>座席表示名</th><th>状態</th></tr></thead><tbody>${S.people.filter(x => x.seat).map(x => `<tr><td><button data-seat="${x.seat}" class="textbtn">${x.seat}</button></td><td>${esc(x.label)}</td><td>${S.arrived === x.seat ? '来場済み' : '未受付'}</td></tr>`).join('')}</tbody></table></div>`}<div class="preview"><strong>選択中：${esc(S.seat)}</strong><p>状態：${S.arrived === S.seat ? '来場済み' : '未受付'} · 座席表示名：${p ? esc(p.label) : '席未設定'}</p>${admin ? `<p>購入者名：${p ? esc(p.name) : '－'}</p><div class="row">${btn('座席表示名を変更', 'changeLabel')}${btn(S.arrived === S.seat ? '未受付へ訂正' : '手動受付', 'manual', 'primary')}</div>` : ''}</div></div>`, '一般受付担当者では直接編集操作と購入者名を表示しません。');
 }
 
 function messages() {
@@ -607,7 +607,7 @@ function handle(action) {
         ['購入者名', buyer.name],
         ['来場予定', buyer.inactive ? '不参加' : '来場予定'],
         ['座席表示名', buyer.label],
-        ['席番号', buyer.seat || '未配置'],
+        ['席番号', buyer.seat || '席未設定'],
         ...(buyer.previousAssignment ? [['不参加前の席・発行状態（モック）', `${buyer.previousAssignment.seat}・${buyer.previousAssignment.issued ? checkLabels.issued : '未発行'}・${buyer.previousAssignment.delivered ? checkLabels.delivered : '未送付'}`]] : []),
         ['案内', buyer.note || '－']
       ];
@@ -648,7 +648,7 @@ function handle(action) {
     const details = [
       ['購入者名', person.name],
       ['来場予定', person.inactive ? '不参加' : '来場予定'],
-      ['席番号', person.seat || '未配置'],
+      ['席番号', person.seat || '席未設定'],
       ['交付方法', person.method],
       ...Object.entries(checkLabels).map(([key, label]) => [label, person[key] ? '済み' : '未済み']),
       ['案内・例外情報', person.note || 'なし']
@@ -678,7 +678,7 @@ function handle(action) {
     const person = S.people.find(p => p.id === +action.slice(15));
     if (!person) return;
     const next = person.inactive ? '来場予定に戻す' : '不参加にする';
-    const impact = person.inactive ? '席や発行状態は自動では戻りません。' : person.seat ? `既に${esc(person.seat)}へ席配置済みです。よろしいですか？席配置を解除します。${person.issued || person.delivered ? '券発行済み・券送付済みの表示も解除します。' : ''}` : 'チケット準備の一覧から除外します。';
+    const impact = person.inactive ? '席や発行状態は自動では戻りません。' : person.seat ? `既に${esc(person.seat)}へ席設定済みです。よろしいですか？席設定を解除します。${person.issued || person.delivered ? '券発行済み・券送付済みの表示も解除します。' : ''}` : 'チケット準備の一覧から除外します。';
     return openModal('来場予定を変更', `<p>${esc(person.name)}を「${next}」にします。${impact}</p>`, [
       { label: '詳細へ戻る', action: `showBuyer:${person.id}` },
       { label: next, action: `applyInactive:${person.id}`, style: person.seat ? 'dangerbtn' : 'primary' }
@@ -959,7 +959,7 @@ function handle(action) {
     case 'makeSeat':
     case 'makeGap':
     case 'makeSpace':
-      if (action !== 'makeSeat' && S.people.some(p => p.seat === S.seat)) return toast('配置済みの席は空間や欠番にできません');
+      if (action !== 'makeSeat' && S.people.some(p => p.seat === S.seat)) return toast('席設定済みの席は空間や欠番にできません');
       if (action === 'makeSeat' && !S.gapSeats.has(S.seat) && !S.spaceSeats.has(S.seat)) return toast('すでに席です');
       S.gapSeats.delete(S.seat);
       S.spaceSeats.delete(S.seat);
@@ -973,11 +973,11 @@ function handle(action) {
         let id = +$('person-to-place')?.value,
           p = S.people.find(x => x.id === id);
         if (!p) return;
-        if (S.gapSeats.has(S.seat) || S.spaceSeats.has(S.seat)) return toast('配置できる席を選択してください');
-        if (S.people.some(x => x.seat === S.seat)) return toast('この席には既に配置されています');
+        if (S.gapSeats.has(S.seat) || S.spaceSeats.has(S.seat)) return toast('設定できる席を選択してください');
+        if (S.people.some(x => x.seat === S.seat)) return toast('この席には既に席が設定されています');
         p.seat = S.seat;
         S.dirty = true;
-        return toast(`${p.name}を${S.seat}へ仮配置しました`);
+        return toast(`${p.name}を${S.seat}へ席を仮設定しました`);
       }
 
     case 'sortReverse':
@@ -990,7 +990,7 @@ function handle(action) {
         if (!Object.hasOwn(checkLabels, k)) return;
         const selected = S.people.filter(p => !p.inactive && S.selectedIds.has(p.id));
         if (!selected.length) return toast('対象を選択してください');
-        if (k === 'issued' && selected.some(p => !p.seat)) return toast('席未割当の方には発行できません');
+        if (k === 'issued' && selected.some(p => !p.seat)) return toast('席未設定の方には発行できません');
         return confirmAction('一斉チェック', `対象 ${selected.length}件の「${esc(checkLabels[k])}」を済みにします。`, `bulkDo:${k}`);
       }
 
@@ -1146,8 +1146,8 @@ document.addEventListener('click', e => {
     let [id, k] = check.dataset.check.split(':'),
       p = S.people.find(x => x.id === +id);
     if (!p || p.inactive || !Object.hasOwn(checkLabels, k)) return;
-    if (k === 'issued' && !p.seat && !p.issued) return toast('席未割当の方には発行できません');
-    return confirmAction(`${checkLabels[k]}を変更`, `${esc(p.name)} · ${p.seat || '席未割当'}：${p[k] ? '済み → 未済み' : '未済み → 済み'}。他のチェック項目は変更しません。`, `checkConfirm:${id}:${k}`);
+    if (k === 'issued' && !p.seat && !p.issued) return toast('席未設定の方には発行できません');
+    return confirmAction(`${checkLabels[k]}を変更`, `${esc(p.name)} · ${p.seat || '席未設定'}：${p[k] ? '済み → 未済み' : '未済み → 済み'}。他のチェック項目は変更しません。`, `checkConfirm:${id}:${k}`);
   }
 
   let act = e.target.closest('[data-action]');

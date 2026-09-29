@@ -81,7 +81,7 @@ test('逆順採番・番号消費・固定ID・保存破棄・配置保護', () 
   r("S.screen='placement'; S.cell='cell-0'; syncAssignments(); handle('place'); save(); S.screen='seats'");
   h.inputs['grid-order'].value = 'forward'; r("handle('gridSettings')");
   assert.equal(r('S.layout.reverse'), true);
-  assert.match(r('S.modal.title'), /配置を解除/);
+  assert.match(r('S.modal.title'), /席設定を解除/);
   r("handle('cancelLayout'); S.people[5].issued=true; handle('gridSettings')");
   assert.equal(r('S.layout.reverse'), true);
   assert.match(r('S.toast'), /発行済み/);

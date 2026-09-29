@@ -81,8 +81,8 @@ function proposeLayout(layout) {
   });
   if (affected.some(p => p.issued)) return toast('券発行済みの席番号変更・削除はできません。対象席を除いてください。');
   S.pendingLayout = { layout, affected: affected.map(p => p.id) };
-  if (affected.length) return openModal('配置を解除して変更しますか？', `<p>未発行のお客様の配置を解除します。</p><ul>${affected.map(p => `<li>${esc(p.name)}：${esc(p.seat)}</li>`).join('')}</ul>`, [
-    { label: '配置を解除して変更', action: 'applyLayout', style: 'primary' }, { label: 'キャンセル', action: 'cancelLayout' }
+  if (affected.length) return openModal('席設定を解除して変更しますか？', `<p>未発行のお客様の席設定を解除します。</p><ul>${affected.map(p => `<li>${esc(p.name)}：${esc(p.seat)}</li>`).join('')}</ul>`, [
+    { label: '席設定を解除して変更', action: 'applyLayout', style: 'primary' }, { label: 'キャンセル', action: 'cancelLayout' }
   ]);
   applyLayout();
 }
@@ -123,7 +123,7 @@ function switchScenario(target) {
 
 selectedCellState = function () {
   const c = selectedCell();
-  return c?.type === 'seat' ? S.people.some(p => p.seat && p.cellId === c.id) ? '配置済み' : '空席' : cellTypes[c?.type] || '未';
+  return c?.type === 'seat' ? S.people.some(p => p.seat && p.cellId === c.id) ? '席設定済み' : '空席' : cellTypes[c?.type] || '未';
 };
 
 seatTiles = function () {
@@ -141,13 +141,13 @@ function venueImage() {
 seats = function () {
   const l = S.layout, d = S.gridDraft, groups = d.direction === 'horizontal' ? +d.rows : +d.cols;
   return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `
-    <div class="row">${btn('配置済みの例', 'scenario:sample', S.scenario === 'sample' ? 'primary' : '')}${btn('新規会場の例', 'scenario:new', S.scenario === 'new' ? 'primary' : '')}</div>
+    <div class="row">${btn('席設定済みの例', 'scenario:sample', S.scenario === 'sample' ? 'primary' : '')}${btn('新規会場の例', 'scenario:new', S.scenario === 'new' ? 'primary' : '')}</div>
     <p class="small muted">ドラッグで移動。範囲選択は始点と終点を順にタップします。席・欠番だけが番号を消費します。</p>
     <div class="row"><label class="field">縦<input id="grid-rows" type="number" min="1" max="30" value="${esc(d.rows)}"></label><label class="field">横<input id="grid-cols" type="number" min="1" max="30" value="${esc(d.cols)}"></label></div>
     <div class="row numbering-settings"><label class="field">列の並び<select id="grid-direction"><option value="horizontal" ${d.direction === 'horizontal' ? 'selected' : ''}>横方向</option><option value="vertical" ${d.direction === 'vertical' ? 'selected' : ''}>縦方向</option></select></label><label class="field">席番の順序<select id="grid-order"><option value="forward" ${!d.reverse ? 'selected' : ''}>${d.direction === 'horizontal' ? '左から' : '上から'}</option><option value="reverse" ${d.reverse ? 'selected' : ''}>${d.direction === 'horizontal' ? '右から' : '下から'}</option></select></label></div>
-    <details><summary>列名・開始番号（配置済みの例を変更すると全体を再採番）</summary><div class="column-settings">${Array.from({ length: Math.min(30, Math.max(0, groups)) }, (_, i) => `<label>${i + 1}列 <input data-column-name="${i}" value="${esc(d.names[i])}" aria-label="${i + 1}列の名前"><input data-column-start="${i}" type="number" min="1" value="${esc(d.starts[i])}" aria-label="${i + 1}列の開始番号"></label>`).join('')}</div></details>
+    <details><summary>列名・開始番号（席設定済みの例を変更すると全体を再採番）</summary><div class="column-settings">${Array.from({ length: Math.min(30, Math.max(0, groups)) }, (_, i) => `<label>${i + 1}列 <input data-column-name="${i}" value="${esc(d.names[i])}" aria-label="${i + 1}列の名前"><input data-column-start="${i}" type="number" min="1" value="${esc(d.starts[i])}" aria-label="${i + 1}列の開始番号"></label>`).join('')}</div></details>
     ${btn('設定を反映', 'gridSettings')}<div class="row">${btn('下書きを保存', 'saveDraft', 'primary draft-button')}${btn('編集内容を確定', 'confirmFinalize', 'primary')}${btn('保存状態に戻す', 'discardEditor')}</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section>
-    <div class="selection-strip"><div class="selection-details"><span>選択 <strong>${esc(selectedCell()?.code || '未採番セル')}</strong></span><span class="pill neutral">${selectedCellState()}</span><span>${S.cells.size}セル</span><select data-selection-mode aria-label="選択方法"><option value="single" ${S.selectionMode === 'single' ? 'selected' : ''}>個別</option><option value="multiple" ${S.selectionMode === 'multiple' ? 'selected' : ''}>複数</option><option value="range" ${S.selectionMode === 'range' ? 'selected' : ''}>範囲（始点→終点）</option></select>${S.rangeStart ? '<small>終点を選んでください</small>' : ''}</div><div class="seat-actions">${Object.entries(cellTypes).map(([key, text]) => btn(`${text}に`, `cellType:${key}`)).join('')}</div>${editStatus()}<div class="selection-image">${venueImage()}</div></div><div class="seat-workspace"><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div></div>`, '空の会場と配置済みの会場で編集を試せます。');
+    <div class="selection-strip"><div class="selection-details"><span>選択 <strong>${esc(selectedCell()?.code || '未採番セル')}</strong></span><span class="pill neutral">${selectedCellState()}</span><span>${S.cells.size}セル</span><select data-selection-mode aria-label="選択方法"><option value="single" ${S.selectionMode === 'single' ? 'selected' : ''}>個別</option><option value="multiple" ${S.selectionMode === 'multiple' ? 'selected' : ''}>複数</option><option value="range" ${S.selectionMode === 'range' ? 'selected' : ''}>範囲（始点→終点）</option></select>${S.rangeStart ? '<small>終点を選んでください</small>' : ''}</div><div class="seat-actions">${Object.entries(cellTypes).map(([key, text]) => btn(`${text}に`, `cellType:${key}`)).join('')}</div>${editStatus()}<div class="selection-image">${venueImage()}</div></div><div class="seat-workspace"><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div></div>`, '空の会場と席設定済みの会場で編集を試せます。');
 };
 
 const baseSave = save;
@@ -174,15 +174,15 @@ placement = function () {
   if (!assigned.some(p => p.id === S.movePerson)) S.movePerson = assigned[0]?.id;
   const moving = S.placementMode === 'move';
   const person = moving ? assigned.find(p => p.id === S.movePerson) : selectedPerson;
-  const tabs = `<div class="placement-tabs" role="tablist" aria-label="配置対象">${[['place', '席未割当', unplaced.length], ['move', '配置済み', assigned.length]].map(([mode, label, count]) => `<button id="placement-tab-${mode}" role="tab" data-placement-tab="${mode}" data-action="placementTab:${mode}" aria-selected="${S.placementMode === mode}" aria-controls="placement-target-panel" tabindex="${S.placementMode === mode ? '0' : '-1'}">${label}<span>${count}件</span></button>`).join('')}</div>`;
-  const controls = moving ? `${person ? `<label class="field">席替えする方<select id="move-person">${assigned.map(p => `<option value="${p.id}" ${S.movePerson === p.id ? 'selected' : ''}>${esc(p.name)}（${esc(p.seat)}）</option>`).join('')}</select></label><p>移動先の席をキャンバスで選択してください。配置済みなら交換します。</p>${btn('移動・交換を確認', 'moveGuest', 'primary')}` : '<p>配置済みのお客様はいません。</p>'}` : `<label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>入金確認済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>入金未確認</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>来場予定の未配置全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。不参加の方は候補から除外します。</p>${person ? `<label class="field">配置する方<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === person.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>この条件に合う未配置の方はいません。</p>'}`;
-  return page('お客様を席に配置', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card">${tabs}<div class="stack" id="placement-target-panel" role="tabpanel" aria-labelledby="placement-tab-${S.placementMode}">${controls}</div><div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${person ? esc(person.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '席未割当のお客様の配置と、配置済みのお客様の席替えを確認します。');
+  const tabs = `<div class="placement-tabs" role="tablist" aria-label="席設定対象">${[['place', '席未設定', unplaced.length], ['move', '席設定済み', assigned.length]].map(([mode, label, count]) => `<button id="placement-tab-${mode}" role="tab" data-placement-tab="${mode}" data-action="placementTab:${mode}" aria-selected="${S.placementMode === mode}" aria-controls="placement-target-panel" tabindex="${S.placementMode === mode ? '0' : '-1'}">${label}<span>${count}件</span></button>`).join('')}</div>`;
+  const controls = moving ? `${person ? `<label class="field">席替えする方<select id="move-person">${assigned.map(p => `<option value="${p.id}" ${S.movePerson === p.id ? 'selected' : ''}>${esc(p.name)}（${esc(p.seat)}）</option>`).join('')}</select></label><p>移動先の席をキャンバスで選択してください。席設定済みなら交換します。</p>${btn('移動・交換を確認', 'moveGuest', 'primary')}` : '<p>席設定済みのお客様はいません。</p>'}` : `<label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>入金確認済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>入金未確認</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>来場予定の席未設定全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。不参加の方は候補から除外します。</p>${person ? `<label class="field">席を設定するお客様<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === person.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「この席に設定」を押します。</p>${btn('この席に設定', 'place', 'primary')}` : '<p>この条件に合う席未設定の方はいません。</p>'}`;
+  return page('お客様の席を設定', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card">${tabs}<div class="stack" id="placement-target-panel" role="tabpanel" aria-labelledby="placement-tab-${S.placementMode}">${controls}</div><div class="row">${btn('下書きを保存', 'saveDraft')}${btn('席設定を確定', 'confirmFinalize', 'primary')}</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${person ? esc(person.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '席未設定のお客様の席設定と、席設定済みのお客様の席替えを確認します。');
 };
 
 function proposeMove() {
   const p = S.people.find(p => p.id === +$('move-person')?.value);
   const c = selectedCell();
-  if (!p || p.inactive || !p.seat || c?.type !== 'seat') return toast('配置済みのお客様と席を選んでください');
+  if (!p || p.inactive || !p.seat || c?.type !== 'seat') return toast('席設定済みのお客様と席を選んでください');
   if (p.cellId === c.id) return toast('現在と同じ席です');
   const other = S.people.find(q => q.seat && q.cellId === c.id);
   if (other?.inactive) return toast('不参加のお客様は交換できません');
@@ -338,7 +338,7 @@ handle = function (action) {
   if (action === 'place') {
     if (selectedCell()?.type !== 'seat') return toast('席セルを選んでください');
     const p = S.people.find(p => p.id === +$('person-to-place')?.value);
-    if (!p || p.inactive || p.seat || S.people.some(p => p.seat && p.cellId === S.cell)) return toast('未配置のお客様と空席を選んでください');
+    if (!p || p.inactive || p.seat || S.people.some(p => p.seat && p.cellId === S.cell)) return toast('席未設定のお客様と空席を選んでください');
     p.cellId = S.cell; syncAssignments(); S.dirty = true; return render();
   }
   if (action === 'moveGuest') return proposeMove();
