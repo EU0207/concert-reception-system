@@ -351,7 +351,7 @@ function tickets() {
   const customItems = S.customCheckIds.map(id => `<div class="row"><strong>${esc(checkLabels[id])}</strong>${btn('名前を変更', `renameCustom:${id}`)}${btn('削除', `removeCustom:${id}`)}</div>`).join('');
 
   return page('チケット準備', `<div class="card stack">
-    <div class="notice">不参加の方はこの一覧から除外します。来場者管理で確認・復帰できます。緑色の「固定」項目は名前の変更・削除ができません。確認用項目は追加・変更・削除できます。チェック操作で決済・発送・送信は行いません。</div>
+    <div class="notice">不参加の方はこの一覧から除外します。チェック項目は追加・変更・削除できます。ただし、緑色の「固定」項目は変更・削除ができません。チェック操作で決済・発送・送信は行いません。</div>
     <details class="custom-checks" ${S.customChecksOpen ? 'open' : ''}><summary>確認用チェック項目を管理</summary>
       <p class="small muted">確認用項目はシステムの判定に使いません。</p>
       <div class="row"><input id="custom-check-name" aria-label="追加する確認用項目名" placeholder="例：連絡済み" maxlength="20">${btn('項目を追加', 'addCustomCheck', 'primary')}</div>
