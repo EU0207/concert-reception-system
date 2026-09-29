@@ -283,6 +283,11 @@ function people() {
     </div>`, '購入者名と座席表示名を分けて確認します。');
 }
 
+function seatDisplayName(label) {
+  const characters = Array.from(label);
+  return `<span class="seat-name"><span>${esc(characters.slice(0, 3).join(''))}</span>${characters.length > 3 ? `<span>${esc(characters.slice(3).join(''))}</span>` : ''}</span>`;
+}
+
 function seatTiles() {
   let tiles = [];
   for (let r = 0; r < 5; r++) {
@@ -296,7 +301,7 @@ function seatTiles() {
         continue;
       }
       let p = S.people.find(x => x.seat === key);
-      tiles.push(`<button class="seat ${selected ? 'selected' : ''} ${p ? '' : 'empty'} ${S.arrived === key ? 'arrived' : ''}" data-seat="${key}" aria-label="席 ${key}${p ? ', ' + p.label : ''}"><strong>${key}</strong><span>${p ? esc(p.label) : '空席'}</span>${S.arrived === key ? '<span>✓ 来場済み</span>' : ''}</button>`);
+      tiles.push(`<button class="seat ${selected ? 'selected' : ''} ${p ? '' : 'empty'} ${S.arrived === key ? 'arrived' : ''}" data-seat="${key}" aria-label="席 ${key}${p ? ', ' + p.label : ''}"><strong>${key}</strong>${p ? seatDisplayName(p.label) : '<span>空席</span>'}${S.arrived === key ? '<span>✓ 来場済み</span>' : ''}</button>`);
     }
   }
   return `<div class="seatmap" style="transform:scale(${S.zoom})"><div class="stage-label">舞台</div>${tiles.join('')}</div>`;
