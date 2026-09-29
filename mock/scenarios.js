@@ -166,13 +166,17 @@ resetDraft = function () {
   } else { baseReset(); syncAssignments(); }
 };
 
-const basePlacement = placement;
 placement = function () {
   const assigned = S.people.filter(p => p.seat && !p.inactive);
+  const unplaced = S.people.filter(p => !p.seat && !p.inactive);
+  const candidates = unplaced.filter(p => S.placementFilter === 'all' || p.payment === (S.placementFilter === 'confirmed'));
+  const selectedPerson = candidates.find(p => p.id === S.personToPlace) || candidates[0];
   if (!assigned.some(p => p.id === S.movePerson)) S.movePerson = assigned[0]?.id;
-  let html = basePlacement().replace('<h3>席未割当', `<details class="move-settings" ${S.placementMode === 'move' ? 'open' : ''}><summary>配置済みのお客様の席替え</summary><label class="field">席替えする方<select id="move-person">${assigned.map(p => `<option value="${p.id}" ${S.movePerson === p.id ? 'selected' : ''}>${esc(p.name)}（${esc(p.seat)}）</option>`).join('')}</select></label><p>移動先の席をキャンバスで選択してください。配置済みなら交換します。</p>${btn('移動・交換を確認', 'moveGuest')}</details><h3>席未割当`);
-  if (S.placementMode === 'move') html = html.replace(/(<strong id="selected-person-name">)[\s\S]*?(<\/strong>)/, `$1${esc(assigned.find(p => p.id === S.movePerson)?.name || '対象なし')}$2`);
-  return html;
+  const moving = S.placementMode === 'move';
+  const person = moving ? assigned.find(p => p.id === S.movePerson) : selectedPerson;
+  const tabs = `<div class="placement-tabs" role="tablist" aria-label="配置対象">${[['place', '席未割当', unplaced.length], ['move', '配置済み', assigned.length]].map(([mode, label, count]) => `<button id="placement-tab-${mode}" role="tab" data-placement-tab="${mode}" data-action="placementTab:${mode}" aria-selected="${S.placementMode === mode}" aria-controls="placement-target-panel" tabindex="${S.placementMode === mode ? '0' : '-1'}">${label}<span>${count}件</span></button>`).join('')}</div>`;
+  const controls = moving ? `${person ? `<label class="field">席替えする方<select id="move-person">${assigned.map(p => `<option value="${p.id}" ${S.movePerson === p.id ? 'selected' : ''}>${esc(p.name)}（${esc(p.seat)}）</option>`).join('')}</select></label><p>移動先の席をキャンバスで選択してください。配置済みなら交換します。</p>${btn('移動・交換を確認', 'moveGuest', 'primary')}` : '<p>配置済みのお客様はいません。</p>'}` : `<label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>入金確認済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>入金未確認</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>来場予定の未配置全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。不参加の方は候補から除外します。</p>${person ? `<label class="field">配置する方<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === person.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「選択席に配置」を押します。</p>${btn('選択席に配置', 'place', 'primary')}` : '<p>この条件に合う未配置の方はいません。</p>'}`;
+  return page('お客様を席に配置', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card">${tabs}<div class="stack" id="placement-target-panel" role="tabpanel" aria-labelledby="placement-tab-${S.placementMode}">${controls}</div><div class="row">${btn('下書きを保存', 'saveDraft')}${btn('配置を決定', 'confirmFinalize', 'primary')}</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${person ? esc(person.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '席未割当のお客様の配置と、配置済みのお客様の席替えを確認します。');
 };
 
 function proposeMove() {
@@ -294,6 +298,13 @@ render = function () {
 
 const baseHandle = handle;
 handle = function (action) {
+  if (action.startsWith('placementTab:')) {
+    const mode = action.split(':')[1];
+    if (!['place', 'move'].includes(mode)) return;
+    S.placementMode = mode; render();
+    document.querySelector(`#placement-tab-${mode}`)?.focus();
+    return;
+  }
   if (action.startsWith('scenario:')) return switchScenario(action.split(':')[1]);
   if (action.startsWith('scenarioSave:')) { const target = action.split(':')[1]; if (save()) switchScenario(target); return; }
   if (action.startsWith('scenarioDiscard:')) { resetDraft(); return switchScenario(action.split(':')[1]); }
@@ -454,12 +465,15 @@ document.addEventListener('change', e => {
 
 document.addEventListener('toggle', e => {
   if (e.target.matches('[data-venue-image]')) S.imageOpen = e.target.open;
-  if (e.target.matches('.move-settings')) {
-    S.placementMode = e.target.open ? 'move' : 'place';
-    const id = e.target.open ? S.movePerson : S.personToPlace;
-    const name = $('selected-person-name'); if (name) name.textContent = S.people.find(p => p.id === id)?.name || '対象なし';
-  }
 }, true);
+
+document.addEventListener('keydown', e => {
+  const tab = e.target.closest('[data-placement-tab]');
+  if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+  e.preventDefault();
+  const mode = e.key === 'Home' ? 'place' : e.key === 'End' ? 'move' : tab.dataset.placementTab === 'place' ? 'move' : 'place';
+  handle(`placementTab:${mode}`);
+});
 
 document.addEventListener('input', e => {
   const target = e.target;
