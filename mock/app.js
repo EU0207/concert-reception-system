@@ -271,7 +271,7 @@ function people() {
             ${btn('次へ', 'peopleNext', 'secondary', currentPage === pageCount ? 'disabled' : '')}
           </div>
         </div>
-        <div class="row">${btn('保存', 'save', 'primary')}${btn('お客様の席を設定', 'placement')}<div id="state-status">${editStatus()}</div></div>
+        <div class="row">${btn('保存', 'save', 'primary')}${btn('お客様の席を設定', 'placement')}${btn('お客様対応状況', 'tickets')}<div id="state-status">${editStatus()}</div></div>
       </div>
       <div class="people-table-viewport" data-page="${currentPage}" data-page-size="${S.peoplePageSize}" role="region" aria-label="お客様一覧。横方向にもスクロールできます" tabindex="0">
         <table class="table people-table">
