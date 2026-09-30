@@ -195,7 +195,7 @@ function header() {
 
 function nav() {
   let admin = ['主担当', '代理管理者'].includes(S.role);
-  let groups = admin ? [['公演準備', ['home', 'prep', 'people', 'seats', 'placement', 'tickets', 'output']], ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]] : [['担当公演', ['home', 'device', 'day', 'venue', ...(S.role === '臨時管理者' ? ['management'] : [])]]];
+  let groups = admin ? [['公演準備', ['home', 'prep', 'people', 'tickets', 'seats', 'placement', 'output']], ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]] : [['担当公演', ['home', 'device', 'day', 'venue', ...(S.role === '臨時管理者' ? ['management'] : [])]]];
   return `<aside class="side ${S.drawerOpen ? 'open' : ''}" id="app-menu" aria-label="画面メニュー"><div class="side-heading"><div class="brand">受付システム <small>操作確認用 UIモック</small></div><button class="iconbtn menu-close" data-action="menuClose" aria-label="メニューを閉じる">×</button></div><nav>${groups.map(([g, ids]) => `<span class="group">${g}</span>${ids.map(id => `<button data-screen="${id}" class="${S.screen === id ? 'active' : ''}" ${S.screen === id ? 'aria-current="page"' : ''}>${screens[id]}</button>`).join('')}`).join('')}</nav></aside>`;
 }
 
