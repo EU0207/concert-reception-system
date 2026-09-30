@@ -337,6 +337,18 @@ h3 {
 .tablewrap {
   overflow:auto
 }
+.output-person {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 0;
+  border-top:1px solid #dce4dc
+}
+.output-person .row {
+  margin-top:6px
+}
 .people-table-viewport,.canvas-outer,.tablewrap {
   scrollbar-color:#486d63 #e2ebe5;
   scrollbar-width:auto
