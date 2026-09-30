@@ -147,7 +147,7 @@ const screens = {
   seats: '会場席の編集',
   placement: 'お客様の席を設定',
   tickets: 'お客様対応状況',
-  output: '出力',
+  output: 'チケットデータ出力',
   staff: 'スタッフ・端末',
   device: '端末事前準備',
   other: 'その他',
@@ -234,7 +234,7 @@ function home() {
 }
 
 function prep() {
-  let items = [['1 公演情報と会場', 'info', '公演名・会場情報を入力'], ['2 お客様情報', 'people', '架空名簿を確認'], ['3 会場席', 'seats', '席と空間を編集'], ['4 座席設定', 'placement', '席未設定のお客様に席を割り当てる'], ['5 お客様対応状況', 'tickets', '入金・券発行・送付と確認項目を管理'], ['6 出力', 'output', '電子チケットPDFと紙チケット用Excelを試す'], ['7 スタッフ・端末', 'staff', '招待・準備を確認']];
+  let items = [['1 公演情報と会場', 'info', '公演名・会場情報を入力'], ['2 お客様情報', 'people', '架空名簿を確認'], ['3 会場席', 'seats', '席と空間を編集'], ['4 座席設定', 'placement', '席未設定のお客様に席を割り当てる'], ['5 お客様対応状況', 'tickets', '入金・券発行・送付と確認項目を管理'], ['6 チケットデータ出力', 'output', '電子チケットPDFと紙チケット用Excelを試す'], ['7 スタッフ・端末', 'staff', '招待・準備を確認']];
   return page('公演準備', `<div class="grid">${items.map(([n, id, d]) => `<section class="card action"><div class="eyebrow">準備手順</div><h3>${n}</h3><p>${d}</p>${btn('開く', id, 'secondary')}</section>`).join('')}</div><div class="card" style="margin-top:16px"><h3>当日の開始</h3><p>公演状態：<strong>${S.started ? '当日運用中' : '準備中'}</strong>。開催時刻だけでは受付を開始しません。</p>${btn(S.started ? '受付を停止して準備に戻す' : '受付を開始', 'toggleStart', 'primary')} ${btn('スタッフ連絡を見る', 'messages')}</div>`, '準備の順番と各画面への導線を確認します。');
 }
 
@@ -370,7 +370,7 @@ function outputPeople(method) {
 }
 
 function output() {
-  if (!['主担当', '代理管理者'].includes(S.role)) return page('出力', '<div class="notice warn">出力は主担当・代理管理者の操作です。</div>');
+  if (!['主担当', '代理管理者'].includes(S.role)) return page('チケットデータ出力', '<div class="notice warn">出力は主担当・代理管理者の操作です。</div>');
   const electronic = outputPeople('電子チケット');
   const paper = outputPeople('紙チケット');
   const waiting = S.people.filter(person => !person.inactive && person.method !== '未選択' && !person.seat);
@@ -379,7 +379,7 @@ function output() {
   const electronicRows = electronic.map(person => `<div class="output-person"><div><strong>${esc(person.name)}</strong><div class="row"><span class="pill neutral">${esc(person.seat)}</span><span class="small muted">${person.issued ? '券発行済み' : '券未発行'}</span></div></div>${btn('PDFを1枚出力', `previewPdf:${person.id}`, 'primary')}</div>`).join('');
   const paperRows = paper.map(person => `<tr><td>${esc(person.seat)}</td><td>QR画像の位置</td><td>${esc(person.name)}</td><td>${person.issued ? '券発行済み' : '券未発行'}</td></tr>`).join('');
 
-  return page('出力', `<div class="notice">架空データによる出力操作の見本です。PDF・Excelの実ファイルは作成しません。出力を試しても「券発行済み」や「券送付済み」のチェックは変わりません。</div>
+  return page('チケットデータ出力', `<div class="notice">架空データによる出力操作の見本です。PDF・Excelの実ファイルは作成しません。出力を試しても「券発行済み」や「券送付済み」のチェックは変わりません。</div>
     <div class="grid two output-grid">
       <section class="card stack"><div class="eyebrow">電子チケット</div><h2>個別PDF</h2><p class="muted">電子チケットを選んだお客様ごとに1枚ずつ出力します。</p>
         <div class="output-people">${electronicRows || '<p>対象はありません</p>'}</div>
