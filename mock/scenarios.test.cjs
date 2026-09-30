@@ -171,6 +171,32 @@ test('6人目は未配置・案内の編集取消し・保存破棄・空欄解�
   r("handle('applyNote:2')"); assert.equal(r('S.people[1].note'), '架空の案内\n手渡しを確認');
 });
 
+test('出力見本は交付方法と席を反映し、確認・中止で状態を変更しない', () => {
+  const { run: r } = harness();
+  r("S.screen='output'");
+  assert.match(r('nav()'), /お客様対応状況/);
+  assert.match(r('output()'), /架空 太郎/);
+  assert.match(r('output()'), /例示 三郎/);
+  assert.doesNotMatch(r('output()'), /架空 四郎/);
+  r("handle('previewPdf:1')");
+  assert.match(r('S.modal.title'), /電子チケットPDF/);
+  assert.match(r('S.modal.body'), /架空 太郎.*A-12/);
+  r("handle('modalClose')");
+  assert.equal(r('S.people[0].issued'), true);
+  r("handle('previewPdf:1'); handle('completePdf:1')");
+  assert.match(r('S.toast'), /実ファイルは作成されません/);
+  assert.equal(r('S.people[0].delivered'), false);
+  r("handle('previewPaperExcel')");
+  assert.match(r('S.modal.body'), /1件/);
+  r("handle('completePaperExcel')");
+  assert.equal(r('S.people[2].delivered'), true);
+  r("S.people[2].seat=''; handle('previewPaperExcel')");
+  assert.match(r('S.toast'), /対象はありません/);
+  r("S.role='一般受付担当者'; handle('previewPdf:1')");
+  assert.match(r('S.toast'), /管理者/);
+  assert.doesNotMatch(r('output()'), /架空 太郎/);
+});
+
 test('端末操作の対象限定・停止解除・未送信削除拒否・2回確認・申請', () => {
   const { run: r } = harness();
   r("deviceAction('stop',2,true)"); assert.equal(r('S.devices[1].stopped'), true); assert.equal(r('S.devices[0].stopped'), false);

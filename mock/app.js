@@ -146,7 +146,8 @@ const screens = {
   people: '来場者管理',
   seats: '会場席の編集',
   placement: 'お客様の席を設定',
-  tickets: 'チケット準備',
+  tickets: 'お客様対応状況',
+  output: '出力',
   staff: 'スタッフ・端末',
   device: '端末事前準備',
   other: 'その他',
@@ -194,7 +195,7 @@ function header() {
 
 function nav() {
   let admin = ['主担当', '代理管理者'].includes(S.role);
-  let groups = admin ? [['公演準備', ['home', 'prep', 'people', 'seats', 'placement', 'tickets']], ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]] : [['担当公演', ['home', 'device', 'day', 'venue', ...(S.role === '臨時管理者' ? ['management'] : [])]]];
+  let groups = admin ? [['公演準備', ['home', 'prep', 'people', 'seats', 'placement', 'tickets', 'output']], ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]] : [['担当公演', ['home', 'device', 'day', 'venue', ...(S.role === '臨時管理者' ? ['management'] : [])]]];
   return `<aside class="side ${S.drawerOpen ? 'open' : ''}" id="app-menu" aria-label="画面メニュー"><div class="side-heading"><div class="brand">受付システム <small>操作確認用 UIモック</small></div><button class="iconbtn menu-close" data-action="menuClose" aria-label="メニューを閉じる">×</button></div><nav>${groups.map(([g, ids]) => `<span class="group">${g}</span>${ids.map(id => `<button data-screen="${id}" class="${S.screen === id ? 'active' : ''}" ${S.screen === id ? 'aria-current="page"' : ''}>${screens[id]}</button>`).join('')}`).join('')}</nav></aside>`;
 }
 
@@ -233,7 +234,7 @@ function home() {
 }
 
 function prep() {
-  let items = [['1 公演情報と会場', 'info', '公演名・会場情報を入力'], ['2 お客様情報', 'people', '架空名簿を確認'], ['3 会場席', 'seats', '席と空間を編集'], ['4 座席設定', 'placement', '席未設定のお客様に席を割り当てる'], ['5 チケット準備', 'tickets', '独立した4項目を確認'], ['6 スタッフ・端末', 'staff', '招待・準備を確認']];
+  let items = [['1 公演情報と会場', 'info', '公演名・会場情報を入力'], ['2 お客様情報', 'people', '架空名簿を確認'], ['3 会場席', 'seats', '席と空間を編集'], ['4 座席設定', 'placement', '席未設定のお客様に席を割り当てる'], ['5 お客様対応状況', 'tickets', '入金・券発行・送付と確認項目を管理'], ['6 出力', 'output', '電子チケットPDFと紙チケット用Excelを試す'], ['7 スタッフ・端末', 'staff', '招待・準備を確認']];
   return page('公演準備', `<div class="grid">${items.map(([n, id, d]) => `<section class="card action"><div class="eyebrow">準備手順</div><h3>${n}</h3><p>${d}</p>${btn('開く', id, 'secondary')}</section>`).join('')}</div><div class="card" style="margin-top:16px"><h3>当日の開始</h3><p>公演状態：<strong>${S.started ? '当日運用中' : '準備中'}</strong>。開催時刻だけでは受付を開始しません。</p>${btn(S.started ? '受付を停止して準備に戻す' : '受付を開始', 'toggleStart', 'primary')} ${btn('スタッフ連絡を見る', 'messages')}</div>`, '準備の順番と各画面への導線を確認します。');
 }
 
@@ -342,7 +343,7 @@ function tickets() {
   const headers = checks.map(([key, label]) => `<th scope="col" class="${systemCheckIds.has(key) ? 'system-check-head' : ''}">${esc(label)}${systemCheckIds.has(key) ? '<small>固定</small>' : ''}</th>`).join('');
   const rowHtml = rows.map(p => `<tr>
     <td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td>
-    <td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}のチケット準備と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}</td>
+    <td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}の対応状況と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}</td>
     <td>${p.seat || '<span class="pill warn">席未設定</span>'}</td>
     <td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>
     ${checks.map(([key, label]) => `<td><button class="${p[key] ? 'pill' : 'secondary'} ${systemCheckIds.has(key) ? 'system-check-button' : ''}" data-check="${p.id}:${key}" aria-label="${esc(p.name)}の${esc(label)}を${p[key] ? '未済み' : '済み'}にする">${p[key] ? '✓ 済' : '□ 未'}</button></td>`).join('')}
@@ -350,7 +351,7 @@ function tickets() {
   </tr>`).join('');
   const customItems = S.customCheckIds.map(id => `<div class="row"><strong>${esc(checkLabels[id])}</strong>${btn('名前を変更', `renameCustom:${id}`)}${btn('削除', `removeCustom:${id}`)}</div>`).join('');
 
-  return page('チケット準備', `<div class="card stack">
+  return page('お客様対応状況', `<div class="card stack">
     <div class="notice">不参加の方はこの一覧から除外します。チェック項目は追加・変更・削除できます。ただし、緑色の「固定」項目は変更・削除ができません。チェック操作で決済・発送・送信は行いません。</div>
     <details class="custom-checks" ${S.customChecksOpen ? 'open' : ''}><summary>確認用チェック項目を管理</summary>
       <p class="small muted">確認用項目はシステムの判定に使いません。</p>
@@ -361,6 +362,34 @@ function tickets() {
     <div class="tablewrap"><table class="table"><thead><tr><th>選択</th><th>購入者名</th><th>席</th><th>交付方法</th>${headers}<th>案内</th></tr></thead><tbody>${rowHtml}</tbody></table></div>
     <div class="row">選択 ${rows.filter(p => S.selectedIds.has(p.id)).length}件 <select id="bulk-field">${checks.map(([key, label]) => `<option value="${key}">${esc(label)}</option>`).join('')}</select>${btn('選択行をチェック', 'bulk', 'primary')}</div>
   </div>`, '未入金のまま発行・送付した状態も確認できます。');
+}
+
+function outputPeople(method) {
+  return S.people.filter(person => !person.inactive && person.seat && person.method === method)
+    .sort((a, b) => a.seat.localeCompare(b.seat, undefined, { numeric: true }));
+}
+
+function output() {
+  if (!['主担当', '代理管理者'].includes(S.role)) return page('出力', '<div class="notice warn">出力は主担当・代理管理者の操作です。</div>');
+  const electronic = outputPeople('電子チケット');
+  const paper = outputPeople('紙チケット');
+  const waiting = S.people.filter(person => !person.inactive && person.method !== '未選択' && !person.seat);
+  const unselected = S.people.filter(person => !person.inactive && person.method === '未選択').length;
+  const inactive = S.people.filter(person => person.inactive).length;
+  const electronicRows = electronic.map(person => `<div class="output-person"><div><strong>${esc(person.name)}</strong><div class="row"><span class="pill neutral">${esc(person.seat)}</span><span class="small muted">${person.issued ? '券発行済み' : '券未発行'}</span></div></div>${btn('PDFを1枚出力', `previewPdf:${person.id}`, 'primary')}</div>`).join('');
+  const paperRows = paper.map(person => `<tr><td>${esc(person.seat)}</td><td>QR画像の位置</td><td>${esc(person.name)}</td><td>${person.issued ? '券発行済み' : '券未発行'}</td></tr>`).join('');
+
+  return page('出力', `<div class="notice">架空データによる出力操作の見本です。PDF・Excelの実ファイルは作成しません。出力を試しても「券発行済み」や「券送付済み」のチェックは変わりません。</div>
+    <div class="grid two output-grid">
+      <section class="card stack"><div class="eyebrow">電子チケット</div><h2>個別PDF</h2><p class="muted">電子チケットを選んだお客様ごとに1枚ずつ出力します。</p>
+        <div class="output-people">${electronicRows || '<p>対象はありません</p>'}</div>
+      </section>
+      <section class="card stack"><div class="eyebrow">紙チケット</div><h2>印刷業者向けExcel</h2><p class="muted">紙チケットを選んだお客様を席番号順の一覧にまとめます。QR画像は本番のExcelで席番の隣に配置します。</p>
+        <div class="tablewrap"><table class="table"><thead><tr><th scope="col">席番号</th><th scope="col">QR画像</th><th scope="col">購入者名</th><th scope="col">対応状況</th></tr></thead><tbody>${paperRows || '<tr><td colspan="4">対象はありません</td></tr>'}</tbody></table></div>
+        <div class="row"><span>${paper.length}件</span>${btn('Excel一覧を出力', 'previewPaperExcel', 'primary', paper.length ? '' : 'disabled')}</div>
+      </section>
+    </div>
+    <div class="card stack" style="margin-top:16px"><h3>出力対象外</h3><div class="row"><span class="pill warn">交付方法選択済み・席未設定 ${waiting.length}件</span><span class="pill neutral">交付方法未選択 ${unselected}件</span><span class="pill neutral">不参加 ${inactive}件</span></div><p>席未設定の方は、席を設定すると交付方法に応じた一覧へ表示されます。</p><div class="row">${btn('お客様対応状況を確認', 'tickets')}${btn('お客様の席を設定', 'placement')}</div></div>`, '交付方法と現在の席設定を確認してから出力します。');
 }
 
 function staff() {
@@ -432,6 +461,7 @@ function body() {
     seats,
     placement,
     tickets,
+    output,
     staff,
     device,
     other,
@@ -598,6 +628,24 @@ function confirmAction(title, body, action, danger = false) {
 function handle(action) {
   if (!action) return;
   if (screens[action] && action !== 'messages') return go(action);
+  if (action.startsWith('previewPdf:') || action.startsWith('completePdf:')) {
+    if (!['主担当', '代理管理者'].includes(S.role)) return toast('出力は管理者が行います');
+    const person = S.people.find(p => p.id === +action.split(':')[1]);
+    if (!person || person.inactive || !person.seat || person.method !== '電子チケット') return toast('対象のお客様と交付方法を確認してください');
+    if (action.startsWith('completePdf:')) { S.modal = null; return toast('PDFを出力しました（モックのため実ファイルは作成されません）'); }
+    return openModal('電子チケットPDFを出力', `<p>対象：${esc(person.name)}／${esc(person.seat)}。1枚のPDFを出力します。</p><p class="small muted">このモックではファイルを作成せず、券発行済み・券送付済みのチェックも変更しません。</p>`, [
+      { label: 'PDF出力を試す', action: `completePdf:${person.id}`, style: 'primary' }, { label: 'キャンセル', action: 'modalClose' }
+    ]);
+  }
+  if (action === 'previewPaperExcel' || action === 'completePaperExcel') {
+    if (!['主担当', '代理管理者'].includes(S.role)) return toast('出力は管理者が行います');
+    const count = outputPeople('紙チケット').length;
+    if (!count) return toast('紙チケットの出力対象はありません');
+    if (action === 'completePaperExcel') { S.modal = null; return toast('Excel一覧を出力しました（モックのため実ファイルは作成されません）'); }
+    return openModal('印刷業者向けExcelを出力', `<p>紙チケット ${count}件を席番号順の一覧にまとめます。</p><p class="small muted">このモックではファイルを作成せず、券発行済み・券送付済みのチェックも変更しません。</p>`, [
+      { label: 'Excel出力を試す', action: 'completePaperExcel', style: 'primary' }, { label: 'キャンセル', action: 'modalClose' }
+    ]);
+  }
   if (action.startsWith('showBuyer:')) {
     const buyer = S.people.find(p => p.id === +action.slice(10));
     if (buyer) {
@@ -654,7 +702,7 @@ function handle(action) {
       ['案内・例外情報', person.note || 'なし']
     ];
     const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
-    return openModal('チケット準備の詳細', body, [{ label: '閉じる', action: 'modalClose' }]);
+    return openModal('お客様対応状況の詳細', body, [{ label: '閉じる', action: 'modalClose' }]);
   }
   if (action.startsWith('editBuyerName:')) {
     const person = S.people.find(p => p.id === +action.slice(14));
@@ -678,7 +726,7 @@ function handle(action) {
     const person = S.people.find(p => p.id === +action.slice(15));
     if (!person) return;
     const next = person.inactive ? '来場予定に戻す' : '不参加にする';
-    const impact = person.inactive ? '席や発行状態は自動では戻りません。' : person.seat ? `既に${esc(person.seat)}へ席設定済みです。よろしいですか？席設定を解除します。${person.issued || person.delivered ? '券発行済み・券送付済みの表示も解除します。' : ''}` : 'チケット準備の一覧から除外します。';
+    const impact = person.inactive ? '席や発行状態は自動では戻りません。' : person.seat ? `既に${esc(person.seat)}へ席設定済みです。よろしいですか？席設定を解除します。${person.issued || person.delivered ? '券発行済み・券送付済みの表示も解除します。' : ''}` : 'お客様対応状況の一覧から除外します。';
     return openModal('来場予定を変更', `<p>${esc(person.name)}を「${next}」にします。${impact}</p>`, [
       { label: '詳細へ戻る', action: `showBuyer:${person.id}` },
       { label: next, action: `applyInactive:${person.id}`, style: person.seat ? 'dangerbtn' : 'primary' }

@@ -83,7 +83,7 @@
 | セキュリティ・プライバシー設計 | [security-privacy-design.md](development/security-privacy-design.md) | 信頼境界、Security Rules、App Check、公開画面のFirestore非接続を定める。1回限りリンク、端末暗号化と鍵、Web保護を扱う。秘密情報・ログ、公開物、依存関係、インシデント対応も扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 脅威、認可、暗号化、鍵、外部サービス、公開・依存ゲートの変更時 | Approved |
 | 画面・画面遷移・操作見本設計 | [screen-flow-wireframe-design.md](development/screen-flow-wireframe-design.md) | 公演準備と当日運用の画面を定める。座席キャンバス、下書き保存・確定、未保存変更の離脱確認、端末・終了処理の情報構造を扱う。主要操作見本と非技術的なエラー案内も定める | 依頼者、画面設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 業務フロー、画面、権限、状態、利用者向け文言の変更時 | Approved |
 | UIモック確認記録 | [ui-mock-review.md](development/ui-mock-review.md) | 主要画面の操作確認手順、初期結果、依頼者確認事項と実装後試験への引継ぎを記録する | 依頼者、開発者、設計担当者 | UIモック工程 | 操作確認結果と設計への反映時 | In Review |
-| UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock-client-response.md) | モックの指摘に対する依頼者回答とCONF-060の包括承認を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | 依頼者回答の伝達時 | Approved |
+| UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock-client-response.md) | モックの指摘に対する依頼者回答とCONF-060～063の承認を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | 依頼者回答の伝達時 | Approved |
 | UIモック変更の本番引継ぎ台帳 | [ui-mock-production-handoff.md](development/ui-mock-production-handoff.md) | FB-01～33の採用内容、モック有無、設計・受入条件の追補、本番試験と作業Issueを対応付ける | 開発者、設計担当者、テスト担当者、依頼者 | UIモック承認後から本番受入まで | 設計・実装・試験の進捗変更時 | Approved |
 | 静的UIモック充実の確認記録 | [ui-mock-static-review.md](development/ui-mock-static-review.md) | 座席編集、個別既読、席替え、端末管理、カメラの操作確認と本番残作業を記録する | 開発者、設計担当者、テスト担当者 | UIモック工程 | 静的モックの対応・確認結果変更時 | In Review |
 | QR受付中断・誤更新への対策設計 | [qr-reception-recovery-review.md](development/qr-reception-recovery-review.md) | 受付保存中の中断からの復帰と二重計上防止について、既存設計と追加試験条件を整理する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | #92の確認・設計反映時 | Approved |
