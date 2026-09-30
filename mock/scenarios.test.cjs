@@ -197,17 +197,31 @@ test('出力見本は交付方法と席を反映し、確認・中止で状態�
   assert.doesNotMatch(r('output()'), /架空 太郎/);
 });
 
-test('端末操作の対象限定・停止解除・未送信削除拒否・2回確認・申請', () => {
+test('端末申請と本人追加を区別し、他端末の準備・データ削除を拒否する', () => {
   const { run: r } = harness();
   r("deviceAction('stop',2,true)"); assert.equal(r('S.devices[1].stopped'), true); assert.equal(r('S.devices[0].stopped'), false);
   r("deviceAction('resume',2,true)"); assert.equal(r('S.devices[1].stopped'), false);
   r("deviceAction('erase',2,true)"); assert.equal(r('S.devices[1].erased'), false);
-  r("handle('device:erase:3')"); assert.match(r('S.modal.title'), /1\/2/);
-  r("handle('deviceAgain:erase:3')"); assert.match(r('S.modal.title'), /2\/2/); assert.equal(r('S.devices[2].erased'), false);
-  r("handle('deviceCommit:erase:3')"); assert.equal(r('S.devices[2].erased'), true);
+  r("deviceAction('prepare',2,true)"); assert.equal(r('S.devices[1].prepared'), false);
+  r("S.screen='staff'; handle('device:retire:3')"); assert.match(r('S.modal.title'), /重大操作.*1\/2/);
+  r("handle('deviceAgain:retire:3')"); assert.match(r('S.modal.title'), /2\/2/);
+  r("handle('deviceCommit:retire:3')"); assert.equal(r('S.devices[2].retired'), true);
+  assert.equal(r('S.devices[2].erased'), false);
+  assert.doesNotMatch(r('staff()'), /data-action="device:(prepare|erase):/);
+  assert.match(r('staff()'), /class="cautionbtn" data-action="device:stop:2"/);
+  assert.match(r('staff()'), /class="dangerbtn" data-action="device:retire:2"/);
   r("handle('registerDevice')"); assert.equal(r('S.devices[3].approval'), 'pending');
+  assert.equal(r('S.devices[3].role'), '一般受付担当者');
   r("deviceAction('approve',4,true)"); assert.equal(r('S.devices[3].approval'), 'approved');
+  r("handle('linkDevice'); handle('linkDeviceDo')");
+  assert.equal(r('S.devices[4].role'), '主担当');
+  assert.equal(r('S.devices[4].approval'), 'approved');
+  assert.equal(r('S.devices[4].prepared'), false);
+  r("S.devices[0].prepared=false; S.screen='other'; deviceAction('prepare',1,true)");
+  assert.equal(r('S.devices[0].prepared'), true);
   assert.equal(r('S.devices.filter(d=>d.current).length'), 1);
+  r("S.role='臨時管理者'");
+  assert.doesNotMatch(r('staff()'), /data-action="(registerDevice|linkDevice|device:)/);
 });
 
 test('一般受付は管理メニュー非表示・自身の端末だけ削除・未送信保護', () => {
@@ -229,7 +243,9 @@ test('一般受付は管理メニュー非表示・自身の端末だけ削除�
   assert.equal(r('S.devices[0].erased'), false);
   r("handle('deviceCommit:erase:1')"); assert.equal(r('S.devices[0].erased'), true);
   assert.doesNotMatch(r('other()'), /data-action="device:erase/);
+  assert.doesNotMatch(r('other()'), /data-action="device:prepare/);
   r("S.role='主担当'"); assert.match(r('nav()'), /data-screen="staff"/);
+  assert.match(r('staff()'), /再登録が必要/);
   assert.doesNotMatch(r('staff()'), /data-action="device:erase:1"/);
 });
 
