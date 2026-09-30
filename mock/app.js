@@ -143,7 +143,7 @@ const screens = {
   home: '公演一覧',
   prep: '公演準備',
   info: '公演基本情報',
-  people: '来場者管理',
+  people: 'お客様情報',
   seats: '会場席の編集',
   placement: 'お客様の席を設定',
   tickets: 'お客様対応状況',
@@ -239,7 +239,7 @@ function prep() {
 }
 
 function info() {
-  return page('公演基本情報', `<div class="card stack"><div class="formgrid"><label class="field">公演名<input data-form="title" value="${esc(S.form.title)}"></label><label class="field">開催日時<input value="2027-10-10 18:00" readonly></label><label class="field">会場名<input data-form="venue" value="${esc(S.form.venue)}"></label><label class="field">住所<input data-form="address" value="${esc(S.form.address)}"><small>会場の所在地です。来場者の住所ではありません。</small></label></div>${status()}<div class="row">${btn('保存', 'save', 'primary')}${btn('公演準備へ戻る', 'prep')}</div></div>`, '編集内容は明示的に保存します。');
+  return page('公演基本情報', `<div class="card stack"><div class="formgrid"><label class="field">公演名<input data-form="title" value="${esc(S.form.title)}"></label><label class="field">開催日時<input value="2027-10-10 18:00" readonly></label><label class="field">会場名<input data-form="venue" value="${esc(S.form.venue)}"></label><label class="field">住所<input data-form="address" value="${esc(S.form.address)}"><small>会場の所在地です。お客様の住所ではありません。</small></label></div>${status()}<div class="row">${btn('保存', 'save', 'primary')}${btn('公演準備へ戻る', 'prep')}</div></div>`, '編集内容は明示的に保存します。');
 }
 
 function people() {
@@ -253,7 +253,7 @@ function people() {
     return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">席未設定</span>'}</td><td><button class="textbtn" data-action="editNote:${p.id}" aria-label="${name}の案内を編集">${p.note ? '要確認・編集' : '追加'}</button></td></tr>`;
   }).join('');
 
-  return page('来場者管理', `
+  return page('お客様情報', `
     <div class="card stack people-card">
       <div class="notice">初回取込では席番号が空欄でも登録できます。席未設定の方にはチケットとQRを発行できません。購入者名は名前を押して修正できます。不参加にすると席設定と発行・送付の表示を解除します（モックのみ）。</div>
       <details>
@@ -273,7 +273,7 @@ function people() {
         </div>
         <div class="row">${btn('保存', 'save', 'primary')}${btn('お客様の席を設定', 'placement')}<div id="state-status">${editStatus()}</div></div>
       </div>
-      <div class="people-table-viewport" data-page="${currentPage}" data-page-size="${S.peoplePageSize}" role="region" aria-label="来場者一覧。横方向にもスクロールできます" tabindex="0">
+      <div class="people-table-viewport" data-page="${currentPage}" data-page-size="${S.peoplePageSize}" role="region" aria-label="お客様一覧。横方向にもスクロールできます" tabindex="0">
         <table class="table people-table">
           <colgroup><col class="number-col"><col class="buyer-col"><col class="label-col"><col class="seat-col"><col class="note-col"></colgroup>
           <thead><tr><th scope="col">番号</th><th scope="col">購入者名</th><th scope="col">座席表示名</th><th scope="col">席番号</th><th scope="col">案内</th></tr></thead>
@@ -660,7 +660,7 @@ function handle(action) {
         ['案内', buyer.note || '－']
       ];
       const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
-      return openModal('来場者情報', body, [
+      return openModal('お客様情報の詳細', body, [
         { label: '閉じる', action: 'modalClose' },
         { label: '購入者名を変更', action: `editBuyerName:${buyer.id}` },
         { label: '案内を編集', action: `editNote:${buyer.id}` },
@@ -672,7 +672,7 @@ function handle(action) {
   if (action.startsWith('editNote:')) {
     const person = S.people.find(p => p.id === +action.split(':')[1]);
     if (!person) return;
-    return openModal('案内を編集', `<p>${esc(person.name)}</p><label class="field">受付時の案内・特別対応（200文字以内）<textarea id="person-note" rows="5" maxlength="200">${esc(person.note)}</textarea></label><p class="small muted">変更を反映した後、来場者管理の「保存」で保存してください。空欄にすると案内を解除します。</p>`, [
+    return openModal('案内を編集', `<p>${esc(person.name)}</p><label class="field">受付時の案内・特別対応（200文字以内）<textarea id="person-note" rows="5" maxlength="200">${esc(person.note)}</textarea></label><p class="small muted">変更を反映した後、お客様情報の「保存」で保存してください。空欄にすると案内を解除します。</p>`, [
       { label: '変更を反映', action: `applyNote:${person.id}`, style: 'primary' },
       { label: 'キャンセル', action: 'modalClose' }
     ]);
