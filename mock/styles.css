@@ -258,7 +258,7 @@ h3 {
   background:#e9eeee;
   color:#4b6361
 }
-.primary,.secondary,.dangerbtn,.textbtn {
+.primary,.secondary,.cautionbtn,.dangerbtn,.textbtn {
   border-radius:9px;
   padding:10px 15px;
   min-height:44px;
@@ -283,6 +283,14 @@ h3 {
   background:#fff;
   border:1px solid #8eb0a6;
   color:#155c52
+}
+.cautionbtn {
+  background:#fff0ef;
+  border:1px solid #c96b70;
+  color:#8b2530
+}
+.cautionbtn:hover {
+  background:#f9dedd
 }
 .dangerbtn {
   background:#9f2631;
