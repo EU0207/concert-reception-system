@@ -25,7 +25,7 @@
 | REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | [BD-01-01、BD-01-02](system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
 | REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
 | REQ-B-006 | CONF-030～CONF-032 | AC-033 | [BD-01-04～BD-01-08](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
-| REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028、CONF-043 | AC-001 | [BD-02-02、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06-04、BD-06-09](screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム)、[BD-07-02、BD-07-03](file-output-report-design.md#bd-07-02-公演用excelテンプレート) | 未登録 | In Review |
+| REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028、CONF-043、CONF-048、CONF-067 | AC-001 | [BD-02-02、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-04](authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[BD-06-04、BD-06-09](screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム)、[BD-07-02、BD-07-03](file-output-report-design.md#bd-07-02-公演用excelテンプレート) | 未登録（個別登録は#97） | In Review |
 | REQ-F-002 | INT-Q-009、INT-Q-026、CONF-037、CONF-043 | AC-001、AC-035 | [BD-02-02、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06-09](screen-flow-wireframe-design.md#bd-06-09-お客様チケット管理)、[BD-07-03](file-output-report-design.md#bd-07-03-取込検証と確定) | 未登録 | In Review |
 | REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-03、BD-02-06、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-07-04](file-output-report-design.md#bd-07-04-qrと確認コード) | 未登録 | In Review |
 | REQ-F-004 | INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-07-04](file-output-report-design.md#bd-07-04-qrと確認コード) | 未登録 | In Review |
