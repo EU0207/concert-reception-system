@@ -986,6 +986,13 @@ h3 {
 .editable-map .cell-space { background: white; color: #71818b; border-style: dashed; }
 .editable-map .cell-aisle { background: #d5e8f8; color: #225a80; }
 .editable-map .selected { outline: 3px solid #197d74; outline-offset: -3px; }
+.canvas-outer[data-canvas-screen="venue"] .editable-map .seat.arrived {
+  background: #eadffa;
+  border-color: #7955a8;
+  color: #46246b;
+}
+.seatmap-legend { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; font-size: .85rem; color: #46246b; }
+.arrival-swatch { display: inline-grid; place-items: center; width: 22px; height: 22px; border: 2px solid #7955a8; border-radius: 5px; background: #eadffa; font-weight: 700; }
 .column-settings { display: grid; gap: 8px; }
 .column-settings label { display: flex; align-items: center; gap: 8px; }
 .column-settings input { width: 85px; min-width: 0; }
