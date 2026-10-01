@@ -281,7 +281,7 @@ function people() {
         </table>
       </div>
       <small class="muted">表は左右にスクロールできます。</small>
-    </div>`, '購入者名と座席表示名を分けて確認します。');
+    </div>`, '購入者名と座席表示名を分けて確認します。', ['主担当', '代理管理者'].includes(S.role) ? btn('お客様を追加', 'addPerson', 'primary') : '');
 }
 
 function seatDisplayName(label) {
@@ -703,6 +703,31 @@ function handle(action) {
     ];
     const body = `<dl class="person-details">${details.map(([label, value]) => `<div><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>`;
     return openModal('お客様対応状況の詳細', body, [{ label: '閉じる', action: 'modalClose' }]);
+  }
+  if (action === 'addPerson') {
+    if (S.screen !== 'people' || !['主担当', '代理管理者'].includes(S.role)) return;
+    return openModal('お客様を追加', '<label class="field">購入者名（必須・50文字以内）<input id="new-person-name" maxlength="50" autocomplete="off"></label><label class="field">座席表示名（任意・6文字以内）<input id="new-person-label" maxlength="6" autocomplete="off"></label><p class="small muted">席未設定・各チェック未済で追加します。追加後に「保存」を押してください。</p><p id="add-person-error" class="notice warn" role="alert" hidden></p>', [
+      { label: 'キャンセル', action: 'modalClose' },
+      { label: '追加する', action: 'addPersonDo', style: 'primary' }
+    ]);
+  }
+  if (action === 'addPersonDo') {
+    if (S.screen !== 'people' || !['主担当', '代理管理者'].includes(S.role) || S.modal?.title !== 'お客様を追加') return;
+    const name = $('new-person-name')?.value.trim() || '';
+    const label = $('new-person-label')?.value.trim() || '';
+    if (!name || name.length > 50 || label.length > 6) {
+      const error = $('add-person-error');
+      if (error) { error.textContent = '購入者名は1～50文字、座席表示名は6文字以内にしてください'; error.hidden = false; }
+      return;
+    }
+    const id = Math.max(0, ...S.people.map(p => p.id)) + 1;
+    const person = { id, name, label, seat: '', cellId: '', note: '', method: '未選択', inactive: false };
+    for (const key of Object.keys(checkLabels)) person[key] = false;
+    S.people.push(person);
+    S.peoplePage = Math.ceil(S.people.length / S.peoplePageSize);
+    S.dirty = true;
+    S.modal = null;
+    return render();
   }
   if (action.startsWith('editBuyerName:')) {
     const person = S.people.find(p => p.id === +action.slice(14));
