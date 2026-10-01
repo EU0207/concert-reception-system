@@ -416,6 +416,26 @@ h3 {
 .table button {
   min-height:38px
 }
+.ticket-row-select {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  cursor:pointer
+}
+.ticket-row-select input {
+  width:24px;
+  height:24px;
+  margin:0;
+  cursor:pointer
+}
+.table [data-check] {
+  min-width:64px;
+  min-height:44px;
+  justify-content:center;
+  cursor:pointer
+}
 .custom-checks {
   padding:12px;
   border:1px solid #c8d7cf;

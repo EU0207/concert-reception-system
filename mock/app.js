@@ -342,7 +342,7 @@ function tickets() {
 
   const headers = checks.map(([key, label]) => `<th scope="col" class="${systemCheckIds.has(key) ? 'system-check-head' : ''}">${esc(label)}${systemCheckIds.has(key) ? '<small>固定</small>' : ''}</th>`).join('');
   const rowHtml = rows.map(p => `<tr>
-    <td><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></td>
+    <td><label class="ticket-row-select"><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></label></td>
     <td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}の対応状況と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}</td>
     <td>${p.seat || '<span class="pill warn">席未設定</span>'}</td>
     <td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>
