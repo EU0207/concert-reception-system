@@ -11,11 +11,13 @@ function createLayout(sample = false) {
   const cells = Array.from({ length: 40 }, (_, i) => ({
     id: `cell-${i}`, row: Math.floor(i / 8), col: i % 8,
     type: sample && ![11, 29].includes(i) ? 'seat' : sample ? 'space' : 'unset',
-    code: sample ? `A-${10 + i}` : ''
+    code: ''
   }));
-  return { rows: 5, cols: 8, direction: 'horizontal', reverse: false, sample, cells,
+  const layout = { rows: 5, cols: 8, direction: sample ? 'vertical' : 'horizontal', reverse: sample, sample, cells,
     names: Array.from({ length: 30 }, (_, i) => columnName(i)),
     starts: Array(30).fill(1), nextId: 40 };
+  if (sample) numberLayout(layout);
+  return layout;
 }
 
 S.layout = createLayout(true);
@@ -41,7 +43,7 @@ S.moveHistory = [];
 S.placementMode = 'place';
 S.imageOpen = false;
 function resetGridDraft() {
-  S.gridDraft = structuredClone({ rows: S.layout.rows, cols: S.layout.cols, direction: S.layout.direction, reverse: S.layout.reverse, names: S.layout.names, starts: S.layout.sample ? Array(30).fill(10) : S.layout.starts });
+  S.gridDraft = structuredClone({ rows: S.layout.rows, cols: S.layout.cols, direction: S.layout.direction, reverse: S.layout.reverse, names: S.layout.names, starts: S.layout.starts });
   S.gridPending = false;
 }
 resetGridDraft();
@@ -61,7 +63,6 @@ function snapshotEditor() { return structuredClone({ layout: S.layout, people: S
 S.savedEditor = snapshotEditor();
 
 function numberLayout(layout) {
-  if (layout.sample) return;
   for (let group = 0; group < (layout.direction === 'horizontal' ? layout.rows : layout.cols); group++) {
     let number = layout.starts[group];
     const cells = layout.cells.filter(c => (layout.direction === 'horizontal' ? c.row : c.col) === group)
