@@ -125,7 +125,7 @@ test('席設定済みの初期例は縦列・下から・各列1開始で採番�
 
 test('来場済み席の目印は会場席管理の座席表だけに表示する', () => {
   const { run: r } = harness();
-  r("S.arrived = S.people[0].seat; S.screen = 'venue'");
+  r("S.arrivedIds.add(S.people[0].id); S.screen = 'venue'");
   const venueMap = r('seatTiles()');
   assert.match(venueMap, /class="seat cell-seat [^"]*arrived"[^>]*aria-label="[^"]*来場済み"[^>]*><strong>[^<]* ✓<\/strong>/);
   assert.equal((venueMap.match(/class="seat cell-seat [^"]*arrived"/g) || []).length, 1);
@@ -135,6 +135,40 @@ test('来場済み席の目印は会場席管理の座席表だけに表示す�
   assert.doesNotMatch(r('canvas()'), /class="seatmap-legend"/);
   r("S.screen = 'placement'");
   assert.doesNotMatch(r('seatTiles()'), /class="seat cell-seat [^"]*arrived"| ✓<\/strong>/);
+});
+
+test('手動受付は席未設定を拒否し、複数の来場状態と訂正を独立して保つ', () => {
+  const { run: r, inputs } = harness();
+  r("S.screen='venue'; S.seat=S.people[0].seat; handle('manual'); handle('manualDo')");
+  assert.equal(r('S.arrivedIds.has(S.people[0].id)'), true);
+  assert.match(r('venue()'), /未受付 1 \/ 来場済み 1/);
+
+  r("S.seat='D-4'; handle('manual')");
+  assert.equal(r('S.modal'), null);
+  assert.equal(r('S.arrivedIds.size'), 1);
+  assert.match(r('venue()'), /状態：席未設定/);
+  assert.match(r('venue()'), /data-action="manual"[^>]*disabled/);
+  r("handle('manualDo')");
+  assert.equal(r('S.arrivedIds.size'), 1);
+
+  r("S.seat=S.people[2].seat; handle('manual'); handle('manualDo')");
+  assert.equal(r('S.arrivedIds.has(S.people[0].id)'), true);
+  assert.equal(r('S.arrivedIds.has(S.people[2].id)'), true);
+  assert.match(r('venue()'), /未受付 0 \/ 来場済み 2/);
+
+  r("S.seat=S.people[2].seat; handle('manual'); S.seat='D-4'; handle('manualDo')");
+  assert.equal(r('S.arrivedIds.size'), 2);
+  assert.equal(r('S.modal'), null);
+
+  r("S.seat=S.people[0].seat; handle('manual')");
+  assert.match(r('S.modal.title'), /来場状態の訂正/);
+  r("handle('manualDo')");
+  assert.equal(r('S.arrivedIds.size'), 2);
+  inputs['correction-reason'] = { value: '入力誤り' };
+  r("handle('manualDo')");
+  assert.equal(r('S.arrivedIds.has(S.people[0].id)'), false);
+  assert.equal(r('S.arrivedIds.has(S.people[2].id)'), true);
+  assert.match(r('venue()'), /未受付 1 \/ 来場済み 1/);
 });
 
 test('新規会場・番号消費・種別往復・列方向・固定ID・保存破棄', () => {

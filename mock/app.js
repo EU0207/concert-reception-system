@@ -96,6 +96,8 @@ const S = {
   version: 12,
   draftVersion: 12,
   people: structuredClone(initialPeople),
+  arrivedIds: new Set(),
+  manualTarget: null,
   customCheckIds: ['contact'],
   nextCustomCheckId: 1,
   customChecksOpen: false,
@@ -290,6 +292,10 @@ function seatDisplayName(label) {
   return `<span class="seat-name"><span>${esc(characters.slice(0, 3).join(''))}</span>${characters.length > 3 ? `<span>${esc(characters.slice(3).join(''))}</span>` : ''}</span>`;
 }
 
+function isArrived(person) {
+  return !!person && S.arrivedIds.has(person.id);
+}
+
 function seatTiles() {
   let tiles = [];
   for (let r = 0; r < 5; r++) {
@@ -303,7 +309,7 @@ function seatTiles() {
         continue;
       }
       let p = S.people.find(x => x.seat === key);
-      tiles.push(`<button class="seat ${selected ? 'selected' : ''} ${p ? '' : 'empty'} ${S.arrived === key ? 'arrived' : ''}" data-seat="${esc(key)}" aria-label="席 ${esc(key)}${p ? ', ' + esc(p.label) : ''}"><strong>${esc(key)}</strong>${p ? seatDisplayName(p.label) : '<span>空席</span>'}${S.arrived === key ? '<span>✓ 来場済み</span>' : ''}</button>`);
+      tiles.push(`<button class="seat ${selected ? 'selected' : ''} ${p ? '' : 'empty'} ${isArrived(p) ? 'arrived' : ''}" data-seat="${esc(key)}" aria-label="席 ${esc(key)}${p ? ', ' + esc(p.label) : ''}${isArrived(p) ? '、来場済み' : ''}"><strong>${esc(key)}</strong>${p ? seatDisplayName(p.label) : '<span>空席</span>'}${isArrived(p) ? '<span>✓ 来場済み</span>' : ''}</button>`);
     }
   }
   return `<div class="seatmap" style="transform:scale(${S.zoom})"><div class="stage-label">舞台</div>${tiles.join('')}</div>`;
@@ -436,9 +442,17 @@ function venueSvg() {
 }
 
 function venue() {
-  let p = S.people.find(x => x.seat === S.seat),
-    admin = S.role !== '一般受付担当者';
-  return page('会場席管理', `<div class="card stack"><div class="row between"><strong>未受付 42 / 来場済み 258</strong><div class="row">${btn('座席表', 'mapView', S.view === 'map' ? 'primary' : 'secondary')}${btn('一覧', 'listView', S.view === 'list' ? 'primary' : 'secondary')}</div></div><details open><summary>会場画像を表示／隠す</summary><div class="venue"><div style="width:100%;height:100%;transform:scale(${S.imageZoom})">${venueSvg()}</div></div><div class="venue-controls">${btn('前の画像', 'prevImage')}${btn('次の画像', 'nextImage')}<span>${S.imageIndex}/2</span>${btn('縮小', 'imageOut')}${btn('拡大', 'imageIn')}</div><small>図解用の架空画像。実画像の取得は行いません。</small></details>${S.view === 'map' ? canvas() : `<div class="tablewrap"><table class="table"><thead><tr><th>席番号</th><th>座席表示名</th><th>状態</th></tr></thead><tbody>${S.people.filter(x => x.seat).map(x => `<tr><td><button data-seat="${esc(x.seat)}" class="textbtn">${esc(x.seat)}</button></td><td>${esc(x.label)}</td><td>${S.arrived === x.seat ? '来場済み' : '未受付'}</td></tr>`).join('')}</tbody></table></div>`}<div class="preview"><strong>選択中：${esc(S.seat)}</strong><p>状態：${S.arrived === S.seat ? '来場済み' : '未受付'} · 座席表示名：${p ? esc(p.label) : '席未設定'}</p>${admin ? `<p>購入者名：${p ? esc(p.name) : '－'}</p><div class="row">${btn('座席表示名を変更', 'changeLabel')}${btn(S.arrived === S.seat ? '未受付へ訂正' : '手動受付', 'manual', 'primary')}</div>` : ''}</div></div>`, '一般受付担当者では直接編集操作と購入者名を表示しません。');
+  const guests = S.people.filter(p => p.seat && !p.inactive);
+  const arrivedCount = guests.filter(isArrived).length;
+  const p = guests.find(p => p.seat === S.seat);
+  const admin = S.role !== '一般受付担当者';
+  const list = guests.map(guest => `<tr><td><button data-seat="${esc(guest.seat)}" class="textbtn">${esc(guest.seat)}</button></td><td>${esc(guest.label)}</td><td>${isArrived(guest) ? '来場済み' : '未受付'}</td></tr>`).join('');
+  return page('会場席管理', `<div class="card stack">
+    <div class="row between"><strong>未受付 ${guests.length - arrivedCount} / 来場済み ${arrivedCount}</strong><div class="row">${btn('座席表', 'mapView', S.view === 'map' ? 'primary' : 'secondary')}${btn('一覧', 'listView', S.view === 'list' ? 'primary' : 'secondary')}</div></div>
+    <details open><summary>会場画像を表示／隠す</summary><div class="venue"><div style="width:100%;height:100%;transform:scale(${S.imageZoom})">${venueSvg()}</div></div><div class="venue-controls">${btn('前の画像', 'prevImage')}${btn('次の画像', 'nextImage')}<span>${S.imageIndex}/2</span>${btn('縮小', 'imageOut')}${btn('拡大', 'imageIn')}</div><small>図解用の架空画像。実画像の取得は行いません。</small></details>
+    ${S.view === 'map' ? canvas() : `<div class="tablewrap"><table class="table"><thead><tr><th>席番号</th><th>座席表示名</th><th>状態</th></tr></thead><tbody>${list}</tbody></table></div>`}
+    <div class="preview"><strong>選択中：${esc(S.seat)}</strong><p>状態：${p ? isArrived(p) ? '来場済み' : '未受付' : '席未設定'} · 座席表示名：${p ? esc(p.label) : '－'}</p>${admin ? `<p>購入者名：${p ? esc(p.name) : '－'}</p><div class="row">${btn('座席表示名を変更', 'changeLabel', 'secondary', p ? '' : 'disabled')}${btn(p && isArrived(p) ? '未受付へ訂正' : '手動受付', 'manual', 'primary', p ? '' : 'disabled')}</div>${p ? '' : '<p class="small muted">お客様が設定されていない席は受付できません。</p>'}` : ''}</div>
+  </div>`, '一般受付担当者では直接編集操作と購入者名を表示しません。');
 }
 
 function messages() {
@@ -534,6 +548,7 @@ function openModal(title, body, buttons) {
 
 function closeModal() {
   S.modal = null;
+  S.manualTarget = null;
   render();
 }
 
@@ -1150,19 +1165,35 @@ function handle(action) {
       }
 
     case 'manual':
-      return openModal(S.arrived === S.seat ? '来場状態の訂正' : '手動受付', `<p>対象席：${esc(S.seat)}</p>${S.arrived === S.seat ? '<label class="field">訂正理由<input id="correction-reason"></label>' : ''}`, [{
-        label: '確認して記録',
-        action: 'manualDo',
-        style: 'primary'
-      }, {
-        label: '戻る',
-        action: 'modalClose'
-      }]);
+      {
+        const person = S.people.find(p => p.seat === S.seat && !p.inactive);
+        if (S.screen !== 'venue' || S.role === '一般受付担当者' || !person) return toast('お客様が設定されている席を選んでください');
+        S.manualTarget = { id: person.id, seat: person.seat, arrived: isArrived(person) };
+        return openModal(S.manualTarget.arrived ? '来場状態の訂正' : '手動受付', `<p>対象席：${esc(person.seat)}／${esc(person.label)}</p>${S.manualTarget.arrived ? '<label class="field">訂正理由<input id="correction-reason"></label>' : ''}`, [{
+          label: '確認して記録',
+          action: 'manualDo',
+          style: 'primary'
+        }, {
+          label: '戻る',
+          action: 'modalClose'
+        }]);
+      }
 
     case 'manualDo':
-      if (S.arrived === S.seat && !$('correction-reason')?.value.trim()) return toast('訂正理由を入力してください');
-      S.arrived = S.arrived === S.seat ? null : S.seat;
+      {
+        const target = S.manualTarget;
+        const person = S.people.find(p => p.id === target?.id);
+        if (!S.modal || !target || S.screen !== 'venue' || S.role === '一般受付担当者' || !person || person.inactive || person.seat !== target.seat || S.seat !== target.seat || isArrived(person) !== target.arrived) {
+          S.modal = null;
+          S.manualTarget = null;
+          return toast('対象や来場状態が変わりました。確認し直してください');
+        }
+        if (target.arrived && !$('correction-reason')?.value.trim()) return toast('訂正理由を入力してください');
+        if (target.arrived) S.arrivedIds.delete(person.id);
+        else S.arrivedIds.add(person.id);
+      }
       S.modal = null;
+      S.manualTarget = null;
       return toast('来場状態を更新しました（模擬）');
 
     case 'stopDevice':
