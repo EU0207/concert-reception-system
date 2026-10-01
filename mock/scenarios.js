@@ -269,7 +269,7 @@ nav = function () {
 const baseVenue = venue;
 venue = function () { return baseVenue().replace(/<details open>[\s\S]*?<\/details>/, venueImage()); };
 management = function () {
-  return page('当日管理', `<section class="card"><h3>端末の確認</h3><p>承認・停止・廃止は「スタッフ・端末」で行います。</p>${btn('スタッフ・端末へ', 'staff')}</section><section class="card"><h3>公演終了</h3>${btn('締め画面へ', 'close')}${btn('公演後の再ログイン表示', 'relogin')}</section>`, '端末操作と公演の締めを確認します。');
+  return page('当日管理', `<div class="stack"><section class="card stack"><h3>端末の確認</h3><p>承認・停止・廃止は「スタッフ・端末」で行います。</p><div class="row">${btn('スタッフ・端末へ', 'staff')}</div></section><section class="card stack"><h3>公演終了</h3><div class="row">${btn('締め画面へ', 'close')}${btn('公演後の再ログイン表示', 'relogin')}</div></section></div>`, '端末操作と公演の締めを確認します。');
 };
 
 function deviceAction(op, id, confirmed = false) {
