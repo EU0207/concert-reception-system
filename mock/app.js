@@ -75,8 +75,9 @@ const initialPeople = [{
 
 const sampleDevices = [
   { id: 1, name: '見本端末 01', role: '主担当', current: true },
-  { id: 2, name: '見本端末 02', role: '一般受付担当者', current: false },
-  { id: 3, name: '見本端末 03', role: '代理管理者', current: false }
+  { id: 2, name: '見本端末 02', role: '代理管理者', current: false },
+  { id: 3, name: '見本端末 03', role: '臨時管理者', current: false },
+  { id: 4, name: '見本端末 04', role: '一般受付担当者', current: false }
 ];
 
 // 画面の仮データと表示状態をここに集める。再読み込みすると初期値に戻る。
@@ -230,7 +231,7 @@ function selectedCellState() {
 
 function home() {
   let admin = ['主担当', '代理管理者'].includes(S.role);
-  return page('公演一覧', `<div class="grid two"><section class="card"><div class="eyebrow">現在の公演</div><h2>${esc(S.form.title)}</h2><p>2027年10月10日 · ${esc(S.form.venue)}</p>${status()}<p style="margin-top:18px">${btn(admin ? '現在の公演を開く' : '担当公演を開く', admin ? 'prep' : 'day', 'primary')}</p></section><section class="card"><div class="eyebrow">切替候補</div><h2>秋のコンサート 2日目</h2><p>2027年10月11日 · 架空市民ホール</p><span class="pill neutral">未送信 0件</span><p style="margin-top:18px">${btn('内容を確認して切り替える', 'switchShow')}</p></section></div><div class="card stack" style="margin-top:16px"><h3>操作確認用の条件</h3><div class="row"><label class="field">役割<select data-role>${['主担当', '代理管理者', '臨時管理者', '一般受付担当者'].map(r => `<option ${S.role === r ? 'selected' : ''}>${r}</option>`).join('')}</select></label><label class="field">未読連絡数<select data-unread>${[0, 3, 9, 10].map(n => `<option ${S.unread === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>${btn(S.online ? 'オフラインにする' : 'オンラインにする', 'toggleOnline')}</div><p class="small muted">役割と通信状態は画面表示の確認用です。認証・同期は実行しません。</p></div><div class="notice" style="margin-top:17px">このモックの操作はブラウザー内だけで再現されます。再読み込みで初期状態に戻ります。</div>`, '公演単位の切替と、現在公演の区別を確認します。');
+  return page('公演一覧', `<div class="grid two"><section class="card"><div class="eyebrow">現在の公演</div><h2>${esc(S.form.title)}</h2><p>2027年10月10日 · ${esc(S.form.venue)}</p>${status()}<p style="margin-top:18px">${btn(admin ? '現在の公演を開く' : '担当公演を開く', admin ? 'prep' : 'day', 'primary')}</p></section><section class="card"><div class="eyebrow">切替候補</div><h2>秋のコンサート 2日目</h2><p>2027年10月11日 · 架空市民ホール</p><span class="pill neutral">未送信 0件</span><p style="margin-top:18px">${btn('内容を確認して切り替える', 'switchShow')}</p></section></div><div class="card stack" style="margin-top:16px"><h3>操作確認用の条件</h3><div class="row"><label class="field">操作する役割・端末<select data-role>${S.devices.map(d => `<option value="${d.id}" ${d.current ? 'selected' : ''}>${esc(d.role)}（${esc(d.name)}）</option>`).join('')}</select></label><label class="field">未読連絡数<select data-unread>${[0, 3, 9, 10].map(n => `<option ${S.unread === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>${btn(S.online ? 'オフラインにする' : 'オンラインにする', 'toggleOnline')}</div><p class="small muted">選んだ見本端末を「この端末」として表示し、その役割で画面を確認します。認証・同期は実行しません。</p></div><div class="notice" style="margin-top:17px">このモックの操作はブラウザー内だけで再現されます。再読み込みで初期状態に戻ります。</div>`, '公演単位の切替と、現在公演の区別を確認します。');
 }
 
 function prep() {
@@ -398,7 +399,7 @@ function staff() {
     return `<section class="card stack"><div class="row"><h3>${device.name}</h3>${device.current ? '<span class="pill">この端末（ダミー）</span>' : ''}</div><p>利用者の役割：${device.role}</p><span class="pill ${device.id === 2 && S.stopped ? 'danger' : 'neutral'}">${state}</span>${device.current ? btn('端末を承認', 'approve', 'primary', S.approved ? 'disabled' : '') : device.id === 2 ? btn('停止・記録を確認', 'management') : '<p class="small muted">公演データの更新後、差分取得が必要な端末の例です。</p>'}</section>`;
   }).join('');
 
-  return page('スタッフ・端末', `<section class="card stack"><h3>スタッフ招待</h3><p>架空の招待先：staff@example.com</p><span class="pill ${S.invited ? '' : 'warn'}">${S.invited ? '招待済み' : '未招待'}</span>${btn('招待を作成', 'invite', 'primary')}</section><h3 style="margin-top:16px">端末一覧（ダミー3台）</h3><div class="grid">${deviceCards}</div><div class="card" style="margin-top:16px"><h3>この端末の事前準備</h3><p>本人・役割・端末、アプリ・データ、カメラ・練習、オフライン準備を確認します。</p>${btn('端末事前準備へ', 'device', 'primary')}</div>`, '招待、端末承認、準備を順に確認します。端末識別はすべて架空です。');
+  return page('スタッフ・端末', `<section class="card stack"><h3>スタッフ招待</h3><p>架空の招待先：staff@example.com</p><span class="pill ${S.invited ? '' : 'warn'}">${S.invited ? '招待済み' : '未招待'}</span>${btn('招待を作成', 'invite', 'primary')}</section><h3 style="margin-top:16px">端末一覧（ダミー${S.devices.length}台）</h3><div class="grid">${deviceCards}</div><div class="card" style="margin-top:16px"><h3>この端末の事前準備</h3><p>本人・役割・端末、アプリ・データ、カメラ・練習、オフライン準備を確認します。</p>${btn('端末事前準備へ', 'device', 'primary')}</div>`, '招待、端末承認、準備を順に確認します。端末識別はすべて架空です。');
 }
 
 function device() {
@@ -1263,7 +1264,10 @@ document.addEventListener('change', e => {
     $('selected-person-name').textContent = S.people.find(p => p.id === S.personToPlace)?.name || '対象なし';
   }
   if (e.target.dataset.role !== undefined) {
-    S.role = e.target.value;
+    const device = S.devices.find(d => d.id === +e.target.value);
+    if (!device) return;
+    S.devices.forEach(d => { d.current = d.id === device.id; });
+    S.role = device.role;
     render();
   }
   if (e.target.dataset.unread !== undefined) {
