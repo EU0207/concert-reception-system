@@ -55,6 +55,52 @@ test('列名由来の席番号は一覧・属性・確認画面でHTMLとして�
   assert.doesNotMatch(confirmation, /<img\b|<svg\/onload/i);
 });
 
+test('お客様の追加は入力検証・未保存確認・保存と破棄に従う', () => {
+  const { run: r, inputs } = harness();
+  r("S.role='一般受付担当者'");
+  assert.doesNotMatch(r('people()'), /data-action="addPerson"/);
+  r("S.screen='people'; handle('addPerson')");
+  assert.equal(r('S.modal'), null);
+  r("S.role='主担当'");
+  r("S.screen='people'; handle('addPerson')");
+  assert.match(r('S.modal.body'), /購入者名（必須/);
+  inputs['new-person-name'] = { value: '   ' };
+  inputs['new-person-label'] = { value: '' };
+  inputs['add-person-error'] = { hidden: true, textContent: '' };
+  r("handle('addPersonDo')");
+  assert.equal(r('S.people.length'), 6);
+  assert.equal(inputs['add-person-error'].hidden, false);
+  r("handle('modalClose')");
+  assert.equal(r('S.people.length'), 6);
+
+  r("handle('addPerson')");
+  inputs['new-person-name'].value = '  架空 新客  ';
+  inputs['new-person-label'].value = '新客';
+  r("handle('addPersonDo')");
+  assert.equal(r('S.people[6].name'), '架空 新客');
+  assert.equal(r('S.people[6].label'), '新客');
+  assert.equal(r('S.people[6].seat'), '');
+  assert.equal(r('S.people[6].method'), '未選択');
+  assert.equal(r('Object.keys(checkLabels).every(key => S.people[6][key] === false)'), true);
+  assert.equal(r('S.dirty'), true);
+  assert.match(r('people()'), /1～7 \/ 7件/);
+  r("go('tickets')");
+  assert.equal(r('S.screen'), 'people');
+  assert.equal(r('S.modal.title'), '変更が保存されていません');
+  r("handle('modalClose')");
+  r('resetDraft()');
+  assert.equal(r('S.people.length'), 6);
+
+  r("handle('addPerson')");
+  inputs['new-person-name'].value = '<img src=x onerror=alert(1)>';
+  inputs['new-person-label'].value = '';
+  r("handle('addPersonDo')");
+  assert.doesNotMatch(r('people()'), /<img\b/i);
+  r('save(); resetDraft()');
+  assert.equal(r('S.people.length'), 7);
+  assert.equal(r('S.savedPeople[6].name'), '<img src=x onerror=alert(1)>');
+});
+
 test('席設定済みの初期例は縦列・下から・各列1開始で採番済み', () => {
   const { run: r, inputs } = harness();
   assert.equal(r('S.layout.direction'), 'vertical');
