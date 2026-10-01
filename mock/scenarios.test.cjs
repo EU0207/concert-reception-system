@@ -317,7 +317,7 @@ test('端末申請と本人追加を区別し、他端末の準備・データ�
   assert.equal(r('S.devices[0].prepared'), true);
   assert.equal(r('S.devices.filter(d=>d.current).length'), 1);
   r("S.role='臨時管理者'");
-  assert.doesNotMatch(r('staff()'), /data-action="(registerDevice|linkDevice|device:)/);
+  assert.doesNotMatch(r('staff()'), /data-action="(registerDevice|linkDevice|switchMockDevice:|device:)/);
 });
 
 test('一般受付は管理メニュー非表示・自身の端末だけ削除・未送信保護', () => {
@@ -388,6 +388,32 @@ test('最後の管理端末は廃止と自己データ削除を拒否し、代�
   r("S.devices[3].stopped=false; S.screen='staff'; handle('device:retire:1'); handle('deviceAgain:retire:1')");
   r("S.devices[3].prepared=false; handle('deviceCommit:retire:1')");
   assert.equal(r('S.devices[0].retired'), false);
+});
+
+test('主担当の追加端末は本人側で準備すると代替端末になり警告が消える', () => {
+  const { run: r } = harness();
+  r("S.screen='staff'; handle('linkDevice'); handle('linkDeviceDo')");
+  assert.equal(r('S.devices[3].prepared'), false);
+  assert.match(r('staff()'), /追加済みですが、まだ準備が完了していません/);
+  assert.match(r('staff()'), /data-action="device:retire:1" disabled/);
+  assert.match(r('staff()'), /data-action="switchMockDevice:4"/);
+  r("handle('switchMockDevice:3')");
+  assert.equal(r('S.devices[0].current'), true);
+  r("handle('switchMockDevice:4')");
+  assert.equal(r('S.screen'), 'other');
+  assert.equal(r('S.devices[3].current'), true);
+  assert.equal(r('S.devices[0].current'), false);
+  assert.match(r('other()'), /data-action="device:prepare:4"/);
+  assert.match(r('staff()'), /現在の端末の「その他」で準備を完了/);
+  r("deviceAction('prepare',4,true)");
+  assert.equal(r('S.devices[3].prepared'), true);
+  r("go('staff')");
+  assert.equal(r('needsManagerReplacement(S.devices[0])'), false);
+  assert.doesNotMatch(r('staff()'), /追加済みですが、まだ準備が完了していません/);
+  assert.doesNotMatch(r('staff()'), /data-action="device:retire:1" disabled/);
+  r("handle('switchMockDevice:1')");
+  assert.equal(r('S.devices[0].current'), true);
+  assert.equal(r('S.devices.filter(d => d.current).length'), 1);
 });
 
 test('主担当は下位役割を変更し、同じ利用者の端末をまとめて追加準備待ちにする', () => {
