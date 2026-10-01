@@ -249,6 +249,42 @@ test('一般受付は管理メニュー非表示・自身の端末だけ削除�
   assert.doesNotMatch(r('staff()'), /data-action="device:erase:1"/);
 });
 
+test('主担当は下位役割を変更し、同じ利用者の端末をまとめて追加準備待ちにする', () => {
+  const { run: r, inputs } = harness();
+  r("S.screen='staff'; S.devices.push({...S.devices[1], id:4, name:'見本端末 04', prepared:true, unsent:0})");
+  assert.doesNotMatch(r('staff()'), /data-action="roleChange:1"/);
+  r("handle('roleChange:2')"); assert.match(r('S.modal.title'), /役割を変更/);
+  inputs['role-target'] = { value: '臨時管理者' };
+  r("handle('rolePreview:2')"); assert.match(r('S.modal.body'), /一般受付担当者 → 臨時管理者/);
+  r("handle('modalClose')"); assert.equal(r('S.devices[1].role'), '一般受付担当者');
+  r("handle('roleChange:2'); handle('rolePreview:2'); handle('roleCommit:2')");
+  assert.equal(r('S.devices[1].role'), '臨時管理者');
+  assert.equal(r('S.devices[3].role'), '臨時管理者');
+  assert.equal(r('S.devices[3].prepared'), false);
+  assert.equal(r('S.devices[1].roleChangePending'), true);
+  assert.match(r('staff()'), /追加準備待ち/);
+  assert.equal(r('S.devices[1].roleExpiresAt'), '2027/10/11 23:59');
+  r("handle('roleChange:3')"); assert.match(r('S.modal.body'), /代理管理者/);
+  inputs['role-target'] = { value: '一般受付担当者' };
+  r("handle('rolePreview:3'); handle('roleCommit:3')"); assert.equal(r('S.devices[2].role'), '一般受付担当者');
+});
+
+test('代理管理者は下位2役割だけ変更でき、権限喪失・オフライン時は確定できない', () => {
+  const { run: r, inputs } = harness();
+  r("S.screen='staff'; S.role='代理管理者'");
+  assert.doesNotMatch(r('staff()'), /data-action="roleChange:(1|3)"/);
+  r("handle('roleChange:2')"); assert.doesNotMatch(r('S.modal.body'), /option value="代理管理者"/);
+  inputs['role-target'] = { value: '代理管理者' };
+  r("handle('rolePreview:2')"); assert.equal(r('S.pendingRoleChange'), null);
+  inputs['role-target'] = { value: '臨時管理者' };
+  r("handle('rolePreview:2'); S.role='一般受付担当者'; handle('roleCommit:2')");
+  assert.equal(r('S.devices[1].role'), '一般受付担当者');
+  r("S.role='代理管理者'; S.online=false; handle('roleChange:2')");
+  assert.equal(r('S.devices[1].role'), '一般受付担当者');
+  r("S.online=true; handle('roleChange:2'); handle('rolePreview:2'); S.online=false; handle('roleCommit:2')");
+  assert.equal(r('S.devices[1].role'), '一般受付担当者');
+});
+
 test('結果の初回表示だけアニメーション・理由と例外の確認後も結果を維持', () => {
   for (const [result, action, commit] of [['duplicate', 'reason', 'reasonDo'], ['invalid', 'exception', 'exceptionDo']]) {
     const h = harness(), r = h.run;
