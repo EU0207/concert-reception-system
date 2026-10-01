@@ -238,7 +238,13 @@ test('一般受付は管理メニュー非表示・自身の端末だけ削除�
   assert.equal(r('S.devices[0].stopped'), false);
   r("S.devices[0].unsent=1; handle('device:erase:1')");
   assert.match(r('S.modal.title'), /削除できません/);
-  r("S.devices[0].unsent=0; handle('device:erase:1')"); assert.match(r('S.modal.title'), /1\/2/);
+  r("S.devices[0].unsent=0; handle('device:erase:1')"); assert.match(r('S.modal.title'), /削除できません/);
+  assert.match(r('other()'), /data-action="device:erase:1" disabled/);
+  assert.doesNotMatch(r('other()'), /data-action="deleteReadyDemo"/);
+  r("handle('deleteReadyDemo')"); assert.equal(r('S.devices[0].mockClosed'), false);
+  r("S.role='主担当'; handle('deleteReadyDemo'); S.role='一般受付担当者'");
+  assert.match(r('other()'), /data-action="device:erase:1" >/);
+  r("handle('device:erase:1')"); assert.match(r('S.modal.title'), /1\/2/);
   r("handle('deviceAgain:erase:1')"); assert.match(r('S.modal.title'), /2\/2/);
   assert.equal(r('S.devices[0].erased'), false);
   r("handle('deviceCommit:erase:1')"); assert.equal(r('S.devices[0].erased'), true);
@@ -247,6 +253,22 @@ test('一般受付は管理メニュー非表示・自身の端末だけ削除�
   r("S.role='主担当'"); assert.match(r('nav()'), /data-screen="staff"/);
   assert.match(r('staff()'), /再登録が必要/);
   assert.doesNotMatch(r('staff()'), /data-action="device:erase:1"/);
+});
+
+test('自己端末の削除は受領と締め・廃止を確認し、確認中の未送信発生でも拒否する', () => {
+  const { run: r } = harness();
+  r("S.screen='other'; handle('deleteReadyDemo')");
+  assert.equal(r('S.devices[0].mockReceiptConfirmed'), true);
+  assert.equal(r('S.devices[0].mockClosed'), true);
+  r("handle('device:erase:1'); handle('deviceAgain:erase:1')");
+  r("S.devices[0].unsent=1; handle('deviceCommit:erase:1')");
+  assert.equal(r('S.devices[0].erased'), false);
+  r("S.devices[0].unsent=0; S.online=false; deviceAction('erase',1,true)");
+  assert.equal(r('S.devices[0].erased'), false);
+  r("S.online=true; S.devices[0].mockReceiptConfirmed=false; deviceAction('erase',1,true)");
+  assert.equal(r('S.devices[0].erased'), false);
+  r("S.devices[0].mockReceiptConfirmed=true; S.devices[0].mockClosed=false; deviceAction('erase',1,true)");
+  assert.equal(r('S.devices[0].erased'), false);
 });
 
 test('主担当は下位役割を変更し、同じ利用者の端末をまとめて追加準備待ちにする', () => {

@@ -1004,6 +1004,8 @@ h3 {
 .numbering-settings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .numbering-settings select { width: 100%; }
 .device-registration-actions { margin: 16px 0; gap: 12px; }
+.deletion-conditions { display:grid; gap:8px; margin:0; padding-left:22px; }
+.deletion-conditions li { padding-left:3px; }
 .image-pan svg { width: 100%; height: 100%; }
 .image-content { min-width: 100%; min-height: 100%; }
 .image-content svg { display: block; }
