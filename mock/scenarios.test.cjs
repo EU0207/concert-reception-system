@@ -27,6 +27,28 @@ function harness() {
   } };
 }
 
+test('席設定済みの初期例は縦列・下から・各列1開始で採番済み', () => {
+  const { run: r, inputs } = harness();
+  assert.equal(r('S.layout.direction'), 'vertical');
+  assert.equal(r('S.layout.reverse'), true);
+  assert.deepEqual(Array.from(r('S.gridDraft.starts.slice(0, 8)')), Array(8).fill(1));
+  assert.equal(r('S.layout.cells[0].code'), 'A-5');
+  assert.equal(r('S.layout.cells[32].code'), 'A-1');
+  assert.equal(r('S.layout.cells[11].code'), '');
+  assert.equal(r('S.layout.cells[3].code'), 'D-4');
+  assert.equal(r('S.people[0].cellId'), 'cell-2');
+  assert.equal(r('S.people[0].seat'), 'C-5');
+  assert.equal(r('S.people[2].cellId'), 'cell-4');
+  assert.equal(r('S.people[2].seat'), 'E-5');
+  assert.equal(r('S.dirty'), false);
+  inputs['grid-rows'] = { value: '5' }; inputs['grid-cols'] = { value: '8' };
+  inputs['grid-direction'] = { value: 'vertical' }; inputs['grid-order'] = { value: 'reverse' };
+  r("S.screen='seats'; handle('gridSettings')");
+  assert.equal(r('S.people[0].seat'), 'C-5');
+  assert.equal(r('S.people[2].seat'), 'E-5');
+  assert.equal(r('S.modal'), null);
+});
+
 test('新規会場・番号消費・種別往復・列方向・固定ID・保存破棄', () => {
   const h = harness(), r = h.run;
   r("S.screen='seats'; switchScenario('new'); S.cells=new Set(['cell-0','cell-1','cell-2']); handle('cellType:seat')");
@@ -55,7 +77,7 @@ test('新規会場・番号消費・種別往復・列方向・固定ID・保存
   r("switchScenario('sample')");
   assert.match(r('S.modal.title'), /切り替える/);
   r("handle('scenarioDiscard:sample')");
-  assert.equal(r('S.people[0].seat'), 'A-12');
+  assert.equal(r('S.people[0].seat'), 'C-5');
 });
 
 test('逆順採番・番号消費・固定ID・保存破棄・配置保護', () => {
@@ -95,13 +117,13 @@ test('発行済み保護・未発行配置解除の確認・配置を含む復�
   inputs['person-to-place'] = { value: '6' };
   r("S.screen='placement'; S.cell='cell-6'; syncAssignments(); handle('place'); save(); S.screen='seats'");
   r("S.cell='cell-6'; S.cells=new Set([S.cell]); handle('cellType:gap')");
-  assert.equal(r('S.people[5].seat'), 'A-16');
+  assert.equal(r('S.people[5].seat'), 'G-5');
   r("handle('cancelLayout')");
-  assert.equal(r('S.people[5].seat'), 'A-16');
+  assert.equal(r('S.people[5].seat'), 'G-5');
   r("handle('cellType:gap'); handle('applyLayout')");
   assert.equal(r('S.people[5].seat'), '');
   r('resetDraft()');
-  assert.equal(r('S.people[5].seat'), 'A-16');
+  assert.equal(r('S.people[5].seat'), 'G-5');
   assert.equal(r('selectedCell().type'), 'seat');
 });
 
@@ -136,16 +158,16 @@ test('席移動・交換は確定時のみ・発行済み理由・重複なし�
   const h = harness(), r = h.run;
   h.inputs['move-person'] = { value: '1' }; h.inputs['move-reason'] = { value: '', focus() {} };
   r("S.screen='placement'; S.cell='cell-4'; syncAssignments(); proposeMove(); commitMove()");
-  assert.equal(r('S.people[0].seat'), 'A-12');
-  r("handle('cancelMove')"); assert.equal(r('S.people[2].seat'), 'A-14');
+  assert.equal(r('S.people[0].seat'), 'C-5');
+  r("handle('cancelMove')"); assert.equal(r('S.people[2].seat'), 'E-5');
   r('proposeMove()'); h.inputs['move-reason'].value = '案内変更'; r('commitMove()');
-  assert.equal(r('S.people[0].seat'), 'A-14'); assert.equal(r('S.people[2].seat'), 'A-12');
+  assert.equal(r('S.people[0].seat'), 'E-5'); assert.equal(r('S.people[2].seat'), 'C-5');
   assert.equal(r('new Set(S.people.filter(p=>p.seat).map(p=>p.seat)).size'), 2);
-  r('resetDraft()'); assert.equal(r('S.people[0].seat'), 'A-12');
+  r('resetDraft()'); assert.equal(r('S.people[0].seat'), 'C-5');
   h.inputs['person-to-place'] = { value: '6' };
   r("S.cell='cell-6'; syncAssignments(); handle('place')");
   h.inputs['move-person'].value = '6'; r("S.cell='cell-0'; syncAssignments(); proposeMove(); commitMove()");
-  assert.equal(r('S.people[5].seat'), 'A-10');
+  assert.equal(r('S.people[5].seat'), 'A-5');
   r("S.cell='cell-11'; syncAssignments(); proposeMove()"); assert.equal(r('S.pendingMove'), null);
 });
 
@@ -180,7 +202,7 @@ test('出力見本は交付方法と席を反映し、確認・中止で状態�
   assert.doesNotMatch(r('output()'), /架空 四郎/);
   r("handle('previewPdf:1')");
   assert.match(r('S.modal.title'), /電子チケットPDF/);
-  assert.match(r('S.modal.body'), /架空 太郎.*A-12/);
+  assert.match(r('S.modal.body'), /架空 太郎.*C-5/);
   r("handle('modalClose')");
   assert.equal(r('S.people[0].issued'), true);
   r("handle('previewPdf:1'); handle('completePdf:1')");

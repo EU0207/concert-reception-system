@@ -3,7 +3,7 @@ const initialPeople = [{
   id: 1,
   name: '架空 太郎',
   label: '架空A',
-  seat: 'A-12',
+  seat: 'C-5',
   note: '受付時に案内事項を確認する（架空の例）',
   method: '電子チケット',
   contact: true,
@@ -27,7 +27,7 @@ const initialPeople = [{
   id: 3,
   name: '例示 三郎',
   label: '例示C',
-  seat: 'A-14',
+  seat: 'E-5',
   note: '',
   method: '紙チケット',
   contact: true,
@@ -100,7 +100,7 @@ const S = {
   customChecksOpen: false,
   peoplePageSize: 50,
   peoplePage: 1,
-  seat: 'A-12',
+  seat: 'C-5',
   personToPlace: 2,
   placementFilter: 'confirmed',
   zoom: 1,
@@ -135,7 +135,7 @@ const S = {
 S.savedForm = structuredClone(S.form);
 S.savedPeople = structuredClone(S.people);
 S.gapSeats = new Set();
-S.spaceSeats = new Set(['A-21', 'A-39']);
+S.spaceSeats = new Set();
 S.savedGapSeats = new Set();
 S.savedSpaceSeats = new Set(S.spaceSeats);
 
@@ -416,7 +416,7 @@ function camera() {
 
 function result() {
   let data = {
-    success: ['✓', '受付しました', '1階 A列 A-12', ''],
+    success: ['✓', '受付しました', '1階 C列 C-5', ''],
     duplicate: ['!', 'すでに受付されています', '初回受付 18:02', '受付理由を確認してください'],
     invalid: ['×', '受付できません', 'この公演のチケットではありません', '管理者へ確認してください'],
     special: ['!', '確認が必要です', '特別案内：受付で確認', '対応済みにしてください'],
