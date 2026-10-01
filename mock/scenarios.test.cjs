@@ -12,7 +12,10 @@ function harness() {
     setTimeout: (fn, delay) => { const id = ++nextTimer; timers.set(id, { fn, delay }); return id; },
     clearTimeout: id => timers.delete(id),
     document: {
-      getElementById: id => inputs[id] || null, querySelector: () => null, querySelectorAll: () => [],
+      getElementById: id => inputs[id] || null, querySelector: () => null,
+      querySelectorAll: selector => selector === '[data-column-name]' || selector === '[data-column-start]'
+        ? Object.values(inputs).filter(input => input.dataset?.[selector === '[data-column-name]' ? 'columnName' : 'columnStart'] !== undefined)
+        : [],
       addEventListener: (name, fn, capture) => { (listeners[name] ||= []).push({ fn, capture }); },
       body: { classList: { toggle() {} } }
     },
@@ -26,6 +29,31 @@ function harness() {
     assert.ok(entry, `timer ${delay}ms`); timers.delete(entry[0]); entry[1].fn();
   } };
 }
+
+test('列名由来の席番号は一覧・属性・確認画面でHTMLとして解釈されない', () => {
+  const h = harness(), r = h.run;
+  const attack = '\"><img src=x onerror=alert(1)>&#x3c;svg/onload=alert(2)>';
+  r("S.screen='seats'; switchScenario('new')");
+  Object.assign(h.inputs, {
+    'grid-rows': { value: '5' }, 'grid-cols': { value: '8' },
+    'grid-direction': { value: 'horizontal' }, 'grid-order': { value: 'forward' },
+    'first-column': { dataset: { columnName: '0' }, value: attack }
+  });
+  r("handle('gridSettings'); S.cells = new Set(['cell-0']); handle('cellType:seat'); S.people[0].cellId = 'cell-0'; syncAssignments()");
+
+  assert.equal(r('S.people[0].seat'), `${attack}-1`);
+  for (const html of [r('seats()'), r('people()'), r('tickets()'), r("S.view='list'; venue()")]) {
+    assert.ok(html.includes('&quot;&gt;&lt;img'), '引用符とタグをエスケープする');
+    assert.ok(html.includes('&amp;#x3c;svg'), '入力されたHTML実体参照もエスケープする');
+    assert.doesNotMatch(html, /<img\b|<svg\/onload/i);
+  }
+
+  const id = r('S.people[0].id');
+  h.listeners.click[0].fn({ target: { closest: selector => selector === '[data-check]' ? { dataset: { check: `${id}:payment` } } : null } });
+  const confirmation = r('S.modal.body');
+  assert.ok(confirmation.includes('&quot;&gt;&lt;img'));
+  assert.doesNotMatch(confirmation, /<img\b|<svg\/onload/i);
+});
 
 test('席設定済みの初期例は縦列・下から・各列1開始で採番済み', () => {
   const { run: r, inputs } = harness();

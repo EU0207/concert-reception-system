@@ -250,7 +250,7 @@ function people() {
   const rows = S.people.slice(start, start + S.peoplePageSize);
   const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat || '<span class="pill warn">席未設定</span>'}</td><td><button class="textbtn" data-action="editNote:${p.id}" aria-label="${name}の案内を編集">${p.note ? '要確認・編集' : '追加'}</button></td></tr>`;
+    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat ? esc(p.seat) : '<span class="pill warn">席未設定</span>'}</td><td><button class="textbtn" data-action="editNote:${p.id}" aria-label="${name}の案内を編集">${p.note ? '要確認・編集' : '追加'}</button></td></tr>`;
   }).join('');
 
   return page('お客様情報', `
@@ -298,11 +298,11 @@ function seatTiles() {
       let selected = S.seat === key;
       let cellType = S.spaceSeats.has(key) ? '空間' : S.gapSeats.has(key) ? '欠番' : '';
       if (cellType) {
-        tiles.push(S.screen === 'seats' ? `<button class="gapcell ${selected ? 'selected' : ''}" data-seat="${key}" aria-label="${cellType}セル ${key}">${cellType}</button>` : `<div class="gapcell">${cellType}</div>`);
+        tiles.push(S.screen === 'seats' ? `<button class="gapcell ${selected ? 'selected' : ''}" data-seat="${esc(key)}" aria-label="${cellType}セル ${esc(key)}">${cellType}</button>` : `<div class="gapcell">${cellType}</div>`);
         continue;
       }
       let p = S.people.find(x => x.seat === key);
-      tiles.push(`<button class="seat ${selected ? 'selected' : ''} ${p ? '' : 'empty'} ${S.arrived === key ? 'arrived' : ''}" data-seat="${key}" aria-label="席 ${key}${p ? ', ' + p.label : ''}"><strong>${key}</strong>${p ? seatDisplayName(p.label) : '<span>空席</span>'}${S.arrived === key ? '<span>✓ 来場済み</span>' : ''}</button>`);
+      tiles.push(`<button class="seat ${selected ? 'selected' : ''} ${p ? '' : 'empty'} ${S.arrived === key ? 'arrived' : ''}" data-seat="${esc(key)}" aria-label="席 ${esc(key)}${p ? ', ' + esc(p.label) : ''}"><strong>${esc(key)}</strong>${p ? seatDisplayName(p.label) : '<span>空席</span>'}${S.arrived === key ? '<span>✓ 来場済み</span>' : ''}</button>`);
     }
   }
   return `<div class="seatmap" style="transform:scale(${S.zoom})"><div class="stage-label">舞台</div>${tiles.join('')}</div>`;
@@ -344,7 +344,7 @@ function tickets() {
   const rowHtml = rows.map(p => `<tr>
     <td><label class="ticket-row-select"><input type="checkbox" data-select="${p.id}" ${S.selectedIds.has(p.id) ? 'checked' : ''} aria-label="${esc(p.name)}を選択"></label></td>
     <td><button class="buyer-name" data-action="showTicketPerson:${p.id}" aria-label="${esc(p.name)}の対応状況と案内情報を表示">${esc(p.name)}</button>${p.note ? '<span class="pill warn">要確認</span>' : ''}</td>
-    <td>${p.seat || '<span class="pill warn">席未設定</span>'}</td>
+    <td>${p.seat ? esc(p.seat) : '<span class="pill warn">席未設定</span>'}</td>
     <td><select data-method="${p.id}">${['未選択', '電子チケット', '紙チケット'].map(m => `<option ${p.method === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>
     ${checks.map(([key, label]) => `<td><button class="${p[key] ? 'pill' : 'secondary'} ${systemCheckIds.has(key) ? 'system-check-button' : ''}" data-check="${p.id}:${key}" aria-label="${esc(p.name)}の${esc(label)}を${p[key] ? '未済み' : '済み'}にする">${p[key] ? '✓ 済' : '□ 未'}</button></td>`).join('')}
     <td>${p.note ? `<button class="textbtn" data-action="showTicketPerson:${p.id}">要確認</button>` : '－'}</td>
@@ -437,7 +437,7 @@ function venueSvg() {
 function venue() {
   let p = S.people.find(x => x.seat === S.seat),
     admin = S.role !== '一般受付担当者';
-  return page('会場席管理', `<div class="card stack"><div class="row between"><strong>未受付 42 / 来場済み 258</strong><div class="row">${btn('座席表', 'mapView', S.view === 'map' ? 'primary' : 'secondary')}${btn('一覧', 'listView', S.view === 'list' ? 'primary' : 'secondary')}</div></div><details open><summary>会場画像を表示／隠す</summary><div class="venue"><div style="width:100%;height:100%;transform:scale(${S.imageZoom})">${venueSvg()}</div></div><div class="venue-controls">${btn('前の画像', 'prevImage')}${btn('次の画像', 'nextImage')}<span>${S.imageIndex}/2</span>${btn('縮小', 'imageOut')}${btn('拡大', 'imageIn')}</div><small>図解用の架空画像。実画像の取得は行いません。</small></details>${S.view === 'map' ? canvas() : `<div class="tablewrap"><table class="table"><thead><tr><th>席番号</th><th>座席表示名</th><th>状態</th></tr></thead><tbody>${S.people.filter(x => x.seat).map(x => `<tr><td><button data-seat="${x.seat}" class="textbtn">${x.seat}</button></td><td>${esc(x.label)}</td><td>${S.arrived === x.seat ? '来場済み' : '未受付'}</td></tr>`).join('')}</tbody></table></div>`}<div class="preview"><strong>選択中：${esc(S.seat)}</strong><p>状態：${S.arrived === S.seat ? '来場済み' : '未受付'} · 座席表示名：${p ? esc(p.label) : '席未設定'}</p>${admin ? `<p>購入者名：${p ? esc(p.name) : '－'}</p><div class="row">${btn('座席表示名を変更', 'changeLabel')}${btn(S.arrived === S.seat ? '未受付へ訂正' : '手動受付', 'manual', 'primary')}</div>` : ''}</div></div>`, '一般受付担当者では直接編集操作と購入者名を表示しません。');
+  return page('会場席管理', `<div class="card stack"><div class="row between"><strong>未受付 42 / 来場済み 258</strong><div class="row">${btn('座席表', 'mapView', S.view === 'map' ? 'primary' : 'secondary')}${btn('一覧', 'listView', S.view === 'list' ? 'primary' : 'secondary')}</div></div><details open><summary>会場画像を表示／隠す</summary><div class="venue"><div style="width:100%;height:100%;transform:scale(${S.imageZoom})">${venueSvg()}</div></div><div class="venue-controls">${btn('前の画像', 'prevImage')}${btn('次の画像', 'nextImage')}<span>${S.imageIndex}/2</span>${btn('縮小', 'imageOut')}${btn('拡大', 'imageIn')}</div><small>図解用の架空画像。実画像の取得は行いません。</small></details>${S.view === 'map' ? canvas() : `<div class="tablewrap"><table class="table"><thead><tr><th>席番号</th><th>座席表示名</th><th>状態</th></tr></thead><tbody>${S.people.filter(x => x.seat).map(x => `<tr><td><button data-seat="${esc(x.seat)}" class="textbtn">${esc(x.seat)}</button></td><td>${esc(x.label)}</td><td>${S.arrived === x.seat ? '来場済み' : '未受付'}</td></tr>`).join('')}</tbody></table></div>`}<div class="preview"><strong>選択中：${esc(S.seat)}</strong><p>状態：${S.arrived === S.seat ? '来場済み' : '未受付'} · 座席表示名：${p ? esc(p.label) : '席未設定'}</p>${admin ? `<p>購入者名：${p ? esc(p.name) : '－'}</p><div class="row">${btn('座席表示名を変更', 'changeLabel')}${btn(S.arrived === S.seat ? '未受付へ訂正' : '手動受付', 'manual', 'primary')}</div>` : ''}</div></div>`, '一般受付担当者では直接編集操作と購入者名を表示しません。');
 }
 
 function messages() {
@@ -1195,7 +1195,7 @@ document.addEventListener('click', e => {
       p = S.people.find(x => x.id === +id);
     if (!p || p.inactive || !Object.hasOwn(checkLabels, k)) return;
     if (k === 'issued' && !p.seat && !p.issued) return toast('席未設定の方には発行できません');
-    return confirmAction(`${checkLabels[k]}を変更`, `${esc(p.name)} · ${p.seat || '席未設定'}：${p[k] ? '済み → 未済み' : '未済み → 済み'}。他のチェック項目は変更しません。`, `checkConfirm:${id}:${k}`);
+    return confirmAction(`${checkLabels[k]}を変更`, `${esc(p.name)} · ${p.seat ? esc(p.seat) : '席未設定'}：${p[k] ? '済み → 未済み' : '未済み → 済み'}。他のチェック項目は変更しません。`, `checkConfirm:${id}:${k}`);
   }
 
   let act = e.target.closest('[data-action]');
