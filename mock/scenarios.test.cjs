@@ -123,6 +123,20 @@ test('席設定済みの初期例は縦列・下から・各列1開始で採番�
   assert.equal(r('S.modal'), null);
 });
 
+test('来場済み席の目印は会場席管理の座席表だけに表示する', () => {
+  const { run: r } = harness();
+  r("S.arrived = S.people[0].seat; S.screen = 'venue'");
+  const venueMap = r('seatTiles()');
+  assert.match(venueMap, /class="seat cell-seat [^"]*arrived"[^>]*aria-label="[^"]*来場済み"[^>]*><strong>[^<]* ✓<\/strong>/);
+  assert.equal((venueMap.match(/class="seat cell-seat [^"]*arrived"/g) || []).length, 1);
+  assert.match(r('canvas()'), /class="seatmap-legend"/);
+  r("S.screen = 'seats'");
+  assert.doesNotMatch(r('seatTiles()'), /class="seat cell-seat [^"]*arrived"| ✓<\/strong>/);
+  assert.doesNotMatch(r('canvas()'), /class="seatmap-legend"/);
+  r("S.screen = 'placement'");
+  assert.doesNotMatch(r('seatTiles()'), /class="seat cell-seat [^"]*arrived"| ✓<\/strong>/);
+});
+
 test('新規会場・番号消費・種別往復・列方向・固定ID・保存破棄', () => {
   const h = harness(), r = h.run;
   r("S.screen='seats'; switchScenario('new'); S.cells=new Set(['cell-0','cell-1','cell-2']); handle('cellType:seat')");

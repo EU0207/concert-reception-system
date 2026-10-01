@@ -132,7 +132,8 @@ seatTiles = function () {
   const l = S.layout;
   return `<div class="seatmap editable-map" style="transform:scale(${S.zoom});grid-template-columns:90px repeat(${l.cols},74px);grid-template-rows:repeat(${l.rows},72px)"><div class="stage-label" style="grid-row:1/${l.rows + 1};grid-column:1">舞台</div>${l.cells.map(c => {
     const p = S.people.find(p => p.seat && p.cellId === c.id);
-    return `<button class="seat cell-${c.type} ${S.cells.has(c.id) && S.screen === 'seats' || S.cell === c.id ? 'selected' : ''}" style="grid-column:${c.col + 2};grid-row:${c.row + 1}" data-cell="${c.id}" data-seat="${esc(c.code)}" aria-label="${esc(c.code || `${c.row + 1}行${c.col + 1}列`)} ${cellTypes[c.type]}"><strong>${esc(c.code || cellTypes[c.type])}</strong>${p ? seatDisplayName(p.label) : `<span>${cellTypes[c.type]}</span>`}</button>`;
+    const arrived = S.screen === 'venue' && c.type === 'seat' && p && S.arrived === c.code;
+    return `<button class="seat cell-${c.type} ${S.cells.has(c.id) && S.screen === 'seats' || S.cell === c.id ? 'selected' : ''} ${arrived ? 'arrived' : ''}" style="grid-column:${c.col + 2};grid-row:${c.row + 1}" data-cell="${c.id}" data-seat="${esc(c.code)}" aria-label="${esc(c.code || `${c.row + 1}行${c.col + 1}列`)} ${cellTypes[c.type]}${arrived ? '、来場済み' : ''}"><strong>${esc(c.code || cellTypes[c.type])}${arrived ? ' ✓' : ''}</strong>${p ? seatDisplayName(p.label) : `<span>${cellTypes[c.type]}</span>`}</button>`;
   }).join('')}</div>`;
 };
 

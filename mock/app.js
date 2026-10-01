@@ -310,7 +310,7 @@ function seatTiles() {
 }
 
 function canvas() {
-  return `<div class="canvas-outer" id="canvas" data-canvas-screen="${S.screen}"><div class="seatmap-extent">${seatTiles()}</div></div><div class="row" style="margin-top:9px">${btn('－', 'zoomOut')}${btn('＋', 'zoomIn')}${btn('標準倍率で左上へ', 'resetCanvas')}${btn('選択席へ戻る', 'focusSeat')}</div>`;
+  return `${S.screen === 'venue' ? '<div class="seatmap-legend"><span class="arrival-swatch" aria-hidden="true">✓</span>来場済み</div>' : ''}<div class="canvas-outer" id="canvas" data-canvas-screen="${S.screen}"><div class="seatmap-extent">${seatTiles()}</div></div><div class="row" style="margin-top:9px">${btn('－', 'zoomOut')}${btn('＋', 'zoomIn')}${btn('標準倍率で左上へ', 'resetCanvas')}${btn('選択席へ戻る', 'focusSeat')}</div>`;
 }
 
 function seats() {
