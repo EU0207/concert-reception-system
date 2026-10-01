@@ -993,6 +993,9 @@ h3 {
 .image-pan { overflow: auto; cursor: grab; touch-action: pan-x pan-y; }
 .settings-card, .settings-card details { min-width: 0; max-width: 100%; }
 .settings-card { grid-template-columns: minmax(0, 1fr); }
+.scenario-switch { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.scenario-current { display:flex; align-items:baseline; gap:4px; padding-left:10px; border-left:3px solid #207565; color:#164e43; }
+.scenario-current span { color:#526965; font-size:.85rem; }
 @media (min-width: 901px) {
   .stage { grid-template-rows: min-content 1fr; }
 }
