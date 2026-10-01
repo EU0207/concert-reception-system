@@ -33,7 +33,7 @@ S.notices = Array.from({ length: 10 }, (_, i) => ({
   title: ['集合場所の確認', '緊急時の連絡先', '座席案内', '入口の案内板', '受付備品の確認', '休憩の交代', '紙受付の保管場所', '開場前の確認', '会場内の動線', '当日の持ち物'][i],
   text: ['開始前に受付入口で集合してください。', '困った場合は会場責任者へ声をかけてください。', '席のご案内には会場席画面を使用してください。'][i % 3] + '（架空の連絡）'
 }));
-S.devices = sampleDevices.map((d, i) => ({ ...d, accountId: `staff-${d.id}`, approval: i === 2 ? 'pending' : 'approved', prepared: i === 0, stopped: false, retired: false, erased: false, unsent: i === 1 ? 1 : 0, isolated: 0, mockReceiptConfirmed: false, mockClosed: false }));
+S.devices = sampleDevices.map((d, i) => ({ ...d, accountId: `staff-${d.id}`, approval: i === 2 ? 'pending' : 'approved', prepared: i === 0 || i === 3, stopped: false, retired: false, erased: false, unsent: i === 1 ? 1 : 0, isolated: 0, mockReceiptConfirmed: false, mockClosed: false }));
 S.pendingRoleChange = null;
 S.cameraResult = false;
 S.cameraWaiting = false;
@@ -248,7 +248,8 @@ staff = function () {
     const registration = d.registration === 'staff' ? '<p class="small muted">一般受付担当者の新端末申請</p>' : d.registration === 'linked' ? '<p class="small muted">主担当本人の追加端末・関連付け済み</p>' : '';
     const replacementNeeded = needsManagerReplacement(d);
     const current = S.devices.find(other => other.current);
-    const waitingReplacement = replacementNeeded && S.devices.find(other => other.id !== d.id && ['主担当', '代理管理者'].includes(other.role) && other.approval === 'approved' && !other.prepared && !other.stopped && !other.retired && !other.erased);
+    const waitingCandidates = S.devices.filter(other => other.id !== d.id && ['主担当', '代理管理者'].includes(other.role) && other.approval === 'approved' && !other.prepared && !other.stopped && !other.retired && !other.erased);
+    const waitingReplacement = replacementNeeded && (waitingCandidates.find(other => other.accountId === d.accountId && other.registration === 'linked') || waitingCandidates.find(other => other.current) || waitingCandidates[0]);
     const replacementNotice = waitingReplacement
       ? `代替端末「${esc(waitingReplacement.name)}」は追加済みですが、まだ準備が完了していません。${waitingReplacement.current ? '現在の端末の「その他」で準備を完了してください。' : current?.accountId === waitingReplacement.accountId ? '「この端末として操作を試す」で切り替え、「その他」で準備を完了してください。' : 'その端末自身で準備を完了してください。'}準備前は、この端末の廃止と端末内データ削除はできません。`
       : '利用可能な代替管理端末がありません。この端末の廃止と端末内データ削除はできません。別の管理端末を準備するか、端末喪失時は環境所有者の復旧手順へ進んでください。';
