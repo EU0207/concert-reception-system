@@ -279,8 +279,9 @@ function other() {
 const baseNav = nav;
 nav = function () {
   const html = baseNav();
-  const link = S.role === '一般受付担当者' || html.includes('data-screen="staff"') ? '' : `<button data-screen="staff" class="${S.screen === 'staff' ? 'active' : ''}" ${S.screen === 'staff' ? 'aria-current="page"' : ''}>スタッフ・端末</button>`;
-  return html.replace(/<button data-screen="device"[\s\S]*?<\/button>/, link).replace('</nav>', `<span class="group">端末設定</span><button data-screen="other" class="${S.screen === 'other' ? 'active' : ''}" ${S.screen === 'other' ? 'aria-current="page"' : ''}>その他</button></nav>`);
+  const staffLink = S.role === '一般受付担当者' ? '' : `<button data-screen="staff" class="${S.screen === 'staff' ? 'active' : ''}" ${S.screen === 'staff' ? 'aria-current="page"' : ''}>スタッフ・端末</button>`;
+  const otherLink = `<button data-screen="other" class="${S.screen === 'other' ? 'active' : ''}" ${S.screen === 'other' ? 'aria-current="page"' : ''}>その他</button>`;
+  return html.replace(/<button data-screen="(?:staff|device)"[\s\S]*?<\/button>/g, '').replace('</nav>', `<span class="group">端末設定</span>${staffLink}${otherLink}</nav>`);
 };
 const baseVenue = venue;
 venue = function () { return baseVenue().replace(/<details open>[\s\S]*?<\/details>/, venueImage()); };

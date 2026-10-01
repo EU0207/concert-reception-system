@@ -338,9 +338,13 @@ test('端末申請と本人追加を区別し、他端末の準備・データ�
 
 test('一般受付は管理メニュー非表示・自身の端末だけ削除・未送信保護', () => {
   const { run: r } = harness();
+  assert.match(r('nav()'), /<span class="group">端末設定<\/span><button data-screen="staff"[\s\S]*?<button data-screen="other"/);
+  assert.doesNotMatch(r('nav()'), /data-screen="device"/);
+  r("S.role='臨時管理者'");
+  assert.match(r('nav()'), /<span class="group">端末設定<\/span><button data-screen="staff"[\s\S]*?<button data-screen="other"/);
   r("S.role='一般受付担当者'");
   assert.doesNotMatch(r('nav()'), /data-screen="staff"|data-screen="device"/);
-  assert.match(r('nav()'), /data-screen="other"/);
+  assert.match(r('nav()'), /<span class="group">端末設定<\/span><button data-screen="other"/);
   r("go('staff')"); assert.equal(r('S.screen'), 'other');
   assert.match(r('body()'), /この端末のデータを削除/);
   r("handle('registerDevice'); handle('linkDevice'); deviceAction('approve',3,true); deviceAction('erase',3,true); deviceAction('stop',1,true)");
