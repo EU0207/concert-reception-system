@@ -236,6 +236,7 @@ test('一般受付は管理メニュー非表示・自身の端末だけ削除�
   assert.equal(r('S.devices[2].approval'), 'pending');
   assert.equal(r('S.devices[2].erased'), false);
   assert.equal(r('S.devices[0].stopped'), false);
+  r("S.devices.push({...S.devices[2], id:4, approval:'approved', prepared:true})");
   r("S.devices[0].unsent=1; handle('device:erase:1')");
   assert.match(r('S.modal.title'), /削除できません/);
   r("S.devices[0].unsent=0; handle('device:erase:1')"); assert.match(r('S.modal.title'), /削除できません/);
@@ -257,6 +258,7 @@ test('一般受付は管理メニュー非表示・自身の端末だけ削除�
 
 test('自己端末の削除は受領と締め・廃止を確認し、確認中の未送信発生でも拒否する', () => {
   const { run: r } = harness();
+  r("S.devices.push({...S.devices[2], id:4, approval:'approved', prepared:true})");
   r("S.screen='other'; handle('deleteReadyDemo')");
   assert.equal(r('S.devices[0].mockReceiptConfirmed'), true);
   assert.equal(r('S.devices[0].mockClosed'), true);
@@ -269,6 +271,27 @@ test('自己端末の削除は受領と締め・廃止を確認し、確認中�
   assert.equal(r('S.devices[0].erased'), false);
   r("S.devices[0].mockReceiptConfirmed=true; S.devices[0].mockClosed=false; deviceAction('erase',1,true)");
   assert.equal(r('S.devices[0].erased'), false);
+});
+
+test('最後の管理端末は廃止と自己データ削除を拒否し、代替端末の状態を確定時にも再確認する', () => {
+  const { run: r } = harness();
+  r("S.screen='staff'");
+  assert.match(r('staff()'), /data-action="device:retire:1" disabled/);
+  r("handle('device:retire:1')");
+  assert.match(r('S.modal.title'), /最後の管理端末/);
+  assert.equal(r('S.devices[0].retired'), false);
+  r("S.screen='other'; handle('deleteReadyDemo')");
+  assert.match(r('other()'), /代替管理端末.*未達|未達.*代替管理端末/);
+  r("deviceAction('erase',1,true)");
+  assert.equal(r('S.devices[0].erased'), false);
+  r("S.devices.push({...S.devices[2], id:4, approval:'approved', prepared:true})");
+  assert.match(r('other()'), /data-action="device:erase:1" >/);
+  r("handle('device:erase:1'); handle('deviceAgain:erase:1')");
+  r("S.devices[3].stopped=true; handle('deviceCommit:erase:1')");
+  assert.equal(r('S.devices[0].erased'), false);
+  r("S.devices[3].stopped=false; S.screen='staff'; handle('device:retire:1'); handle('deviceAgain:retire:1')");
+  r("S.devices[3].prepared=false; handle('deviceCommit:retire:1')");
+  assert.equal(r('S.devices[0].retired'), false);
 });
 
 test('主担当は下位役割を変更し、同じ利用者の端末をまとめて追加準備待ちにする', () => {
