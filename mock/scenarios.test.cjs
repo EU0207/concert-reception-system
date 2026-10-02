@@ -357,6 +357,31 @@ test('公演一覧の役割・端末切替は4台のこの端末表示と一致�
   assert.equal(r('S.devices.find(d => d.current).id'), 4);
 });
 
+test('公演終了・締めは主担当と代理管理者だけが開き、確定時も役割を確認する', () => {
+  const { run: r } = harness();
+  for (const role of ['臨時管理者', '一般受付担当者']) {
+    r(`S.role='${role}'; S.screen='management'`);
+    assert.doesNotMatch(r('management()'), /data-action="close"/);
+    r("go('close')");
+    assert.equal(r('S.screen'), 'management');
+    r("S.screen='close'");
+    assert.doesNotMatch(r('close()'), /data-action="exceptionClose"/);
+    r("handle('exceptionClose'); handle('closeDo')");
+    assert.equal(r('S.modal'), null);
+    assert.match(r('S.toast'), /主担当または代理管理者/);
+  }
+  for (const role of ['主担当', '代理管理者']) {
+    r(`S.role='${role}'; S.screen='management'`);
+    assert.match(r('management()'), /data-action="close"/);
+    r("go('close'); handle('exceptionClose')");
+    assert.equal(r('S.screen'), 'close');
+    assert.match(r('S.modal.title'), /例外締め/);
+  }
+  r("S.role='臨時管理者'; handle('closeDo')");
+  assert.equal(r('S.modal'), null);
+  assert.match(r('S.toast'), /主担当または代理管理者/);
+});
+
 test('端末申請と本人追加を区別し、他端末の準備・データ削除を拒否する', () => {
   const { run: r } = harness();
   r("deviceAction('stop',2,true)"); assert.equal(r('S.devices[1].stopped'), true); assert.equal(r('S.devices[0].stopped'), false);

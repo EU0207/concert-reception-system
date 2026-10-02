@@ -1,5 +1,9 @@
 # 要件定義書
 
+## CONF-068による承認済み追補
+
+[依頼者回答](../development/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)により、REQ-F-040の通常締め・例外締めは主担当または代理管理者だけに許可し、臨時管理者には許可しない。REQ-F-028の臨時管理者権限は、公演と利用者ごとに設定できるようにする。設定可能な操作と条件は[変更Issue #98](https://github.com/EU0207/concert-reception-system/issues/98)で設計する。既存の禁止操作は、その設計と承認が済むまで許可しない。
+
 ## CONF-067による承認済み追補
 
 [依頼者回答](../development/ui-mock-client-response.md#conf-067-お客様の個別登録)により、REQ-F-001のExcel取込に加え、主担当・代理管理者が「お客様情報」から公演の名簿へ個別登録できるようにする。購入者名は必須とし、既存の前後空白除去と1～50文字の条件を適用する。追加直後は席未設定とする。席設定と必要な確認が完了するまで、対象行のチケット・QRは発行しない。Excel取込は継続する。重複候補、履歴、同時更新の設計は[変更Issue #97](https://github.com/EU0207/concert-reception-system/issues/97)で追跡する。
