@@ -440,9 +440,12 @@ test('自己端末の削除は受領と締め・廃止を確認し、確認中�
 test('最後の管理端末は廃止と自己データ削除を拒否し、代替端末の状態を確定時にも再確認する', () => {
   const { run: r } = harness();
   r("S.screen='staff'");
-  assert.match(r('staff()'), /data-action="device:retire:1" disabled/);
+  assert.match(r('staff()'), /data-action="device:retire:1" >/);
+  assert.doesNotMatch(r('staff()'), /代替端末「見本端末 02」|利用可能な代替管理端末がありません/);
   r("handle('device:retire:1')");
-  assert.match(r('S.modal.title'), /最後の管理端末/);
+  assert.match(r('S.modal.title'), /廃止できません/);
+  assert.match(r('S.modal.body'), /別の主担当端末/);
+  assert.doesNotMatch(r('S.modal.body'), /見本端末 02/);
   assert.equal(r('S.devices[0].retired'), false);
   r("S.screen='other'; handle('deleteReadyDemo')");
   assert.match(r('other()'), /代替管理端末.*未達|未達.*代替管理端末/);
@@ -453,17 +456,22 @@ test('最後の管理端末は廃止と自己データ削除を拒否し、代�
   r("handle('device:erase:1'); handle('deviceAgain:erase:1')");
   r("S.devices[4].stopped=true; handle('deviceCommit:erase:1')");
   assert.equal(r('S.devices[0].erased'), false);
-  r("S.devices[4].stopped=false; S.screen='staff'; handle('device:retire:1'); handle('deviceAgain:retire:1')");
-  r("S.devices[4].prepared=false; handle('deviceCommit:retire:1')");
+  r("S.devices[4].stopped=false; S.screen='staff'; handle('device:retire:1')");
+  assert.match(r('S.modal.body'), /別の主担当端末/);
+  r("S.devices.push({...S.devices[0], id:6, name:'主担当の追加端末', current:false, prepared:true}); handle('device:retire:1'); handle('deviceAgain:retire:1')");
+  r("S.devices[5].prepared=false; handle('deviceCommit:retire:1')");
   assert.equal(r('S.devices[0].retired'), false);
 });
 
-test('主担当の追加端末は本人側で準備すると代替端末になり警告が消える', () => {
+test('主担当の追加端末は本人側で準備すると廃止条件を満たす', () => {
   const { run: r } = harness();
   r("S.screen='staff'; handle('linkDevice'); handle('linkDeviceDo')");
   assert.equal(r('S.devices[4].prepared'), false);
-  assert.match(r('staff()'), /追加済みですが、まだ準備が完了していません/);
-  assert.match(r('staff()'), /data-action="device:retire:1" disabled/);
+  assert.doesNotMatch(r('staff()'), /追加済みですが、まだ準備が完了していません/);
+  r("handle('device:retire:1')");
+  assert.match(r('S.modal.body'), /主担当の追加端末/);
+  assert.match(r('S.modal.body'), /まだ準備が完了していません|準備が完了していません/);
+  r("handle('modalClose')");
   assert.match(r('staff()'), /data-action="switchMockDevice:5"/);
   r("handle('switchMockDevice:3')");
   assert.equal(r('S.devices[0].current'), true);
@@ -472,13 +480,17 @@ test('主担当の追加端末は本人側で準備すると代替端末にな�
   assert.equal(r('S.devices[4].current'), true);
   assert.equal(r('S.devices[0].current'), false);
   assert.match(r('other()'), /data-action="device:prepare:5"/);
-  assert.match(r('staff()'), /現在の端末の「その他」で準備を完了/);
+  r("go('staff'); handle('device:retire:1')");
+  assert.match(r('S.modal.body'), /この端末の「その他」で準備を完了/);
+  r("handle('modalClose'); go('other')");
   r("deviceAction('prepare',5,true)");
   assert.equal(r('S.devices[4].prepared'), true);
   r("go('staff')");
-  assert.equal(r('needsManagerReplacement(S.devices[0])'), false);
+  assert.equal(r('needsRetirementReplacement(S.devices[0])'), false);
   assert.doesNotMatch(r('staff()'), /追加済みですが、まだ準備が完了していません/);
-  assert.doesNotMatch(r('staff()'), /data-action="device:retire:1" disabled/);
+  r("handle('device:retire:1')");
+  assert.match(r('S.modal.title'), /重大操作/);
+  r("handle('modalClose')");
   r("handle('switchMockDevice:1')");
   assert.equal(r('S.devices[0].current'), true);
   assert.equal(r('S.devices.filter(d => d.current).length'), 1);
