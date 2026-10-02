@@ -11,9 +11,11 @@
 | 関連Issue | [#85 UIモック確認](https://github.com/EU0207/concert-reception-system/issues/85)、[#89 当日導線と会場表示](https://github.com/EU0207/concert-reception-system/issues/89)、[#90 連絡と重大操作](https://github.com/EU0207/concert-reception-system/issues/90)、[#91 会場席と配置](https://github.com/EU0207/concert-reception-system/issues/91)、[#93 チケット準備](https://github.com/EU0207/concert-reception-system/issues/93) |
 | 状態 | In Review |
 
-依頼者から伝達された回答は[CONF-055～CONF-060](ui-mock-client-response.md)に記録した。2026-09-28にFB-01～FB-33の変更を包括承認として受領した。本書の過去の未承認表記と確認欄は当時の経緯であり、最新の採用内容と残る技術作業は[本番引継ぎ台帳](ui-mock-production-handoff.md)を参照する。
+依頼者から伝達された回答は[UIモック依頼者回答](ui-mock-client-response.md)に記録した。2026-09-28にFB-01～FB-33の変更を包括承認として受領した。本書の過去の未承認表記と確認欄は当時の経緯であり、最新の採用内容と残る技術作業は[本番引継ぎ台帳](ui-mock-production-handoff.md)を参照する。
 
 ## 結論
+
+2026-10-02、開発者から、依頼者が現状の操作可能なUIモックを確認して「とても良い」と評価した旨の伝達を受けた。開発者はモックを完成とする意向を示した。確認した版の特定と公開範囲の判断は別に扱う。この評価を本番実装・実機試験の合格とは扱わない。
 
 主要画面の操作可能な見本を作成し、追加変更の依頼者承認をCONF-060で受領した。モックにない変更も本番引継ぎ台帳へ登録し、関連する設計・受入条件の追補とした。モックの初期確認と依頼者の変更承認は、本番の試験合格とは区別する。詳細設計の具体化と実装Issueへの割当は#89～93の残作業である。
 
