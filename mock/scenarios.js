@@ -295,7 +295,13 @@ nav = function () {
 const baseVenue = venue;
 venue = function () { return baseVenue().replace(/<details open>[\s\S]*?<\/details>/, venueImage()); };
 management = function () {
-  return page('当日管理', `<div class="stack"><section class="card stack"><h3>端末の確認</h3><p>承認・停止・廃止は「スタッフ・端末」で行います。</p><div class="row">${btn('スタッフ・端末へ', 'staff')}</div></section><section class="card stack"><h3>公演終了</h3><div class="row">${btn('締め画面へ', 'close')}${btn('公演後の再ログイン表示', 'relogin')}</div></section></div>`, '端末操作と公演の締めを確認します。');
+  const canClose = ['主担当', '代理管理者'].includes(S.role);
+  return page('当日管理', `<div class="stack"><section class="card stack"><h3>端末の確認</h3><p>承認・停止・廃止は「スタッフ・端末」で行います。</p><div class="row">${btn('スタッフ・端末へ', 'staff')}</div></section><section class="card stack"><h3>公演終了</h3>${canClose ? `<div class="row">${btn('締め画面へ', 'close')}${btn('公演後の再ログイン表示', 'relogin')}</div>` : '<p>公演終了・締めは主担当または代理管理者が行います。</p>'}</section></div>`, '端末操作と公演の締めを確認します。');
+};
+const baseClose = close;
+close = function () {
+  if (!['主担当', '代理管理者'].includes(S.role)) return management();
+  return baseClose();
 };
 
 function deviceAction(op, id, confirmed = false) {
@@ -328,6 +334,7 @@ const baseGo = go;
 go = function (target, ...args) {
   if (target === 'device') target = 'staff';
   if (target === 'staff' && S.role === '一般受付担当者') target = 'other';
+  if (target === 'close' && !['主担当', '代理管理者'].includes(S.role)) target = 'management';
   if (S.screen === 'camera' && target !== 'camera') stopCamera();
   return baseGo(target, ...args);
 };
@@ -340,6 +347,10 @@ camera = function () {
 const baseRender = render;
 render = function () {
   if (S.role === '一般受付担当者' && ['staff', 'device'].includes(S.screen)) S.screen = 'other';
+  if (S.screen === 'close' && !['主担当', '代理管理者'].includes(S.role)) {
+    S.screen = 'management';
+    S.modal = null;
+  }
   const image = document.querySelector('.image-pan');
   const position = image ? { left: image.scrollLeft, top: image.scrollTop } : null;
   S.unread = unreadCount(); baseRender();
@@ -360,6 +371,10 @@ render = function () {
 
 const baseHandle = handle;
 handle = function (action) {
+  if (['exceptionClose', 'closeDo'].includes(action) && (S.screen !== 'close' || !['主担当', '代理管理者'].includes(S.role))) {
+    S.modal = null;
+    return toast('公演終了・締めは主担当または代理管理者が行います');
+  }
   if (action === 'deleteReadyDemo') {
     const d = S.devices.find(device => device.current);
     if (S.screen !== 'other' || !d || d.erased || !['主担当', '代理管理者'].includes(S.role) || !S.online || d.unsent || d.isolated) return toast('管理者確認または未送信・隔離記録の条件を満たしていません');
