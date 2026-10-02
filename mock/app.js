@@ -191,15 +191,26 @@ function toast(message) {
 }
 
 function header() {
-  let day = dayScreens.has(S.screen),
-    back = day && S.screen !== 'day';
-  return `<header class="top"><div class="top-left"><button class="iconbtn menu-toggle" data-action="menuOpen" aria-label="メニューを開く" aria-controls="app-menu" aria-expanded="${S.drawerOpen}">☰</button>${back ? `<button class="iconbtn" data-action="back" aria-label="前の画面へ戻る">←</button>` : ''}<div class="identity"><strong>${esc(S.form.title)}</strong>2027/10/10 · ${esc(S.role)}</div></div><div class="top-right">${day && S.screen !== 'result' ? `<button class="iconbtn" data-action="messages" aria-label="スタッフ連絡、未読${S.unread}件">♧${S.unread ? `<span class="badge">${S.unread > 9 ? '9+' : S.unread}</span>` : ''}</button>` : ''}<button class="iconbtn" data-action="connection" aria-label="通信状態を確認">${S.online ? '◉' : '⊘'}</button></div></header>`;
+  const day = dayScreens.has(S.screen);
+  const back = day && S.screen !== 'day';
+  return `<header class="top"><div class="top-left">` +
+    `<button class="iconbtn menu-toggle" data-action="menuOpen" aria-label="メニューを開く" aria-controls="app-menu" aria-expanded="${S.drawerOpen}">☰</button>` +
+    `${back ? `<button class="iconbtn" data-action="back" aria-label="前の画面へ戻る">←</button>` : ''}` +
+    `<div class="identity"><strong>${esc(S.form.title)}</strong>2027/10/10 · ${esc(S.role)}</div></div>` +
+    `<div class="top-right">${day && S.screen !== 'result' ? `<button class="iconbtn" data-action="messages" aria-label="スタッフ連絡、未読${S.unread}件">♧${S.unread ? `<span class="badge">${S.unread > 9 ? '9+' : S.unread}</span>` : ''}</button>` : ''}` +
+    `<button class="iconbtn" data-action="connection" aria-label="通信状態を確認">${S.online ? '◉' : '⊘'}</button></div></header>`;
 }
 
 function nav() {
-  let admin = ['主担当', '代理管理者'].includes(S.role);
-  let groups = admin ? [['公演準備', ['home', 'prep', 'people', 'tickets', 'seats', 'placement', 'output']], ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]] : [['担当公演', ['home', 'device', 'day', 'venue', ...(S.role === '臨時管理者' ? ['management'] : [])]]];
-  return `<aside class="side ${S.drawerOpen ? 'open' : ''}" id="app-menu" aria-label="画面メニュー"><div class="side-heading"><div class="brand">受付システム <small>操作確認用 UIモック</small></div><button class="iconbtn menu-close" data-action="menuClose" aria-label="メニューを閉じる">×</button></div><nav>${groups.map(([g, ids]) => `<span class="group">${g}</span>${ids.map(id => `<button data-screen="${id}" class="${S.screen === id ? 'active' : ''}" ${S.screen === id ? 'aria-current="page"' : ''}>${screens[id]}</button>`).join('')}`).join('')}</nav></aside>`;
+  const admin = ['主担当', '代理管理者'].includes(S.role);
+  const groups = admin
+    ? [['公演準備', ['home', 'prep', 'people', 'tickets', 'seats', 'placement', 'output']],
+      ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]]
+    : [['担当公演', ['home', 'device', 'day', 'venue', ...(S.role === '臨時管理者' ? ['management'] : [])]]];
+  return `<aside class="side ${S.drawerOpen ? 'open' : ''}" id="app-menu" aria-label="画面メニュー">` +
+    `<div class="side-heading"><div class="brand">受付システム <small>操作確認用 UIモック</small></div>` +
+    `<button class="iconbtn menu-close" data-action="menuClose" aria-label="メニューを閉じる">×</button></div>` +
+    `<nav>${groups.map(([g, ids]) => `<span class="group">${g}</span>${ids.map(id => `<button data-screen="${id}" class="${S.screen === id ? 'active' : ''}" ${S.screen === id ? 'aria-current="page"' : ''}>${screens[id]}</button>`).join('')}`).join('')}</nav></aside>`;
 }
 
 function backTarget() {
@@ -233,7 +244,20 @@ function selectedCellState() {
 
 function home() {
   let admin = ['主担当', '代理管理者'].includes(S.role);
-  return page('公演一覧', `<div class="grid two"><section class="card"><div class="eyebrow">現在の公演</div><h2>${esc(S.form.title)}</h2><p>2027年10月10日 · ${esc(S.form.venue)}</p>${status()}<p style="margin-top:18px">${btn(admin ? '現在の公演を開く' : '担当公演を開く', admin ? 'prep' : 'day', 'primary')}</p></section><section class="card"><div class="eyebrow">切替候補</div><h2>秋のコンサート 2日目</h2><p>2027年10月11日 · 架空市民ホール</p><span class="pill neutral">未送信 0件</span><p style="margin-top:18px">${btn('内容を確認して切り替える', 'switchShow')}</p></section></div><div class="card stack" style="margin-top:16px"><h3>操作確認用の条件</h3><div class="row"><label class="field">操作する役割・端末<select data-role>${S.devices.map(d => `<option value="${d.id}" ${d.current ? 'selected' : ''}>${esc(d.role)}（${esc(d.name)}）</option>`).join('')}</select></label><label class="field">未読連絡数<select data-unread>${[0, 3, 9, 10].map(n => `<option ${S.unread === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>${btn(S.online ? 'オフラインにする' : 'オンラインにする', 'toggleOnline')}</div><p class="small muted">選んだ見本端末を「この端末」として表示し、その役割で画面を確認します。認証・同期は実行しません。</p></div><div class="notice" style="margin-top:17px">このモックの操作はブラウザー内だけで再現されます。再読み込みで初期状態に戻ります。</div>`, '公演単位の切替と、現在公演の区別を確認します。');
+  const currentShow = `<section class="card"><div class="eyebrow">現在の公演</div><h2>${esc(S.form.title)}</h2>` +
+    `<p>2027年10月10日 · ${esc(S.form.venue)}</p>${status()}` +
+    `<p style="margin-top:18px">${btn(admin ? '現在の公演を開く' : '担当公演を開く', admin ? 'prep' : 'day', 'primary')}</p></section>`;
+  const nextShow = `<section class="card"><div class="eyebrow">切替候補</div><h2>秋のコンサート 2日目</h2>` +
+    `<p>2027年10月11日 · 架空市民ホール</p><span class="pill neutral">未送信 0件</span>` +
+    `<p style="margin-top:18px">${btn('内容を確認して切り替える', 'switchShow')}</p></section>`;
+  const demoControls = `<div class="card stack" style="margin-top:16px"><h3>操作確認用の条件</h3><div class="row">` +
+    `<label class="field">操作する役割・端末<select data-role>${S.devices.map(d => `<option value="${d.id}" ${d.current ? 'selected' : ''}>${esc(d.role)}（${esc(d.name)}）</option>`).join('')}</select></label>` +
+    `<label class="field">未読連絡数<select data-unread>${[0, 3, 9, 10].map(n => `<option ${S.unread === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>` +
+    `${btn(S.online ? 'オフラインにする' : 'オンラインにする', 'toggleOnline')}</div>` +
+    `<p class="small muted">選んだ見本端末を「この端末」として表示し、その役割で画面を確認します。認証・同期は実行しません。</p></div>`;
+  return page('公演一覧', `<div class="grid two">${currentShow}${nextShow}</div>${demoControls}` +
+    '<div class="notice" style="margin-top:17px">このモックの操作はブラウザー内だけで再現されます。再読み込みで初期状態に戻ります。</div>',
+  '公演単位の切替と、現在公演の区別を確認します。');
 }
 
 function prep() {
@@ -242,7 +266,14 @@ function prep() {
 }
 
 function info() {
-  return page('公演基本情報', `<div class="card stack"><div class="formgrid"><label class="field">公演名<input data-form="title" value="${esc(S.form.title)}"></label><label class="field">開催日時<input value="2027-10-10 18:00" readonly></label><label class="field">会場名<input data-form="venue" value="${esc(S.form.venue)}"></label><label class="field">住所<input data-form="address" value="${esc(S.form.address)}"><small>会場の所在地です。お客様の住所ではありません。</small></label></div>${status()}<div class="row">${btn('保存', 'save', 'primary')}${btn('公演準備へ戻る', 'prep')}</div></div>`, '編集内容は明示的に保存します。');
+  return page('公演基本情報', `<div class="card stack"><div class="formgrid">` +
+    `<label class="field">公演名<input data-form="title" value="${esc(S.form.title)}"></label>` +
+    '<label class="field">開催日時<input value="2027-10-10 18:00" readonly></label>' +
+    `<label class="field">会場名<input data-form="venue" value="${esc(S.form.venue)}"></label>` +
+    `<label class="field">住所<input data-form="address" value="${esc(S.form.address)}">` +
+    `<small>会場の所在地です。お客様の住所ではありません。</small></label></div>${status()}` +
+    `<div class="row">${btn('保存', 'save', 'primary')}${btn('公演準備へ戻る', 'prep')}</div></div>`,
+  '編集内容は明示的に保存します。');
 }
 
 function people() {
@@ -253,7 +284,12 @@ function people() {
   const rows = S.people.slice(start, start + S.peoplePageSize);
   const rowHtml = rows.map((p, index) => {
     const name = esc(p.name);
-    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th><td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td><td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td><td>${p.seat ? esc(p.seat) : '<span class="pill warn">席未設定</span>'}</td><td><button class="textbtn" data-action="editNote:${p.id}" aria-label="${name}の案内を編集">${p.note ? '要確認・編集' : '追加'}</button></td></tr>`;
+    return `<tr class="${p.inactive ? 'inactive-row' : ''}"><th scope="row" class="row-number">${start + index + 1}</th>` +
+      `<td><button class="buyer-name" data-action="showBuyer:${p.id}" title="この行の情報を表示" aria-label="購入者名 ${name} の行の詳細を表示">${name}</button>` +
+      `${p.inactive ? '<span class="pill neutral">不参加</span>' : ''}</td>` +
+      `<td><input class="seat-label-input" aria-label="${name}の座席表示名" data-label="${p.id}" value="${esc(p.label)}" maxlength="6"></td>` +
+      `<td>${p.seat ? esc(p.seat) : '<span class="pill warn">席未設定</span>'}</td>` +
+      `<td><button class="textbtn" data-action="editNote:${p.id}" aria-label="${name}の案内を編集">${p.note ? '要確認・編集' : '追加'}</button></td></tr>`;
   }).join('');
 
   return page('お客様情報', `
@@ -320,7 +356,20 @@ function canvas() {
 }
 
 function seats() {
-  return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>${S.panelCollapsed ? '' : `<label class="field">区画<select><option>1階 A列</option></select></label><div class="row">${btn('下書きを保存', 'saveDraft', 'primary')}${btn('編集内容を確定', 'confirmFinalize')}</div><details><summary>保存エラーを試す（モック専用）</summary><p class="small muted">他の人が先に保存した状態を作ります。その後「下書きを保存」を押すと、保存できない場合の案内を確認できます。実際の共有先は変更しません。</p>${btn('他の人が先に保存した状態にする', 'simulateConflict')}</details><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section><div class="selection-strip"><div class="selection-details"><span>選択 <strong>${esc(S.seat)}</strong></span><span class="pill neutral">${selectedCellState()}</span></div><div class="seat-actions">${btn('席に', 'makeSeat')}${btn('欠番に', 'makeGap')}${btn('空間に', 'makeSpace')}</div>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, 'キャンバスを縦横に動かし、席を選択してください。');
+  const settings = `<section class="card stack settings-card"><div class="paneltop"><strong>席の設定</strong>` +
+    `${btn(S.panelCollapsed ? '開く' : '最小化', 'panelCollapse', 'textbtn')}</div>` +
+    `${S.panelCollapsed ? '' : `<label class="field">区画<select><option>1階 A列</option></select></label>` +
+      `<div class="row">${btn('下書きを保存', 'saveDraft', 'primary')}${btn('編集内容を確定', 'confirmFinalize')}</div>` +
+      `<details><summary>保存エラーを試す（モック専用）</summary><p class="small muted">他の人が先に保存した状態を作ります。その後「下書きを保存」を押すと、保存できない場合の案内を確認できます。実際の共有先は変更しません。</p>` +
+      `${btn('他の人が先に保存した状態にする', 'simulateConflict')}</details>` +
+      `<div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>` +
+      `${btn(S.panelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}`}</section>`;
+  const selection = `<div class="selection-strip"><div class="selection-details">` +
+    `<span>選択 <strong>${esc(S.seat)}</strong></span><span class="pill neutral">${selectedCellState()}</span></div>` +
+    `<div class="seat-actions">${btn('席に', 'makeSeat')}${btn('欠番に', 'makeGap')}${btn('空間に', 'makeSpace')}</div>${editStatus()}</div>`;
+  return page('会場席の編集', `<div class="stage ${S.panelBottom ? 'panel-bottom' : ''}>${settings}${selection}` +
+    `<section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`,
+  'キャンバスを縦横に動かし、席を選択してください。');
 }
 
 function placement() {
@@ -328,7 +377,25 @@ function placement() {
   const candidates = unplaced.filter(p => S.placementFilter === 'all' || p.payment === (S.placementFilter === 'confirmed'));
   const selectedPerson = candidates.find(p => p.id === S.personToPlace) || candidates[0];
 
-  return page('お客様の席を設定', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}"><section class="card stack settings-card"><h3>席未設定 ${unplaced.length}件</h3><label class="field">表示する対象<select data-placement-filter><option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>入金確認済み</option><option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>入金未確認</option><option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>来場予定の席未設定全員</option></select></label><p class="small muted">表示中 ${candidates.length}件。不参加の方は候補から除外します。</p>${selectedPerson ? `<label class="field">席を設定するお客様<select id="person-to-place">${candidates.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label><p>空席を選び「この席に設定」を押します。</p>${btn('この席に設定', 'place', 'primary')}` : '<p>この条件に合う席未設定の方はいません。</p>'}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('席設定を確定', 'confirmFinalize', 'primary')}</div><div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section><div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span><span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div><section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`, '席未設定のお客様から発券までの操作を確認します。');
+  const target = selectedPerson
+    ? `<label class="field">席を設定するお客様<select id="person-to-place">` +
+      `${candidates.map(p => `<option value="${p.id}" ${p.id === selectedPerson.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}` +
+      `</select></label><p>空席を選び「この席に設定」を押します。</p>${btn('この席に設定', 'place', 'primary')}`
+    : '<p>この条件に合う席未設定の方はいません。</p>';
+  const settings = `<section class="card stack settings-card"><h3>席未設定 ${unplaced.length}件</h3>` +
+    `<label class="field">表示する対象<select data-placement-filter>` +
+    `<option value="confirmed" ${S.placementFilter === 'confirmed' ? 'selected' : ''}>入金確認済み</option>` +
+    `<option value="unconfirmed" ${S.placementFilter === 'unconfirmed' ? 'selected' : ''}>入金未確認</option>` +
+    `<option value="all" ${S.placementFilter === 'all' ? 'selected' : ''}>来場予定の席未設定全員</option>` +
+    `</select></label><p class="small muted">表示中 ${candidates.length}件。不参加の方は候補から除外します。</p>` +
+    `${target}<div class="row">${btn('下書きを保存', 'saveDraft')}${btn('席設定を確定', 'confirmFinalize', 'primary')}</div>` +
+    `<div class="small muted">スマートフォンでは設定パネルの位置を比較できます。</div>` +
+    `${btn(S.placementPanelBottom ? 'パネルを上に' : 'パネルを下に', 'panelPosition')}</section>`;
+  const selection = `<div class="selection-strip"><span>選択中の席 <strong>${esc(S.seat)}</strong></span>` +
+    `<span>お客様 <strong id="selected-person-name">${selectedPerson ? esc(selectedPerson.name) : '対象なし'}</strong></span>${editStatus()}</div>`;
+  return page('お客様の席を設定', `<div class="stage ${S.placementPanelBottom ? 'panel-bottom' : ''}">` +
+    `${settings}${selection}<section class="card canvas-card"><h3>座席キャンバス</h3>${canvas()}</section></div>`,
+  '席未設定のお客様から発券までの操作を確認します。');
 }
 
 const checkLabels = {
@@ -405,7 +472,13 @@ function staff() {
     return `<section class="card stack"><div class="row"><h3>${device.name}</h3>${device.current ? '<span class="pill">この端末（ダミー）</span>' : ''}</div><p>利用者の役割：${device.role}</p><span class="pill ${device.id === 2 && S.stopped ? 'danger' : 'neutral'}">${state}</span>${device.current ? btn('端末を承認', 'approve', 'primary', S.approved ? 'disabled' : '') : device.id === 2 ? btn('停止・記録を確認', 'management') : '<p class="small muted">公演データの更新後、差分取得が必要な端末の例です。</p>'}</section>`;
   }).join('');
 
-  return page('スタッフ・端末', `<section class="card stack"><h3>スタッフ招待</h3><p>架空の招待先：staff@example.com</p><span class="pill ${S.invited ? '' : 'warn'}">${S.invited ? '招待済み' : '未招待'}</span>${btn('招待を作成', 'invite', 'primary')}</section><h3 style="margin-top:16px">端末一覧（ダミー${S.devices.length}台）</h3><div class="grid">${deviceCards}</div><div class="card" style="margin-top:16px"><h3>この端末の事前準備</h3><p>本人・役割・端末、アプリ・データ、カメラ・練習、オフライン準備を確認します。</p>${btn('端末事前準備へ', 'device', 'primary')}</div>`, '招待、端末承認、準備を順に確認します。端末識別はすべて架空です。');
+  return page('スタッフ・端末', `<section class="card stack"><h3>スタッフ招待</h3>` +
+    `<p>架空の招待先：staff@example.com</p><span class="pill ${S.invited ? '' : 'warn'}">${S.invited ? '招待済み' : '未招待'}</span>` +
+    `${btn('招待を作成', 'invite', 'primary')}</section>` +
+    `<h3 style="margin-top:16px">端末一覧（ダミー${S.devices.length}台）</h3><div class="grid">${deviceCards}</div>` +
+    '<div class="card" style="margin-top:16px"><h3>この端末の事前準備</h3><p>本人・役割・端末、アプリ・データ、カメラ・練習、オフライン準備を確認します。</p>' +
+    `${btn('端末事前準備へ', 'device', 'primary')}</div>`,
+  '招待、端末承認、準備を順に確認します。端末識別はすべて架空です。');
 }
 
 function device() {
@@ -414,11 +487,24 @@ function device() {
 }
 
 function day() {
-  return page('当日受付', `<div class="grid"><section class="card action"><h3>QR受付</h3><p>読取り後は結果を全面表示し、「次へ」まで追加読取りを止めます。</p>${btn('カメラを開く', 'camera', 'primary')}</section><section class="card action"><h3>会場席</h3><p>役割によって閲覧と管理操作を分けます。</p>${btn('会場席を見る', 'venue')}</section><section class="card action"><h3>例外・連絡</h3><p>未読連絡と確認が必要な記録を確認します。</p>${btn('スタッフ連絡を見る', 'messages')}</section></div><div class="card" style="margin-top:16px">${status()}<p style="margin-top:12px">${S.started ? '当日運用中' : '準備中：本番受付の開始前です。操作確認用の架空QRは試せます。'}</p>${S.role !== '一般受付担当者' ? btn('当日管理へ', 'management') : ''}</div>`, '画面上の受付操作は架空データによる模擬動作です。');
+  return page('当日受付', `<div class="grid"><section class="card action"><h3>QR受付</h3>` +
+    `<p>読取り後は結果を全面表示し、「次へ」まで追加読取りを止めます。</p>${btn('カメラを開く', 'camera', 'primary')}</section>` +
+    `<section class="card action"><h3>会場席</h3><p>役割によって閲覧と管理操作を分けます。</p>${btn('会場席を見る', 'venue')}</section>` +
+    `<section class="card action"><h3>例外・連絡</h3><p>未読連絡と確認が必要な記録を確認します。</p>${btn('スタッフ連絡を見る', 'messages')}</section></div>` +
+    `<div class="card" style="margin-top:16px">${status()}<p style="margin-top:12px">${S.started ? '当日運用中' : '準備中：本番受付の開始前です。操作確認用の架空QRは試せます。'}</p>` +
+    `${S.role !== '一般受付担当者' ? btn('当日管理へ', 'management') : ''}</div>`,
+  '画面上の受付操作は架空データによる模擬動作です。');
 }
 
 function camera() {
-  return page('QR受付', `<div class="camera"><div class="camera-inner"><h2>QRを枠内へ</h2><p>${S.noticeOpen ? '連絡を表示中：読取り停止' : '架空QRの判定を選んで試してください'}</p></div></div><div class="camera-actions">${btn(S.light ? 'ライトを消す' : 'ライトを点ける', 'light')}${['success', 'duplicate', 'invalid', 'special', 'failure'].map((v, i) => btn(['初回受付', '受付済み', '受付不可', '要確認', '保存失敗'][i], `scan:${v}`)).join('')}</div><p class="small muted" style="margin-top:14px">実カメラは起動しません。ライト表示は対応端末を想定した操作見本です。</p>`, '追加読取りの停止、連絡表示、戻る操作を確認します。');
+  const scanButtons = ['success', 'duplicate', 'invalid', 'special', 'failure']
+    .map((v, i) => btn(['初回受付', '受付済み', '受付不可', '要確認', '保存失敗'][i], `scan:${v}`))
+    .join('');
+  return page('QR受付', `<div class="camera"><div class="camera-inner"><h2>QRを枠内へ</h2>` +
+    `<p>${S.noticeOpen ? '連絡を表示中：読取り停止' : '架空QRの判定を選んで試してください'}</p></div></div>` +
+    `<div class="camera-actions">${btn(S.light ? 'ライトを消す' : 'ライトを点ける', 'light')}${scanButtons}</div>` +
+    '<p class="small muted" style="margin-top:14px">実カメラは起動しません。ライト表示は対応端末を想定した操作見本です。</p>',
+  '追加読取りの停止、連絡表示、戻る操作を確認します。');
 }
 
 function result() {
@@ -460,7 +546,13 @@ function messages() {
 }
 
 function management() {
-  return page('当日管理', `<div class="grid two"><section class="card stack"><h3>紛失端末・例外締め</h3><p>端末：見本端末 02 · 最終同期 18:10</p><span class="pill ${S.stopped ? 'danger' : 'warn'}">${S.stopped ? '停止済み・未同期あり' : '稼働中'}</span>${btn('端末を停止', 'stopDevice', 'dangerbtn')}${btn('停止中の受付記録を確認', 'stoppedRecords')}</section><section class="card stack"><h3>期限切れと削除案内</h3><p>過去の詳細履歴が残る場合、次回管理画面起動時に削除が必要な理由を案内します。</p>${btn('削除案内を表示', 'deleteNotice')}</section></div><div class="card" style="margin-top:16px"><h3>公演終了</h3>${btn('締め画面へ', 'close')} ${btn('公演後の再ログイン表示', 'relogin')}</div>`, '停止後の記録を自動採用しないことを確認します。');
+  return page('当日管理', '<div class="grid two"><section class="card stack"><h3>紛失端末・例外締め</h3><p>端末：見本端末 02 · 最終同期 18:10</p>' +
+    `<span class="pill ${S.stopped ? 'danger' : 'warn'}">${S.stopped ? '停止済み・未同期あり' : '稼働中'}</span>` +
+    `${btn('端末を停止', 'stopDevice', 'dangerbtn')}${btn('停止中の受付記録を確認', 'stoppedRecords')}</section>` +
+    '<section class="card stack"><h3>期限切れと削除案内</h3><p>過去の詳細履歴が残る場合、次回管理画面起動時に削除が必要な理由を案内します。</p>' +
+    `${btn('削除案内を表示', 'deleteNotice')}</section></div>` +
+    `<div class="card" style="margin-top:16px"><h3>公演終了</h3>${btn('締め画面へ', 'close')} ${btn('公演後の再ログイン表示', 'relogin')}</div>`,
+  '停止後の記録を自動採用しないことを確認します。');
 }
 
 function close() {
@@ -523,13 +615,24 @@ function focusSelectedSeat() {
 // S の現在値から画面を組み立て直す。操作後の再表示はここに集約する。
 function render() {
   const previousCanvas = $('canvas');
-  const previousPosition = previousCanvas?.dataset.canvasScreen === S.screen ? { left: previousCanvas.scrollLeft, top: previousCanvas.scrollTop } : null;
+  const previousPosition = previousCanvas?.dataset.canvasScreen === S.screen
+    ? { left: previousCanvas.scrollLeft, top: previousCanvas.scrollTop }
+    : null;
   const previousTable = document.querySelector('.people-table-viewport');
-  const previousTablePosition = S.screen === 'people' && previousTable?.dataset.page === String(S.peoplePage) && previousTable.dataset.pageSize === String(S.peoplePageSize) ? { left: previousTable.scrollLeft, top: previousTable.scrollTop } : null;
+  const previousTablePosition = S.screen === 'people' &&
+    previousTable?.dataset.page === String(S.peoplePage) &&
+    previousTable.dataset.pageSize === String(S.peoplePageSize)
+    ? { left: previousTable.scrollLeft, top: previousTable.scrollTop }
+    : null;
+
   document.title = `${screens[S.screen]} · UIモック`;
-  $('app').innerHTML = `<div class="shell">${nav()}<main class="main" ${S.drawerOpen ? 'inert' : ''}>${header()}<div class="content">${breadcrumb()}${body()}</div></main></div>${S.drawerOpen ? '<button class="drawer-backdrop" data-action="menuClose" tabindex="-1" aria-label="メニューを閉じる"></button>' : ''}${modal()}${S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''}`;
+  $('app').innerHTML = `<div class="shell">${nav()}<main class="main" ${S.drawerOpen ? 'inert' : ''}>` +
+    `${header()}<div class="content">${breadcrumb()}${body()}</div></main></div>` +
+    `${S.drawerOpen ? '<button class="drawer-backdrop" data-action="menuClose" tabindex="-1" aria-label="メニューを閉じる"></button>' : ''}` +
+    `${modal()}${S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : ''}`;
   document.body.classList.toggle('menu-open', S.drawerOpen);
   sizeCanvas();
+
   if (previousPosition) $('canvas')?.scrollTo(previousPosition);
   if (previousTablePosition) document.querySelector('.people-table-viewport')?.scrollTo(previousTablePosition);
   if (S.modal) document.querySelector('.modal button')?.focus();
