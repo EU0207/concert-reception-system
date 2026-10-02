@@ -211,7 +211,7 @@ function commitMove() {
 
 function unreadCount() { return S.notices.filter(n => !n.read).length; }
 messages = function () {
-  return page('スタッフ連絡', `<p>未読 ${unreadCount()}件</p><div class="stack">${[...S.notices].sort((a, b) => Number(b.important) - Number(a.important) || b.date.localeCompare(a.date)).map(n => `<button class="notice-row card ${n.read ? 'is-read' : ''}" data-action="notice:${n.id}"><span class="unread-mark" aria-label="${n.read ? '既読' : '未読'}">${n.read ? '' : '●'}</span><span><small>${n.important ? '重要 · ' : ''}${n.date}</small><strong>${esc(n.title)}</strong></span></button>`).join('')}</div><p>${btn('戻る', 'back')}</p>`, '左端の印は未読です。重要連絡は内容を確認してから「確認しました」を押します。');
+  return page('スタッフ連絡', `<p>未読 ${unreadCount()}件</p><div class="stack">${[...S.notices].sort((a, b) => Number(b.important) - Number(a.important) || b.date.localeCompare(a.date)).map(n => `<button class="notice-row card ${n.read ? 'is-read' : ''}" data-action="notice:${n.id}"><span class="unread-mark" aria-label="${n.read ? '既読' : '未読'}">${n.read ? '' : '●'}</span><span><small>${n.important ? '<span class="important-label">重要</span> · ' : ''}${n.date}</small><strong>${esc(n.title)}</strong></span></button>`).join('')}</div><p>${btn('戻る', 'back')}</p>`, '左端の印は未読です。重要連絡は内容を確認してから「確認しました」を押します。');
 };
 
 function showNotice(id) {
