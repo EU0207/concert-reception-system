@@ -4,30 +4,51 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 
+// ブラウザーの入出力だけを置き換え、画面の状態遷移をそのまま試す。
 function harness() {
-  const inputs = {}, timers = new Map(), listeners = {};
+  const inputs = {};
+  const timers = new Map();
+  const listeners = {};
   let nextTimer = 0;
   const context = vm.createContext({
     structuredClone,
-    setTimeout: (fn, delay) => { const id = ++nextTimer; timers.set(id, { fn, delay }); return id; },
+    setTimeout: (fn, delay) => {
+      const id = ++nextTimer;
+      timers.set(id, { fn, delay });
+      return id;
+    },
     clearTimeout: id => timers.delete(id),
     document: {
-      getElementById: id => inputs[id] || null, querySelector: () => null,
+      getElementById: id => inputs[id] || null,
+      querySelector: () => null,
       querySelectorAll: selector => selector === '[data-column-name]' || selector === '[data-column-start]'
-        ? Object.values(inputs).filter(input => input.dataset?.[selector === '[data-column-name]' ? 'columnName' : 'columnStart'] !== undefined)
+        ? Object.values(inputs).filter(input =>
+          input.dataset?.[selector === '[data-column-name]' ? 'columnName' : 'columnStart'] !== undefined
+        )
         : [],
       addEventListener: (name, fn, capture) => { (listeners[name] ||= []).push({ fn, capture }); },
       body: { classList: { toggle() {} } }
     },
     window: { history: { replaceState() {}, pushState() {} }, addEventListener() {}, matchMedia: () => ({ matches: false }) }
   });
-  for (const file of ['app.js', 'scenarios.js']) vm.runInContext(fs.readFileSync(`${__dirname}/${file}`, 'utf8').replace(/render\(\);\s*$/, ''), context);
+
+  for (const file of ['app.js', 'scenarios.js']) {
+    vm.runInContext(
+      fs.readFileSync(`${__dirname}/${file}`, 'utf8').replace(/render\(\);\s*$/, ''),
+      context
+    );
+  }
   vm.runInContext('render = () => {}; toast = message => { S.toast = message; };', context);
   const run = code => vm.runInContext(code, context);
-  return { inputs, timers, listeners, run, tick(delay) {
-    const entry = [...timers].find(([, t]) => t.delay === delay);
-    assert.ok(entry, `timer ${delay}ms`); timers.delete(entry[0]); entry[1].fn();
-  } };
+  return {
+    inputs, timers, listeners, run,
+    tick(delay) {
+      const entry = [...timers].find(([, t]) => t.delay === delay);
+      assert.ok(entry, `timer ${delay}ms`);
+      timers.delete(entry[0]);
+      entry[1].fn();
+    }
+  };
 }
 
 test('列名由来の席番号は一覧・属性・確認画面でHTMLとして解釈されない', () => {
@@ -41,6 +62,7 @@ test('列名由来の席番号は一覧・属性・確認画面でHTMLとして�
   });
   r("handle('gridSettings'); S.cells = new Set(['cell-0']); handle('cellType:seat'); S.people[0].cellId = 'cell-0'; syncAssignments()");
 
+  // 同じ入力を一覧と確認画面へ流し、HTMLとして解釈されないことを確かめる。
   assert.equal(r('S.people[0].seat'), `${attack}-1`);
   for (const html of [r('seats()'), r('people()'), r('tickets()'), r("S.view='list'; venue()")]) {
     assert.ok(html.includes('&quot;&gt;&lt;img'), '引用符とタグをエスケープする');
@@ -57,6 +79,8 @@ test('列名由来の席番号は一覧・属性・確認画面でHTMLとして�
 
 test('お客様の追加は入力検証・未保存確認・保存と破棄に従う', () => {
   const { run: r, inputs } = harness();
+
+  // 権限と入力検証を通した後、未保存・破棄・保存の順に状態を確認する。
   r("S.role='一般受付担当者'");
   assert.doesNotMatch(r('people()'), /data-action="addPerson"/);
   r("S.screen='people'; handle('addPerson')");
@@ -139,6 +163,8 @@ test('来場済み席の目印は会場席管理の座席表だけに表示す�
 
 test('手動受付は席未設定を拒否し、複数の来場状態と訂正を独立して保つ', () => {
   const { run: r, inputs } = harness();
+
+  // 受付済みの席を保持したまま、別の席と空席への操作を試す。
   r("S.screen='venue'; S.seat=S.people[0].seat; handle('manual'); handle('manualDo')");
   assert.equal(r('S.arrivedIds.has(S.people[0].id)'), true);
   assert.match(r('venue()'), /未受付 1 \/ 来場済み 1/);
@@ -173,6 +199,8 @@ test('手動受付は席未設定を拒否し、複数の来場状態と訂正�
 
 test('新規会場・番号消費・種別往復・列方向・固定ID・保存破棄', () => {
   const h = harness(), r = h.run;
+
+  // セルの種別変更と保存を先に確認し、次に会場全体の設定を変える。
   r("S.screen='seats'; switchScenario('new'); S.cells=new Set(['cell-0','cell-1','cell-2']); handle('cellType:seat')");
   assert.equal(r("S.layout.cells[2].code"), 'A-3');
   r("S.cell='cell-1'; S.cells=new Set([S.cell]); handle('cellType:gap')");
@@ -204,7 +232,10 @@ test('新規会場・番号消費・種別往復・列方向・固定ID・保存
 
 test('逆順採番・番号消費・固定ID・保存破棄・配置保護', () => {
   const h = harness(), r = h.run;
-  r("S.screen='seats'; switchScenario('new'); S.layout=createLayout(false); S.layout.cells.forEach(c=>c.type='seat'); S.layout.cells[1].type='gap'; S.layout.cells[2].type='space'; S.layout.cells[3].type='aisle'; S.layout.cells[4].type='unset'; numberLayout(S.layout); resetGridDraft(); save()");
+  r(`S.screen='seats'; switchScenario('new'); S.layout=createLayout(false);
+    S.layout.cells.forEach(c=>c.type='seat'); S.layout.cells[1].type='gap';
+    S.layout.cells[2].type='space'; S.layout.cells[3].type='aisle';
+    S.layout.cells[4].type='unset'; numberLayout(S.layout); resetGridDraft(); save()`);
   h.inputs['grid-rows'] = { value: '5' }; h.inputs['grid-cols'] = { value: '8' };
   h.inputs['grid-direction'] = { value: 'horizontal' }; h.inputs['grid-order'] = { value: 'reverse' };
   r("handle('gridSettings')");
@@ -278,6 +309,8 @@ test('連絡10件・重要2件・通常既読と重要確認・件数一致', ()
 
 test('席移動・交換は確定時のみ・発行済み理由・重複なし・破棄', () => {
   const h = harness(), r = h.run;
+
+  // 確認中のキャンセルと理由不足では席を変えず、確定後に重複を調べる。
   h.inputs['move-person'] = { value: '1' }; h.inputs['move-reason'] = { value: '', focus() {} };
   r("S.screen='placement'; S.cell='cell-4'; syncAssignments(); proposeMove(); commitMove()");
   assert.equal(r('S.people[0].seat'), 'C-5');
@@ -359,6 +392,8 @@ test('公演一覧の役割・端末切替は4台のこの端末表示と一致�
 
 test('公演終了・締めは主担当と代理管理者だけが開き、確定時も役割を確認する', () => {
   const { run: r } = harness();
+
+  // 表示と直接操作の両方を拒否し、許可役割へ切り替えた後の確認も試す。
   for (const role of ['臨時管理者', '一般受付担当者']) {
     r(`S.role='${role}'; S.screen='management'`);
     assert.doesNotMatch(r('management()'), /data-action="close"/);
@@ -464,6 +499,8 @@ test('自己端末の削除は受領と締め・廃止を確認し、確認中�
 
 test('最後の管理端末は廃止と自己データ削除を拒否し、代替端末の状態を確定時にも再確認する', () => {
   const { run: r } = harness();
+
+  // 代替端末の準備状態を確認画面の前後で変え、確定時の再判定を試す。
   r("S.screen='staff'");
   assert.match(r('staff()'), /data-action="device:retire:1" >/);
   assert.doesNotMatch(r('staff()'), /代替端末「見本端末 02」|利用可能な代替管理端末がありません/);
@@ -483,7 +520,8 @@ test('最後の管理端末は廃止と自己データ削除を拒否し、代�
   assert.equal(r('S.devices[0].erased'), false);
   r("S.devices[4].stopped=false; S.screen='staff'; handle('device:retire:1')");
   assert.match(r('S.modal.body'), /別の主担当端末/);
-  r("S.devices.push({...S.devices[0], id:6, name:'主担当の追加端末', current:false, prepared:true}); handle('device:retire:1'); handle('deviceAgain:retire:1')");
+  r("S.devices.push({...S.devices[0], id:6, name:'主担当の追加端末', current:false, prepared:true})");
+  r("handle('device:retire:1'); handle('deviceAgain:retire:1')");
   r("S.devices[5].prepared=false; handle('deviceCommit:retire:1')");
   assert.equal(r('S.devices[0].retired'), false);
 });
@@ -559,6 +597,7 @@ test('代理管理者は下位2役割だけ変更でき、権限喪失・オフ�
 });
 
 test('結果の初回表示だけアニメーション・理由と例外の確認後も結果を維持', () => {
+  // 確認画面から戻っても結果の入場アニメーションを繰り返さない。
   for (const [result, action, commit] of [['duplicate', 'reason', 'reasonDo'], ['invalid', 'exception', 'exceptionDo']]) {
     const h = harness(), r = h.run;
     r(`S.screen='camera'; handle('scan:${result}')`);
@@ -580,6 +619,8 @@ test('結果の初回表示だけアニメーション・理由と例外の確�
 
 test('結果中の追加読取り拒否・終了後500ms・離脱時タイマー破棄', () => {
   const h = harness(), r = h.run;
+
+  // 判定中、再開待機中、画面離脱後でタイマーと追加判定の扱いを確認する。
   r("S.screen='camera'; S.online=false; handle('scan:success'); handle('scan:success')");
   assert.equal(r('S.unsent'), 1); assert.equal(r('S.screen'), 'camera');
   r("deviceAction('erase',1,true)"); assert.equal(r('S.devices[0].erased'), false); r('S.modal=null');
