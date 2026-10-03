@@ -6,7 +6,7 @@
 |---|---|
 | 目的 | C-01の端末別停止を実現する認可方式の候補、根拠、影響を記録する |
 | 主な読者 | 依頼者、開発者、設計担当者 |
-| 関連文書 | [C-01調査](../device-authorization-feasibility.md)、[POC-006](../poc-006-result.md)、[BD-04](../authentication-authorization-design.md) |
+| 関連文書 | [C-01調査](../technical-validation/device-authorization-feasibility.md)、[POC-006](../technical-validation/poc-006-result.md)、[BD-04](../basic-design/authentication-authorization-design.md) |
 | 関連Issue | [#71](https://github.com/EU0207/concert-reception-system/issues/71) |
 | ADR状態 | Accepted |
 | 決定日 | 2026-09-26。`CONF-051`で依頼者が本ADRを了承。基本設計一式の変更承認は別判定 |
