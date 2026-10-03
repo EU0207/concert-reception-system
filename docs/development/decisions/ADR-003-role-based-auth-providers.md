@@ -7,7 +7,7 @@
 | 目的 | ADR-001のメール・パスワード方式とBD-04の初期主担当Googleログインの差を解消するため、役割別の認証候補と判断条件を示す |
 | 主な読者 | 依頼者、開発者、設計担当者、運用担当者 |
 | 前提 | [要件定義書](../../client/requirements.md)と[受入条件書](../../client/acceptance-criteria.md)はApproved。[ADR-001](ADR-001-product-platform.md)と[ADR-002](ADR-002-quota-emergency-response.md)はAccepted。基本設計一式は未承認 |
-| 関連文書 | [認証・役割・権限設計](../authentication-authorization-design.md)、[セキュリティ・プライバシー設計](../security-privacy-design.md)、[運用・復旧設計](../operations-recovery-design.md)、[基本設計計画書](../basic-design-plan.md) |
+| 関連文書 | [認証・役割・権限設計](../basic-design/authentication-authorization-design.md)、[セキュリティ・プライバシー設計](../basic-design/security-privacy-design.md)、[運用・復旧設計](../basic-design/operations-recovery-design.md)、[基本設計計画書](../basic-design/basic-design-plan.md) |
 | 関連Issue | [#44](https://github.com/EU0207/concert-reception-system/issues/44) |
 | 関連ID | TBD-003、TBD-011、TBD-012、REQ-F-026～REQ-F-028、REQ-NF-016、REQ-NF-017、AC-014、AC-030、AC-031、CONF-045、CONF-047 |
 | 文書状態 | Approved |

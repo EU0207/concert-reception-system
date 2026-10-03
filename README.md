@@ -31,7 +31,7 @@ PoCコードは技術的な実現可能性を確認するためのものです�
 
 架空のお客様6人と端末4台を使用します。操作結果はメモリー内だけで保持し、再読み込みで初期状態に戻ります。実カメラ、Firebase、実認証・同期には接続しません。GitHub Pagesの設定と公開URLの記載は、リポジトリを公開する工程で行います。
 
-詳しい手順は[モック操作手順](mock/mock-guide.md)、本番への引継ぎは[変更台帳](docs/development/ui-mock-production-handoff.md)を参照してください。
+詳しい手順は[モック操作手順](mock/mock-guide.md)、本番への引継ぎは[変更台帳](docs/development/ui-mock/ui-mock-production-handoff.md)を参照してください。
 
 ## 主な機能
 
@@ -78,7 +78,7 @@ Vite、QR読取り、PDF生成などのライブラリは、PoCで候補を検�
 | パス | 内容 |
 |---|---|
 | `docs/client/` | 要件定義書、受入条件書、依頼者向け資料 |
-| `docs/development/` | ADR、基本設計、テスト方針、技術検証結果 |
+| `docs/development/` | 工程別に整理した開発文書、ADR、横断資料 |
 | `docs/templates/` | 文書とテストケースのテンプレート |
 | `poc/` | 技術検証用の限定コードと自動試験 |
 | `mock/` | 架空データによる操作可能なUIモック |
@@ -87,14 +87,15 @@ Vite、QR読取り、PDF生成などのライブラリは、PoCで候補を検�
 
 ## 主なドキュメント
 
+- [開発文書のフォルダ案内](docs/development/index.md)
 - [要件定義書](docs/client/requirements.md)
 - [受入条件書](docs/client/acceptance-criteria.md)
-- [基本設計計画書](docs/development/basic-design-plan.md)
-- [システム構成・環境分離設計](docs/development/system-architecture.md)
-- [画面・画面遷移・操作見本設計](docs/development/screen-flow-wireframe-design.md)
+- [基本設計計画書](docs/development/basic-design/basic-design-plan.md)
+- [システム構成・環境分離設計](docs/development/basic-design/system-architecture.md)
+- [画面・画面遷移・操作見本設計](docs/development/basic-design/screen-flow-wireframe-design.md)
 - [UIモック操作手順](mock/mock-guide.md)
-- [UIモック確認記録](docs/development/ui-mock-review.md)
-- [テスト方針](docs/development/test-strategy.md)
+- [UIモック確認記録](docs/development/ui-mock/ui-mock-review.md)
+- [テスト方針](docs/development/basic-design/test-strategy.md)
 - [ドキュメント案内](docs/document-guide.md)
 
 ## 開発方法

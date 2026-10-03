@@ -51,9 +51,9 @@ PCで`ipconfig`を実行してプライベートIPv4アドレスを確認する�
 
 ## 参照
 
-- [画面・画面遷移・操作見本設計](../docs/development/screen-flow-wireframe-design.md)
-- [基本設計計画書](../docs/development/basic-design-plan.md)
-- [確認記録](../docs/development/ui-mock-review.md)
+- [画面・画面遷移・操作見本設計](../docs/development/basic-design/screen-flow-wireframe-design.md)
+- [基本設計計画書](../docs/development/basic-design/basic-design-plan.md)
+- [確認記録](../docs/development/ui-mock/ui-mock-review.md)
 ## 静的操作シナリオの追加（2026-09-28）
 
 お客様の案内は、名前から開く詳細の「案内を編集」、または一覧の案内欄から入力する。「変更を反映」で編集中の名簿へ反映し、一覧の「保存」で保存する。会場席編集の画像は、上部へ追随する「選択」パネルの一番下に配置する。初期状態は折り畳み、開くと画像と座席キャンバスを見比べながら編集できる。

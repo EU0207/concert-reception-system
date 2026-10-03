@@ -6,7 +6,7 @@
 |---|---|
 | 目的 | 公演中にFirebaseの無料枠へ接近・到達した場合の受付継続、課金判断、紙転記、復旧方式を決める |
 | 主な読者 | 依頼者、管理者、設計担当者、開発担当者、運用担当者 |
-| 関連文書 | [ADR-001](ADR-001-product-platform.md)、[要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md)、[システム構成・環境分離設計](../system-architecture.md) |
+| 関連文書 | [ADR-001](ADR-001-product-platform.md)、[要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md)、[システム構成・環境分離設計](../basic-design/system-architecture.md) |
 | 関連Issue | [#32](https://github.com/EU0207/concert-reception-system/issues/32) |
 | 関連ID | REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020、AC-012、AC-015、AC-020、AC-021、AC-032、AC-034、TBD-009、TBD-012、CONF-034 |
 | 状態 | Approved |
