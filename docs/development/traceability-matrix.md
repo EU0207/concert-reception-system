@@ -256,6 +256,22 @@
 | 日常運用は管理画面中心とし、外部コンソールは環境所有者による所有、利用量、App Check、料金確認に限定する。公演前確認、障害分類、紙切替、復旧、締め、削除、問い合わせ、引継ぎを担当と時点で定める。JSONは通常出力へ表示せず、秘密情報と端末CryptoKeyを含まない暗号化バックアップとして扱う | REQ-B-005、REQ-F-020、REQ-F-023～REQ-F-025、REQ-F-028、REQ-F-030、REQ-F-031、REQ-F-040、REQ-F-042、REQ-NF-003、REQ-NF-008～REQ-NF-011、REQ-NF-015、REQ-NF-016、REQ-NF-018～REQ-NF-021／AC-009、AC-013～AC-015、AC-017、AC-020、AC-021、AC-028、AC-030、AC-031、AC-033、AC-034 | [BD-08](basic-design/operations-recovery-design.md#bd-08-01-運用役割と記録)、[#41](https://github.com/EU0207/concert-reception-system/issues/41) |
 | 公演前画面の`完成時に確認した無料枠`で、Firestoreと完成時に採用したApp Check認証方式の確認値・確認日・公式URLを表示する。現在の公式条件と対象プロジェクトの利用量は開催前に環境所有者が確認し、主担当が結果を記録する。未記録値を推測せず、特定の相手への納品を前提としない | REQ-B-005、REQ-F-020、REQ-F-042、REQ-NF-003、REQ-NF-010、REQ-NF-019、REQ-NF-020／AC-012、AC-015、AC-020、AC-021、AC-034 | [BD-08](basic-design/operations-recovery-design.md#無料条件の公演前確認表示)、[BD-09引継ぎ](basic-design/operations-recovery-design.md#bd-08-14-bd-09bd-10への引継ぎ)、[#41](https://github.com/EU0207/concert-reception-system/issues/41) |
 
+## Issue #91の詳細設計と追加試験
+
+本節は[DD-91詳細設計](detailed-design/seat-management-detail-design.md)と[ケース表](detailed-design/seat-management-test-cases.md)への追加追跡であり、詳細設計の状態はIn Reviewである。既存基本設計の承認と本番試験の合格を意味しない。具体的なIssueと依存は[実装分割表](detailed-design/seat-management-implementation-plan.md)で管理する。
+
+| 要件・確認ID | 関連AC | 詳細設計 | ケースID | 実装タスク |
+|---|---|---|---|---|
+| REQ-F-035・038・039、CONF-060・061 | AC-025 | DD-91-02・03・06 | DD91-T01～06・19・22・24 | IMP91-01・04、GD91-01 |
+| REQ-F-036、CONF-060・062・070 | AC-026 | DD-91-04 | DD91-T07～10・12～14・25 | IMP91-02・03・05 |
+| REQ-F-004・007・043、CONF-070 | AC-002・003・035 | DD-91-02・04・05・07 | DD91-T11～21 | IMP91-01・03・05・06 |
+| REQ-F-044、FB-19・30 | AC-035・036 | DD-91-04・07 | DD91-T07・20・21・25 | IMP91-02・06、#93共同契約 |
+| REQ-F-045、MHD-03 | AC-037 | DD-91-07 | DD91-T23 | IMP91-07 |
+| REQ-F-046、REQ-NF-013・014・020 | AC-032・038 | DD-91-05・06・07 | DD91-T17・19・24・25 | IMP91-03～06 |
+| MCT-08・09・14 | AC-025・032 | DD-91-02・03・06 | DD91-T01～06・13・19・24 | IMP91-01・04 |
+| MCT-10・19・34 | AC-026・032・035・036 | DD-91-04・06 | DD91-T07～15・19・24・25 | IMP91-02・03・05 |
+| MCT-30、MHD-05 | AC-002・035・036 | DD-91-05・07 | DD91-T20～22・25 | IMP91-06、#93共同契約 |
+
 ## ADRとの対応
 
 | ADR | 判断対象 | 関連要件・未決定事項 | 関連受入条件 | 状態 |
@@ -266,6 +282,7 @@
 | [ADR-004](decisions/ADR-004-retention-and-exceptional-close.md) | 詳細履歴の案内・手動削除、紛失端末の例外締め | REQ-F-025、REQ-F-040、REQ-NF-015 | AC-013、AC-028 | Accepted（CONF-051） |
 | [ADR-005](decisions/ADR-005-device-principal-authorization.md) | 端末別Authと本人Authの結合 | REQ-F-031、REQ-NF-017 | AC-030 | Accepted（CONF-051） |
 | [ADR-006](decisions/ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存。最新の1MB上限 | REQ-F-035 | AC-025 | Accepted（CONF-053） |
+| [ADR-007](decisions/ADR-007-seat-edit-commit-boundary.md) | 席編集の原子的確定と物理保存候補 | REQ-F-036・038・043・044、DD-91-T01 | AC-025・026・035・036 | Proposed。成立性未確認 |
 
 ## 更新ルール
 

@@ -1,5 +1,9 @@
 # 画面・画面遷移・操作見本設計
 
+## Issue #91の詳細化
+
+会場席作成と「お客様の席を設定」の状態・異常時は[DD-91-03・04・06](../detailed-design/seat-management-detail-design.md)で具体化する。発券後の移動・交換は維持し、単独で席未設定へ戻す取消しは[CONF-070](../ui-mock/ui-mock-client-response.md#conf-070-発券後の席設定解除)により不参加処理を使う。詳細設計案はIn Review、本番実装と実機試験は未実施である。
+
 ## CONF-068による承認済み追補
 
 当日管理の公演終了・締めへの導線は主担当と代理管理者だけに表示する。臨時管理者と一般受付担当者が直接画面へ移動しても操作を許可しない。臨時管理者の公演・利用者別権限設定画面と操作範囲は[変更Issue #98](https://github.com/EU0207/concert-reception-system/issues/98)で設計する。[CONF-068](../ui-mock/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)を適用する。

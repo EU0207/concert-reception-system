@@ -106,10 +106,18 @@
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | UIモック確認記録 | [ui-mock-review.md](development/ui-mock/ui-mock-review.md) | 主要画面の操作確認手順、初期結果、依頼者確認事項と実装後試験への引継ぎを記録する | 依頼者、開発者、設計担当者 | UIモック工程 | 操作確認結果と設計への反映時 | In Review |
-| UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock/ui-mock-client-response.md) | モックの指摘に対する依頼者回答とCONF-060～068の承認を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | 依頼者回答の伝達時 | Approved |
+| UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock/ui-mock-client-response.md) | モックの指摘に対する依頼者回答とCONF-060～070の承認を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程、詳細設計 | 依頼者回答の伝達時 | Approved |
 | UIモック変更の本番引継ぎ台帳 | [ui-mock-production-handoff.md](development/ui-mock/ui-mock-production-handoff.md) | FB-01～33の採用内容、モック有無、設計・受入条件の追補、本番試験と作業Issueを対応付ける | 開発者、設計担当者、テスト担当者、依頼者 | UIモック承認後から本番受入まで | 設計・実装・試験の進捗変更時 | Approved |
 | 静的UIモック充実の確認記録 | [ui-mock-static-review.md](development/ui-mock/ui-mock-static-review.md) | 座席編集、個別既読、席替え、端末管理、カメラの操作確認と本番残作業を記録する | 開発者、設計担当者、テスト担当者 | UIモック工程 | 静的モックの対応・確認結果変更時 | In Review |
 | QR受付中断・誤更新への対策設計 | [qr-reception-recovery-review.md](development/ui-mock/qr-reception-recovery-review.md) | 受付保存中の中断からの復帰と二重計上防止について、既存設計と追加試験条件を整理する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | #92の確認・設計反映時 | Approved |
+
+### 詳細設計
+
+| 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
+|---|---|---|---|---|---|---|
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約、採番、変更、保存境界と判断を具体化する | 開発者、設計担当者、依頼者 | 詳細設計 | 技術検証・契約・承認変更時 | In Review |
+| 会場席作成・席設定の試験ケース | [seat-management-test-cases.md](development/detailed-design/seat-management-test-cases.md) | DD91-T01～25を関連AC・MCTへ割り当てる | 開発者、テスト担当者、依頼者 | 詳細設計 | ケース・実装契約変更時 | In Review |
+| 会場席作成・席設定の実装分割 | [seat-management-implementation-plan.md](development/detailed-design/seat-management-implementation-plan.md) | 成立性確認と7つの実装タスクの依存・完了条件を定める | 開発者、レビュー担当者 | 詳細設計 | Issue登録・依存・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 
@@ -122,6 +130,7 @@
 | ADR-004 詳細履歴の削除案内と例外締め | [ADR-004-retention-and-exceptional-close.md](development/decisions/ADR-004-retention-and-exceptional-close.md) | C-02・C-04の候補、採用理由、未検証事項を記録する | 依頼者、開発者、設計担当者、運用担当者 | 基本設計の是正時 | 再レビューと方式判断時 | Accepted |
 | ADR-005 端末別認証主体と本人認証の結合 | [ADR-005-device-principal-authorization.md](development/decisions/ADR-005-device-principal-authorization.md) | C-01の認可方式と検証条件を記録する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 認可方式または残存リスクの変更時 | Accepted |
 | ADR-006 会場画像のFirestore保存方式 | [ADR-006-firestore-image-storage.md](development/decisions/ADR-006-firestore-image-storage.md) | C-03の旧5MB分割案と採用した1MB単一文書案を比較する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 実画像の画質・容量上限の変更時 | Accepted |
+| ADR-007 席編集の確定境界 | [ADR-007-seat-edit-commit-boundary.md](development/decisions/ADR-007-seat-edit-commit-boundary.md) | 単一トランザクションと版切替の候補、技術検証条件を比較する | 開発者、設計担当者 | 詳細設計 | 成立性検証・採否決定時 | In Review（Proposed） |
 
 ## テンプレート
 
