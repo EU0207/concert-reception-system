@@ -155,7 +155,7 @@ MHD-05では、オフライン端末へ旧QRの無効化を即時通知できな
 |---|---|---|
 | 承認内容の記録 | CONF-060、FB-01～33の漏れのない対応表、最新名称・旧案の区別 | 本書で記録 |
 | 基本設計への反映 | 関連文書から本追補を参照し、相違箇所に追補の適用を明示 | PR #88は2026-10-03にmain統合済み |
-| 詳細設計と実装Issueの作成 | 各MHDの方式と異常時を具体化し、MCTと実装Issueを対応付ける | #91は[詳細設計](../detailed-design/seat-management-detail-design.md)、[ケース](../detailed-design/seat-management-test-cases.md)、[分割](../detailed-design/seat-management-implementation-plan.md)をIn Reviewで作成。MHD-03の物理保存成立性とMHD-05共同契約は未完了。#89・90・92・93は別途追跡 |
+| 詳細設計と実装Issueの作成 | 各MHDの方式と異常時を具体化し、MCTと実装Issueを対応付ける | #91は[詳細設計と試験ケース](../detailed-design/seat-management-detail-design.md)をIn Reviewで作成。実装分割と依存順は[親Issue #91](https://github.com/EU0207/concert-reception-system/issues/91)で管理。MHD-03の物理保存成立性とMHD-05共同契約は未完了。#89・90・92・93は別途追跡 |
 | 本番実装 | 本番コードのPRに対象FB・MCTを列挙し、権限・保存・出力を実装 | 全項目未実施 |
 | 本番試験 | MCT-01～34のうちMCT-13を除く全MCTの結果と関連ACの証拠を揃える。対象3実機で必要な操作を確認 | 全項目未実施 |
 | 完了判断 | モックの有無で対象を落とさず、全対象の実装・試験・残作業を再取得して照合する | 未実施 |
@@ -174,7 +174,7 @@ MHD-05では、オフライン端末へ旧QRの無効化を即時通知できな
 | MCT-34 | [#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105)、[#106 席設定画面](https://github.com/EU0207/concert-reception-system/issues/106) | DD91-T24 |
 | MHD-03の帳票同一構成 | [#108 共通投影と出力受渡し](https://github.com/EU0207/concert-reception-system/issues/108) | DD91-T23 |
 
-ケースの入力・期待結果は[詳細ケース表](../detailed-design/seat-management-test-cases.md)を参照する。FB-30の購入者名修正や確認用項目の保存は#93の設計へ残し、#107だけでFB-30全体を完了扱いしない。
+ケースの入力・期待結果は[詳細設計の試験ケース](../detailed-design/seat-management-detail-design.md#dd-91-09-試験ケース)を参照する。FB-30の購入者名修正や確認用項目の保存は#93の設計へ残し、#107だけでFB-30全体を完了扱いしない。
 
 **依頼者に確認してください**
 

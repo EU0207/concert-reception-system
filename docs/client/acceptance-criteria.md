@@ -2,7 +2,7 @@
 
 ## CONF-070による席設定解除の追加試験
 
-[依頼者回答CONF-070](../development/ui-mock/ui-mock-client-response.md#conf-070-発券後の席設定解除)により、AC-026・035・036へ発券後の単独席設定解除の拒否を追加する。席を未設定へ戻す場合は不参加処理を用い、席解放・現在券状態解除・旧QR無効化・履歴が一体で確定することを確認する。通常の移動・交換ではQRを維持する。[DD91-T13・20・21](../development/detailed-design/seat-management-test-cases.md)へ割り当てる。ケース案はレビュー中、本番試験の結果は未判定である。
+[依頼者回答CONF-070](../development/ui-mock/ui-mock-client-response.md#conf-070-発券後の席設定解除)により、AC-026・035・036へ発券後の単独席設定解除の拒否を追加する。席を未設定へ戻す場合は不参加処理を用い、席解放・現在券状態解除・旧QR無効化・履歴が一体で確定することを確認する。通常の移動・交換ではQRを維持する。[DD91-T13・20・21](../development/detailed-design/seat-management-detail-design.md#dd-91-09-試験ケース)へ割り当てる。ケース案はレビュー中、本番試験の結果は未判定である。
 
 ## CONF-069による承認済み追補
 
