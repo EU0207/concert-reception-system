@@ -113,11 +113,11 @@
 
 ### 詳細設計
 
+詳細設計は機能のまとまりごとに作成し、主要テストケースを同じ文書へ記載する。実装タスクの分割、依存順と進捗は親Issueと子Issueで管理する。ケースが大きくなった場合だけ試験仕様書を分離し、文書案内と追跡IDで対応を維持する。
+
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約、採番、変更、保存境界と判断を具体化する | 開発者、設計担当者、依頼者 | 詳細設計 | 技術検証・契約・承認変更時 | In Review |
-| 会場席作成・席設定の試験ケース | [seat-management-test-cases.md](development/detailed-design/seat-management-test-cases.md) | DD91-T01～25を関連AC・MCTへ割り当てる | 開発者、テスト担当者、依頼者 | 詳細設計 | ケース・実装契約変更時 | In Review |
-| 会場席作成・席設定の実装分割 | [seat-management-implementation-plan.md](development/detailed-design/seat-management-implementation-plan.md) | 成立性確認と7つの実装タスクの依存・完了条件を定める | 開発者、レビュー担当者 | 詳細設計 | Issue登録・依存・承認変更時 | In Review |
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約、操作と異常時を具体化し、DD91-T01～25を関連AC・MCTへ割り当てる | 開発者、設計担当者、テスト担当者、依頼者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 
