@@ -6,7 +6,7 @@
 |---|---|
 | 目的 | 無人時の詳細履歴削除と紛失端末がある公演の締め方式を選んだ理由を記録する |
 | 主な読者 | 依頼者、開発者、設計担当者、運用担当者 |
-| 関連文書 | [依頼者回答](../basic-design-remediation-client-response.md)、[要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md)、[BD-08](../operations-recovery-design.md) |
+| 関連文書 | [依頼者回答](../basic-design/basic-design-remediation-client-response.md)、[要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md)、[BD-08](../basic-design/operations-recovery-design.md) |
 | 関連Issue | [#70](https://github.com/EU0207/concert-reception-system/issues/70)、[#72](https://github.com/EU0207/concert-reception-system/issues/72)、[#76](https://github.com/EU0207/concert-reception-system/issues/76) |
 | ADR状態 | Accepted |
 | 決定日 | 2026-09-26。`CONF-051`で依頼者が本ADRを了承。基本設計一式の変更承認は別判定 |

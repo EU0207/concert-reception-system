@@ -6,7 +6,7 @@
 |---|---|
 | 目的 | 承認済み要件とPoC結果に基づき、本番アプリケーションの製品基盤候補を比較して採用案を提示する |
 | 主な読者 | 依頼者、開発担当者、将来の保守担当者 |
-| 関連文書 | [要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md)、[ADR-002案](ADR-002-quota-emergency-response.md)、[技術実現可能性調査報告書](../technical-feasibility-research.md)、[POC-001結果](../poc-001-result.md)、[POC-004結果](../poc-004-result.md) |
+| 関連文書 | [要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md)、[ADR-002案](ADR-002-quota-emergency-response.md)、[技術実現可能性調査報告書](../technical-validation/technical-feasibility-research.md)、[POC-001結果](../technical-validation/poc-001-result.md)、[POC-004結果](../technical-validation/poc-004-result.md) |
 | 関連Issue | [#25](https://github.com/EU0207/concert-reception-system/issues/25) |
 | 関連ID | TBD-002、TBD-003、TBD-004、TBD-011、TBD-012、REQ-F-042、REQ-NF-002～REQ-NF-004、REQ-NF-010～REQ-NF-021、AC-011、AC-014、AC-015、AC-020、AC-028、AC-030、AC-031、AC-033、AC-034、CONF-034 |
 | 調査基準日 | 2026-09-09 |
