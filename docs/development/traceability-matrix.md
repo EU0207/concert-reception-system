@@ -25,7 +25,7 @@
 | REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | [BD-01-01、BD-01-02](system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
 | REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
 | REQ-B-006 | CONF-030～CONF-032 | AC-033 | [BD-01-04～BD-01-08](system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
-| REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028、CONF-043 | AC-001 | [BD-02-02、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06-04、BD-06-09](screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム)、[BD-07-02、BD-07-03](file-output-report-design.md#bd-07-02-公演用excelテンプレート) | 未登録 | In Review |
+| REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028、CONF-043、CONF-048、CONF-067 | AC-001 | [BD-02-02、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-04](authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[BD-06-04、BD-06-09](screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム)、[BD-07-02、BD-07-03](file-output-report-design.md#bd-07-02-公演用excelテンプレート) | 未登録（個別登録は#97） | In Review |
 | REQ-F-002 | INT-Q-009、INT-Q-026、CONF-037、CONF-043 | AC-001、AC-035 | [BD-02-02、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06-09](screen-flow-wireframe-design.md#bd-06-09-お客様チケット管理)、[BD-07-03](file-output-report-design.md#bd-07-03-取込検証と確定) | 未登録 | In Review |
 | REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-03、BD-02-06、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-07-04](file-output-report-design.md#bd-07-04-qrと確認コード) | 未登録 | In Review |
 | REQ-F-004 | INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-07-04](file-output-report-design.md#bd-07-04-qrと確認コード) | 未登録 | In Review |
@@ -52,7 +52,7 @@
 | REQ-F-025 | INT-Q-025、CONF-049 | AC-013 | [BD-02-08、BD-02-09](logical-data-model.md#bd-02-08-保存期間無効化完全削除)、[BD-08-11](operations-recovery-design.md#bd-08-11-保存期限削除希望問い合わせ)、[依頼者回答](basic-design-remediation-client-response.md#conf-049-依頼者から伝達された回答) | 未登録 | In Review |
 | REQ-F-026 | INT-Q-027 | AC-007、AC-014 | [BD-04-03、BD-04-04](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
 | REQ-F-027 | INT-Q-014、INT-Q-027 | AC-007、AC-014 | [BD-04-03、BD-04-04](authentication-authorization-design.md#bd-04-03-役割範囲有効期間) | 未登録 | In Review |
-| REQ-F-028 | INT-Q-028 | AC-014 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-02～BD-04-07、BD-04-10、BD-04-11](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定)、[BD-05-02～BD-05-05、BD-05-08](security-privacy-design.md#bd-05-02-firestoreの認可とデータ境界)、[BD-06-03、BD-06-05、BD-06-11](screen-flow-wireframe-design.md#bd-06-03-全体画面遷移) | 未登録 | In Review |
+| REQ-F-028 | INT-Q-028、CONF-068 | AC-014 | [BD-02-02、BD-02-04、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-02～BD-04-07、BD-04-10、BD-04-11](authentication-authorization-design.md#bd-04-02-アカウント登録と初期設定)、[BD-05-02～BD-05-05、BD-05-08](security-privacy-design.md#bd-05-02-firestoreの認可とデータ境界)、[BD-06-03、BD-06-05、BD-06-11](screen-flow-wireframe-design.md#bd-06-03-全体画面遷移) | 未登録（権限設定は#98） | In Review |
 | REQ-F-029 | INT-Q-031、INT-Q-040 | AC-003 | [BD-06-04、BD-06-05](screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム) | 未登録 | In Review |
 | REQ-F-030 | INT-Q-018～INT-Q-021、INT-Q-037、INT-Q-038、CONF-003、CONF-044 | AC-015 | [BD-01-02、BD-01-03、BD-01-09](system-architecture.md#bd-01-02-コンポーネントと責務)、[BD-03-01～BD-03-05、BD-03-08](offline-sync-conflict-design.md#bd-03-01-同期対象と正本) | 未登録 | In Review |
 | REQ-F-031 | INT-Q-019、INT-Q-028、CONF-036 | AC-014、AC-030 | [BD-04-03、BD-04-07、BD-04-08](authentication-authorization-design.md#bd-04-03-役割範囲有効期間)、[BD-05-02、BD-05-04](security-privacy-design.md#bd-05-02-firestoreの認可とデータ境界) | 未登録 | In Review |
@@ -64,7 +64,7 @@
 | REQ-F-037 | INT-Q-004、INT-Q-031、RQ-006、CONF-007、CONF-009 | AC-027 | [BD-02-02、BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-03-05～BD-03-07](offline-sync-conflict-design.md#bd-03-05-差分受信と収束)、[BD-04-04、BD-04-07](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
 | REQ-F-038 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023、CONF-035、CONF-041 | AC-025 | [BD-02-02、BD-02-03、BD-02-07、BD-02-09、BD-02-10](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06-08、BD-06-15](screen-flow-wireframe-design.md#bd-06-08-会場席の編集と席配置)、[BD-07-06、BD-07-08](file-output-report-design.md#bd-07-06-印刷業者向けexcel)、[BD-09初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
 | REQ-F-039 | INT-Q-017、INT-Q-036、INT-Q-039、CONF-023 | AC-025 | [BD-02-02、BD-02-03、BD-02-07](logical-data-model.md#bd-02-02-論理エンティティと関係) | 未登録 | In Review |
-| REQ-F-040 | INT-Q-021、INT-Q-025、INT-Q-031、INT-Q-042、CONF-016、CONF-024、CONF-036、CONF-038、CONF-049 | AC-028、AC-038 | [BD-02-02、BD-02-04、BD-02-06～BD-02-08](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-03-10](offline-sync-conflict-design.md#bd-03-10-端末停止回収不能締め処理)、[BD-04-08](authentication-authorization-design.md#bd-04-08-停止紛失期限切れログアウト)、[BD-06-12](screen-flow-wireframe-design.md#bd-06-12-終了後確認締め削除)、[BD-08-10](operations-recovery-design.md#bd-08-10-公演停止締め端末内削除) | 未登録 | In Review |
+| REQ-F-040 | INT-Q-021、INT-Q-025、INT-Q-031、INT-Q-042、CONF-016、CONF-024、CONF-036、CONF-038、CONF-049、CONF-066、CONF-068 | AC-028、AC-038 | [BD-02-02、BD-02-04、BD-02-06～BD-02-08](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-03-10](offline-sync-conflict-design.md#bd-03-10-端末停止回収不能締め処理)、[BD-04-08](authentication-authorization-design.md#bd-04-08-停止紛失期限切れログアウト)、[BD-06-12](screen-flow-wireframe-design.md#bd-06-12-終了後確認締め削除)、[BD-08-03・BD-08-10](operations-recovery-design.md#bd-08-03-初期環境招待端末準備) | 未登録 | In Review |
 | REQ-F-041 | INT-Q-011、INT-Q-016、INT-Q-023、INT-Q-027、CONF-025、CONF-037 | AC-029、AC-035 | [BD-02-04、BD-02-05、BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント)、[BD-03-06、BD-03-07](offline-sync-conflict-design.md#bd-03-06-順序と現在状態の導出)、[BD-04-04、BD-04-07](authentication-authorization-design.md#bd-04-04-主要操作の権限表) | 未登録 | In Review |
 | REQ-F-042 | CONF-034 | AC-034 | [BD-01-09、BD-01-10](system-architecture.md#bd-01-09-無料条件障害方式見直し)、[BD-02-04、BD-02-06～BD-02-08](logical-data-model.md#bd-02-04-変更不能イベント)、[BD-03-03、BD-03-04、BD-03-09～BD-03-12](offline-sync-conflict-design.md#bd-03-03-端末キューと保存状態)、[BD-04-03、BD-04-04、BD-04-10](authentication-authorization-design.md#bd-04-03-役割範囲有効期間)、[BD-05-08、BD-05-11](security-privacy-design.md#bd-05-08-ログ監査プライバシー)、[BD-07-07、BD-07-10](file-output-report-design.md#bd-07-07-csv当日運営表匿名集計) | 未登録 | In Review |
 | REQ-F-043 | CONF-037、CONF-041、CONF-043 | AC-035 | [BD-02-02、BD-02-04、BD-02-05、BD-02-09](logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06-08～BD-06-10](screen-flow-wireframe-design.md#bd-06-08-会場席の編集と席配置)、[BD-07-02～BD-07-04、BD-07-08](file-output-report-design.md#bd-07-02-公演用excelテンプレート)、[BD-09初期割当](basic-design-plan.md#要件受入条件の割当) | 未登録 | In Review |
@@ -217,6 +217,24 @@
 | CONF-052 | 依頼者が一度、会場画像1枚200KBを上限としてよいと回答。`CONF-053`で1MBへ変更 | C-03 | REQ-F-035／AC-025 | [依頼者回答](basic-design-remediation-client-response.md)、[ADR-006](decisions/ADR-006-firestore-image-storage.md)、[POC-006](poc-006-result.md) |
 | CONF-053 | 依頼者が会場画像1枚1MBを希望。最大5枚、合計5MB。実画像の拡大時可読性はAC-025で確認 | C-03 | REQ-F-035／AC-025 | [依頼者回答](basic-design-remediation-client-response.md)、[ADR-006](decisions/ADR-006-firestore-image-storage.md)、[POC-006](poc-006-result.md)、[BD-09](test-strategy.md) |
 | CONF-054 | 開発者が統合PRと依頼者回答の一致を確認し、依頼者が第三者レビュー是正後の要件・受入条件・基本設計一式の変更を承認 | C-01～C-04、M-01～M-06、Q-01 | PR #84で改訂した要件・受入条件・基本設計 | [変更承認記録](basic-design-remediation-approval.md)、[再レビュー表](basic-design-remediation-re-review.md) |
+| CONF-055 | QR受付から受付ホームへ、会場席編集から遷移元の確認画面へ戻す。重要連絡を先頭に置き、その後を新しい順に並べる。公演終了・締めを重大操作として強調する | FB-01、FB-06、FB-07 | AC-004、AC-025、AC-027、AC-028／BD-06-01、BD-06-06、BD-06-08、BD-06-13 | [依頼者回答](ui-mock-client-response.md#conf-055-依頼者から伝達された回答)、[UIモック確認記録](ui-mock-review.md) |
+| CONF-056 | 回復不能な操作だけを重大操作とし、実行前に2回確認する。未読は連絡行の左端マークで示し、管理者向けの既読管理は設けない | FB-06、FB-07 | AC-009、AC-027、AC-028／BD-06-01、BD-06-04、BD-06-13 | [依頼者回答](ui-mock-client-response.md#conf-056-重大操作と連絡の既読表示)、[UIモック確認記録](ui-mock-review.md) |
+| CONF-057 | 端末保存を前提に、QR受付中断後の復帰方法の具体化を開発側へ委ねる。保存失敗や二重計上の許容は含まない | FB-11 | AC-004、AC-005、AC-015／BD-03、BD-06-06、BD-09 | [依頼者回答](ui-mock-client-response.md#conf-057-qr受付中断時の扱い)、[対策設計](qr-reception-recovery-review.md)、[#92](https://github.com/EU0207/concert-reception-system/issues/92) |
+
+## UIモック工程の設計課題
+
+`CONF-060`（2026-09-28）でFB-01～FB-33の追加変更を包括承認として受領した。[本番引継ぎ台帳](ui-mock-production-handoff.md)を要件・設計・受入条件の追補として適用する。全指摘とMCT-01～34の対応は同台帳を正本とし、モックの有無にかかわらず実装Issueとケース・結果を追跡する。
+
+`CONF-068`（2026-10-02）で、REQ-F-028・REQ-F-040に対する臨時管理者の公演・利用者別権限設定と、締めを主担当・代理管理者へ限定する条件を承認済み。AC-014・AC-028とBD-04・BD-06へ追跡する。権限設定の詳細は[変更Issue #98](https://github.com/EU0207/concert-reception-system/issues/98)で設計する。
+
+| 確認ID | 承認内容 | 対象 | 設計・試験・作業 |
+|---|---|---|---|
+| CONF-058・059 | 不参加の明示、購入の約束チェックの廃止、固定項目と確認用項目の分離 | FB-25・27・28 | 最新名称と復元操作はCONF-060で更新。#93、AC-035・036 |
+| CONF-060 | ここまでのモック反映と書面上の追加変更をすべて承認 | FB-01～33 | [追補とMCT対応](ui-mock-production-handoff.md)、#85・89～93。実装・試験は未実施 |
+
+| 指摘ID | 既存要件・受入条件 | 既存設計と追加確認先 | 状態 |
+|---|---|---|---|
+| FB-11 | REQ-F-008～REQ-F-010、REQ-NF-004／AC-004、AC-005、AC-011、AC-015 | [BD-03の端末保存と冪等再送](offline-sync-conflict-design.md)、[中断・誤更新への対策設計](qr-reception-recovery-review.md)、[#92](https://github.com/EU0207/concert-reception-system/issues/92) | `CONF-057`で開発側へ具体化を委任。文書はIn Review、実装・試験は未実施 |
 
 ## 設計工程の開発者判断
 
