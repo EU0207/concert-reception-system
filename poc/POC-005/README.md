@@ -25,4 +25,4 @@ firebase hosting:channel:deploy poc-005-YYYYMMDD --expires 1d
 node scripts/generate-access-qr.mjs https://発行された確認URL/
 ```
 
-実機手順は`docs/development/poc-005-device-check-guide.md`を参照します。結果確認後にチャネル、端末データ、生成物、生証跡を限定削除します。Firebaseプロジェクト本体は別確認なしに削除しません。
+実機手順は`docs/development/technical-validation/poc-005-device-check-guide.md`を参照します。結果確認後にチャネル、端末データ、生成物、生証跡を限定削除します。Firebaseプロジェクト本体は別確認なしに削除しません。

@@ -7,7 +7,7 @@
 | 目的 | IT開発の専門知識がない依頼者または後任者が、Firebase環境の所有・初期設定・引継ぎを安全に進められるようにする |
 | 主な読者 | 依頼者、後任の管理担当者、設定を支援する技術担当者 |
 | 前提 | Firebaseの本番採用と本番構成は未決定。この手順はPOC-001で確認した画面と管理原則を将来の手順案として整理したもの |
-| 関連文書 | [POC-001実施結果報告書](../development/poc-001-result.md)、[POC-001開始承認依頼書](../development/poc-001-approval-request.md) |
+| 関連文書 | [POC-001実施結果報告書](../development/technical-validation/poc-001-result.md)、[POC-001開始承認依頼書](../development/technical-validation/poc-001-approval-request.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 状態 | Draft |
 | 承認情報 | 未承認。Firebase採用決定後、実際の本番画面と構成に合わせて確定する |

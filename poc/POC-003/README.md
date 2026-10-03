@@ -2,7 +2,7 @@
 
 ## 位置づけ
 
-Issue #6で2026-09-03に明示承認された`POC-003`専用の技術検証である。本番アプリケーションではなく、すべて架空データを使用する。範囲、依存関係、外部資源、保存・削除、費用は[POC-003開始承認依頼書](../../docs/development/poc-003-approval-request.md)に従う。
+Issue #6で2026-09-03に明示承認された`POC-003`専用の技術検証である。本番アプリケーションではなく、すべて架空データを使用する。範囲、依存関係、外部資源、保存・削除、費用は[POC-003開始承認依頼書](../../docs/development/technical-validation/poc-003-approval-request.md)に従う。
 
 ## 確認対象
 
@@ -67,7 +67,7 @@ firebase hosting:channel:deploy poc-003-YYYYMMDD --expires 1d --project PROJECT_
 
 ## 実機結果
 
-各実機は画面内の確認票を完了し、`FAKE-P003-device-result-...json`を保存して開発担当者へ渡す。操作順は[POC-003実機確認手順書](../../docs/development/poc-003-device-test-guide.md)に従う。
+各実機は画面内の確認票を完了し、`FAKE-P003-device-result-...json`を保存して開発担当者へ渡す。操作順は[POC-003実機確認手順書](../../docs/development/technical-validation/poc-003-device-test-guide.md)に従う。
 
 ## 終了処理
 

@@ -2,9 +2,9 @@
 
 ## 位置づけ
 
-Issue #6で明示承認された`POC-001`専用の技術検証である。本番アプリケーションではなく、架空データだけを使用する。承認範囲と削除方法は[POC-001開始承認依頼書](../../docs/development/poc-001-approval-request.md)に従う。
+Issue #6で明示承認された`POC-001`専用の技術検証である。本番アプリケーションではなく、架空データだけを使用する。承認範囲と削除方法は[POC-001開始承認依頼書](../../docs/development/technical-validation/poc-001-approval-request.md)に従う。
 
-2026-09-02にローカルエミュレーターと専用実Firebaseの両方で合格した。結果、制約、次の判断は[POC-001実施結果報告書](../../docs/development/poc-001-result.md)を参照する。
+2026-09-02にローカルエミュレーターと専用実Firebaseの両方で合格した。結果、制約、次の判断は[POC-001実施結果報告書](../../docs/development/technical-validation/poc-001-result.md)を参照する。
 
 ## 確認対象
 

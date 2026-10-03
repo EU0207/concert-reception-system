@@ -6,7 +6,7 @@
 |---|---|
 | 目的 | C-03の画像保存・配布・削除方式の候補、根拠、影響を記録する |
 | 主な読者 | 依頼者、開発者、設計担当者 |
-| 関連文書 | [C-03調査](../venue-image-storage-feasibility.md)、[POC-006](../poc-006-result.md)、[依頼者回答](../basic-design-remediation-client-response.md)、[BD-02](../logical-data-model.md) |
+| 関連文書 | [C-03調査](../technical-validation/venue-image-storage-feasibility.md)、[POC-006](../technical-validation/poc-006-result.md)、[依頼者回答](../basic-design/basic-design-remediation-client-response.md)、[BD-02](../basic-design/logical-data-model.md) |
 | 関連Issue | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
 | ADR状態 | Accepted |
 | 決定日 | 2026-09-26。`CONF-053`の1MB上限とPOC-006の限定検証を根拠に容量条件を改訂。基本設計一式の変更承認と実画像の受入試験は別判定 |
@@ -19,7 +19,7 @@
 
 公演ごとに画像5枠、各枠に固定2バンク、各バンク7分割を使う案だった。分割0～5は各750,000バイト、分割6は500,000バイト以下とし、画像本体の最大は確定版25,000,000バイトと作業版25,000,000バイトの合計50,000,000バイトだった。分割、再結合、途中失敗の処理が必要になる。
 
-[POC-006](../poc-006-result.md)では上限外の要求、作業版の閲覧、旧版の閲覧をRulesで拒否した。5枚各5,000,000バイトを6つの別認証取得元が再構成し、SHA-256一致を確認した。これは実画像・実機でのAC-025合格ではない。
+[POC-006](../technical-validation/poc-006-result.md)では上限外の要求、作業版の閲覧、旧版の閲覧をRulesで拒否した。5枚各5,000,000バイトを6つの別認証取得元が再構成し、SHA-256一致を確認した。これは実画像・実機でのAC-025合格ではない。
 
 ## 採用する決定と比較
 

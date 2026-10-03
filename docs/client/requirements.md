@@ -2,23 +2,23 @@
 
 ## CONF-069による承認済み追補
 
-[依頼者回答](../development/ui-mock-client-response.md#conf-069-主担当端末の廃止と主担当引継ぎ)により、主担当本人は複数の端末を登録できる。主担当端末の廃止には、別の承認・準備済みで利用可能な主担当端末を必要とする。同じ本人の追加端末、または正式な主担当引継ぎ後の後任者の端末を認める。引継ぎ前の代理管理者端末は代替としない。代理管理者が自分の操作だけで主担当権限を取得することを禁止する。公演ごとの主担当の利用者は1人とし、端末数とは区別する。自己端末内データ削除と代理管理者端末の廃止にはCONF-066の条件を維持する。
+[依頼者回答](../development/ui-mock/ui-mock-client-response.md#conf-069-主担当端末の廃止と主担当引継ぎ)により、主担当本人は複数の端末を登録できる。主担当端末の廃止には、別の承認・準備済みで利用可能な主担当端末を必要とする。同じ本人の追加端末、または正式な主担当引継ぎ後の後任者の端末を認める。引継ぎ前の代理管理者端末は代替としない。代理管理者が自分の操作だけで主担当権限を取得することを禁止する。公演ごとの主担当の利用者は1人とし、端末数とは区別する。自己端末内データ削除と代理管理者端末の廃止にはCONF-066の条件を維持する。
 
 ## CONF-068による承認済み追補
 
-[依頼者回答](../development/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)により、REQ-F-040の通常締め・例外締めは主担当または代理管理者だけに許可し、臨時管理者には許可しない。REQ-F-028の臨時管理者権限は、公演と利用者ごとに設定できるようにする。設定可能な操作と条件は[変更Issue #98](https://github.com/EU0207/concert-reception-system/issues/98)で設計する。既存の禁止操作は、その設計と承認が済むまで許可しない。
+[依頼者回答](../development/ui-mock/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)により、REQ-F-040の通常締め・例外締めは主担当または代理管理者だけに許可し、臨時管理者には許可しない。REQ-F-028の臨時管理者権限は、公演と利用者ごとに設定できるようにする。設定可能な操作と条件は[変更Issue #98](https://github.com/EU0207/concert-reception-system/issues/98)で設計する。既存の禁止操作は、その設計と承認が済むまで許可しない。
 
 ## CONF-067による承認済み追補
 
-[依頼者回答](../development/ui-mock-client-response.md#conf-067-お客様の個別登録)により、REQ-F-001のExcel取込に加え、主担当・代理管理者が「お客様情報」から公演の名簿へ個別登録できるようにする。購入者名は必須とし、既存の前後空白除去と1～50文字の条件を適用する。追加直後は席未設定とする。席設定と必要な確認が完了するまで、対象行のチケット・QRは発行しない。Excel取込は継続する。重複候補、履歴、同時更新の設計は[変更Issue #97](https://github.com/EU0207/concert-reception-system/issues/97)で追跡する。
+[依頼者回答](../development/ui-mock/ui-mock-client-response.md#conf-067-お客様の個別登録)により、REQ-F-001のExcel取込に加え、主担当・代理管理者が「お客様情報」から公演の名簿へ個別登録できるようにする。購入者名は必須とし、既存の前後空白除去と1～50文字の条件を適用する。追加直後は席未設定とする。席設定と必要な確認が完了するまで、対象行のチケット・QRは発行しない。Excel取込は継続する。重複候補、履歴、同時更新の設計は[変更Issue #97](https://github.com/EU0207/concert-reception-system/issues/97)で追跡する。
 
 ## CONF-066による承認済み追補
 
-[依頼者回答](../development/ui-mock-client-response.md#conf-066-最後の管理端末の廃止削除)により、REQ-F-040の端末廃止・削除条件へ次を追加する。主担当または代理管理者の端末が最後の利用可能な管理端末である場合、その端末の廃止と端末自身の公演データ削除を禁止する。代替は別の承認・準備済み管理端末で、停止・廃止・削除されていないものとする。公演締め後や端末喪失時に代替を準備できない場合は、環境所有者による全管理端末喪失時の復旧後に条件を再判定する。未送信・隔離記録の全件受領と既存の削除条件は維持する。
+[依頼者回答](../development/ui-mock/ui-mock-client-response.md#conf-066-最後の管理端末の廃止削除)により、REQ-F-040の端末廃止・削除条件へ次を追加する。主担当または代理管理者の端末が最後の利用可能な管理端末である場合、その端末の廃止と端末自身の公演データ削除を禁止する。代替は別の承認・準備済み管理端末で、停止・廃止・削除されていないものとする。公演締め後や端末喪失時に代替を準備できない場合は、環境所有者による全管理端末喪失時の復旧後に条件を再判定する。未送信・隔離記録の全件受領と既存の削除条件は維持する。
 
 ## CONF-060による承認済み追補
 
-2026-09-28のUIモック追加変更の包括承認は、[本番引継ぎ台帳](../development/ui-mock-production-handoff.md)を本書の追補として適用する。モックに未反映の変更も本番対象とする。REQ-F-035・038のセル構成、REQ-F-043の購入者名修正、REQ-F-044の準備項目と不参加状態は、台帳の最新内容を優先する。過去の購入確定チェックや旧表示名は採用しない。その他の承認済み制約は維持する。
+2026-09-28のUIモック追加変更の包括承認は、[本番引継ぎ台帳](../development/ui-mock/ui-mock-production-handoff.md)を本書の追補として適用する。モックに未反映の変更も本番対象とする。REQ-F-035・038のセル構成、REQ-F-043の購入者名修正、REQ-F-044の準備項目と不参加状態は、台帳の最新内容を優先する。過去の購入確定チェックや旧表示名は採用しない。その他の承認済み制約は維持する。
 
 ## この文書について
 
@@ -27,11 +27,11 @@
 | 目的 | システムに必要な機能、品質、運用上の条件を合意する |
 | 主な読者 | 依頼者、受付担当者、運用担当者、開発担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [プロジェクト概要書](project-overview.md)、[受入条件書](acceptance-criteria.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation-plan.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](../development/production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](../development/production-security-ui-ux-notes.md) |
+| 関連文書 | [プロジェクト概要書](project-overview.md)、[受入条件書](acceptance-criteria.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation/technical-validation-plan.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](../development/requirements-review/production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](../development/requirements-review/production-security-ui-ux-notes.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#32](https://github.com/EU0207/concert-reception-system/issues/32)、[#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#36](https://github.com/EU0207/concert-reception-system/issues/36)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#38](https://github.com/EU0207/concert-reception-system/issues/38)、[#57](https://github.com/EU0207/concert-reception-system/issues/57) |
 | 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映し、Issue #23で承認された要件へIssue #32、Issue #33、Issue #36～Issue #38、Issue #57、Issue #68で受領した変更と、`CONF-054`で承認された今回の是正を追記した文書 |
 | 状態 | Approved |
-| 承認情報 | 2026-09-09に依頼者がPR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`を承認。2026-09-11に`CONF-034`、2026-09-15に`CONF-035`、2026-09-17に`CONF-036`、2026-09-18に`CONF-037`・`CONF-038`、2026-09-19に`CONF-039`、2026-09-20に`CONF-040`、2026-09-21に`CONF-041`～`CONF-044`、2026-09-22に`CONF-045`・`CONF-046`、2026-09-24に`CONF-048`の依頼者承認を、開発者を連絡窓口として受領。`CONF-048`の文書改訂はPR #69で統合済み。2026-09-25に`CONF-049`・`CONF-050`、2026-09-26に`CONF-051`～`CONF-053`の依頼者回答を受領し、今回の是正案へ反映した。ADR-004～ADR-006の個別採用と、要件・基本設計一式の変更承認は区別する。 `CONF-054`でPR #84の設計内容コミット`c52b22706759af92f3a9a9646d6ec39df0616cfc`に対する要件変更を承認。詳細は[変更承認記録](../development/basic-design-remediation-approval.md)を参照。 |
+| 承認情報 | 2026-09-09に依頼者がPR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`を承認。2026-09-11に`CONF-034`、2026-09-15に`CONF-035`、2026-09-17に`CONF-036`、2026-09-18に`CONF-037`・`CONF-038`、2026-09-19に`CONF-039`、2026-09-20に`CONF-040`、2026-09-21に`CONF-041`～`CONF-044`、2026-09-22に`CONF-045`・`CONF-046`、2026-09-24に`CONF-048`の依頼者承認を、開発者を連絡窓口として受領。`CONF-048`の文書改訂はPR #69で統合済み。2026-09-25に`CONF-049`・`CONF-050`、2026-09-26に`CONF-051`～`CONF-053`の依頼者回答を受領し、今回の是正案へ反映した。ADR-004～ADR-006の個別採用と、要件・基本設計一式の変更承認は区別する。 `CONF-054`でPR #84の設計内容コミット`c52b22706759af92f3a9a9646d6ec39df0616cfc`に対する要件変更を承認。詳細は[変更承認記録](../development/basic-design/basic-design-remediation-approval.md)を参照。 |
 
 ## 結論と前提
 
@@ -212,7 +212,7 @@
 
 - 依頼者が決定済み要件、対象外、追加要望、未決定事項の区分を確認する。
 - `TBD-005`、`TBD-006`、`TBD-008`、`TBD-010`、`TBD-013` の確認済み方針と後続設計の境界を確認する。
-- Issue #5で[技術検証計画書](../development/technical-validation-plan.md)を確認し、技術検証が必要な要件、評価方法、合格基準、PoC実施可否を合意する。
+- Issue #5で[技術検証計画書](../development/technical-validation/technical-validation-plan.md)を確認し、技術検証が必要な要件、評価方法、合格基準、PoC実施可否を合意する。
 - 承認されたIssue #6の調査・PoCを完了し、結果と要件への影響を反映する。
 - [受入条件書](acceptance-criteria.md)を検証結果に合わせて更新し、要件との対応を確認する。
 - 技術検証後に別途作成する最終承認Issueへ、承認結果を記録する。

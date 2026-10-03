@@ -2,7 +2,7 @@
 
 ## CONF-069による承認済み追補
 
-[依頼者回答](../development/ui-mock-client-response.md#conf-069-主担当端末の廃止と主担当引継ぎ)に基づき、AC-014・AC-028へ次の試験を追加する。主担当本人の2台目を承認・準備すると、元の主担当端末を廃止できる。2台目が承認待ち、未準備、停止中、廃止済みなら拒否する。代理管理者端末だけが利用可能な状態でも主担当端末の廃止を拒否する。現主担当が開始し、後任の代理管理者が受諾した正式な引継ぎ後は、後任の準備済み主担当端末を代替にできる。代理管理者が単独で主担当への変更を要求した場合は、画面とサーバーの双方で拒否する。廃止確認中に代替の役割または端末状態が変われば確定時に拒否する。試験は未実施。
+[依頼者回答](../development/ui-mock/ui-mock-client-response.md#conf-069-主担当端末の廃止と主担当引継ぎ)に基づき、AC-014・AC-028へ次の試験を追加する。主担当本人の2台目を承認・準備すると、元の主担当端末を廃止できる。2台目が承認待ち、未準備、停止中、廃止済みなら拒否する。代理管理者端末だけが利用可能な状態でも主担当端末の廃止を拒否する。現主担当が開始し、後任の代理管理者が受諾した正式な引継ぎ後は、後任の準備済み主担当端末を代替にできる。代理管理者が単独で主担当への変更を要求した場合は、画面とサーバーの双方で拒否する。廃止確認中に代替の役割または端末状態が変われば確定時に拒否する。試験は未実施。
 
 ## CONF-068による承認済み追補
 
@@ -10,7 +10,7 @@ AC-014とAC-028に、通常締め・例外締めを主担当と代理管理者�
 
 ## CONF-067による承認済み追補
 
-[依頼者回答](../development/ui-mock-client-response.md#conf-067-お客様の個別登録)に基づき、AC-001へ個別登録の試験を追加する。主担当・代理管理者は購入者名を入力して名簿へ席未設定の行を追加できる。一般受付担当者と臨時管理者は追加できない。購入者名は前後空白を除去し、1文字・50文字を受け付ける。空白だけと51文字は理由を示して拒否する。追加直後は席未設定であり、席設定と必要な確認が完了するまでチケット・QRを発行しない。既存のExcel取込試験も維持する。重複候補、履歴、同時更新とサーバー側権限検証の具体的な試験条件は[変更Issue #97](https://github.com/EU0207/concert-reception-system/issues/97)で定める。実装後の合否は未判定である。
+[依頼者回答](../development/ui-mock/ui-mock-client-response.md#conf-067-お客様の個別登録)に基づき、AC-001へ個別登録の試験を追加する。主担当・代理管理者は購入者名を入力して名簿へ席未設定の行を追加できる。一般受付担当者と臨時管理者は追加できない。購入者名は前後空白を除去し、1文字・50文字を受け付ける。空白だけと51文字は理由を示して拒否する。追加直後は席未設定であり、席設定と必要な確認が完了するまでチケット・QRを発行しない。既存のExcel取込試験も維持する。重複候補、履歴、同時更新とサーバー側権限検証の具体的な試験条件は[変更Issue #97](https://github.com/EU0207/concert-reception-system/issues/97)で定める。実装後の合否は未判定である。
 
 ## CONF-066による承認済み追補
 
@@ -18,7 +18,7 @@ AC-028に、最後の管理端末の保護を追加する。主担当または�
 
 ## CONF-060による承認済み追補
 
-[本番引継ぎ台帳](../development/ui-mock-production-handoff.md)のMCT-01～34を、関連ACの追加試験条件として適用する。モック専用のMCT-13は本番の再現ボタンを対象外とし、実際の競合時の入力保持だけを既存ACで確認する。AC-025・026・035・036の相違箇所は台帳の最新内容を採用する。旧4項目の準備チェックは、入金済み・券発行済み・券送付済みの固定3項目と確認用項目へ変更する。未入金発行と既存の確認・履歴条件は維持する。本番試験は全件未実施であり、CONF-060を合格結果にはしない。
+[本番引継ぎ台帳](../development/ui-mock/ui-mock-production-handoff.md)のMCT-01～34を、関連ACの追加試験条件として適用する。モック専用のMCT-13は本番の再現ボタンを対象外とし、実際の競合時の入力保持だけを既存ACで確認する。AC-025・026・035・036の相違箇所は台帳の最新内容を採用する。旧4項目の準備チェックは、入金済み・券発行済み・券送付済みの固定3項目と確認用項目へ変更する。未入金発行と既存の確認・履歴条件は維持する。本番試験は全件未実施であり、CONF-060を合格結果にはしない。
 
 ## この文書について
 
@@ -27,7 +27,7 @@ AC-028に、最後の管理端末の保護を追加する。主担当または�
 | 目的 | システムを完成として受け入れるための確認条件を合意する |
 | 主な読者 | 依頼者、受付担当者、開発担当者、確認担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](meeting-notes/2026-08-30-initial-requirements-interview.md) |
-| 関連文書 | [要件定義書](requirements.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation-plan.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](../development/production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](../development/production-security-ui-ux-notes.md) |
+| 関連文書 | [要件定義書](requirements.md)、[トレーサビリティ表](../development/traceability-matrix.md)、[技術検証計画書](../development/technical-validation/technical-validation-plan.md)、[本番座席表・会場画像UI/UX設計引継ぎ事項](../development/requirements-review/production-seat-map-ui-ux-notes.md)、[本番セキュリティ・UI/UX設計引継ぎ事項](../development/requirements-review/production-security-ui-ux-notes.md) |
 | 関連Issue | [#4](https://github.com/EU0207/concert-reception-system/issues/4)、[#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#23](https://github.com/EU0207/concert-reception-system/issues/23)、[#32](https://github.com/EU0207/concert-reception-system/issues/32)、[#33](https://github.com/EU0207/concert-reception-system/issues/33)、[#36](https://github.com/EU0207/concert-reception-system/issues/36)、[#37](https://github.com/EU0207/concert-reception-system/issues/37)、[#38](https://github.com/EU0207/concert-reception-system/issues/38)、[#57](https://github.com/EU0207/concert-reception-system/issues/57)、[#60](https://github.com/EU0207/concert-reception-system/issues/60) |
 | 文書の位置づけ | Issue #6の技術検証結果と追加確認を反映し、Issue #23で承認された受入条件へIssue #32、Issue #33、Issue #36～Issue #38、Issue #57、Issue #60、Issue #68で受領した変更と、`CONF-054`で承認された今回の是正を追記した文書 |
 | 状態 | Approved |
@@ -111,7 +111,7 @@ AC-028に、最後の管理端末の保護を追加する。主担当または�
 
 ## 承認
 
-Issue #5では本書を最終承認せず、[技術検証計画書](../development/technical-validation-plan.md)で技術検証が必要な条件、評価方法、合格基準を確認した。その後、Issue #6の調査・PoC結果と追加確認を反映し、2026-09-09に依頼者が、PR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`に含まれる[要件定義書](requirements.md)、本書、未決定事項の区分、残るリスクを明示承認した。
+Issue #5では本書を最終承認せず、[技術検証計画書](../development/technical-validation/technical-validation-plan.md)で技術検証が必要な条件、評価方法、合格基準を確認した。その後、Issue #6の調査・PoC結果と追加確認を反映し、2026-09-09に依頼者が、PR #24のコミット`4a0e32b8e450a95fa1ce4560ebce1137e46aeccb`に含まれる[要件定義書](requirements.md)、本書、未決定事項の区分、残るリスクを明示承認した。
 
 追加承認は次のとおりである。
 
