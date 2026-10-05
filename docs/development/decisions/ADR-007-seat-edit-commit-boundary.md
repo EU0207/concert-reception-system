@@ -5,13 +5,15 @@
 | 項目 | 内容 |
 |---|---|
 | 目的 | 席構成・席設定・履歴を途中状態なしで共有確定する候補を比較する |
-| 読者 | 開発者、設計担当者、保守担当者 |
+| 読者 | 開発者、設計担当者、テスト担当者 |
 | 関連Issue | [#91](https://github.com/EU0207/concert-reception-system/issues/91)、[#93](https://github.com/EU0207/concert-reception-system/issues/93) |
 | 関連文書 | [詳細設計](../detailed-design/seat-management-detail-design.md)、[BD-03](../basic-design/offline-sync-conflict-design.md)、[ADR-001](ADR-001-product-platform.md) |
 | 文書状態 | In Review |
 | ADR状態 | Proposed |
 | 日付 | 2026-10-03 |
 | 採否 | 未決定。DD-91-T01の成立性確認後に決定する |
+
+本ADRと成立性検証の技術レビューは開発側で行い、採否は開発者が判断する。依頼者には未決定の業務判断だけを平易に説明して確認し、技術資料全体のレビュー・承認は求めない。承認済みの業務回答は再確認しない。
 
 ## 背景
 

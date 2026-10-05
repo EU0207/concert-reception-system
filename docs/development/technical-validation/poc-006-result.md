@@ -5,7 +5,7 @@
 | 項目 | 内容 |
 |---|---|
 | 目的 | 第三者レビューC-01・C-03の設計候補を架空データとエミュレーターで検証し、成立範囲と残るリスクを分ける |
-| 主な読者 | 依頼者、開発者、設計担当者、テスト担当者 |
+| 主な読者 | 開発者、設計担当者、テスト担当者 |
 | 対象 | REQ-F-031、REQ-F-035、REQ-NF-017、AC-025、AC-030 |
 | 関連Issue | [#71](https://github.com/EU0207/concert-reception-system/issues/71)、[#73](https://github.com/EU0207/concert-reception-system/issues/73) |
 | 実施日 | 2026-09-25。200KB案と1MB案の追加検証は2026-09-26 |

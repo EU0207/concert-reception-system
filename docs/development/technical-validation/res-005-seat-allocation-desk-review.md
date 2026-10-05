@@ -5,7 +5,7 @@
 | 項目 | 内容 |
 |---|---|
 | 目的 | REQ-F-036の自動座席配置について、PoCコードを作らず架空の割当表で期待結果を確認し、AC-026の将来テストへ引き継ぐ |
-| 主な読者 | 依頼者、開発担当者、確認担当者 |
+| 主な読者 | 開発者、設計担当者、テスト担当者 |
 | 前提 | [技術検証計画書](technical-validation-plan.md)、[要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
 | 関連ID | RES-005、REQ-F-036、RQ-005、AC-026、CONF-015 |
