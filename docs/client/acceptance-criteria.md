@@ -1,10 +1,10 @@
 # 受入条件書
 
-## CONF-071の試験条件案（In Review）
+## CONF-071の業務回答と追加試験
 
-[変更要望CONF-071](../development/ui-mock/ui-mock-client-response.md#conf-071-席交換の理由当日の構成編集舞台位置)の受入条件への影響はAC-025・026・037。既存席を保った行列追加、舞台の左／上の画面・帳票一致、理由入力の時点を追加確認する。解除後の編集可否は確認待ちであり、未決定の期待結果を試験合格にしない。
+[依頼者回答CONF-071](../development/ui-mock/ui-mock-client-response.md#conf-071-席交換の理由当日の構成編集舞台位置)により、AC-026の交換理由は初回本番受付開始前は不要、開始後・停止中は必須とする。AC-025の番号・位置編集は未割当席だけ理由付きで許可する。理由必須時の空白入力、割当済みの編集対象、古い版の要求は拒否し、入力を保持する。AC-035の履歴とQR保持を維持する。
 
-[DD91-T26～29](../development/detailed-design/seat-management-detail-design.md#dd-91-09-試験ケース)で入力と期待結果の案を管理する。本節は未承認。従来の承認条件との変更点は[DD-91の確認待ち](../development/detailed-design/seat-management-detail-design.md#conf-071-変更要望と確認待ち)で区別する。
+[DD91-T29・30](../development/detailed-design/seat-management-detail-design.md#dd-91-09-試験ケース)で停止後の理由判定と未割当席編集を分けて確認する。AC-039の本番開始記録の保持と、画面を経由しない拒否も確認する。行列拡張と舞台の左／上一致（AC-037）の試験案はT26～28へ割り当てる。技術設計・ケース案はIn Review、本番試験は全件未実施。
 
 ## CONF-070による席設定解除の追加試験
 
