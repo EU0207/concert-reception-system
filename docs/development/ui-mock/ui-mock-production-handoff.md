@@ -1,5 +1,9 @@
 # UIモック変更の本番引継ぎ台帳
 
+## CONF-073による当日の個別追加席
+
+[依頼者要望](ui-mock-client-response.md#conf-073-横方向の拡張と当日の個別追加席)として、非席4種別からの追加、手入力採番と緊急表示を受領した。[詳細設計](../detailed-design/seat-management-detail-design.md#当日の非席セルからの個別席追加conf-073)で既存番号を保護し、T33～36を追加する。T04のunset確定拒否案を非席としての保持へ変更し、T27へ横両方向の具体例を加える。番号形式と緊急表示対象は確認待ち。技術方式はIn Review、本番未実装。
+
 ## CONF-072による自由な区画名と印刷条件
 
 [依頼者回答](ui-mock-client-response.md#conf-072-自由な区画名と区画単位の印刷)として、自由な区画名と区画ごとの座席表を受領した。1区画A4横1枚、左上に区画名、フッターにページ数を表示する。MHD-03の共通構成を維持し、画面寸法を帳票へコピーしない。[詳細設計](../detailed-design/seat-management-detail-design.md#自由な区画名と独立した座席表conf-072)のT31・32で確認する。技術方式はIn Review、本番未実装。
@@ -188,12 +192,13 @@ MHD-05では、オフライン端末へ旧QRの無効化を即時通知できな
 | MCT-34 | [#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105)、[#106 席設定画面](https://github.com/EU0207/concert-reception-system/issues/106) | DD91-T24 |
 | MHD-03の帳票同一構成、CONF-072の区画印刷 | [#108 共通投影と出力受渡し](https://github.com/EU0207/concert-reception-system/issues/108) | DD91-T23・32 |
 | CONF-072の自由な区画名と独立構成 | [#102 型・採番](https://github.com/EU0207/concert-reception-system/issues/102)、[#104 保存](https://github.com/EU0207/concert-reception-system/issues/104)、[#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105) | DD91-T31 |
+| CONF-073の手入力席と緊急表示、MHD-03 | #101・102・104～108、#89・95の受渡し | DD91-T04・22・27・33～36 |
 
 ケースの入力・期待結果は[詳細設計の試験ケース](../detailed-design/seat-management-detail-design.md#dd-91-09-試験ケース)を参照する。FB-30の購入者名修正や確認用項目の保存は#93の設計へ残し、#107だけでFB-30全体を完了扱いしない。
 
 **依頼者に確認してください**
 
-- なし。最後の管理端末の保護と環境所有者の復旧後の再判定はCONF-066で了承済み。
+- CONF-073-C・D：自由番号の形式と緊急表示の対象を[確認欄](../detailed-design/seat-management-detail-design.md#確認事項の分類)で確認してください。入力検証と表示範囲が未決です。推奨は枝番・文字を許可し、緊急表示を席構成の変更だけに限定する案です。CONF-066等の回答は維持します。
 
 **開発者が確認してください**
 
