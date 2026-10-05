@@ -1,5 +1,9 @@
 # UIモック変更の本番引継ぎ台帳
 
+## CONF-072による自由な区画名と印刷条件
+
+[依頼者回答](ui-mock-client-response.md#conf-072-自由な区画名と区画単位の印刷)として、自由な区画名と区画ごとの座席表を受領した。1区画A4横1枚、左上に区画名、フッターにページ数を表示する。MHD-03の共通構成を維持し、画面寸法を帳票へコピーしない。[詳細設計](../detailed-design/seat-management-detail-design.md#自由な区画名と独立した座席表conf-072)のT31・32で確認する。技術方式はIn Review、本番未実装。
+
 ## CONF-071の業務回答と変更設計
 
 [依頼者回答](ui-mock-client-response.md#conf-071-席交換の理由当日の構成編集舞台位置)で理由の時点と編集対象を承認済み。[設計差分](../detailed-design/seat-management-detail-design.md#conf-071-業務回答と変更設計)の技術方式はIn Review。旧交換理由条件は本追補へ置き換え、舞台左端固定は左／上選択の変更前条件として照合する。
@@ -182,7 +186,8 @@ MHD-05では、オフライン端末へ旧QRの無効化を即時通知できな
 | FB-10・19／MCT-10・19、CONF-062・070 | [#103 席設定案](https://github.com/EU0207/concert-reception-system/issues/103)、[#104 保存](https://github.com/EU0207/concert-reception-system/issues/104)、[#106 席設定画面](https://github.com/EU0207/concert-reception-system/issues/106) | DD91-T07～15・19・24・25 |
 | FB-30／MCT-30、MHD-05 | [#107 不参加・QR結合](https://github.com/EU0207/concert-reception-system/issues/107)、#93の共同契約 | DD91-T20～22・25 |
 | MCT-34 | [#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105)、[#106 席設定画面](https://github.com/EU0207/concert-reception-system/issues/106) | DD91-T24 |
-| MHD-03の帳票同一構成 | [#108 共通投影と出力受渡し](https://github.com/EU0207/concert-reception-system/issues/108) | DD91-T23 |
+| MHD-03の帳票同一構成、CONF-072の区画印刷 | [#108 共通投影と出力受渡し](https://github.com/EU0207/concert-reception-system/issues/108) | DD91-T23・32 |
+| CONF-072の自由な区画名と独立構成 | [#102 型・採番](https://github.com/EU0207/concert-reception-system/issues/102)、[#104 保存](https://github.com/EU0207/concert-reception-system/issues/104)、[#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105) | DD91-T31 |
 
 ケースの入力・期待結果は[詳細設計の試験ケース](../detailed-design/seat-management-detail-design.md#dd-91-09-試験ケース)を参照する。FB-30の購入者名修正や確認用項目の保存は#93の設計へ残し、#107だけでFB-30全体を完了扱いしない。
 

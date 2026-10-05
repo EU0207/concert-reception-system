@@ -134,7 +134,7 @@
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約、操作と異常時を具体化し、DD91-T01～30を関連AC・MCTへ割り当てる。CONF-071の業務回答を反映。[印刷形式と500席の確認](development/detailed-design/seat-management-detail-design.md#印刷用レイアウトと500席の確認)も扱う | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約、操作と異常時を具体化し、DD91-T01～32を関連AC・MCTへ割り当てる。CONF-071・072の業務回答を反映。[区画単位の印刷と500席の確認](development/detailed-design/seat-management-detail-design.md#印刷用レイアウトと500席の確認)も扱う | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 
