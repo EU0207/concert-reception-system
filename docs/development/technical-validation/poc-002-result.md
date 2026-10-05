@@ -5,7 +5,7 @@
 | 項目 | 内容 |
 |---|---|
 | 目的 | QR判定後の受付性能、復旧・オンライン同期、通信量の技術検証結果と制約を記録する |
-| 主な読者 | 依頼者、開発担当者、確認担当者 |
+| 主な読者 | 開発者、設計担当者、テスト担当者 |
 | 実施日 | 2026-09-03 |
 | 関連文書 | [技術検証計画書](technical-validation-plan.md)、[開始承認依頼書](poc-002-approval-request.md)、[検証集計](../../../poc/POC-002/artifacts/poc-002-verification-summary.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |

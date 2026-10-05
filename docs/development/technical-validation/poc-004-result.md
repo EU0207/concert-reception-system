@@ -5,7 +5,7 @@
 | 項目 | 内容 |
 |---|---|
 | 目的 | 個別認証、役割別権限制御、任意項目保護、権限停止、端末データ削除の検証結果と制約を記録する |
-| 主な読者 | 依頼者、開発担当者、確認担当者 |
+| 主な読者 | 開発者、設計担当者、テスト担当者 |
 | 実施日 | 2026-09-04 |
 | 関連文書 | [技術検証計画書](technical-validation-plan.md)、[開始承認依頼書](poc-004-approval-request.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
