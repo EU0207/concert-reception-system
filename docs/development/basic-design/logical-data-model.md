@@ -1,5 +1,9 @@
 # 論理データモデル・データフロー・ライフサイクル設計
 
+## CONF-072による区画の詳細化
+
+[依頼者回答CONF-072](../ui-mock/ui-mock-client-response.md#conf-072-自由な区画名と区画単位の印刷)により、区画名は階表記に限定しない。[詳細設計](../detailed-design/seat-management-detail-design.md#自由な区画名と独立した座席表conf-072)では、表示用の自由名称と固定sectionIdを分け、区画ごとに独立した座席表を保持する案とする。名称変更や区画切替で既存席と割当を作り直さない。業務条件は受領済み、技術設計はIn Review。
+
 ## Issue #91の詳細化
 
 CONF-071の[業務回答と変更設計](../detailed-design/seat-management-detail-design.md#conf-071-業務回答と変更設計)で、初回本番受付開始後の交換理由必須と未割当席だけの理由付き番号・位置編集を承認済み。初回開始時刻は停止で消さず、公演管理版と席編集版を合わせて検証する技術案とする。行列拡張と舞台設定の技術設計はIn Review。

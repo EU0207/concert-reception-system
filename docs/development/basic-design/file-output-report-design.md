@@ -1,5 +1,9 @@
 # Excel・QR・PDF・CSV・帳票設計
 
+## CONF-072による区画単位の印刷条件
+
+[依頼者回答CONF-072](../ui-mock/ui-mock-client-response.md#conf-072-自由な区画名と区画単位の印刷)により、BD-07-08のA4横1ページは「1区画につき1枚」として適用する。番号版PDFと名前版PDF・Excelの左上に自由な区画名、フッターに「現在ページ/総ページ」を表示する。[詳細設計](../detailed-design/seat-management-detail-design.md#印刷用レイアウトと500席の確認)で出力対象に対応する連番を具体化する。業務条件は受領済み、技術設計はIn Review。既存の名前枠・席番号・空間位置の条件を維持する。
+
 ## Issue #91の座席構成の受渡し
 
 CONF-071の[舞台位置変更案](../detailed-design/seat-management-detail-design.md#舞台位置の変更案conf-071)は従来の左端固定との差分である。左／上の確定設定を番号PDFと名前PDF・Excelへ共通に渡し、セル座標と席番号を回転させない案とする。未承認のため既存出力条件と区別し、DD91-T28で一致を確認する。
