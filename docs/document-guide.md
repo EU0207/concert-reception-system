@@ -128,7 +128,7 @@
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約、操作と異常時を具体化し、DD91-T01～25を関連AC・MCTへ割り当てる | 開発者、設計担当者、テスト担当者、依頼者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約、操作と異常時を具体化し、DD91-T01～29を関連AC・MCTへ割り当てる。CONF-071の条件確認を含む | 開発者、設計担当者、テスト担当者、依頼者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 

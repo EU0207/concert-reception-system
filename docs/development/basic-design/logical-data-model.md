@@ -2,6 +2,8 @@
 
 ## Issue #91の詳細化
 
+CONF-071の[変更案](../detailed-design/seat-management-detail-design.md#conf-071-変更要望と確認待ち)で、既存ID・番号を保つ行列拡張と舞台位置の共通設定を検討する。解除対象はDD-91-B03で確認中。詳細設計の追加案は未承認であり、以下の既存承認条件を先行して緩和しない。
+
 [DD-91-02](../detailed-design/seat-management-detail-design.md#dd-91-02-データ契約と不変条件)で、固定セルID・座席ID・表示番号の分離と5種別を具体化する。欠番セルは編集位置と番号消費を持つが、Seat・割当・QRを持たない。発券後の単独席設定解除は[CONF-070](../ui-mock/ui-mock-client-response.md#conf-070-発券後の席設定解除)で禁止し、不参加処理を使う。物理スキーマはDD-91-T01の技術検証後に確定する。詳細設計案を基本設計の承認へ読み替えない。
 
 ## CONF-060による承認済み追補
