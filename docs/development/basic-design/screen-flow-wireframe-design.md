@@ -2,7 +2,7 @@
 
 ## Issue #91の詳細化
 
-CONF-071の[変更案](../detailed-design/seat-management-detail-design.md#conf-071-変更要望と確認待ち)で、交換理由の時点と当日の行列拡張を見直す。舞台位置の左／上選択を追加する案とし、従来の左端固定との差分を明示する。時点と解除対象は依頼者確認中、画面の変更案は未承認。
+CONF-071の[業務回答と変更設計](../detailed-design/seat-management-detail-design.md#conf-071-業務回答と変更設計)を適用する。初回本番受付開始前の交換は理由不要、開始後は停止中も必須。未割当席だけ理由付きで番号・位置を編集し、割当済み席は保護する。行列拡張と舞台の左／上選択を含む画面詳細案はIn Review、本番未実装。
 
 会場席作成と「お客様の席を設定」の状態・異常時は[DD-91-03・04・06](../detailed-design/seat-management-detail-design.md)で具体化する。発券後の移動・交換は維持し、単独で席未設定へ戻す取消しは[CONF-070](../ui-mock/ui-mock-client-response.md#conf-070-発券後の席設定解除)により不参加処理を使う。詳細設計案はIn Review、本番実装と実機試験は未実施である。
 
