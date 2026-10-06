@@ -1,0 +1,214 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function authorized(p, requireManager) {
+      let d = get(/databases/$(database)/documents/proofShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/proofShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/proofShows/$(p)/roles/$(d.humanUid)).data;
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && d.deviceUid == request.auth.uid && d.active == true
+        && s.humanUid == d.humanUid && s.emailVerified == true
+        && s.active == true && s.expiresAt > request.time && r.active == true
+        && (!requireManager || r.role in ['owner', 'deputy']);
+    }
+    function active(p) {
+      return request.auth != null && authorized(p, false);
+    }
+    function manager(p) {
+      return request.auth != null && authorized(p, true);
+    }
+    function beforeHead(p) {
+      return get(/databases/$(database)/documents/proofShows/$(p)/state/head).data;
+    }
+    function afterHead(p) {
+      return getAfter(/databases/$(database)/documents/proofShows/$(p)/state/head).data;
+    }
+    function afterEvent(p, op) {
+      return getAfter(/databases/$(database)/documents/proofShows/$(p)/events/$(op)).data;
+    }
+    function fence(p, op) {
+      return afterHead(p).revision == beforeHead(p).revision + 1
+        && afterHead(p).operationId == op
+        && afterEvent(p, op).revision == afterHead(p).revision
+        && afterEvent(p, op).deviceUid == request.auth.uid;
+    }
+    function bulkHead(p) {
+      return get(/databases/$(database)/documents/proofShows/$(p)/generationHead/state).data;
+    }
+    function bulkBefore(p, op) {
+      return get(/databases/$(database)/documents/proofShows/$(p)/bulkOperations/$(op)).data;
+    }
+    function bulkAfter(p, op) {
+      return getAfter(/databases/$(database)/documents/proofShows/$(p)/bulkOperations/$(op)).data;
+    }
+    function baseEntry(p, generation, ordinal) {
+      return get(/databases/$(database)/documents/proofShows/$(p)/generations/$(generation)/entries/$(ordinal)).data;
+    }
+    function stagedEntry(p, op, ordinal) {
+      return getAfter(/databases/$(database)/documents/proofShows/$(p)/generations/$(op)/entries/$(ordinal)).data;
+    }
+    function member(p, op, aid) {
+      return getAfter(/databases/$(database)/documents/proofShows/$(p)/generations/$(op)/members/$(aid)).data;
+    }
+    function validEntry(p, op, before) {
+      let ordinal = string(before.processed);
+      let entry = stagedEntry(p, op, ordinal);
+      let old = baseEntry(p, before.baseGeneration, ordinal);
+      return entry.diff(old).affectedKeys().hasOnly(['attendeeId'])
+        && entry.attendeeId is string
+        && (!old.fixed || entry.attendeeId == old.attendeeId)
+        && (entry.attendeeId == '' || member(p, op, entry.attendeeId).ordinal == ordinal);
+    }
+    function verifyOccupant(p, op, before) {
+      let old = baseEntry(p, before.baseGeneration, string(before.verified));
+      return old.attendeeId == '' || member(p, op, old.attendeeId).ordinal is string;
+    }
+    function publishedHead(p, op, before) {
+      let h = getAfter(/databases/$(database)/documents/proofShows/$(p)/generationHead/state).data;
+      return h.generationId == op && h.revision == before.baseRevision + 1;
+    }
+    function createBulk(p, data) {
+      let h = bulkHead(p);
+      let c = get(/databases/$(database)/documents/proofShows/$(p)/control/state).data;
+      return data.keys().hasOnly(['baseGeneration', 'baseRevision', 'controlRevision', 'expectedCount', 'processed', 'verified', 'phase', 'deviceUid'])
+        && data.deviceUid == request.auth.uid && data.baseGeneration == h.generationId
+        && data.baseRevision == h.revision && data.controlRevision == c.revision
+        && data.expectedCount == h.count && data.processed == 0 && data.verified == 0
+        && data.phase == 'preparing';
+    }
+    function updateBulk(p, op, before, after) {
+      let h = bulkHead(p);
+      let c = get(/databases/$(database)/documents/proofShows/$(p)/control/state).data;
+      return before.baseRevision == h.revision && before.baseGeneration == h.generationId
+        && before.controlRevision == c.revision && before.deviceUid == request.auth.uid
+        && after.diff(before).affectedKeys().hasOnly(['processed', 'verified', 'phase'])
+        && (
+          (before.phase == 'preparing' && after.phase == 'preparing'
+            && after.processed == before.processed + 1 && before.processed < before.expectedCount
+            && after.verified == 0 && validEntry(p, op, before))
+          || (before.phase == 'preparing' && after.phase == 'verifying'
+            && before.processed == before.expectedCount && after.processed == before.processed && after.verified == 0)
+          || (before.phase == 'verifying' && after.phase == 'verifying'
+            && after.processed == before.processed && after.verified == before.verified + 1
+            && before.verified < before.expectedCount && verifyOccupant(p, op, before))
+          || (before.phase == 'verifying' && after.phase == 'ready'
+            && before.verified == before.expectedCount && after.processed == before.processed && after.verified == before.verified)
+          || (before.phase == 'ready' && after.phase == 'published'
+            && after.processed == before.processed && after.verified == before.verified && publishedHead(p, op, before))
+        );
+    }
+    function createEntry(p, op, ordinal) {
+      let before = bulkBefore(p, op);
+      let after = bulkAfter(p, op);
+      return before.deviceUid == request.auth.uid && before.phase == 'preparing' && after.phase == 'preparing'
+        && ordinal == string(before.processed) && after.processed == before.processed + 1;
+    }
+    function createMember(p, op, aid, data) {
+      let before = bulkBefore(p, op);
+      let after = bulkAfter(p, op);
+      let entry = stagedEntry(p, op, data.ordinal);
+      return before.deviceUid == request.auth.uid && before.phase == 'preparing'
+        && data.keys().hasOnly(['ordinal']) && data.ordinal == string(before.processed)
+        && after.processed == before.processed + 1 && entry.attendeeId == aid;
+    }
+    function updateBulkHead(p, before, after) {
+      let opBefore = bulkBefore(p, after.generationId);
+      let opAfter = bulkAfter(p, after.generationId);
+      let c = get(/databases/$(database)/documents/proofShows/$(p)/control/state).data;
+      let event = getAfter(/databases/$(database)/documents/proofShows/$(p)/bulkEvents/$(after.generationId)).data;
+      return after.keys().hasOnly(['generationId', 'revision', 'count']) && after.count == before.count
+        && after.revision == before.revision + 1 && opBefore.phase == 'ready'
+        && opBefore.deviceUid == request.auth.uid && opBefore.baseRevision == before.revision
+        && opBefore.baseGeneration == before.generationId && opBefore.controlRevision == c.revision
+        && opAfter.phase == 'published' && event.revision == after.revision;
+    }
+    function createBulkEvent(p, op, data) {
+      let before = bulkBefore(p, op);
+      let after = bulkAfter(p, op);
+      let h = getAfter(/databases/$(database)/documents/proofShows/$(p)/generationHead/state).data;
+      return data.keys().hasOnly(['revision', 'deviceUid', 'kind']) && data.deviceUid == request.auth.uid
+        && data.kind == 'assign' && before.phase == 'ready' && after.phase == 'published'
+        && h.generationId == op && data.revision == h.revision;
+    }
+    match /proofShows/{p} {
+      match /{privateCollection}/{id} {
+        allow read: if privateCollection in ['devices', 'roles', 'sessions'] && manager(p);
+        allow write: if false;
+      }
+      match /state/head {
+        allow get: if active(p);
+        allow update: if manager(p)
+          && request.resource.data.keys().hasOnly(['revision', 'operationId'])
+          && request.resource.data.revision == resource.data.revision + 1
+          && request.resource.data.operationId is string
+          && afterEvent(p, request.resource.data.operationId).revision == request.resource.data.revision
+          && afterEvent(p, request.resource.data.operationId).deviceUid == request.auth.uid;
+      }
+      match /seats/{sid} {
+        allow get: if manager(p);
+        allow update: if manager(p)
+          && request.resource.data.keys().hasOnly(['attendeeId', 'label', 'revision', 'operationId'])
+          && request.resource.data.label == resource.data.label
+          && request.resource.data.attendeeId is string
+          && request.resource.data.revision == afterHead(p).revision
+          && fence(p, request.resource.data.operationId)
+          && (resource.data.attendeeId == ''
+            || getAfter(/databases/$(database)/documents/proofShows/$(p)/assignments/$(resource.data.attendeeId)).data.seatId != sid)
+          && (request.resource.data.attendeeId == ''
+            || getAfter(/databases/$(database)/documents/proofShows/$(p)/assignments/$(request.resource.data.attendeeId)).data.seatId == sid);
+      }
+      match /assignments/{aid} {
+        allow get: if manager(p);
+        allow update: if manager(p)
+          && request.resource.data.keys().hasOnly(['seatId', 'revision', 'operationId'])
+          && request.resource.data.seatId is string
+          && request.resource.data.revision == afterHead(p).revision
+          && fence(p, request.resource.data.operationId)
+          && (resource.data.seatId == ''
+            || getAfter(/databases/$(database)/documents/proofShows/$(p)/seats/$(resource.data.seatId)).data.attendeeId != aid)
+          && (request.resource.data.seatId == ''
+            || getAfter(/databases/$(database)/documents/proofShows/$(p)/seats/$(request.resource.data.seatId)).data.attendeeId == aid);
+      }
+      match /events/{op} {
+        allow get: if manager(p);
+        allow create: if manager(p)
+          && request.resource.data.keys().hasOnly(['revision', 'deviceUid', 'kind'])
+          && request.resource.data.deviceUid == request.auth.uid
+          && request.resource.data.kind in ['assign', 'move', 'swap']
+          && request.resource.data.revision == afterHead(p).revision
+          && fence(p, op);
+      }
+      match /control/state {
+        allow get: if active(p);
+        allow update: if manager(p)
+          && request.resource.data.keys().hasOnly(['revision', 'firstReceptionStartedAt'])
+          && request.resource.data.revision == resource.data.revision + 1
+          && (resource.data.firstReceptionStartedAt == null
+            ? request.resource.data.firstReceptionStartedAt == request.time
+            : request.resource.data.firstReceptionStartedAt == resource.data.firstReceptionStartedAt);
+      }
+      // Bの限定検証：既知の固定席集合をコピーし、割当だけ変更する。
+      match /bulkOperations/{op} {
+        allow get: if manager(p);
+        allow create: if manager(p) && createBulk(p, request.resource.data);
+        allow update: if manager(p) && updateBulk(p, op, resource.data, request.resource.data);
+      }
+      match /generations/{op}/entries/{ordinal} {
+        allow read: if active(p) && bulkHead(p).generationId == op;
+        allow create: if manager(p) && createEntry(p, op, ordinal);
+      }
+      match /generations/{op}/members/{aid} {
+        allow get: if active(p) && bulkHead(p).generationId == op;
+        allow create: if manager(p) && createMember(p, op, aid, request.resource.data);
+      }
+      match /generationHead/state {
+        allow get: if active(p);
+        allow update: if manager(p) && updateBulkHead(p, resource.data, request.resource.data);
+      }
+      match /bulkEvents/{op} {
+        allow get: if manager(p);
+        allow create: if manager(p) && createBulkEvent(p, op, request.resource.data);
+      }
+    }
+  }
+}
