@@ -1,12 +1,12 @@
 {
   "project": "demo-concert-seat-gd91-03",
   "runtime": "v24.19.0",
-  "executedAt": "2026-10-06T14:45:06.894Z",
+  "executedAt": "2026-10-06T14:47:17.182Z",
   "hashLineEndings": "LF",
   "sourceSha256": {
     "../firestore.rules": "aad32cc3681b13cdc946f007674283a0786a76c59487bee3af1bd4548b80db30",
     "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
-    "emulator.mjs": "f05f48bf9b98ade28f6b05453376f43e7a033f58ac911b6818df859c822b0040"
+    "emulator.mjs": "604dd74602cc949a14b441d2b0be996e715d54fb2f8e1f76ea5a03d3fe97cf9e"
   },
   "scope": "single existing-cell layout edits only; not production acceptance or integrated assignment Rules",
   "callsWithoutCache": {
