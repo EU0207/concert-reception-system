@@ -1,0 +1,95 @@
+{
+  "basis": "https://firebase.google.com/docs/firestore/storage-size",
+  "limits": {
+    "documentBytes": 1048576,
+    "requestBytes": 10485760,
+    "callsPerOperation": 10,
+    "callsPerCommit": 20
+  },
+  "profiles": {
+    "sectionNameCodePoints": 64,
+    "lineNameCodePoints": 16,
+    "prefixCodePoints": 16,
+    "manualNumberCodePoints": 64,
+    "reasonCodePoints": 200
+  },
+  "profileStatus": "proposal-not-approved-limits",
+  "requestSizeStatus": "document sizes only; protobuf and index overhead not proven",
+  "results": [
+    {
+      "scenario": "move-1",
+      "documents": 6,
+      "largestDocumentBytes": 1771,
+      "documentBodyBytes": 6297,
+      "storageWithin1MiB": true,
+      "minimumDistinctInverseReferences": 3,
+      "distinctReferencesWithSharedProof": 9
+    },
+    {
+      "scenario": "swap-2",
+      "documents": 7,
+      "largestDocumentBytes": 1787,
+      "documentBodyBytes": 7408,
+      "storageWithin1MiB": true,
+      "minimumDistinctInverseReferences": 4,
+      "distinctReferencesWithSharedProof": 10
+    },
+    {
+      "scenario": "assign-1",
+      "documents": 5,
+      "largestDocumentBytes": 1771,
+      "documentBodyBytes": 4526,
+      "storageWithin1MiB": true,
+      "minimumDistinctInverseReferences": 2,
+      "distinctReferencesWithSharedProof": 8
+    },
+    {
+      "scenario": "assign-2",
+      "documents": 7,
+      "largestDocumentBytes": 1787,
+      "documentBodyBytes": 7408,
+      "storageWithin1MiB": true,
+      "minimumDistinctInverseReferences": 4,
+      "distinctReferencesWithSharedProof": 10
+    },
+    {
+      "scenario": "assign-10",
+      "documents": 23,
+      "largestDocumentBytes": 4571,
+      "documentBodyBytes": 30464,
+      "storageWithin1MiB": true,
+      "minimumDistinctInverseReferences": 20,
+      "distinctReferencesWithSharedProof": 26
+    },
+    {
+      "scenario": "assign-500",
+      "documents": 1003,
+      "largestDocumentBytes": 175091,
+      "documentBodyBytes": 1442644,
+      "storageWithin1MiB": true,
+      "minimumDistinctInverseReferences": 1000,
+      "distinctReferencesWithSharedProof": 1006
+    },
+    {
+      "scenario": "layout-30x30",
+      "cells": 900,
+      "documentBytes": 171130,
+      "storageWithin1MiB": true,
+      "proposalOnly": true
+    },
+    {
+      "scenario": "layout-31x30",
+      "cells": 930,
+      "documentBytes": 176530,
+      "storageWithin1MiB": true,
+      "proposalOnly": true
+    },
+    {
+      "scenario": "layout-30x31",
+      "cells": 930,
+      "documentBytes": 176810,
+      "storageWithin1MiB": true,
+      "proposalOnly": true
+    }
+  ]
+}
