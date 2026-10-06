@@ -1,0 +1,181 @@
+{
+  "project": "demo-concert-seat-gd91-01",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-06T08:37:22.746Z",
+  "hashLineEndings": "LF",
+  "rulesSha256": "7b333634ea5e4ca5d7f122fca9bfe6c387c26d5a06ff98364a64973659e196cd",
+  "testsSha256": "651d50a6ad14b71a75fdcfef8fa733579be54818f035704114275fa3c0f0cb48",
+  "reports": [
+    {
+      "id": "GD91-P01",
+      "name": "one paired assignment and history",
+      "writes": 4,
+      "http": 200
+    },
+    {
+      "id": "GD91-P02",
+      "name": "one-sided assignment denied with no partial commit",
+      "http": 403,
+      "stateUnchanged": true
+    },
+    {
+      "id": "GD91-P03",
+      "name": "simultaneous assignment commits only once",
+      "http": [
+        200,
+        403
+      ],
+      "finalRevision": 1
+    },
+    {
+      "id": "GD91-P04",
+      "name": "paired assignment count 2",
+      "count": 2,
+      "writes": 6,
+      "http": 200,
+      "accepted": true,
+      "partialUpdate": false
+    },
+    {
+      "id": "GD91-P05",
+      "name": "paired assignment count 5",
+      "count": 5,
+      "writes": 12,
+      "http": 200,
+      "accepted": true,
+      "partialUpdate": false
+    },
+    {
+      "id": "GD91-P06",
+      "name": "paired assignment count 10",
+      "count": 10,
+      "writes": 22,
+      "http": 200,
+      "accepted": true,
+      "partialUpdate": false
+    },
+    {
+      "id": "GD91-P07",
+      "name": "paired assignment count 500",
+      "count": 500,
+      "writes": 1002,
+      "http": 200,
+      "accepted": true,
+      "partialUpdate": false
+    },
+    {
+      "id": "GD91-P08",
+      "name": "stopped device cannot impersonate another device",
+      "http": 403
+    },
+    {
+      "id": "GD91-P09",
+      "name": "first reception timestamp cannot be cleared or backdated",
+      "attempts": 2,
+      "http": 403
+    },
+    {
+      "id": "GD91-P12",
+      "name": "server timestamp initializes once and survives stop-like revision update",
+      "serverTimestamp": true,
+      "preserved": true,
+      "receptionStartWorkflowNotImplemented": true
+    },
+    {
+      "id": "GD91-P10",
+      "name": "move retains paired references",
+      "writes": 5,
+      "paired": true
+    },
+    {
+      "id": "GD91-P11",
+      "name": "two-person swap retains paired references",
+      "writes": 6,
+      "paired": true
+    },
+    {
+      "id": "GD91-B01",
+      "name": "500-entry staged publication hides partial generation",
+      "entries": 500,
+      "mutations": 1004,
+      "documentWrites": 2006,
+      "elapsedMs": 16227,
+      "partialReadDenied": true
+    },
+    {
+      "id": "GD91-B02",
+      "name": "forged count and missing entry cannot advance preparation",
+      "attacks": 6,
+      "http": 403,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-B03",
+      "name": "duplicate attendee and altered seat identity are denied",
+      "protectedFields": 4,
+      "duplicateDenied": true
+    },
+    {
+      "id": "GD91-B04",
+      "name": "immutable prepared entries cannot be altered",
+      "http": 403
+    },
+    {
+      "id": "GD91-B05",
+      "name": "stale reception control and stopped device block publication",
+      "attacks": 2,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-B06",
+      "name": "simultaneous ready generations publish only once",
+      "http": [
+        200,
+        403
+      ],
+      "finalRevision": 1
+    },
+    {
+      "id": "GD91-B07",
+      "name": "existing occupants must all remain and fixed seat cannot move",
+      "releaseDenied": true,
+      "fixedMoveDenied": true
+    },
+    {
+      "id": "GD91-B08",
+      "name": "general reception reads current reason but cannot read management history",
+      "currentReasonReadable": true,
+      "privateDocumentsDenied": 3
+    },
+    {
+      "id": "GD91-B09",
+      "name": "skipped verification and missing publication history are denied",
+      "attacks": 3,
+      "publicationUnchanged": true
+    },
+    {
+      "id": "GD91-B10",
+      "name": "interrupted preparation and replay do not publish twice",
+      "resultCanBeQueried": true,
+      "replayDoesNotIncrement": true,
+      "adapterIdempotenceNotImplemented": true
+    },
+    {
+      "id": "GD91-B11",
+      "name": "expired session and non-manager cannot prepare",
+      "attacks": 3,
+      "http": 403
+    },
+    {
+      "id": "GD91-B12",
+      "name": "900-record collection publishes 500 assignments and 400 empty seats",
+      "entries": 900,
+      "assigned": 500,
+      "empty": 400,
+      "mutations": 1804,
+      "documentWrites": 3206,
+      "elapsedMs": 27718,
+      "geometryNotValidated": true
+    }
+  ]
+}

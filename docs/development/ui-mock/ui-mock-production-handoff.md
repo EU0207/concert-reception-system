@@ -1,5 +1,9 @@
 # UIモック変更の本番引継ぎ台帳
 
+## CONF-074の端末下書き保存
+
+[承認回答](ui-mock-client-response.md#conf-074-座席編集の端末下書き保存)を本番引継ぎ条件へ追加する。既存モックの共有下書き保存をそのまま移植せず、端末保存・共有・確定へ分ける。技術設計はIn Review、本番未実装。
+
 ## CONF-073による当日の個別追加席
 
 [依頼者要望](ui-mock-client-response.md#conf-073-横方向の拡張と当日の個別追加席)として、非席4種別からの追加、手入力採番と緊急表示を受領した。[詳細設計](../detailed-design/seat-management-detail-design.md#当日の非席セルからの個別席追加conf-073)で既存番号を保護し、T33～36を追加する。T04のunset確定拒否案を非席としての保持へ変更し、T27へ横両方向の具体例を加える。番号形式と緊急表示対象はCONF-073-C・Dの推奨案承認済み。技術方式はIn Review、本番未実装。
@@ -195,6 +199,7 @@ MHD-05では、オフライン端末へ旧QRの無効化を即時通知できな
 | MHD-03の帳票同一構成、CONF-072の区画印刷 | [#108 共通投影と出力受渡し](https://github.com/EU0207/concert-reception-system/issues/108) | DD91-T23・32 |
 | CONF-072の自由な区画名と独立構成 | [#102 型・採番](https://github.com/EU0207/concert-reception-system/issues/102)、[#104 保存](https://github.com/EU0207/concert-reception-system/issues/104)、[#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105) | DD91-T31 |
 | CONF-073の手入力席と緊急表示、MHD-03 | #101・102・104～108、#89・95の受渡し | DD91-T04・22・27・33～36 |
+| CONF-074、MCT-08・14 | #104-A 端末保存 → #105-A 画面・離脱 → #104-B・105-B 共有・確定結合 | DD91-T15・19・37～41 |
 
 ケースの入力・期待結果は[詳細設計の試験ケース](../detailed-design/seat-management-detail-design.md#dd-91-09-試験ケース)を参照する。FB-30の購入者名修正や確認用項目の保存は#93の設計へ残し、#107だけでFB-30全体を完了扱いしない。
 
