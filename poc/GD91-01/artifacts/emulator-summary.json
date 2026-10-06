@@ -1,9 +1,10 @@
 {
   "project": "demo-concert-seat-gd91-01",
   "runtime": "v24.19.0",
-  "executedAt": "2026-10-06T08:34:16.278Z",
+  "executedAt": "2026-10-06T08:37:22.746Z",
+  "hashLineEndings": "LF",
   "rulesSha256": "7b333634ea5e4ca5d7f122fca9bfe6c387c26d5a06ff98364a64973659e196cd",
-  "testsSha256": "d17ce8d825a221ef72a495f88134f5b2ed85cf31cf36df8c48c33c9cb56ddb2e",
+  "testsSha256": "651d50a6ad14b71a75fdcfef8fa733579be54818f035704114275fa3c0f0cb48",
   "reports": [
     {
       "id": "GD91-P01",
@@ -98,7 +99,7 @@
       "entries": 500,
       "mutations": 1004,
       "documentWrites": 2006,
-      "elapsedMs": 15634,
+      "elapsedMs": 16227,
       "partialReadDenied": true
     },
     {
@@ -173,7 +174,7 @@
       "empty": 400,
       "mutations": 1804,
       "documentWrites": 3206,
-      "elapsedMs": 27007,
+      "elapsedMs": 27718,
       "geometryNotValidated": true
     }
   ]
