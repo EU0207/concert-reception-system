@@ -24,7 +24,7 @@ node poc/POC-004/node_modules/firebase-tools/lib/bin/firebase.js emulators:exec 
 ## 証拠と適用範囲
 
 - `artifacts/capacity-summary.json`：候補の文書容量。入力上限は未承認の評価値で、通信要求全体の実測ではない。
-- `artifacts/emulator-summary.json`：直接REST要求の結果。実行時刻と検証コードのSHA-256を含む。
+- `artifacts/emulator-summary.json`：直接REST要求の結果。実行時刻と検証コードのSHA-256を含む。ハッシュ計算では改行をLFへ統一する。
 - `firestore.rules`：候補Aの参照整合性と、候補Bの固定席集合の世代切替を限定検証するRules。本番の業務条件を網羅していないため転用しない。
 
 ローカルの成功と本番成立性は区別する。再実行後は証拠JSONの差分とコードのハッシュを照合する。本番への配信設定と本番環境の作成を含めない。

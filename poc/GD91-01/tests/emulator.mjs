@@ -243,6 +243,9 @@ await record('GD91-B01', '500-entry staged publication hides partial generation'
   assert.equal((await commit(f.actor.token, publishWrites(f))).status, 200);
   assert.equal((await get(f.show, 'generationHead/state')).body.fields.generationId.stringValue, f.op);
   assert.equal((await request(`${base}/${path(f.show, `generations/${f.op}/entries/499`)}`, f.actor.token)).status, 200);
+  const query = await request(`${base}/${path(f.show, `generations/${f.op}`)}:runQuery`, f.actor.token, 'POST', { structuredQuery: { from: [{ collectionId: 'entries' }] } });
+  assert.equal(query.status, 200);
+  assert.equal(query.body.filter(row => row.document).length, 500);
   assert.equal((await request(`${base}/${path(f.show, `generations/${f.baseGeneration}/entries/0`)}`, f.actor.token)).status, 403);
   return { entries: 500, mutations: 1004, documentWrites: 2006, elapsedMs: Math.round(performance.now() - started), partialReadDenied: true };
 });
@@ -372,9 +375,10 @@ await record('GD91-B12', '900-record collection publishes 500 assignments and 40
   return { entries: 900, assigned: 500, empty: 400, mutations: 1804, documentWrites: 3206, elapsedMs: Math.round(performance.now() - started), geometryNotValidated: true };
 });
 await mkdir(new URL('../artifacts/', import.meta.url), { recursive: true });
-const digest = async url => createHash('sha256').update(await readFile(url)).digest('hex');
+const digest = async url => createHash('sha256').update((await readFile(url, 'utf8')).replace(/\r\n/g, '\n')).digest('hex');
 await writeFile(new URL('../artifacts/emulator-summary.json', import.meta.url), JSON.stringify({
   project, runtime: process.version, executedAt: new Date().toISOString(),
+  hashLineEndings: 'LF',
   rulesSha256: await digest(new URL('../firestore.rules', import.meta.url)),
   testsSha256: await digest(new URL(import.meta.url)),
   reports
