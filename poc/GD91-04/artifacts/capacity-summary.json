@@ -1,0 +1,41 @@
+{
+  "scope": "draft stress profiles only; 30-cell group split with global number index does not establish product limits or index/request budgets",
+  "hashLineEndings": "LF",
+  "sourceSha256": "107367bf8811ab9e48c5580d077e4018c311fe70b495f1d66c8eb3a48d6b3d1a",
+  "reports": [
+    {
+      "cells": 900,
+      "seats": 900,
+      "occupants": 500,
+      "lines": 30,
+      "cellsPerLine": 30,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "unpartitionedDocumentBytes": 1774019,
+      "maxChunkDocumentBytes": 49938,
+      "totalChunkDocumentBytes": 1498140,
+      "headDocumentBytes": 288656,
+      "assignmentDocumentBytes": 52530,
+      "storageGroups": 30,
+      "cellsPerGroup": 30,
+      "eachDocumentWithin1MiBForThisProfile": true
+    },
+    {
+      "cells": 900,
+      "seats": 900,
+      "occupants": 500,
+      "lines": 1,
+      "cellsPerLine": 900,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "unpartitionedDocumentBytes": 1770916,
+      "maxChunkDocumentBytes": 49938,
+      "totalChunkDocumentBytes": 1498140,
+      "headDocumentBytes": 288656,
+      "assignmentDocumentBytes": 52530,
+      "storageGroups": 30,
+      "cellsPerGroup": 30,
+      "eachDocumentWithin1MiBForThisProfile": true
+    }
+  ]
+}
