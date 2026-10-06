@@ -502,7 +502,7 @@ PDFは1区画1ページ、Excelは1区画1シート・各シートA4横1ペー�
 
 ## DD-91-08 実装順と承認ゲート
 
-[親Issue #91](https://github.com/EU0207/concert-reception-system/issues/91)で実装分割、依存順と完了条件を管理する。各Issueは一つのPRでレビューできる責務へ限定する。
+[親Issue #91](https://github.com/EU0207/concert-reception-system/issues/91)で実装分割、依存順と完了条件を管理する。各PRは一つの責務をレビューできる大きさへ限定する。複数段階を持つIssueは、段階の結果を追跡して全完了後にCloseする。
 
 | ゲート | 必須条件 | 未完了時の扱い |
 |---|---|---|
