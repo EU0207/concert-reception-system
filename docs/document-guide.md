@@ -123,18 +123,18 @@
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | UIモック確認記録 | [ui-mock-review.md](development/ui-mock/ui-mock-review.md) | 主要画面の操作確認手順、初期結果、依頼者確認事項と実装後試験への引継ぎを記録する | 依頼者、開発者、設計担当者 | UIモック工程 | 操作確認結果と設計への反映時 | In Review |
-| UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock/ui-mock-client-response.md) | モックの指摘に対する依頼者回答とCONF-060～070の承認を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程、詳細設計 | 依頼者回答の伝達時 | Approved |
+| UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock/ui-mock-client-response.md) | モックの指摘と追加回答CONF-060～074を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程、詳細設計 | 依頼者回答の伝達時 | Approved |
 | UIモック変更の本番引継ぎ台帳 | [ui-mock-production-handoff.md](development/ui-mock/ui-mock-production-handoff.md) | FB-01～33の採用内容、モック有無、設計・受入条件の追補、本番試験と作業Issueを対応付ける | 開発者、設計担当者、テスト担当者、依頼者 | UIモック承認後から本番受入まで | 設計・実装・試験の進捗変更時 | Approved |
 | 静的UIモック充実の確認記録 | [ui-mock-static-review.md](development/ui-mock/ui-mock-static-review.md) | 座席編集、個別既読、席替え、端末管理、カメラの操作確認と本番残作業を記録する | 開発者、設計担当者、テスト担当者 | UIモック工程 | 静的モックの対応・確認結果変更時 | In Review |
 | QR受付中断・誤更新への対策設計 | [qr-reception-recovery-review.md](development/ui-mock/qr-reception-recovery-review.md) | 受付保存中の中断からの復帰と二重計上防止について、既存設計と追加試験条件を整理する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | #92の確認・設計反映時 | Approved |
 
 ### 詳細設計
 
-詳細設計は機能のまとまりごとに作成し、主要テストケースを同じ文書へ記載する。実装タスクの分割、依存順と進捗は親Issueと子Issueで管理する。ケースが大きくなった場合だけ試験仕様書を分離し、文書案内と追跡IDで対応を維持する。
+詳細設計は機能のまとまりごとに作成し、主要テストケースを同じ文書へ記載する。CONF-074の端末下書き保存・共有・確定とT37～41は、既存の会場席詳細設計に集約する。業務方針の承認と追加技術設計のIn Reviewを区別する。実装タスクの分割、依存順と進捗は親Issueと子Issueで管理する。ケースが大きくなった場合だけ試験仕様書を分離し、文書案内と追跡IDで対応を維持する。
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約と試験DD91-T01～36を追跡する。承認済み業務回答とGD91-01の限定検証結果を集約。物理方式・依存契約の確定は未完了 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約と試験DD91-T01～41を追跡する。CONF-074の端末下書きと共有・確定も扱う。承認済み業務回答とGD91-01の限定検証結果を集約。物理方式・依存契約の確定は未完了 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 
