@@ -279,4 +279,3 @@ for (const file of ['../firestore.rules', '../firebase.json', 'emulator.mjs']) h
 await writeFile(new URL('../artifacts/emulator-summary.json', import.meta.url), JSON.stringify({ project, runtime: process.version, executedAt: new Date().toISOString(), hashLineEndings: 'LF', sourceSha256: hashes, scope: 'single existing-cell layout edits only; not production acceptance or integrated assignment Rules', callsWithoutCache: { catalog: 7, assignmentState: 5, history: 5, commit: 17 }, reports }, null, 2) + '\n');
 console.log(`${reports.length} scenarios executed`);
 const documentData = r => decode({ mapValue: { fields: r.body.fields } });
-
