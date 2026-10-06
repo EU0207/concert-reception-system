@@ -1,0 +1,49 @@
+{
+  "scope": "draft profile; not approved input limits or actual request/index size",
+  "hashLineEndings": "LF",
+  "sourceSha256": "3e03866471f42055fe052945d8bd50e8da6153ee36cdb2495c42f186a4baf3eb",
+  "reports": [
+    {
+      "seats": 500,
+      "occupants": 500,
+      "idsCharacters": 36,
+      "reasonCodePoints": 200,
+      "documentBytes": {
+        "assignmentState": 37358,
+        "initialHistory": 57188,
+        "occupiedHistory": 75188,
+        "swapHistory": 1374,
+        "catalog": 37203,
+        "eligibility": 18697
+      },
+      "writesPerAssignmentCommit": 2,
+      "callsPerDocumentWithoutCache": {
+        "assignment": 7,
+        "history": 5
+      },
+      "callsPerCommitWithoutCache": 12,
+      "within1MiBForThisProfile": true
+    },
+    {
+      "seats": 900,
+      "occupants": 500,
+      "idsCharacters": 36,
+      "reasonCodePoints": 200,
+      "documentBytes": {
+        "assignmentState": 52558,
+        "initialHistory": 87588,
+        "occupiedHistory": 105588,
+        "swapHistory": 1374,
+        "catalog": 66803,
+        "eligibility": 18697
+      },
+      "writesPerAssignmentCommit": 2,
+      "callsPerDocumentWithoutCache": {
+        "assignment": 7,
+        "history": 5
+      },
+      "callsPerCommitWithoutCache": 12,
+      "within1MiBForThisProfile": true
+    }
+  ]
+}
