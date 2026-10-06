@@ -1,0 +1,147 @@
+{
+  "project": "demo-concert-seat-gd91-03",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-06T14:45:06.894Z",
+  "hashLineEndings": "LF",
+  "sourceSha256": {
+    "../firestore.rules": "aad32cc3681b13cdc946f007674283a0786a76c59487bee3af1bd4548b80db30",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "f05f48bf9b98ade28f6b05453376f43e7a033f58ac911b6818df859c822b0040"
+  },
+  "scope": "single existing-cell layout edits only; not production acceptance or integrated assignment Rules",
+  "callsWithoutCache": {
+    "catalog": 7,
+    "assignmentState": 5,
+    "history": 5,
+    "commit": 17
+  },
+  "reports": [
+    {
+      "id": "GD91-L01",
+      "label": "four non-seat kinds become manual seats without renumbering",
+      "cells": 900,
+      "initialSeats": 600,
+      "occupants": 500,
+      "addedSeats": 4,
+      "requestsPerOperation": 1,
+      "writesPerOperation": 3,
+      "maskedRequestBytes": [
+        4216,
+        4216,
+        4216,
+        4223
+      ],
+      "unchangedCursorAndExistingAssignments": true
+    },
+    {
+      "id": "GD91-L02",
+      "label": "unassigned renumber and move retain seat identity and protected fields",
+      "identityRetained": true,
+      "latestMarker": "move",
+      "assignmentsUnchanged": true
+    },
+    {
+      "id": "GD91-L03",
+      "label": "duplicate displayed number including automatic seats is rejected",
+      "attacks": 2,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-L04",
+      "label": "occupied seat cannot be renumbered moved or implicitly released",
+      "attacks": 3,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-L05",
+      "label": "occupied destination existing seat and cross-line move are rejected",
+      "attacks": 4,
+      "crossLineMoveOutsideProof": true
+    },
+    {
+      "id": "GD91-L06",
+      "label": "hidden cell seat number index line and grid edits are rejected",
+      "attacks": 8,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-L07",
+      "label": "reserved unusable fields and existing number mode cannot be silently changed",
+      "attacks": 3,
+      "categoryAndAvailabilityRetained": true
+    },
+    {
+      "id": "GD91-L08",
+      "label": "reason marker and history must match actual before and after cells",
+      "blankReasons": 3,
+      "forgedHistories": 5,
+      "multilineReasonAccepted": true
+    },
+    {
+      "id": "GD91-L09",
+      "label": "missing orphan and partial commits cannot change any current state",
+      "attacks": 6,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-L10",
+      "label": "parallel edits on different cells have one winner",
+      "statuses": [
+        200,
+        403
+      ],
+      "globalConflictBoundary": true
+    },
+    {
+      "id": "GD91-L11",
+      "label": "assignment and performance changes after confirmation invalidate edit",
+      "racedSources": 2,
+      "staleRequestDenied": true
+    },
+    {
+      "id": "GD91-L12",
+      "label": "reader revoked stopped expired and unauthenticated writes are denied",
+      "attacks": 5,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-L13",
+      "label": "reception reader gets latest reason but no actor or past history",
+      "currentReasonVisible": true,
+      "actorAndHistoryDenied": true,
+      "deltaDeliveryNotTested": true
+    },
+    {
+      "id": "GD91-L14",
+      "label": "horizontal vertical and reverse profiles preserve coordinates and cursor",
+      "profiles": 4,
+      "automaticNumberingAndGridExpansionNotTested": true
+    },
+    {
+      "id": "GD91-L15",
+      "label": "same operation result can be queried and immutable history rejects replay",
+      "resultQueryAccepted": true,
+      "replayAndHistoryRewriteDenied": true,
+      "actualSdkAndRestartNotTested": true
+    },
+    {
+      "id": "GD91-L16",
+      "label": "another performance cannot be read or edited",
+      "crossPerformanceDenied": true
+    },
+    {
+      "id": "GD91-L17",
+      "label": "manual addition cannot forge automatic mode index or occupancy",
+      "forgedAdditions": 5,
+      "invalidNumbers": 4,
+      "inputLimitsAreProofOnly": true
+    },
+    {
+      "id": "GD91-L18",
+      "label": "equal displayed numbers on different lines remain distinct",
+      "freeNumbersAccepted": true,
+      "uniquenessScopedToLine": true,
+      "crossSectionAndUnicodeNormalizationNotTested": true
+    }
+  ]
+}

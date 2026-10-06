@@ -1,0 +1,121 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 個別構成編集の隔離検証。初期構成と本人証跡の発行は対象外。
+    function authorized(p, requireManager) {
+      let d = get(/databases/$(database)/documents/layoutShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/layoutShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/layoutShows/$(p)/roles/$(d.humanUid)).data;
+      return d.deviceUid == request.auth.uid && d.active == true
+        && request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && s.humanUid == d.humanUid && s.emailVerified == true
+        && s.active == true && s.expiresAt > request.time && r.active == true
+        && (!requireManager || r.role in ['owner', 'deputy']);
+    }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+    function beforeCatalog(p) { return get(/databases/$(database)/documents/layoutShows/$(p)/catalog/current).data; }
+    function afterCatalog(p) { return getAfter(/databases/$(database)/documents/layoutShows/$(p)/catalog/current).data; }
+    function changed(a, b, ids) { return b.diff(a).affectedKeys() == ids.toSet(); }
+    function marker(s, h, op) {
+      return s.emergencyChange == {'kind': h.kind, 'operationId': op, 'reason': h.reason};
+    }
+    function seatShape(s) {
+      return s.keys().hasOnly(['cellId', 'lineId', 'displayNumber', 'numberingMode', 'category', 'usable', 'reservedLabel', 'emergencyChange'])
+        && s.cellId is string && s.lineId is string && s.displayNumber is string
+        && s.displayNumber.matches('\\S([^\\r\\n]*\\S)?') && s.displayNumber.size() <= 64
+        && s.numberingMode in ['automatic', 'manual'] && s.category in ['general', 'reserved', 'special']
+        && s.usable is bool && s.reservedLabel is string;
+    }
+    function toSeat(old, next, id) {
+      return old.kind in ['unset', 'gap', 'space', 'aisle'] && old.seatId == ''
+        && next.diff(old).affectedKeys().hasOnly(['kind', 'seatId']) && next.kind == 'seat' && next.seatId == id;
+    }
+    function numberChange(b, a, h, oldKey, newKey) {
+      return b.numberOwners.get(newKey, '') == '' && a.numberOwners[newKey] == h.seatId
+        && changed(b.numberOwners, a.numberOwners, h.kind == 'add' ? [newKey] : [oldKey, newKey])
+        && (h.kind == 'add' || (b.numberOwners[oldKey] == h.seatId && !a.numberOwners.keys().hasAny([oldKey])));
+    }
+    function addition(b, a, h, next) {
+      let cell = b.cells[h.targetCell];
+      let key = next.lineId + '|' + next.displayNumber;
+      return !b.seats.keys().hasAny([h.seatId]) && h.beforeSeat == null
+        && next.cellId == h.targetCell && next.lineId == cell.lineId && next.numberingMode == 'manual'
+        && next.category == 'general' && next.usable == true && next.reservedLabel == ''
+        && changed(b.cells, a.cells, [h.targetCell]) && toSeat(cell, a.cells[h.targetCell], h.seatId)
+        && numberChange(b, a, h, '', key);
+    }
+    function editExisting(b, a, h, next) {
+      let old = b.seats[h.seatId];
+      let oldKey = old.lineId + '|' + old.displayNumber;
+      let newKey = next.lineId + '|' + next.displayNumber;
+      return h.beforeSeat == old && next.lineId == old.lineId
+        && (
+          (h.kind == 'renumber' && next.cellId == old.cellId && h.targetCell == old.cellId && h.sourceCell == old.cellId
+            && next.diff(old).affectedKeys().hasOnly(['displayNumber', 'numberingMode', 'emergencyChange'])
+            && next.numberingMode == 'manual' && next.displayNumber != old.displayNumber
+            && a.cells == b.cells && numberChange(b, a, h, oldKey, newKey))
+          || (h.kind == 'move' && h.sourceCell == old.cellId && h.sourceCell != h.targetCell
+            && next.cellId == h.targetCell && next.lineId == b.cells[h.targetCell].lineId
+            && next.diff(old).affectedKeys().hasOnly(['cellId', 'emergencyChange'])
+            && b.cells[h.sourceCell].kind == 'seat' && b.cells[h.sourceCell].seatId == h.seatId
+            && a.cells[h.sourceCell].kind == 'unset' && a.cells[h.sourceCell].seatId == ''
+            && a.cells[h.sourceCell].diff(b.cells[h.sourceCell]).affectedKeys().hasOnly(['kind', 'seatId'])
+            && toSeat(b.cells[h.targetCell], a.cells[h.targetCell], h.seatId)
+            && changed(b.cells, a.cells, [h.sourceCell, h.targetCell]) && a.numberOwners == b.numberOwners)
+        );
+    }
+    function cellHistory(b, a, h) {
+      return h.beforeTarget == b.cells[h.targetCell] && h.afterTarget == a.cells[h.targetCell]
+        && (h.kind == 'add'
+          ? h.sourceCell == '' && h.beforeSource == null && h.afterSource == null
+          : h.beforeSource == b.cells[h.sourceCell] && h.afterSource == a.cells[h.sourceCell]);
+    }
+    function validCatalog(p, b, a) {
+      let h = getAfter(/databases/$(database)/documents/layoutShows/$(p)/operations/$(a.operationId)).data;
+      let sb = get(/databases/$(database)/documents/layoutShows/$(p)/assignmentState/current).data;
+      let sa = getAfter(/databases/$(database)/documents/layoutShows/$(p)/assignmentState/current).data;
+      let control = get(/databases/$(database)/documents/layoutShows/$(p)/control/current).data;
+      let next = a.seats[h.seatId];
+      return a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'seats', 'cells', 'numberOwners'])
+        && a.revision is int && a.revision == b.revision + 1 && a.operationId is string && a.operationId.size() > 0
+        && h.keys().hasOnly(['kind', 'deviceUid', 'baseRevision', 'revision', 'baseAssignmentRevision', 'controlRevision', 'seatId', 'sourceCell', 'targetCell', 'reason', 'beforeSeat', 'afterSeat', 'beforeSource', 'afterSource', 'beforeTarget', 'afterTarget'])
+        && h.kind in ['add', 'renumber', 'move'] && h.deviceUid == request.auth.uid
+        && h.baseRevision == b.revision && h.revision == a.revision && h.baseAssignmentRevision == sb.revision
+        && h.controlRevision == control.revision && h.reason is string && h.reason.matches('(?s).*\\S.*')
+        && sa.keys() == sb.keys() && sa.diff(sb).affectedKeys().hasOnly(['revision', 'operationId', 'catalogRevision', 'assignments'])
+        && sa.revision is int && sa.revision == sb.revision + 1 && sa.operationId == a.operationId
+        && sb.catalogRevision == b.revision && sa.catalogRevision == a.revision
+        && sa.controlRevision == control.revision && sb.assignments.keys().toSet() == b.seats.keys().toSet()
+        && sa.assignments.keys().toSet() == a.seats.keys().toSet()
+        && sb.assignments.get(h.seatId, '') == '' && sa.assignments[h.seatId] == ''
+        && (h.kind == 'add' ? changed(sb.assignments, sa.assignments, [h.seatId]) : sa.assignments == sb.assignments)
+        && a.cells.keys() == b.cells.keys() && changed(b.seats, a.seats, [h.seatId])
+        && h.afterSeat == next && cellHistory(b, a, h) && seatShape(next) && marker(next, h, a.operationId)
+        && (h.kind == 'add' ? addition(b, a, h, next) : editExisting(b, a, h, next));
+    }
+    function followsCatalog(p, operationId, revision) {
+      let b = beforeCatalog(p);
+      let a = afterCatalog(p);
+      return a.revision == b.revision + 1 && a.operationId == operationId && a.revision == revision;
+    }
+    match /layoutShows/{p} {
+      match /{privateCollection}/{id} {
+        allow get: if privateCollection in ['devices', 'sessions', 'roles', 'control'] && manager(p);
+        allow write: if false;
+      }
+      match /catalog/current {
+        allow get: if active(p);
+        allow update: if manager(p) && validCatalog(p, resource.data, request.resource.data);
+      }
+      match /assignmentState/current {
+        allow get: if active(p);
+        allow update: if manager(p) && followsCatalog(p, request.resource.data.operationId, request.resource.data.catalogRevision);
+      }
+      match /operations/{op} {
+        allow get: if manager(p);
+        allow create: if manager(p) && followsCatalog(p, op, request.resource.data.revision);
+      }
+    }
+  }
+}
