@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 隔離検証専用。正式な本人証跡の発行と全業務条件は含まない。
+    function authorized(p, requireManager) {
+      let d = get(/databases/$(database)/documents/aggregateShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/aggregateShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/aggregateShows/$(p)/roles/$(d.humanUid)).data;
+      return d.deviceUid == request.auth.uid && d.active == true
+        && request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && s.humanUid == d.humanUid && s.emailVerified == true
+        && s.active == true && s.expiresAt > request.time && r.active == true
+        && (!requireManager || r.role in ['owner', 'deputy']);
+    }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+    function stateBefore(p) {
+      return get(/databases/$(database)/documents/aggregateShows/$(p)/assignmentState/current).data;
+    }
+    function stateAfter(p) {
+      return getAfter(/databases/$(database)/documents/aggregateShows/$(p)/assignmentState/current).data;
+    }
+    function occupied(assignments) { return assignments.values().removeAll(['']); }
+    function smallHistory(h, before, after) {
+      let changed = after.diff(before).affectedKeys();
+      return h.keys().hasOnly(['mode', 'kind', 'deviceUid', 'revision', 'baseRevision', 'reason', 'seat1', 'seat2', 'before1', 'before2', 'after1', 'after2'])
+        && h.seat1 is string && h.seat2 is string && h.seat1 != h.seat2
+        && before.keys().hasAll([h.seat1]) && (h.seat2 == '' || before.keys().hasAll([h.seat2]))
+        && changed == [h.seat1, h.seat2].removeAll(['']).toSet()
+        && h.before1 == before[h.seat1] && h.after1 == after[h.seat1]
+        && h.before2 == before.get(h.seat2, '') && h.after2 == after.get(h.seat2, '')
+        && (
+          (h.kind == 'assign' && h.seat2 == '' && h.before1 == '' && h.after1 != '')
+          || (h.kind == 'move' && h.seat2 != '' && h.before1 != '' && h.after1 == '' && h.before2 == '' && h.after2 == h.before1)
+          || (h.kind == 'swap' && h.seat2 != '' && h.before1 != '' && h.before2 != '' && h.after1 == h.before2 && h.after2 == h.before1)
+        );
+    }
+    function historyMatches(h, before, after) {
+      return h.deviceUid == request.auth.uid && h.baseRevision == before.revision
+        && h.revision == after.revision && h.reason is string
+        && (
+          (h.mode == 'small' && smallHistory(h, before.assignments, after.assignments))
+          || (h.mode == 'bulk' && h.kind == 'assign'
+            && h.keys().hasOnly(['mode', 'kind', 'deviceUid', 'revision', 'baseRevision', 'reason', 'before', 'after'])
+            && h.before == before.assignments && h.after == after.assignments)
+        );
+    }
+    function validState(p, before, after) {
+      let catalog = get(/databases/$(database)/documents/aggregateShows/$(p)/catalog/current).data;
+      let eligible = get(/databases/$(database)/documents/aggregateShows/$(p)/eligibility/current).data;
+      let control = get(/databases/$(database)/documents/aggregateShows/$(p)/control/current).data;
+      let history = getAfter(/databases/$(database)/documents/aggregateShows/$(p)/operations/$(after.operationId)).data;
+      let values = occupied(after.assignments);
+      let changed = after.assignments.diff(before.assignments).affectedKeys();
+      return after.keys().hasOnly(['revision', 'operationId', 'catalogRevision', 'eligibilityRevision', 'controlRevision', 'assignments'])
+        && after.revision is int && after.revision == before.revision + 1 && after.operationId is string && after.operationId.size() > 0
+        && after.catalogRevision == catalog.revision && before.catalogRevision == catalog.revision
+        && after.eligibilityRevision == eligible.revision && after.controlRevision == control.revision
+        && after.assignments is map && after.assignments.keys().toSet() == catalog.seatIds.toSet()
+        && values.size() <= 500 && values.size() == values.toSet().size()
+        && values.toSet().hasOnly(eligible.attendeeIds)
+        && values.toSet().hasAll(occupied(before.assignments))
+        && changed.size() > 0 && !changed.hasAny(catalog.lockedSeatIds)
+        && (control.firstReceptionStartedAt == null || history.reason.matches('(?s).*\\S.*'))
+        && historyMatches(history, before, after);
+    }
+    function createHistory(p, op, history) {
+      let before = stateBefore(p);
+      let after = stateAfter(p);
+      return after.operationId == op && historyMatches(history, before, after);
+    }
+    match /aggregateShows/{p} {
+      match /{privateCollection}/{id} {
+        allow get: if privateCollection in ['devices', 'sessions', 'roles', 'eligibility', 'control'] && manager(p);
+        allow write: if false;
+      }
+      match /catalog/current { allow get: if active(p); }
+      match /assignmentState/current {
+        allow get: if active(p);
+        allow update: if manager(p) && validState(p, resource.data, request.resource.data);
+      }
+      match /operations/{op} {
+        allow get: if manager(p);
+        allow create: if manager(p) && createHistory(p, op, request.resource.data);
+      }
+    }
+  }
+}
