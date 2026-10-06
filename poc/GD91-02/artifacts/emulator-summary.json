@@ -1,0 +1,149 @@
+{
+  "project": "demo-concert-seat-gd91-02",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-06T12:15:29.666Z",
+  "hashLineEndings": "LF",
+  "sourceSha256": {
+    "../firestore.rules": "1000eebebb6f3d4cd0d35da7a48ce102ea0732279561fe1540f361a2e2b751f1",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "a1bdbaaf06d1be14fd206929a6b9747d921da690c3c36fe4818dfd6d054a3654"
+  },
+  "scope": "fixed seat assignment map only; not production acceptance",
+  "reports": [
+    {
+      "id": "GD91-E01",
+      "label": "500 seats with 500 unique occupants in one commit",
+      "seats": 500,
+      "occupants": 500,
+      "mutations": 1,
+      "documentWrites": 2,
+      "requestBodyBytes": 43437,
+      "inverseDerived": true
+    },
+    {
+      "id": "GD91-E02",
+      "label": "900 seats with 500 unique occupants in one commit",
+      "seats": 900,
+      "occupants": 500,
+      "mutations": 1,
+      "documentWrites": 2,
+      "requestBodyBytes": 74637,
+      "inverseDerived": true
+    },
+    {
+      "id": "GD91-E03",
+      "label": "move then swap use the same canonical map and small payload",
+      "documentWritesPerOperation": 2,
+      "mapEntries": 900,
+      "changedSeatsPerOperation": 2,
+      "requestBodyBytes": {
+        "move": 1300,
+        "swap": 1306
+      }
+    },
+    {
+      "id": "GD91-E04",
+      "label": "duplicate unknown and omitted occupant are rejected",
+      "attacks": 5,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-E05",
+      "label": "seat addition deletion and locked seat change are rejected",
+      "attacks": 4,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-E06",
+      "label": "missing orphan and fabricated history cannot commit",
+      "attacks": 5,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-E07",
+      "label": "small history cannot hide extra changes or mislabel commands",
+      "attacks": 5,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-E08",
+      "label": "concurrent updates to different seats have one winner",
+      "statuses": [
+        200,
+        403
+      ],
+      "revision": 1,
+      "globalConflictBoundary": true
+    },
+    {
+      "id": "GD91-E09",
+      "label": "catalog eligibility and performance version races are rejected",
+      "sources": 3,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-E10",
+      "label": "reason required after first real reception start",
+      "reasonlessRejected": 3,
+      "multilineReasonAccepted": true
+    },
+    {
+      "id": "GD91-E11",
+      "label": "stopped expired reader and unauthenticated requests are denied",
+      "attacks": 4,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-E12",
+      "label": "lost response resolves by same operation and history is immutable",
+      "resultMatched": true,
+      "retriesCreateNothing": true,
+      "changedPayloadDetected": true
+    },
+    {
+      "id": "GD91-E13",
+      "label": "no change and metadata injection cannot bump the revision",
+      "attacks": 2,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-E14",
+      "label": "client cannot change trusted eligibility or seat catalog",
+      "attacks": 3,
+      "readerEligibilityDenied": true
+    },
+    {
+      "id": "GD91-E15",
+      "label": "another performance does not accept the first performance device",
+      "crossPerformanceWriteDenied": true,
+      "crossPerformanceReadDenied": true
+    },
+    {
+      "id": "GD91-E16",
+      "label": "501 occupants are rejected even with a trusted candidate list",
+      "occupants": 501,
+      "http": 403,
+      "unchanged": true
+    },
+    {
+      "id": "GD91-E17",
+      "label": "ten occupants use the same canonical map as single and bulk changes",
+      "occupants": 10,
+      "mutations": 1,
+      "documentWrites": 2
+    },
+    {
+      "id": "GD91-E18",
+      "label": "UUID keys support full publication followed by quoted field-mask move",
+      "seats": 900,
+      "occupants": 500,
+      "idLength": 36,
+      "mutationsPerOperation": 1,
+      "documentWritesPerOperation": 2,
+      "requestBodyBytes": {
+        "initial500": 193587,
+        "move": 1600
+      }
+    }
+  ]
+}
