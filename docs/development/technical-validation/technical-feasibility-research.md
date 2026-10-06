@@ -5,7 +5,7 @@
 | 項目 | 内容 |
 |---|---|
 | 目的 | Issue #6の調査段階 `RES-001`～`RES-005` の結果を記録し、PoC対象を選択できる状態にする |
-| 主な読者 | 依頼者、開発担当者、確認担当者 |
+| 主な読者 | 開発者、設計担当者、テスト担当者 |
 | 調査日 | 2026-09-01～2026-09-02 |
 | 関連文書 | [要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md)、[技術検証計画書](technical-validation-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実機確認手順書](poc-003-device-test-guide.md)、[POC-003実施結果報告書](poc-003-result.md)、[POC-004開始承認依頼書](poc-004-approval-request.md)、[POC-004実施結果報告書](poc-004-result.md)、[POC-005開始承認依頼書](poc-005-approval-request.md)、[POC-005実施結果報告書](poc-005-result.md)、[トレーサビリティ表](../traceability-matrix.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |

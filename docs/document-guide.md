@@ -13,6 +13,23 @@
 | 状態 | Draft |
 | 承認情報 | 未承認 |
 
+## 記載の分担
+
+| 場所 | 記載する内容 |
+|---|---|
+| 詳細設計 | 冒頭に要点と未決定事項。本文に仕様・判断理由と主要試験ケースを集約する |
+| 親Issue | 目的、タスク一覧、依存順。各タスクの完了条件は子Issueを参照する |
+| 子Issue | 作るもの、開始条件、完了条件。設計と試験はID・リンクで参照する |
+| PR | 冒頭に変更の結論、確認点、残作業。確認点は原則3件以内とし、対象箇所へリンクする |
+
+同じ説明を複数箇所へ転記せず、正本へリンクする。詳細な確認証拠や過去の経緯は後段または折りたたみへ置く。承認条件と例外は省略せず、未実施の試験を明示する。以後の新規作成と更新対象へ適用する。
+
+### 詳細設計と技術試験の役割分担
+
+詳細設計と技術的な試験資料の読者は、開発者・設計担当者・テスト担当者とする。設計担当者とテスト担当者が技術内容を確認し、開発者が技術上の承認を判断する。試験資料を設計書から分離した場合も同じ分担を適用する。
+
+依頼者には未決定の業務判断だけを平易に説明し、確認事項・理由・推奨案を示す。詳細設計全体の技術レビュー・承認は求めない。承認済みの業務回答は維持し、文書整理を理由に再確認しない。
+
 ## 文書の状態
 
 | 状態 | 意味 |
@@ -50,25 +67,25 @@
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 技術検証計画書 | [technical-validation-plan.md](development/technical-validation/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 依頼者、開発担当者、確認担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
-| 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-validation/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 依頼者、開発担当者、確認担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
-| RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/technical-validation/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 依頼者、開発担当者、確認担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
+| 技術検証計画書 | [technical-validation-plan.md](development/technical-validation/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 開発者、設計担当者、テスト担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
+| 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-validation/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 開発者、設計担当者、テスト担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
+| RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/technical-validation/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 開発者、設計担当者、テスト担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
 | POC-001開始承認依頼書 | [poc-001-approval-request.md](development/technical-validation/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | Approved |
-| POC-001実施結果報告書 | [poc-001-result.md](development/technical-validation/poc-001-result.md) | 完全オフライン受付と復旧後統合の検証結果、制約、次の判断材料を記録する | 依頼者、開発担当者、確認担当者 | POC-001完了時 | 結果確認、終了処理、次の判断時 | Approved |
+| POC-001実施結果報告書 | [poc-001-result.md](development/technical-validation/poc-001-result.md) | 完全オフライン受付と復旧後統合の検証結果、制約、次の判断材料を記録する | 開発者、設計担当者、テスト担当者 | POC-001完了時 | 結果確認、終了処理、次の判断時 | Approved |
 | POC-002開始承認依頼書 | [poc-002-approval-request.md](development/technical-validation/poc-002-approval-request.md) | 性能・通信量PoC開始前に測定方法、再利用、外部資源、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-002承認前 | 測定条件または承認状態の変更時 | Approved |
-| POC-002実施結果報告書 | [poc-002-result.md](development/technical-validation/poc-002-result.md) | QR判定後の受付性能、同期、通信量の検証結果、制約、終了処理を記録する | 依頼者、開発担当者、確認担当者 | POC-002完了時 | 結果確認、次の判断時 | Approved |
+| POC-002実施結果報告書 | [poc-002-result.md](development/technical-validation/poc-002-result.md) | QR判定後の受付性能、同期、通信量の検証結果、制約、終了処理を記録する | 開発者、設計担当者、テスト担当者 | POC-002完了時 | 結果確認、次の判断時 | Approved |
 | POC-003開始承認依頼書 | [poc-003-approval-request.md](development/technical-validation/poc-003-approval-request.md) | 実機・カメラ・電子チケットPoC開始前に依存関係、HTTPS配信、実機協力、保存・削除、費用を確認する | 依頼者、開発担当者、実機確認担当者 | POC-003承認前 | 対象、実機、配信条件または承認状態の変更時 | Approved |
 | POC-003実機確認手順書 | [poc-003-device-test-guide.md](development/technical-validation/poc-003-device-test-guide.md) | IT開発経験がない確認担当者が3機種のQR読取り、オフライン動作、結果出力、端末内データ削除を確認する | 依頼者、実機確認担当者 | POC-003実機確認時 | 操作手順、対象機種、確認項目の変更時 | Draft |
-| POC-003実施結果報告書 | [poc-003-result.md](development/technical-validation/poc-003-result.md) | 指定実機のQR読取り、電子チケット、オフライン保持、終了処理の結果と制約を記録する | 依頼者、開発担当者、確認担当者 | POC-003終了時 | 版番号、削除確認、結果承認時 | Approved |
+| POC-003実施結果報告書 | [poc-003-result.md](development/technical-validation/poc-003-result.md) | 指定実機のQR読取り、電子チケット、オフライン保持、終了処理の結果と制約を記録する | 開発者、設計担当者、テスト担当者 | POC-003終了時 | 版番号、削除確認、結果承認時 | Approved |
 | POC-004開始承認依頼書 | [poc-004-approval-request.md](development/technical-validation/poc-004-approval-request.md) | 個別認証、権限制御、暗号化、期限、端末削除PoCの開始前に外部資源、保存・削除、費用と制約を確認する | 依頼者、開発担当者、確認担当者 | POC-004承認前 | 対象、Firebase設定、削除方式または承認状態の変更時 | Approved |
-| POC-004実施結果報告書 | [poc-004-result.md](development/technical-validation/poc-004-result.md) | 個別認証、役割制御、暗号化、期限、端末削除の結果と0円条件で残る制約を記録する | 依頼者、開発担当者、確認担当者 | POC-004終了時 | 結果確認、要件調整、次の判断時 | Approved |
+| POC-004実施結果報告書 | [poc-004-result.md](development/technical-validation/poc-004-result.md) | 個別認証、役割制御、暗号化、期限、端末削除の結果と0円条件で残る制約を記録する | 開発者、設計担当者、テスト担当者 | POC-004終了時 | 結果確認、要件調整、次の判断時 | Approved |
 | POC-005開始承認依頼書 | [poc-005-approval-request.md](development/technical-validation/poc-005-approval-request.md) | 座席表・会場画像の事前取得、完全オフライン表示、実機確認の開始前に外部資源、保存・削除、費用を確認する | 依頼者、開発担当者、実機確認担当者 | POC-005承認前 | 対象、画像上限、実機、配信・削除条件の変更時 | Approved |
 | POC-005実機確認手順 | [poc-005-device-check-guide.md](development/technical-validation/poc-005-device-check-guide.md) | 3機種で事前取得、完全オフライン、現在席、代替一覧、Fold開閉を確認する | 依頼者、実機確認担当者 | POC-005実機確認時 | 確認URL、画面手順、対象端末の変更時 | In Review |
-| POC-005実施結果報告書 | [poc-005-result.md](development/technical-validation/poc-005-result.md) | 自動試験、指定3実機、配信、費用、終了処理とAC-025判定を記録する | 依頼者、開発担当者、確認担当者 | POC-005実施中・終了時 | 実機結果、削除確認、最終判定時 | Approved |
+| POC-005実施結果報告書 | [poc-005-result.md](development/technical-validation/poc-005-result.md) | 自動試験、指定3実機、配信、費用、終了処理とAC-025判定を記録する | 開発者、設計担当者、テスト担当者 | POC-005実施中・終了時 | 実機結果、削除確認、最終判定時 | Approved |
 | 検証用Firebaseプロジェクト削除承認依頼書 | [firebase-test-project-deletion-approval-request.md](development/technical-validation/firebase-test-project-deletion-approval-request.md) | 全PoC終了後の検証用Firebaseプロジェクト本体について、削除対象、影響、復元条件、承認方法を確認する | 依頼者、開発担当者 | プロジェクト本体の削除前 | 資源状態、復元条件、削除結果の変更時 | Approved |
-| C-01 端末単位認可の成立性調査 | [device-authorization-feasibility.md](development/technical-validation/device-authorization-feasibility.md) | 同じUIDの複数端末を個別停止する方式と検証条件を整理する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 技術検証、費用条件、認可方式の決定時 | In Review |
-| C-03 会場画像の共有保存方式調査 | [venue-image-storage-feasibility.md](development/technical-validation/venue-image-storage-feasibility.md) | 会場画像の保存、配布、削除と無料条件を比較する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 方式の技術検証と採用判断時 | In Review |
-| C-01・C-03 限定技術検証結果 | [poc-006-result.md](development/technical-validation/poc-006-result.md) | 端末別停止と画像1MB配布の成立範囲・残存リスクを記録する | 依頼者、開発者、設計担当者 | 第三者品質レビュー是正時 | 方式選定と実装後試験の分離確認時 | In Review |
+| C-01 端末単位認可の成立性調査 | [device-authorization-feasibility.md](development/technical-validation/device-authorization-feasibility.md) | 同じUIDの複数端末を個別停止する方式と検証条件を整理する | 開発者、設計担当者、テスト担当者 | 第三者品質レビュー是正時 | 技術検証、費用条件、認可方式の決定時 | In Review |
+| C-03 会場画像の共有保存方式調査 | [venue-image-storage-feasibility.md](development/technical-validation/venue-image-storage-feasibility.md) | 会場画像の保存、配布、削除と無料条件を比較する | 開発者、設計担当者、テスト担当者 | 第三者品質レビュー是正時 | 方式の技術検証と採用判断時 | In Review |
+| C-01・C-03 限定技術検証結果 | [poc-006-result.md](development/technical-validation/poc-006-result.md) | 端末別停止と画像1MB配布の成立範囲・残存リスクを記録する | 開発者、設計担当者、テスト担当者 | 第三者品質レビュー是正時 | 方式選定と実装後試験の分離確認時 | In Review |
 
 ### 要件確認
 
@@ -106,10 +123,18 @@
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | UIモック確認記録 | [ui-mock-review.md](development/ui-mock/ui-mock-review.md) | 主要画面の操作確認手順、初期結果、依頼者確認事項と実装後試験への引継ぎを記録する | 依頼者、開発者、設計担当者 | UIモック工程 | 操作確認結果と設計への反映時 | In Review |
-| UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock/ui-mock-client-response.md) | モックの指摘に対する依頼者回答とCONF-060～068の承認を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | 依頼者回答の伝達時 | Approved |
+| UIモック依頼者回答 | [ui-mock-client-response.md](development/ui-mock/ui-mock-client-response.md) | モックの指摘に対する依頼者回答とCONF-060～070の承認を記録する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程、詳細設計 | 依頼者回答の伝達時 | Approved |
 | UIモック変更の本番引継ぎ台帳 | [ui-mock-production-handoff.md](development/ui-mock/ui-mock-production-handoff.md) | FB-01～33の採用内容、モック有無、設計・受入条件の追補、本番試験と作業Issueを対応付ける | 開発者、設計担当者、テスト担当者、依頼者 | UIモック承認後から本番受入まで | 設計・実装・試験の進捗変更時 | Approved |
 | 静的UIモック充実の確認記録 | [ui-mock-static-review.md](development/ui-mock/ui-mock-static-review.md) | 座席編集、個別既読、席替え、端末管理、カメラの操作確認と本番残作業を記録する | 開発者、設計担当者、テスト担当者 | UIモック工程 | 静的モックの対応・確認結果変更時 | In Review |
 | QR受付中断・誤更新への対策設計 | [qr-reception-recovery-review.md](development/ui-mock/qr-reception-recovery-review.md) | 受付保存中の中断からの復帰と二重計上防止について、既存設計と追加試験条件を整理する | 依頼者、開発者、設計担当者、テスト担当者 | UIモック工程 | #92の確認・設計反映時 | Approved |
+
+### 詳細設計
+
+詳細設計は機能のまとまりごとに作成し、主要テストケースを同じ文書へ記載する。実装タスクの分割、依存順と進捗は親Issueと子Issueで管理する。ケースが大きくなった場合だけ試験仕様書を分離し、文書案内と追跡IDで対応を維持する。
+
+| 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
+|---|---|---|---|---|---|---|
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約と試験DD91-T01～36を追跡する。CONF-071～073の回答を反映。PR #109の記載内容と検証計画はレビュー承認済み。物理方式・依存契約の確定は未完了 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 
@@ -122,6 +147,7 @@
 | ADR-004 詳細履歴の削除案内と例外締め | [ADR-004-retention-and-exceptional-close.md](development/decisions/ADR-004-retention-and-exceptional-close.md) | C-02・C-04の候補、採用理由、未検証事項を記録する | 依頼者、開発者、設計担当者、運用担当者 | 基本設計の是正時 | 再レビューと方式判断時 | Accepted |
 | ADR-005 端末別認証主体と本人認証の結合 | [ADR-005-device-principal-authorization.md](development/decisions/ADR-005-device-principal-authorization.md) | C-01の認可方式と検証条件を記録する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 認可方式または残存リスクの変更時 | Accepted |
 | ADR-006 会場画像のFirestore保存方式 | [ADR-006-firestore-image-storage.md](development/decisions/ADR-006-firestore-image-storage.md) | C-03の旧5MB分割案と採用した1MB単一文書案を比較する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 実画像の画質・容量上限の変更時 | Accepted |
+| ADR-007 席編集の確定境界 | [ADR-007-seat-edit-commit-boundary.md](development/decisions/ADR-007-seat-edit-commit-boundary.md) | 単一トランザクションと版切替の候補、技術検証条件を比較する | 開発者、設計担当者、テスト担当者 | 詳細設計 | 成立性検証・採否決定時 | In Review（Proposed） |
 
 ## テンプレート
 

@@ -5,7 +5,7 @@
 | 項目 | 内容 |
 |---|---|
 | 目的 | Issue #5のレビュー結果を記録し、Issue #6で実施する調査・PoCの範囲、順序、評価方法、合格基準を合意する |
-| 主な読者 | 依頼者、開発担当者、確認担当者 |
+| 主な読者 | 開発者、設計担当者、テスト担当者 |
 | 正式情報 | [承認済み初回要件ヒアリング議事録](../../client/meeting-notes/2026-08-30-initial-requirements-interview.md) |
 | 関連文書 | [要件定義書](../../client/requirements.md)、[受入条件書](../../client/acceptance-criteria.md)、[トレーサビリティ表](../traceability-matrix.md)、[開発計画書](../project-plan.md)、[RES-005机上レビュー記録](res-005-seat-allocation-desk-review.md)、[POC-001開始承認依頼書](poc-001-approval-request.md)、[POC-001実施結果報告書](poc-001-result.md)、[POC-002開始承認依頼書](poc-002-approval-request.md)、[POC-002実施結果報告書](poc-002-result.md)、[POC-003開始承認依頼書](poc-003-approval-request.md)、[POC-003実機確認手順書](poc-003-device-test-guide.md)、[POC-003実施結果報告書](poc-003-result.md) |
 | 関連Issue | [#5](https://github.com/EU0207/concert-reception-system/issues/5)、[#6](https://github.com/EU0207/concert-reception-system/issues/6)、[#57](https://github.com/EU0207/concert-reception-system/issues/57) |

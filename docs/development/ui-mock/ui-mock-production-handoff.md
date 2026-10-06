@@ -1,5 +1,25 @@
 # UIモック変更の本番引継ぎ台帳
 
+## CONF-073による当日の個別追加席
+
+[依頼者要望](ui-mock-client-response.md#conf-073-横方向の拡張と当日の個別追加席)として、非席4種別からの追加、手入力採番と緊急表示を受領した。[詳細設計](../detailed-design/seat-management-detail-design.md#当日の非席セルからの個別席追加conf-073)で既存番号を保護し、T33～36を追加する。T04のunset確定拒否案を非席としての保持へ変更し、T27へ横両方向の具体例を加える。番号形式と緊急表示対象はCONF-073-C・Dの推奨案承認済み。技術方式はIn Review、本番未実装。
+
+2026-10-06のCONF-073-Eを適用し、「緊急」の常時文字表示案をタップ時の選択席情報へ変更する。色等の区別は維持し、選択時に変更理由も併記する。T35で通常席との表示差と、閲覧による更新がないことを確認する。
+
+## CONF-072による自由な区画名と印刷条件
+
+[依頼者回答](ui-mock-client-response.md#conf-072-自由な区画名と区画単位の印刷)として、自由な区画名と区画ごとの座席表を受領した。1区画A4横1枚、左上に区画名、フッターにページ数を表示する。MHD-03の共通構成を維持し、画面寸法を帳票へコピーしない。[詳細設計](../detailed-design/seat-management-detail-design.md#自由な区画名と独立した座席表conf-072)のT31・32で確認する。技術方式はIn Review、本番未実装。
+
+## CONF-071の業務回答と変更設計
+
+[依頼者回答](ui-mock-client-response.md#conf-071-席交換の理由当日の構成編集舞台位置)で理由の時点と編集対象を承認済み。[設計差分](../detailed-design/seat-management-detail-design.md#conf-071-業務回答と変更設計)の技術方式はIn Review。旧交換理由条件は本追補へ置き換え、舞台左端固定は左／上選択の変更前条件として照合する。
+
+| 対象 | 本番へ引き継ぐ変更案 | 試験・タスク |
+|---|---|---|
+| MCT-09・14、MHD-03 | 当日の行列拡張を全体再採番と分離。既存ID・番号・割当を保持し、下から採番する列は上側へ追加 | DD91-T26・27／#101・102・104・105・107 |
+| MCT-10、MHD-05 | 初回本番受付開始前の交換は理由不要、開始後・停止中は必須。未割当席だけ理由付きで番号・位置を編集。発券後単独解除禁止を維持 | DD91-T29・30／#101・102・104～106、#93共同境界 |
+| MCT-09・10、MHD-03 | 舞台位置の左／上を画面とPDF・Excelへ共通に反映。席表を自動回転しない | DD91-T28／#102・105・108 |
+
 ## この文書について
 
 | 項目 | 内容 |
@@ -17,6 +37,7 @@
 | お客様の個別登録 | [CONF-067](ui-mock-client-response.md#conf-067-お客様の個別登録)。Excel取込に加え、主担当・代理管理者が購入者名必須で席未設定の行を追加する |
 | 公演終了と臨時管理者 | [CONF-068](ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)。締めは主担当・代理管理者に限定し、臨時管理者の公演・利用者別権限設定を本番設計へ引き継ぐ |
 | 主担当端末と引継ぎ | [CONF-069](ui-mock-client-response.md#conf-069-主担当端末の廃止と主担当引継ぎ)。主担当端末は複数登録可。廃止には別の利用可能な主担当端末を要し、代理管理者による自己昇格を許可しない |
+| 発券後の席設定解除 | [CONF-070](ui-mock-client-response.md#conf-070-発券後の席設定解除)。発券後は移動・交換のみとし、席未設定へ戻す取消しは不参加処理を用いる |
 | 承認と整理の区別 | 承認対象は提示済みの変更内容。台帳の網羅性確認と技術条件の整理は開発者の作業として記録する |
 | 状態 | Approved |
 | 関連 | [確認記録](ui-mock-review.md)、[要件](../../client/requirements.md)、[受入条件](../../client/acceptance-criteria.md)、[追跡表](../traceability-matrix.md) |
@@ -153,17 +174,33 @@ MHD-05では、オフライン端末へ旧QRの無効化を即時通知できな
 | 工程 | 必須条件 | 現在の状態 |
 |---|---|---|
 | 承認内容の記録 | CONF-060、FB-01～33の漏れのない対応表、最新名称・旧案の区別 | 本書で記録 |
-| 基本設計への反映 | 関連文書から本追補を参照し、相違箇所に追補の適用を明示 | PR #88の作業ブランチで参照を追加。main未統合 |
-| 詳細設計と実装Issueの作成 | 各MHDの方式と異常時を具体化し、MCTと実装Issueを対応付ける | 未実施。#89～93で追跡 |
+| 基本設計への反映 | 関連文書から本追補を参照し、相違箇所に追補の適用を明示 | PR #88は2026-10-03にmain統合済み |
+| 詳細設計と実装Issueの作成 | 各MHDの方式と異常時を具体化し、MCTと実装Issueを対応付ける | #91は[詳細設計と試験ケース](../detailed-design/seat-management-detail-design.md)をIn Reviewで作成。実装分割と依存順は[親Issue #91](https://github.com/EU0207/concert-reception-system/issues/91)で管理。MHD-03の物理保存成立性とMHD-05共同契約は未完了。#89・90・92・93は別途追跡 |
 | 本番実装 | 本番コードのPRに対象FB・MCTを列挙し、権限・保存・出力を実装 | 全項目未実施 |
 | 本番試験 | MCT-01～34のうちMCT-13を除く全MCTの結果と関連ACの証拠を揃える。対象3実機で必要な操作を確認 | 全項目未実施 |
 | 完了判断 | モックの有無で対象を落とさず、全対象の実装・試験・残作業を再取得して照合する | 未実施 |
 
 実装Issueの番号とケース・結果の証拠は、確定した時点で本表へ追記する。実装Issueが未登録の項目をリリース済みとは報告しない。#85のモック確認終了と、#89～93の本番変更完了を分けて管理する。
 
+### #91の詳細設計・実装割当（2026-10-03）
+
+下表はIssue登録とケース設計の記録である。詳細設計はIn Review、保存方式の成立性は未確認、本番実装と試験は全件未実施。
+
+| 対象FB／MCT・MHD | 実装・検証Issue | 試験ケース |
+|---|---|---|
+| FB-08・09・14／MCT-08・09・14、CONF-061 | [#101 保存成立性](https://github.com/EU0207/concert-reception-system/issues/101)、[#102 型・採番](https://github.com/EU0207/concert-reception-system/issues/102)、[#104 保存](https://github.com/EU0207/concert-reception-system/issues/104)、[#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105) | DD91-T01～06・13～19・24 |
+| FB-10・19／MCT-10・19、CONF-062・070 | [#103 席設定案](https://github.com/EU0207/concert-reception-system/issues/103)、[#104 保存](https://github.com/EU0207/concert-reception-system/issues/104)、[#106 席設定画面](https://github.com/EU0207/concert-reception-system/issues/106) | DD91-T07～15・19・24・25 |
+| FB-30／MCT-30、MHD-05 | [#107 不参加・QR結合](https://github.com/EU0207/concert-reception-system/issues/107)、#93の共同契約 | DD91-T20～22・25 |
+| MCT-34 | [#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105)、[#106 席設定画面](https://github.com/EU0207/concert-reception-system/issues/106) | DD91-T24 |
+| MHD-03の帳票同一構成、CONF-072の区画印刷 | [#108 共通投影と出力受渡し](https://github.com/EU0207/concert-reception-system/issues/108) | DD91-T23・32 |
+| CONF-072の自由な区画名と独立構成 | [#102 型・採番](https://github.com/EU0207/concert-reception-system/issues/102)、[#104 保存](https://github.com/EU0207/concert-reception-system/issues/104)、[#105 会場席画面](https://github.com/EU0207/concert-reception-system/issues/105) | DD91-T31 |
+| CONF-073の手入力席と緊急表示、MHD-03 | #101・102・104～108、#89・95の受渡し | DD91-T04・22・27・33～36 |
+
+ケースの入力・期待結果は[詳細設計の試験ケース](../detailed-design/seat-management-detail-design.md#dd-91-09-試験ケース)を参照する。FB-30の購入者名修正や確認用項目の保存は#93の設計へ残し、#107だけでFB-30全体を完了扱いしない。
+
 **依頼者に確認してください**
 
-- なし。最後の管理端末の保護と環境所有者の復旧後の再判定はCONF-066で了承済み。
+- なし。CONF-073-C・Dの推奨案と、選択時に理由も表示する追加回答は2026-10-06に受領済み。技術方式全体の承認とは区別する。
 
 **開発者が確認してください**
 
