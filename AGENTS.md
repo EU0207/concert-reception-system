@@ -62,6 +62,7 @@
 - 専門用語は `docs/development/glossary.md` で説明してください。
 - 文書の状態は `Draft`、`In Review`、`Approved`、`Superseded` のいずれかで示してください。
 - 正式文書は `docs/document-guide.md` から参照できるようにしてください。
+- 文書・Issue・Pull Requestの記載分担は `docs/document-guide.md` に従い、確認点から詳細の該当箇所へリンクしてください。
 
 ### 文章表現
 

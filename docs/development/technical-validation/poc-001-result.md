@@ -5,7 +5,7 @@
 | 項目 | 内容 |
 |---|---|
 | 目的 | 完全オフライン受付と復旧後統合の技術検証結果、制約、次の判断材料を記録する |
-| 主な読者 | 依頼者、開発担当者、確認担当者 |
+| 主な読者 | 開発者、設計担当者、テスト担当者 |
 | 実施日 | 2026-09-02 |
 | 関連文書 | [技術検証計画書](technical-validation-plan.md)、[開始承認依頼書](poc-001-approval-request.md)、[Firebase初期設定・引継ぎ手順書](../../client/firebase-initial-setup-guide.md) |
 | 関連Issue | [#6](https://github.com/EU0207/concert-reception-system/issues/6) |
