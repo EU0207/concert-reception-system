@@ -1,0 +1,47 @@
+{
+  "scope": "draft stress profile, not approved product limits; full catalog is not a production adoption candidate without capacity redesign",
+  "hashLineEndings": "LF",
+  "sourceSha256": "dd1a2c188f5932daac038498bfde4f6e77ad748b863aafd6fae63e197b4b495e",
+  "reports": [
+    {
+      "cells": 900,
+      "seats": 600,
+      "markedSeats": 0,
+      "idsCharacters": 36,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "catalogDocumentBytes": 712279,
+      "within1MiBForThisProfile": true
+    },
+    {
+      "cells": 900,
+      "seats": 600,
+      "markedSeats": 600,
+      "idsCharacters": 36,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "catalogDocumentBytes": 1250479,
+      "within1MiBForThisProfile": false
+    },
+    {
+      "cells": 900,
+      "seats": 900,
+      "markedSeats": 0,
+      "idsCharacters": 36,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "catalogDocumentBytes": 966679,
+      "within1MiBForThisProfile": true
+    },
+    {
+      "cells": 900,
+      "seats": 900,
+      "markedSeats": 900,
+      "idsCharacters": 36,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "catalogDocumentBytes": 1773979,
+      "within1MiBForThisProfile": false
+    }
+  ]
+}
