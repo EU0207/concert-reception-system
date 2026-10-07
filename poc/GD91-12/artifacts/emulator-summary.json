@@ -1,0 +1,532 @@
+{
+  "project": "demo-concert-seat-gd91-12",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-07T14:03:38.896Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "7e932c5857dcea891c32800eae2c00e05e21eded364647b11dd0587375a71c2f",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "dd4eaa11be235ad74ae35faf82417bd7ecc62a759cd17cbe8d664d7a225406bc",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "7e932c5857dcea891c32800eae2c00e05e21eded364647b11dd0587375a71c2f",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "dd4eaa11be235ad74ae35faf82417bd7ecc62a759cd17cbe8d664d7a225406bc",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "scope": "single-section cellId and seatId uniqueness registry with initial row/column counters and offsets; not formal Seat/line initialization, numbering, full edits, expansion, multiple sections, QR, SDK, IndexedDB, production receiver or devices",
+  "reports": [
+    {
+      "id": "I01",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "up",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3546
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 948
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I02",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "down",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3468
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I03",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "left",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3401
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 948
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I04",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "right",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3401
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I05",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "up",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3546
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 948
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I06",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "down",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3468
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I07",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "left",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3401
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 948
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I08",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "right",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3401
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I09",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "up",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3546
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 948
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I10",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "down",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3468
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I11",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "left",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3401
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 948
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I12",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "right",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3401
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I13",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "up",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3546
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 948
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I14",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "down",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3468
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I15",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "left",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3401
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 948
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I16",
+      "label": "untrusted initialization counts connect to offset slide",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "right",
+      "initialization": {
+        "requests": 6,
+        "writes": 16,
+        "maxRequestBytes": 3401
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSeededByAdmin": false,
+      "sourcePreserved": true
+    },
+    {
+      "id": "I17",
+      "label": "initial nonzero counters and completed-state forgery are denied",
+      "status": "passed",
+      "creationForgeries": 14,
+      "existingHeadResetDenied": true
+    },
+    {
+      "id": "I18",
+      "label": "chunks reject omitted cells, wrong positions and invented types",
+      "status": "passed",
+      "malformedChunkVariants": 17,
+      "fullAndShortChunksChecked": true
+    },
+    {
+      "id": "I19",
+      "label": "every counter and atomic half-write is checked",
+      "status": "passed",
+      "halfWritesDenied": 2,
+      "counterForgeries": 14,
+      "paddedColumnInjectionDenied": true
+    },
+    {
+      "id": "I20",
+      "label": "incomplete initialization is private and cannot slide or finish",
+      "status": "passed",
+      "prematureFinishAndSlideDenied": true,
+      "incompleteReaderAccessDenied": true,
+      "finalHalfWritesDenied": true,
+      "finalReplayAndHistoryEditDenied": true
+    },
+    {
+      "id": "I21",
+      "label": "interruptions resume from stored progress without a duplicate chunk",
+      "status": "passed",
+      "persistedProgressResumed": true,
+      "lostChunkResponseDetectable": true,
+      "lostFinalResponseQueryable": true,
+      "browserOutboxNotImplemented": true
+    },
+    {
+      "id": "I22",
+      "label": "racing initial chunks and old control revisions cannot publish",
+      "status": "passed",
+      "staleConcurrentChunkDenied": true,
+      "controlChangeBlocksContinuationAndFinish": true
+    },
+    {
+      "id": "I23",
+      "label": "revoked devices and roles cannot initialize, continue or finish",
+      "status": "passed",
+      "phaseRevocationsDenied": 12,
+      "readerCrossShowAnonymousDenied": true,
+      "deputyAllowed": true
+    },
+    {
+      "id": "I24",
+      "label": "each occupied boundary kind blocks an offset after verified counting",
+      "status": "passed",
+      "blockedBoundaryVariants": 16,
+      "emptyGridCountedButSlideDenied": true
+    },
+    {
+      "id": "I25",
+      "label": "short dimensions and chunk boundaries retain every row and column",
+      "status": "passed",
+      "dimensions": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          1,
+          11
+        ],
+        [
+          2,
+          19
+        ],
+        [
+          2,
+          20
+        ],
+        [
+          2,
+          21
+        ]
+      ],
+      "rowAndColumnTotalsChecked": true
+    },
+    {
+      "id": "I26",
+      "label": "930 source cells are counted by device writes before two-write sliding",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "chunks": 210,
+      "assignedReferences": 500,
+      "initialization": {
+        "requests": 212,
+        "writes": 634,
+        "maxRequestBytes": 5543
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 947
+      },
+      "countsSourcesAndRegistrySeededByAdmin": false,
+      "registryEntries": 1831,
+      "registryJsonBytes": 80648,
+      "headJsonBytes": 965,
+      "registryUnchangedBySlide": true,
+      "prerequisiteAndVerificationIOExcluded": true
+    },
+    {
+      "id": "I27",
+      "label": "committed source and counts cannot be edited through initialization paths",
+      "status": "passed",
+      "sourceAndCounterResetDenied": true,
+      "allEditKindsRequireSeparateIntegration": true,
+      "slideReasonAbsent": true
+    },
+    {
+      "id": "I28",
+      "label": "the earlier cross-chunk cellId reuse is now rejected",
+      "status": "passed",
+      "previousI28GapClosedWithinSection": true,
+      "cellIdReuseDenied": true
+    },
+    {
+      "id": "I29",
+      "label": "seatId duplicates within and across chunks are rejected",
+      "status": "passed",
+      "duplicateSeatIdVariantsDenied": 2
+    },
+    {
+      "id": "I30",
+      "label": "cell and seat identities cannot collide or use noncanonical IDs",
+      "status": "passed",
+      "identityCollisionAndFormatVariantsDenied": 10,
+      "lowercaseUuidV4Required": true
+    },
+    {
+      "id": "I31",
+      "label": "head, source and registry require one atomic commit",
+      "status": "passed",
+      "initialHalfWritesDenied": 2,
+      "partialThreeWriteSubsetsDenied": 6
+    },
+    {
+      "id": "I32",
+      "label": "registry membership cannot be omitted, invented or reset",
+      "status": "passed",
+      "initialRegistryForgeriesDenied": 6,
+      "registryUpdateForgeriesDenied": 9
+    },
+    {
+      "id": "I33",
+      "label": "registry stays private and frozen after initialization",
+      "status": "passed",
+      "unauthorizedRegistryReadsDenied": 3,
+      "registryResetAndDeleteDenied": true,
+      "extraRegistryWriteDuringSlideDenied": true,
+      "registryUnchangedBySlide": true
+    },
+    {
+      "id": "I34",
+      "label": "registry writes send only the new IDs and preserve old membership",
+      "status": "passed",
+      "maskedRegistryFieldCount": 10,
+      "fullRegistryNotSent": true,
+      "oldMembershipPreserved": true
+    },
+    {
+      "id": "I35",
+      "label": "unique seatId still requires a formal Seat record before production",
+      "status": "passed",
+      "knownLimitation": "the initialization of formal Seat records, numbering and line IDs is not validated by this identity proof",
+      "unknownSeatReferenceAcceptedByProof": true,
+      "projectionRejectsInvalidReference": true,
+      "productionAdoptionBlocked": true
+    }
+  ]
+}
