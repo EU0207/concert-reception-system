@@ -1,0 +1,283 @@
+{
+  "proof": "GD91-08",
+  "scope": "pure slide calculation only",
+  "sourceHashes": {
+    "../slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "slide.mjs": "d6662c749665e9cbf52b0a29773f75d839b2a7fc2051334b29fac5c80f8ae64f",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "slide.mjs": "d6662c749665e9cbf52b0a29773f75d839b2a7fc2051334b29fac5c80f8ae64f",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "passed": 27,
+  "reports": [
+    {
+      "id": "S01",
+      "name": "horizontal forward up: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "up",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S02",
+      "name": "horizontal forward down: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "down",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S03",
+      "name": "horizontal forward left: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "left",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S04",
+      "name": "horizontal forward right: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "right",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S05",
+      "name": "horizontal reverse up: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "up",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S06",
+      "name": "horizontal reverse down: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "down",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S07",
+      "name": "horizontal reverse left: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "left",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S08",
+      "name": "horizontal reverse right: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "right",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S09",
+      "name": "vertical forward up: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "up",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S10",
+      "name": "vertical forward down: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "down",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S11",
+      "name": "vertical forward left: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "left",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S12",
+      "name": "vertical forward right: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "right",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S13",
+      "name": "vertical reverse up: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "up",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S14",
+      "name": "vertical reverse down: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "down",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S15",
+      "name": "vertical reverse left: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "left",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S16",
+      "name": "vertical reverse right: IDs labels cursor and references preserved",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "right",
+      "inverseRestored": true,
+      "occupiedReferences": 3
+    },
+    {
+      "id": "S17",
+      "name": "right shift matches named example and the empty cell ID moves to the vacated edge",
+      "status": "passed",
+      "visualNumbers": [
+        "未",
+        "A-1",
+        "A-2"
+      ]
+    },
+    {
+      "id": "S18",
+      "name": "one non-unset cell blocks the entire boundary in every direction",
+      "status": "passed",
+      "rejectedVariants": 16
+    },
+    {
+      "id": "S19",
+      "name": "invalid direction and movement amounts never change input",
+      "status": "passed",
+      "rejectedVariants": 9
+    },
+    {
+      "id": "S20",
+      "name": "corrupt cell identities coordinates references and counters are rejected",
+      "status": "passed",
+      "rejectedVariants": 8
+    },
+    {
+      "id": "S21",
+      "name": "all-unset grids are no-op including single-row and single-column cases",
+      "status": "passed",
+      "noOpVariants": 12
+    },
+    {
+      "id": "S22",
+      "name": "extension then slide preserves 900 seats and 500 references in four numbering profiles",
+      "status": "passed",
+      "profiles": [
+        {
+          "axis": "horizontal",
+          "order": "forward",
+          "direction": "right",
+          "seats": 900,
+          "cells": 930,
+          "assignments": 500,
+          "ticketReferences": 500,
+          "receptionReferences": 500
+        },
+        {
+          "axis": "horizontal",
+          "order": "reverse",
+          "direction": "left",
+          "seats": 900,
+          "cells": 930,
+          "assignments": 500,
+          "ticketReferences": 500,
+          "receptionReferences": 500
+        },
+        {
+          "axis": "vertical",
+          "order": "forward",
+          "direction": "down",
+          "seats": 900,
+          "cells": 930,
+          "assignments": 500,
+          "ticketReferences": 500,
+          "receptionReferences": 500
+        },
+        {
+          "axis": "vertical",
+          "order": "reverse",
+          "direction": "up",
+          "seats": 900,
+          "cells": 930,
+          "assignments": 500,
+          "ticketReferences": 500,
+          "receptionReferences": 500
+        }
+      ]
+    },
+    {
+      "id": "S23",
+      "name": "repeated slide stops at occupied edge and preserves the last valid plan",
+      "status": "passed"
+    },
+    {
+      "id": "S24",
+      "name": "another free-named section is unchanged",
+      "status": "passed"
+    },
+    {
+      "id": "S25",
+      "name": "manual seat converted from gap retains consumed number and cursor",
+      "status": "passed"
+    },
+    {
+      "id": "S26",
+      "name": "output shares no mutable records with original input and allocates no IDs",
+      "status": "passed"
+    },
+    {
+      "id": "S27",
+      "name": "unnumbered draft is not treated as a confirmed layout",
+      "status": "passed"
+    }
+  ]
+}
