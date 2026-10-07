@@ -4,7 +4,7 @@
 
 [依頼者承認CONF-075](../development/ui-mock/ui-mock-client-response.md#conf-075-座席表全体のスライド)をREQ-F-035・038へ適用する。外周がすべて未の場合、同一区画の座席表全体を上下左右へずらして余白を調整できる。空いた側は未とし、割当済み・発券済みの席も番号・IDとお客様の対応を維持する。実会場の席移動や個別の割当済み席編集は含めない。
 
-当日も主担当・代理がオンラインで理由付き一括確定する。[詳細設計](../development/detailed-design/seat-management-detail-design.md#座席表全体のスライドconf-075)の技術案はIn Review。本番実装と試験は未実施。
+当日も主担当・代理がオンラインで一括確定する。CONF-075-Cによりスライドの理由入力・保存は不要。緊急席追加の用途を伝える理由は維持する。[詳細設計](../development/detailed-design/seat-management-detail-design.md#座席表全体のスライドconf-075)の技術案はIn Review。本番実装と試験は未実施。
 
 ## CONF-074による座席編集の保存境界
 
