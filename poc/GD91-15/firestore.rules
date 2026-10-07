@@ -1,0 +1,251 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-15専用。初期準備を世代別に分け、中断破棄と再作成を検証する。本番Rulesではない。
+    function authorized(p, edit) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(d.humanUid)).data;
+      return request.auth.token.firebase.sign_in_provider == 'anonymous' && d.deviceUid == request.auth.uid
+        && d.active && s.active && s.emailVerified && s.humanUid == d.humanUid && s.expiresAt > request.time
+        && r.active && d.preparedRoleRevision == r.revision && (!edit || r.role in ['owner', 'deputy']);
+    }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function head(p, g) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/head/current).data; }
+    function nextHead(p, g) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/head/current).data; }
+    function event(p, g, id) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/events/$(id)).data; }
+    function control(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data; }
+    function fence(p, b, a, e) {
+      return a.revision == b.revision + 1 && a.operationId != b.operationId && a.operationId is string
+        && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+        && e.controlRevision == control(p).revision;
+    }
+    function uuid(id) { return id is string && id.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+    function registry(p, g) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/idRegistry/current).data; }
+    function nextRegistry(p, g) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/idRegistry/current).data; }
+    function initial(p, g, a) {
+      let ids = nextRegistry(p, g);
+      return a.keys().hasAll(["sectionId","sectionName","rows","columns","axis","seatOrder","stagePosition","initialNumbered","rowOffset","columnOffset","rowCounts","columnCounts","nonEmptyCount","sourceRevision","revision","operationId","status","cursor","lastChunk","controlRevision","initializationId","chunkSize"]) && a.keys().hasOnly(["sectionId","sectionName","rows","columns","axis","seatOrder","stagePosition","initialNumbered","rowOffset","columnOffset","rowCounts","columnCounts","nonEmptyCount","sourceRevision","revision","operationId","status","cursor","lastChunk","controlRevision","initializationId","chunkSize"])
+        && uuid(a.sectionId) && a.sectionName is string && a.sectionName.size() > 0
+        && a.rows is int && a.columns is int && a.rows > 0 && a.columns > 0 && a.rows <= 100 && a.columns <= 100
+        && a.axis in ['horizontal', 'vertical'] && a.seatOrder in ['forward', 'reverse'] && a.stagePosition in ['top', 'left']
+        && a.chunkSize in [1, 2, 3, 4, 5] && a.initialNumbered is bool && a.rowOffset == 0 && a.columnOffset == 0
+        && a.rowCounts == {} && a.columnCounts == {} && a.nonEmptyCount == 0
+        && a.status == 'building' && a.cursor == 0 && a.lastChunk == '' && a.sourceRevision == 0 && a.revision == 0 && a.operationId == ''
+        && a.initializationId == g && uuid(g) && nextSelection(p).activeGeneration == g && a.controlRevision == control(p).revision
+        && ids.initializationId == a.initializationId && ids.cursor == 0;
+    }
+    function occupied(c, j) { return j < c.cells.size() && c.cells[j].kind != 'unset' ? 1 : 0; }
+    function validSlot(h, c, j, lines) {
+      let v = c.cells[j];
+      let line = lines[string(h.axis == 'horizontal' ? c.row : c.startColumn + j)];
+      return v.keys().hasOnly(['cellId', 'row', 'column', 'kind', 'seatId', 'numberValue'])
+        && v.cellId == c.cellIds[j] && uuid(v.cellId) && v.row == c.row && v.column == c.startColumn + j
+        && v.kind in ['unset', 'seat', 'gap', 'space', 'aisle']
+        && (v.kind == 'seat' ? uuid(v.seatId) : v.seatId == '')
+        && (v.kind in ['seat', 'gap']
+          ? v.numberValue is int && v.numberValue >= line.startNumber && v.numberValue < line.nextAutomaticNumber
+            && c.numberKeys[j] == line.lineId + ':' + string(v.numberValue)
+          : v.numberValue == null && c.numberKeys[j] == '');
+    }
+    function validChunk(b, c, id, lines) {
+      return c.keys().hasAll(['row', 'startColumn', 'cells', 'cellIds', 'numberKeys']) && c.keys().hasOnly(['row', 'startColumn', 'cells', 'cellIds', 'numberKeys'])
+        && c.row is int && c.startColumn is int && c.row >= 0 && c.row < b.rows && c.startColumn >= 0 && c.startColumn < b.columns
+        && c.row * b.columns + c.startColumn == b.cursor && id == string(c.row) + '-' + string(c.startColumn)
+        && c.cells is list && c.cellIds is list && c.cells.size() == (b.columns - c.startColumn < b.chunkSize ? b.columns - c.startColumn : b.chunkSize)
+        && c.numberKeys is list && c.numberKeys.size() == c.cells.size()
+        && c.cellIds.size() == c.cells.size() && c.cellIds.toSet().size() == c.cells.size()
+        && validSlot(b, c, 0, lines) && (c.cells.size() < 2 || validSlot(b, c, 1, lines))
+        && (c.cells.size() < 3 || validSlot(b, c, 2, lines)) && (c.cells.size() < 4 || validSlot(b, c, 3, lines)) && (c.cells.size() < 5 || validSlot(b, c, 4, lines));
+    }
+    function marker(a) {
+      let e = a.get('emergencyChange', null);
+      return e == null || e is map && e.keys().hasOnly(['kind', 'reason']) && e.kind in ['add', 'renumber', 'move']
+        && e.reason is string && e.reason.matches('.*\\S.*');
+    }
+    function validAttribute(c, a, j) {
+      let v = a.values[j];
+      return c.cells[j].kind == 'seat'
+        ? v is map && v.keys().hasOnly(['category', 'usable', 'reservedLabel', 'displayOrder', 'emergencyChange'])
+          && v.category in ['general', 'reserved', 'special'] && v.usable is bool && v.get('reservedLabel', '') is string
+          && v.get('displayOrder', 0) is int && v.get('displayOrder', 0) >= 0 && marker(v)
+        : v == null;
+    }
+    function createAttributes(p, g, id, a) {
+      let h = head(p, g);
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/chunks/$(id)).data;
+      return pending(p, g) && h.status == 'building' && h.controlRevision == control(p).revision && c.row * h.columns + c.startColumn == h.cursor
+        && a.keys().hasAll(['row', 'startColumn', 'values']) && a.keys().hasOnly(['row', 'startColumn', 'values'])
+        && a.row == c.row && a.startColumn == c.startColumn && a.values is list && a.values.size() == c.cells.size()
+        && validAttribute(c, a, 0) && (c.cells.size() < 2 || validAttribute(c, a, 1))
+        && (c.cells.size() < 3 || validAttribute(c, a, 2)) && (c.cells.size() < 4 || validAttribute(c, a, 3)) && (c.cells.size() < 5 || validAttribute(c, a, 4));
+    }
+    function columnDelta(b, a, c, j) {
+      let key = string(c.startColumn + j);
+      return a.columnCounts.get(key, 0) == b.columnCounts.get(key, 0) + occupied(c, j)
+        && (j < c.cells.size() || a.columnCounts.keys().hasAny([key]) == b.columnCounts.keys().hasAny([key]));
+    }
+    function ingest(p, g, b, a) {
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/chunks/$(a.lastChunk)).data;
+      let delta = occupied(c, 0) + occupied(c, 1) + occupied(c, 2) + occupied(c, 3) + occupied(c, 4);
+      let row = string(c.row);
+      let ids = nextRegistry(p, g);
+      return ids.cursor == a.cursor && ids.initializationId == b.initializationId && b.status == 'building' && b.cursor < b.rows * b.columns
+        && exists(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/attributes/$(a.lastChunk)) && c.row * b.columns + c.startColumn == b.cursor
+        && a.diff(b).affectedKeys().hasOnly(['cursor', 'lastChunk', 'nonEmptyCount', 'rowCounts', 'columnCounts'])
+        && a.cursor == b.cursor + c.cells.size() && a.nonEmptyCount == b.nonEmptyCount + delta
+        && a.rowCounts.diff(b.rowCounts).affectedKeys().hasOnly([row]) && a.rowCounts.get(row, 0) == b.rowCounts.get(row, 0) + delta
+        && a.columnCounts.diff(b.columnCounts).affectedKeys().hasOnly([string(c.startColumn + 0), string(c.startColumn + 1), string(c.startColumn + 2), string(c.startColumn + 3), string(c.startColumn + 4)])
+        && columnDelta(b, a, c, 0) && columnDelta(b, a, c, 1) && columnDelta(b, a, c, 2) && columnDelta(b, a, c, 3) && columnDelta(b, a, c, 4);
+    }
+    function finish(p, g, b, a) {
+      let e = event(p, g, a.operationId);
+      let ids = registry(p, g);
+      let n = nextSelection(p);
+      return ids.initializationId == b.initializationId && ids.cursor == b.cursor && b.status == 'building' && b.cursor == b.rows * b.columns && a.status == 'countReady'
+        && a.diff(b).affectedKeys().hasOnly(['status', 'sourceRevision', 'revision', 'operationId'])
+        && a.sourceRevision == 1 && a.revision == 1 && a.operationId != ''
+        && n.publishedGeneration == g && n.activeGeneration == '' && n.operationId == a.operationId
+        && e.kind == 'initialCounterProof' && e.deviceUid == request.auth.uid && e.initializationId == b.initializationId
+        && e.controlRevision == b.controlRevision;
+    }
+    function validSlide(b, a, e) {
+      let row = ((e.dr < 0 ? 0 : b.rows - 1) - b.rowOffset + b.rows) % b.rows;
+      let column = ((e.dc < 0 ? 0 : b.columns - 1) - b.columnOffset + b.columns) % b.columns;
+      return b.status == 'countReady' && b.initialNumbered && b.nonEmptyCount > 0 && e.dr is int && e.dc is int
+        && ((e.dr in [-1, 1] && e.dc == 0) || (e.dc in [-1, 1] && e.dr == 0))
+        && a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'rowOffset', 'columnOffset'])
+        && a.rowOffset == (b.rowOffset + e.dr + b.rows) % b.rows && a.columnOffset == (b.columnOffset + e.dc + b.columns) % b.columns
+        && (e.dr != 0 ? b.rowCounts.get(string(row), 0) == 0 : b.columnCounts.get(string(column), 0) == 0);
+    }
+    function slideHead(p, g, b, a) {
+      let e = event(p, g, a.operationId);
+      return fence(p, b, a, e) && e.kind == 'slide' && validSlide(b, a, e);
+    }
+    function updateHead(p, g, b, a) {
+      return b.status == 'building' ? pending(p, g) && (a.status == 'aborted' ? abortInitial(p, g, b, a)
+          : b.controlRevision == control(p).revision && (a.status == 'building' ? ingest(p, g, b, a) : finish(p, g, b, a)))
+        : published(p, g) && slideHead(p, g, b, a);
+    }
+    function createChunk(p, g, id) {
+      let h = head(p, g);
+      let catalog = get(/databases/$(database)/documents/splitSeatShows/$(p)/lineCatalog/current).data;
+      return pending(p, g) && h.status == 'building' && h.controlRevision == control(p).revision && catalog.sectionId == h.sectionId
+        && validChunk(h, request.resource.data, id, catalog.lines);
+    }
+    function createEvent(p, g, id, e) {
+      let b = head(p, g);
+      let a = nextHead(p, g);
+      return a.operationId == id && ((e.kind == 'abortInitial' && b.status == 'building' && a.status == 'aborted'
+          && e.keys().hasOnly(['kind', 'deviceUid', 'initializationId', 'controlRevision']))
+        || (e.kind == 'initialCounterProof' && b.status == 'building' && a.status == 'countReady'
+          && e.keys().hasOnly(['kind', 'deviceUid', 'initializationId', 'controlRevision']))
+        || (e.kind == 'slide' && b.status == 'countReady' && a.status == 'countReady' && a.revision == b.revision + 1
+          && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+          && e.keys().hasOnly(['kind', 'deviceUid', 'baseRevision', 'revision', 'controlRevision', 'dr', 'dc'])));
+    }
+    // 信頼済みの列IDも予約する。自動席と欠番の消費番号は別の集合で照合する。
+    function createRegistry(p, g, a) {
+      let h = nextHead(p, g);
+      let catalog = get(/databases/$(database)/documents/splitSeatShows/$(p)/lineCatalog/current).data;
+      return catalog.sectionId == h.sectionId && a.usedNumbers == {} && a.keys().hasAll(['initializationId', 'cursor', 'usedIds', 'usedNumbers']) && a.keys().hasOnly(['initializationId', 'cursor', 'usedIds', 'usedNumbers'])
+        && h.status == 'building' && h.cursor == 0 && a.cursor == 0 && a.initializationId == h.initializationId
+        && a.usedIds.keys().toSet() == [h.sectionId].toSet().union(catalog.lineIds.toSet()) && a.usedIds.values().toSet() == [true].toSet();
+    }
+    function seatId(c, j) { return j < c.cells.size() ? c.cells[j].seatId : ''; }
+    function seat(c, j) { return j < c.cells.size() && c.cells[j].kind == 'seat' ? 1 : 0; }
+    function consumed(c, j) { return j < c.cells.size() && c.cells[j].kind in ['seat', 'gap'] ? 1 : 0; }
+    function updateRegistry(p, g, b, a) {
+      let h = head(p, g);
+      let n = nextHead(p, g);
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/chunks/$(n.lastChunk)).data;
+      let cells = c.cellIds.toSet();
+      let seats = [seatId(c, 0), seatId(c, 1), seatId(c, 2), seatId(c, 3), seatId(c, 4)].toSet().difference([''].toSet());
+      let delta = a.usedIds.diff(b.usedIds);
+      let numbers = c.numberKeys.toSet().difference([''].toSet());
+      let numberDelta = a.usedNumbers.diff(b.usedNumbers);
+      return h.status == 'building' && n.status == 'building' && n.cursor == h.cursor + c.cells.size()
+        && b.cursor == h.cursor && a.cursor == n.cursor && b.initializationId == h.initializationId
+        && a.diff(b).affectedKeys().hasOnly(['cursor', 'usedIds', 'usedNumbers'])
+        && seats.size() == seat(c, 0) + seat(c, 1) + seat(c, 2) + seat(c, 3) + seat(c, 4)
+        && cells.intersection(seats).size() == 0 && delta.addedKeys() == cells.union(seats)
+        && delta.changedKeys().size() == 0 && delta.removedKeys().size() == 0
+        && numbers.size() == consumed(c, 0) + consumed(c, 1) + consumed(c, 2) + consumed(c, 3) + consumed(c, 4)
+        && numberDelta.addedKeys() == numbers && numberDelta.changedKeys().size() == 0 && numberDelta.removedKeys().size() == 0
+        && (a.usedNumbers.size() == 0 || a.usedNumbers.values().toSet() == [true].toSet())
+        && a.usedIds.values().toSet() == [true].toSet();
+    }
+    function selection(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/selection/current).data; }
+    function nextSelection(p) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/selection/current).data; }
+    function pending(p, g) { let s = selection(p); return s.activeGeneration == g && s.publishedGeneration == ''; }
+    function published(p, g) { return selection(p).publishedGeneration == g; }
+    function selectionShape(a) {
+      return a.keys().hasAll(['revision', 'activeGeneration', 'publishedGeneration', 'operationId'])
+        && a.keys().hasOnly(['revision', 'activeGeneration', 'publishedGeneration', 'operationId'])
+        && a.revision is int && a.revision > 0 && a.activeGeneration is string && a.publishedGeneration is string && uuid(a.operationId);
+    }
+    function initialTarget(p, a) {
+      let h = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(a.activeGeneration)/head/current).data;
+      return uuid(a.activeGeneration) && a.operationId == a.activeGeneration && a.publishedGeneration == ''
+        && h.status == 'building' && h.cursor == 0 && h.initializationId == a.activeGeneration;
+    }
+    function changeSelection(p, b, a) {
+      return selectionShape(a) && a.revision == b.revision + 1 && a.operationId != b.operationId && b.publishedGeneration == ''
+        && (b.activeGeneration == '' ? initialTarget(p, a)
+          : completedTarget(p, b, a));
+    }
+    function completedTarget(p, b, a) {
+      let h = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(b.activeGeneration)/head/current).data;
+      return a.activeGeneration == '' && h.operationId == a.operationId
+        && (a.publishedGeneration == '' && h.status == 'aborted'
+          || a.publishedGeneration == b.activeGeneration && h.status == 'countReady');
+    }
+    function abortInitial(p, g, b, a) {
+      let e = event(p, g, a.operationId);
+      let n = nextSelection(p);
+      return a.status == 'aborted' && a.diff(b).affectedKeys().hasOnly(['status', 'revision', 'operationId'])
+        && a.revision == b.revision + 1 && uuid(a.operationId) && a.operationId != b.operationId
+        && n.activeGeneration == '' && n.publishedGeneration == '' && n.operationId == a.operationId
+        && e.kind == 'abortInitial' && e.initializationId == g && e.deviceUid == request.auth.uid && e.controlRevision == control(p).revision;
+    }
+    match /splitSeatShows/{p} {
+      match /{privateCollection}/{id} {
+        allow get: if privateCollection in ['devices', 'sessions', 'roles', 'control'] && manager(p);
+        allow write: if false;
+      }
+      match /selection/current {
+        allow get: if manager(p) || active(p) && resource.data.publishedGeneration != '';
+        allow create: if manager(p) && selectionShape(request.resource.data) && request.resource.data.revision == 1 && initialTarget(p, request.resource.data);
+        allow update: if manager(p) && changeSelection(p, resource.data, request.resource.data);
+      }
+      match /lineCatalog/current { allow get: if manager(p) || active(p) && selection(p).publishedGeneration != ''; }
+      match /lines/{id} { allow get: if active(p) && selection(p).publishedGeneration != ''; }
+      match /seatReferences/current { allow get: if active(p) && selection(p).publishedGeneration != ''; }
+      match /generations/{g} {
+        match /idRegistry/current {
+          allow get: if manager(p);
+          allow create: if manager(p) && createRegistry(p, g, request.resource.data);
+          allow update: if manager(p) && updateRegistry(p, g, resource.data, request.resource.data);
+        }
+        match /head/current {
+          allow get: if manager(p) || active(p) && published(p, g) && resource.data.status == 'countReady';
+          allow create: if manager(p) && initial(p, g, request.resource.data);
+          allow update: if manager(p) && updateHead(p, g, resource.data, request.resource.data);
+        }
+        match /chunks/{id} {
+          allow get: if manager(p) || active(p) && published(p, g) && head(p, g).status == 'countReady';
+          allow create: if manager(p) && createChunk(p, g, id);
+        }
+        match /attributes/{id} {
+          allow get: if manager(p) || active(p) && published(p, g) && head(p, g).status == 'countReady';
+          allow create: if manager(p) && createAttributes(p, g, id, request.resource.data);
+        }
+        match /events/{id} {
+          allow get: if manager(p);
+          allow create: if manager(p) && createEvent(p, g, id, request.resource.data);
+        }
+      }
+    }
+  }
+}
