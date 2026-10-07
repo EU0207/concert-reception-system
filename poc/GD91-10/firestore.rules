@@ -1,0 +1,92 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-10専用。初期構成・集計と本人証跡は前提投入。本番Rulesではない。
+    function authorized(p, edit) {
+      let d = get(/databases/$(database)/documents/offsetShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/offsetShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/offsetShows/$(p)/roles/$(d.humanUid)).data;
+      return request.auth.token.firebase.sign_in_provider == 'anonymous' && d.deviceUid == request.auth.uid
+        && d.active && s.active && s.emailVerified && s.humanUid == d.humanUid && s.expiresAt > request.time
+        && r.active && d.preparedRoleRevision == r.revision && (!edit || r.role in ['owner', 'deputy']);
+    }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function head(p) { return get(/databases/$(database)/documents/offsetShows/$(p)/head/current).data; }
+    function nextHead(p) { return getAfter(/databases/$(database)/documents/offsetShows/$(p)/head/current).data; }
+    function event(p, id) { return getAfter(/databases/$(database)/documents/offsetShows/$(p)/events/$(id)).data; }
+    function control(p) { return get(/databases/$(database)/documents/offsetShows/$(p)/control/current).data; }
+    function fence(p, b, a, e) {
+      return a.revision == b.revision + 1 && a.operationId != b.operationId && a.operationId is string
+        && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+        && e.controlRevision == control(p).revision;
+    }
+    function validSlide(b, a, e) {
+      let row = ((e.dr < 0 ? 0 : b.rows - 1) - b.rowOffset + b.rows) % b.rows;
+      let column = ((e.dc < 0 ? 0 : b.columns - 1) - b.columnOffset + b.columns) % b.columns;
+      return b.initialNumbered && b.nonEmptyCount > 0 && e.dr is int && e.dc is int
+        && ((e.dr in [-1, 1] && e.dc == 0) || (e.dc in [-1, 1] && e.dr == 0))
+        && a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'rowOffset', 'columnOffset'])
+        && a.rowOffset == (b.rowOffset + e.dr + b.rows) % b.rows
+        && a.columnOffset == (b.columnOffset + e.dc + b.columns) % b.columns
+        && (e.dr != 0 ? b.rowCounts[string(row)] == 0 : b.columnCounts[string(column)] == 0);
+    }
+    // 集計維持の検証用操作。非席3種以外の本番編集契約はここでは扱わない。
+    function validNonSeat(p, b, a, e) {
+      let old = get(/databases/$(database)/documents/offsetShows/$(p)/cells/$(e.cellId)).data;
+      let next = getAfter(/databases/$(database)/documents/offsetShows/$(p)/cells/$(e.cellId)).data;
+      let delta = (e.toKind == 'unset' ? 0 : 1) - (e.fromKind == 'unset' ? 0 : 1);
+      let row = string(old.row);
+      let column = string(old.column);
+      return e.fromKind in ['unset', 'space', 'aisle'] && e.toKind in ['unset', 'space', 'aisle'] && e.fromKind != e.toKind
+        && old.kind == e.fromKind && next.kind == e.toKind && old.seatId == '' && old.consumedNumber == null
+        && next.diff(old).affectedKeys().hasOnly(['kind'])
+        && a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'sourceRevision', 'nonEmptyCount', 'rowCounts', 'columnCounts'])
+        && a.sourceRevision == b.sourceRevision + 1 && a.nonEmptyCount == b.nonEmptyCount + delta
+        && a.rowCounts.diff(b.rowCounts).affectedKeys().hasOnly([row])
+        && a.columnCounts.diff(b.columnCounts).affectedKeys().hasOnly([column])
+        && a.rowCounts[row] == b.rowCounts[row] + delta && a.columnCounts[column] == b.columnCounts[column] + delta
+        && a.rowCounts[row] >= 0 && a.columnCounts[column] >= 0;
+    }
+    function updateHead(p, b, a) {
+      let e = event(p, a.operationId);
+      return fence(p, b, a, e) && (e.kind == 'slide' ? validSlide(b, a, e) : e.kind == 'nonSeatProof' && validNonSeat(p, b, a, e));
+    }
+    function createEvent(p, id, e) {
+      let b = head(p);
+      let a = nextHead(p);
+      return a.operationId == id && a.revision == b.revision + 1
+        && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+        && ((e.kind == 'slide' && e.keys().hasOnly(['kind', 'deviceUid', 'baseRevision', 'revision', 'controlRevision', 'dr', 'dc']))
+          || (e.kind == 'nonSeatProof' && e.keys().hasOnly(['kind', 'deviceUid', 'baseRevision', 'revision', 'controlRevision', 'cellId', 'fromKind', 'toKind', 'reason'])
+            && e.reason is string && e.reason.matches('.*[^\\s].*')));
+    }
+    function updateCell(p, id, b, a) {
+      let before = head(p);
+      let after = nextHead(p);
+      let e = event(p, after.operationId);
+      return after.revision == before.revision + 1 && e.kind == 'nonSeatProof' && e.cellId == id
+        && b.kind == e.fromKind && a.kind == e.toKind && a.diff(b).affectedKeys().hasOnly(['kind']);
+    }
+    match /offsetShows/{p} {
+      match /{privateCollection}/{id} {
+        allow get: if privateCollection in ['devices', 'sessions', 'roles', 'control'] && manager(p);
+        allow write: if false;
+      }
+      match /head/current {
+        allow get: if active(p);
+        allow update: if manager(p) && updateHead(p, resource.data, request.resource.data);
+      }
+      match /cells/{id} {
+        allow get: if active(p);
+        allow update: if manager(p) && updateCell(p, id, resource.data, request.resource.data);
+      }
+      match /lines/{id} { allow get: if active(p); }
+      match /seatReferences/current { allow get: if active(p); }
+      match /events/{id} {
+        allow get: if manager(p);
+        allow create: if manager(p) && createEvent(p, id, request.resource.data);
+      }
+    }
+  }
+}
