@@ -1,0 +1,262 @@
+{
+  "project": "demo-concert-seat-gd91-05",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-07T06:06:55.041Z",
+  "hashLineEndings": "LF",
+  "sourceSha256": {
+    "../firestore.rules": "e99737bd3783a16d5786fd0268dca19e5fd503e6c9688001a493fd3fdd72cd61",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "51814d830b8691737545f722c6f503e278e8dc7f5e34de89f02668cc171af669",
+    "receiver.mjs": "1f84cf927b70bce861976efbcee3525dc8cceb8f0a65e15860f2ee0612562734"
+  },
+  "scope": "preseeded layout-only edits with atomic public version manifest and staged REST receiver; not production acceptance, assignment command integration, SDK or IndexedDB recovery",
+  "callsWithoutCache": {
+    "head": 10,
+    "chunk": 2,
+    "assignmentState": 2,
+    "history": 2,
+    "version": 2,
+    "commit": 18
+  },
+  "reports": [
+    {
+      "id": "GD91-C01",
+      "label": "four kinds of addition atomically publish the version manifest",
+      "chunks": 30,
+      "cellsPerChunk": 30,
+      "occupants": 500,
+      "requestsPerOperation": 1,
+      "writesPerOperation": 5,
+      "maskedRequestBytes": [
+        7424,
+        7424,
+        7424,
+        7431
+      ],
+      "otherChunksAndExistingAssignmentsUnchanged": true
+    },
+    {
+      "id": "GD91-C02",
+      "label": "unassigned renumber and move keep identity under global version",
+      "sameIdentity": true,
+      "assignmentsUnchanged": true
+    },
+    {
+      "id": "GD91-C03",
+      "label": "five linked documents reject every incomplete subset",
+      "rejectedSubsets": 30,
+      "currentStateAndHistoryUnchanged": true
+    },
+    {
+      "id": "GD91-C04",
+      "label": "another chunk extra history and unknown chunk cannot ride on valid head",
+      "attacks": 4,
+      "arbitraryLinkedWritesDenied": true
+    },
+    {
+      "id": "GD91-C05",
+      "label": "satellite writes cannot bypass reader revoked stopped expired or absent auth",
+      "attacks": 5,
+      "headAuthorizationRequired": true
+    },
+    {
+      "id": "GD91-C06",
+      "label": "duplicates and forged index automatic numbering or hidden changes are rejected",
+      "attacks": 8,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-C07",
+      "label": "global seat identity cannot be reused from a different chunk",
+      "attacks": 2,
+      "assignmentMapProtectsGlobalIdentity": true
+    },
+    {
+      "id": "GD91-C08",
+      "label": "occupied seat cannot be changed or implicitly released",
+      "attacks": 3,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-C09",
+      "label": "two simultaneous different chunks still have one global winner",
+      "statuses": [
+        200,
+        403
+      ],
+      "globalConflictBoundary": true
+    },
+    {
+      "id": "GD91-C10",
+      "label": "latest assignment control and stale head or chunk version reject edit",
+      "staleSources": 4,
+      "trustedSourceRacesOnly": true
+    },
+    {
+      "id": "GD91-C11",
+      "label": "history reason marker and actual cells must agree",
+      "rejectedReasons": 3,
+      "forgedHistory": 4,
+      "multilineReasonAccepted": true
+    },
+    {
+      "id": "GD91-C12",
+      "label": "reader sees current reason but cannot fetch actor history",
+      "currentReasonVisible": true,
+      "actorHistoryDenied": true,
+      "privateIndexDenied": true
+    },
+    {
+      "id": "GD91-C13",
+      "label": "same displayed number can exist in different chunks without collision",
+      "uniquenessScopedToLine": true
+    },
+    {
+      "id": "GD91-C14",
+      "label": "reply loss uses immutable history and later direct replay cannot use previous head",
+      "replayAndOrphanAfterPreviousCommitDenied": true,
+      "sdkAndLocalRestartNotTested": true
+    },
+    {
+      "id": "GD91-C15",
+      "label": "performance isolation applies to head and every satellite write",
+      "crossPerformanceDenied": true
+    },
+    {
+      "id": "GD91-C16",
+      "label": "horizontal vertical forward and reverse partitions preserve cursor and coordinates",
+      "profiles": 4,
+      "gridExpansionAndAutomaticNumberingNotTested": true
+    },
+    {
+      "id": "GD91-C17",
+      "label": "one long line split into chunks rejects duplicate in a different chunk",
+      "cellsInOneLine": 900,
+      "chunks": 30,
+      "crossChunkDuplicateDenied": true
+    },
+    {
+      "id": "GD91-C18",
+      "label": "occupied reserved fields cannot be changed and released chunk cannot bypass head",
+      "reservedCategoryAndAvailabilityRetained": true
+    },
+    {
+      "id": "GD91-C19",
+      "label": "bootstrap reads coherent thirty chunks and assignment without private index",
+      "reads": {
+        "manifest": 2,
+        "chunk": 30,
+        "assignment": 1,
+        "jsonBytes": 663572
+      },
+      "totalDocumentReads": 33,
+      "privateHeadReads": 0
+    },
+    {
+      "id": "GD91-C20",
+      "label": "unchanged version reads one small document and no bodies or writes",
+      "reads": {
+        "manifest": 1,
+        "chunk": 0,
+        "assignment": 0,
+        "jsonBytes": 2583
+      },
+      "bodyReads": 0,
+      "receiverWrites": 0
+    },
+    {
+      "id": "GD91-C21",
+      "label": "single edit downloads one changed chunk and current assignment",
+      "reads": {
+        "manifest": 2,
+        "chunk": 1,
+        "assignment": 1,
+        "jsonBytes": 79349
+      },
+      "unchangedChunksSkipped": 29,
+      "assignmentBodyStillWhole": true
+    },
+    {
+      "id": "GD91-C22",
+      "label": "missed updates in different chunks are both recovered from version map",
+      "recoveredChanges": 2,
+      "reads": {
+        "manifest": 2,
+        "chunk": 2,
+        "assignment": 1,
+        "jsonBytes": 100193
+      },
+      "finalPointerAloneNotUsed": true
+    },
+    {
+      "id": "GD91-C23",
+      "label": "several missed edits in one chunk require only its newest snapshot",
+      "missedVersions": 3,
+      "chunkReads": 1,
+      "reconstructsCurrentStateOnly": true
+    },
+    {
+      "id": "GD91-C24",
+      "label": "update during fetch discards staging and retries against newest manifest",
+      "attempts": 2,
+      "mixedStageDiscarded": true,
+      "reads": {
+        "manifest": 4,
+        "chunk": 3,
+        "assignment": 2,
+        "jsonBytes": 179595
+      }
+    },
+    {
+      "id": "GD91-C25",
+      "label": "continuous changes stop at bounded attempts and retain old snapshot",
+      "attempts": 2,
+      "oldRevisionRetained": 1
+    },
+    {
+      "id": "GD91-C26",
+      "label": "partial download failure retains old chunks and assignments",
+      "injectedTransportFailure": true,
+      "partialStateNeverApplied": true
+    },
+    {
+      "id": "GD91-C27",
+      "label": "revoked read permission before final barrier prevents application",
+      "serverReadRevocationChecked": true,
+      "oldSnapshotRetainedButNotReceptionResumePermission": true
+    },
+    {
+      "id": "GD91-C28",
+      "label": "receiver rejects incompatible scope versions and malformed snapshots",
+      "injectedInvalidResponses": 11,
+      "crossPerformanceLocalCacheRejected": true
+    },
+    {
+      "id": "GD91-C29",
+      "label": "late older refresh cannot replace a newer completed refresh",
+      "reorderedAdapterCompletions": true,
+      "latestAppliedRevision": 3
+    },
+    {
+      "id": "GD91-C30",
+      "label": "server rejects forged public projections and version-map bypasses",
+      "forgedProjectionAttacks": 6,
+      "indexVersionAttacks": 2,
+      "protectedFieldAndNumberAttacks": 12,
+      "standaloneProjectionReplayDenied": true
+    },
+    {
+      "id": "GD91-C31",
+      "label": "public read paths exclude private index actor and operation history",
+      "privatePathsDenied": 4,
+      "crossPerformanceAndUnauthenticatedDenied": true,
+      "currentEmergencyReasonRetained": true
+    },
+    {
+      "id": "GD91-C32",
+      "label": "bootstrap failure publishes no partial snapshot",
+      "initialFailureLeavesNoUsableProjection": true,
+      "browserPersistenceNotTested": true
+    }
+  ]
+}
