@@ -1,0 +1,43 @@
+{
+  "scope": "draft stress profiles only; private number index and public 30-chunk version manifest; no product limit, SDK traffic, query billing or index/request budget guarantee",
+  "hashLineEndings": "LF",
+  "sourceSha256": "e4525f4fd96c92d9860a4ca8f29e174a2c924f41c5ede37c6be2bf1f203b57cc",
+  "reports": [
+    {
+      "cells": 900,
+      "seats": 900,
+      "occupants": 500,
+      "lines": 30,
+      "cellsPerLine": 30,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "unpartitionedDocumentBytes": 1774019,
+      "maxChunkDocumentBytes": 49938,
+      "totalChunkDocumentBytes": 1498140,
+      "headDocumentBytes": 290052,
+      "assignmentDocumentBytes": 52530,
+      "publicVersionDocumentBytes": 1871,
+      "storageGroups": 30,
+      "cellsPerGroup": 30,
+      "eachDocumentWithin1MiBForThisProfile": true
+    },
+    {
+      "cells": 900,
+      "seats": 900,
+      "occupants": 500,
+      "lines": 1,
+      "cellsPerLine": 900,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "unpartitionedDocumentBytes": 1770916,
+      "maxChunkDocumentBytes": 49938,
+      "totalChunkDocumentBytes": 1498140,
+      "headDocumentBytes": 290052,
+      "assignmentDocumentBytes": 52530,
+      "publicVersionDocumentBytes": 1871,
+      "storageGroups": 30,
+      "cellsPerGroup": 30,
+      "eachDocumentWithin1MiBForThisProfile": true
+    }
+  ]
+}
