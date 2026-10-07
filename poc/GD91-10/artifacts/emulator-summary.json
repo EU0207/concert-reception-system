@@ -1,0 +1,399 @@
+{
+  "project": "demo-concert-seat-gd91-10",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-07T12:14:04.599Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "846ba287fd2b4355228eedbba916412fd579d9716a036e306dc80873afdc51a3",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "emulator.mjs": "09757d09e9f437157fb82299e0a3a358b8e1cd6da52a8e40f8df866045223ab0",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "846ba287fd2b4355228eedbba916412fd579d9716a036e306dc80873afdc51a3",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "emulator.mjs": "09757d09e9f437157fb82299e0a3a358b8e1cd6da52a8e40f8df866045223ab0",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "scope": "preseeded single-section offsets and verified non-seat counter maintenance; not initialization, expansion, full seat edits, production projection, calendar, QR, SDK or IndexedDB",
+  "reports": [
+    {
+      "id": "O01",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "up",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 944
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O02",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "down",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O03",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "left",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 944
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O04",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "right",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O05",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "up",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 944
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O06",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "down",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O07",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "left",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 944
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O08",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "right",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O09",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "up",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 944
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O10",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "down",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O11",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "left",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 944
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O12",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "right",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O13",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "up",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 944
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O14",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "down",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O15",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "left",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 944
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O16",
+      "label": "two writes match full slide calculation",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "right",
+      "sourceUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0
+    },
+    {
+      "id": "O17",
+      "label": "inverse and repeated moves keep stable identity and current boundary",
+      "status": "passed",
+      "inverseRestored": true,
+      "secondOccupiedEdgeDenied": true,
+      "vacatedEdgeUsesOldUnsetIds": true
+    },
+    {
+      "id": "O18",
+      "label": "all occupied boundary types reject in every direction",
+      "status": "passed",
+      "rejectedVariants": 16
+    },
+    {
+      "id": "O19",
+      "label": "slide cannot forge offsets, counters or immutable metadata",
+      "status": "passed",
+      "headForgeries": 11,
+      "historyForgeries": 8
+    },
+    {
+      "id": "O20",
+      "label": "atomic slide excludes isolated history, extra edits and replay",
+      "status": "passed",
+      "isolatedWritesAndExtraCellDenied": 3,
+      "replayDenied": true,
+      "historyImmutable": true,
+      "sameIdResultQuery": true
+    },
+    {
+      "id": "O21",
+      "label": "verified non-seat edit maintains both axes and then blocks boundary",
+      "status": "passed",
+      "sourceRevision": 4,
+      "countersMaintainedAcrossThreeKinds": true,
+      "restoredBoundaryAllowed": true
+    },
+    {
+      "id": "O22",
+      "label": "non-seat edit rejects partial counters and unrelated changes",
+      "status": "passed",
+      "rejectedSubsets": 6,
+      "summaryOrSourceForgeries": 11
+    },
+    {
+      "id": "O23",
+      "label": "editing a displayed edge uses the original cell coordinates",
+      "status": "passed",
+      "originalColumn": 3,
+      "displayedColumn": 0,
+      "reverseMoveAfterEditDenied": true
+    },
+    {
+      "id": "O24",
+      "label": "simultaneous slides and edits reject stale revisions in both orders",
+      "status": "passed",
+      "staleSlideAndEditVariantsDenied": 3
+    },
+    {
+      "id": "O25",
+      "label": "latest role, device, session and control are checked at confirmation",
+      "status": "passed",
+      "revocationAndControlVariants": 5,
+      "calendarNotTested": true
+    },
+    {
+      "id": "O26",
+      "label": "role and performance boundaries with deputy confirmation",
+      "status": "passed",
+      "crossPerformanceAndReaderEditDenied": true,
+      "deputyAccepted": true,
+      "privateHistoryDenied": true
+    },
+    {
+      "id": "O27",
+      "label": "930 cells retain 500 references with one request and two writes",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "lines": 30,
+      "assignedReferences": 500,
+      "ticketReferences": 500,
+      "receptionReferences": 500,
+      "sourcesUnchanged": true,
+      "counts": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 943
+      },
+      "refreshHeadReads": 1,
+      "refreshSourceReads": 0,
+      "elapsedMs": 1324,
+      "prerequisiteAndVerificationIOExcluded": true
+    },
+    {
+      "id": "O28",
+      "label": "all-unset no-op, unnumbered draft and invalid projection are guarded",
+      "status": "passed",
+      "emptySaveDenied": true,
+      "unnumberedDenied": true,
+      "invalidProjectionVariants": 5
+    },
+    {
+      "id": "O29",
+      "label": "seat and gap source records cannot use non-seat counter operation",
+      "status": "passed",
+      "unsupportedSeatAndGapChangesDenied": 4,
+      "fullSeatEditIntegrationNotTested": true
+    },
+    {
+      "id": "O30",
+      "label": "missed source edits remain detectable after a later slide",
+      "status": "passed",
+      "missedEditDetectedBySourceRevision": true,
+      "staleSourceMustRefresh": true,
+      "fullReceiverNotImplemented": true
+    }
+  ]
+}
