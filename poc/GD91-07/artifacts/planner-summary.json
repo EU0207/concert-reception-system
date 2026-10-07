@@ -1,0 +1,184 @@
+{
+  "proof": "GD91-07",
+  "scope": "pure calculation only; no persistence or authorization",
+  "sourceHashes": {
+    "../planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "planner.mjs": "36bd62805e49151bb226d5df5fa0a183143eaa2294467e0f791261c3383ac37c"
+  },
+  "endSourceHashes": {
+    "../planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "planner.mjs": "36bd62805e49151bb226d5df5fa0a183143eaa2294467e0f791261c3383ac37c"
+  },
+  "passed": 25,
+  "results": [
+    {
+      "id": "G01",
+      "name": "initial grid contains only unset cells and no assignments",
+      "status": "passed"
+    },
+    {
+      "id": "G02",
+      "name": "initial numbering horizontal forward preserves logical line names",
+      "status": "passed"
+    },
+    {
+      "id": "G03",
+      "name": "initial numbering horizontal reverse preserves logical line names",
+      "status": "passed"
+    },
+    {
+      "id": "G04",
+      "name": "initial numbering vertical forward preserves logical line names",
+      "status": "passed"
+    },
+    {
+      "id": "G05",
+      "name": "initial numbering vertical reverse preserves logical line names",
+      "status": "passed"
+    },
+    {
+      "id": "G06",
+      "name": "tail extension horizontal forward preserves occupied seats and ticket references",
+      "status": "passed",
+      "edge": "right",
+      "visualNumbers": [
+        "A-1",
+        "A-2",
+        "A-3",
+        "A-4",
+        "A-5"
+      ],
+      "protectedSeats": 3
+    },
+    {
+      "id": "G07",
+      "name": "tail extension horizontal reverse preserves occupied seats and ticket references",
+      "status": "passed",
+      "edge": "left",
+      "visualNumbers": [
+        "A-5",
+        "A-4",
+        "A-3",
+        "A-2",
+        "A-1"
+      ],
+      "protectedSeats": 3
+    },
+    {
+      "id": "G08",
+      "name": "tail extension vertical forward preserves occupied seats and ticket references",
+      "status": "passed",
+      "edge": "bottom",
+      "visualNumbers": [
+        "A-1",
+        "A-2",
+        "A-3",
+        "A-4",
+        "A-5"
+      ],
+      "protectedSeats": 3
+    },
+    {
+      "id": "G09",
+      "name": "tail extension vertical reverse preserves occupied seats and ticket references",
+      "status": "passed",
+      "edge": "top",
+      "visualNumbers": [
+        "A-5",
+        "A-4",
+        "A-3",
+        "A-2",
+        "A-1"
+      ],
+      "protectedSeats": 3
+    },
+    {
+      "id": "G10",
+      "name": "gap consumes a number while unset space and aisle do not",
+      "status": "passed"
+    },
+    {
+      "id": "G11",
+      "name": "extension starts unset and does not consume numbers",
+      "status": "passed"
+    },
+    {
+      "id": "G12",
+      "name": "repeated reverse extensions never renumber previous additions",
+      "status": "passed"
+    },
+    {
+      "id": "G13",
+      "name": "new logical line horizontal retains old line IDs and counters",
+      "status": "passed"
+    },
+    {
+      "id": "G14",
+      "name": "new logical line vertical retains old line IDs and counters",
+      "status": "passed"
+    },
+    {
+      "id": "G15",
+      "name": "manual seat does not advance automatic cursor or overwrite consumed gap",
+      "status": "passed"
+    },
+    {
+      "id": "G16",
+      "name": "collision between new automatic number and manual display number rejects whole plan",
+      "status": "passed"
+    },
+    {
+      "id": "G17",
+      "name": "independent sections may share a free name and number without merging",
+      "status": "passed"
+    },
+    {
+      "id": "G18",
+      "name": "rename and stage left top change only their own fields",
+      "status": "passed"
+    },
+    {
+      "id": "G19",
+      "name": "performance extension requires reason and marks only added seats",
+      "status": "passed"
+    },
+    {
+      "id": "G20",
+      "name": "invalid dimensions names directions line counts and IDs are rejected",
+      "status": "passed",
+      "rejectedVariants": 14
+    },
+    {
+      "id": "G21",
+      "name": "invalid extension requests reject without input changes",
+      "status": "passed",
+      "rejectedVariants": 10
+    },
+    {
+      "id": "G22",
+      "name": "automatic numbering overflow preserves original draft",
+      "status": "passed"
+    },
+    {
+      "id": "G23",
+      "name": "reinitialization and corrupted coordinates IDs or cursor are rejected",
+      "status": "passed"
+    },
+    {
+      "id": "G24",
+      "name": "900 cells and 500 occupied seats survive reverse growth to 930 cells",
+      "status": "passed",
+      "beforeCells": 900,
+      "afterCells": 930,
+      "preservedAssignments": 500,
+      "preservedTicketReferences": 500,
+      "shiftedOldCells": 900,
+      "addedSeats": 30
+    },
+    {
+      "id": "G25",
+      "name": "evaluation budget is explicit and does not become product maximum",
+      "status": "passed"
+    }
+  ]
+}
