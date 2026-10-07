@@ -1,0 +1,49 @@
+{
+  "scope": "draft stress profiles only; joint commit metadata, 900 locked-seat IDs and schema-2 version manifest; no product limit, SDK traffic, query billing or index/request budget guarantee",
+  "hashLineEndings": "LF",
+  "sourceSha256": "0d783329c317304d64ad21037a826c0e506a00ed73978a22b41666ce3c0a048e",
+  "reports": [
+    {
+      "cells": 900,
+      "seats": 900,
+      "occupants": 500,
+      "lines": 30,
+      "cellsPerLine": 30,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "unpartitionedDocumentBytes": 1774019,
+      "maxChunkDocumentBytes": 49938,
+      "totalChunkDocumentBytes": 1498140,
+      "headDocumentBytes": 323407,
+      "assignmentDocumentBytes": 52558,
+      "lockedSeatMetadataEntries": 900,
+      "historyDocumentBytes": 105730,
+      "eligibilityDocumentBytes": 18697,
+      "publicVersionDocumentBytes": 1894,
+      "storageGroups": 30,
+      "cellsPerGroup": 30,
+      "eachDocumentWithin1MiBForThisProfile": true
+    },
+    {
+      "cells": 900,
+      "seats": 900,
+      "occupants": 500,
+      "lines": 1,
+      "cellsPerLine": 900,
+      "numberCodePoints": 64,
+      "reasonCodePoints": 200,
+      "unpartitionedDocumentBytes": 1770916,
+      "maxChunkDocumentBytes": 49938,
+      "totalChunkDocumentBytes": 1498140,
+      "headDocumentBytes": 323407,
+      "assignmentDocumentBytes": 52558,
+      "lockedSeatMetadataEntries": 900,
+      "historyDocumentBytes": 105730,
+      "eligibilityDocumentBytes": 18697,
+      "publicVersionDocumentBytes": 1894,
+      "storageGroups": 30,
+      "cellsPerGroup": 30,
+      "eachDocumentWithin1MiBForThisProfile": true
+    }
+  ]
+}

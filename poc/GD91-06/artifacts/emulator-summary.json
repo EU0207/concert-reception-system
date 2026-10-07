@@ -1,0 +1,411 @@
+{
+  "project": "demo-concert-seat-gd91-06",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-07T06:49:22.494Z",
+  "hashLineEndings": "LF",
+  "sourceSha256": {
+    "../firestore.rules": "b2968ca2de0a915f2f838ee1f066062055a89472e8c0ed74b0f832bc9a5eed27",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "b5c9e554c1a10b7e95d05ed75699a8e0f88c4a1ced050385060d9cda9b850165",
+    "receiver.mjs": "41093d9789755ea26e44aa796e648deee0d3fd0b288b1c27627ce7748637f26c"
+  },
+  "scope": "joint preseeded layout and canonical assignment Rules with role preparation check; not ticket/QR, initial creation, proof issuance, SDK or IndexedDB acceptance",
+  "callsWithoutCache": {
+    "layout": {
+      "head": 9,
+      "chunk": 2,
+      "assignmentState": 4,
+      "history": 2,
+      "version": 2,
+      "commit": 19
+    },
+    "assignment": {
+      "head": 7,
+      "assignmentState": 4,
+      "history": 2,
+      "version": 2,
+      "commit": 15
+    }
+  },
+  "reports": [
+    {
+      "id": "GD91-C01",
+      "label": "four kinds of addition atomically publish the version manifest",
+      "chunks": 30,
+      "cellsPerChunk": 30,
+      "occupants": 500,
+      "requestsPerOperation": 1,
+      "writesPerOperation": 5,
+      "maskedRequestBytes": [
+        7631,
+        7631,
+        7631,
+        7638
+      ],
+      "otherChunksAndExistingAssignmentsUnchanged": true
+    },
+    {
+      "id": "GD91-C02",
+      "label": "unassigned renumber and move keep identity under global version",
+      "sameIdentity": true,
+      "assignmentsUnchanged": true
+    },
+    {
+      "id": "GD91-C03",
+      "label": "five linked documents reject every incomplete subset",
+      "rejectedSubsets": 30,
+      "currentStateAndHistoryUnchanged": true
+    },
+    {
+      "id": "GD91-C04",
+      "label": "another chunk extra history and unknown chunk cannot ride on valid head",
+      "attacks": 4,
+      "arbitraryLinkedWritesDenied": true
+    },
+    {
+      "id": "GD91-C05",
+      "label": "satellite writes cannot bypass reader revoked stopped expired or absent auth",
+      "attacks": 5,
+      "headAuthorizationRequired": true
+    },
+    {
+      "id": "GD91-C06",
+      "label": "duplicates and forged index automatic numbering or hidden changes are rejected",
+      "attacks": 8,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-C07",
+      "label": "global seat identity cannot be reused from a different chunk",
+      "attacks": 2,
+      "assignmentMapProtectsGlobalIdentity": true
+    },
+    {
+      "id": "GD91-C08",
+      "label": "occupied seat cannot be changed or implicitly released",
+      "attacks": 3,
+      "atomicRejection": true
+    },
+    {
+      "id": "GD91-C09",
+      "label": "two simultaneous different chunks still have one global winner",
+      "statuses": [
+        200,
+        403
+      ],
+      "globalConflictBoundary": true
+    },
+    {
+      "id": "GD91-C10",
+      "label": "latest assignment control and stale head or chunk version reject edit",
+      "staleSources": 4,
+      "trustedSourceRacesOnly": true
+    },
+    {
+      "id": "GD91-C11",
+      "label": "history reason marker and actual cells must agree",
+      "rejectedReasons": 3,
+      "forgedHistory": 4,
+      "multilineReasonAccepted": true
+    },
+    {
+      "id": "GD91-C12",
+      "label": "reader sees current reason but cannot fetch actor history",
+      "currentReasonVisible": true,
+      "actorHistoryDenied": true,
+      "privateIndexDenied": true
+    },
+    {
+      "id": "GD91-C13",
+      "label": "same displayed number can exist in different chunks without collision",
+      "uniquenessScopedToLine": true
+    },
+    {
+      "id": "GD91-C14",
+      "label": "reply loss uses immutable history and later direct replay cannot use previous head",
+      "replayAndOrphanAfterPreviousCommitDenied": true,
+      "sdkAndLocalRestartNotTested": true
+    },
+    {
+      "id": "GD91-C15",
+      "label": "performance isolation applies to head and every satellite write",
+      "crossPerformanceDenied": true
+    },
+    {
+      "id": "GD91-C16",
+      "label": "horizontal vertical forward and reverse partitions preserve cursor and coordinates",
+      "profiles": 4,
+      "gridExpansionAndAutomaticNumberingNotTested": true
+    },
+    {
+      "id": "GD91-C17",
+      "label": "one long line split into chunks rejects duplicate in a different chunk",
+      "cellsInOneLine": 900,
+      "chunks": 30,
+      "crossChunkDuplicateDenied": true
+    },
+    {
+      "id": "GD91-C18",
+      "label": "occupied reserved fields cannot be changed and released chunk cannot bypass head",
+      "reservedCategoryAndAvailabilityRetained": true
+    },
+    {
+      "id": "GD91-C19",
+      "label": "bootstrap reads coherent thirty chunks and assignment without private index",
+      "reads": {
+        "manifest": 2,
+        "chunk": 30,
+        "assignment": 1,
+        "jsonBytes": 663691
+      },
+      "totalDocumentReads": 33,
+      "privateHeadReads": 0
+    },
+    {
+      "id": "GD91-C20",
+      "label": "unchanged version reads one small document and no bodies or writes",
+      "reads": {
+        "manifest": 1,
+        "chunk": 0,
+        "assignment": 0,
+        "jsonBytes": 2621
+      },
+      "bodyReads": 0,
+      "receiverWrites": 0
+    },
+    {
+      "id": "GD91-C21",
+      "label": "single edit downloads one changed chunk and current assignment",
+      "reads": {
+        "manifest": 2,
+        "chunk": 1,
+        "assignment": 1,
+        "jsonBytes": 79468
+      },
+      "unchangedChunksSkipped": 29,
+      "assignmentBodyStillWhole": true
+    },
+    {
+      "id": "GD91-C22",
+      "label": "missed updates in different chunks are both recovered from version map",
+      "recoveredChanges": 2,
+      "reads": {
+        "manifest": 2,
+        "chunk": 2,
+        "assignment": 1,
+        "jsonBytes": 100312
+      },
+      "finalPointerAloneNotUsed": true
+    },
+    {
+      "id": "GD91-C23",
+      "label": "several missed edits in one chunk require only its newest snapshot",
+      "missedVersions": 3,
+      "chunkReads": 1,
+      "reconstructsCurrentStateOnly": true
+    },
+    {
+      "id": "GD91-C24",
+      "label": "update during fetch discards staging and retries against newest manifest",
+      "attempts": 2,
+      "mixedStageDiscarded": true,
+      "reads": {
+        "manifest": 4,
+        "chunk": 3,
+        "assignment": 2,
+        "jsonBytes": 179833
+      }
+    },
+    {
+      "id": "GD91-C25",
+      "label": "continuous changes stop at bounded attempts and retain old snapshot",
+      "attempts": 2,
+      "oldRevisionRetained": 1
+    },
+    {
+      "id": "GD91-C26",
+      "label": "partial download failure retains old chunks and assignments",
+      "injectedTransportFailure": true,
+      "partialStateNeverApplied": true
+    },
+    {
+      "id": "GD91-C27",
+      "label": "revoked read permission before final barrier prevents application",
+      "serverReadRevocationChecked": true,
+      "oldSnapshotRetainedButNotReceptionResumePermission": true
+    },
+    {
+      "id": "GD91-C28",
+      "label": "receiver rejects incompatible scope versions and malformed snapshots",
+      "injectedInvalidResponses": 11,
+      "crossPerformanceLocalCacheRejected": true
+    },
+    {
+      "id": "GD91-C29",
+      "label": "late older refresh cannot replace a newer completed refresh",
+      "reorderedAdapterCompletions": true,
+      "latestAppliedRevision": 3
+    },
+    {
+      "id": "GD91-C30",
+      "label": "server rejects forged public projections and version-map bypasses",
+      "forgedProjectionAttacks": 6,
+      "indexVersionAttacks": 2,
+      "protectedFieldAndNumberAttacks": 12,
+      "standaloneProjectionReplayDenied": true
+    },
+    {
+      "id": "GD91-C31",
+      "label": "public read paths exclude private index actor and operation history",
+      "privatePathsDenied": 4,
+      "crossPerformanceAndUnauthenticatedDenied": true,
+      "currentEmergencyReasonRetained": true
+    },
+    {
+      "id": "GD91-C32",
+      "label": "bootstrap failure publishes no partial snapshot",
+      "initialFailureLeavesNoUsableProjection": true,
+      "browserPersistenceNotTested": true
+    },
+    {
+      "id": "GD91-J01",
+      "label": "five hundred people commit against six hundred or nine hundred actual seats",
+      "profiles": [
+        {
+          "seats": 600,
+          "occupants": 500,
+          "writes": 4,
+          "requestJSONBytes": 165202,
+          "receiverReads": {
+            "manifest": 2,
+            "chunk": 0,
+            "assignment": 1,
+            "jsonBytes": 58629
+          }
+        },
+        {
+          "seats": 900,
+          "occupants": 500,
+          "writes": 4,
+          "requestJSONBytes": 200002,
+          "receiverReads": {
+            "manifest": 2,
+            "chunk": 0,
+            "assignment": 1,
+            "jsonBytes": 76029
+          }
+        }
+      ],
+      "geometryUnchanged": true
+    },
+    {
+      "id": "GD91-J02",
+      "label": "new seat is usable by assignment commands and occupied geometry is protected",
+      "commits": 5,
+      "newSeatAssignedThenFreed": true,
+      "swapKeepsEmergencyMark": true,
+      "ticketAndQRIntegrationNotTested": true
+    },
+    {
+      "id": "GD91-J03",
+      "label": "assignment-only refresh uses no geometry body and preserves layout revision",
+      "reads": {
+        "manifest": 2,
+        "chunk": 0,
+        "assignment": 1,
+        "jsonBytes": 58629
+      },
+      "layoutRevisionUnchanged": true
+    },
+    {
+      "id": "GD91-J04",
+      "label": "assignment needs all four documents and cannot carry geometry or extra history",
+      "rejectedSubsets": 14,
+      "geometryAndExtraHistoryDenied": true
+    },
+    {
+      "id": "GD91-J05",
+      "label": "canonical assignment rejects duplicates unknowns implicit release and seat identity changes",
+      "attacks": 8,
+      "fiveHundredOneUniqueEligiblePeopleDenied": true
+    },
+    {
+      "id": "GD91-J06",
+      "label": "small history and global metadata cannot hide unrelated assignment changes",
+      "attacks": 9,
+      "operationDomainsSeparated": true
+    },
+    {
+      "id": "GD91-J07",
+      "label": "trusted locked-seat metadata protects assignment and cannot be unlocked by command",
+      "attacks": 2,
+      "trustedMetadataMaintenanceNotTested": true
+    },
+    {
+      "id": "GD91-J08",
+      "label": "layout edit and assignment move racing for same empty seat have one winner",
+      "statuses": [
+        403,
+        200
+      ],
+      "sharedCommitBoundary": true,
+      "noAutomaticMerge": true
+    },
+    {
+      "id": "GD91-J09",
+      "label": "each operation domain rejects the other domain completed after confirmation",
+      "staleDirections": 2,
+      "globalCommitVersionProtectsBoth": true
+    },
+    {
+      "id": "GD91-J10",
+      "label": "role change requires each device preparation and downgrade rejects old preparation",
+      "stalePreparationDeniedInBothDomains": true,
+      "secondDeviceNotImplicitlyPrepared": true,
+      "downgradeImmediatelyDeniedOnline": true,
+      "proofIssuanceNotTested": true
+    },
+    {
+      "id": "GD91-J11",
+      "label": "assignment checks session proof device status and authorization",
+      "attacks": 6,
+      "humanProofAndDeviceNotInterchangeable": true
+    },
+    {
+      "id": "GD91-J12",
+      "label": "eligibility and control races reject both layout and assignment requests",
+      "latestSources": 2,
+      "bothDomainsDenied": true,
+      "sourceUpdatesTrustedOnly": true
+    },
+    {
+      "id": "GD91-J13",
+      "label": "swap reason optional before first reception and required after start including stopped state",
+      "reasonlessBeforeStartAccepted": true,
+      "blankAfterStartDenied": 3,
+      "stoppedReasonStillRequired": true,
+      "firstReceptionStartCommandNotTested": true
+    },
+    {
+      "id": "GD91-J14",
+      "label": "unknown reply uses same history and replay cannot create second assignment commit",
+      "oneCommitOnly": true,
+      "replayAndPreviousHeadReuseDenied": true,
+      "sdkAndLocalRestartNotTested": true
+    },
+    {
+      "id": "GD91-J15",
+      "label": "assignment and private history are isolated by performance and role",
+      "crossPerformanceDenied": true,
+      "receptionistHistoryDenied": true
+    },
+    {
+      "id": "GD91-J16",
+      "label": "ten-person map change is atomic and next unchanged refresh has zero body reads",
+      "changedPeople": 10,
+      "allOtherAssignmentsRetained": true,
+      "unchangedBodyReads": 0,
+      "groupAndConsecutiveSeatSelectionNotTested": true
+    }
+  ]
+}
