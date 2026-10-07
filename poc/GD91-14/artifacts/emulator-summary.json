@@ -1,0 +1,495 @@
+{
+  "project": "demo-concert-seat-gd91-14",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-07T15:32:04.222Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "b3570df43cefbb12e43a59c9b0a4c9d03293da4eac0ee18d596ad014f62a9b98",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../codec.mjs": "f04f52023c136a1d6868abd8843878c8b41e946bb4295a11c25f3c171cd002bc",
+    "emulator.mjs": "d9512fa9715bc1ce855332de778b66fc4e8bde8162e6a3d0af69e5aad1313958",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "b3570df43cefbb12e43a59c9b0a4c9d03293da4eac0ee18d596ad014f62a9b98",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../codec.mjs": "f04f52023c136a1d6868abd8843878c8b41e946bb4295a11c25f3c171cd002bc",
+    "emulator.mjs": "d9512fa9715bc1ce855332de778b66fc4e8bde8162e6a3d0af69e5aad1313958",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "scope": "single-section four-cell layout and attribute preparation, private immutable fragments, atomic counter and identity/number ledger ingestion, logical automatic Seat restoration and offset sliding; not line catalog initialization or numbering order, manual seats, full edits, multiple sections, abort/cleanup, formal auth, QR, SDK, IndexedDB or devices",
+  "reports": [
+    {
+      "id": "V01",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "up",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2396
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 950
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V02",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "down",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2318
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V03",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "left",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2168
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 950
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V04",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "right",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2168
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V05",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "up",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2396
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 950
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V06",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "down",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2318
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V07",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "left",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2168
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 950
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V08",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "right",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2168
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V09",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "up",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2396
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 950
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V10",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "down",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2318
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V11",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "left",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2168
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 950
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V12",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "right",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2168
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V13",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "up",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2396
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 950
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V14",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "down",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2318
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V15",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "left",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2168
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 950
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V16",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "right",
+      "initialization": {
+        "requests": 14,
+        "writes": 20,
+        "maxRequestBytes": 2168
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": true
+    },
+    {
+      "id": "V17",
+      "label": "cell fragment rejects malformed positions, IDs and number values",
+      "status": "passed",
+      "cellForgeriesDenied": 27
+    },
+    {
+      "id": "V18",
+      "label": "attributes reject missing seats and unapproved field overrides",
+      "status": "passed",
+      "attributeForgeriesDenied": 23,
+      "cellSourcePreserved": true
+    },
+    {
+      "id": "V19",
+      "label": "prepared fragments stay private and ingestion is atomic",
+      "status": "passed",
+      "missingAttributesBlocksIngestion": true,
+      "preparedDataPrivate": true,
+      "ingestionAndFinalHalfWritesDenied": 4,
+      "sourceImmutable": true
+    },
+    {
+      "id": "V20",
+      "label": "cross-fragment identity and consumption conflicts cannot enter counters",
+      "status": "passed",
+      "crossFragmentConflictsDeniedAtIngestion": 4,
+      "privateInvalidPreparationNotPublished": true,
+      "abortOrRebuildNotImplemented": true
+    },
+    {
+      "id": "V21",
+      "label": "ledger membership and initial head cannot be forged",
+      "status": "passed",
+      "initialHalfWritesDenied": 2,
+      "ledgerForgeriesDenied": 5,
+      "counterForgeriesDenied": 5
+    },
+    {
+      "id": "V22",
+      "label": "lost preparation, ingestion and final responses can be queried",
+      "status": "passed",
+      "savedFragmentsQueryable": true,
+      "progressResumed": true,
+      "duplicateIngestionAndFinishDenied": true,
+      "browserOutboxNotImplemented": true
+    },
+    {
+      "id": "V23",
+      "label": "parallel creation and ingestion allow one winner and control changes stop continuation",
+      "status": "passed",
+      "parallelSourceWinners": 1,
+      "parallelIngestionWinners": 1,
+      "controlChangePhasesDenied": 4
+    },
+    {
+      "id": "V24",
+      "label": "revocation blocks every preparation and publication phase",
+      "status": "passed",
+      "phaseRevocationsDenied": 20,
+      "readerCrossShowAnonymousDenied": true,
+      "deputyAllowed": true
+    },
+    {
+      "id": "V25",
+      "label": "occupied boundaries and short fragments preserve the grid",
+      "status": "passed",
+      "blockedBoundaryVariants": 16,
+      "shortDimensions": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          11
+        ]
+      ],
+      "emptyGridSlideDenied": true
+    },
+    {
+      "id": "V26",
+      "label": "custom starts, prefixes and rich Seat metadata survive restoration and slide",
+      "status": "passed",
+      "customStartAndPrefix": true,
+      "reservedAndEmergencyMetadataPreserved": true,
+      "slideReasonAbsent": true
+    },
+    {
+      "id": "V27",
+      "label": "930 cells are initialized with fewer writes and projected before two-write sliding",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "chunks": 240,
+      "attributeFragments": 240,
+      "assignedReferences": 500,
+      "initialization": {
+        "requests": 722,
+        "writes": 964,
+        "maxRequestBytes": 3835
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 949
+      },
+      "registryEntries": 1861,
+      "consumedNumberEntries": 900,
+      "registryJsonBytes": 124014,
+      "headJsonBytes": 979,
+      "sourceAndLedgersSeededByAdmin": false,
+      "prerequisiteAndVerificationIOExcluded": true
+    },
+    {
+      "id": "V28",
+      "label": "codec rejects unsupported or inconsistent logical Seats and attributes require actual seats",
+      "status": "passed",
+      "invalidLogicalSeatRejected": true,
+      "manualSeatExplicitlyUnsupported": true,
+      "unknownFieldNotSilentlyDropped": true,
+      "nonSeatAttributesDenied": 2
+    },
+    {
+      "id": "V29",
+      "label": "trusted line data still does not prove the initial numbering order",
+      "status": "passed",
+      "knownLimitation": "line catalog initialization and initial numbering order remain unproven",
+      "uniqueInRangeButReorderedNumbersAccepted": true,
+      "productionAdoptionBlocked": true
+    },
+    {
+      "id": "V30",
+      "label": "four rich cells pass but five reach the cell-validation expression limit",
+      "status": "passed",
+      "richFourCellFragmentsPassed": true,
+      "fiveCellCandidateDeniedByExpressionLimit": true,
+      "noPartialCounterOrSourceWrite": true,
+      "productionLimitNotEstablished": true
+    }
+  ]
+}
