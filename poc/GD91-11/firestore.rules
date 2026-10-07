@@ -1,0 +1,136 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-11専用。集計だけの初期保存検証。本番Rulesではない。
+    function authorized(p, edit) {
+      let d = get(/databases/$(database)/documents/initialShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/initialShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/initialShows/$(p)/roles/$(d.humanUid)).data;
+      return request.auth.token.firebase.sign_in_provider == 'anonymous' && d.deviceUid == request.auth.uid
+        && d.active && s.active && s.emailVerified && s.humanUid == d.humanUid && s.expiresAt > request.time
+        && r.active && d.preparedRoleRevision == r.revision && (!edit || r.role in ['owner', 'deputy']);
+    }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function head(p) { return get(/databases/$(database)/documents/initialShows/$(p)/head/current).data; }
+    function nextHead(p) { return getAfter(/databases/$(database)/documents/initialShows/$(p)/head/current).data; }
+    function event(p, id) { return getAfter(/databases/$(database)/documents/initialShows/$(p)/events/$(id)).data; }
+    function control(p) { return get(/databases/$(database)/documents/initialShows/$(p)/control/current).data; }
+    function fence(p, b, a, e) {
+      return a.revision == b.revision + 1 && a.operationId != b.operationId && a.operationId is string
+        && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+        && e.controlRevision == control(p).revision;
+    }
+    function initial(p, a) {
+      return a.keys().hasAll(["sectionId","sectionName","rows","columns","axis","seatOrder","stagePosition","initialNumbered","rowOffset","columnOffset","rowCounts","columnCounts","nonEmptyCount","sourceRevision","revision","operationId","status","cursor","lastChunk","controlRevision","initializationId"]) && a.keys().hasOnly(["sectionId","sectionName","rows","columns","axis","seatOrder","stagePosition","initialNumbered","rowOffset","columnOffset","rowCounts","columnCounts","nonEmptyCount","sourceRevision","revision","operationId","status","cursor","lastChunk","controlRevision","initializationId"])
+        && a.sectionId is string && a.sectionName is string && a.sectionName.size() > 0
+        && a.rows is int && a.columns is int && a.rows > 0 && a.columns > 0 && a.rows <= 100 && a.columns <= 100
+        && a.axis in ['horizontal', 'vertical'] && a.seatOrder in ['forward', 'reverse'] && a.stagePosition in ['top', 'left']
+        && a.initialNumbered is bool && a.rowOffset == 0 && a.columnOffset == 0
+        && a.rowCounts == {} && a.columnCounts == {} && a.nonEmptyCount == 0
+        && a.status == 'building' && a.cursor == 0 && a.lastChunk == '' && a.sourceRevision == 0 && a.revision == 0 && a.operationId == ''
+        && a.initializationId is string && a.initializationId.size() > 0 && a.controlRevision == control(p).revision;
+    }
+    function occupied(c, j) { return j < c.cells.size() && c.cells[j].kind != 'unset' ? 1 : 0; }
+    function validCell(v, id, row, column) {
+      let kind = v.kind;
+      let seatId = v.seatId;
+      let consumed = v.consumedNumber;
+      return v.keys().hasOnly(['cellId', 'row', 'column', 'kind', 'seatId', 'consumedNumber'])
+        && v.cellId == id && id is string && id.size() > 0 && v.row == row && v.column == column
+        && kind in ['unset', 'seat', 'gap', 'space', 'aisle']
+        && (kind == 'seat' ? seatId is string && seatId.size() > 0 : seatId == '')
+        && (kind in ['unset', 'space', 'aisle'] ? consumed == null
+          : consumed == null || (consumed is int && consumed > 0));
+    }
+    function validSlot(c, j) {
+      return j >= c.cells.size() || validCell(c.cells[j], c.cellIds[j], c.row, c.startColumn + j);
+    }
+    function validChunk(b, c, id) {
+      return c.keys().hasAll(['row', 'startColumn', 'cells', 'cellIds']) && c.keys().hasOnly(['row', 'startColumn', 'cells', 'cellIds'])
+        && c.row is int && c.startColumn is int && c.row >= 0 && c.row < b.rows && c.startColumn >= 0 && c.startColumn < b.columns
+        && c.row * b.columns + c.startColumn == b.cursor && id == string(c.row) + '-' + string(c.startColumn)
+        && c.cells is list && c.cellIds is list && c.cells.size() == (b.columns - c.startColumn < 5 ? b.columns - c.startColumn : 5)
+        && c.cellIds.size() == c.cells.size() && c.cellIds.toSet().size() == c.cells.size()
+        && validSlot(c, 0) && validSlot(c, 1) && validSlot(c, 2) && validSlot(c, 3) && validSlot(c, 4);
+    }
+    function columnDelta(b, a, c, j) {
+      let key = string(c.startColumn + j);
+      return a.columnCounts.get(key, 0) == b.columnCounts.get(key, 0) + occupied(c, j)
+        && (j < c.cells.size() || a.columnCounts.keys().hasAny([key]) == b.columnCounts.keys().hasAny([key]));
+    }
+    function ingest(p, b, a) {
+      let c = getAfter(/databases/$(database)/documents/initialShows/$(p)/chunks/$(a.lastChunk)).data;
+      let delta = occupied(c, 0) + occupied(c, 1) + occupied(c, 2) + occupied(c, 3) + occupied(c, 4);
+      let row = string(c.row);
+      return b.status == 'building' && b.cursor < b.rows * b.columns
+        && !exists(/databases/$(database)/documents/initialShows/$(p)/chunks/$(a.lastChunk))
+        && a.diff(b).affectedKeys().hasOnly(['cursor', 'lastChunk', 'nonEmptyCount', 'rowCounts', 'columnCounts'])
+        && a.cursor == b.cursor + c.cells.size() && a.nonEmptyCount == b.nonEmptyCount + delta
+        && a.rowCounts.diff(b.rowCounts).affectedKeys().hasOnly([row]) && a.rowCounts.get(row, 0) == b.rowCounts.get(row, 0) + delta
+        && a.columnCounts.diff(b.columnCounts).affectedKeys().hasOnly([string(c.startColumn + 0), string(c.startColumn + 1), string(c.startColumn + 2), string(c.startColumn + 3), string(c.startColumn + 4)])
+        && columnDelta(b, a, c, 0) && columnDelta(b, a, c, 1) && columnDelta(b, a, c, 2) && columnDelta(b, a, c, 3) && columnDelta(b, a, c, 4);
+    }
+    function finish(p, b, a) {
+      let e = event(p, a.operationId);
+      return b.status == 'building' && b.cursor == b.rows * b.columns && a.status == 'countReady'
+        && a.diff(b).affectedKeys().hasOnly(['status', 'sourceRevision', 'revision', 'operationId'])
+        && a.sourceRevision == 1 && a.revision == 1 && a.operationId != ''
+        && e.kind == 'initialCounterProof' && e.deviceUid == request.auth.uid && e.initializationId == b.initializationId
+        && e.controlRevision == b.controlRevision;
+    }
+    function validSlide(b, a, e) {
+      let row = ((e.dr < 0 ? 0 : b.rows - 1) - b.rowOffset + b.rows) % b.rows;
+      let column = ((e.dc < 0 ? 0 : b.columns - 1) - b.columnOffset + b.columns) % b.columns;
+      return b.status == 'countReady' && b.initialNumbered && b.nonEmptyCount > 0 && e.dr is int && e.dc is int
+        && ((e.dr in [-1, 1] && e.dc == 0) || (e.dc in [-1, 1] && e.dr == 0))
+        && a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'rowOffset', 'columnOffset'])
+        && a.rowOffset == (b.rowOffset + e.dr + b.rows) % b.rows && a.columnOffset == (b.columnOffset + e.dc + b.columns) % b.columns
+        && (e.dr != 0 ? b.rowCounts.get(string(row), 0) == 0 : b.columnCounts.get(string(column), 0) == 0);
+    }
+    function slideHead(p, b, a) {
+      let e = event(p, a.operationId);
+      return fence(p, b, a, e) && e.kind == 'slide' && validSlide(b, a, e);
+    }
+    function updateHead(p, b, a) {
+      return b.status == 'building' ? b.controlRevision == control(p).revision && (a.status == 'building' ? ingest(p, b, a) : finish(p, b, a))
+        : slideHead(p, b, a);
+    }
+    function createChunk(p, id) {
+      let b = head(p);
+      let a = nextHead(p);
+      return b.status == 'building' && a.status == 'building' && a.lastChunk == id && a.cursor > b.cursor
+        && validChunk(b, request.resource.data, id);
+    }
+    function createEvent(p, id, e) {
+      let b = head(p);
+      let a = nextHead(p);
+      return a.operationId == id && ((e.kind == 'initialCounterProof' && b.status == 'building' && a.status == 'countReady'
+          && e.keys().hasOnly(['kind', 'deviceUid', 'initializationId', 'controlRevision']))
+        || (e.kind == 'slide' && b.status == 'countReady' && a.status == 'countReady' && a.revision == b.revision + 1
+          && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+          && e.keys().hasOnly(['kind', 'deviceUid', 'baseRevision', 'revision', 'controlRevision', 'dr', 'dc'])));
+    }
+    match /initialShows/{p} {
+      match /{privateCollection}/{id} {
+        allow get: if privateCollection in ['devices', 'sessions', 'roles', 'control'] && manager(p);
+        allow write: if false;
+      }
+      match /head/current {
+        allow get: if manager(p) || active(p) && resource.data.status == 'countReady';
+        allow create: if manager(p) && initial(p, request.resource.data);
+        allow update: if manager(p) && updateHead(p, resource.data, request.resource.data);
+      }
+      match /chunks/{id} {
+        allow get: if manager(p) || active(p) && head(p).status == 'countReady';
+        allow create: if manager(p) && createChunk(p, id);
+      }
+      match /lines/{id} { allow get: if active(p) && head(p).status == 'countReady'; }
+      match /seatReferences/current { allow get: if active(p) && head(p).status == 'countReady'; }
+      match /events/{id} {
+        allow get: if manager(p);
+        allow create: if manager(p) && createEvent(p, id, request.resource.data);
+      }
+    }
+  }
+}
