@@ -134,7 +134,7 @@
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約と試験DD91-T01～45を追跡する。CONF-074の保存境界とCONF-075の全体スライドを扱う。GD91-01～08の限定結果を集約。スライドは計算だけ確認し、物理方式・依存契約の確定は未完了 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約と試験DD91-T01～45を追跡する。CONF-074の保存境界とCONF-075の全体スライドを扱う。GD91-01～09の限定結果を集約。スライドの逐次世代保存は要求・書込み数が多く採用非推奨。物理方式・依存契約の確定は未完了 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 

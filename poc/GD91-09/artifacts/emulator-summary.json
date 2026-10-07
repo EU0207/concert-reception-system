@@ -1,0 +1,325 @@
+{
+  "project": "demo-concert-seat-gd91-09",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-07T11:22:21.234Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "bdcfcbe64aa3304a36cbc23f8dc580ddf28ff49fcd65b387b7c094a21bf4c9a0",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "b501d2c75516e7973653ccc9b693d79daa81033877f50924daaf4bbf242c8c9f",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "bdcfcbe64aa3304a36cbc23f8dc580ddf28ff49fcd65b387b7c094a21bf4c9a0",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "b501d2c75516e7973653ccc9b693d79daa81033877f50924daaf4bbf242c8c9f",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "scope": "preseeded single-section slide generation; not initial creation, growth, multi-section, real QR, complete authorization, calendar, SDK or IndexedDB",
+  "reports": [
+    {
+      "id": "G01",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "up",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1944
+      }
+    },
+    {
+      "id": "G02",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "down",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1943
+      }
+    },
+    {
+      "id": "G03",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "left",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1944
+      }
+    },
+    {
+      "id": "G04",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "right",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1943
+      }
+    },
+    {
+      "id": "G05",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "up",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1944
+      }
+    },
+    {
+      "id": "G06",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "down",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1943
+      }
+    },
+    {
+      "id": "G07",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "left",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1944
+      }
+    },
+    {
+      "id": "G08",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "right",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1943
+      }
+    },
+    {
+      "id": "G09",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "up",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1944
+      }
+    },
+    {
+      "id": "G10",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "down",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1943
+      }
+    },
+    {
+      "id": "G11",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "left",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1944
+      }
+    },
+    {
+      "id": "G12",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "right",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1943
+      }
+    },
+    {
+      "id": "G13",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "up",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1946
+      }
+    },
+    {
+      "id": "G14",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "down",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1943
+      }
+    },
+    {
+      "id": "G15",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "left",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1946
+      }
+    },
+    {
+      "id": "G16",
+      "label": "direction and numbering profiles publish matching records",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "right",
+      "records": 20,
+      "counts": {
+        "requests": 23,
+        "writes": 45,
+        "maxRequestBytes": 1945
+      }
+    },
+    {
+      "id": "G17",
+      "label": "cannot skip validation or alter command, records and line correspondence",
+      "status": "passed",
+      "invalidCommands": 8,
+      "skippedOrChangedProgress": 4,
+      "cellMutations": 15,
+      "detachedOrWrongOrdinal": 3,
+      "lineMutations": 4
+    },
+    {
+      "id": "G18",
+      "label": "every occupied boundary type prevents publication",
+      "status": "passed",
+      "boundaryTypesRejected": 4,
+      "partialCandidateInvisible": true
+    },
+    {
+      "id": "G19",
+      "label": "all incomplete publication subsets and forged event rejected",
+      "status": "passed",
+      "rejectedSubsets": 6,
+      "forgedHistoryOrHead": 5
+    },
+    {
+      "id": "G20",
+      "label": "interruption, read isolation, immutable candidate and unknown reply",
+      "status": "passed",
+      "oldVersionDuringPreparation": true,
+      "candidatePrivateAndImmutable": true,
+      "sameOperationResume": true,
+      "simulatedLostReply": true,
+      "doublePublicationDenied": true,
+      "indexedDBNotTested": true
+    },
+    {
+      "id": "G21",
+      "label": "stale concurrent preparation cannot overwrite winner",
+      "status": "passed",
+      "independentPreparedCandidates": 2,
+      "winnerPublished": 1,
+      "stalePublicationDenied": true
+    },
+    {
+      "id": "G22",
+      "label": "revocation and control changes fence preparation and publication",
+      "status": "passed",
+      "phaseAndRevocationVariants": 8,
+      "latestControlRequired": true,
+      "calendarAndFirstStartIssuanceNotTested": true
+    },
+    {
+      "id": "G23",
+      "label": "role and performance separation and direct head forgery",
+      "status": "passed",
+      "receptionistAndCrossPerformanceAndAnonymousDenied": true,
+      "unvalidatedHeadDenied": true,
+      "deputyAccepted": true
+    },
+    {
+      "id": "G24",
+      "label": "930 cells and 900 seats retain 500 references without reason",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "lines": 30,
+      "assignedReferences": 500,
+      "ticketReferences": 500,
+      "receptionReferences": 500,
+      "noSlideReason": true,
+      "counts": {
+        "requests": 963,
+        "writes": 1925,
+        "maxRequestBytes": 1943
+      },
+      "elapsedMs": 15846,
+      "prerequisiteWritesExcluded": true
+    }
+  ]
+}
