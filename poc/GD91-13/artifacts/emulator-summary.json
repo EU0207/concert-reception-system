@@ -1,0 +1,463 @@
+{
+  "project": "demo-concert-seat-gd91-13",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-07T14:52:52.955Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "e8f9c8bdb12d8c7f94b75f89c99bfb920e8ffb0fa8f12e65d84c5be9804cacfd",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "d39c64afba5ec7ad8f789cf163df98ed2b95b6be2bab226b4b5b83aa63eedd58",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "e8f9c8bdb12d8c7f94b75f89c99bfb920e8ffb0fa8f12e65d84c5be9804cacfd",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "d39c64afba5ec7ad8f789cf163df98ed2b95b6be2bab226b4b5b83aa63eedd58",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71"
+  },
+  "scope": "single-section automatic Seat records stored with cells, trusted line catalog correspondence, unique IDs and consumed numbers with initial counters and offsets; single-cell production storage not recommended; not catalog initialization or numbering sequence, manual seats, full edits, multiple sections, QR, SDK, IndexedDB, production receiver or devices",
+  "reports": [
+    {
+      "id": "S01",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "up",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2660
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 956
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S02",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "down",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2563
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S03",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "left",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2588
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 956
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S04",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "right",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2588
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S05",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "up",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2660
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 956
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S06",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "down",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2635
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S07",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "left",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2635
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 956
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S08",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "right",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2610
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S09",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "up",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2660
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 956
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S10",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "down",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2563
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S11",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "left",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2588
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 956
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S12",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "right",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2588
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S13",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "up",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2712
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 956
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S14",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "down",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2685
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S15",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "left",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2713
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 956
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S16",
+      "label": "automatic Seat records restore and offset sliding preserves all references",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "right",
+      "initialization": {
+        "requests": 18,
+        "writes": 52,
+        "maxRequestBytes": 2713
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "trustedLineCatalogSeededByAdmin": true
+    },
+    {
+      "id": "S17",
+      "label": "missing or mismatched Seat records and field forgeries are denied",
+      "status": "passed",
+      "previousGD12I35GapClosedForAutomaticSeats": true,
+      "forgedSeatVariantsDenied": 40
+    },
+    {
+      "id": "S18",
+      "label": "non-seat records and duplicate number consumption are denied",
+      "status": "passed",
+      "duplicateConsumptionVariantsDenied": 2,
+      "nonSeatAndGapForgeriesDenied": 3
+    },
+    {
+      "id": "S19",
+      "label": "source, summary and both ledgers are atomic and private",
+      "status": "passed",
+      "partialThreeWriteSubsetsDenied": 6,
+      "initialAndFinalHalfWritesDenied": 4,
+      "ledgerForgeriesDenied": 5,
+      "identityReuseDenied": 4,
+      "privateDuringBuild": true
+    },
+    {
+      "id": "S20",
+      "label": "saved progress, lost responses and racing requests preserve state",
+      "status": "passed",
+      "progressResumed": true,
+      "duplicateChunkAndFinalCommitDenied": true,
+      "lostResponseQueryable": true,
+      "controlRevisionChecked": true,
+      "browserOutboxNotImplemented": true
+    },
+    {
+      "id": "S21",
+      "label": "revoked devices and roles cannot initialize, continue or finish",
+      "status": "passed",
+      "phaseRevocationsDenied": 12,
+      "readerCrossShowAnonymousDenied": true,
+      "deputyAllowed": true
+    },
+    {
+      "id": "S22",
+      "label": "occupied boundaries and empty grids still refuse sliding",
+      "status": "passed",
+      "blockedBoundaryVariants": 16,
+      "emptyGridSlideDenied": true
+    },
+    {
+      "id": "S23",
+      "label": "trusted catalog binding, custom starts and Seat metadata are preserved",
+      "status": "passed",
+      "customStartAndPrefix": true,
+      "reservedMetadataAndOldEmergencyReasonPreserved": true,
+      "catalogClientEditAndMissingLineDenied": true,
+      "slideReasonAbsent": true
+    },
+    {
+      "id": "S24",
+      "label": "930 source cells and 900 Seats restore before two-write sliding",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "chunks": 930,
+      "assignedReferences": 500,
+      "initialization": {
+        "requests": 932,
+        "writes": 2794,
+        "maxRequestBytes": 4030
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 2,
+        "maxRequestBytes": 955
+      },
+      "registryEntries": 1861,
+      "consumedNumberEntries": 900,
+      "registryJsonBytes": 124014,
+      "headJsonBytes": 979,
+      "seatsCellsAndLedgersSeededByAdmin": false,
+      "prerequisiteAndVerificationIOExcluded": true
+    },
+    {
+      "id": "S25",
+      "label": "trusted next-number data does not prove the initial numbering sequence",
+      "status": "passed",
+      "knownLimitation": "trusted line catalog generation and automatic numbering order are not proven",
+      "uniqueInRangeButReorderedNumbersAccepted": true,
+      "productionAdoptionBlocked": true
+    },
+    {
+      "id": "S26",
+      "label": "two, three and five rich cells reach the Rules expression limit atomically",
+      "status": "passed",
+      "capacities": [
+        {
+          "chunkSize": 2,
+          "status": 403,
+          "expressionLimit": true,
+          "noPartialWrite": true
+        },
+        {
+          "chunkSize": 3,
+          "status": 403,
+          "expressionLimit": true,
+          "noPartialWrite": true
+        },
+        {
+          "chunkSize": 5,
+          "status": 403,
+          "expressionLimit": true,
+          "noPartialWrite": true
+        }
+      ],
+      "singleCellProofPassed": true,
+      "naiveSingleCellProductionAdoptionNotRecommended": true
+    }
+  ]
+}
