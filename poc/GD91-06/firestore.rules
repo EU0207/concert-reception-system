@@ -1,0 +1,196 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 個別構成編集の隔離検証。初期構成と本人証跡の発行は対象外。
+    function authorized(p, requireManager) {
+      let d = get(/databases/$(database)/documents/partitionShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/partitionShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/partitionShows/$(p)/roles/$(d.humanUid)).data;
+      return d.deviceUid == request.auth.uid && d.active == true
+        && request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && s.humanUid == d.humanUid && s.emailVerified == true
+        && s.active == true && s.expiresAt > request.time && r.active == true
+        && (!requireManager || (r.role in ['owner', 'deputy'] && d.preparedRoleRevision == r.revision));
+    }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+
+
+    function changed(a, b, ids) { return b.diff(a).affectedKeys() == ids.toSet(); }
+    function marker(s, h, op) {
+      return s.emergencyChange == {'kind': h.kind, 'operationId': op, 'reason': h.reason};
+    }
+    function numberShape(n) {
+      return n is string && n.matches('\\S([^\\r\\n]*\\S)?') && n.size() <= 64;
+    }
+    function seatShape(s) {
+      return s.keys().hasOnly(['cellId', 'lineId', 'displayNumber', 'numberingMode', 'category', 'usable', 'reservedLabel', 'emergencyChange'])
+        && s.cellId is string && s.lineId is string && numberShape(s.displayNumber)
+        && s.numberingMode in ['automatic', 'manual'] && s.category in ['general', 'reserved', 'special']
+        && s.usable is bool && s.reservedLabel is string;
+    }
+    function toSeat(old, next, id) {
+      return old.kind in ['unset', 'gap', 'space', 'aisle'] && old.seatId == ''
+        && next.diff(old).affectedKeys().hasOnly(['kind', 'seatId']) && next.kind == 'seat' && next.seatId == id;
+    }
+    function numberChange(b, a, h, oldKey, newKey) {
+      return b.numberOwners.get(newKey, '') == '' && a.numberOwners[newKey] == h.seatId
+        && changed(b.numberOwners, a.numberOwners, h.kind == 'add' ? [newKey] : [oldKey, newKey])
+        && (h.kind == 'add' || (b.numberOwners[oldKey] == h.seatId && !a.numberOwners.keys().hasAny([oldKey])));
+    }
+    function addition(b, a, h, next, bh, ah) {
+      let cell = b.cells[h.targetCell];
+      let key = next.lineId + '|' + next.displayNumber;
+      return !b.seats.keys().hasAny([h.seatId]) && h.beforeSeat == null
+        && next.cellId == h.targetCell && next.lineId == cell.lineId && next.numberingMode == 'manual'
+        && next.category == 'general' && next.usable == true && next.reservedLabel == ''
+        && changed(b.cells, a.cells, [h.targetCell]) && toSeat(cell, a.cells[h.targetCell], h.seatId)
+        && numberChange(bh, ah, h, '', key);
+    }
+    function editExisting(b, a, h, next, bh, ah) {
+      let old = b.seats[h.seatId];
+      let oldKey = old.lineId + '|' + old.displayNumber;
+      let newKey = next.lineId + '|' + next.displayNumber;
+      return h.beforeSeat == old && next.lineId == old.lineId
+        && (
+          (h.kind == 'renumber' && next.cellId == old.cellId && h.targetCell == old.cellId && h.sourceCell == old.cellId
+            && next.diff(old).affectedKeys().hasOnly(['displayNumber', 'numberingMode', 'emergencyChange'])
+            && next.numberingMode == 'manual' && numberShape(next.displayNumber) && next.displayNumber != old.displayNumber
+            && a.cells == b.cells && numberChange(bh, ah, h, oldKey, newKey))
+          || (h.kind == 'move' && h.sourceCell == old.cellId && h.sourceCell != h.targetCell
+            && next.cellId == h.targetCell && next.lineId == b.cells[h.targetCell].lineId
+            && next.diff(old).affectedKeys().hasOnly(['cellId', 'emergencyChange'])
+            && b.cells[h.sourceCell].kind == 'seat' && b.cells[h.sourceCell].seatId == h.seatId
+            && a.cells[h.sourceCell].kind == 'unset' && a.cells[h.sourceCell].seatId == ''
+            && a.cells[h.sourceCell].diff(b.cells[h.sourceCell]).affectedKeys().hasOnly(['kind', 'seatId'])
+            && toSeat(b.cells[h.targetCell], a.cells[h.targetCell], h.seatId)
+            && changed(b.cells, a.cells, [h.sourceCell, h.targetCell]) && ah.numberOwners == bh.numberOwners)
+        );
+    }
+    function cellHistory(b, a, h) {
+      return h.beforeTarget == b.cells[h.targetCell] && h.afterTarget == a.cells[h.targetCell]
+        && (h.kind == 'add'
+          ? h.sourceCell == '' && h.beforeSource == null && h.afterSource == null
+          : h.beforeSource == b.cells[h.sourceCell] && h.afterSource == a.cells[h.sourceCell]);
+    }
+    function validChunk(b, a, h, sb, sa, bh, ah) {
+      let next = a.seats[h.seatId];
+      return a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'seats', 'cells'])
+        && a.revision is int && a.revision == b.revision + 1 && a.operationId == ah.operationId
+        && h.baseRevision == b.revision && h.revision == a.revision
+        && h.chunkId == a.chunkId && h.baseAssignmentRevision == sb.revision
+        && sb.assignments.get(h.seatId, '') == '' && sa.assignments[h.seatId] == ''
+        && (h.kind == 'add'
+          ? !sb.assignments.keys().hasAny([h.seatId]) && changed(sb.assignments, sa.assignments, [h.seatId])
+          : sb.assignments.keys().hasAll([h.seatId]) && sa.assignments == sb.assignments)
+        && a.cells.keys() == b.cells.keys() && changed(b.seats, a.seats, [h.seatId])
+        && h.afterSeat == next && cellHistory(b, a, h) && marker(next, h, ah.operationId)
+        // 既存席は変更許可項目以外の同一性で保護し、新規席だけ全項目を検査する。
+        && (h.kind == 'add' ? seatShape(next) && addition(b, a, h, next, bh, ah) : editExisting(b, a, h, next, bh, ah));
+    }
+    function publicProjection(p, a, sa) {
+      return { 'schemaVersion': 2, 'performanceId': p, 'revision': a.revision, 'layoutRevision': a.layoutRevision,
+        'operationId': a.operationId, 'assignmentRevision': sa.revision, 'controlRevision': sa.controlRevision,
+        'sectionId': a.sectionId, 'rows': a.rows, 'columns': a.columns,
+        'axis': a.axis, 'reverse': a.reverse, 'stagePosition': a.stagePosition, 'chunkVersions': a.chunkVersions };
+    }
+    function validLayout(p, b, a, sb, sa, h) {
+      let cb = get(/databases/$(database)/documents/partitionShows/$(p)/chunks/$(a.chunkId)).data;
+      let ca = getAfter(/databases/$(database)/documents/partitionShows/$(p)/chunks/$(a.chunkId)).data;
+      return a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'domain', 'chunkId', 'numberOwners', 'chunkVersions', 'layoutRevision'])
+        && a.layoutRevision == b.layoutRevision + 1
+        && changed(b.chunkVersions, a.chunkVersions, [a.chunkId]) && a.chunkVersions[a.chunkId] == ca.revision
+        && a.chunkVersions.keys() == b.chunkVersions.keys()
+        && a.chunkIds.hasAny([a.chunkId]) && cb.chunkId == a.chunkId && cb.sectionId == a.sectionId
+        && h.keys().hasOnly(['domain', 'baseCommitRevision', 'commitRevision', 'kind', 'deviceUid', 'baseLayoutRevision', 'layoutRevision', 'chunkId', 'baseRevision', 'revision', 'baseAssignmentRevision', 'controlRevision', 'seatId', 'sourceCell', 'targetCell', 'reason', 'beforeSeat', 'afterSeat', 'beforeSource', 'afterSource', 'beforeTarget', 'afterTarget'])
+        && h.kind in ['add', 'renumber', 'move'] && h.baseLayoutRevision == b.layoutRevision && h.layoutRevision == a.layoutRevision
+        && h.reason is string && h.reason.matches('(?s).*\\S.*')
+        && validChunk(cb, ca, h, sb, sa, b, a);
+    }
+    function occupied(assignments) { return assignments.values().removeAll(['']); }
+    function smallHistory(h, before, after) {
+      let changes = after.diff(before).affectedKeys();
+      return h.keys().hasOnly(['domain', 'baseCommitRevision', 'commitRevision', 'mode', 'kind', 'deviceUid', 'revision', 'baseRevision', 'reason', 'seat1', 'seat2', 'before1', 'before2', 'after1', 'after2', 'controlRevision', 'baseLayoutRevision', 'layoutRevision'])
+        && h.seat1 is string && h.seat2 is string && h.seat1 != h.seat2
+        && before.keys().hasAll([h.seat1]) && (h.seat2 == '' || before.keys().hasAll([h.seat2]))
+        && changes == [h.seat1, h.seat2].removeAll(['']).toSet()
+        && h.before1 == before[h.seat1] && h.after1 == after[h.seat1]
+        && h.before2 == before.get(h.seat2, '') && h.after2 == after.get(h.seat2, '')
+        && ((h.kind == 'assign' && h.seat2 == '' && h.before1 == '' && h.after1 != '')
+          || (h.kind == 'move' && h.seat2 != '' && h.before1 != '' && h.after1 == '' && h.before2 == '' && h.after2 == h.before1)
+          || (h.kind == 'swap' && h.seat2 != '' && h.before1 != '' && h.before2 != '' && h.after1 == h.before2 && h.after2 == h.before1));
+    }
+    function validAssignment(b, a, sb, sa, h, control) {
+      let changes = sa.assignments.diff(sb.assignments).affectedKeys();
+      return a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'domain'])
+        && sa.assignments.keys() == sb.assignments.keys() && changes.size() > 0 && !changes.hasAny(b.lockedSeatIds)
+        && occupied(sa.assignments).toSet().hasAll(occupied(sb.assignments))
+        && h.baseRevision == sb.revision && h.revision == sa.revision
+        && h.baseLayoutRevision == b.layoutRevision && h.layoutRevision == a.layoutRevision
+        && h.reason is string && (control.firstReceptionStartedAt == null || h.reason.matches('(?s).*\\S.*'))
+        && (h.mode == 'small' ? smallHistory(h, sb.assignments, sa.assignments)
+          : h.mode == 'bulk' && h.kind == 'assign'
+            && h.keys().hasOnly(['domain', 'baseCommitRevision', 'commitRevision', 'mode', 'kind', 'deviceUid', 'revision', 'baseRevision', 'reason', 'before', 'after', 'controlRevision', 'baseLayoutRevision', 'layoutRevision'])
+            && h.before == sb.assignments && h.after == sa.assignments);
+    }
+    function validHead(p, b, a) {
+      let sb = get(/databases/$(database)/documents/partitionShows/$(p)/assignmentState/current).data;
+      let sa = getAfter(/databases/$(database)/documents/partitionShows/$(p)/assignmentState/current).data;
+      let h = getAfter(/databases/$(database)/documents/partitionShows/$(p)/operations/$(a.operationId)).data;
+      let control = get(/databases/$(database)/documents/partitionShows/$(p)/control/current).data;
+      return a.keys() == b.keys() && a.revision is int && a.revision == b.revision + 1
+        && a.operationId is string && a.operationId.size() > 0 && h.domain == a.domain
+        && h.deviceUid == request.auth.uid && h.baseCommitRevision == b.revision && h.commitRevision == a.revision
+        && h.controlRevision == control.revision
+        && sa.keys() == sb.keys() && sa.diff(sb).affectedKeys().hasOnly(['revision', 'operationId', 'catalogRevision', 'eligibilityRevision', 'controlRevision', 'assignments'])
+        && sa.revision is int && sa.revision == sb.revision + 1 && sa.operationId == a.operationId
+        && sb.catalogRevision == b.layoutRevision && sa.catalogRevision == a.layoutRevision && sa.controlRevision == control.revision
+        && (h.domain == 'layout' ? validLayout(p, b, a, sb, sa, h)
+          : h.domain == 'assignment' && validAssignment(b, a, sb, sa, h, control));
+    }
+    // head→割当表→軽量版→headの検証を同じ要求で閉じ、別要求への便乗を拒否する。
+    function validStateLink(p, sa) {
+      let b = get(/databases/$(database)/documents/partitionShows/$(p)/head/current).data;
+      let a = getAfter(/databases/$(database)/documents/partitionShows/$(p)/head/current).data;
+      let published = getAfter(/databases/$(database)/documents/partitionShows/$(p)/versions/current).data;
+      let eligible = get(/databases/$(database)/documents/partitionShows/$(p)/eligibility/current).data;
+      let values = occupied(sa.assignments);
+      return request.auth != null && a.revision == b.revision + 1 && a.operationId == sa.operationId
+        && published == publicProjection(p, a, sa) && sa.eligibilityRevision == eligible.revision
+        && values.size() <= 500 && values.size() == values.toSet().size() && values.toSet().hasOnly(eligible.attendeeIds);
+    }
+    function followsHead(p, op, chunkId, checkChunk) {
+      let b = get(/databases/$(database)/documents/partitionShows/$(p)/head/current).data;
+      let a = getAfter(/databases/$(database)/documents/partitionShows/$(p)/head/current).data;
+      return request.auth != null && a.revision == b.revision + 1 && a.operationId == op
+        && (!checkChunk || (a.domain == 'layout' && a.chunkId == chunkId));
+    }
+    match /partitionShows/{p} {
+      match /devices/{id} { allow get: if manager(p); }
+      match /sessions/{id} { allow get: if manager(p); }
+      match /roles/{id} { allow get: if manager(p); }
+      match /control/current { allow get: if manager(p); }
+      match /eligibility/current { allow get: if manager(p); }
+      match /versions/current {
+        allow get: if active(p);
+        allow update: if followsHead(p, request.resource.data.operationId, '', false);
+      }
+      match /head/current {
+        allow get: if manager(p);
+        allow update: if manager(p) && validHead(p, resource.data, request.resource.data);
+      }
+      match /chunks/{chunkId} {
+        allow get: if active(p);
+        allow update: if followsHead(p, request.resource.data.operationId, chunkId, true);
+      }
+      match /assignmentState/current {
+        allow get: if active(p);
+        allow update: if validStateLink(p, request.resource.data);
+      }
+      match /operations/{op} {
+        allow get: if manager(p);
+        allow create: if followsHead(p, op, '', false);
+      }
+    }
+  }
+}
