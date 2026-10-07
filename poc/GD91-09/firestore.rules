@@ -1,0 +1,117 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-09専用。旧世代の完全性と本人証跡は前提投入し、本番Rulesへ流用しない。
+    function authorized(p, edit) {
+      let d = get(/databases/$(database)/documents/slideShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/slideShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/slideShows/$(p)/roles/$(d.humanUid)).data;
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && d.deviceUid == request.auth.uid && d.active && s.active && s.emailVerified
+        && s.humanUid == d.humanUid && s.expiresAt > request.time && r.active
+        && d.preparedRoleRevision == r.revision && (!edit || r.role in ['owner', 'deputy']);
+    }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function head(p) { return get(/databases/$(database)/documents/slideShows/$(p)/head/current).data; }
+    function nextHead(p) { return getAfter(/databases/$(database)/documents/slideShows/$(p)/head/current).data; }
+    function control(p) { return get(/databases/$(database)/documents/slideShows/$(p)/control/current).data; }
+    function op(p, id) { return get(/databases/$(database)/documents/slideShows/$(p)/operations/$(id)).data; }
+    function nextOp(p, id) { return getAfter(/databases/$(database)/documents/slideShows/$(p)/operations/$(id)).data; }
+    function event(p, id) { return getAfter(/databases/$(database)/documents/slideShows/$(p)/events/$(id)).data; }
+    function createOperation(p, a) {
+      let h = head(p);
+      return a.keys().hasOnly(['kind', 'deviceUid', 'baseGeneration', 'baseRevision', 'controlRevision', 'dr', 'dc', 'processed', 'phase'])
+        && a.kind == 'slide' && a.deviceUid == request.auth.uid
+        && a.baseGeneration == h.generation && a.baseRevision == h.revision
+        && a.controlRevision == control(p).revision && a.processed == 0 && a.phase == 'preparing'
+        && a.dr is int && a.dc is int
+        && ((a.dr in [-1, 1] && a.dc == 0) || (a.dc in [-1, 1] && a.dr == 0));
+    }
+    function currentBase(p, a, h) {
+      return a.deviceUid == request.auth.uid && a.baseGeneration == h.generation
+        && a.baseRevision == h.revision && a.controlRevision == control(p).revision;
+    }
+    function cellMatches(h, a, before, after) {
+      let row = before.row + a.dr;
+      let column = before.column + a.dc;
+      let inside = row >= 0 && row < h.rows && column >= 0 && column < h.columns;
+      return before.type == 'cell' && after.diff(before).affectedKeys().hasOnly(['row', 'column'])
+        && after.row == (row + h.rows) % h.rows && after.column == (column + h.columns) % h.columns
+        && (inside || (before.kind == 'unset' && before.seat == null));
+    }
+    function lineMatches(h, a, before, after) {
+      let delta = h.axis == 'horizontal' ? a.dr : a.dc;
+      return before.type == 'line' && after.diff(before).affectedKeys().hasOnly(['index'])
+        && after.index == (before.index + delta + h.lineCount) % h.lineCount;
+    }
+    function recordMatches(p, id, a, h) {
+      let ordinal = string(a.processed);
+      let before = get(/databases/$(database)/documents/slideShows/$(p)/generations/$(a.baseGeneration)/records/$(ordinal)).data;
+      let after = getAfter(/databases/$(database)/documents/slideShows/$(p)/generations/$(id)/records/$(ordinal)).data;
+      return a.processed < h.cellCount ? cellMatches(h, a, before, after) : lineMatches(h, a, before, after);
+    }
+    function publication(p, id, a) {
+      let h = nextHead(p);
+      let e = event(p, id);
+      return h.generation == id && h.operationId == id && h.revision == a.baseRevision + 1
+        && e.kind == 'slide' && e.deviceUid == request.auth.uid && e.baseGeneration == a.baseGeneration
+        && e.generation == id && e.revision == h.revision && e.dr == a.dr && e.dc == a.dc;
+    }
+    function updateOperation(p, id, b, a) {
+      let h = head(p);
+      let total = h.cellCount + h.lineCount;
+      return currentBase(p, b, h) && a.diff(b).affectedKeys().hasOnly(['processed', 'phase'])
+        && ((b.phase == 'preparing' && a.phase == 'preparing'
+            && b.processed < total && a.processed == b.processed + 1 && recordMatches(p, id, b, h))
+          || (b.phase == 'preparing' && a.phase == 'ready' && b.processed == total && a.processed == b.processed)
+          || (b.phase == 'ready' && a.phase == 'published' && a.processed == b.processed && publication(p, id, b)));
+    }
+    function createRecord(p, id, ordinal) {
+      let b = op(p, id);
+      let a = nextOp(p, id);
+      return b.deviceUid == request.auth.uid && b.phase == 'preparing' && a.phase == 'preparing'
+        && ordinal == string(b.processed) && a.processed == b.processed + 1;
+    }
+    function updateHead(p, b, a) {
+      let before = op(p, a.generation);
+      let after = nextOp(p, a.generation);
+      return a.diff(b).affectedKeys().hasOnly(['generation', 'revision', 'operationId'])
+        && a.revision == b.revision + 1 && a.operationId == a.generation
+        && before.deviceUid == request.auth.uid && before.phase == 'ready' && after.phase == 'published'
+        && before.baseGeneration == b.generation && before.baseRevision == b.revision
+        && before.controlRevision == control(p).revision && publication(p, a.generation, before);
+    }
+    function createEvent(p, id, a) {
+      let o = nextOp(p, id);
+      let h = nextHead(p);
+      return a.keys().hasOnly(['kind', 'deviceUid', 'baseGeneration', 'generation', 'revision', 'dr', 'dc'])
+        && a.kind == 'slide' && a.deviceUid == request.auth.uid && o.phase == 'published'
+        && h.generation == id && h.operationId == id && a.generation == id && a.revision == h.revision
+        && a.baseGeneration == o.baseGeneration && a.dr == o.dr && a.dc == o.dc;
+    }
+    match /slideShows/{p} {
+      match /{privateCollection}/{id} {
+        allow get: if privateCollection in ['devices', 'sessions', 'roles', 'control'] && manager(p);
+        allow write: if false;
+      }
+      match /head/current {
+        allow get: if active(p);
+        allow update: if manager(p) && updateHead(p, resource.data, request.resource.data);
+      }
+      match /operations/{id} {
+        allow get: if manager(p);
+        allow create: if manager(p) && createOperation(p, request.resource.data);
+        allow update: if manager(p) && updateOperation(p, id, resource.data, request.resource.data);
+      }
+      match /generations/{generation}/records/{ordinal} {
+        allow get: if manager(p) || (active(p) && head(p).generation == generation);
+        allow create: if manager(p) && createRecord(p, generation, ordinal);
+      }
+      match /events/{id} {
+        allow get: if manager(p);
+        allow create: if manager(p) && createEvent(p, id, request.resource.data);
+      }
+    }
+  }
+}
