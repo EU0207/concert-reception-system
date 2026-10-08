@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-20の保存境界だけを検証する。初期作成と本人証跡の発行は前提投入。本番Rulesではない。
+    function uuid(id) { return id is string && id.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+    function authorized(p, edit) {
+      let d = get(/databases/$(database)/documents/slideShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/slideShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/slideShows/$(p)/roles/$(d.humanUid)).data;
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && d.deviceUid == request.auth.uid && d.active && s.active && s.emailVerified
+        && s.humanUid == d.humanUid && s.expiresAt > request.time && r.active
+        && d.preparedRoleRevision == r.revision && (!edit || r.role in ['owner', 'deputy']);
+    }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function head(p,g) { return get(/databases/$(database)/documents/slideShows/$(p)/generations/$(g)/head/current).data; }
+    function nextHead(p,g) { return getAfter(/databases/$(database)/documents/slideShows/$(p)/generations/$(g)/head/current).data; }
+    function versions(p) { return get(/databases/$(database)/documents/slideShows/$(p)/versions/current).data; }
+    function nextVersions(p) { return getAfter(/databases/$(database)/documents/slideShows/$(p)/versions/current).data; }
+    function positive(n) { return n is int && n > 0 && n <= 9007199254740991; }
+    function versionShape(v) {
+      return v.keys().hasAll(['commit','layout','source','assignment','attendee','ticket','control'])
+        && v.keys().hasOnly(['commit','layout','source','assignment','attendee','ticket','control'])
+        && positive(v.commit) && positive(v.layout) && positive(v.source) && positive(v.assignment)
+        && positive(v.attendee) && positive(v.ticket) && positive(v.control);
+    }
+    function changedVersions(b,a) {
+      return a.diff(b).affectedKeys().hasOnly(['values','operationId']) && uuid(a.operationId)
+        && versionShape(b.values) && versionShape(a.values)
+        && a.values.diff(b.values).affectedKeys().hasOnly(['commit','layout'])
+        && a.values.commit == b.values.commit+1 && a.values.layout == b.values.layout+1;
+    }
+    // GD91-18と同じ移動量・外周集計の条件。固定した元セルの更新は許可しない。
+    function validSlide(b,a,e) {
+      let row = ((e.dr < 0 ? 0 : b.rows-1)-b.rowOffset+b.rows)%b.rows;
+      let column = ((e.dc < 0 ? 0 : b.columns-1)-b.columnOffset+b.columns)%b.columns;
+      return b.status == 'countReady' && b.initialNumbered && b.nonEmptyCount > 0
+        && e.dr is int && e.dc is int && ((e.dr in [-1,1] && e.dc == 0) || (e.dc in [-1,1] && e.dr == 0))
+        && a.diff(b).affectedKeys().hasOnly(['revision','operationId','rowOffset','columnOffset'])
+        && a.revision == b.revision+1 && uuid(a.operationId)
+        && a.rowOffset == (b.rowOffset+e.dr+b.rows)%b.rows && a.columnOffset == (b.columnOffset+e.dc+b.columns)%b.columns
+        && (e.dr != 0 ? b.rowCounts.get(string(row),0) == 0 : b.columnCounts.get(string(column),0) == 0);
+    }
+    function slideHead(p,g,b,a) {
+      let v = versions(p);
+      let n = nextVersions(p);
+      let e = getAfter(/databases/$(database)/documents/slideShows/$(p)/generations/$(g)/events/$(a.operationId)).data;
+      let c = get(/databases/$(database)/documents/slideShows/$(p)/control/current).data;
+      return v.schemaVersion == 1 && v.performanceId == p && v.generation == g && v.sectionId == b.sectionId
+        && v.values.commit == b.revision && v.values.source == b.sourceRevision && v.values.control == c.revision
+        && e.environmentId == v.environmentId && e.performanceId == p && e.generation == g && e.sectionId == b.sectionId
+        && e.expectedVersions == v.values && e.deviceUid == request.auth.uid && e.kind == 'slide'
+        && e.baseRevision == b.revision && e.revision == a.revision
+        && n.operationId == a.operationId && changedVersions(v,n) && validSlide(b,a,e);
+    }
+    // headの更新へ相互に結び、3件の一部だけを確定させない。認可はhead更新で評価する。
+    function updateVersions(p,b,a) {
+      let h = head(p,b.generation);
+      let n = nextHead(p,b.generation);
+      return changedVersions(b,a) && h.revision == b.values.commit && n.revision == a.values.commit
+        && n.operationId == a.operationId && n.revision == h.revision+1;
+    }
+    function createEvent(p,g,id,e) {
+      let b = head(p,g);
+      let a = nextHead(p,g);
+      return request.auth != null && uuid(id) && a.operationId == id && a.revision == b.revision+1
+        && e.keys().hasAll(['kind','deviceUid','environmentId','performanceId','generation','sectionId','expectedVersions','baseRevision','revision','dr','dc'])
+        && e.keys().hasOnly(['kind','deviceUid','environmentId','performanceId','generation','sectionId','expectedVersions','baseRevision','revision','dr','dc']);
+    }
+    match /slideShows/{p} {
+      match /versions/current {
+        allow get: if active(p);
+        allow update: if request.auth != null && updateVersions(p,resource.data,request.resource.data);
+      }
+      match /seatReferences/current { allow get: if active(p); }
+      match /generations/{g} {
+        match /head/current {
+          allow get: if active(p) && versions(p).generation == g;
+          allow update: if manager(p) && slideHead(p,g,resource.data,request.resource.data);
+        }
+        match /events/{id} {
+          allow get: if manager(p);
+          allow create: if createEvent(p,g,id,request.resource.data);
+        }
+        match /source/{id} { allow get: if active(p) && versions(p).generation == g; }
+      }
+    }
+  }
+}
