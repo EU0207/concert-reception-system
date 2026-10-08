@@ -1,0 +1,492 @@
+{
+  "project": "demo-concert-seat-gd91-20",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-08T09:30:12.463Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "795da33016eae56029ae435986b555e38277fee0079b23c878b8b5ef7d057513",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "1f5e0b5e895830d4a3a349e17d2c7002b099cecb19300adda218a06db8d2db53",
+    "../../GD91-19/plan.mjs": "99bd2a3f5f5064121b975c8c76bcfca7a1d2ed0f2d3fea331e1891dfdf358463",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "795da33016eae56029ae435986b555e38277fee0079b23c878b8b5ef7d057513",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "1f5e0b5e895830d4a3a349e17d2c7002b099cecb19300adda218a06db8d2db53",
+    "../../GD91-19/plan.mjs": "99bd2a3f5f5064121b975c8c76bcfca7a1d2ed0f2d3fea331e1891dfdf358463",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "scope": "One-section slide with server-owned shared version checks, existing simplified device/session/role authorization and reciprocal three-document atomic commit. Source, counters, references, versions and authority evidence are admin-seeded. No initial-build integration, version publication lifecycle for other operations, formal identity flow, QR validity check, complete auth policy, multi-section, SDK, IndexedDB or devices.",
+  "reports": [
+    {
+      "id": "S01",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "up",
+      "writes": 3
+    },
+    {
+      "id": "S02",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "down",
+      "writes": 3
+    },
+    {
+      "id": "S03",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "left",
+      "writes": 3
+    },
+    {
+      "id": "S04",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "right",
+      "writes": 3
+    },
+    {
+      "id": "S05",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "up",
+      "writes": 3
+    },
+    {
+      "id": "S06",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "down",
+      "writes": 3
+    },
+    {
+      "id": "S07",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "left",
+      "writes": 3
+    },
+    {
+      "id": "S08",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "right",
+      "writes": 3
+    },
+    {
+      "id": "S09",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "up",
+      "writes": 3
+    },
+    {
+      "id": "S10",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "down",
+      "writes": 3
+    },
+    {
+      "id": "S11",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "left",
+      "writes": 3
+    },
+    {
+      "id": "S12",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "right",
+      "writes": 3
+    },
+    {
+      "id": "S13",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "up",
+      "writes": 3
+    },
+    {
+      "id": "S14",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "down",
+      "writes": 3
+    },
+    {
+      "id": "S15",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "left",
+      "writes": 3
+    },
+    {
+      "id": "S16",
+      "description": "軸・順序・方向と3件の一体保存",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "right",
+      "writes": 3
+    },
+    {
+      "id": "S17",
+      "description": "最新の版変更を古い期待版で上書きしない：commit",
+      "status": "passed"
+    },
+    {
+      "id": "S18",
+      "description": "最新の版変更を古い期待版で上書きしない：layout",
+      "status": "passed"
+    },
+    {
+      "id": "S19",
+      "description": "最新の版変更を古い期待版で上書きしない：source",
+      "status": "passed"
+    },
+    {
+      "id": "S20",
+      "description": "最新の版変更を古い期待版で上書きしない：assignment",
+      "status": "passed"
+    },
+    {
+      "id": "S21",
+      "description": "最新の版変更を古い期待版で上書きしない：attendee",
+      "status": "passed"
+    },
+    {
+      "id": "S22",
+      "description": "最新の版変更を古い期待版で上書きしない：ticket",
+      "status": "passed"
+    },
+    {
+      "id": "S23",
+      "description": "最新の版変更を古い期待版で上書きしない：control",
+      "status": "passed"
+    },
+    {
+      "id": "S24",
+      "description": "3件中の部分送信を拒否：1",
+      "status": "passed"
+    },
+    {
+      "id": "S25",
+      "description": "3件中の部分送信を拒否：2",
+      "status": "passed"
+    },
+    {
+      "id": "S26",
+      "description": "3件中の部分送信を拒否：3",
+      "status": "passed"
+    },
+    {
+      "id": "S27",
+      "description": "3件中の部分送信を拒否：4",
+      "status": "passed"
+    },
+    {
+      "id": "S28",
+      "description": "3件中の部分送信を拒否：5",
+      "status": "passed"
+    },
+    {
+      "id": "S29",
+      "description": "3件中の部分送信を拒否：6",
+      "status": "passed"
+    },
+    {
+      "id": "S30",
+      "description": "直接要求を拒否：移動量改変",
+      "status": "passed"
+    },
+    {
+      "id": "S31",
+      "description": "直接要求を拒否：構成版改変",
+      "status": "passed"
+    },
+    {
+      "id": "S32",
+      "description": "直接要求を拒否：外周集計改変",
+      "status": "passed"
+    },
+    {
+      "id": "S33",
+      "description": "直接要求を拒否：区画名の同時変更",
+      "status": "passed"
+    },
+    {
+      "id": "S34",
+      "description": "直接要求を拒否：舞台の同時変更",
+      "status": "passed"
+    },
+    {
+      "id": "S35",
+      "description": "直接要求を拒否：席数の同時変更",
+      "status": "passed"
+    },
+    {
+      "id": "S36",
+      "description": "直接要求を拒否：理由の混入",
+      "status": "passed"
+    },
+    {
+      "id": "S37",
+      "description": "直接要求を拒否：履歴方向と配置の不一致",
+      "status": "passed"
+    },
+    {
+      "id": "S38",
+      "description": "直接要求を拒否：斜め移動",
+      "status": "passed"
+    },
+    {
+      "id": "S39",
+      "description": "直接要求を拒否：移動量2",
+      "status": "passed"
+    },
+    {
+      "id": "S40",
+      "description": "直接要求を拒否：履歴の版改変",
+      "status": "passed"
+    },
+    {
+      "id": "S41",
+      "description": "直接要求を拒否：履歴の期待版改変",
+      "status": "passed"
+    },
+    {
+      "id": "S42",
+      "description": "直接要求を拒否：履歴の期待版欠落",
+      "status": "passed"
+    },
+    {
+      "id": "S43",
+      "description": "直接要求を拒否：履歴の操作者偽装",
+      "status": "passed"
+    },
+    {
+      "id": "S44",
+      "description": "直接要求を拒否：別環境",
+      "status": "passed"
+    },
+    {
+      "id": "S45",
+      "description": "直接要求を拒否：別公演",
+      "status": "passed"
+    },
+    {
+      "id": "S46",
+      "description": "直接要求を拒否：別世代",
+      "status": "passed"
+    },
+    {
+      "id": "S47",
+      "description": "直接要求を拒否：別区画",
+      "status": "passed"
+    },
+    {
+      "id": "S48",
+      "description": "直接要求を拒否：未対応操作",
+      "status": "passed"
+    },
+    {
+      "id": "S49",
+      "description": "直接要求を拒否：共通版の世代差替え",
+      "status": "passed"
+    },
+    {
+      "id": "S50",
+      "description": "直接要求を拒否：共通版の形式変更",
+      "status": "passed"
+    },
+    {
+      "id": "S51",
+      "description": "直接要求を拒否：共通版の余分な項目",
+      "status": "passed"
+    },
+    {
+      "id": "S52",
+      "description": "直接要求を拒否：共通版の更新量改変",
+      "status": "passed"
+    },
+    {
+      "id": "S53",
+      "description": "直接要求を拒否：論理配置版の更新漏れ",
+      "status": "passed"
+    },
+    {
+      "id": "S54",
+      "description": "直接要求を拒否：元構成版の更新",
+      "status": "passed"
+    },
+    {
+      "id": "S55",
+      "description": "直接要求を拒否：割当版の同時更新",
+      "status": "passed"
+    },
+    {
+      "id": "S56",
+      "description": "直接要求を拒否：来場者版の同時更新",
+      "status": "passed"
+    },
+    {
+      "id": "S57",
+      "description": "直接要求を拒否：券版の同時更新",
+      "status": "passed"
+    },
+    {
+      "id": "S58",
+      "description": "直接要求を拒否：管理版の同時更新",
+      "status": "passed"
+    },
+    {
+      "id": "S59",
+      "description": "直接要求を拒否：操作IDの不一致",
+      "status": "passed"
+    },
+    {
+      "id": "S60",
+      "description": "入力後の権限・管理状態変更を拒否：端末停止",
+      "status": "passed"
+    },
+    {
+      "id": "S61",
+      "description": "入力後の権限・管理状態変更を拒否：端末UID偽装",
+      "status": "passed"
+    },
+    {
+      "id": "S62",
+      "description": "入力後の権限・管理状態変更を拒否：本人結合の不一致",
+      "status": "passed"
+    },
+    {
+      "id": "S63",
+      "description": "入力後の権限・管理状態変更を拒否：セッション停止",
+      "status": "passed"
+    },
+    {
+      "id": "S64",
+      "description": "入力後の権限・管理状態変更を拒否：メール未確認",
+      "status": "passed"
+    },
+    {
+      "id": "S65",
+      "description": "入力後の権限・管理状態変更を拒否：期限切れ",
+      "status": "passed"
+    },
+    {
+      "id": "S66",
+      "description": "入力後の権限・管理状態変更を拒否：役割停止",
+      "status": "passed"
+    },
+    {
+      "id": "S67",
+      "description": "入力後の権限・管理状態変更を拒否：役割版失効",
+      "status": "passed"
+    },
+    {
+      "id": "S68",
+      "description": "入力後の権限・管理状態変更を拒否：一般受付へ変更",
+      "status": "passed"
+    },
+    {
+      "id": "S69",
+      "description": "入力後の権限・管理状態変更を拒否：臨時管理者へ変更",
+      "status": "passed"
+    },
+    {
+      "id": "S70",
+      "description": "入力後の権限・管理状態変更を拒否：管理版変更",
+      "status": "passed"
+    },
+    {
+      "id": "S71",
+      "description": "代理は許可し一般受付と未認証は拒否",
+      "status": "passed"
+    },
+    {
+      "id": "S72",
+      "description": "別公演の端末資格は流用できない",
+      "status": "passed"
+    },
+    {
+      "id": "S73",
+      "description": "固定した元構成・割当・QRと既存理由を同時改変できない",
+      "status": "passed",
+      "tamperingVariants": 6
+    },
+    {
+      "id": "S74",
+      "description": "非未の外周と全未の直接移動を拒否",
+      "status": "passed"
+    },
+    {
+      "id": "S75",
+      "description": "同じ基準の同時確定は一方だけ成功",
+      "status": "passed",
+      "winners": 1
+    },
+    {
+      "id": "S76",
+      "description": "応答を利用せず再開して同じIDの履歴を照会し再確定を拒否",
+      "status": "passed"
+    },
+    {
+      "id": "S77",
+      "description": "履歴・共通版・元構成の単独削除と更新を拒否",
+      "status": "passed"
+    },
+    {
+      "id": "S78",
+      "description": "930セルと500人の架空参照でも3書込みを維持",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "assignedReferences": 500,
+      "commit": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 4410
+      },
+      "seedAndVerificationIOExcluded": true
+    }
+  ]
+}
