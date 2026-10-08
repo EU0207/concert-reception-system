@@ -1,0 +1,287 @@
+{
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-08T07:12:08.679Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../plan.mjs": "99bd2a3f5f5064121b975c8c76bcfca7a1d2ed0f2d3fea331e1891dfdf358463",
+    "plan.mjs": "fcc06109e3c3ce6a2aa7cc7a9c671f0732916cda17ecc1dae3f276088388d31d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../plan.mjs": "99bd2a3f5f5064121b975c8c76bcfca7a1d2ed0f2d3fea331e1891dfdf358463",
+    "plan.mjs": "fcc06109e3c3ce6a2aa7cc7a9c671f0732916cda17ecc1dae3f276088388d31d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "scope": "Pure calculation of slide intent against a supplied complete snapshot. No network, authorization, server Rules, generation replacement, commit, QR validation, SDK, local storage or devices.",
+  "reports": [
+    {
+      "id": "P01",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P02",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P03",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P04",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P05",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P06",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P07",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P08",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P09",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P10",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P11",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P12",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P13",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P14",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P15",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P16",
+      "description": "軸・順序・方向を照合して移動量更新を選ぶ",
+      "status": "passed"
+    },
+    {
+      "id": "P17",
+      "description": "期待版が一つでも古ければ拒否：commit",
+      "status": "passed"
+    },
+    {
+      "id": "P18",
+      "description": "期待版が一つでも古ければ拒否：layout",
+      "status": "passed"
+    },
+    {
+      "id": "P19",
+      "description": "期待版が一つでも古ければ拒否：source",
+      "status": "passed"
+    },
+    {
+      "id": "P20",
+      "description": "期待版が一つでも古ければ拒否：assignment",
+      "status": "passed"
+    },
+    {
+      "id": "P21",
+      "description": "期待版が一つでも古ければ拒否：attendee",
+      "status": "passed"
+    },
+    {
+      "id": "P22",
+      "description": "期待版が一つでも古ければ拒否：ticket",
+      "status": "passed"
+    },
+    {
+      "id": "P23",
+      "description": "期待版が一つでも古ければ拒否：control",
+      "status": "passed"
+    },
+    {
+      "id": "P24",
+      "description": "世代の違い",
+      "status": "passed"
+    },
+    {
+      "id": "P25",
+      "description": "環境の違い",
+      "status": "passed"
+    },
+    {
+      "id": "P26",
+      "description": "公演の違い",
+      "status": "passed"
+    },
+    {
+      "id": "P27",
+      "description": "未対応の全差替え",
+      "status": "passed"
+    },
+    {
+      "id": "P28",
+      "description": "理由欄の混入",
+      "status": "passed"
+    },
+    {
+      "id": "P29",
+      "description": "未対応の保存形式",
+      "status": "passed"
+    },
+    {
+      "id": "P30",
+      "description": "版の欠落",
+      "status": "passed"
+    },
+    {
+      "id": "P31",
+      "description": "版の不正な数値",
+      "status": "passed"
+    },
+    {
+      "id": "P32",
+      "description": "headと全体版の不一致",
+      "status": "passed"
+    },
+    {
+      "id": "P33",
+      "description": "headと元構成版の不一致",
+      "status": "passed"
+    },
+    {
+      "id": "P34",
+      "description": "無効な操作ID",
+      "status": "passed"
+    },
+    {
+      "id": "P35",
+      "description": "参照データの未取得",
+      "status": "passed"
+    },
+    {
+      "id": "P36",
+      "description": "スライドの方向改変",
+      "status": "passed"
+    },
+    {
+      "id": "P37",
+      "description": "移動量の改変",
+      "status": "passed"
+    },
+    {
+      "id": "P38",
+      "description": "割当の消去",
+      "status": "passed"
+    },
+    {
+      "id": "P39",
+      "description": "QR参照の改変",
+      "status": "passed"
+    },
+    {
+      "id": "P40",
+      "description": "来場参照の消去",
+      "status": "passed"
+    },
+    {
+      "id": "P41",
+      "description": "席番号の改変",
+      "status": "passed"
+    },
+    {
+      "id": "P42",
+      "description": "緊急席の理由改変",
+      "status": "passed"
+    },
+    {
+      "id": "P43",
+      "description": "区画名の同時変更",
+      "status": "passed"
+    },
+    {
+      "id": "P44",
+      "description": "舞台の同時変更",
+      "status": "passed"
+    },
+    {
+      "id": "P45",
+      "description": "列の次番号改変",
+      "status": "passed"
+    },
+    {
+      "id": "P46",
+      "description": "余分な更新の混入",
+      "status": "passed"
+    },
+    {
+      "id": "P47",
+      "description": "異なる移動案の混入",
+      "status": "passed"
+    },
+    {
+      "id": "P48",
+      "description": "外周の非未セルを拒否",
+      "status": "passed"
+    },
+    {
+      "id": "P49",
+      "description": "全未は変更なし",
+      "status": "passed"
+    },
+    {
+      "id": "P50",
+      "description": "手入力席・既存理由と参照を計算上保持",
+      "status": "passed"
+    },
+    {
+      "id": "P51",
+      "description": "セル・席・参照の配列順だけの違いを許容",
+      "status": "passed"
+    },
+    {
+      "id": "P52",
+      "description": "累積した移動量に一度だけ適用",
+      "status": "passed"
+    },
+    {
+      "id": "P53",
+      "description": "930セル・500人の参照を保持し全複写の計画を作らない",
+      "status": "passed"
+    }
+  ]
+}
