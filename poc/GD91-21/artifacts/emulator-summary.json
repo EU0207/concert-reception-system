@@ -1,0 +1,835 @@
+{
+  "project": "demo-concert-seat-gd91-21",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-08T12:14:25.822Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "89cafe4800c25931a76a9d3a99469452a0f7173a34552a575201574579611af2",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "emulator.mjs": "653d637c23b08dab1842d239b4cae3acf224fb4d83b7e94e29ef48e0ce9fcbef",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-19/plan.mjs": "99bd2a3f5f5064121b975c8c76bcfca7a1d2ed0f2d3fea331e1891dfdf358463"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "89cafe4800c25931a76a9d3a99469452a0f7173a34552a575201574579611af2",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "emulator.mjs": "653d637c23b08dab1842d239b4cae3acf224fb4d83b7e94e29ef48e0ce9fcbef",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-19/plan.mjs": "99bd2a3f5f5064121b975c8c76bcfca7a1d2ed0f2d3fea331e1891dfdf358463"
+  },
+  "scope": "First publication of validated automatic layout, catalog, counters and ID ledger with four-document atomic head/history/selection/shared-version publication, followed by three-document version-fenced slide. Reference revision heads and identity/session/role evidence remain admin-seeded. No full business-version lifecycle, selected-generation replacement, cleanup, manual seats, full edits, multiple sections, formal identity flow, complete auth policy, QR validity check, SDK, IndexedDB or devices",
+  "reports": [
+    {
+      "id": "V01",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "up",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2652
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2359
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V02",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "down",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V03",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "left",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2359
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V04",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "forward",
+      "direction": "right",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V05",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "up",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2652
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2359
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V06",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "down",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V07",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "left",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2359
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V08",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "direction": "right",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V09",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "up",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2652
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2359
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V10",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "down",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2574
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V11",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "left",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2359
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V12",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "forward",
+      "direction": "right",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V13",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "up",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2652
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2359
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V14",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "down",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2574
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V15",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "left",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2359
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V16",
+      "label": "split fragments restore before offset sliding",
+      "status": "passed",
+      "axis": "vertical",
+      "order": "reverse",
+      "direction": "right",
+      "initialization": {
+        "requests": 26,
+        "writes": 39,
+        "maxRequestBytes": 2550
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "sourceAndLedgersSeededByAdmin": false,
+      "trustedCatalogSeededByAdmin": false
+    },
+    {
+      "id": "V17",
+      "label": "cell fragment rejects malformed positions, IDs and number values",
+      "status": "passed",
+      "cellForgeriesDenied": 26
+    },
+    {
+      "id": "V18",
+      "label": "attributes reject missing seats and unapproved field overrides",
+      "status": "passed",
+      "attributeForgeriesDenied": 23,
+      "cellSourcePreserved": true
+    },
+    {
+      "id": "V19",
+      "label": "prepared fragments stay private and ingestion is atomic",
+      "status": "passed",
+      "missingAttributesBlocksIngestion": true,
+      "preparedDataPrivate": true,
+      "ingestionAndFinalHalfWritesDenied": 8,
+      "sourceImmutable": true
+    },
+    {
+      "id": "V20",
+      "label": "cross-fragment identity and consumption conflicts cannot enter counters",
+      "status": "passed",
+      "crossFragmentConflictsDenied": 4,
+      "privateInvalidPreparationNotPublished": true,
+      "thisScenarioDoesNotRebuild": true
+    },
+    {
+      "id": "V21",
+      "label": "ledger membership and initial head cannot be forged",
+      "status": "passed",
+      "initialHalfWritesDenied": 6,
+      "ledgerForgeriesDenied": 5,
+      "counterForgeriesDenied": 5
+    },
+    {
+      "id": "V22",
+      "label": "lost preparation, ingestion and final responses can be queried",
+      "status": "passed",
+      "savedFragmentsQueryable": true,
+      "progressResumed": true,
+      "duplicateIngestionAndFinishDenied": true,
+      "browserOutboxNotImplemented": true
+    },
+    {
+      "id": "V23",
+      "label": "parallel creation and ingestion allow one winner and control changes stop continuation",
+      "status": "passed",
+      "parallelSourceWinners": 1,
+      "parallelIngestionWinners": 1,
+      "controlChangePhasesDenied": 4
+    },
+    {
+      "id": "V24",
+      "label": "revocation blocks every preparation and publication phase",
+      "status": "passed",
+      "phaseRevocationsDenied": 20,
+      "readerCrossShowAnonymousDenied": true,
+      "deputyAllowed": true
+    },
+    {
+      "id": "V25",
+      "label": "occupied boundaries and short fragments preserve the grid",
+      "status": "passed",
+      "blockedBoundaryVariants": 16,
+      "shortDimensions": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          11
+        ]
+      ],
+      "emptyGridSlideDenied": true
+    },
+    {
+      "id": "V26",
+      "label": "custom starts, prefixes and rich Seat metadata survive restoration and slide",
+      "status": "passed",
+      "customStartAndPrefix": true,
+      "reservedAndEmergencyMetadataPreserved": true,
+      "slideReasonAbsent": true
+    },
+    {
+      "id": "V27",
+      "label": "930 cells are initialized through Rules and projected before three-write sliding",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "chunks": 240,
+      "attributeFragments": 240,
+      "assignedReferences": 500,
+      "initialization": {
+        "requests": 1232,
+        "writes": 1507,
+        "maxRequestBytes": 12438
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "registryEntries": 1861,
+      "consumedNumberEntries": 900,
+      "registryJsonBytes": 124030,
+      "headJsonBytes": 1297,
+      "sourceAndLedgersSeededByAdmin": false,
+      "prerequisiteAndVerificationIOExcluded": true
+    },
+    {
+      "id": "V28",
+      "label": "codec rejects unsupported or inconsistent logical Seats and attributes require actual seats",
+      "status": "passed",
+      "invalidLogicalSeatRejected": true,
+      "manualSeatExplicitlyUnsupported": true,
+      "unknownFieldNotSilentlyDropped": true,
+      "nonSeatAttributesDenied": 2
+    },
+    {
+      "id": "V29",
+      "label": "reordered unique in-range numbers are rejected before ingestion",
+      "status": "passed",
+      "uniqueInRangeButReorderedNumbersDenied": true,
+      "invalidPreparationPrivate": true,
+      "productionAdoptionStillBlocked": true
+    },
+    {
+      "id": "V30",
+      "label": "four rich cells pass and five are compared without defining a product limit",
+      "status": "passed",
+      "richFourCellFragmentsPassed": true,
+      "fiveCellComparison": {
+        "deniedAt": "layout"
+      },
+      "productionLimitNotEstablished": true
+    },
+    {
+      "id": "V31",
+      "label": "abort at five preparation phases is atomic and a fresh generation can finish",
+      "status": "passed",
+      "abortPhases": 5,
+      "partialAbortBatchesDenied": 30,
+      "freshAttemptsRestored": true,
+      "oldDataNotDeleted": true
+    },
+    {
+      "id": "V32",
+      "label": "an invalid private fragment can be abandoned and corrected with stable logical IDs",
+      "status": "passed",
+      "invalidPreparationCorrectedInNewGeneration": true,
+      "logicalIDsPreserved": true,
+      "oldPreparationRetainedPrivate": true,
+      "physicalCleanupNotImplemented": true
+    },
+    {
+      "id": "V33",
+      "label": "lost abort and restart responses can be resolved by operation and generation IDs",
+      "status": "passed",
+      "abortAndRestartQueryable": true,
+      "replayedOperationsNotApplied": true,
+      "browserOutboxNotImplemented": true
+    },
+    {
+      "id": "V34",
+      "label": "ingestion racing with abort cannot publish or continue the abandoned generation",
+      "status": "passed",
+      "progressMayPrecedeAbort": true,
+      "finalStatus": "aborted",
+      "noPublicationOrLateProgress": true
+    },
+    {
+      "id": "V35",
+      "label": "final selection and abort racing allow exactly one winner",
+      "status": "passed",
+      "exactlyOneWinner": true,
+      "winner": "countReady",
+      "partialPublicationAbsent": true
+    },
+    {
+      "id": "V36",
+      "label": "delayed writes from an abandoned generation cannot affect its replacement",
+      "status": "passed",
+      "delayedOperationKindsDenied": 5,
+      "replacementUnchanged": true,
+      "abandonedGenerationNotReadableByReception": true
+    },
+    {
+      "id": "V37",
+      "label": "abort requires current authorization and control but never cancels a selected result",
+      "status": "passed",
+      "revocationsDenied": 4,
+      "readerCrossShowAnonymousDenied": true,
+      "latestControlAbortAllowed": true,
+      "deputyAllowed": true,
+      "selectedResultCannotBeAbortedOrReinitialized": true
+    },
+    {
+      "id": "V38",
+      "label": "competing first starts and restarts select one generation without orphan writes",
+      "status": "passed",
+      "firstStartWinners": 1,
+      "restartWinners": 1,
+      "loserHeadsAndLedgersAbsent": true
+    },
+    {
+      "id": "V39",
+      "label": "selection cannot be forged or point to unvalidated and unrelated data",
+      "status": "passed",
+      "selectionForgeriesDenied": 8,
+      "wrongGenerationHeadDenied": true,
+      "selectionAndAbandonedHeadDeletionDenied": true
+    },
+    {
+      "id": "V40",
+      "label": "large abort uses three writes without deleting prepared cells before a fresh full build",
+      "status": "passed",
+      "cells": 930,
+      "preparedFragmentsBeforeAbort": 240,
+      "abort": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 1343
+      },
+      "rebuild": {
+        "requests": 1232,
+        "writes": 1507,
+        "maxRequestBytes": 12438
+      },
+      "oldFragmentsNotDeletedOrRewritten": true,
+      "retentionAndCleanupPolicyUnimplemented": true
+    },
+    {
+      "id": "V41",
+      "label": "line catalog validation and ID reservation reject forged or partial inputs",
+      "status": "passed",
+      "lineFieldForgeriesDenied": 10,
+      "catalogForgeriesDenied": 4,
+      "partialCatalogBatchesDenied": 2,
+      "duplicateAndSectionIDReuseDenied": 2,
+      "catalogNotSeededByAdmin": true
+    },
+    {
+      "id": "V42",
+      "label": "catalog and both number-proof phases require current authority and control",
+      "status": "passed",
+      "phaseRevocationsDenied": 12,
+      "controlChangesDenied": 3
+    },
+    {
+      "id": "V43",
+      "label": "incomplete and forged number proofs cannot advance the head",
+      "status": "passed",
+      "missingAndIncompleteProofDenied": 2,
+      "proofForgeriesDenied": 8,
+      "lostStepQueryable": true,
+      "lateAndDuplicateUpdatesDenied": true
+    },
+    {
+      "id": "V44",
+      "label": "every line terminal is checked in both axes and orders including partial proof boundaries",
+      "status": "passed",
+      "forgedTerminalVariantsDenied": 16,
+      "firstAndSecondNumberPartsCovered": true
+    },
+    {
+      "id": "V45",
+      "label": "partial catalog and numeric preparation can be queried, abandoned and rebuilt",
+      "status": "passed",
+      "partialPreparationPhases": 2,
+      "rebuildPreservesLogicalIDs": true
+    },
+    {
+      "id": "V46",
+      "label": "two-position number checks are compared with a four-position request",
+      "status": "passed",
+      "numberSpan": 4,
+      "httpStatus": 403,
+      "expressionLimit": true,
+      "productionLimitNotEstablished": true
+    },
+    {
+      "id": "V47",
+      "label": "the first line creates its exact ledger atomically without an empty initial ledger",
+      "status": "passed",
+      "firstLedgerForgeriesDenied": 7,
+      "sectionIDReuseDenied": true,
+      "emptyLedgerDenied": true,
+      "startWrites": 3,
+      "firstLineWrites": 2
+    },
+    {
+      "id": "V48",
+      "label": "a lost first-line response is recovered by reading both documents without reapplying the operation",
+      "status": "passed",
+      "bothDocumentsQueryable": true,
+      "duplicateFirstLineDenied": true,
+      "browserOutboxNotImplemented": true
+    },
+    {
+      "id": "V49",
+      "label": "first-line creation races safely with another creator and with abort",
+      "status": "passed",
+      "firstLineWinners": 1,
+      "firstLineMayPrecedeAbort": false,
+      "abortedAndLateFirstLineCannotPublish": true
+    },
+    {
+      "id": "V50",
+      "label": "a one-line section reaches validation completion only after creating its reserved IDs",
+      "status": "passed",
+      "singleLineProfiles": 4,
+      "preCatalogCellCreationDenied": true
+    },
+    {
+      "id": "V51",
+      "label": "selected readers keep the old generation through seven preparation stages and abort",
+      "status": "passed",
+      "preparationStages": 7,
+      "partialAbortBatchesDenied": 42,
+      "oldReadersAndReferencesPreserved": true
+    },
+    {
+      "id": "V52",
+      "label": "starting another generation validates its selected base and preserves the pointer",
+      "status": "passed",
+      "baseAndPointerForgeriesDenied": 9,
+      "staleBaseAtStartDenied": true,
+      "refreshedBaseAccepted": true
+    },
+    {
+      "id": "V53",
+      "label": "completed preparation cannot replace or clear a selected generation",
+      "status": "passed",
+      "replacementAndClearingDenied": true,
+      "completionEventAbsent": true,
+      "confirmationBoundaryUnimplemented": true
+    },
+    {
+      "id": "V54",
+      "label": "competing preparation starts and abort racing with the old slide preserve valid selections",
+      "status": "passed",
+      "preparationStartWinners": 1,
+      "abortAndSelectedSlideBothCommitted": true,
+      "latePreparationDenied": true
+    },
+    {
+      "id": "V55",
+      "label": "a changed selected revision does not silently rebase or publish a private generation",
+      "status": "passed",
+      "baseNotAutomaticallyUpdated": true,
+      "oldRevisionChangePreserved": true,
+      "freshAttemptUsesLatestBase": true
+    },
+    {
+      "id": "V56",
+      "label": "new preparation and abort require latest authority while selected readers remain available",
+      "status": "passed",
+      "authorityAndControlVariantsDenied": 10,
+      "selectedReaderUnaffected": true
+    },
+    {
+      "id": "V57",
+      "label": "a full second preparation retains the old 930 cells and 500 references with a three-write abort",
+      "status": "passed",
+      "cells": 930,
+      "assignedReferences": 500,
+      "preparation": {
+        "requests": 1231,
+        "writes": 1503,
+        "maxRequestBytes": 12438
+      },
+      "abort": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 1379
+      },
+      "oldSourceAndIDsPreserved": true,
+      "secondGenerationNeverSelected": true,
+      "physicalCleanupUnimplemented": true
+    },
+    {
+      "id": "V58",
+      "label": "first publication requires all four documents and leaves no partial version",
+      "status": "passed",
+      "partialSubsetsDenied": 14
+    },
+    {
+      "id": "V59",
+      "label": "first shared version rejects forged fields and unrelated base revisions",
+      "status": "passed",
+      "versionForgeriesDenied": 18
+    },
+    {
+      "id": "V60",
+      "label": "first publication compares current reference revision heads without copying attendees",
+      "status": "passed",
+      "latestReferenceHeadsChecked": 3
+    },
+    {
+      "id": "V61",
+      "label": "version and pointer cannot publish before initialization validation completes",
+      "status": "passed",
+      "incompletePhasesDenied": 5
+    },
+    {
+      "id": "V62",
+      "label": "a normally initialized version feeds the planner and version-fenced slide",
+      "status": "passed",
+      "versionCreatedThroughRules": true,
+      "plannerConnected": true,
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      }
+    },
+    {
+      "id": "V63",
+      "label": "first-publication requests reject current authority changes without emitting a version",
+      "status": "passed",
+      "latestAuthorityVariantsDenied": 3
+    },
+    {
+      "id": "V64",
+      "label": "ignored first-publication response is resolved by pointer version and immutable history",
+      "status": "passed",
+      "fourDocumentResultConfirmed": true,
+      "reapplicationDenied": true
+    },
+    {
+      "id": "V65",
+      "label": "completion racing with abort yields either a complete first version or none",
+      "status": "passed",
+      "oneWinner": true,
+      "versionPresentExactlyWhenPublished": true
+    },
+    {
+      "id": "V66",
+      "label": "private preparation and abort preserve selected shared version and references",
+      "status": "passed",
+      "selectedVersionRetained": true,
+      "replacementDenied": true
+    },
+    {
+      "id": "V67",
+      "label": "first publication cannot rewrite fragments references or revision heads in the same request",
+      "status": "passed",
+      "piggybackWritesDenied": 4
+    },
+    {
+      "id": "V68",
+      "label": "large first publication adds one version write and keeps slide independent of seat count",
+      "status": "passed",
+      "cells": 930,
+      "assignedReferences": 500,
+      "publication": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 2271
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "initialVersionNotSeeded": true
+    },
+    {
+      "id": "V69",
+      "label": "first publication cannot reuse its preparation-start operation ID",
+      "status": "passed",
+      "startOperationIdReuseDenied": true
+    }
+  ]
+}
