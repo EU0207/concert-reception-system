@@ -1,0 +1,218 @@
+{
+  "project": "demo-concert-seat-gd91-24",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-08T15:35:43.729Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "4eec104a4d5c8006ffc72d8cc1ba36af12def68c71c22cbfef1137dccac27159",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "101971d32c8448aa9ea9229466e2a82d937c37a407c1fd73e2e7afd83ae3def4",
+    "support.mjs": "367ce53696edd9093b3786451db3bbc0d9b1ddac4e82d7efc35b1b4f95890abb",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "4eec104a4d5c8006ffc72d8cc1ba36af12def68c71c22cbfef1137dccac27159",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "emulator.mjs": "101971d32c8448aa9ea9229466e2a82d937c37a407c1fd73e2e7afd83ae3def4",
+    "support.mjs": "367ce53696edd9093b3786451db3bbc0d9b1ddac4e82d7efc35b1b4f95890abb",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "scope": "Seat-only ID index and first five-document publication of an empty canonical assignment. Attendee/ticket business snapshots and device/role grants are trusted seeded prerequisites; sessions are issued through normal human Auth. No actual 500-person assignment, full business writers/QR validity, replacement/multiple sections/cleanup, complete auth lifecycle, SDK/IndexedDB or device tests.",
+  "reports": [
+    {
+      "id": "C01",
+      "label": "human-issued session connects real seat IDs to an empty assignment table",
+      "status": "passed",
+      "publication": {
+        "requests": 1,
+        "writes": 5,
+        "maxRequestBytes": 3380
+      },
+      "seats": 9,
+      "assignmentNotSeeded": true,
+      "indexNotSeeded": true,
+      "sessionsNotSeeded": true
+    },
+    {
+      "id": "C02",
+      "label": "all thirty proper subsets of the five-document publication are rejected",
+      "status": "passed",
+      "partialSubsetsDenied": 30
+    },
+    {
+      "id": "C03",
+      "label": "shared version forgeries do not detach business versions from their source",
+      "status": "passed",
+      "versionForgeriesDenied": 18
+    },
+    {
+      "id": "C04",
+      "label": "initial assignments reject non-seat IDs omitted seats and nonempty values",
+      "status": "passed",
+      "assignmentForgeriesDenied": 17
+    },
+    {
+      "id": "C05",
+      "label": "seat index deltas are tied to checked source fragments and retain prior seats",
+      "status": "passed",
+      "indexDeltaForgeriesDenied": 8
+    },
+    {
+      "id": "C06",
+      "label": "line creation cannot predeclare seat IDs",
+      "status": "passed",
+      "firstAndLaterLineIndexForgeriesDenied": 2
+    },
+    {
+      "id": "C07",
+      "label": "an all-unset layout publishes an empty assignment map without creating seats",
+      "status": "passed",
+      "zeroSeatAssignmentValid": true,
+      "emptySlideDenied": true
+    },
+    {
+      "id": "C08",
+      "label": "unfinished fragment ingestion cannot issue an assignment or a public version",
+      "status": "passed",
+      "incompleteSourceDenied": true
+    },
+    {
+      "id": "C09",
+      "label": "publication reads current attendee and ticket revisions instead of an independent version stub",
+      "status": "passed",
+      "currentBusinessHeadsChecked": 2,
+      "independentReferenceVersionNotSeeded": true
+    },
+    {
+      "id": "C10",
+      "label": "invalid business head scopes revisions and existing issued-seat references block first publication",
+      "status": "passed",
+      "invalidBusinessHeadsDenied": 14,
+      "issuedSeatReferenceDenied": true
+    },
+    {
+      "id": "C11",
+      "label": "ordinary clients cannot rewrite business prerequisites alone or alongside publication",
+      "status": "passed",
+      "businessPiggybackVariantsDenied": 4
+    },
+    {
+      "id": "C12",
+      "label": "latest authority changes reject both publication and slide without changing the assignment",
+      "status": "passed",
+      "authorityVariantsDenied": 20
+    },
+    {
+      "id": "C13",
+      "label": "device-only publication rejects human anonymous outsiders and receptionist credentials",
+      "status": "passed",
+      "wrongPrincipalsDenied": 3
+    },
+    {
+      "id": "C14",
+      "label": "unknown response is resolved from five persisted documents and cannot be reapplied",
+      "status": "passed",
+      "persistedResultDocuments": 5,
+      "reapplicationDenied": true
+    },
+    {
+      "id": "C15",
+      "label": "competing first publications produce one coherent assignment and one event",
+      "status": "passed",
+      "winners": 1,
+      "noOrphanEvent": true
+    },
+    {
+      "id": "C16",
+      "label": "publication racing with abort leaves all five documents or none of the published documents",
+      "status": "passed",
+      "oneWinner": true,
+      "assignmentExistsExactlyWhenPublished": true
+    },
+    {
+      "id": "C17",
+      "label": "an existing assignment cannot be replaced with an empty first-publication table",
+      "status": "passed",
+      "existingOccupiedAssignmentPreserved": true
+    },
+    {
+      "id": "C18",
+      "label": "late publication and index ingestion are rejected after abort",
+      "status": "passed",
+      "latePublicationAndIndexDenied": true
+    },
+    {
+      "id": "C19",
+      "label": "another performance cannot borrow a device session for first publication",
+      "status": "passed",
+      "crossPerformanceDenied": true
+    },
+    {
+      "id": "C20",
+      "label": "both axes numbering orders and four slide directions retain the initial empty assignment and seat index",
+      "status": "passed",
+      "axisOrderDirectionProfiles": 16,
+      "slideWrites": 3
+    },
+    {
+      "id": "C21",
+      "label": "930 cells and 900 seats publish a complete empty assignment against a 500-person prerequisite",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "eligiblePrerequisitePeople": 500,
+      "assignedPeople": 0,
+      "initialization": {
+        "requests": 1652,
+        "writes": 2018,
+        "maxRequestBytes": 55058
+      },
+      "publication": {
+        "requests": 1,
+        "writes": 5
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2358
+      },
+      "indexJsonBytes": 163642,
+      "assignmentJsonBytes": 38048,
+      "prerequisiteAndVerificationIOExcluded": true
+    },
+    {
+      "id": "C22",
+      "label": "deputy can publish but unverified human cannot issue a manager session",
+      "status": "passed",
+      "deputyAllowed": true,
+      "unverifiedIssuerDenied": true
+    },
+    {
+      "id": "C23",
+      "label": "slide cannot rewrite assignment source or emergency seat reasons",
+      "status": "passed",
+      "unrelatedWritesDenied": 4,
+      "existingEmergencyReasonPreserved": true
+    },
+    {
+      "id": "C24",
+      "label": "four-seat layout fragment remains an expression-budget rejection comparison",
+      "status": "passed",
+      "httpStatus": 403,
+      "expressionLimit": true,
+      "productLimitUnchanged": true
+    },
+    {
+      "id": "C25",
+      "label": "duplicate seat identities inside one fragment and across fragments cannot enter the index",
+      "status": "passed",
+      "withinAndAcrossFragmentDuplicatesDenied": 2
+    }
+  ]
+}
