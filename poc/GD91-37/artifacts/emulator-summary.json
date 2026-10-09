@@ -1,0 +1,134 @@
+{
+  "project": "demo-concert-seat-gd91-37",
+  "executedAt": "2026-10-09T15:11:23.166Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "selectedCase": "all",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "dd9c8232391e2bcea4c6db02efce4352d9885ac4e5ade6f6f8526419e9b82823",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "a799ddb52872375f89fceaeeb5e2affbb32dace100e1a885ca5799ef1a53180b",
+    "budgets.mjs": "1c93142c5d998d0f6e55b16246f37fb27bee955297d73456d016c722af567e53",
+    "emulator.mjs": "d19bf530e19c92d9e193aad1e83642bdba72cf4d9faf50980e19ee6d5ef42ac9",
+    "../../GD91-36/firestore.rules": "f45f7320ea590cfb3ffc6f57921bebd52ca353d27f1c71bc94e3409d966a532a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "dd9c8232391e2bcea4c6db02efce4352d9885ac4e5ade6f6f8526419e9b82823",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "a799ddb52872375f89fceaeeb5e2affbb32dace100e1a885ca5799ef1a53180b",
+    "budgets.mjs": "1c93142c5d998d0f6e55b16246f37fb27bee955297d73456d016c722af567e53",
+    "emulator.mjs": "d19bf530e19c92d9e193aad1e83642bdba72cf4d9faf50980e19ee6d5ef42ac9",
+    "../../GD91-36/firestore.rules": "f45f7320ea590cfb3ffc6f57921bebd52ca353d27f1c71bc94e3409d966a532a"
+  },
+  "budgets": {
+    "state": [
+      5,
+      1,
+      3
+    ],
+    "read": {
+      "reception": 4,
+      "closedManager": 7,
+      "dayTemporary": 7,
+      "management": 3,
+      "selfRole": 4
+    },
+    "policy": {
+      "reception": 5,
+      "temporaryManager": 5,
+      "temporaryStaff": 8,
+      "postCorrection": 5
+    },
+    "publication": [
+      4
+    ]
+  },
+  "scope": "Stage B partial: separate read projections and lifecycle policy. Roles/devices and initial control/views root-seeded; human sessions normally issued. Three-write start/stop/end uses normal authorization. OperationChecks are policy probes, not business writes. No closing transition, quarantine, actual preparation, SDK or physical tests; no full save regression under these new rules.",
+  "reports": [
+    {
+      "id": "B01",
+      "label": "four roles use separate single-read and list scopes",
+      "status": "passed",
+      "matrixRequests": 56,
+      "roles": 4,
+      "getAndListTested": true,
+      "arbitraryFieldsAllDenied": true
+    },
+    {
+      "id": "B02",
+      "label": "query bounds, cross-performance and collection-group reads are denied",
+      "status": "passed",
+      "unboundedAndOversizedDenied": 2,
+      "crossPerformanceIdentityRequests": 8,
+      "collectionGroupDenied": true
+    },
+    {
+      "id": "B03",
+      "label": "read and operation policy distinguish all four performance states",
+      "status": "passed",
+      "roleStateCombinations": 16,
+      "policyChecks": 96,
+      "businessWritesTested": false,
+      "closingTransitionTested": false
+    },
+    {
+      "id": "B04",
+      "label": "start, stop and end are atomic and retain first reception start",
+      "status": "passed",
+      "partialSubsetsDenied": 6,
+      "stateCommits": 4,
+      "writesPerCommit": 3,
+      "firstStartPreserved": true,
+      "replayDenied": true,
+      "unsupportedTransitionsDenied": 2
+    },
+    {
+      "id": "B05",
+      "label": "only managers change state, and stale or forged proposals do not write",
+      "status": "passed",
+      "staffTransitionsDenied": 2,
+      "forgedProposalsDenied": 6,
+      "concurrentWinners": 1,
+      "auditCount": 1,
+      "deputyStartAllowed": true
+    },
+    {
+      "id": "B06",
+      "label": "re-authentication is required for end and post-correction, not normal start or reception",
+      "status": "passed",
+      "expiredHumanEndAndCorrectionDenied": 2,
+      "ordinaryStartAndReceptionAllowed": true,
+      "missingCorrectionReasonDenied": true,
+      "oldAuthTimeSeeded": true
+    },
+    {
+      "id": "B07",
+      "label": "latest authority revocation blocks normal get, list and writes, but own stop status remains readable",
+      "status": "passed",
+      "normalRequestsDenied": 28,
+      "ownMinimalStatusReadable": true,
+      "quarantineSubmissionTested": false
+    },
+    {
+      "id": "B08",
+      "label": "stale data and control versions block policy writes without blocking a fresh download",
+      "status": "passed",
+      "staleVersionRequestsDenied": 3,
+      "downloadNotDeadlocked": true,
+      "preparationReceiptRootSeeded": true,
+      "indexedDBCompletenessTested": false
+    },
+    {
+      "id": "B09",
+      "label": "public seat publication rejects management fields and staff writes",
+      "status": "passed",
+      "privateFieldPublicationDenied": 3,
+      "staffPublicationDenied": 2,
+      "postPerformanceDirectPublicationDenied": 2,
+      "emergencyReasonVisible": true,
+      "sourceProjectionConsistencyTested": false
+    }
+  ]
+}
