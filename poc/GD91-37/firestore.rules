@@ -1,0 +1,143 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-37専用。GD91-36の本人・端末照合を共用する隔離候補。
+    function scope(p,x) { return x.schemaVersion == 2 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+    function roleValid(p,r) {
+      return scope(p,r) && r.active == true && r.revision is int && r.revision > 0
+        && r.role in ['owner','deputy','temporary','receptionist']
+        && r.receptionBaselineRevision is int && r.receptionBaselineRevision >= 0 && r.receptionBaselineRevision < r.revision
+        && r.startsAt is timestamp && r.endsAt is timestamp && r.startsAt <= request.time && request.time < r.endsAt;
+    }
+    function providerValid(provider,role) { return role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+    function currentPreparation(d,s,r) { return d.preparedRoleRevision == r.revision && s.roleRevision == r.revision; }
+    function generalPreparation(d,s,r) {
+      return r.role == 'temporary' && r.receptionBaselineRevision > 0
+        && d.preparedRoleRevision == r.receptionBaselineRevision && s.roleRevision == r.receptionBaselineRevision;
+    }
+    function sessionShape(p,uid,s) {
+      return s.keys().hasAll(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+        && s.keys().hasOnly(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+        && scope(p,s) && s.deviceUid == uid && s.humanUid is string && s.humanUid.size() > 0
+        && s.active is bool && s.emailVerified == true && s.authProvider is string && s.roleRevision is int
+        && s.revision is int && s.revision > 0 && s.issuedAt is timestamp && s.expiresAt is timestamp
+        && s.humanAuthTime is timestamp && s.humanAuthTime <= s.issuedAt
+        && s.issuedAt <= request.time && s.issuedAt < s.expiresAt && s.expiresAt <= s.issuedAt + duration.value(12,'h');
+    }
+    function recentHumanAt(s,at) { return s.humanAuthTime <= at && at <= s.humanAuthTime + duration.value(15,'m'); }
+    function recentHuman(s) { return recentHumanAt(s,request.time); }
+    function authorizedLevel(p,level) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(d.humanUid)).data;
+      let managerRole = r.role in ['owner','deputy'];
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && d.schemaVersion == 2 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+        // 形式と認証時刻の出所はissueSessionが検査し、更新権限もそこで閉じる。
+        && s.schemaVersion == 2 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true
+        && s.humanUid == d.humanUid && s.expiresAt > request.time
+        && r.schemaVersion == 2 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt
+        && (managerRole ? s.authProvider == 'google.com' : s.authProvider == 'password')
+        && (level == 0 ? (managerRole || r.role in ['temporary','receptionist']) && (currentPreparation(d,s,r) || generalPreparation(d,s,r))
+          : currentPreparation(d,s,r) && (level == 3 ? r.role == 'temporary'
+            : managerRole && (level == 1 || recentHuman(s))));
+    }
+    function authorized(p,edit) { return authorizedLevel(p,edit ? 1 : 0); }
+    function issueSession(p,uid,a) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(uid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(request.auth.uid)).data;
+      return request.auth.token.email_verified == true && providerValid(request.auth.token.firebase.sign_in_provider,r.role)
+        && scope(p,d) && d.active == true && d.deviceUid == uid && d.humanUid == request.auth.uid
+        && roleValid(p,r) && sessionShape(p,uid,a) && a.active == true && a.humanUid == request.auth.uid
+        && (currentPreparation(d,a,r) || generalPreparation(d,a,r))
+        && a.authProvider == request.auth.token.firebase.sign_in_provider
+        && a.humanAuthTime == timestamp.date(1970,1,1) + duration.value(request.auth.token.auth_time,'s')
+        && a.issuedAt == request.time && a.expiresAt > request.time && a.expiresAt <= r.endsAt;
+    }
+    function revokeSession(p,uid,b,a) {
+      return request.auth.token.firebase.sign_in_provider in ['google.com','password'] && b.humanUid == request.auth.uid
+        && scope(p,b) && b.deviceUid == uid && a.diff(b).affectedKeys().hasOnly(['active','revision'])
+        && a.active == false && a.revision == b.revision + 1;
+    }
+    function manager(p) { return request.auth != null && authorized(p,true); }
+    function active(p) { return request.auth != null && authorized(p,false); }
+    function highImpact(p) { return request.auth != null && authorizedLevel(p,2); }
+    function uuid(id) { return id is string && id.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+    function control(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data; }
+    function limited() { return request.query.limit > 0 && request.query.limit <= 100; }
+    function normalRead(p) { return active(p) && (control(p).state != 'closed' || manager(p)); }
+    function dayRead(p) { return manager(p) || request.auth != null && authorizedLevel(p,3) && control(p).state in ['operating','ended']; }
+    function statePair(b,a) { return b.state == 'preparing' && a.state == 'operating' || b.state == 'operating' && a.state in ['preparing','ended']; }
+    function statusMatches(c,v) {
+      return v.keys().hasAll(['schemaVersion','state','revision','dataRevision','firstReceptionStartedAt','operationId'])
+        && v.keys().hasOnly(['schemaVersion','state','revision','dataRevision','firstReceptionStartedAt','operationId'])
+        && v.schemaVersion == c.schemaVersion && v.state == c.state && v.revision == c.revision && v.dataRevision == c.dataRevision
+        && v.firstReceptionStartedAt == c.firstReceptionStartedAt && v.operationId == c.operationId;
+    }
+    function stateWrite(p,b,a) {
+      let e = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/performanceEvents/$(a.operationId)).data;
+      let v = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/publicStatus/current).data;
+      return (a.state == 'ended' ? highImpact(p) : manager(p)) && statePair(b,a)
+        && b.schemaVersion == 1 && b.environmentId == 'FAKE-environment' && b.performanceId == p
+        && a.diff(b).affectedKeys().hasOnly(['state','revision','firstReceptionStartedAt','operationId'])
+        && a.revision == b.revision + 1 && uuid(a.operationId) && a.operationId != b.operationId
+        && a.firstReceptionStartedAt == (b.firstReceptionStartedAt == null && a.state == 'operating' ? request.time : b.firstReceptionStartedAt)
+        && statusMatches(a,v) && e.operationId == a.operationId && e.beforeRevision == b.revision && e.afterRevision == a.revision
+        && e.beforeState == b.state && e.afterState == a.state && e.confirmed == true && e.occurredAt == request.time;
+    }
+    function stateEvent(p,id,e) {
+      let b = control(p);
+      let a = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data;
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      return e.keys().hasAll(['operationId','deviceUid','humanUid','beforeState','afterState','beforeRevision','afterRevision','confirmed','occurredAt'])
+        && e.keys().hasOnly(['operationId','deviceUid','humanUid','beforeState','afterState','beforeRevision','afterRevision','confirmed','occurredAt'])
+        && uuid(id) && e.operationId == id && e.deviceUid == request.auth.uid && e.humanUid == s.humanUid
+        && e.confirmed == true && e.occurredAt == request.time && statePair(b,a) && a.operationId == id
+        && e.beforeRevision == b.revision && e.afterRevision == a.revision && a.revision == b.revision + 1
+        && e.beforeState == b.state && e.afterState == a.state;
+    }
+    function publishedSeat(p,a) {
+      return manager(p) && control(p).state in ['preparing','operating']
+        && a.keys().hasAll(['seatId','seatNumber','seatDisplayName','receptionStatus','emergencyKind','emergencyReason'])
+        && a.keys().hasOnly(['seatId','seatNumber','seatDisplayName','receptionStatus','emergencyKind','emergencyReason'])
+        && a.seatId is string && a.seatNumber is string && a.seatDisplayName is string
+        && a.receptionStatus in ['notReceived','received'] && a.emergencyKind in ['','add','change'] && a.emergencyReason is string;
+    }
+    // 実業務更新ではなく、最新状態と版の許可表だけを試す要求。
+    function operationCheck(p,a) {
+      let c = control(p);
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(request.auth.uid)).data;
+      return a.keys().hasAll(['kind','deviceUid','controlRevision','dataRevision'])
+        && a.keys().hasOnly(['kind','deviceUid','controlRevision','dataRevision','reason']) && a.deviceUid == request.auth.uid
+        && a.controlRevision == c.revision && a.dataRevision == c.dataRevision && d.preparedDataRevision == c.dataRevision
+        && (a.kind == 'reception' ? c.state == 'operating' && active(p)
+          : a.kind == 'temporary' ? c.state == 'operating' && (manager(p) || request.auth != null && authorizedLevel(p,3))
+          : a.kind == 'postCorrection' && c.state in ['ended','closed'] && highImpact(p) && a.reason is string && a.reason.size() > 0);
+    }
+    match /splitSeatShows/{p} {
+      match /sessions/{uid} {
+        allow create: if request.auth != null && request.resource.data.revision == 1 && issueSession(p,uid,request.resource.data);
+        allow update: if request.auth != null && (request.resource.data.revision == resource.data.revision + 1 && issueSession(p,uid,request.resource.data) || revokeSession(p,uid,resource.data,request.resource.data));
+        allow get: if manager(p);
+      }
+      match /roles/{uid} { allow get: if manager(p); allow list: if manager(p) && limited(); }
+      match /devices/{uid} { allow get: if manager(p); allow list: if manager(p) && limited(); }
+      match /selfRoles/{uid} { allow get: if active(p) && get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data.humanUid == uid; }
+      match /deviceStatus/{uid} { allow get: if request.auth != null && request.auth.token.firebase.sign_in_provider == 'anonymous' && uid == request.auth.uid; }
+      match /control/current { allow get: if manager(p); allow update: if stateWrite(p,resource.data,request.resource.data); }
+      match /publicStatus/current {
+        allow get: if active(p);
+        allow update: if statusMatches(getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data,request.resource.data)
+          && request.resource.data.revision == resource.data.revision + 1;
+      }
+      match /performanceEvents/{id} { allow get: if manager(p); allow list: if manager(p) && limited(); allow create: if stateEvent(p,id,request.resource.data); }
+      match /receptionViews/{id} { allow get: if normalRead(p); allow list: if normalRead(p) && limited(); allow create, update: if publishedSeat(p,request.resource.data) && request.resource.data.seatId == id; }
+      match /dayViews/{id} { allow get: if dayRead(p); allow list: if dayRead(p) && limited(); }
+      match /managementHistory/{id} { allow get: if manager(p); allow list: if manager(p) && limited(); }
+      match /sharedDrafts/{id} { allow get: if manager(p); allow list: if manager(p) && limited(); }
+      // 任意項目は暗号鍵の準備を未接続のため、この候補では全役割へ配布しない。
+      match /arbitraryFields/{id} { allow read, write: if false; }
+      match /operationChecks/{id} { allow create: if uuid(id) && operationCheck(p,request.resource.data); }
+    }
+  }
+}
