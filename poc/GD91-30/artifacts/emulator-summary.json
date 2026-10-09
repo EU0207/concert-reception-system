@@ -1,0 +1,192 @@
+{
+  "project": "demo-concert-seat-gd91-30",
+  "executedAt": "2026-10-09T07:24:49.020Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "selectedCase": "all",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "6bb94cf10cc48753bf03d760713ddf314601dc75009ff9dd2f219896cdf8ce4d",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "a0610c53bf8eb3ec9de798ee65b1c7c7dcb3a4992c9c77d5eb103520235ebc0f",
+    "business.mjs": "c45a16ac1b6b4a1f58d6ef48b376eced506fdbb9c82fe369dd3ec23e31d342cf",
+    "ticket.mjs": "b1e6de8ee81f45924ed46fa3dd12d08f040bb83fa2bb3b9c0e3ba3d943f74fbb",
+    "emulator.mjs": "e8f4f0c4dfec914c534ee7accfb34b8b41ca9fa989a052509f74feb6e367258f",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "6bb94cf10cc48753bf03d760713ddf314601dc75009ff9dd2f219896cdf8ce4d",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "a0610c53bf8eb3ec9de798ee65b1c7c7dcb3a4992c9c77d5eb103520235ebc0f",
+    "business.mjs": "c45a16ac1b6b4a1f58d6ef48b376eced506fdbb9c82fe369dd3ec23e31d342cf",
+    "ticket.mjs": "b1e6de8ee81f45924ed46fa3dd12d08f040bb83fa2bb3b9c0e3ba3d943f74fbb",
+    "emulator.mjs": "e8f4f0c4dfec914c534ee7accfb34b8b41ca9fa989a052509f74feb6e367258f",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "scope": "Single section; ordinary first qualification and manual checks only; REST commit; seeded role/device/control. Reissue/nonattendance/cycle reopening, SDK, IndexedDB, output files and physical devices untested.",
+  "reports": [
+    {
+      "id": "Q01",
+      "label": "first QR is six atomic writes and every partial subset leaves all state unchanged",
+      "status": "passed",
+      "partialSubsetsDenied": 62,
+      "firstQr": {
+        "requests": 1,
+        "writes": 6,
+        "maxRequestBytes": 5517
+      },
+      "otherTicketAbsent": true,
+      "paidAndChecksUnchanged": true
+    },
+    {
+      "id": "Q02",
+      "label": "manual issue check is four atomic writes and unchecking preserves the issue history fence",
+      "status": "passed",
+      "partialSubsetsDenied": 14,
+      "checkWrites": 4,
+      "everIssued": true,
+      "unassignAndBulkDenied": true,
+      "actorOmitted": true
+    },
+    {
+      "id": "Q03",
+      "label": "QR and protection survive independent issue sent and payment check changes",
+      "status": "passed",
+      "independentCheckChanges": 4,
+      "paymentChanges": 2,
+      "credentialAndCodeUnchanged": true
+    },
+    {
+      "id": "Q04",
+      "label": "QR may follow a manually unchecked issue flag while the historical protection remains",
+      "status": "passed",
+      "manualFirst": true,
+      "issuedAtPreserved": true,
+      "everIssuedPreserved": true
+    },
+    {
+      "id": "Q05",
+      "label": "schema metadata audit qualification and index forgeries cannot bypass the joint write set",
+      "status": "passed",
+      "forgedRequestsDenied": 40,
+      "rawValuesNotInAudit": true,
+      "oldFormatsDenied": true
+    },
+    {
+      "id": "Q06",
+      "label": "missing unassigned and not attending customers cannot obtain a QR",
+      "status": "passed",
+      "denied": 3,
+      "unassignedTicketAbsent": true
+    },
+    {
+      "id": "Q07",
+      "label": "credential and confirmation code collisions do not overwrite or partially issue another ticket",
+      "status": "passed",
+      "collisionsDenied": 2,
+      "secondGenerationForExistingCredentialDenied": true,
+      "distinctFreshQualification": true
+    },
+    {
+      "id": "Q08",
+      "label": "version changes after confirmation reject the old QR proposal",
+      "status": "passed",
+      "staleAttendeeLayoutAndControlDenied": 3
+    },
+    {
+      "id": "Q09",
+      "label": "response loss is resolved through operation and limited canonical records without reapplying",
+      "status": "passed",
+      "sameOperationLocated": true,
+      "rawQualificationComparedInRestrictedRecords": true,
+      "replaysDenied": 2,
+      "sdkRetryTested": false
+    },
+    {
+      "id": "Q10",
+      "label": "concurrent initial qualification requests produce at most one complete final winner",
+      "status": "passed",
+      "completeWinners": 1,
+      "initialSuccesses": 1,
+      "lockAbortRecovery": false
+    },
+    {
+      "id": "Q11",
+      "label": "latest authorization rejects both QR creation and manual ticket checks",
+      "status": "passed",
+      "deniedRequests": 20,
+      "authorizationFixturesSeeded": true
+    },
+    {
+      "id": "Q12",
+      "label": "ticket history and confirmation lookup stay private while active staff can resolve credentials",
+      "status": "passed",
+      "privateReadsDenied": 4,
+      "strangerDenied": true,
+      "minimalCredentialAllowed": true
+    },
+    {
+      "id": "Q13",
+      "label": "an additional ticket cannot piggyback on another customer qualification or check operation",
+      "status": "passed",
+      "additionalNewAndExistingTicketsDenied": 2
+    },
+    {
+      "id": "Q14",
+      "label": "five hundred normally registered and assigned customers acquire independent qualifications",
+      "status": "passed",
+      "customers": 500,
+      "seats": 900,
+      "cells": 930,
+      "bootstrap": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 2757
+      },
+      "initialization": {
+        "requests": 1652,
+        "writes": 2018,
+        "maxRequestBytes": 55835
+      },
+      "registration": {
+        "requests": 500,
+        "writes": 2000,
+        "maxRequestBytes": 31539
+      },
+      "allocation": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 195325
+      },
+      "qualifications": {
+        "requests": 500,
+        "writes": 3000,
+        "maxRequestBytes": 32985
+      },
+      "swap": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 73243
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2594
+      },
+      "totalToQualification": {
+        "requests": 2654,
+        "writes": 7025
+      },
+      "allAssignmentsRetained": true,
+      "allQualificationsChecked": true,
+      "checksNotAutoUpdated": true
+    }
+  ]
+}
