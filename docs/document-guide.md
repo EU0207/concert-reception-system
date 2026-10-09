@@ -134,7 +134,7 @@
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約と試験DD91-T01～63を追跡する。GD91-01～31を集約。初回資格と保護は承認済み。旧資格無効化と再発行8書込みを限定確認。不参加・復帰と正式認可全体、物理方式の採否は継続 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約と試験DD91-T01～63を追跡する。GD91-01～32を集約。再発行は承認済み。有効QR・席ありの不参加と復帰、新cycleを限定確認。券未作成・QRなしと正式認可全体、方式採否は継続 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 
