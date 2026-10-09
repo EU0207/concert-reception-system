@@ -1,0 +1,295 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-39専用。GD91-36の本人・端末照合を共用する隔離候補。
+    function scope(p,x) { return x.schemaVersion == 2 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+    function roleValid(p,r) {
+      return scope(p,r) && r.active == true && r.revision is int && r.revision > 0
+        && r.role in ['owner','deputy','temporary','receptionist']
+        && r.receptionBaselineRevision is int && r.receptionBaselineRevision >= 0 && r.receptionBaselineRevision < r.revision
+        && r.startsAt is timestamp && r.endsAt is timestamp && r.startsAt <= request.time && request.time < r.endsAt;
+    }
+    function providerValid(provider,role) { return role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+    function currentPreparation(d,s,r) { return d.preparedRoleRevision == r.revision && s.roleRevision == r.revision; }
+    function generalPreparation(d,s,r) {
+      return r.role == 'temporary' && r.receptionBaselineRevision > 0
+        && d.preparedRoleRevision == r.receptionBaselineRevision && s.roleRevision == r.receptionBaselineRevision;
+    }
+    function sessionShape(p,uid,s) {
+      return s.keys().hasAll(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+        && s.keys().hasOnly(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+        && scope(p,s) && s.deviceUid == uid && s.humanUid is string && s.humanUid.size() > 0
+        && s.active is bool && s.emailVerified == true && s.authProvider is string && s.roleRevision is int
+        && s.revision is int && s.revision > 0 && s.issuedAt is timestamp && s.expiresAt is timestamp
+        && s.humanAuthTime is timestamp && s.humanAuthTime <= s.issuedAt
+        && s.issuedAt <= request.time && s.issuedAt < s.expiresAt && s.expiresAt <= s.issuedAt + duration.value(12,'h');
+    }
+    function recentHumanAt(s,at) { return s.humanAuthTime <= at && at <= s.humanAuthTime + duration.value(15,'m'); }
+    function recentHuman(s) { return recentHumanAt(s,request.time); }
+    function authorizedLevel(p,level) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(d.humanUid)).data;
+      let managerRole = r.role in ['owner','deputy'];
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && d.schemaVersion == 2 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+        // 形式と認証時刻の出所はissueSessionが検査し、更新権限もそこで閉じる。
+        && s.schemaVersion == 2 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true
+        && s.humanUid == d.humanUid && s.expiresAt > request.time
+        && r.schemaVersion == 2 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt
+        && (managerRole ? s.authProvider == 'google.com' : s.authProvider == 'password')
+        && (level == 0 ? (managerRole || r.role in ['temporary','receptionist']) && (currentPreparation(d,s,r) || generalPreparation(d,s,r))
+          : currentPreparation(d,s,r) && (level == 4 ? managerRole || r.role == 'temporary'
+            : level == 3 ? r.role == 'temporary'
+            : managerRole && (level == 1 || recentHuman(s))));
+    }
+    function authorized(p,edit) { return authorizedLevel(p,edit ? 1 : 0); }
+    function issueSession(p,uid,a) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(uid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(request.auth.uid)).data;
+      return request.auth.token.email_verified == true && providerValid(request.auth.token.firebase.sign_in_provider,r.role)
+        && scope(p,d) && d.active == true && d.deviceUid == uid && d.humanUid == request.auth.uid
+        && roleValid(p,r) && sessionShape(p,uid,a) && a.active == true && a.humanUid == request.auth.uid
+        && (currentPreparation(d,a,r) || generalPreparation(d,a,r))
+        && a.authProvider == request.auth.token.firebase.sign_in_provider
+        && a.humanAuthTime == timestamp.date(1970,1,1) + duration.value(request.auth.token.auth_time,'s')
+        && a.issuedAt == request.time && a.expiresAt > request.time && a.expiresAt <= r.endsAt;
+    }
+    function revokeSession(p,uid,b,a) {
+      return request.auth.token.firebase.sign_in_provider in ['google.com','password'] && b.humanUid == request.auth.uid
+        && scope(p,b) && b.deviceUid == uid && a.diff(b).affectedKeys().hasOnly(['active','revision'])
+        && a.active == false && a.revision == b.revision + 1;
+    }
+    function manager(p) { return request.auth != null && authorized(p,true); }
+    function active(p) { return request.auth != null && authorized(p,false); }
+    function highImpact(p) { return request.auth != null && authorizedLevel(p,2); }
+    function uuid(id) { return id is string && id.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+    function control(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data; }
+    function limited() { return request.query.limit > 0 && request.query.limit <= 100; }
+    function normalRead(p) { return active(p) && (control(p).state != 'closed' || manager(p)); }
+    function dayRead(p) { return manager(p) || request.auth != null && authorizedLevel(p,3) && control(p).state in ['operating','ended']; }
+    function statePair(b,a) { return b.state == 'preparing' && a.state == 'operating' || b.state == 'operating' && a.state in ['preparing','ended']; }
+    function statusMatches(c,v) {
+      return v.keys().hasAll(['schemaVersion','state','revision','dataRevision','firstReceptionStartedAt','operationId'])
+        && v.keys().hasOnly(['schemaVersion','state','revision','dataRevision','firstReceptionStartedAt','operationId'])
+        && v.schemaVersion == c.schemaVersion && v.state == c.state && v.revision == c.revision && v.dataRevision == c.dataRevision
+        && v.firstReceptionStartedAt == c.firstReceptionStartedAt && v.operationId == c.operationId;
+    }
+    function stateWrite(p,b,a) {
+      let e = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/performanceEvents/$(a.operationId)).data;
+      let v = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/publicStatus/current).data;
+      return (a.state == 'ended' ? highImpact(p) : manager(p)) && statePair(b,a)
+        && b.schemaVersion == 1 && b.environmentId == 'FAKE-environment' && b.performanceId == p
+        && a.diff(b).affectedKeys().hasOnly(['state','revision','firstReceptionStartedAt','operationId'])
+        && a.revision == b.revision + 1 && uuid(a.operationId) && a.operationId != b.operationId
+        && a.firstReceptionStartedAt == (b.firstReceptionStartedAt == null && a.state == 'operating' ? request.time : b.firstReceptionStartedAt)
+        && statusMatches(a,v) && e.operationId == a.operationId && e.beforeRevision == b.revision && e.afterRevision == a.revision
+        && e.beforeState == b.state && e.afterState == a.state && e.confirmed == true && e.occurredAt == request.time;
+    }
+    function stateEvent(p,id,e) {
+      let b = control(p);
+      let a = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data;
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      return e.keys().hasAll(['operationId','deviceUid','humanUid','beforeState','afterState','beforeRevision','afterRevision','confirmed','occurredAt'])
+        && e.keys().hasOnly(['operationId','deviceUid','humanUid','beforeState','afterState','beforeRevision','afterRevision','confirmed','occurredAt'])
+        && uuid(id) && e.operationId == id && e.deviceUid == request.auth.uid && e.humanUid == s.humanUid
+        && e.confirmed == true && e.occurredAt == request.time && statePair(b,a) && a.operationId == id
+        && e.beforeRevision == b.revision && e.afterRevision == a.revision && a.revision == b.revision + 1
+        && e.beforeState == b.state && e.afterState == a.state;
+    }
+    // 正本・公開用投影・本人履歴・配布版を一体更新する最小候補。
+    function viewMatches(a,v) {
+      return v.keys().hasAll(['seatId','seatNumber','seatDisplayName','receptionStatus','emergencyKind','emergencyReason','sourceRevision','dataRevision','operationId'])
+        && v.keys().hasOnly(['seatId','seatNumber','seatDisplayName','receptionStatus','emergencyKind','emergencyReason','sourceRevision','dataRevision','operationId'])
+        && v.seatId == a.seatId && v.seatNumber == a.seatNumber && v.seatDisplayName == a.seatDisplayName
+        && v.receptionStatus == a.receptionStatus && v.emergencyKind == a.emergencyKind && v.emergencyReason == a.emergencyReason
+        && v.sourceRevision == a.revision && v.dataRevision == a.dataRevision && v.operationId == a.operationId;
+    }
+    function factWrite(p,id,b,a) {
+      let c = control(p);
+      let next = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(a.actorUid)).data;
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(request.auth.uid)).data;
+      let v = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/receptionViews/$(id)).data;
+      let e = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/dayEvents/$(a.actorUid)/entries/$(a.operationId)).data;
+      return request.auth != null && authorizedLevel(p,4)
+        && c.state in ['preparing','operating'] && (c.state == 'operating' || r.role in ['owner','deputy'])
+        && d.preparedDataRevision == c.dataRevision
+        && b.schemaVersion == 1 && b.environmentId == 'FAKE-environment' && b.performanceId == p && b.seatId == id
+        && a.diff(b).affectedKeys().hasOnly(['seatDisplayName','revision','operationId','actorUid','controlRevision','dataRevision'])
+        && a.seatDisplayName is string && a.seatDisplayName != b.seatDisplayName && a.revision == b.revision + 1
+        && uuid(a.operationId) && a.operationId != b.operationId
+        && a.controlRevision == c.revision + 1 && next.revision == a.controlRevision
+        && a.dataRevision == c.dataRevision + 1 && next.dataRevision == a.dataRevision
+        && next.dataSeatId == id && next.operationId == a.operationId && viewMatches(a,v)
+        && e.operationId == a.operationId && e.seatId == id && e.actorUid == a.actorUid
+        && e.afterRevision == a.revision && e.occurredAt == request.time;
+    }
+    function publishedSeat(p,id,v) {
+      let b = get(/databases/$(database)/documents/splitSeatShows/$(p)/seatFacts/$(id)).data;
+      let a = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/seatFacts/$(id)).data;
+      return a.revision == b.revision + 1 && viewMatches(a,v);
+    }
+    function dayEvent(p,uid,id,e) {
+      let b = get(/databases/$(database)/documents/splitSeatShows/$(p)/seatFacts/$(e.seatId)).data;
+      let a = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/seatFacts/$(e.seatId)).data;
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      return e.keys().hasAll(['operationId','kind','seatId','actorUid','deviceUid','beforeRevision','afterRevision','controlRevision','dataRevision','occurredAt'])
+        && e.keys().hasOnly(['operationId','kind','seatId','actorUid','deviceUid','beforeRevision','afterRevision','controlRevision','dataRevision','occurredAt'])
+        && uuid(id) && e.operationId == id && e.kind == 'seatDisplayNameChange' && e.deviceUid == request.auth.uid
+        && e.actorUid == uid && e.actorUid == s.humanUid && a.actorUid == uid
+        && a.operationId == id && a.revision == b.revision + 1 && e.beforeRevision == b.revision && e.afterRevision == a.revision
+        && e.controlRevision == a.controlRevision && e.dataRevision == a.dataRevision && e.occurredAt == request.time;
+    }
+    function dataPublication(p,b,a) {
+      let before = get(/databases/$(database)/documents/splitSeatShows/$(p)/seatFacts/$(a.dataSeatId)).data;
+      let after = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/seatFacts/$(a.dataSeatId)).data;
+      let v = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/publicStatus/current).data;
+      return b.state in ['preparing','operating'] && a.diff(b).affectedKeys().hasOnly(['revision','dataRevision','dataSeatId','operationId'])
+        && a.revision == b.revision + 1 && a.dataRevision == b.dataRevision + 1 && uuid(a.operationId)
+        && after.revision == before.revision + 1 && after.operationId == a.operationId
+        && after.controlRevision == a.revision && after.dataRevision == a.dataRevision && statusMatches(a,v);
+    }
+    function ownDayRead(p,uid) {
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      return manager(p) || request.auth != null && authorizedLevel(p,3)
+        && s.humanUid == uid && control(p).state in ['operating','ended'];
+    }
+    // 実業務更新ではなく、最新状態と版の許可表だけを試す要求。
+    function operationCheck(p,a) {
+      let c = control(p);
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(request.auth.uid)).data;
+      return a.keys().hasAll(['kind','deviceUid','controlRevision','dataRevision'])
+        && a.keys().hasOnly(['kind','deviceUid','controlRevision','dataRevision','reason']) && a.deviceUid == request.auth.uid
+        && a.controlRevision == c.revision && a.dataRevision == c.dataRevision && d.preparedDataRevision == c.dataRevision
+        && (a.kind == 'reception' ? c.state == 'operating' && active(p)
+          : a.kind == 'temporary' ? c.state == 'operating' && (manager(p) || request.auth != null && authorizedLevel(p,3))
+          : a.kind == 'postCorrection' && c.state in ['ended','closed'] && highImpact(p) && a.reason is string && a.reason.size() > 0);
+    }
+    function manifest(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/preparationManifest/current).data; }
+    function currentManifest(p,m,c) {
+      return m.schemaVersion == 1 && m.environmentId == 'FAKE-environment' && m.performanceId == p
+        && m.dataRevision == c.dataRevision && m.snapshotId is string && uuid(m.snapshotId)
+        && m.digest is string && m.digest.matches('^[0-9a-f]{64}$') && m.recordCount is int && m.recordCount >= 0;
+    }
+    function prepare(p,uid,b,a) {
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(request.auth.uid)).data;
+      let c = control(p);
+      let m = manifest(p);
+      let e = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/preparationReceipts/$(a.preparationOperationId)).data;
+      return request.auth != null && request.auth.token.email_verified == true && providerValid(request.auth.token.firebase.sign_in_provider,r.role)
+        && roleValid(p,r) && scope(p,b) && b.active == true && b.deviceUid == uid && b.humanUid == request.auth.uid
+        && c.state != 'closed' && currentManifest(p,m,c)
+        && (b.preparedRoleRevision != r.revision || b.preparedDataRevision != m.dataRevision || b.get('preparedSnapshotId','') != m.snapshotId)
+        && a.diff(b).affectedKeys().hasOnly(['preparedRoleRevision','preparedDataRevision','preparedSnapshotId','preparedDigest','preparedAt','preparationOperationId'])
+        && a.preparedRoleRevision == r.revision && a.preparedDataRevision == m.dataRevision && a.preparedSnapshotId == m.snapshotId && a.preparedDigest == m.digest
+        && uuid(a.preparationOperationId) && a.preparedAt == request.time
+        && e.operationId == a.preparationOperationId && e.deviceUid == uid && e.humanUid == request.auth.uid
+        && e.roleRevision == r.revision && e.dataRevision == m.dataRevision && e.snapshotId == m.snapshotId && e.digest == m.digest && e.recordCount == m.recordCount;
+    }
+    function preparationReceipt(p,id,e) {
+      let b = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(e.deviceUid)).data;
+      let a = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(e.deviceUid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(request.auth.uid)).data;
+      let c = control(p);
+      let m = manifest(p);
+      return e.keys().hasAll(['operationId','deviceUid','humanUid','roleRevision','dataRevision','snapshotId','digest','recordCount','occurredAt'])
+        && e.keys().hasOnly(['operationId','deviceUid','humanUid','roleRevision','dataRevision','snapshotId','digest','recordCount','occurredAt'])
+        && request.auth.token.email_verified == true && providerValid(request.auth.token.firebase.sign_in_provider,r.role) && roleValid(p,r)
+        && scope(p,b) && b.active == true && b.deviceUid == e.deviceUid && b.humanUid == request.auth.uid && c.state != 'closed' && currentManifest(p,m,c)
+        && (b.preparedRoleRevision != r.revision || b.preparedDataRevision != m.dataRevision || b.get('preparedSnapshotId','') != m.snapshotId)
+        && e.operationId == id && uuid(id) && e.humanUid == request.auth.uid && e.occurredAt == request.time
+        && e.roleRevision == r.revision && e.dataRevision == m.dataRevision && e.snapshotId == m.snapshotId && e.digest == m.digest && e.recordCount == m.recordCount
+        && a.preparedRoleRevision == r.revision && a.preparedDataRevision == m.dataRevision && a.preparedSnapshotId == m.snapshotId && a.preparedDigest == m.digest
+        && a.preparationOperationId == id && a.preparedAt == request.time;
+    }
+    function preparationResult(p,e) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(e.deviceUid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(request.auth.uid)).data;
+      return request.auth.token.email_verified == true && providerValid(request.auth.token.firebase.sign_in_provider,r.role) && roleValid(p,r)
+        && scope(p,d) && d.active == true && d.deviceUid == e.deviceUid && d.humanUid == request.auth.uid && e.humanUid == request.auth.uid;
+    }
+    function recovery(p,e) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(d.humanUid)).data;
+      let c = control(p);
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && scope(p,d) && scope(p,s) && scope(p,r) && d.deviceUid == request.auth.uid && s.deviceUid == request.auth.uid
+        && e.deviceUid == request.auth.uid && e.humanUid == d.humanUid && s.humanUid == d.humanUid && s.emailVerified == true
+        && s.authProvider in ['google.com','password'] && c.state != 'closed'
+        && e.stopRevision == (d.active == true ? 0 : d.stopRevision)
+        && e.stoppedAt == (d.active == true ? null : d.stoppedAt)
+        && e.sourceControlRevision <= c.revision && e.sourceDataRevision <= c.dataRevision && e.sourceRoleRevision <= r.revision
+        && (d.active == false && d.stopRevision is int && d.stopRevision > 0 && d.stoppedAt is timestamp
+          || d.active == true && (s.active == false || s.expiresAt <= request.time || r.active == false || r.startsAt > request.time || r.endsAt <= request.time
+            || !(currentPreparation(d,s,r) || generalPreparation(d,s,r)) || d.preparedDataRevision != c.dataRevision
+            || e.sourceControlRevision != c.revision || c.state != 'operating'));
+    }
+    function quarantine(p,id,e) {
+      let q = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/quarantineSequences/$(e.deviceUid + '_' + string(e.sequence))).data;
+      let receipt = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/quarantineReceipts/$(id)).data;
+      return request.auth != null && recovery(p,e)
+        && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','deviceUid','humanUid','sequence','sourceControlRevision','sourceDataRevision','sourceRoleRevision','stopRevision','stoppedAt','observedAt','lastSyncedAt','event','receivedAt'])
+        && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','deviceUid','humanUid','sequence','sourceControlRevision','sourceDataRevision','sourceRoleRevision','stopRevision','stoppedAt','observedAt','lastSyncedAt','event','receivedAt'])
+        && e.schemaVersion == 1 && e.environmentId == 'FAKE-environment' && e.performanceId == p && e.operationId == id && uuid(id)
+        && e.sequence is int && e.sequence > 0 && e.sourceControlRevision is int && e.sourceControlRevision > 0
+        && e.sourceDataRevision is int && e.sourceDataRevision > 0 && e.sourceRoleRevision is int && e.sourceRoleRevision > 0
+        && e.stopRevision is int && e.stopRevision >= 0
+        && e.observedAt is timestamp && e.lastSyncedAt is timestamp && e.receivedAt == request.time
+        && e.event.keys().hasAll(['kind','targetId']) && e.event.keys().hasOnly(['kind','targetId'])
+        && e.event.kind == 'receptionObserved' && uuid(e.event.targetId)
+        && q.operationId == id && q.deviceUid == e.deviceUid && q.sequence == e.sequence
+        && receipt.operationId == id && receipt.deviceUid == e.deviceUid && receipt.status == 'receivedForReview' && receipt.receivedAt == request.time;
+    }
+    function sequence(p,id,q) {
+      let e = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/quarantineEvents/$(q.operationId)).data;
+      return q.keys().hasAll(['operationId','deviceUid','sequence']) && q.keys().hasOnly(['operationId','deviceUid','sequence'])
+        && uuid(q.operationId) && id == q.deviceUid + '_' + string(q.sequence) && e.operationId == q.operationId && e.deviceUid == q.deviceUid && e.sequence == q.sequence;
+    }
+    function quarantineReceipt(p,id,receipt) {
+      let e = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/quarantineEvents/$(id)).data;
+      return receipt.keys().hasAll(['operationId','deviceUid','status','receivedAt']) && receipt.keys().hasOnly(['operationId','deviceUid','status','receivedAt'])
+        && uuid(id) && receipt.operationId == id && receipt.deviceUid == e.deviceUid && receipt.status == 'receivedForReview'
+        && receipt.receivedAt == request.time && e.receivedAt == request.time;
+    }
+    match /splitSeatShows/{p} {
+      match /sessions/{uid} {
+        allow create: if request.auth != null && request.resource.data.revision == 1 && issueSession(p,uid,request.resource.data);
+        allow update: if request.auth != null && (request.resource.data.revision == resource.data.revision + 1 && issueSession(p,uid,request.resource.data) || revokeSession(p,uid,resource.data,request.resource.data));
+        allow get: if manager(p);
+      }
+      match /roles/{uid} { allow get: if manager(p); allow list: if manager(p) && limited(); }
+      match /devices/{uid} { allow get: if manager(p); allow list: if manager(p) && limited(); allow update: if prepare(p,uid,resource.data,request.resource.data); }
+      match /preparationManifest/current { allow get: if active(p); }
+      match /preparationReceipts/{id} {
+        allow create: if request.auth != null && preparationReceipt(p,id,request.resource.data);
+        allow get: if request.auth != null && (request.auth.token.firebase.sign_in_provider == 'anonymous' ? manager(p) : preparationResult(p,resource.data));
+      }
+      match /quarantineEvents/{id} { allow create: if quarantine(p,id,request.resource.data); allow get: if manager(p); allow list: if manager(p) && limited(); }
+      match /quarantineSequences/{id} { allow create: if sequence(p,id,request.resource.data); }
+      match /quarantineReceipts/{id} {
+        allow create: if quarantineReceipt(p,id,request.resource.data);
+        allow get: if request.auth != null && (request.auth.token.firebase.sign_in_provider == 'anonymous' && request.auth.uid == resource.data.deviceUid || manager(p));
+      }
+      match /selfRoles/{uid} { allow get: if active(p) && get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data.humanUid == uid; }
+      match /deviceStatus/{uid} { allow get: if request.auth != null && request.auth.token.firebase.sign_in_provider == 'anonymous' && uid == request.auth.uid; }
+      match /control/current { allow get: if manager(p); allow update: if request.resource.data.dataRevision != resource.data.dataRevision ? dataPublication(p,resource.data,request.resource.data) : stateWrite(p,resource.data,request.resource.data); }
+      match /publicStatus/current {
+        allow get: if active(p);
+        allow update: if statusMatches(getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data,request.resource.data)
+          && request.resource.data.revision == resource.data.revision + 1;
+      }
+      match /performanceEvents/{id} { allow get: if manager(p); allow list: if manager(p) && limited(); allow create: if stateEvent(p,id,request.resource.data); }
+      match /receptionViews/{id} { allow get: if normalRead(p); allow list: if normalRead(p) && limited(); allow create, update: if publishedSeat(p,id,request.resource.data); }
+      match /seatFacts/{id} { allow get: if manager(p); allow list: if manager(p) && limited(); allow update: if factWrite(p,id,resource.data,request.resource.data); }
+      match /dayEvents/{uid}/entries/{id} { allow get: if ownDayRead(p,uid); allow list: if ownDayRead(p,uid) && limited(); allow create: if dayEvent(p,uid,id,request.resource.data); }
+      match /dayViews/{id} { allow get: if dayRead(p); allow list: if dayRead(p) && limited(); }
+      match /managementHistory/{id} { allow get: if manager(p); allow list: if manager(p) && limited(); }
+      match /sharedDrafts/{id} { allow get: if manager(p); allow list: if manager(p) && limited(); }
+      // 任意項目は暗号鍵の準備を未接続のため、この候補では全役割へ配布しない。
+      match /arbitraryFields/{id} { allow read, write: if false; }
+      match /operationChecks/{id} { allow create: if uuid(id) && operationCheck(p,request.resource.data); }
+    }
+  }
+}
