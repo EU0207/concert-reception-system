@@ -2,7 +2,7 @@
 
 状態：In Review。読者：開発者・設計担当者・テスト担当者。
 目的：#101の候補Eについて、固定席集合の少数変更と500人配置を同じ正本で保存できるか確認する。
-正式な結果と未検証範囲は[詳細設計](../../docs/development/detailed-design/seat-management-detail-design.md#gd91-02-割当表集約の限定検証)へ集約する。
+正式な結果と未検証範囲は[技術検証記録](../../docs/development/technical-validation/seat-save-validation.md#gd91-02-割当表集約の限定検証)へ集約する。
 
 ## 実行
 
