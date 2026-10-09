@@ -3,7 +3,7 @@
 状態：In Review。読者：開発者・設計担当者・テスト担当者。
 目的：Issue #101の保存候補を、架空データとローカルのAuth／Firestoreだけで検証する。
 
-結果と未検証範囲は[詳細設計](../../docs/development/detailed-design/seat-management-detail-design.md#gd91-01-隔離検証結果2026-10-06)へ集約する。ここには再実行方法だけを記載する。
+結果と未検証範囲は[技術検証記録](../../docs/development/technical-validation/seat-save-validation.md#gd91-01-隔離検証結果2026-10-06)へ集約する。ここには再実行方法だけを記載する。
 
 ## 再実行
 

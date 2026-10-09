@@ -1,0 +1,396 @@
+{
+  "project": "demo-concert-seat-gd91-32",
+  "executedAt": "2026-10-09T08:53:22.201Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "selectedCase": "all",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "e8bf636fc9a690746efd81fffef9c096fa9f48b7f7a325a3a29b7b0c9ac36a55",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "e04d2c7c3b7da41339044ec3cf3ea85f36cc1e0f83caed733535d88c327d5dbf",
+    "business.mjs": "42b9de6ad184da0d7c9b8b854e667a9505e8a65719f952ea8038b7ee9b2b781e",
+    "ticket.mjs": "d848ea114e3a5440a5166b193ae53aebb9ca0bde45a711517611cc457189046d",
+    "emulator.mjs": "627ce1c4e4ffe9df7f1b4e55b9002b67b73d6c4bdc7db1212727401c878a6db3",
+    "budgets.mjs": "9bd8edbde0e4493cdd91bf1b4e1e44d9878c9fb4e8abd56c73f12e0f48fab709",
+    "cancel.mjs": "2ab79a2fc68cfb079660dbe90f533a1c9eb7e6b64c497c6699888d151084efe0",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "e8bf636fc9a690746efd81fffef9c096fa9f48b7f7a325a3a29b7b0c9ac36a55",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "e04d2c7c3b7da41339044ec3cf3ea85f36cc1e0f83caed733535d88c327d5dbf",
+    "business.mjs": "42b9de6ad184da0d7c9b8b854e667a9505e8a65719f952ea8038b7ee9b2b781e",
+    "ticket.mjs": "d848ea114e3a5440a5166b193ae53aebb9ca0bde45a711517611cc457189046d",
+    "emulator.mjs": "627ce1c4e4ffe9df7f1b4e55b9002b67b73d6c4bdc7db1212727401c878a6db3",
+    "budgets.mjs": "9bd8edbde0e4493cdd91bf1b4e1e44d9878c9fb4e8abd56c73f12e0f48fab709",
+    "cancel.mjs": "2ab79a2fc68cfb079660dbe90f533a1c9eb7e6b64c497c6699888d151084efe0",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "budgets": {
+    "firstQr": [
+      5,
+      5,
+      4,
+      1,
+      1,
+      1
+    ],
+    "ticketCheck": [
+      5,
+      3,
+      4,
+      1
+    ],
+    "reissue": [
+      5,
+      6,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "cancel": [
+      5,
+      5,
+      3,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1
+    ],
+    "reopenCheck": [
+      5,
+      4,
+      4,
+      1
+    ],
+    "return": [
+      9,
+      4,
+      4,
+      2
+    ]
+  },
+  "scope": "Single section; first qualification, manual checks and loss reissue; REST commit; seeded role/device/control. Device-stop confirmation is an asserted precondition, not physical fleet verification. Assigned active-QR nonattendance/return and cycle reopening covered; no-ticket/no-QR variants, SDK, IndexedDB, output files and physical fleet untested. Reception fact seeded, not normally produced.",
+  "reports": [
+    {
+      "id": "Q01",
+      "label": "first QR is six atomic writes and every partial subset leaves all state unchanged",
+      "status": "passed",
+      "partialSubsetsDenied": 62,
+      "firstQr": {
+        "requests": 1,
+        "writes": 6,
+        "maxRequestBytes": 6187
+      },
+      "otherTicketAbsent": true,
+      "paidAndChecksUnchanged": true
+    },
+    {
+      "id": "Q02",
+      "label": "manual issue check is four atomic writes and unchecking preserves the issue history fence",
+      "status": "passed",
+      "partialSubsetsDenied": 14,
+      "checkWrites": 4,
+      "everIssued": true,
+      "unassignAndBulkDenied": true,
+      "actorOmitted": true
+    },
+    {
+      "id": "Q03",
+      "label": "QR and protection survive independent issue sent and payment check changes",
+      "status": "passed",
+      "independentCheckChanges": 4,
+      "paymentChanges": 2,
+      "credentialAndCodeUnchanged": true
+    },
+    {
+      "id": "Q04",
+      "label": "QR may follow a manually unchecked issue flag while the historical protection remains",
+      "status": "passed",
+      "manualFirst": true,
+      "issuedAtPreserved": true,
+      "everIssuedPreserved": true
+    },
+    {
+      "id": "Q05",
+      "label": "schema metadata audit qualification and index forgeries cannot bypass the joint write set",
+      "status": "passed",
+      "forgedRequestsDenied": 46,
+      "rawValuesNotInAudit": true,
+      "oldFormatsDenied": true
+    },
+    {
+      "id": "Q06",
+      "label": "missing unassigned and not attending customers cannot obtain a QR",
+      "status": "passed",
+      "denied": 3,
+      "unassignedTicketAbsent": true
+    },
+    {
+      "id": "Q07",
+      "label": "credential and confirmation code collisions do not overwrite or partially issue another ticket",
+      "status": "passed",
+      "collisionsDenied": 2,
+      "secondGenerationForExistingCredentialDenied": true,
+      "distinctFreshQualification": true
+    },
+    {
+      "id": "Q08",
+      "label": "version changes after confirmation reject the old QR proposal",
+      "status": "passed",
+      "staleAttendeeLayoutAndControlDenied": 3
+    },
+    {
+      "id": "Q09",
+      "label": "response loss is resolved through operation and limited canonical records without reapplying",
+      "status": "passed",
+      "sameOperationLocated": true,
+      "rawQualificationComparedInRestrictedRecords": true,
+      "replaysDenied": 2,
+      "sdkRetryTested": false
+    },
+    {
+      "id": "Q10",
+      "label": "concurrent initial qualification requests produce at most one complete final winner",
+      "status": "passed",
+      "completeWinners": 1,
+      "initialSuccesses": 1,
+      "lockAbortRecovery": false
+    },
+    {
+      "id": "Q11",
+      "label": "latest authorization rejects both QR creation and manual ticket checks",
+      "status": "passed",
+      "deniedRequests": 20,
+      "authorizationFixturesSeeded": true
+    },
+    {
+      "id": "Q12",
+      "label": "ticket history and confirmation lookup stay private while active staff can resolve credentials",
+      "status": "passed",
+      "privateReadsDenied": 4,
+      "strangerDenied": true,
+      "minimalCredentialAllowed": true
+    },
+    {
+      "id": "Q13",
+      "label": "an additional ticket cannot piggyback on another customer qualification or check operation",
+      "status": "passed",
+      "additionalNewAndExistingTicketsDenied": 2
+    },
+    {
+      "id": "Q14",
+      "label": "five hundred normally registered and assigned customers acquire independent qualifications",
+      "status": "passed",
+      "customers": 500,
+      "seats": 900,
+      "cells": 930,
+      "bootstrap": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 2757
+      },
+      "initialization": {
+        "requests": 1652,
+        "writes": 2018,
+        "maxRequestBytes": 55872
+      },
+      "registration": {
+        "requests": 500,
+        "writes": 2000,
+        "maxRequestBytes": 31539
+      },
+      "allocation": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 195365
+      },
+      "qualifications": {
+        "requests": 500,
+        "writes": 3000,
+        "maxRequestBytes": 33671
+      },
+      "swap": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 73277
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2594
+      },
+      "totalToQualification": {
+        "requests": 2654,
+        "writes": 7025
+      },
+      "allAssignmentsRetained": true,
+      "allQualificationsChecked": true,
+      "checksNotAutoUpdated": true
+    },
+    {
+      "id": "Q15",
+      "label": "all 254 partial reissue subsets fail and eight writes revoke both old references atomically",
+      "status": "passed",
+      "partialSubsetsDenied": 254,
+      "reissue": {
+        "requests": 1,
+        "writes": 8,
+        "maxRequestBytes": 8289
+      },
+      "oldCredentialRevoked": true,
+      "oldCodeInactive": true,
+      "checksPaymentSeatAndCyclePreserved": true
+    },
+    {
+      "id": "Q16",
+      "label": "reissue forgeries cannot change flags or revoke another ticket qualification",
+      "status": "passed",
+      "forgeriesDenied": 23
+    },
+    {
+      "id": "Q17",
+      "label": "unknown reissue response and racing reissues never produce two active replacements",
+      "status": "passed",
+      "responseLocated": true,
+      "replaysDenied": 2,
+      "completeWinners": 1,
+      "initialWinners": 1,
+      "lockAbortRecovery": false,
+      "sdkRetryTested": false
+    },
+    {
+      "id": "Q18",
+      "label": "latest customer layout control and authorization fences apply to reissue",
+      "status": "passed",
+      "staleAndUnauthorizedRequestsDenied": 10
+    },
+    {
+      "id": "Q19",
+      "label": "collisions and repeated reissue preserve tombstones across swaps and check changes",
+      "status": "passed",
+      "collisionsDenied": 4,
+      "reissues": 3,
+      "allOldReferencesRemainInvalid": true,
+      "swapPreservesTicket": true,
+      "protectionPreserved": true
+    },
+    {
+      "id": "Q20",
+      "label": "missing physical stop assertion or reason holds the operation and direct false acknowledgments fail",
+      "status": "passed",
+      "plannerHolds": 3,
+      "directRequestsDenied": 6,
+      "physicalFleetVerified": false,
+      "updateReceiptAndResumeUntested": true
+    },
+    {
+      "id": "Q21",
+      "label": "reduced reference checks cannot authorize lone writes replays reactivation or extra targets",
+      "status": "passed",
+      "additionalLoneReplayAndReactivationRequestsDenied": 18
+    },
+    {
+      "id": "Q22",
+      "label": "a stored operation cannot authorize a new ticket-only check mutation",
+      "status": "passed",
+      "existingOperationLoneTicketDenied": true,
+      "sharedTicketVersionMustAdvance": true
+    },
+    {
+      "id": "Q23",
+      "label": "all 510 nonattendance partial sets fail and nine writes preserve payment and first reception",
+      "status": "passed",
+      "partialSubsetsDenied": 510,
+      "cancel": {
+        "requests": 1,
+        "writes": 9,
+        "maxRequestBytes": 9808
+      },
+      "paymentAndSeededReceptionPreserved": true,
+      "oldSeatAndTicketFactsInAudit": true,
+      "otherTicketUnchanged": true
+    },
+    {
+      "id": "Q24",
+      "label": "return does not reclaim the old seat or ticket and a new assigned cycle gets a new qualification",
+      "status": "passed",
+      "return": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 5016
+      },
+      "oldSeatOccupiedByOtherPreserved": true,
+      "unassignedQrAndReopenCheckDenied": 2,
+      "newCycle": 2,
+      "newQualification": true
+    },
+    {
+      "id": "Q25",
+      "label": "confirmation becomes stale after customer seat control or authorization changes",
+      "status": "passed",
+      "staleAndUnauthorizedRequestsDenied": 10
+    },
+    {
+      "id": "Q26",
+      "label": "forgeries cannot change payment another seat another ticket or the immutable reception",
+      "status": "passed",
+      "forgeriesAndExtraTargetsDenied": 23
+    },
+    {
+      "id": "Q27",
+      "label": "two business confirmations and physical stop assertion are required together",
+      "status": "passed",
+      "plannerHolds": 3,
+      "directRequestsDenied": 4,
+      "physicalFleetVerified": false,
+      "independentDialogsUntested": true
+    },
+    {
+      "id": "Q28",
+      "label": "response loss and cancel versus reissue race leave exactly one complete outcome",
+      "status": "passed",
+      "responseLocated": true,
+      "replaysDenied": 2,
+      "completeWinners": 1,
+      "winner": "cancel",
+      "lockAbortRecovery": false,
+      "sdkRetryTested": false
+    },
+    {
+      "id": "Q29",
+      "label": "cycle cannot reopen without assignment or skip and manual check may begin the next assigned cycle",
+      "status": "passed",
+      "unassignedReopenDenied": 2,
+      "cycleSkipOrRollbackDenied": 2,
+      "newCycleFromCheck": 2,
+      "qrAndReissueInCycle2": true
+    },
+    {
+      "id": "Q30",
+      "label": "one cancellation among five hundred protected assigned people preserves the other 499",
+      "status": "passed",
+      "customers": 500,
+      "otherAssignmentsRetained": 499,
+      "otherTicketsRetained": 499,
+      "cancel": {
+        "requests": 1,
+        "writes": 9,
+        "maxRequestBytes": 134182
+      }
+    }
+  ]
+}

@@ -16,7 +16,7 @@
 | 場所 | 主な内容 | 最初に読む文書 |
 |---|---|---|
 | このフォルダ直下 | 全工程で参照する計画、用語、追跡表 | [開発計画書](project-plan.md) |
-| [技術検証](technical-validation/) | 技術調査、PoCの計画・手順・結果 | [技術検証計画書](technical-validation/technical-validation-plan.md) |
+| [技術検証](technical-validation/) | 技術調査、PoCの計画・手順・結果。[座席保存の技術検証記録](technical-validation/seat-save-validation.md)に現在地と比較履歴を集約 | [技術検証計画書](technical-validation/technical-validation-plan.md) |
 | [要件確認](requirements-review/) | 要件の最終レビューと設計への引継ぎ | [要件・受入条件の最終レビュー](requirements-review/requirements-final-review.md) |
 | [基本設計](basic-design/) | 設計書、テスト方針、レビュー・是正記録 | [基本設計計画書](basic-design/basic-design-plan.md) |
 | [UIモック](ui-mock/) | モックの確認結果と本番への引継ぎ | [UIモック変更の本番引継ぎ台帳](ui-mock/ui-mock-production-handoff.md) |

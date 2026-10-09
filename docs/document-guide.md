@@ -18,11 +18,12 @@
 | 場所 | 記載する内容 |
 |---|---|
 | 詳細設計 | 冒頭に要点と未決定事項。本文に仕様・判断理由と主要試験ケースを集約する |
+| 技術検証記録 | 冒頭に現在地と残作業。結果・費用と比較履歴をIDで追跡し、測定データはpoc/を参照する |
 | 親Issue | 目的、タスク一覧、依存順。各タスクの完了条件は子Issueを参照する |
 | 子Issue | 作るもの、開始条件、完了条件。設計と試験はID・リンクで参照する |
 | PR | 冒頭に変更の結論、確認点、残作業。確認点は原則3件以内とし、対象箇所へリンクする |
 
-同じ説明を複数箇所へ転記せず、正本へリンクする。Git管理する設計文書では通常のMarkdown見出しを使い、詳細な確認証拠や過去の経緯は後段へ置く。折りたたみはGitHubのIssue・PR本文で使用する。承認条件と例外は省略せず、未実施の試験を明示する。以後の新規作成と更新対象へ適用する。
+同じ説明を複数箇所へ転記せず、正本へリンクする。Git管理する設計文書では通常のMarkdown見出しを使い、検証結果と過去の経緯は技術検証記録へ分離し、設計書には現在の契約と主要試験ケースを残す。折りたたみはGitHubのIssue・PR本文で使用する。承認条件と例外は省略せず、未実施の試験を明示する。以後の新規作成と更新対象へ適用する。
 
 ### 詳細設計と技術試験の役割分担
 
@@ -68,6 +69,7 @@
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 開発者、設計担当者、テスト担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
+| 座席保存の技術検証記録 | [seat-save-validation.md](development/technical-validation/seat-save-validation.md) | #101の現在地とGD91-01～32の結果・費用を追跡する。GD91-32は限定範囲で承認済み、方式全体は未採用 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残作業・承認変更時 | In Review |
 | 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-validation/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 開発者、設計担当者、テスト担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
 | RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/technical-validation/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 開発者、設計担当者、テスト担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
 | POC-001開始承認依頼書 | [poc-001-approval-request.md](development/technical-validation/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | Approved |
@@ -134,7 +136,7 @@
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91のデータ契約と試験DD91-T01～63を追跡する。GD91-01～31を集約。初回資格と保護は承認済み。旧資格無効化と再発行8書込みを限定確認。不参加・復帰と正式認可全体、物理方式の採否は継続 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 設計・試験・承認変更時 | In Review |
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91の仕様とデータ契約、主要試験DD91-T01～63を追跡する。検証結果は別記録を参照 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 仕様・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 
