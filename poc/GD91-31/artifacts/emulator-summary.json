@@ -1,0 +1,282 @@
+{
+  "project": "demo-concert-seat-gd91-31",
+  "executedAt": "2026-10-09T08:03:29.423Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "selectedCase": "all",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "44fffb779eb8391a381092b4100d00d0eed1a91fd0fb8d2e20f85a7ce59cb4fc",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "d10e125b9ae07ca415b059224e1b6e5f2070ddfe8c86eb476fe3f2311d8525c7",
+    "business.mjs": "c45a16ac1b6b4a1f58d6ef48b376eced506fdbb9c82fe369dd3ec23e31d342cf",
+    "ticket.mjs": "edf10042b45fab513102021dde0d9c1550c8ca4206b0dbfa49fce2b997a032f6",
+    "emulator.mjs": "bcebce32d62c81ef41cf11ef8a99f22685e9fc6e2b7729a2f42404619d9c3011",
+    "budgets.mjs": "6916aa1cd7e16601f5647335ec191ba7a79a386486604f638b9577364aadf1c0",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "44fffb779eb8391a381092b4100d00d0eed1a91fd0fb8d2e20f85a7ce59cb4fc",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "d10e125b9ae07ca415b059224e1b6e5f2070ddfe8c86eb476fe3f2311d8525c7",
+    "business.mjs": "c45a16ac1b6b4a1f58d6ef48b376eced506fdbb9c82fe369dd3ec23e31d342cf",
+    "ticket.mjs": "edf10042b45fab513102021dde0d9c1550c8ca4206b0dbfa49fce2b997a032f6",
+    "emulator.mjs": "bcebce32d62c81ef41cf11ef8a99f22685e9fc6e2b7729a2f42404619d9c3011",
+    "budgets.mjs": "6916aa1cd7e16601f5647335ec191ba7a79a386486604f638b9577364aadf1c0",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "budgets": {
+    "firstQr": [
+      5,
+      5,
+      4,
+      1,
+      1,
+      1
+    ],
+    "ticketCheck": [
+      5,
+      3,
+      4,
+      1
+    ],
+    "reissue": [
+      5,
+      6,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "scope": "Single section; first qualification, manual checks and loss reissue; REST commit; seeded role/device/control. Device-stop confirmation is an asserted precondition, not physical fleet verification. Nonattendance/cycle reopening, SDK, IndexedDB, output files and physical devices untested.",
+  "reports": [
+    {
+      "id": "Q01",
+      "label": "first QR is six atomic writes and every partial subset leaves all state unchanged",
+      "status": "passed",
+      "partialSubsetsDenied": 62,
+      "firstQr": {
+        "requests": 1,
+        "writes": 6,
+        "maxRequestBytes": 5631
+      },
+      "otherTicketAbsent": true,
+      "paidAndChecksUnchanged": true
+    },
+    {
+      "id": "Q02",
+      "label": "manual issue check is four atomic writes and unchecking preserves the issue history fence",
+      "status": "passed",
+      "partialSubsetsDenied": 14,
+      "checkWrites": 4,
+      "everIssued": true,
+      "unassignAndBulkDenied": true,
+      "actorOmitted": true
+    },
+    {
+      "id": "Q03",
+      "label": "QR and protection survive independent issue sent and payment check changes",
+      "status": "passed",
+      "independentCheckChanges": 4,
+      "paymentChanges": 2,
+      "credentialAndCodeUnchanged": true
+    },
+    {
+      "id": "Q04",
+      "label": "QR may follow a manually unchecked issue flag while the historical protection remains",
+      "status": "passed",
+      "manualFirst": true,
+      "issuedAtPreserved": true,
+      "everIssuedPreserved": true
+    },
+    {
+      "id": "Q05",
+      "label": "schema metadata audit qualification and index forgeries cannot bypass the joint write set",
+      "status": "passed",
+      "forgedRequestsDenied": 43,
+      "rawValuesNotInAudit": true,
+      "oldFormatsDenied": true
+    },
+    {
+      "id": "Q06",
+      "label": "missing unassigned and not attending customers cannot obtain a QR",
+      "status": "passed",
+      "denied": 3,
+      "unassignedTicketAbsent": true
+    },
+    {
+      "id": "Q07",
+      "label": "credential and confirmation code collisions do not overwrite or partially issue another ticket",
+      "status": "passed",
+      "collisionsDenied": 2,
+      "secondGenerationForExistingCredentialDenied": true,
+      "distinctFreshQualification": true
+    },
+    {
+      "id": "Q08",
+      "label": "version changes after confirmation reject the old QR proposal",
+      "status": "passed",
+      "staleAttendeeLayoutAndControlDenied": 3
+    },
+    {
+      "id": "Q09",
+      "label": "response loss is resolved through operation and limited canonical records without reapplying",
+      "status": "passed",
+      "sameOperationLocated": true,
+      "rawQualificationComparedInRestrictedRecords": true,
+      "replaysDenied": 2,
+      "sdkRetryTested": false
+    },
+    {
+      "id": "Q10",
+      "label": "concurrent initial qualification requests produce at most one complete final winner",
+      "status": "passed",
+      "completeWinners": 1,
+      "initialSuccesses": 1,
+      "lockAbortRecovery": false
+    },
+    {
+      "id": "Q11",
+      "label": "latest authorization rejects both QR creation and manual ticket checks",
+      "status": "passed",
+      "deniedRequests": 20,
+      "authorizationFixturesSeeded": true
+    },
+    {
+      "id": "Q12",
+      "label": "ticket history and confirmation lookup stay private while active staff can resolve credentials",
+      "status": "passed",
+      "privateReadsDenied": 4,
+      "strangerDenied": true,
+      "minimalCredentialAllowed": true
+    },
+    {
+      "id": "Q13",
+      "label": "an additional ticket cannot piggyback on another customer qualification or check operation",
+      "status": "passed",
+      "additionalNewAndExistingTicketsDenied": 2
+    },
+    {
+      "id": "Q14",
+      "label": "five hundred normally registered and assigned customers acquire independent qualifications",
+      "status": "passed",
+      "customers": 500,
+      "seats": 900,
+      "cells": 930,
+      "bootstrap": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 2757
+      },
+      "initialization": {
+        "requests": 1652,
+        "writes": 2018,
+        "maxRequestBytes": 55835
+      },
+      "registration": {
+        "requests": 500,
+        "writes": 2000,
+        "maxRequestBytes": 31539
+      },
+      "allocation": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 195325
+      },
+      "qualifications": {
+        "requests": 500,
+        "writes": 3000,
+        "maxRequestBytes": 33101
+      },
+      "swap": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 73243
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2594
+      },
+      "totalToQualification": {
+        "requests": 2654,
+        "writes": 7025
+      },
+      "allAssignmentsRetained": true,
+      "allQualificationsChecked": true,
+      "checksNotAutoUpdated": true
+    },
+    {
+      "id": "Q15",
+      "label": "all 254 partial reissue subsets fail and eight writes revoke both old references atomically",
+      "status": "passed",
+      "partialSubsetsDenied": 254,
+      "reissue": {
+        "requests": 1,
+        "writes": 8,
+        "maxRequestBytes": 7732
+      },
+      "oldCredentialRevoked": true,
+      "oldCodeInactive": true,
+      "checksPaymentSeatAndCyclePreserved": true
+    },
+    {
+      "id": "Q16",
+      "label": "reissue forgeries cannot change flags or revoke another ticket qualification",
+      "status": "passed",
+      "forgeriesDenied": 23
+    },
+    {
+      "id": "Q17",
+      "label": "unknown reissue response and racing reissues never produce two active replacements",
+      "status": "passed",
+      "responseLocated": true,
+      "replaysDenied": 2,
+      "completeWinners": 1,
+      "initialWinners": 1,
+      "lockAbortRecovery": false,
+      "sdkRetryTested": false
+    },
+    {
+      "id": "Q18",
+      "label": "latest customer layout control and authorization fences apply to reissue",
+      "status": "passed",
+      "staleAndUnauthorizedRequestsDenied": 10
+    },
+    {
+      "id": "Q19",
+      "label": "collisions and repeated reissue preserve tombstones across swaps and check changes",
+      "status": "passed",
+      "collisionsDenied": 4,
+      "reissues": 3,
+      "allOldReferencesRemainInvalid": true,
+      "swapPreservesTicket": true,
+      "protectionPreserved": true
+    },
+    {
+      "id": "Q20",
+      "label": "missing physical stop assertion or reason holds the operation and direct false acknowledgments fail",
+      "status": "passed",
+      "plannerHolds": 3,
+      "directRequestsDenied": 6,
+      "physicalFleetVerified": false,
+      "updateReceiptAndResumeUntested": true
+    },
+    {
+      "id": "Q21",
+      "label": "reduced reference checks cannot authorize lone writes replays reactivation or extra targets",
+      "status": "passed",
+      "additionalLoneReplayAndReactivationRequestsDenied": 18
+    }
+  ]
+}
