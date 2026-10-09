@@ -1,0 +1,238 @@
+{
+  "project": "demo-concert-seat-gd91-26",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-09T03:55:19.303Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "b872611ce7c6074b3bbcc5ee318d420f32a06b231659ecace1f9bc484949df7a",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../plan.mjs": "09430c685d4f04d79085d7e6c522d4d5f101cc106054a8462d9ad9fbab08316f",
+    "emulator.mjs": "98b6f533a2f2cb290bf4627ba4acefc68947033e2e8657858d71c45d7d0e9cbb",
+    "support.mjs": "e12335671bffc1bb5635ee1c5da2a8c3dc5a0138091e2973506509f55849537a",
+    "business.mjs": "205d69617fbce559ea32c329b1a0cc2b9a8ae472fdf5f47a2b2b9b282fbd35ec",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "b872611ce7c6074b3bbcc5ee318d420f32a06b231659ecace1f9bc484949df7a",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../plan.mjs": "09430c685d4f04d79085d7e6c522d4d5f101cc106054a8462d9ad9fbab08316f",
+    "emulator.mjs": "98b6f533a2f2cb290bf4627ba4acefc68947033e2e8657858d71c45d7d0e9cbb",
+    "support.mjs": "e12335671bffc1bb5635ee1c5da2a8c3dc5a0138091e2973506509f55849537a",
+    "business.mjs": "205d69617fbce559ea32c329b1a0cc2b9a8ae472fdf5f47a2b2b9b282fbd35ec",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "scope": "Normal empty business-index initialization, minimal attendee record/index writes and 500 actual assignments, moves/swaps and offset slide in one-section format two. Human sessions issued normally; device registration and role grants seeded. C17 seeds protected IDs and first-start only as a comparison: no normal ticket/QR issuance, invalidation or nonattendance integration. Full group/fixed rules, complete auth lifecycle, multiple sections, all edits/cleanup, SDK/IndexedDB/UI/device tests are not covered.",
+  "reports": [
+    {
+      "id": "C01",
+      "label": "empty business indexes bootstrap through authenticated client requests",
+      "status": "passed",
+      "partialSubsetsDenied": 6,
+      "bootstrap": {
+        "requests": 2,
+        "writes": 4,
+        "maxRequestBytes": 1672
+      },
+      "businessIndexesNotSeeded": true
+    },
+    {
+      "id": "C02",
+      "label": "bootstrap refuses nonempty indexes and revoked or unbound actors",
+      "status": "passed",
+      "bootstrapForgeriesDenied": 6,
+      "wrongActorsDenied": 3
+    },
+    {
+      "id": "C03",
+      "label": "five-document initial publication remains atomic with business format two",
+      "status": "passed",
+      "partialSubsetsDenied": 30,
+      "publication": {
+        "requests": 2,
+        "writes": 8,
+        "maxRequestBytes": 3403
+      },
+      "postPublicationResetDenied": true
+    },
+    {
+      "id": "C04",
+      "label": "all partial customer registrations preserve old state and absent profiles",
+      "status": "passed",
+      "partialSubsetsDenied": 14,
+      "unpaidPersonEligible": true,
+      "creation": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 4080
+      }
+    },
+    {
+      "id": "C05",
+      "label": "customer indexes cannot be forged independently of their business records",
+      "status": "passed",
+      "customerForgeriesDenied": 28,
+      "unrelatedExistingPersonPreserved": true
+    },
+    {
+      "id": "C06",
+      "label": "normal profile changes maintain eligibility and fixed-check audit exceptions",
+      "status": "passed",
+      "headUnchanged": true,
+      "ticketUnchanged": true,
+      "fixedCheckOperatorOmitted": true,
+      "unassignedUnissuedReturnOnly": true
+    },
+    {
+      "id": "C07",
+      "label": "normal assign move swap and unissued release preserve unchanged domains",
+      "status": "passed",
+      "partialSubsetsDenied": 6,
+      "operations": 5,
+      "writesPerOperation": 3,
+      "layoutAndBusinessUnchanged": true
+    },
+    {
+      "id": "C08",
+      "label": "assignment forgeries and unrelated piggyback changes are rejected",
+      "status": "passed",
+      "assignmentForgeriesDenied": 27,
+      "piggybackVariantsDenied": 3,
+      "assignedPersonCannotUseUnissuedOnlyCancellation": true
+    },
+    {
+      "id": "C09",
+      "label": "stale confirmations refuse customer and assignment overwrites",
+      "status": "passed",
+      "staleOperationsDenied": 3,
+      "currentReconfirmationAccepted": true
+    },
+    {
+      "id": "C10",
+      "label": "customer and seat races each have exactly one winner",
+      "status": "passed",
+      "normalCustomerRaceWinners": 1,
+      "sameSeatRaceWinners": 1,
+      "sameHumanTwoApprovedDevices": true
+    },
+    {
+      "id": "C11",
+      "label": "business changes and slides compete at the same commit boundary",
+      "status": "passed",
+      "competingDomainPairs": 20,
+      "initialWinnerPairs": 18,
+      "lockAbortRecoveries": 2,
+      "finalWinnersPerPair": 1,
+      "noDoubleCommit": true,
+      "sameIdAfterResultAndVersionCheck": true,
+      "permissionDeniedNotBlindlyRetried": true
+    },
+    {
+      "id": "C12",
+      "label": "latest device session and role authorization fences all normal writes",
+      "status": "passed",
+      "authorityVariants": 12,
+      "deniedRequests": 39,
+      "sessionsIssuedNormally": true,
+      "registrationAndRoleGrantsSeeded": true
+    },
+    {
+      "id": "C13",
+      "label": "unknown responses are resolved by operation ID without double application",
+      "status": "passed",
+      "customerDocumentsChecked": 4,
+      "assignmentDocumentsChecked": 3,
+      "replayAndChangedContentDenied": 3,
+      "sdkRecoveryNotTested": true
+    },
+    {
+      "id": "C14",
+      "label": "slide calculation uses layout revision after normal business changes",
+      "status": "passed",
+      "commitBefore": 3,
+      "layoutBefore": 1,
+      "commitAfter": 4,
+      "layoutAfter": 2,
+      "inputUnchanged": true,
+      "legacyFormatRejected": true
+    },
+    {
+      "id": "C15",
+      "label": "axis order and all slide directions retain normal assignments",
+      "status": "passed",
+      "axisOrderDirectionProfiles": 16,
+      "identitiesNumbersAndAssignmentsPreserved": true
+    },
+    {
+      "id": "C16",
+      "label": "five hundred normally registered people connect to nine hundred real seats",
+      "status": "passed",
+      "cells": 930,
+      "seats": 900,
+      "normallyRegisteredPeople": 500,
+      "assignedPeople": 500,
+      "bootstrap": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 1672
+      },
+      "initialization": {
+        "requests": 1652,
+        "writes": 2018,
+        "maxRequestBytes": 55081
+      },
+      "registration": {
+        "requests": 500,
+        "writes": 2000,
+        "maxRequestBytes": 31539
+      },
+      "bulkAssignment": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 195325
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2585
+      },
+      "customerIndexJsonBytes": 19758,
+      "assignmentJsonBytes": 56048,
+      "sourceBusinessSnapshotsSeeded": false,
+      "ticketIssuanceNotTested": true,
+      "sessionCosts": {
+        "requests": 3,
+        "writes": 3
+      }
+    },
+    {
+      "id": "C17",
+      "label": "seeded protection comparison does not equate check clearing with QR issuance tests",
+      "status": "passed",
+      "comparisonOnly": true,
+      "protectedIndexAndFirstStartSeeded": true,
+      "restrictionsChecked": 3,
+      "normalTicketWriterAndQrNotTested": true
+    },
+    {
+      "id": "C18",
+      "label": "legacy version format and foreign business sources cannot be used",
+      "status": "passed",
+      "legacyFormatRequestsDenied": 2,
+      "foreignBusinessSourcesDenied": 2
+    },
+    {
+      "id": "C19",
+      "label": "four-seat source fragment remains an evaluation-limit comparison",
+      "status": "passed",
+      "comparisonOnly": true,
+      "expressionLimit": true,
+      "productLimitUnchanged": true
+    }
+  ]
+}
