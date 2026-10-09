@@ -1,7 +1,7 @@
 # GD91-06: 席構成と席設定の合同Rules検証
 
 状態：In Review。読者：開発者、設計担当者、テスト担当者。
-Issue #101の隔離検証。結果と主要試験は[詳細設計](../../docs/development/detailed-design/seat-management-detail-design.md#gd91-06-席構成と席設定の合同検証)へ集約する。本番Rules・受信処理として使用しない。
+Issue #101の隔離検証。結果と主要試験は[技術検証記録](../../docs/development/technical-validation/seat-save-validation.md#gd91-06-席構成と席設定の合同検証)へ集約する。本番Rules・受信処理として使用しない。
 
 ## 実行
 
