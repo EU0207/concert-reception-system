@@ -1,0 +1,810 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-30専用。券生成・固定チェックと発券後保護の隔離検証。本番Rulesではない。
+    function scope(p,x) { return x.schemaVersion == 1 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+    function roleValid(p,r) {
+      return scope(p,r) && r.active == true && r.revision is int && r.revision > 0
+        && r.role in ['owner','deputy','temporary','receptionist']
+        && r.startsAt is timestamp && r.endsAt is timestamp && r.startsAt <= request.time && request.time < r.endsAt;
+    }
+    function providerValid(provider,role) { return role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+    function sessionShape(p,uid,s) {
+      return s.keys().hasAll(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt'])
+        && s.keys().hasOnly(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt'])
+        && scope(p,s) && s.deviceUid == uid && s.humanUid is string && s.humanUid.size() > 0
+        && s.active is bool && s.emailVerified == true && s.authProvider is string && s.roleRevision is int
+        && s.revision is int && s.revision > 0 && s.issuedAt is timestamp && s.expiresAt is timestamp
+        && s.issuedAt <= request.time && s.issuedAt < s.expiresAt && s.expiresAt <= s.issuedAt + duration.value(12,'h');
+    }
+    function authorized(p, edit) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/splitSeatShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(d.humanUid)).data;
+      return request.auth.token.firebase.sign_in_provider == 'anonymous' && d.schemaVersion == 1 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid
+        && d.active == true && s.schemaVersion == 1 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true && s.humanUid == d.humanUid
+        && s.expiresAt > request.time && r.schemaVersion == 1 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt && r.role in ['owner','deputy','temporary','receptionist'] && s.roleRevision == r.revision && providerValid(s.authProvider,r.role)
+        && d.preparedRoleRevision == r.revision && (!edit || r.role in ['owner', 'deputy']);
+    }
+    function issueSession(p,uid,a) {
+      let d = get(/databases/$(database)/documents/splitSeatShows/$(p)/devices/$(uid)).data;
+      let r = get(/databases/$(database)/documents/splitSeatShows/$(p)/roles/$(request.auth.uid)).data;
+      return request.auth.token.email_verified == true && providerValid(request.auth.token.firebase.sign_in_provider,r.role)
+        && scope(p,d) && d.active == true && d.deviceUid == uid && d.humanUid == request.auth.uid && d.preparedRoleRevision == r.revision
+        && roleValid(p,r) && sessionShape(p,uid,a) && a.active == true && a.humanUid == request.auth.uid
+        && a.authProvider == request.auth.token.firebase.sign_in_provider && a.roleRevision == r.revision
+        && a.issuedAt == request.time && a.expiresAt > request.time && a.expiresAt <= r.endsAt;
+    }
+    function revokeSession(p,uid,b,a) {
+      return request.auth.token.firebase.sign_in_provider in ['google.com','password'] && b.humanUid == request.auth.uid
+        && scope(p,b) && b.deviceUid == uid && a.diff(b).affectedKeys().hasOnly(['active','revision'])
+        && a.active == false && a.revision == b.revision + 1;
+    }
+    function manager(p) { return request.auth != null && authorized(p, true); }
+    function active(p) { return request.auth != null && authorized(p, false); }
+    function head(p, g) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/head/current).data; }
+    function nextHead(p, g) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/head/current).data; }
+    function event(p, g, id) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/operations/$(id)).data; }
+    function control(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data; }
+    function fence(p, b, a, e) {
+      return a.revision == b.revision + 1 && a.operationId != b.operationId && a.operationId is string
+        && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+        && e.controlRevision == control(p).revision;
+    }
+    function uuid(id) { return id is string && id.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+    function registry(p, g) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/idRegistry/current).data; }
+    function nextRegistry(p, g) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/idRegistry/current).data; }
+    function currentBase(p,g,a) {
+      let b = head(p,a.basePublishedGeneration);
+      return a.basePublishedGeneration != g && b.status == 'countReady' && b.sectionId == a.sectionId && a.basePublishedRevision == b.revision;
+    }
+    function initial(p, g, a) {
+      let catalog = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/lineCatalog/current).data;
+      let selected = nextSelection(p);
+      return a.keys().hasAll(["sectionId","sectionName","rows","columns","axis","seatOrder","stagePosition","initialNumbered","rowOffset","columnOffset","rowCounts","columnCounts","nonEmptyCount","sourceRevision","revision","operationId","status","cursor","lastChunk","controlRevision","initializationId","chunkSize","numberCursors","numberSpan","basePublishedGeneration","basePublishedRevision"]) && a.keys().hasOnly(["sectionId","sectionName","rows","columns","axis","seatOrder","stagePosition","initialNumbered","rowOffset","columnOffset","rowCounts","columnCounts","nonEmptyCount","sourceRevision","revision","operationId","status","cursor","lastChunk","controlRevision","initializationId","chunkSize","numberCursors","numberSpan","basePublishedGeneration","basePublishedRevision"])
+        && uuid(a.sectionId) && a.sectionName is string && a.sectionName.size() > 0
+        && a.rows is int && a.columns is int && a.rows > 0 && a.columns > 0 && a.rows <= 100 && a.columns <= 100
+        && a.axis in ['horizontal', 'vertical'] && a.seatOrder in ['forward', 'reverse'] && a.stagePosition in ['top', 'left']
+        && a.numberSpan in [2,4] && a.chunkSize in [1, 2, 3, 4, 5] && a.initialNumbered is bool && a.rowOffset == 0 && a.columnOffset == 0
+        && a.numberCursors == {} && a.rowCounts == {} && a.columnCounts == {} && a.nonEmptyCount == 0
+        && a.status == 'building' && a.cursor == 0 && a.lastChunk == '' && a.sourceRevision == 0 && a.revision == 0 && a.operationId == ''
+        && a.initializationId == g && uuid(g) && selected.activeGeneration == g && a.controlRevision == control(p).revision
+        && catalog.initializationId == g && catalog.sectionId == a.sectionId && catalog.cursor == 0
+        && a.basePublishedGeneration is string && a.basePublishedRevision is int && a.basePublishedGeneration == selected.publishedGeneration
+        && (a.basePublishedGeneration == '' ? a.basePublishedRevision == 0 : a.basePublishedRevision > 0 && currentBase(p,g,a));
+    }
+    function occupied(c, j) { return j < c.cells.size() && c.cells[j].kind != 'unset' ? 1 : 0; }
+    function validSlot(c, j) {
+      let v = c.cells[j];
+      return v.keys().hasOnly(['cellId', 'row', 'column', 'kind', 'seatId', 'numberValue'])
+        && v.cellId == c.cellIds[j] && uuid(v.cellId) && v.row == c.row && v.column == c.startColumn + j
+        && v.kind in ['unset', 'seat', 'gap', 'space', 'aisle']
+        && (v.kind == 'seat' ? uuid(v.seatId) : v.seatId == '')
+        && (v.kind in ['seat', 'gap']
+          ? v.numberValue is int && v.numberValue > 0 && v.numberValue <= 9007199254740991 && c.numberKeys[j] is string
+          : v.numberValue == null && c.numberKeys[j] == '');
+    }
+    function validChunk(b, c, id) {
+      return c.keys().hasAll(['row', 'startColumn', 'cells', 'cellIds', 'numberKeys']) && c.keys().hasOnly(['row', 'startColumn', 'cells', 'cellIds', 'numberKeys'])
+        && c.row is int && c.startColumn is int && c.row >= 0 && c.row < b.rows && c.startColumn >= 0 && c.startColumn < b.columns
+        && c.row * b.columns + c.startColumn == b.cursor && id == string(c.row) + '-' + string(c.startColumn)
+        && c.cells is list && c.cellIds is list && c.cells.size() == (b.columns - c.startColumn < b.chunkSize ? b.columns - c.startColumn : b.chunkSize)
+        && c.numberKeys is list && c.numberKeys.size() == c.cells.size()
+        && c.cellIds.size() == c.cells.size() && c.cellIds.toSet().size() == c.cells.size()
+        && validSlot(c, 0) && (c.cells.size() < 2 || validSlot(c, 1))
+        && (c.cells.size() < 3 || validSlot(c, 2)) && (c.cells.size() < 4 || validSlot(c, 3)) && (c.cells.size() < 5 || validSlot(c, 4));
+    }
+    function marker(a) {
+      let e = a.get('emergencyChange', null);
+      return e == null || e is map && e.keys().hasOnly(['kind', 'reason']) && e.kind in ['add', 'renumber', 'move']
+        && e.reason is string && e.reason.matches('.*\\S.*');
+    }
+    function validAttribute(c, a, j) {
+      let v = a.values[j];
+      return c.cells[j].kind == 'seat'
+        ? v is map && v.keys().hasOnly(['category', 'usable', 'reservedLabel', 'displayOrder', 'emergencyChange'])
+          && v.category in ['general', 'reserved', 'special'] && v.usable is bool && v.get('reservedLabel', '') is string
+          && v.get('displayOrder', 0) is int && v.get('displayOrder', 0) >= 0 && marker(v)
+        : v == null;
+    }
+    function createAttributes(p, g, id, a) {
+      let h = head(p, g);
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/chunks/$(id)).data;
+      return pending(p, g) && h.status == 'building' && h.controlRevision == control(p).revision && c.row * h.columns + c.startColumn == h.cursor
+        && a.keys().hasAll(['row', 'startColumn', 'values']) && a.keys().hasOnly(['row', 'startColumn', 'values'])
+        && a.row == c.row && a.startColumn == c.startColumn && a.values is list && a.values.size() == c.cells.size()
+        && validAttribute(c, a, 0) && (c.cells.size() < 2 || validAttribute(c, a, 1))
+        && (c.cells.size() < 3 || validAttribute(c, a, 2)) && (c.cells.size() < 4 || validAttribute(c, a, 3)) && (c.cells.size() < 5 || validAttribute(c, a, 4));
+    }
+    function columnDelta(b, a, c, j) {
+      let key = string(c.startColumn + j);
+      return a.columnCounts.get(key, 0) == b.columnCounts.get(key, 0) + occupied(c, j)
+        && (j < c.cells.size() || a.columnCounts.keys().hasAny([key]) == b.columnCounts.keys().hasAny([key]));
+    }
+    function ingest(p, g, b, a) {
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/chunks/$(a.lastChunk)).data;
+      let delta = occupied(c, 0) + occupied(c, 1) + occupied(c, 2) + occupied(c, 3) + occupied(c, 4);
+      let row = string(c.row);
+      let ids = nextRegistry(p, g);
+      let proof = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/numberProofs/$(a.lastChunk)).data;
+      return ids.cursor == a.cursor && ids.initializationId == b.initializationId && b.status == 'building' && b.cursor < b.rows * b.columns
+        && exists(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/attributes/$(a.lastChunk))
+        && proof.progress == c.cells.size() && a.numberCursors == proof.numberCursors && c.row * b.columns + c.startColumn == b.cursor
+        && a.diff(b).affectedKeys().hasOnly(['cursor', 'lastChunk', 'nonEmptyCount', 'rowCounts', 'columnCounts', 'numberCursors'])
+        && a.cursor == b.cursor + c.cells.size() && a.nonEmptyCount == b.nonEmptyCount + delta
+        && a.rowCounts.diff(b.rowCounts).affectedKeys().hasOnly([row]) && a.rowCounts.get(row, 0) == b.rowCounts.get(row, 0) + delta
+        && a.columnCounts.diff(b.columnCounts).affectedKeys().hasOnly([string(c.startColumn + 0), string(c.startColumn + 1), string(c.startColumn + 2), string(c.startColumn + 3), string(c.startColumn + 4)])
+        && columnDelta(b, a, c, 0) && columnDelta(b, a, c, 1) && columnDelta(b, a, c, 2) && columnDelta(b, a, c, 3) && columnDelta(b, a, c, 4);
+    }
+    function finish(p, g, b, a) {
+      let e = event(p, g, a.operationId);
+      let n = nextSelection(p);
+      let v = nextVersions(p);
+      return v.generation == g && v.sectionId == b.sectionId && v.operationId == a.operationId
+        && positive(v.values.commit) && v.values.commit > 1 && v.values.layout == 1 && v.values.source == 1 && b.status == 'building' && b.cursor == b.rows * b.columns && a.status == 'countReady'
+        && a.diff(b).affectedKeys().hasOnly(['status', 'sourceRevision', 'revision', 'operationId'])
+        && a.sourceRevision == 1 && a.revision == 1 && a.operationId != ''
+        && n.publishedGeneration == g && n.activeGeneration == '' && n.operationId == a.operationId
+        && e.kind == 'initialCounterProof' && e.deviceUid == request.auth.uid && e.initializationId == b.initializationId
+        && e.controlRevision == b.controlRevision;
+    }
+    function versions(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/versions/current).data; }
+    function nextVersions(p) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/versions/current).data; }
+    function positive(n) { return n is int && n > 0 && n <= 9007199254740991; }
+    function versionShape(v) {
+      return v.keys().hasAll(['commit','layout','source','assignment','attendee','ticket','control'])
+        && v.keys().hasOnly(['commit','layout','source','assignment','attendee','ticket','control'])
+        && positive(v.commit) && positive(v.layout) && positive(v.source) && positive(v.assignment)
+        && positive(v.attendee) && positive(v.ticket) && positive(v.control);
+    }
+    function changedVersions(b,a) {
+      return a.diff(b).affectedKeys().hasOnly(['values','operationId']) && uuid(a.operationId)
+        && versionShape(b.values) && versionShape(a.values)
+        && a.values.diff(b.values).affectedKeys().hasOnly(['commit','layout'])
+        && a.values.commit == b.values.commit+1 && a.values.layout == b.values.layout+1;
+    }
+    function validSlide(b, a, e) {
+      let row = ((e.dr < 0 ? 0 : b.rows - 1) - b.rowOffset + b.rows) % b.rows;
+      let column = ((e.dc < 0 ? 0 : b.columns - 1) - b.columnOffset + b.columns) % b.columns;
+      return b.status == 'countReady' && b.initialNumbered && b.nonEmptyCount > 0 && e.dr is int && e.dc is int
+        && ((e.dr in [-1, 1] && e.dc == 0) || (e.dc in [-1, 1] && e.dr == 0))
+        && a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'rowOffset', 'columnOffset'])
+        && a.rowOffset == (b.rowOffset + e.dr + b.rows) % b.rows && a.columnOffset == (b.columnOffset + e.dc + b.columns) % b.columns
+        && (e.dr != 0 ? b.rowCounts.get(string(row), 0) == 0 : b.columnCounts.get(string(column), 0) == 0);
+    }
+    function slideHead(p,g,b,a) {
+      let v = versions(p);
+      let n = nextVersions(p);
+      let e = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/operations/$(a.operationId)).data;
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data;
+      return v.schemaVersion == 3 && v.performanceId == p && v.generation == g && v.sectionId == b.sectionId
+        && v.values.layout == b.revision && v.values.source == b.sourceRevision && v.values.control == c.revision
+        && e.environmentId == v.environmentId && e.performanceId == p && e.generation == g && e.sectionId == b.sectionId
+        && e.expectedVersions == v.values && e.deviceUid == request.auth.uid && e.kind == 'slide'
+        && e.baseRevision == b.revision && e.revision == a.revision
+        && n.operationId == a.operationId && e.resultVersions == n.values && changedVersions(v,n) && validSlide(b,a,e);
+    }
+    // headの更新へ相互に結び、3件の一部だけを確定させない。認可はhead更新で評価する。
+    function slideVersion(p,b,a) {
+      let h = head(p,b.generation);
+      let n = nextHead(p,b.generation);
+      return changedVersions(b,a) && h.revision == b.values.layout && n.revision == a.values.layout
+        && n.operationId == a.operationId && n.revision == h.revision+1;
+    }
+    function updateHead(p, g, b, a) {
+      return b.status == 'building' ? pending(p, g) && (a.status == 'aborted' ? abortInitial(p, g, b, a)
+          : b.controlRevision == control(p).revision && (a.status == 'building' ? ingest(p, g, b, a) : finish(p, g, b, a)))
+        : published(p, g) && slideHead(p, g, b, a);
+    }
+    function createChunk(p, g, id) {
+      let h = head(p, g);
+      let catalog = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/lineCatalog/current).data;
+      return pending(p, g) && h.status == 'building' && h.controlRevision == control(p).revision && catalog.sectionId == h.sectionId && catalog.cursor == lineCount(h)
+        && validChunk(h, request.resource.data, id);
+    }
+    function structuralEvent(p, g, id, e) {
+      let b = head(p, g);
+      let a = nextHead(p, g);
+      return a.operationId == id && ((e.kind == 'abortInitial' && b.status == 'building' && a.status == 'aborted'
+          && e.keys().hasOnly(['kind', 'generation', 'deviceUid', 'initializationId', 'controlRevision']))
+        || (e.kind == 'initialCounterProof' && b.status == 'building' && a.status == 'countReady'
+          && e.keys().hasOnly(['kind', 'generation', 'deviceUid', 'initializationId', 'controlRevision']))
+        || (e.kind == 'slide' && b.status == 'countReady' && a.status == 'countReady' && a.revision == b.revision + 1
+          && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+          && e.keys().hasAll(['kind','deviceUid','environmentId','performanceId','generation','sectionId','expectedVersions','resultVersions','baseRevision','revision','dr','dc'])
+          && e.keys().hasOnly(['kind','deviceUid','environmentId','performanceId','generation','sectionId','expectedVersions','resultVersions','baseRevision','revision','dr','dc'])));
+    }
+    // 列IDは通常の列設定追加と同じ要求で予約する。
+    function createRegistry(p, g, a) {
+      let h = head(p, g);
+      let catalog = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/lineCatalog/current).data;
+      let line = catalog.lines['0'];
+      return pending(p,g) && h.controlRevision == control(p).revision && catalog.sectionId == h.sectionId && catalog.cursor == 1 && a.usedNumbers == {} && a.seatIds == {}
+        && a.keys().hasAll(['initializationId','cursor','lineCursor','usedIds','usedNumbers','seatIds']) && a.keys().hasOnly(['initializationId','cursor','lineCursor','usedIds','usedNumbers','seatIds'])
+        && h.status == 'building' && h.cursor == 0 && a.cursor == 0 && a.lineCursor == 1 && a.initializationId == g
+        && line.lineId != h.sectionId && a.usedIds.keys().toSet() == [h.sectionId,line.lineId].toSet() && a.usedIds.values().toSet() == [true].toSet();
+    }
+    function seatId(c, j) { return j < c.cells.size() ? c.cells[j].seatId : ''; }
+    function seat(c, j) { return j < c.cells.size() && c.cells[j].kind == 'seat' ? 1 : 0; }
+    function consumed(c, j) { return j < c.cells.size() && c.cells[j].kind in ['seat', 'gap'] ? 1 : 0; }
+    function ingestRegistry(p, g, h, b, a) {
+      let n = nextHead(p, g);
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/chunks/$(n.lastChunk)).data;
+      let cells = c.cellIds.toSet();
+      let seats = [seatId(c, 0), seatId(c, 1), seatId(c, 2), seatId(c, 3), seatId(c, 4)].toSet().difference([''].toSet());
+      let delta = a.usedIds.diff(b.usedIds);
+      let numbers = c.numberKeys.toSet().difference([''].toSet());
+      let numberDelta = a.usedNumbers.diff(b.usedNumbers);
+      let seatDelta = a.seatIds.diff(b.seatIds);
+      return h.status == 'building' && n.status == 'building' && n.cursor == h.cursor + c.cells.size()
+        && b.cursor == h.cursor && a.cursor == n.cursor && b.initializationId == h.initializationId
+        && a.diff(b).affectedKeys().hasOnly(['cursor', 'usedIds', 'usedNumbers', 'seatIds'])
+        && seats.size() == seat(c, 0) + seat(c, 1) + seat(c, 2) + seat(c, 3) + seat(c, 4)
+        && seatDelta.addedKeys() == seats && seatDelta.changedKeys().size() == 0 && seatDelta.removedKeys().size() == 0
+        && (a.seatIds.size() == 0 || a.seatIds.values().toSet() == [true].toSet())
+        && cells.intersection(seats).size() == 0 && delta.addedKeys() == cells.union(seats)
+        && delta.changedKeys().size() == 0 && delta.removedKeys().size() == 0
+        && numbers.size() == consumed(c, 0) + consumed(c, 1) + consumed(c, 2) + consumed(c, 3) + consumed(c, 4)
+        && numberDelta.addedKeys() == numbers && numberDelta.changedKeys().size() == 0 && numberDelta.removedKeys().size() == 0
+        && (a.usedNumbers.size() == 0 || a.usedNumbers.values().toSet() == [true].toSet())
+        && a.usedIds.values().toSet() == [true].toSet();
+    }
+    function updateRegistry(p, g, b, a) {
+      let h = head(p, g);
+      return b.lineCursor < lineCount(h) ? appendLineId(p, g, h, b, a) : ingestRegistry(p, g, h, b, a);
+    }
+    function lineCount(h) { return h.axis == 'horizontal' ? h.rows : h.columns; }
+    function emptyCatalog(p, g, a) {
+      let h = nextHead(p, g);
+      return a.keys().hasAll(['sectionId','initializationId','cursor','lines','lineIds']) && a.keys().hasOnly(['sectionId','initializationId','cursor','lines','lineIds'])
+        && a.sectionId == h.sectionId && a.initializationId == g && h.status == 'building' && h.cursor == 0
+        && a.cursor == 0 && a.lines == {} && a.lineIds == [];
+    }
+    function lineShape(h, line, index) {
+      return line.keys().hasAll(['lineId','index','name','prefix','startNumber','nextAutomaticNumber']) && line.keys().hasOnly(['lineId','index','name','prefix','startNumber','nextAutomaticNumber'])
+        && uuid(line.lineId) && line.index == index && line.name is string && line.name.matches('.*\\S.*') && line.prefix is string
+        && line.startNumber is int && line.startNumber > 0 && line.nextAutomaticNumber is int && line.nextAutomaticNumber <= 9007199254740991
+        && line.nextAutomaticNumber >= line.startNumber && line.nextAutomaticNumber - line.startNumber <= (h.axis == 'horizontal' ? h.columns : h.rows);
+    }
+    function appendCatalog(p, g, b, a) {
+      let h = head(p, g);
+      let line = a.lines[string(b.cursor)];
+      let ids = nextRegistry(p, g);
+      return pending(p, g) && h.status == 'building' && h.cursor == 0 && h.controlRevision == control(p).revision && b.cursor < lineCount(h)
+        && a.diff(b).affectedKeys().hasOnly(['cursor','lines','lineIds']) && a.cursor == b.cursor + 1 && lineShape(h, line, b.cursor)
+        && a.lines.diff(b.lines).addedKeys() == [string(b.cursor)].toSet() && a.lines.diff(b.lines).changedKeys().size() == 0 && a.lines.diff(b.lines).removedKeys().size() == 0
+        && a.lineIds == b.lineIds.concat([line.lineId]) && ids.lineCursor == a.cursor && ids.usedIds[line.lineId] == true;
+    }
+    function appendLineId(p, g, h, b, a) {
+      let catalog = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/lineCatalog/current).data;
+      let line = catalog.lines[string(b.lineCursor)];
+      let delta = a.usedIds.diff(b.usedIds);
+      return h.status == 'building' && h.cursor == 0 && b.cursor == 0 && a.lineCursor == b.lineCursor + 1 && catalog.cursor == a.lineCursor
+        && a.diff(b).affectedKeys().hasOnly(['lineCursor','usedIds']) && delta.addedKeys() == [line.lineId].toSet()
+        && delta.changedKeys().size() == 0 && delta.removedKeys().size() == 0 && a.usedIds[line.lineId] == true;
+    }
+    function slotKey(h,c,j) { return string(h.axis == 'horizontal' ? c.row : c.startColumn + (j < c.cells.size() ? j : 0)); }
+    function numberSlot(h, c, a, j, lines, b) {
+      let key = slotKey(h,c,j);
+      let line = lines[key];
+      let delta = h.seatOrder == 'forward' ? 1 : -1;
+      let v = c.cells[j];
+      let before = h.axis == 'horizontal' && j > b.progress ? a.steps[j-1] : b.numberCursors.get(key, delta == 1 ? line.startNumber : line.nextAutomaticNumber-1);
+      let after = before + (v.kind in ['seat','gap'] ? delta : 0);
+      let last = h.axis != 'horizontal' || j == a.progress-1;
+      let end = h.axis == 'horizontal' ? c.startColumn+c.cells.size() == h.columns : c.row == h.rows-1;
+      return a.steps[j] == after
+        && (v.kind in ['seat','gap'] ? v.numberValue == before && before >= line.startNumber && before < line.nextAutomaticNumber && c.numberKeys[j] == line.lineId+':'+string(before)
+          : v.numberValue == null && c.numberKeys[j] == '')
+        && (!last || a.numberCursors[key] == after && (!end || h.axis == 'horizontal' && a.progress != c.cells.size() || after == (delta == 1 ? line.nextAutomaticNumber : line.startNumber-1)));
+    }
+    function validateNumberPart(p,g,h,c,b,a,lines) {
+      return pending(p,g) && h.status == 'building' && h.controlRevision == control(p).revision && c.row*h.columns+c.startColumn == h.cursor
+        && a.keys().hasAll(['row','startColumn','numberCursors','steps','progress']) && a.keys().hasOnly(['row','startColumn','numberCursors','steps','progress'])
+        && a.row == c.row && a.startColumn == c.startColumn && b.progress < c.cells.size() && a.progress == (b.progress+h.numberSpan < c.cells.size() ? b.progress+h.numberSpan : c.cells.size())
+        && a.steps is list && a.steps.size() == a.progress && a.steps == b.steps.concat(a.progress == b.progress+1 ? [a.steps[b.progress]] : a.progress == b.progress+2 ? [a.steps[b.progress],a.steps[b.progress+1]] : a.progress == b.progress+3 ? [a.steps[b.progress],a.steps[b.progress+1],a.steps[b.progress+2]] : [a.steps[b.progress],a.steps[b.progress+1],a.steps[b.progress+2],a.steps[b.progress+3]])
+        && a.numberCursors is map && a.numberCursors.diff(b.numberCursors).affectedKeys().hasOnly([slotKey(h,c,b.progress),slotKey(h,c,a.progress-1)])
+        && numberSlot(h,c,a,b.progress,lines,b) && (a.progress == b.progress+1 || numberSlot(h,c,a,b.progress+1,lines,b))
+        && (a.progress <= b.progress+2 || numberSlot(h,c,a,b.progress+2,lines,b)) && (a.progress <= b.progress+3 || numberSlot(h,c,a,b.progress+3,lines,b));
+    }
+    function createNumberProof(p,g,id,a) {
+      let h = head(p,g);
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/chunks/$(id)).data;
+      let catalog = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/lineCatalog/current).data;
+      return validateNumberPart(p,g,h,c,{'progress':0,'steps':[],'numberCursors':h.numberCursors},a,catalog.lines);
+    }
+    function updateNumberProof(p,g,id,b,a) {
+      let h = head(p,g);
+      let c = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/chunks/$(id)).data;
+      let catalog = get(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(g)/lineCatalog/current).data;
+      return validateNumberPart(p,g,h,c,b,a,catalog.lines);
+    }
+    function selection(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/selection/current).data; }
+    function nextSelection(p) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/selection/current).data; }
+    function pending(p, g) { let s = selection(p); return s.activeGeneration == g; }
+    function published(p, g) { return selection(p).publishedGeneration == g; }
+    function selectionShape(a) {
+      return a.keys().hasAll(['revision', 'activeGeneration', 'publishedGeneration', 'operationId'])
+        && a.keys().hasOnly(['revision', 'activeGeneration', 'publishedGeneration', 'operationId'])
+        && a.revision is int && a.revision > 0 && a.activeGeneration is string && a.publishedGeneration is string && uuid(a.operationId);
+    }
+    function initialTarget(p, a) {
+      let h = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(a.activeGeneration)/head/current).data;
+      return uuid(a.activeGeneration) && a.operationId == a.activeGeneration && h.basePublishedGeneration == a.publishedGeneration
+        && h.status == 'building' && h.cursor == 0 && h.initializationId == a.activeGeneration;
+    }
+    function changeSelection(p, b, a) {
+      return selectionShape(a) && a.revision == b.revision + 1 && a.operationId != b.operationId
+        && (b.activeGeneration == '' ? a.publishedGeneration == b.publishedGeneration && initialTarget(p, a)
+          : completedTarget(p, b, a));
+    }
+    function completedTarget(p, b, a) {
+      let h = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/generations/$(b.activeGeneration)/head/current).data;
+      return a.activeGeneration == '' && h.operationId == a.operationId
+        && (a.publishedGeneration == b.publishedGeneration && h.status == 'aborted'
+          || b.publishedGeneration == '' && a.publishedGeneration == b.activeGeneration && h.status == 'countReady');
+    }
+    function abortInitial(p, g, b, a) {
+      let e = event(p, g, a.operationId);
+      let n = nextSelection(p);
+      return a.status == 'aborted' && a.diff(b).affectedKeys().hasOnly(['status', 'revision', 'operationId'])
+        && a.revision == b.revision + 1 && uuid(a.operationId) && a.operationId != b.operationId
+        && n.activeGeneration == '' && n.publishedGeneration == selection(p).publishedGeneration && n.operationId == a.operationId
+        && e.kind == 'abortInitial' && e.initializationId == g && e.deviceUid == request.auth.uid && e.controlRevision == control(p).revision;
+    }
+    function createEvent(p,g,id,e) {
+      return e.kind == 'initialCounterProof' ? publicationEvent(p,g,id,e) : structuralEvent(p,g,id,e);
+    }
+    function publicationEvent(p,g,id,e) {
+      let b = versions(p);
+      let a = nextVersions(p);
+      return businessScope(p,e) && uuid(id) && e.operationId == id && e.generation == g && e.initializationId == g
+        && e.deviceUid == request.auth.uid && e.controlRevision == b.values.control
+        && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','generation','deviceUid','initializationId','controlRevision','expectedVersions','resultVersions'])
+        && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','generation','deviceUid','initializationId','controlRevision','expectedVersions','resultVersions'])
+        && b.values.layout == 0 && a.values.layout == 1 && a.operationId == id
+        && e.expectedVersions == b.values && e.resultVersions == a.values;
+    }
+    function initialAssignment(p,a) {
+      let b = head(p,a.generation);
+      let h = nextHead(p,a.generation);
+      let ids = registry(p,a.generation);
+      return a.keys().hasAll(['schemaVersion','environmentId','performanceId','generation','revision','operationId','assignments'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','generation','revision','operationId','assignments'])
+        && businessScope(p,a) && uuid(a.generation) && uuid(a.operationId) && a.revision == 1 && a.assignments is map
+        && b.status == 'building' && b.revision == 0 && b.sourceRevision == 0 && b.cursor == b.rows * b.columns
+        && h.status == 'countReady' && h.revision == 1 && h.sourceRevision == 1 && h.operationId == a.operationId
+        && ids.initializationId == a.generation && ids.cursor == b.cursor && ids.lineCursor == lineCount(b)
+        && a.assignments.keys().toSet() == ids.seatIds.keys().toSet() && a.assignments.values().toSet().hasOnly(['']);
+    }
+    function initialVersion(p,b,a) {
+      let h = nextHead(p,a.generation);
+      let c = control(p);
+      let s = nextAssignment(p);
+      let person = people(p);
+      let ticket = tickets(p);
+      return businessScope(p,b) && a.keys() == b.keys() && b.generation == '' && b.sectionId == ''
+        && b.values.layout == 0 && b.values.source == 0 && b.values.assignment == 0
+        && a.diff(b).affectedKeys().hasOnly(['sectionId','generation','operationId','values']) && uuid(a.generation) && uuid(a.sectionId)
+        && a.sectionId == h.sectionId && uuid(a.operationId) && a.operationId != b.operationId
+        && h.status == 'countReady' && h.revision == 1 && h.sourceRevision == 1 && h.operationId == a.operationId
+        && businessScope(p,s) && s.generation == a.generation && s.operationId == a.operationId && s.revision == 1
+        && businessScope(p,person) && person.revision == b.values.attendee && businessScope(p,ticket) && ticket.revision == b.values.ticket
+        && ticket.protectedAttendeeIds.size() == 0 && c.environmentId == b.environmentId && c.revision == b.values.control
+        && a.values.diff(b.values).affectedKeys().hasOnly(['commit','layout','source','assignment'])
+        && positive(a.values.commit) && a.values.commit == b.values.commit+1 && a.values.layout == 1 && a.values.source == 1 && a.values.assignment == 1;
+    }
+    function firstPublication(p,b,a) {
+      let h = head(p,b.activeGeneration);
+      let n = nextHead(p,b.activeGeneration);
+      return selectionShape(a) && a.revision == b.revision+1 && a.operationId != b.operationId && b.publishedGeneration == '' && uuid(b.activeGeneration)
+        && a.activeGeneration == '' && a.publishedGeneration == b.activeGeneration && a.operationId == n.operationId
+        && h.status == 'building' && n.status == 'countReady' && n.revision == h.revision+1;
+    }
+    function businessScope(p,x) { return x.schemaVersion == 3 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+    function operation(p,id) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/operations/$(id)).data; }
+    function people(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/attendeeState/current).data; }
+    function tickets(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/ticketState/current).data; }
+    function assignment(p) { return get(/databases/$(database)/documents/splitSeatShows/$(p)/assignmentState/current).data; }
+    function nextAssignment(p) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/assignmentState/current).data; }
+    function nextPeople(p) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/attendeeState/current).data; }
+    function peopleShape(p,a) {
+      return businessScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','attendeeId','eligibleAttendeeIds'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','attendeeId','eligibleAttendeeIds'])
+        && positive(a.revision) && uuid(a.operationId) && a.attendeeId is string
+        && a.eligibleAttendeeIds is list && a.eligibleAttendeeIds.size() <= 500 && a.eligibleAttendeeIds.size() == a.eligibleAttendeeIds.toSet().size();
+    }
+    function ticketShape(p,a) {
+      return businessScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','protectedAttendeeIds'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','protectedAttendeeIds'])
+        && positive(a.revision) && uuid(a.operationId) && a.protectedAttendeeIds is list && a.protectedAttendeeIds.size() == 0;
+    }
+    function bootstrapIndex(p,a,isPerson) {
+      let v = nextVersions(p);
+      return !exists(/databases/$(database)/documents/splitSeatShows/$(p)/versions/current)
+        && (isPerson ? peopleShape(p,a) && a.attendeeId == '' && a.eligibleAttendeeIds.size() == 0 : ticketShape(p,a))
+        && a.revision == 1 && v.operationId == a.operationId && v.values.commit == 1;
+    }
+    function bootstrapEvent(p,id,e) {
+      let v = nextVersions(p);
+      return !exists(/databases/$(database)/documents/splitSeatShows/$(p)/versions/current)
+        && !exists(/databases/$(database)/documents/splitSeatShows/$(p)/attendeeState/current)
+        && !exists(/databases/$(database)/documents/splitSeatShows/$(p)/ticketState/current)
+        && businessScope(p,e) && uuid(id) && e.operationId == id && e.deviceUid == request.auth.uid
+        && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions'])
+        && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions'])
+        && e.generation == '' && e.expectedVersions == null && e.resultVersions == v.values && v.operationId == id;
+    }
+    function bootstrapVersion(p,a) {
+      let c = control(p);
+      let person = nextPeople(p);
+      let ticket = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/ticketState/current).data;
+      let e = operation(p,a.operationId);
+      return manager(p) && businessScope(p,a)
+        && a.keys().hasAll(['schemaVersion','environmentId','performanceId','sectionId','generation','operationId','values'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','sectionId','generation','operationId','values'])
+        && uuid(a.operationId) && a.sectionId == '' && a.generation == ''
+        && a.values.keys().hasAll(['commit','layout','source','assignment','attendee','ticket','control'])
+        && a.values.keys().hasOnly(['commit','layout','source','assignment','attendee','ticket','control'])
+        && a.values.commit == 1 && a.values.layout == 0 && a.values.source == 0 && a.values.assignment == 0
+        && a.values.attendee == 1 && a.values.ticket == 1 && positive(c.revision) && a.values.control == c.revision && c.environmentId == a.environmentId
+        && person.operationId == a.operationId && ticket.operationId == a.operationId && person.revision == 1 && ticket.revision == 1
+        && e.operationId == a.operationId && e.kind == 'bootstrapBusiness' && e.deviceUid == request.auth.uid
+        && !exists(/databases/$(database)/documents/splitSeatShows/$(p)/operations/$(a.operationId))
+        && !exists(/databases/$(database)/documents/splitSeatShows/$(p)/selection/current)
+        && !exists(/databases/$(database)/documents/splitSeatShows/$(p)/assignmentState/current);
+    }
+    function layoutReady(p,b) {
+      let h = head(p,b.generation);
+      return h.status == 'countReady' && h.sectionId == b.sectionId && h.revision == b.values.layout && h.sourceRevision == b.values.source;
+    }
+    function layoutGuard(p,b) {
+      return b.values.layout == 0
+        ? b.generation == '' && b.sectionId == '' && b.values.source == 0 && b.values.assignment == 0
+          && !exists(/databases/$(database)/documents/splitSeatShows/$(p)/assignmentState/current)
+        : layoutReady(p,b);
+    }
+    function versionBase(p,b,a) {
+      return businessScope(p,b) && a.keys() == b.keys()
+        && a.diff(b).affectedKeys().hasOnly(['operationId','values']) && uuid(a.operationId) && a.operationId != b.operationId
+        && positive(a.values.commit) && a.values.commit == b.values.commit+1;
+    }
+    function normalVersion(p,b,a) {
+      let c = control(p);
+      let e = operation(p,a.operationId);
+      return versionBase(p,b,a) && manager(p) && layoutGuard(p,b) && b.values.control == c.revision && b.environmentId == c.environmentId
+        && e.operationId == a.operationId && e.generation == b.generation && e.expectedVersions == b.values && e.resultVersions == a.values
+        && (e.kind in ['attendeeCreate','attendeeUpdate'] ? attendeeVersion(p,b,a,e)
+          : e.kind == 'controlFence' ? controlVersion(p,b,a,e,c) : b.values.layout > 0 && assignmentVersion(p,b,a,e,c));
+    }
+    function occupiedIds(map) { return map.values().removeAll(['']); }
+    function attendeeVersion(p,b,a,e) {
+      let n = nextPeople(p);
+      let t = tickets(p);
+      return a.values.diff(b.values).affectedKeys().hasOnly(['commit','attendee']) && positive(a.values.attendee) && a.values.attendee == b.values.attendee+1
+        && businessScope(p,n) && n.revision == a.values.attendee && n.operationId == a.operationId && n.attendeeId == e.payload.attendeeId
+        && (b.values.layout == 0 ? !exists(/databases/$(database)/documents/splitSeatShows/$(p)/assignmentState/current) : attendeeAssignment(p,b,n))
+        && businessScope(p,t) && t.revision == b.values.ticket && t.protectedAttendeeIds.toSet().hasOnly(n.eligibleAttendeeIds);
+    }
+    function attendeeAssignment(p,b,n) {
+      let s = assignment(p);
+      return businessScope(p,s) && s.revision == b.values.assignment && occupiedIds(s.assignments).toSet().hasOnly(n.eligibleAttendeeIds);
+    }
+    // 隔離検証用の版更新。実際の受付開始・停止を実装したものではない。
+    function controlVersion(p,b,a,e,c) {
+      let n = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/control/current).data;
+      return e.deviceUid == request.auth.uid && a.values.diff(b.values).affectedKeys().hasOnly(['commit','control'])
+        && positive(a.values.control) && a.values.control == b.values.control+1 && n.revision == a.values.control
+        && n.diff(c).affectedKeys() == ['revision'].toSet() && e.payload.before == c && e.payload.after == n;
+    }
+    function controlWrite(p,b,a) {
+      let v = versions(p);
+      let n = nextVersions(p);
+      let e = operation(p,n.operationId);
+      return e.kind == 'controlFence' && e.payload.keys().hasAll(['before','after']) && e.payload.keys().hasOnly(['before','after'])
+        && e.payload.before == b && e.payload.after == a && n.values.control == v.values.control+1 && n.values.commit == v.values.commit+1;
+    }
+    function assignmentVersion(p,b,a,e,c) {
+      let s = nextAssignment(p);
+      let person = people(p);
+      let ticket = tickets(p);
+      let ids = occupiedIds(s.assignments);
+      return e.kind in ['assign','move','swap','unassign','bulkAssign'] && e.deviceUid == request.auth.uid
+        && a.values.diff(b.values).affectedKeys().hasOnly(['commit','assignment']) && positive(a.values.assignment) && a.values.assignment == b.values.assignment+1
+        && businessScope(p,s) && s.revision == a.values.assignment && s.operationId == a.operationId
+        && businessScope(p,person) && person.revision == b.values.attendee && businessScope(p,ticket) && ticket.revision == b.values.ticket
+        && ids.size() <= 500 && ids.size() == ids.toSet().size() && ids.toSet().hasOnly(person.eligibleAttendeeIds)
+        && (e.kind == 'unassign' ? !ticket.protectedAttendeeIds.hasAny([e.payload.before1]) : true)
+        && (e.kind == 'move' && ticket.protectedAttendeeIds.hasAny([e.payload.before1]) || e.kind == 'swap' && c.firstReceptionStartedAt != null
+          ? e.payload.reason is string && e.payload.reason.matches('(?s).*\\S.*') : true)
+        && (e.kind == 'bulkAssign' ? ticket.protectedAttendeeIds.size() == 0 : true);
+    }
+    function profileShape(p,id,a) {
+      return businessScope(p,a) && uuid(id) && a.attendeeId == id && uuid(a.buyerId)
+        && a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','buyerId','attendancePlan','seatDisplayName','paid','revision','operationId'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','buyerId','attendancePlan','seatDisplayName','paid','revision','operationId'])
+        && a.attendancePlan in ['planned','notAttending'] && a.seatDisplayName is string && a.seatDisplayName.size() > 0 && a.seatDisplayName.size() <= 6
+        && a.paid is bool && positive(a.revision) && uuid(a.operationId);
+    }
+    function profileWrite(p,id,b,a,creating) {
+      let v = versions(p);
+      let n = nextVersions(p);
+      let i = nextPeople(p);
+      let e = operation(p,a.operationId);
+      return profileShape(p,id,a) && n.values.attendee == v.values.attendee+1 && n.values.commit == v.values.commit+1
+        && n.operationId == a.operationId && i.operationId == a.operationId && i.attendeeId == id
+        && e.payload.keys().hasAll(['attendeeId','before','after']) && e.payload.keys().hasOnly(['attendeeId','before','after'])
+        && e.payload.attendeeId == id && e.payload.after == a
+        && (creating ? a.revision == 1 && e.kind == 'attendeeCreate' && e.payload.before == null && e.deviceUid == request.auth.uid
+          : a.revision == b.revision+1 && a.diff(b).affectedKeys().hasOnly(['paid','seatDisplayName','attendancePlan','revision','operationId'])
+            && a.diff(b).affectedKeys().hasAny(['paid','seatDisplayName','attendancePlan']) && e.kind == 'attendeeUpdate' && e.payload.before == b
+            && e.deviceUid == (a.diff(b).affectedKeys().hasOnly(['paid','revision','operationId']) ? '' : request.auth.uid));
+    }
+    function peopleUpdate(p,b,a) {
+      let v = versions(p);
+      let n = nextVersions(p);
+      let e = operation(p,a.operationId);
+      let profile = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/attendees/$(a.attendeeId)).data;
+      let expected = profile.attendancePlan == 'planned' ? b.eligibleAttendeeIds.toSet().union([a.attendeeId].toSet()) : b.eligibleAttendeeIds.toSet().difference([a.attendeeId].toSet());
+      return peopleShape(p,a) && uuid(a.attendeeId) && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeId','eligibleAttendeeIds'])
+        && b.revision == v.values.attendee && a.revision == b.revision+1 && a.revision == n.values.attendee
+        && n.values.commit == v.values.commit+1 && n.operationId == a.operationId && e.payload.attendeeId == a.attendeeId
+        && e.kind in ['attendeeCreate','attendeeUpdate'] && profile.operationId == a.operationId && profile == e.payload.after
+        && a.eligibleAttendeeIds.toSet() == expected;
+    }
+    function smallAssignment(e,b,a) {
+      let x = e.payload;
+      let changes = a.diff(b).affectedKeys();
+      return x.keys().hasAll(['seat1','seat2','before1','before2','after1','after2','reason'])
+        && x.keys().hasOnly(['seat1','seat2','before1','before2','after1','after2','reason'])
+        && x.seat1 != x.seat2 && b.keys().hasAll([x.seat1]) && (x.seat2 == '' || b.keys().hasAll([x.seat2]))
+        && changes == [x.seat1,x.seat2].removeAll(['']).toSet() && x.reason is string
+        && x.before1 == b[x.seat1] && x.after1 == a[x.seat1] && x.before2 == b.get(x.seat2,'') && x.after2 == a.get(x.seat2,'')
+        && (e.kind == 'assign' && x.seat2 == '' && x.before1 == '' && x.after1 != ''
+          || e.kind == 'unassign' && x.seat2 == '' && x.before1 != '' && x.after1 == ''
+          || e.kind == 'move' && x.seat2 != '' && x.before1 != '' && x.after1 == '' && x.before2 == '' && x.after2 == x.before1
+          || e.kind == 'swap' && x.seat2 != '' && x.before1 != '' && x.before2 != '' && x.after1 == x.before2 && x.after2 == x.before1);
+    }
+    function assignmentUpdate(p,b,a) {
+      let v = versions(p);
+      let n = nextVersions(p);
+      let h = head(p,v.generation);
+      let ids = registry(p,v.generation);
+      let e = operation(p,a.operationId);
+      return businessScope(p,a) && a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments'])
+        && b.generation == v.generation && b.revision == v.values.assignment && a.revision == b.revision+1 && a.revision == n.values.assignment
+        && a.operationId == n.operationId && n.values.commit == v.values.commit+1 && h.revision == v.values.layout
+        && ids.initializationId == v.generation && ids.cursor == h.rows*h.columns && ids.lineCursor == lineCount(h)
+        && a.assignments is map && a.assignments.keys().toSet() == ids.seatIds.keys().toSet() && a.assignments.diff(b.assignments).affectedKeys().size() > 0
+        && (e.kind == 'bulkAssign' ? e.payload.keys().hasAll(['before','after','reason']) && e.payload.keys().hasOnly(['before','after','reason'])
+          && e.payload.before == b.assignments && e.payload.after == a.assignments && e.payload.reason is string
+          && occupiedIds(b.assignments).toSet().difference(occupiedIds(a.assignments).toSet()).size() == 0
+          : smallAssignment(e,b.assignments,a.assignments));
+    }
+    function normalEvent(p,id,e) {
+      let v = versions(p);
+      let n = nextVersions(p);
+      return businessScope(p,e) && uuid(id) && e.operationId == id && e.generation == v.generation
+        && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+        && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+        && e.kind in ['attendeeCreate','attendeeUpdate','assign','move','swap','unassign','bulkAssign','controlFence'] && e.deviceUid is string
+        && n.operationId == id && n.values.commit == v.values.commit+1 && e.expectedVersions == v.values && e.resultVersions == n.values;
+    }
+
+    // 中央の認可、券の正本、索引と履歴へ検査を分担する。証拠の参照予算も各分岐を別に算定する。
+    function qrScope(p,a) { return a.schemaVersion == 4 && a.environmentId == 'FAKE-environment' && a.performanceId == p; }
+    function nextTicket(p,id) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/tickets/$(id)).data; }
+    function nextTicketIndex(p) { return getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/ticketState/current).data; }
+    function ticketRecord(p,id,a) {
+      return qrScope(p,a) && uuid(id) && a.attendeeId == id && a.ticketId == id
+        && a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','ticketId','revision','operationId','lastKind','currentCycle','cycleClosed','everIssued','issued','sent','issuedAt','sentAt','activeCredentialId','activeCode','credentialVersion'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','ticketId','revision','operationId','lastKind','currentCycle','cycleClosed','everIssued','issued','sent','issuedAt','sentAt','activeCredentialId','activeCode','credentialVersion'])
+        && positive(a.revision) && uuid(a.operationId) && a.lastKind in ['qrCreate','ticketCheck']
+        && a.currentCycle == 1 && a.cycleClosed == false && a.everIssued is bool && a.issued is bool && a.sent is bool
+        && (a.issuedAt == null || a.issuedAt is timestamp) && (a.sentAt == null || a.sentAt is timestamp)
+        && a.activeCredentialId is string && a.activeCode is string && a.credentialVersion is int
+        && (a.activeCredentialId == '' ? a.activeCode == '' && a.credentialVersion == 0
+          : a.activeCredentialId.matches('^[A-Za-z0-9_-]{21}[AQgw]$') && a.activeCode.matches('^[23456789ABCDEFGHJKMNPQRSTVWXYZ]{8}$') && a.credentialVersion == 1)
+        && (!a.issued || a.everIssued);
+    }
+    function ticketAudit(a) {
+      return a == null ? null : {'revision':a.revision,'issued':a.issued,'sent':a.sent,'issuedAt':a.issuedAt,'sentAt':a.sentAt,
+        'currentCycle':a.currentCycle,'cycleClosed':a.cycleClosed,'everIssued':a.everIssued,'credentialVersion':a.credentialVersion};
+    }
+    function ticketVersion(p,b,a) {
+      let c = control(p);
+      let e = operation(p,a.operationId);
+      return versionBase(p,b,a) && manager(p) && b.values.control == c.revision && b.environmentId == c.environmentId
+        && a.values.keys() == b.values.keys() && a.values.diff(b.values).affectedKeys().hasOnly(['commit','ticket'])
+        && a.values.ticket == b.values.ticket+1 && positive(a.values.ticket)
+        && e.kind in ['qrCreate','ticketCheck'] && e.operationId == a.operationId && e.generation == b.generation
+        && e.expectedVersions == b.values && e.resultVersions == a.values
+        && e.deviceUid == (e.kind == 'ticketCheck' ? '' : request.auth.uid);
+    }
+    function ticketEvent(p,id,e) {
+      let v = versions(p);
+      let n = nextVersions(p);
+      let t = nextTicket(p,e.payload.attendeeId);
+      let before = e.payload.creating ? null : get(/databases/$(database)/documents/splitSeatShows/$(p)/tickets/$(e.payload.attendeeId)).data;
+      return businessScope(p,e) && uuid(id) && e.operationId == id && e.generation == v.generation
+        && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+        && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+        && e.kind in ['qrCreate','ticketCheck'] && e.kind == t.lastKind
+        && e.payload.keys().hasAll(['attendeeId','creating','before','after']) && e.payload.keys().hasOnly(['attendeeId','creating','before','after'])
+        && e.payload.creating is bool && e.payload.attendeeId == t.attendeeId
+        && e.payload.before == ticketAudit(before) && e.payload.after == ticketAudit(t)
+        && (!e.payload.creating || !exists(/databases/$(database)/documents/splitSeatShows/$(p)/tickets/$(e.payload.attendeeId)))
+        && n.operationId == id && n.values.commit == v.values.commit+1 && e.expectedVersions == v.values && e.resultVersions == n.values
+        && t.operationId == id;
+    }
+    function qrLinks(p,a) {
+      let c = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/credentials/$(a.activeCredentialId)).data;
+      let k = getAfter(/databases/$(database)/documents/splitSeatShows/$(p)/confirmationCodes/$(a.activeCode)).data;
+      return c.ticketId == a.ticketId && c.currentCycle == a.currentCycle && c.credentialVersion == a.credentialVersion
+        && c.createdOperationId == a.operationId && c.status == 'active'
+        && k.credentialId == a.activeCredentialId && k.ticketId == a.ticketId && k.createdOperationId == a.operationId && k.active == true;
+    }
+    function assignedForQr(p,id,n) {
+      let s = assignment(p);
+      return businessScope(p,s) && n.values.layout > 0 && s.generation == n.generation
+        && s.revision == n.values.assignment && occupiedIds(s.assignments).hasAny([id]);
+    }
+    function eligibleForCheck(p,id,n) {
+      let i = people(p);
+      return businessScope(p,i) && i.revision == n.values.attendee && i.eligibleAttendeeIds.hasAny([id]);
+    }
+    function checkChanges(b,a) {
+      let changed = a.diff(b).affectedKeys();
+      return changed.hasOnly(['revision','operationId','lastKind','issued','sent','issuedAt','sentAt','everIssued'])
+        && a.everIssued == (b.everIssued || a.issued)
+        && (a.issued != b.issued && a.sent == b.sent && a.sentAt == b.sentAt && a.issuedAt == request.time
+          || a.sent != b.sent && a.issued == b.issued && a.issuedAt == b.issuedAt && a.sentAt == request.time);
+    }
+    function ticketWrite(p,id,b,a,creating) {
+      let n = nextVersions(p);
+      let i = nextTicketIndex(p);
+      return ticketRecord(p,id,a) && n.operationId == a.operationId
+        && i.operationId == a.operationId && i.revision == n.values.ticket && i.attendeeId == id
+        && (creating ? a.revision == 1 : a.revision == b.revision+1)
+        && (a.lastKind == 'qrCreate'
+          ? assignedForQr(p,id,n) && a.activeCredentialId != '' && qrLinks(p,a)
+            && (creating ? a.issued == false && a.sent == false && a.issuedAt == null && a.sentAt == null && a.everIssued == false
+              : b.activeCredentialId == '' && a.diff(b).affectedKeys().hasOnly(['revision','operationId','lastKind','activeCredentialId','activeCode','credentialVersion']))
+          : eligibleForCheck(p,id,n) && (creating
+            ? a.activeCredentialId == '' && a.everIssued == a.issued
+              && (a.issued && a.issuedAt == request.time && !a.sent && a.sentAt == null || a.sent && a.sentAt == request.time && !a.issued && a.issuedAt == null)
+            : checkChanges(b,a)));
+    }
+    function ticketIndexUpdate(p,b,a) {
+      let n = nextVersions(p);
+      let t = nextTicket(p,a.attendeeId);
+      let protected = t.issued || t.everIssued || t.activeCredentialId != '';
+      let expected = protected ? b.protectedAttendeeIds.toSet().union([a.attendeeId].toSet()) : b.protectedAttendeeIds.toSet().difference([a.attendeeId].toSet());
+      return businessScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','protectedAttendeeIds','attendeeId'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','protectedAttendeeIds','attendeeId'])
+        && a.diff(b).affectedKeys().hasOnly(['revision','operationId','protectedAttendeeIds','attendeeId'])
+        && a.revision == b.revision+1 && a.revision == n.values.ticket && a.operationId == n.operationId
+        && t.operationId == a.operationId && a.attendeeId == t.attendeeId && t.cycleClosed == false
+        && a.protectedAttendeeIds is list && a.protectedAttendeeIds.size() <= 500
+        && a.protectedAttendeeIds.size() == a.protectedAttendeeIds.toSet().size() && a.protectedAttendeeIds.toSet() == expected;
+    }
+    function credentialCreate(p,id,a) {
+      let n = nextVersions(p);
+      let t = nextTicket(p,a.ticketId);
+      return qrScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','ticketId','currentCycle','credentialVersion','status','createdOperationId','revokedOperationId'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','ticketId','currentCycle','credentialVersion','status','createdOperationId','revokedOperationId'])
+        && t.activeCredentialId == id && t.currentCycle == a.currentCycle && t.credentialVersion == a.credentialVersion
+        && t.lastKind == 'qrCreate' && t.operationId == a.createdOperationId && n.operationId == a.createdOperationId
+        && a.status == 'active' && a.revokedOperationId == '';
+    }
+    function codeCreate(p,id,a) {
+      let n = nextVersions(p);
+      let t = nextTicket(p,a.ticketId);
+      return qrScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','ticketId','credentialId','active','createdOperationId','revokedOperationId'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','ticketId','credentialId','active','createdOperationId','revokedOperationId'])
+        && t.activeCode == id && t.activeCredentialId == a.credentialId && t.lastKind == 'qrCreate'
+        && t.operationId == a.createdOperationId && n.operationId == a.createdOperationId && a.active == true && a.revokedOperationId == '';
+    }
+
+    match /splitSeatShows/{p} {
+      match /control/current { allow update: if request.auth != null && controlWrite(p,resource.data,request.resource.data); }
+      match /attendeeState/current {
+        allow create: if request.auth != null && bootstrapIndex(p,request.resource.data,true);
+        allow update: if request.auth != null && peopleUpdate(p,resource.data,request.resource.data);
+      }
+      match /ticketState/current {
+        allow create: if request.auth != null && bootstrapIndex(p,request.resource.data,false);
+        allow update: if request.auth != null && ticketIndexUpdate(p,resource.data,request.resource.data);
+      }
+      match /tickets/{id} {
+        allow get: if manager(p);
+        allow create: if request.auth != null && ticketWrite(p,id,null,request.resource.data,true);
+        allow update: if request.auth != null && ticketWrite(p,id,resource.data,request.resource.data,false);
+      }
+      match /credentials/{id} {
+        allow get: if active(p) && qrScope(p,resource.data);
+        allow create: if request.auth != null && credentialCreate(p,id,request.resource.data);
+      }
+      match /confirmationCodes/{id} {
+        allow get: if manager(p);
+        allow create: if request.auth != null && codeCreate(p,id,request.resource.data);
+      }
+      match /attendees/{id} {
+        allow get: if manager(p);
+        allow create: if request.auth != null && profileWrite(p,id,null,request.resource.data,true);
+        allow update: if request.auth != null && profileWrite(p,id,resource.data,request.resource.data,false);
+      }
+      match /operations/{id} {
+        allow get: if manager(p);
+        allow create: if request.auth != null && (request.resource.data.kind in ['initialCounterProof','slide','abortInitial']
+          ? createEvent(p,request.resource.data.generation,id,request.resource.data)
+          : request.resource.data.kind in ['qrCreate','ticketCheck'] ? ticketEvent(p,id,request.resource.data)
+          : request.resource.data.kind == 'bootstrapBusiness' ? bootstrapEvent(p,id,request.resource.data) : normalEvent(p,id,request.resource.data));
+      }
+
+      match /sessions/{uid} {
+        allow get: if request.auth != null && resource.data.humanUid == request.auth.uid && scope(p,resource.data)
+          && request.auth.token.firebase.sign_in_provider in ['google.com','password'];
+        allow create: if request.auth != null && request.resource.data.revision == 1 && issueSession(p,uid,request.resource.data);
+        allow update: if request.auth != null && (
+          revokeSession(p,uid,resource.data,request.resource.data)
+          || request.resource.data.revision == resource.data.revision + 1
+            && resource.data.humanUid == request.auth.uid && request.resource.data.deviceUid == resource.data.deviceUid
+            && issueSession(p,uid,request.resource.data));
+      }
+      match /assignmentState/current {
+        allow get: if manager(p) || active(p) && selection(p).publishedGeneration != '';
+        allow create: if request.auth != null && initialAssignment(p,request.resource.data);
+        allow update: if request.auth != null && assignmentUpdate(p,resource.data,request.resource.data);
+      }
+      match /versions/current {
+        allow get: if manager(p) || active(p) && resource.data.generation != '' && published(p,resource.data.generation);
+        allow create: if request.auth != null && bootstrapVersion(p,request.resource.data);
+        allow update: if request.auth != null && (request.resource.data.values.ticket != resource.data.values.ticket ? ticketVersion(p,resource.data,request.resource.data) : resource.data.values.layout == 0 && request.resource.data.values.layout == 1 ? initialVersion(p,resource.data,request.resource.data) : request.resource.data.values.layout != resource.data.values.layout ? slideVersion(p,resource.data,request.resource.data) : normalVersion(p,resource.data,request.resource.data));
+      }
+
+      match /{privateCollection}/{id} {
+        allow get: if privateCollection in ['devices', 'sessions', 'roles', 'control', 'attendeeState', 'ticketState'] && manager(p);
+        allow write: if false;
+      }
+      match /selection/current {
+        allow get: if manager(p) || active(p) && resource.data.publishedGeneration != '';
+        allow create: if manager(p) && selectionShape(request.resource.data) && request.resource.data.revision == 1 && request.resource.data.publishedGeneration == '' && initialTarget(p, request.resource.data);
+        allow update: if resource.data.publishedGeneration == '' && request.resource.data.publishedGeneration != ''
+          ? request.auth != null && firstPublication(p,resource.data,request.resource.data)
+          : manager(p) && changeSelection(p, resource.data, request.resource.data);
+      }
+      match /seatReferences/current { allow get: if active(p) && selection(p).publishedGeneration != ''; }
+      match /generations/{g} {
+        match /lineCatalog/current {
+          allow get: if manager(p) || active(p) && published(p,g) && head(p,g).status == 'countReady';
+          allow create: if manager(p) && emptyCatalog(p,g,request.resource.data);
+          allow update: if manager(p) && appendCatalog(p,g,resource.data,request.resource.data);
+        }
+        match /idRegistry/current {
+          allow get: if manager(p);
+          allow create: if manager(p) && createRegistry(p, g, request.resource.data);
+          allow update: if manager(p) && updateRegistry(p, g, resource.data, request.resource.data);
+        }
+        match /head/current {
+          allow get: if manager(p) || active(p) && published(p, g) && resource.data.status == 'countReady';
+          allow create: if manager(p) && initial(p, g, request.resource.data);
+          allow update: if manager(p) && updateHead(p, g, resource.data, request.resource.data);
+        }
+        match /chunks/{id} {
+          allow get: if manager(p) || active(p) && published(p, g) && head(p, g).status == 'countReady';
+          allow create: if manager(p) && createChunk(p, g, id);
+        }
+        match /attributes/{id} {
+          allow get: if manager(p) || active(p) && published(p, g) && head(p, g).status == 'countReady';
+          allow create: if manager(p) && createAttributes(p, g, id, request.resource.data);
+        }
+        match /numberProofs/{id} {
+          allow get: if manager(p) || active(p) && published(p,g) && head(p,g).status == 'countReady';
+          allow create: if manager(p) && createNumberProof(p,g,id,request.resource.data);
+          allow update: if manager(p) && updateNumberProof(p,g,id,resource.data,request.resource.data);
+        }
+      }
+    }
+  }
+}
