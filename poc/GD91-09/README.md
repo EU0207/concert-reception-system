@@ -1,7 +1,7 @@
 # GD91-09: 全体スライドの世代保存検証
 
 状態：In Review。読者：開発者、設計担当者、テスト担当者。
-Issue #101の隔離検証。結果と主要試験は[詳細設計](../../docs/development/detailed-design/seat-management-detail-design.md#gd91-09-全体スライドの世代保存検証)へ集約する。本番Rulesとして使用しない。
+Issue #101の隔離検証。結果と主要試験は[技術検証記録](../../docs/development/technical-validation/seat-save-validation.md#gd91-09-全体スライドの世代保存検証)へ集約する。本番Rulesとして使用しない。
 
 ## 実行
 

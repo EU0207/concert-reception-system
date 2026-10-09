@@ -1,7 +1,7 @@
 # GD91-17: 初期開始の参照余裕の検証
 
 状態：In Review。読者：開発者、設計担当者、テスト担当者。
-Issue #101の隔離検証。[詳細設計](../../docs/development/detailed-design/seat-management-detail-design.md#gd91-17-初期開始の参照余裕の検証)に結果・残作業を集約する。本番Rulesとして使用しない。
+Issue #101の隔離検証。[技術検証記録](../../docs/development/technical-validation/seat-save-validation.md#gd91-17-初期開始の参照余裕の検証)に結果・残作業を集約する。本番Rulesとして使用しない。
 
 ## 実行
 

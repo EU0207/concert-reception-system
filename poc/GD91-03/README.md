@@ -2,7 +2,7 @@
 
 状態：In Review。読者：開発者、設計担当者、テスト担当者。
 Issue #101の技術検証。構成集約文書の容量課題があり、本番採用の根拠や本番Rulesとして使用しない。
-正式結果と主要試験は[詳細設計](../../docs/development/detailed-design/seat-management-detail-design.md#gd91-03-個別構成編集と容量境界)に集約する。
+正式結果と主要試験は[技術検証記録](../../docs/development/technical-validation/seat-save-validation.md#gd91-03-個別構成編集と容量境界)に集約する。
 
 ## 実行
 

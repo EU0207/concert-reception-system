@@ -1,7 +1,7 @@
 # GD91-26: 来場者の通常登録と500人席割当の接続
 
 状態：In Review。読者：開発者、設計担当者、テスト担当者。
-Issue #101の隔離検証。[詳細設計](../../docs/development/detailed-design/seat-management-detail-design.md#gd91-26-通常登録から500人割当への接続検証)に結果と残作業を集約する。本番Rulesとして使用しない。
+Issue #101の隔離検証。[技術検証記録](../../docs/development/technical-validation/seat-save-validation.md#gd91-26-通常登録から500人割当への接続検証)に結果と残作業を集約する。本番Rulesとして使用しない。
 
 ## 実行
 
