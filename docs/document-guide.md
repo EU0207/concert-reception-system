@@ -69,7 +69,7 @@
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 開発者、設計担当者、テスト担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
-| 座席保存の技術検証記録 | [seat-save-validation.md](development/technical-validation/seat-save-validation.md) | #101の現在地とGD91-01～34の結果・費用を追跡する。GD91-34まで限定承認済み、方式全体は未採用 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残作業・承認変更時 | In Review |
+| 座席保存の技術検証記録 | [seat-save-validation.md](development/technical-validation/seat-save-validation.md) | #101の現在地とGD91-01～35の結果と検証計画を追跡する。GD91-34までの限定結果とGD91-35の検証計画は承認済み。方式全体は未採用 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残作業・承認変更時 | In Review |
 | 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-validation/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 開発者、設計担当者、テスト担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
 | RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/technical-validation/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 開発者、設計担当者、テスト担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
 | POC-001開始承認依頼書 | [poc-001-approval-request.md](development/technical-validation/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | Approved |
@@ -136,7 +136,7 @@
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
-| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91の仕様とデータ契約、主要試験DD91-T01～65を追跡する。検証結果は別記録を参照 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 仕様・試験・承認変更時 | In Review |
+| 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91の仕様とデータ契約、主要試験DD91-T01～69を追跡する。検証結果は別記録を参照 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 仕様・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
 
