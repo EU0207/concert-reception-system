@@ -1,0 +1,325 @@
+{
+  "project": "demo-concert-seat-gd91-28",
+  "runtime": "v24.19.0",
+  "executedAt": "2026-10-09T05:36:32.404Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "1891cf18a9265fbb592509ef49bf676a0857c74764a629ae4cc81823a759fa97",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../plan.mjs": "6f10e870969e61ad5b9546c42800fe2225b015189ac045351c425be221ea2c43",
+    "support.mjs": "b5e11846c2f0fa7d7e1bf935096482580bd710ac566983db7accc603308680e6",
+    "business.mjs": "c45a16ac1b6b4a1f58d6ef48b376eced506fdbb9c82fe369dd3ec23e31d342cf",
+    "emulator.mjs": "83cb845176b8d0b87451951bebee1642ec30c12e712b1584edfa63147ce26e4d",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "1891cf18a9265fbb592509ef49bf676a0857c74764a629ae4cc81823a759fa97",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "../plan.mjs": "6f10e870969e61ad5b9546c42800fe2225b015189ac045351c425be221ea2c43",
+    "support.mjs": "b5e11846c2f0fa7d7e1bf935096482580bd710ac566983db7accc603308680e6",
+    "business.mjs": "c45a16ac1b6b4a1f58d6ef48b376eced506fdbb9c82fe369dd3ec23e31d342cf",
+    "emulator.mjs": "83cb845176b8d0b87451951bebee1642ec30c12e712b1584edfa63147ce26e4d",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "scope": "Format-three bootstrap and first-publication integration in both preparation orders with 500 normally registered people each. Normal Auth sessions; device registration roles and initial control are seeded. controlFence changes only revision, not actual performance creation or reception start/stop. No ticket/QR writer, nonattendance joint operation, complete auth lifecycle, buyer entities/import, multiple sections/all edits/cleanup or SDK/IndexedDB/UI/device tests.",
+  "reports": [
+    {
+      "id": "B01",
+      "label": "four-document bootstrap preserves actual control revision and rejects every partial subset",
+      "status": "passed",
+      "partialSubsetsDenied": 14,
+      "controlRevision": 7,
+      "bootstrap": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 2757
+      },
+      "headAndAssignmentAbsent": true
+    },
+    {
+      "id": "B02",
+      "label": "bootstrap fields actors and existing fragments cannot be reused",
+      "status": "passed",
+      "forgeriesDenied": 23,
+      "wrongActorsDenied": 3,
+      "existingFragmentComparisons": 4,
+      "fragmentsSeededForCorruptionOnly": true
+    },
+    {
+      "id": "B03",
+      "label": "normal attendee writes before layout preserve the uncreated state",
+      "status": "passed",
+      "partialSubsetsDenied": 14,
+      "creation": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 3972
+      },
+      "uncreatedStatePreserved": true,
+      "managerDataNotDistributed": true
+    },
+    {
+      "id": "B04",
+      "label": "first publication updates existing versions and rejects every partial subset",
+      "status": "passed",
+      "partialSubsetsDenied": 30,
+      "publication": {
+        "requests": 1,
+        "writes": 5,
+        "maxRequestBytes": 4157
+      },
+      "existingAttendeeRevisionPreserved": 2,
+      "initialHistoryMatches": true
+    },
+    {
+      "id": "B05",
+      "label": "publication cannot reset business versions or forge history assignments and sources",
+      "status": "passed",
+      "publicationForgeriesDenied": 22,
+      "wrongActorsDenied": 3,
+      "piggybackDenied": 1,
+      "latestBusinessAndControlPreserved": true
+    },
+    {
+      "id": "B06",
+      "label": "registration during source preparation does not freeze the initial business version",
+      "status": "passed",
+      "stalePublicationDenied": true,
+      "preparationDoesNotAdvanceCommit": true,
+      "businessRevisionAtPublication": 3
+    },
+    {
+      "id": "B07",
+      "label": "unknown bootstrap and publication responses use the same operation ID and result documents",
+      "status": "passed",
+      "bootstrapDocumentsChecked": 4,
+      "publicationDocumentsChecked": 5,
+      "replaysAndDifferentPayloadDenied": 3,
+      "sdkRecoveryNotTested": true
+    },
+    {
+      "id": "B08",
+      "label": "layout zero is not permission to repair missing or unexpected documents",
+      "status": "passed",
+      "fullSeatOperationBeforeLayoutDenied": true,
+      "unexpectedAssignmentAndMissingPublishedAssignmentDenied": true,
+      "rollBackToZeroDenied": true,
+      "corruptionInjectedOnlyInLocalEmulator": true
+    },
+    {
+      "id": "B09",
+      "label": "simultaneous bootstrap requests publish one complete common state",
+      "status": "passed",
+      "winner": 0,
+      "initialWinners": 1,
+      "lockAbortRecovery": false,
+      "completeWinnerOnly": true
+    },
+    {
+      "id": "B10",
+      "label": "first publication competes with registration and control without partial results",
+      "status": "passed",
+      "competingPairs": 12,
+      "initialWinnerPairs": 3,
+      "lockAbortRecoveries": 9,
+      "finalWinnersPerPair": 1,
+      "controlFenceOnly": true
+    },
+    {
+      "id": "B11",
+      "label": "minimal control revision updates bind to common versions and fence stale preparation",
+      "status": "passed",
+      "partialSubsetsDenied": 6,
+      "controlCosts": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2582
+      },
+      "stalePreparationFenced": true,
+      "actualReceptionStartStopNotImplemented": true
+    },
+    {
+      "id": "B12",
+      "label": "500 people can be registered before the initial seat map",
+      "status": "passed",
+      "order": "namesFirst",
+      "cells": 930,
+      "seats": 900,
+      "normallyRegisteredPeople": 500,
+      "assignedPeople": 500,
+      "bootstrap": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 2757
+      },
+      "sourceCreation": {
+        "requests": 1651,
+        "writes": 2013,
+        "maxRequestBytes": 12475
+      },
+      "publication": {
+        "requests": 1,
+        "writes": 5,
+        "maxRequestBytes": 55847
+      },
+      "registration": {
+        "requests": 500,
+        "writes": 2000,
+        "maxRequestBytes": 31431
+      },
+      "bulkAssignment": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 195325
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2585
+      },
+      "finalVersions": {
+        "commit": 506,
+        "layout": 2,
+        "source": 1,
+        "assignment": 4,
+        "attendee": 501,
+        "ticket": 1,
+        "control": 1
+      },
+      "sourceBusinessSnapshotsSeeded": false,
+      "profilesAfterSlideChecked": 500,
+      "normalTicketIssuanceNotTested": true
+    },
+    {
+      "id": "B13",
+      "label": "500 people can be registered after the initial seat map",
+      "status": "passed",
+      "order": "layoutFirst",
+      "cells": 930,
+      "seats": 900,
+      "normallyRegisteredPeople": 500,
+      "assignedPeople": 500,
+      "bootstrap": {
+        "requests": 1,
+        "writes": 4,
+        "maxRequestBytes": 2757
+      },
+      "sourceCreation": {
+        "requests": 1651,
+        "writes": 2013,
+        "maxRequestBytes": 12475
+      },
+      "publication": {
+        "requests": 1,
+        "writes": 5,
+        "maxRequestBytes": 55835
+      },
+      "registration": {
+        "requests": 500,
+        "writes": 2000,
+        "maxRequestBytes": 31539
+      },
+      "bulkAssignment": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 195325
+      },
+      "slide": {
+        "requests": 1,
+        "writes": 3,
+        "maxRequestBytes": 2585
+      },
+      "finalVersions": {
+        "commit": 506,
+        "layout": 2,
+        "source": 1,
+        "assignment": 4,
+        "attendee": 501,
+        "ticket": 1,
+        "control": 1
+      },
+      "sourceBusinessSnapshotsSeeded": false,
+      "profilesAfterSlideChecked": 500,
+      "normalTicketIssuanceNotTested": true
+    },
+    {
+      "id": "B14",
+      "label": "customer indexes cannot be forged independently of their business records",
+      "status": "passed",
+      "customerForgeriesDenied": 28,
+      "unrelatedExistingPersonPreserved": true
+    },
+    {
+      "id": "B15",
+      "label": "normal profile changes maintain eligibility and fixed-check audit exceptions",
+      "status": "passed",
+      "headUnchanged": true,
+      "ticketUnchanged": true,
+      "fixedCheckOperatorOmitted": true,
+      "unassignedUnissuedReturnOnly": true
+    },
+    {
+      "id": "B16",
+      "label": "normal assign move swap and unissued release preserve unchanged domains",
+      "status": "passed",
+      "partialSubsetsDenied": 6,
+      "operations": 5,
+      "writesPerOperation": 3,
+      "layoutAndBusinessUnchanged": true
+    },
+    {
+      "id": "B17",
+      "label": "assignment forgeries and unrelated piggyback changes are rejected",
+      "status": "passed",
+      "assignmentForgeriesDenied": 27,
+      "piggybackVariantsDenied": 3,
+      "assignedPersonCannotUseUnissuedOnlyCancellation": true
+    },
+    {
+      "id": "B18",
+      "label": "stale confirmations refuse customer and assignment overwrites",
+      "status": "passed",
+      "staleOperationsDenied": 3,
+      "currentReconfirmationAccepted": true
+    },
+    {
+      "id": "B19",
+      "label": "latest device session and role authorization fences all normal writes",
+      "status": "passed",
+      "authorityVariants": 12,
+      "deniedRequests": 39,
+      "sessionsIssuedNormally": true,
+      "registrationAndRoleGrantsSeeded": true
+    },
+    {
+      "id": "B20",
+      "label": "axis order and all slide directions retain normal assignments",
+      "status": "passed",
+      "axisOrderDirectionProfiles": 16,
+      "identitiesNumbersAndAssignmentsPreserved": true
+    },
+    {
+      "id": "B21",
+      "label": "legacy version format and foreign business sources cannot be used",
+      "status": "passed",
+      "legacyFormatRequestsDenied": 2,
+      "foreignBusinessSourcesDenied": 2
+    },
+    {
+      "id": "B22",
+      "label": "latest role session and device checks apply before layout and at first publication",
+      "status": "passed",
+      "phases": 3,
+      "authorityVariantsPerPhase": 6,
+      "deniedRequests": 27,
+      "sessionsIssuedNormally": true,
+      "registrationAndRoleGrantsSeeded": true
+    }
+  ]
+}
