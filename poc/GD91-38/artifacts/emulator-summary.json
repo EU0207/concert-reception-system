@@ -1,0 +1,232 @@
+{
+  "project": "demo-concert-seat-gd91-38",
+  "executedAt": "2026-10-09T16:00:31.604Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "selectedCase": "all",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "dcedab4a5588b46ef384d6731137862be98708e00d1f98ffc0259d929d6e2ef8",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "44329ce5f158040d324835ca14e60e6b6965686a550d8ec28d7e6147e93cbce3",
+    "budgets.mjs": "0b3ac28b91c752317f841476e432c785b140225129c9f7084ce3ab092e598d63",
+    "emulator.mjs": "fc5a65fb6175550e4281e10d9ee6c2d582eff9e68d20eaef752667d26cd50e58",
+    "recovery.mjs": "cf5936bbf2b1fd2813bb83ca122f92fddd8ecc1424d6027d19d5f1da13cf1c27",
+    "../../GD91-36/firestore.rules": "f45f7320ea590cfb3ffc6f57921bebd52ca353d27f1c71bc94e3409d966a532a",
+    "../../GD91-37/firestore.rules": "dd9c8232391e2bcea4c6db02efce4352d9885ac4e5ade6f6f8526419e9b82823"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "dcedab4a5588b46ef384d6731137862be98708e00d1f98ffc0259d929d6e2ef8",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "44329ce5f158040d324835ca14e60e6b6965686a550d8ec28d7e6147e93cbce3",
+    "budgets.mjs": "0b3ac28b91c752317f841476e432c785b140225129c9f7084ce3ab092e598d63",
+    "emulator.mjs": "fc5a65fb6175550e4281e10d9ee6c2d582eff9e68d20eaef752667d26cd50e58",
+    "recovery.mjs": "cf5936bbf2b1fd2813bb83ca122f92fddd8ecc1424d6027d19d5f1da13cf1c27",
+    "../../GD91-36/firestore.rules": "f45f7320ea590cfb3ffc6f57921bebd52ca353d27f1c71bc94e3409d966a532a",
+    "../../GD91-37/firestore.rules": "dd9c8232391e2bcea4c6db02efce4352d9885ac4e5ade6f6f8526419e9b82823"
+  },
+  "budgets": {
+    "state": [
+      5,
+      1,
+      3
+    ],
+    "read": {
+      "reception": 4,
+      "closedManager": 7,
+      "dayTemporary": 7,
+      "management": 3,
+      "selfRole": 4
+    },
+    "policy": {
+      "reception": 5,
+      "temporaryManager": 5,
+      "temporaryStaff": 8,
+      "postCorrection": 5
+    },
+    "publication": [
+      4
+    ],
+    "preparation": [
+      4,
+      5
+    ],
+    "quarantine": [
+      6,
+      1,
+      1
+    ],
+    "preparationResult": {
+      "human": 2,
+      "manager": 3
+    }
+  },
+  "testLevel": "Auth and Firestore Emulator integration via REST, plus static budget assertions; not production application unit tests.",
+  "scope": "Stage B partial: normal human preparation version acknowledgement and create-only quarantine receipt. Initial roles/devices/manifest and stop instructions root-seeded. Acknowledgement does not prove local persistence. Quarantine body is minimal observed-event fixture; neither offline proof nor final reception acceptance. Closed-state automatic submission denied; manager recovery approval untested. OperationChecks are policy probes. No full save regression, SDK, IndexedDB, physical queue, deletion or real-provider tests.",
+  "reports": [
+    {
+      "id": "B01",
+      "label": "four roles use separate single-read and list scopes",
+      "status": "passed",
+      "matrixRequests": 56,
+      "roles": 4,
+      "getAndListTested": true,
+      "arbitraryFieldsAllDenied": true
+    },
+    {
+      "id": "B02",
+      "label": "query bounds, cross-performance and collection-group reads are denied",
+      "status": "passed",
+      "unboundedAndOversizedDenied": 2,
+      "crossPerformanceIdentityRequests": 8,
+      "collectionGroupDenied": true
+    },
+    {
+      "id": "B03",
+      "label": "read and operation policy distinguish all four performance states",
+      "status": "passed",
+      "roleStateCombinations": 16,
+      "policyChecks": 96,
+      "businessWritesTested": false,
+      "closingTransitionTested": false
+    },
+    {
+      "id": "B04",
+      "label": "start, stop and end are atomic and retain first reception start",
+      "status": "passed",
+      "partialSubsetsDenied": 6,
+      "stateCommits": 4,
+      "writesPerCommit": 3,
+      "firstStartPreserved": true,
+      "replayDenied": true,
+      "unsupportedTransitionsDenied": 2
+    },
+    {
+      "id": "B05",
+      "label": "only managers change state, and stale or forged proposals do not write",
+      "status": "passed",
+      "staffTransitionsDenied": 2,
+      "forgedProposalsDenied": 6,
+      "concurrentWinners": 1,
+      "auditCount": 1,
+      "deputyStartAllowed": true
+    },
+    {
+      "id": "B06",
+      "label": "re-authentication is required for end and post-correction, not normal start or reception",
+      "status": "passed",
+      "expiredHumanEndAndCorrectionDenied": 2,
+      "ordinaryStartAndReceptionAllowed": true,
+      "missingCorrectionReasonDenied": true,
+      "oldAuthTimeSeeded": true
+    },
+    {
+      "id": "B07",
+      "label": "latest authority revocation blocks normal get, list and writes, but own stop status remains readable",
+      "status": "passed",
+      "normalRequestsDenied": 28,
+      "ownMinimalStatusReadable": true,
+      "quarantineSubmissionTested": false
+    },
+    {
+      "id": "B08",
+      "label": "stale data and control versions block policy writes without blocking a fresh download",
+      "status": "passed",
+      "staleVersionRequestsDenied": 3,
+      "downloadNotDeadlocked": true,
+      "preparationReceiptRootSeeded": true,
+      "indexedDBCompletenessTested": false
+    },
+    {
+      "id": "B09",
+      "label": "public seat publication rejects management fields and staff writes",
+      "status": "passed",
+      "privateFieldPublicationDenied": 3,
+      "staffPublicationDenied": 2,
+      "postPerformanceDirectPublicationDenied": 2,
+      "emergencyReasonVisible": true,
+      "sourceProjectionConsistencyTested": false
+    },
+    {
+      "id": "C01",
+      "label": "human acknowledges current role and manifest atomically and stale data can resume",
+      "status": "passed",
+      "normalHumanPreparationWrites": 2,
+      "partialSubsetsDenied": 2,
+      "staleDataResumed": true,
+      "replayDenied": true,
+      "stoppedPreparationResultDenied": true,
+      "actualLocalPersistenceTested": false
+    },
+    {
+      "id": "C02",
+      "label": "preparation rejects wrong identity, versions, digest, count and privilege changes",
+      "status": "passed",
+      "forgedPreparationRequestsDenied": 13,
+      "privilegeNotChanged": true
+    },
+    {
+      "id": "C03",
+      "label": "manifest changes, stop and role expiry invalidate a prepared proposal",
+      "status": "passed",
+      "staleOrLostAuthorityRequestsDenied": 4,
+      "concurrentWinners": 1
+    },
+    {
+      "id": "C04",
+      "label": "role preparation and session renewal remain distinct, and preparation is per device",
+      "status": "passed",
+      "roleChangeRootSeeded": true,
+      "normalRoleAndDataPreparation": true,
+      "sessionRenewalRequiredForPromotion": true,
+      "otherDeviceNotPrepared": true,
+      "closedPreparationDenied": true
+    },
+    {
+      "id": "C05",
+      "label": "stopped device submits three immutable quarantine documents with every partial subset denied",
+      "status": "passed",
+      "partialSubsetsDenied": 6,
+      "quarantineWrites": 3,
+      "stopPreserved": true,
+      "normalReceptionUnchanged": true,
+      "ownReceiptOnly": true
+    },
+    {
+      "id": "C06",
+      "label": "lost response uses same result receipt, replay and duplicate sequence cannot create another record",
+      "status": "passed",
+      "resultLookupAfterAssumedLostResponse": true,
+      "replayAndDuplicateSequenceDenied": 2,
+      "otherIdentityAndListDenied": 3,
+      "physicalQueueTested": false
+    },
+    {
+      "id": "C07",
+      "label": "quarantine rejects forged binding, stop epoch, source envelope and content mutations",
+      "status": "passed",
+      "forgedRequestsDenied": 18,
+      "updatesAndDeletesDenied": 6,
+      "rawQRFieldDenied": true
+    },
+    {
+      "id": "C08",
+      "label": "expired or revoked normal authority can only preserve records and another device stays active",
+      "status": "passed",
+      "expiredOrRevokedRecoveryCases": 5,
+      "activeDeviceUnchanged": true,
+      "ordinaryActiveQuarantineDenied": true,
+      "promotionBaselineCannotBypassNormalRoute": true
+    },
+    {
+      "id": "C09",
+      "label": "changed state routes to review but closed state preserves data without automatic submission",
+      "status": "passed",
+      "staleStateAndEndedQuarantineAccepted": 2,
+      "closedAutomaticSubmissionDenied": true,
+      "normalFactsPreserved": true,
+      "managerClosedRecoveryApprovalTested": false
+    }
+  ]
+}
