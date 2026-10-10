@@ -1,0 +1,180 @@
+{
+  "executedAt": "2026-10-10T09:04:49.127Z",
+  "selectedCase": "all",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "scope": "Publication-boundary protocol only; completed manifests and initial business state seeded by admin. No chunk-completion proof, old 63-case business replay, QR/cancel integration, physical cleanup, IndexedDB, SDK or physical-device result.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "5316b687b3da384fd53c73f081f1427dc84a5c74976d456270fe83e2b4938e5c",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "transport.mjs": "0ca7653c321147d984a1f76389e3aca28c398c2e8213dd1609e04e9691703321",
+    "support.mjs": "5d958bf5f44f4f3c1da686180a0ba29f3e7a08608e454806b079da6733c47436",
+    "emulator.mjs": "c79949c7226aae1d50caa79315f96fb0981e9826621b8a9f7b1d36ccb82b4851",
+    "budgets.mjs": "6cd15cdd999fb50d78f85e517ba093f8b16128d1ab581c5dacce001e74b936d4",
+    "../../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../../GD91-42/tests/support.mjs": "db9c33077065724ac817f58ea88bc72d62a524d0fedf6927a327d5cc0ce9b4f1",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "5316b687b3da384fd53c73f081f1427dc84a5c74976d456270fe83e2b4938e5c",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "transport.mjs": "0ca7653c321147d984a1f76389e3aca28c398c2e8213dd1609e04e9691703321",
+    "support.mjs": "5d958bf5f44f4f3c1da686180a0ba29f3e7a08608e454806b079da6733c47436",
+    "emulator.mjs": "c79949c7226aae1d50caa79315f96fb0981e9826621b8a9f7b1d36ccb82b4851",
+    "budgets.mjs": "6cd15cdd999fb50d78f85e517ba093f8b16128d1ab581c5dacce001e74b936d4",
+    "../../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../../GD91-42/tests/support.mjs": "db9c33077065724ac817f58ea88bc72d62a524d0fedf6927a327d5cc0ce9b4f1",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "budgets": {
+    "publication": [
+      8,
+      5,
+      6
+    ],
+    "sameSeatSet": [
+      8,
+      5,
+      6
+    ],
+    "assignmentProbe": [
+      9,
+      3,
+      3
+    ]
+  },
+  "reports": [
+    {
+      "id": "G01",
+      "label": "first publication and all proper subsets are atomic",
+      "status": "passed",
+      "writes": 3,
+      "properSubsetsDenied": 6
+    },
+    {
+      "id": "G02",
+      "label": "first all-unset section still publishes the assignment boundary",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "G03",
+      "label": "second section preserves the first section and all assignments",
+      "status": "passed",
+      "otherSectionPreserved": true
+    },
+    {
+      "id": "G04",
+      "label": "same seat set uses three writes with only the publication marker changed",
+      "status": "passed",
+      "writes": 3,
+      "properSubsetsDenied": 6,
+      "assignmentValuesAndRevisionUnchanged": true
+    },
+    {
+      "id": "G05",
+      "label": "unassigned removal is atomic and retired identity cannot return",
+      "status": "passed",
+      "retiredReuseDenied": true
+    },
+    {
+      "id": "G06",
+      "label": "assigned seat removal and attribute replacement reject on the server",
+      "status": "passed",
+      "protectedRequestsDenied": 2
+    },
+    {
+      "id": "G07",
+      "label": "issued-seat reference protects even a currently empty assignment",
+      "status": "passed",
+      "issuedReferenceDenied": true
+    },
+    {
+      "id": "G08",
+      "label": "other section identity and pointer cannot be overwritten",
+      "status": "passed",
+      "crossSectionDenied": 2
+    },
+    {
+      "id": "G09",
+      "label": "old and reused generation proposals reject",
+      "status": "passed",
+      "staleAndReuseDenied": 2
+    },
+    {
+      "id": "G10",
+      "label": "forged shared values scope metadata and assignment payload reject",
+      "status": "passed",
+      "forgeriesDenied": 18
+    },
+    {
+      "id": "G11",
+      "label": "latest role device and session restrictions reject publication",
+      "status": "passed",
+      "authorizationDenied": 7
+    },
+    {
+      "id": "G12",
+      "label": "day boundary operating ended and closed state reject this preparation path",
+      "status": "passed",
+      "unsupportedStatesDenied": 5
+    },
+    {
+      "id": "G13",
+      "label": "missing incomplete or directly rewritten candidates cannot be published",
+      "status": "passed",
+      "untrustedCompletionDenied": 3
+    },
+    {
+      "id": "G14",
+      "label": "response loss uses immutable result and cannot publish twice",
+      "status": "passed",
+      "replayDenied": true,
+      "operationLocated": true,
+      "transportResponseActuallyDropped": false
+    },
+    {
+      "id": "G15",
+      "label": "concurrent publication has one complete winner",
+      "status": "passed",
+      "completeWinners": 1,
+      "lockAbortRecovery": false
+    },
+    {
+      "id": "G16",
+      "label": "normal assignment probe preserves global seat keys and rejects duplicates",
+      "status": "passed",
+      "duplicateKeyAndIneligibleDenied": 4
+    },
+    {
+      "id": "G17",
+      "label": "five hundred assignments survive second section publication",
+      "status": "passed",
+      "customers": 500,
+      "writes": 3,
+      "otherAssignmentsPreserved": 500
+    },
+    {
+      "id": "G18",
+      "label": "operation and assignment cannot be rewritten without the shared commit",
+      "status": "passed",
+      "unboundWriteOrDeletionDenied": 4
+    },
+    {
+      "id": "G19",
+      "label": "same-seat-set path preserves protected neighbors and rejects omitted change evidence",
+      "status": "passed",
+      "writes": 3,
+      "protectedNeighborsPreserved": true,
+      "forgeriesDenied": 2
+    },
+    {
+      "id": "G20",
+      "label": "duplicate directories all eight expected versions and integer overflow reject",
+      "status": "passed",
+      "forgeriesDenied": 12
+    }
+  ]
+}
