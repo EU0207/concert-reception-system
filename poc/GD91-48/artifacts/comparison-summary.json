@@ -1,0 +1,234 @@
+{
+  "executedAt": "2026-10-10T17:19:26.851Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "scope": "36 logical comparison unit scenarios. ID-indexed automatic/manual Seat and Cell comparison, independent of grid shape and array order. No new Rules, Emulator run, Firestore writes, auth, authoritative source proof, cleanup, SDK, UI or actual-device test. Previous 44/63 scenarios are not rerun.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "comparison.mjs": "61447c262459724b0b527db936114f725d01dc762bfa015c71fd8839d7c26727",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "comparison.mjs": "61447c262459724b0b527db936114f725d01dc762bfa015c71fd8839d7c26727",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "reports": [
+    {
+      "id": "F01",
+      "label": "five hundred seats compare by ID despite reversed source arrays",
+      "status": "passed",
+      "seats": 500,
+      "indexedCells": 1000,
+      "indexedSeats": 1000
+    },
+    {
+      "id": "F02",
+      "label": "adding unset columns does not mark existing seats as changed",
+      "status": "passed"
+    },
+    {
+      "id": "F03",
+      "label": "adding another numbering line keeps the original seats unchanged",
+      "status": "passed"
+    },
+    {
+      "id": "F04",
+      "label": "shrinking the grid remains outside the supported contract",
+      "status": "passed"
+    },
+    {
+      "id": "F05",
+      "label": "a changed line prefix marks every affected automatic seat",
+      "status": "passed"
+    },
+    {
+      "id": "F06",
+      "label": "line names are layout metadata and do not alter seat identity",
+      "status": "passed"
+    },
+    {
+      "id": "F07",
+      "label": "section name and stage metadata do not alter seat facts",
+      "status": "passed"
+    },
+    {
+      "id": "F08",
+      "label": "swapping the positions of two seats marks both old seats",
+      "status": "passed"
+    },
+    {
+      "id": "F09",
+      "label": "replacing the cell identity is visible even if its position is unchanged",
+      "status": "passed"
+    },
+    {
+      "id": "F10",
+      "label": "deleting a seat is included in the old changed-seat set",
+      "status": "passed"
+    },
+    {
+      "id": "F11",
+      "label": "adding a manual seat does not change existing automatic seats",
+      "status": "passed"
+    },
+    {
+      "id": "F12",
+      "label": "changing a manual label or retained gap consumption marks that seat",
+      "status": "passed"
+    },
+    {
+      "id": "F13",
+      "label": "changing a stored emergency reason marks the same seat",
+      "status": "passed"
+    },
+    {
+      "id": "F14",
+      "label": "all seat attributes and nested field order are compared by value",
+      "status": "passed"
+    },
+    {
+      "id": "F15",
+      "label": "replacing a line ID marks its seats even with the same display labels",
+      "status": "passed"
+    },
+    {
+      "id": "F16",
+      "label": "reusing a display label with a new seat ID is removal plus addition",
+      "status": "passed"
+    },
+    {
+      "id": "F17",
+      "label": "four non-seat kinds become manual seats without advancing the cursor",
+      "status": "passed",
+      "sourceKinds": [
+        "gap",
+        "space",
+        "aisle",
+        "unset"
+      ],
+      "preservedGapConsumption": true
+    },
+    {
+      "id": "F18",
+      "label": "trimmed display-label collision with an automatic seat rejects",
+      "status": "passed"
+    },
+    {
+      "id": "F19",
+      "label": "internal differences and identical labels in separate lines are preserved",
+      "status": "passed"
+    },
+    {
+      "id": "F20",
+      "label": "manual label text is preserved and formula-like text is not evaluated",
+      "status": "passed"
+    },
+    {
+      "id": "F21",
+      "label": "blank manual labels reject without mutating the inputs",
+      "status": "passed"
+    },
+    {
+      "id": "F22",
+      "label": "manual seats cannot carry automatic-number fields",
+      "status": "passed"
+    },
+    {
+      "id": "F23",
+      "label": "automatic seats cannot carry a manual-number field",
+      "status": "passed"
+    },
+    {
+      "id": "F24",
+      "label": "out-of-bounds positions reject",
+      "status": "passed"
+    },
+    {
+      "id": "F25",
+      "label": "unknown fields cannot disappear silently from comparison",
+      "status": "passed"
+    },
+    {
+      "id": "F26",
+      "label": "duplicate identity rejects before index construction",
+      "status": "passed"
+    },
+    {
+      "id": "F27",
+      "label": "orphan and multiply referenced seats reject",
+      "status": "passed"
+    },
+    {
+      "id": "F28",
+      "label": "another performance environment or section cannot be compared",
+      "status": "passed"
+    },
+    {
+      "id": "F29",
+      "label": "reusing the base generation rejects",
+      "status": "passed"
+    },
+    {
+      "id": "F30",
+      "label": "unknown entry versions and incomplete input reject",
+      "status": "passed"
+    },
+    {
+      "id": "F31",
+      "label": "assignment and ticket data cannot become a second canonical source",
+      "status": "passed"
+    },
+    {
+      "id": "F32",
+      "label": "slide and extension commands cannot silently use replacement",
+      "status": "passed"
+    },
+    {
+      "id": "F33",
+      "label": "reverse extensions expose coordinate changes and need the dedicated route",
+      "status": "passed",
+      "directions": [
+        {
+          "axis": "horizontal",
+          "order": "forward",
+          "changedSeats": 0
+        },
+        {
+          "axis": "horizontal",
+          "order": "reverse",
+          "changedSeats": 5
+        },
+        {
+          "axis": "vertical",
+          "order": "forward",
+          "changedSeats": 0
+        },
+        {
+          "axis": "vertical",
+          "order": "reverse",
+          "changedSeats": 5
+        }
+      ],
+      "dedicatedExtensionRequired": true
+    },
+    {
+      "id": "F34",
+      "label": "mutating returned facts cannot mutate source models",
+      "status": "passed"
+    },
+    {
+      "id": "F35",
+      "label": "invalid seat attributes and change reasons reject",
+      "status": "passed"
+    },
+    {
+      "id": "F36",
+      "label": "cursor changes remain visible metadata and do not prove valid numbering",
+      "status": "passed",
+      "numberingSourceProofStillRequired": true
+    }
+  ]
+}
