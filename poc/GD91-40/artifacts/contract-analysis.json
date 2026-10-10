@@ -1,0 +1,196 @@
+{
+  "executedAt": "2026-10-09T16:47:00.879Z",
+  "testLevel": "Static source/previous-evidence comparison and arithmetic only. No new Emulator, unit, SDK or physical-device test.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "analyze.mjs": "a2016085d1e161749a3a49567baa2e4e98293772f16eae5f209683f561149e82",
+    "../GD91-36/firestore.rules": "f45f7320ea590cfb3ffc6f57921bebd52ca353d27f1c71bc94e3409d966a532a",
+    "../GD91-36/tests/budgets.mjs": "eb7e359cb467d30a1aef47a9864cc0e3da16afd1910592eb9c25e0fb6c06c058",
+    "../GD91-36/artifacts/emulator-summary.json": "c8aca4b435017f1869e8cc95f2515cedd2d622f660456b0d3a61f417705f635a",
+    "../GD91-39/firestore.rules": "add9e7fa196388f0a77578762cd4d0233a648f8e1b90134d31f656aee7ef2289",
+    "../GD91-39/artifacts/emulator-summary.json": "a91e146867076b60b581cf57de6276bf01bac91691de82aef274d0bde02eb0da"
+  },
+  "endSourceHashes": {
+    "analyze.mjs": "a2016085d1e161749a3a49567baa2e4e98293772f16eae5f209683f561149e82",
+    "../GD91-36/firestore.rules": "f45f7320ea590cfb3ffc6f57921bebd52ca353d27f1c71bc94e3409d966a532a",
+    "../GD91-36/tests/budgets.mjs": "eb7e359cb467d30a1aef47a9864cc0e3da16afd1910592eb9c25e0fb6c06c058",
+    "../GD91-36/artifacts/emulator-summary.json": "c8aca4b435017f1869e8cc95f2515cedd2d622f660456b0d3a61f417705f635a",
+    "../GD91-39/firestore.rules": "add9e7fa196388f0a77578762cd4d0233a648f8e1b90134d31f656aee7ef2289",
+    "../GD91-39/artifacts/emulator-summary.json": "a91e146867076b60b581cf57de6276bf01bac91691de82aef274d0bde02eb0da"
+  },
+  "baseline": {
+    "noQrAssigned": {
+      "perWrite": [
+        5,
+        3,
+        3,
+        1,
+        2,
+        1,
+        1
+      ],
+      "total": 16,
+      "maxPerWrite": 5
+    },
+    "noQrUnassigned": {
+      "perWrite": [
+        6,
+        3,
+        2,
+        1,
+        2,
+        1
+      ],
+      "total": 15,
+      "maxPerWrite": 6
+    },
+    "noTicketAssigned": {
+      "perWrite": [
+        10,
+        3,
+        3,
+        1,
+        1
+      ],
+      "total": 18,
+      "maxPerWrite": 10
+    },
+    "noTicketUnassigned": {
+      "perWrite": [
+        9,
+        3,
+        3,
+        1
+      ],
+      "total": 16,
+      "maxPerWrite": 9
+    },
+    "firstQr": {
+      "perWrite": [
+        5,
+        5,
+        4,
+        1,
+        1,
+        1
+      ],
+      "total": 17,
+      "maxPerWrite": 5
+    },
+    "ticketCheck": {
+      "perWrite": [
+        5,
+        3,
+        4,
+        1
+      ],
+      "total": 13,
+      "maxPerWrite": 5
+    },
+    "reissue": {
+      "perWrite": [
+        5,
+        6,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "total": 20,
+      "maxPerWrite": 6
+    },
+    "cancel": {
+      "perWrite": [
+        5,
+        5,
+        3,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "total": 20,
+      "maxPerWrite": 5
+    },
+    "reopenCheck": {
+      "perWrite": [
+        5,
+        4,
+        4,
+        1
+      ],
+      "total": 14,
+      "maxPerWrite": 5
+    },
+    "return": {
+      "perWrite": [
+        9,
+        4,
+        4,
+        2
+      ],
+      "total": 19,
+      "maxPerWrite": 9
+    }
+  },
+  "baselineProof": {
+    "GD9136": 57,
+    "GD9139": 24,
+    "rerunThisStage": false
+  },
+  "naiveAddition": {
+    "reissue": 38,
+    "cancel": 38,
+    "noTicketCentralPlusOne": 11
+  },
+  "plannedNameChange": {
+    "implemented": false,
+    "proposedBusinessSchema": 9,
+    "targetReferences": {
+      "versions": {
+        "authorization": 3,
+        "control": 1,
+        "operationAfter": 1,
+        "attendeeIndexAfter": 1,
+        "ownDayEventAfter": 1
+      },
+      "label": {
+        "versionsBefore": 1,
+        "versionsAfter": 1,
+        "operationAfter": 1
+      },
+      "attendeeIndex": {
+        "versionsBefore": 1,
+        "versionsAfter": 1,
+        "labelAfter": 1
+      },
+      "operation": {
+        "versionsBefore": 1,
+        "versionsAfter": 1
+      },
+      "ownDayEvent": {
+        "labelBefore": 1,
+        "labelAfter": 1,
+        "session": 1,
+        "operationAfter": 1
+      }
+    },
+    "perWrite": [
+      7,
+      3,
+      3,
+      2,
+      4
+    ],
+    "total": 19,
+    "maxPerWrite": 7,
+    "writeCount": 5,
+    "expressionEvaluationMeasured": false,
+    "cacheDiscount": false
+  },
+  "scope": "Candidate normalized label source plus existing assignment/layout sources; no per-seat display copy. Existing budgets are source-derived; proposed budgets are unimplemented targets. No full-save adoption or performance result."
+}
