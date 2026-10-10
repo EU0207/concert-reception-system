@@ -1,0 +1,235 @@
+{
+  "executedAt": "2026-10-10T08:17:48.199Z",
+  "testLevel": "Static source and previous-evidence comparison with reference arithmetic. No new Rules or Emulator execution.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "analyze.mjs": "0ec5664684b43aff42e6c72b129770acc8620a243e12f63fd7b4b30ffc8523c6",
+    "../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../GD91-42/tests/budgets.mjs": "c8122dd4ad483331527fb5f970b088804f53b55bd27e529a846d865ad640e767",
+    "../GD91-42/artifacts/emulator-summary.json": "3630af95c01e9384a7e9143f898dc399128b1ad47c9485825e25465319bc4718",
+    "artifacts/plan-summary.json": "b851787cdafe116e59641f27eeead0427a703e1ced5bbe00fa03ecb185b52b67"
+  },
+  "endSourceHashes": {
+    "analyze.mjs": "0ec5664684b43aff42e6c72b129770acc8620a243e12f63fd7b4b30ffc8523c6",
+    "../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../GD91-42/tests/budgets.mjs": "c8122dd4ad483331527fb5f970b088804f53b55bd27e529a846d865ad640e767",
+    "../GD91-42/artifacts/emulator-summary.json": "3630af95c01e9384a7e9143f898dc399128b1ad47c9485825e25465319bc4718",
+    "artifacts/plan-summary.json": "b851787cdafe116e59641f27eeead0427a703e1ced5bbe00fa03ecb185b52b67"
+  },
+  "assumptions": [
+    {
+      "functionName": "completedTarget",
+      "sourceText": "b.publishedGeneration == ''",
+      "meaning": "existing published generation cannot be replaced"
+    },
+    {
+      "functionName": "initialVersion",
+      "sourceText": "b.values.layout == 0 && b.values.source == 0 && b.values.assignment == 0",
+      "meaning": "initial publication only"
+    },
+    {
+      "functionName": "firstPublication",
+      "sourceText": "b.publishedGeneration == ''",
+      "meaning": "single selection publication"
+    },
+    {
+      "functionName": "assignmentUpdate",
+      "sourceText": "h.revision == v.values.layout",
+      "meaning": "local head revision equals global layout version"
+    },
+    {
+      "functionName": "assignmentUpdate",
+      "sourceText": "a.assignments.keys().toSet() == ids.seatIds.keys().toSet()",
+      "meaning": "global assignment keys equal one generation registry"
+    },
+    {
+      "functionName": "assignedForQr",
+      "sourceText": "s.generation == n.generation",
+      "meaning": "QR is bound to the single global generation"
+    }
+  ],
+  "baseline": {
+    "noQrAssigned": {
+      "perWrite": [
+        5,
+        3,
+        3,
+        1,
+        2,
+        1,
+        1
+      ],
+      "total": 16,
+      "maxPerWrite": 5
+    },
+    "noQrUnassigned": {
+      "perWrite": [
+        6,
+        3,
+        2,
+        1,
+        2,
+        1
+      ],
+      "total": 15,
+      "maxPerWrite": 6
+    },
+    "noTicketAssigned": {
+      "perWrite": [
+        10,
+        3,
+        3,
+        1,
+        1
+      ],
+      "total": 18,
+      "maxPerWrite": 10
+    },
+    "noTicketUnassigned": {
+      "perWrite": [
+        9,
+        3,
+        3,
+        1
+      ],
+      "total": 16,
+      "maxPerWrite": 9
+    },
+    "firstQr": {
+      "perWrite": [
+        5,
+        5,
+        4,
+        1,
+        1,
+        1
+      ],
+      "total": 17,
+      "maxPerWrite": 5
+    },
+    "ticketCheck": {
+      "perWrite": [
+        5,
+        3,
+        4,
+        1
+      ],
+      "total": 13,
+      "maxPerWrite": 5
+    },
+    "reissue": {
+      "perWrite": [
+        5,
+        6,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "total": 20,
+      "maxPerWrite": 6
+    },
+    "cancel": {
+      "perWrite": [
+        5,
+        5,
+        3,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "total": 20,
+      "maxPerWrite": 5
+    },
+    "reopenCheck": {
+      "perWrite": [
+        5,
+        4,
+        4,
+        1
+      ],
+      "total": 14,
+      "maxPerWrite": 5
+    },
+    "return": {
+      "perWrite": [
+        9,
+        4,
+        4,
+        2
+      ],
+      "total": 19,
+      "maxPerWrite": 9
+    },
+    "registration": {
+      "perWrite": [
+        7,
+        4,
+        4,
+        2,
+        3
+      ],
+      "total": 20,
+      "maxPerWrite": 7
+    },
+    "paidOnly": {
+      "perWrite": [
+        6,
+        4,
+        4,
+        2
+      ],
+      "total": 16,
+      "maxPerWrite": 6
+    },
+    "dayLabel": {
+      "perWrite": [
+        8,
+        3,
+        3,
+        2,
+        4
+      ],
+      "total": 20,
+      "maxPerWrite": 8
+    },
+    "beforeDayLabel": {
+      "perWrite": [
+        7,
+        3,
+        3,
+        2
+      ],
+      "total": 15,
+      "maxPerWrite": 7
+    }
+  },
+  "naiveExtraDirectoryRead": {
+    "reissue": 21,
+    "cancel": 21,
+    "registration": 21,
+    "dayLabel": 21,
+    "noTicketAssignedCentral": 11
+  },
+  "previousEvidence": {
+    "GD9142RecordedScenarios": 63,
+    "rerun": false
+  },
+  "logicalPlanScenarios": 24,
+  "proposedContract": {
+    "businessSchemaAssigned": false,
+    "implementedRules": false,
+    "perSectionConstruction": true,
+    "performanceGlobalAssignments": true,
+    "normalAssignmentKeepsSeatKeys": true,
+    "seatKeysChangeOnlyWithLayoutPublication": true,
+    "newDirectoryReadOnEveryBusinessSave": false,
+    "invariantProvedByRules": false
+  },
+  "limits": "No candidate write/reference/expression budget, Firestore capacity, billing, cleanup, SDK, IndexedDB or physical-device proof. Existing budget values are source-derived, not new-provider measurements."
+}
