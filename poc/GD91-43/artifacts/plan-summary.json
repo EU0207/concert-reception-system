@@ -1,0 +1,140 @@
+{
+  "executedAt": "2026-10-10T08:16:14.761Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "scope": "Logical planning only. 24 calculation unit scenarios; no new Rules, Emulator, Firestore writes, auth proof, generation cleanup, SDK, IndexedDB, UI or actual-provider tests. GD91-42 63 scenarios are not rerun.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../plan.mjs": "087c4a97bfeb691a0f42017684a85afc027f4f9b9fad7d25500e664c8d23b2de",
+    "plan.mjs": "78bb6413dfc2426edf28a30aceb1ce955c44e5e24467402c7c175ef52eb8b01f",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../plan.mjs": "087c4a97bfeb691a0f42017684a85afc027f4f9b9fad7d25500e664c8d23b2de",
+    "plan.mjs": "78bb6413dfc2426edf28a30aceb1ce955c44e5e24467402c7c175ef52eb8b01f",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "reports": [
+    {
+      "id": "P01",
+      "label": "adding a section preserves every existing section assignment ticket and reception",
+      "status": "passed"
+    },
+    {
+      "id": "P02",
+      "label": "same displayed number in separate sections is allowed without reusing identity",
+      "status": "passed"
+    },
+    {
+      "id": "P03",
+      "label": "same seat set retains assignment revision and protected relationships",
+      "status": "passed"
+    },
+    {
+      "id": "P04",
+      "label": "unassigned removed seat is retired while occupied seat remains",
+      "status": "passed"
+    },
+    {
+      "id": "P05",
+      "label": "occupied seat attributes cannot change",
+      "status": "passed"
+    },
+    {
+      "id": "P06",
+      "label": "occupied seat position cannot change through replacement",
+      "status": "passed"
+    },
+    {
+      "id": "P07",
+      "label": "issued reference protects a seat even with inconsistent empty assignment",
+      "status": "passed"
+    },
+    {
+      "id": "P08",
+      "label": "IDs belonging to another section cannot be copied",
+      "status": "passed"
+    },
+    {
+      "id": "P09",
+      "label": "retired identity cannot be reused",
+      "status": "passed"
+    },
+    {
+      "id": "P10",
+      "label": "existing generation cannot be reused",
+      "status": "passed"
+    },
+    {
+      "id": "P11",
+      "label": "all eight stale global versions reject without mutating inputs",
+      "status": "passed"
+    },
+    {
+      "id": "P12",
+      "label": "wrong performance or environment rejects",
+      "status": "passed"
+    },
+    {
+      "id": "P13",
+      "label": "stale section generation rejects",
+      "status": "passed"
+    },
+    {
+      "id": "P14",
+      "label": "adding an existing section rejects",
+      "status": "passed"
+    },
+    {
+      "id": "P15",
+      "label": "incomplete global seat map rejects",
+      "status": "passed"
+    },
+    {
+      "id": "P16",
+      "label": "duplicate person across sections rejects",
+      "status": "passed"
+    },
+    {
+      "id": "P17",
+      "label": "local section cannot contain a second assignment source",
+      "status": "passed"
+    },
+    {
+      "id": "P18",
+      "label": "performance day or operating state is outside this preparation-only planner",
+      "status": "passed"
+    },
+    {
+      "id": "P19",
+      "label": "version overflow rejects before publication",
+      "status": "passed"
+    },
+    {
+      "id": "P20",
+      "label": "unknown command and proposal fields cannot carry unrelated business updates",
+      "status": "passed"
+    },
+    {
+      "id": "P21",
+      "label": "unsupported individual edit cannot silently use replacement",
+      "status": "passed"
+    },
+    {
+      "id": "P22",
+      "label": "first empty section publishes an empty assignment source",
+      "status": "passed"
+    },
+    {
+      "id": "P23",
+      "label": "an unchanged section model does not create another generation",
+      "status": "passed"
+    },
+    {
+      "id": "P24",
+      "label": "five hundred assigned people remain unchanged when another section is added",
+      "status": "passed"
+    }
+  ]
+}
