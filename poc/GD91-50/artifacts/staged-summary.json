@@ -1,0 +1,93 @@
+{
+  "executedAt": "2026-10-10T18:37:18.238Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "width": 2,
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../staged.rules": "42240d66873921db805c2b52666b0f9932ded0c028b1b0094783234e323ee51c",
+    "../staged.firebase.json": "ec9d72590f439188af1ba1106a0311ce94fcaca3e5d48d501388290edf7fd7a1",
+    "staged.mjs": "052747db2ec7b0d0b2bd20749ab3bc3b53fef45f40a9f6068c5dc0424514ff12",
+    "support.mjs": "7923f6f751420a27e7195a4c5d5f583957f39137e969d236f033977e45753772",
+    "transport.mjs": "1ef256f3009778e565f37d27af9f2b7d67f10fac7ec9467074f84c3d507e1be6",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../staged.rules": "42240d66873921db805c2b52666b0f9932ded0c028b1b0094783234e323ee51c",
+    "../staged.firebase.json": "ec9d72590f439188af1ba1106a0311ce94fcaca3e5d48d501388290edf7fd7a1",
+    "staged.mjs": "052747db2ec7b0d0b2bd20749ab3bc3b53fef45f40a9f6068c5dc0424514ff12",
+    "support.mjs": "7923f6f751420a27e7195a4c5d5f583957f39137e969d236f033977e45753772",
+    "transport.mjs": "1ef256f3009778e565f37d27af9f2b7d67f10fac7ec9467074f84c3d507e1be6",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Diagnostic characterization of six valid fragment submissions only. Parent/catalog/old source and authorization session are fixtures. No completion proof, business regression, global uniqueness, 500-seat run, new total save cost or actual-device proof.",
+  "successfulBusinessSuite": false,
+  "referenceUpperBounds": {
+    "chunk": 8,
+    "attributes": 2,
+    "batchSumWithoutCacheDiscount": 10
+  },
+  "accepted": 2,
+  "expressionLimited": 4,
+  "reports": [
+    {
+      "id": "L01",
+      "label": "manual from gap",
+      "inputValidatedByCodec": true,
+      "submittedCells": 2,
+      "httpStatus": 403,
+      "outcome": "expression-limit",
+      "atomicReadbackChecked": true
+    },
+    {
+      "id": "L02",
+      "label": "manual from space",
+      "inputValidatedByCodec": true,
+      "submittedCells": 2,
+      "httpStatus": 403,
+      "outcome": "expression-limit",
+      "atomicReadbackChecked": true
+    },
+    {
+      "id": "L03",
+      "label": "retained automatic seats",
+      "inputValidatedByCodec": true,
+      "submittedCells": 2,
+      "httpStatus": 403,
+      "outcome": "expression-limit",
+      "atomicReadbackChecked": true
+    },
+    {
+      "id": "L04",
+      "label": "manual from aisle",
+      "inputValidatedByCodec": true,
+      "submittedCells": 2,
+      "httpStatus": 403,
+      "outcome": "expression-limit",
+      "atomicReadbackChecked": true
+    },
+    {
+      "id": "L05",
+      "label": "manual in final single-cell fragment",
+      "inputValidatedByCodec": true,
+      "submittedCells": 1,
+      "httpStatus": 200,
+      "outcome": "accepted",
+      "atomicReadbackChecked": true
+    },
+    {
+      "id": "L06",
+      "label": "single automatic fragment",
+      "inputValidatedByCodec": true,
+      "submittedCells": 1,
+      "httpStatus": 200,
+      "outcome": "accepted",
+      "atomicReadbackChecked": true
+    }
+  ]
+}
