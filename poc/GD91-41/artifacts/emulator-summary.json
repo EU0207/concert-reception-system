@@ -1,0 +1,145 @@
+{
+  "executedAt": "2026-10-10T04:13:36.920Z",
+  "runtime": "v24.19.0",
+  "project": "demo-concert-seat-gd91-41",
+  "testLevel": "Isolated Firebase Auth and Firestore Emulator REST integration plus static no-cache Rules budget. Not production unit, full-save regression, SDK or physical-device testing.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "940101f13755ed5ad36e8b1aaa5147aa53203e787ed6a6f70f2d97924b9c4e1f",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "323b275ddf2df3c701eba82bc47a48d605aee05edc302da87f054cd4f81708c5",
+    "budgets.mjs": "bb4b77d28d4693bf3ba105471d8f6c0558058506bce1acc7d9f9ffe30fb9df26",
+    "emulator.mjs": "0906aa7102ae1082bfde3a77a1170b6bfa04b99e8fe897fe6f66465600fd4c9d",
+    "../../GD91-36/firestore.rules": "f45f7320ea590cfb3ffc6f57921bebd52ca353d27f1c71bc94e3409d966a532a",
+    "../../GD91-39/firestore.rules": "add9e7fa196388f0a77578762cd4d0233a648f8e1b90134d31f656aee7ef2289",
+    "../../GD91-40/artifacts/contract-analysis.json": "7ccd1e2a21ebd2b5fc8293e22fb80e1ed89ab06579267457f8131a2099d428a2"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "940101f13755ed5ad36e8b1aaa5147aa53203e787ed6a6f70f2d97924b9c4e1f",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "support.mjs": "323b275ddf2df3c701eba82bc47a48d605aee05edc302da87f054cd4f81708c5",
+    "budgets.mjs": "bb4b77d28d4693bf3ba105471d8f6c0558058506bce1acc7d9f9ffe30fb9df26",
+    "emulator.mjs": "0906aa7102ae1082bfde3a77a1170b6bfa04b99e8fe897fe6f66465600fd4c9d",
+    "../../GD91-36/firestore.rules": "f45f7320ea590cfb3ffc6f57921bebd52ca353d27f1c71bc94e3409d966a532a",
+    "../../GD91-39/firestore.rules": "add9e7fa196388f0a77578762cd4d0233a648f8e1b90134d31f656aee7ef2289",
+    "../../GD91-40/artifacts/contract-analysis.json": "7ccd1e2a21ebd2b5fc8293e22fb80e1ed89ab06579267457f8131a2099d428a2"
+  },
+  "budgets": {
+    "registration": [
+      8,
+      2,
+      3,
+      3,
+      2
+    ],
+    "dayLabel": [
+      7,
+      3,
+      3,
+      2,
+      4
+    ],
+    "beforeDayLabel": [
+      6,
+      3,
+      3,
+      2
+    ],
+    "reads": {
+      "assignedLabel": 7,
+      "ownDay": 8,
+      "publicClosed": 7,
+      "manager": 3
+    }
+  },
+  "scope": "Business schema 9 canonical profile/label registration and name change only. Root seeds show/control/roles/devices/public assignment and preparation premises; normal Auth issues sessions and normal manager writes create all 500 profiles and labels. Buyer relationship, initial-label fallback, full 48-save integration, manifest issuance, IndexedDB and live-provider authentication remain unconnected.",
+  "reports": [
+    {
+      "id": "E01",
+      "label": "normal registration creates separate canonical profile and public label",
+      "status": "passed",
+      "registrationWrites": 5,
+      "beforeDayNameWrites": 4,
+      "normalSourceCreation": true,
+      "managementEditsDoNotRequireFreshReceptionDownload": true,
+      "spacesExcludedAndSixUnicodeCodePointsAccepted": true
+    },
+    {
+      "id": "E02",
+      "label": "all partial registration and day-name submissions are atomic",
+      "status": "passed",
+      "partialRequestsDenied": 60,
+      "successfulCompleteRequests": 2,
+      "replayDenied": 2
+    },
+    {
+      "id": "E03",
+      "label": "forged fields, reasons, confirmations and extra writes are denied",
+      "status": "passed",
+      "forgedRequestsDenied": 19,
+      "immutableHistoryUpdateDeleteDenied": 4
+    },
+    {
+      "id": "E04",
+      "label": "server day, all roles and performance states govern name writes",
+      "status": "passed",
+      "roleStateAttempts": 16,
+      "dayPreparingStillRequiresReason": true,
+      "dayRegistrationOutsideCurrentSubsetDenied": true
+    },
+    {
+      "id": "E05",
+      "label": "latest identity and data-format checks reject stale privileges",
+      "status": "passed",
+      "revocationAndPreparationCases": 9,
+      "oldFormatSameNumericStampDenied": true
+    },
+    {
+      "id": "E06",
+      "label": "public-name and own-history reads cannot expose private or unassigned data",
+      "status": "passed",
+      "privateAndUnassignedChecks": 16,
+      "ownGetAndBoundedList": true,
+      "otherHumanAndCrossShowDenied": true,
+      "sameHumanSecondDevice": true,
+      "endedOwnAllowedClosedDenied": true,
+      "generationMismatchDenied": true
+    },
+    {
+      "id": "E07",
+      "label": "concurrent names have one winner and preserve profile, assignment and ticket source",
+      "status": "passed",
+      "oneWinner": true,
+      "replayDenied": true,
+      "sourceDocumentsPreserved": 4,
+      "stalePreparationWriteDeniedFreshReadAllowed": true,
+      "sdkResponseLossTested": false
+    },
+    {
+      "id": "E08",
+      "label": "fixed day boundaries and mixed-read rejection preserve previous local snapshot",
+      "status": "passed",
+      "boundaryCases": 4,
+      "businessUsesRequestTime": true,
+      "mixedSnapshotRejected": true,
+      "oldInMemorySnapshotRetained": true,
+      "indexedDbPersistenceTested": false
+    },
+    {
+      "id": "E09",
+      "label": "500 normally registered labels are fetched individually and only one changes",
+      "status": "passed",
+      "normalRegistrations": 500,
+      "capacity501Denied": true,
+      "registrationMs": 30111,
+      "initialPublicGets": 500,
+      "initialReadConcurrency": 20,
+      "initialReadMs": 621,
+      "changedTargetGets": 1,
+      "localUnchangedLabels": 499,
+      "emulatorTimingOnly": true,
+      "publicDocumentReadCountExcludesRuleLookups": true,
+      "productionBillingMeasured": false
+    }
+  ]
+}
