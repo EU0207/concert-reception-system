@@ -1,0 +1,41 @@
+{
+  "executedAt": "2026-10-10T17:19:27.007Z",
+  "scope": "Contract and preserved GD91-47 evidence analysis only. No new Rules or Emulator execution. No improvement in Firestore writes has been measured.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "analyze.mjs": "dc4dec4bd6d08261004d08138bd3c0c61aeabece5983f21589e32fea23d6d2aa",
+    "comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "tests/comparison.mjs": "61447c262459724b0b527db936114f725d01dc762bfa015c71fd8839d7c26727",
+    "../GD91-47/firestore.rules": "8977c91f04c38ad77864c8512a28ea92ce615abdae1c39dde83ace086b1196ce",
+    "../GD91-47/artifacts/emulator-summary.json": "e452a70db50e2de31eb1de24d836df8d11215ee2d51ab8cf074caf565d71a097",
+    "artifacts/comparison-summary.json": "ae75f50932f7ea12bd368e612c3b0baf91ac027824671bbe8d03f08e1d7ef462"
+  },
+  "endSourceHashes": {
+    "analyze.mjs": "dc4dec4bd6d08261004d08138bd3c0c61aeabece5983f21589e32fea23d6d2aa",
+    "comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "tests/comparison.mjs": "61447c262459724b0b527db936114f725d01dc762bfa015c71fd8839d7c26727",
+    "../GD91-47/firestore.rules": "8977c91f04c38ad77864c8512a28ea92ce615abdae1c39dde83ace086b1196ce",
+    "../GD91-47/artifacts/emulator-summary.json": "e452a70db50e2de31eb1de24d836df8d11215ee2d51ab8cf074caf565d71a097",
+    "artifacts/comparison-summary.json": "ae75f50932f7ea12bd368e612c3b0baf91ac027824671bbe8d03f08e1d7ef462"
+  },
+  "calculationScenarios": 36,
+  "previousReplacement": {
+    "seats": 500,
+    "preparationWrites": 1033,
+    "comparisonWrites": 171,
+    "candidateWrites": 2,
+    "publicationWrites": 3,
+    "totalWrites": 1209
+  },
+  "nextPhysicalFormatSelected": false,
+  "nextReferenceBudgetMeasured": false,
+  "nextWriteCostMeasured": false,
+  "requiredSourceProof": [
+    "Both immutable generations must prove complete cell coverage and unique typed IDs.",
+    "Automatic/manual fields, trimmed display uniqueness and consumed gap numbers must be server-validated.",
+    "Line cursors and automatic numbering must be derived from all consuming cells, not accepted from comparison metadata.",
+    "Every old seat must be enumerated once and compared by its own ID; absence is proven by the new completed ID registry.",
+    "Published base, current authorization and control must be rechecked before emission and publication.",
+    "Reference budgets, expression evaluation, capacity and actual write costs require an Emulator implementation."
+  ]
+}
