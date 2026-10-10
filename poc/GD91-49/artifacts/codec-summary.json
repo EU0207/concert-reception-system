@@ -1,0 +1,135 @@
+{
+  "executedAt": "2026-10-10T17:46:59.244Z",
+  "scope": "Local JSON round trips and rejection tests only. No Firestore writes, authorization, completion proof or Emulator execution.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "codec.mjs": "0cf508ff2566768e5abf80a926e4eb6dd8e8d382249ac2180bb57624e5fbefeb",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "codec.mjs": "0cf508ff2566768e5abf80a926e4eb6dd8e8d382249ac2180bb57624e5fbefeb",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "reports": [
+    {
+      "id": "C01",
+      "label": "five hundred automatic seats survive serialization",
+      "status": "passed",
+      "seats": 500,
+      "chunks": 170,
+      "jsonBytes": 138055
+    },
+    {
+      "id": "C02",
+      "label": "both axes and orders with mixed manual and automatic seats",
+      "status": "passed",
+      "directions": [
+        "horizontal:forward",
+        "horizontal:reverse",
+        "vertical:forward",
+        "vertical:reverse"
+      ]
+    },
+    {
+      "id": "C03",
+      "label": "every former non-seat type retains cell ID and gap consumption",
+      "status": "passed",
+      "sourceKinds": [
+        "gap",
+        "space",
+        "aisle",
+        "unset"
+      ]
+    },
+    {
+      "id": "C04",
+      "label": "all optional attributes and literal manual text survive",
+      "status": "passed"
+    },
+    {
+      "id": "C05",
+      "label": "all chunk sizes including incomplete last chunk",
+      "status": "passed"
+    },
+    {
+      "id": "C06",
+      "label": "input array order does not determine storage positions",
+      "status": "passed"
+    },
+    {
+      "id": "C07",
+      "label": "changed geometry and line prefix retain ID comparison result",
+      "status": "passed"
+    },
+    {
+      "id": "C08",
+      "label": "missing chunk is rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C09",
+      "label": "duplicate chunk is rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C10",
+      "label": "wrong physical coordinate is rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C11",
+      "label": "attributes from another chunk cannot silently align",
+      "status": "passed"
+    },
+    {
+      "id": "C12",
+      "label": "missing and unknown attributes are rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C13",
+      "label": "manual and automatic numbering fields cannot mix",
+      "status": "passed"
+    },
+    {
+      "id": "C14",
+      "label": "non-seat numbering or attributes are rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C15",
+      "label": "unknown versions and envelope fields are rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C16",
+      "label": "duplicate seat and cell IDs are rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C17",
+      "label": "blank manual number and trimmed duplicate are rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C18",
+      "label": "malformed consumed number and business duplication are rejected",
+      "status": "passed"
+    },
+    {
+      "id": "C19",
+      "label": "decoded data has independent object ownership",
+      "status": "passed"
+    },
+    {
+      "id": "C20",
+      "label": "scope is preserved but not authenticated by the codec",
+      "status": "passed",
+      "serverScopeProofStillRequired": true
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "executedAt": "2026-10-10T17:48:13.687Z",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "analyze.mjs": "f913c3519b4f81f7a7aafd514bd58782a994a59431c5c250417bc567c9f757f8",
+    "codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "tests/codec.mjs": "0cf508ff2566768e5abf80a926e4eb6dd8e8d382249ac2180bb57624e5fbefeb",
+    "artifacts/codec-summary.json": "51b11824a30ef5d90a4fd6234a958adee47e8251854e875ad9ffb6eb1e1a19a6",
+    "../GD91-47/artifacts/emulator-summary.json": "e452a70db50e2de31eb1de24d836df8d11215ee2d51ab8cf074caf565d71a097",
+    "../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "analyze.mjs": "f913c3519b4f81f7a7aafd514bd58782a994a59431c5c250417bc567c9f757f8",
+    "codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "tests/codec.mjs": "0cf508ff2566768e5abf80a926e4eb6dd8e8d382249ac2180bb57624e5fbefeb",
+    "artifacts/codec-summary.json": "51b11824a30ef5d90a4fd6234a958adee47e8251854e875ad9ffb6eb1e1a19a6",
+    "../GD91-47/artifacts/emulator-summary.json": "e452a70db50e2de31eb1de24d836df8d11215ee2d51ab8cf074caf565d71a097",
+    "../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Local format sizes and structural document counts. JSON bytes are not Firestore storage/index/request sizes. No new Rules, writes, billing or reference/expression budget measurement.",
+  "measuredPreviousReplacement": {
+    "source": "GD91-47 R01",
+    "preparationWrites": 1033,
+    "comparisonWrites": 171,
+    "candidateWrites": 2,
+    "publicationWrites": 3,
+    "totalWrites": 1209
+  },
+  "conditionalDuplicatedFactCost": {
+    "condition": "Only if GD91-47 pipeline remained unchanged and one extra write per seat were added.",
+    "addedWrites": 500,
+    "totalWrites": 1709
+  },
+  "measurements": [
+    {
+      "rows": 10,
+      "columns": 50,
+      "cells": 500,
+      "seats": 500,
+      "chunkSize": 3,
+      "chunks": 170,
+      "chunkAndAttributeDocuments": 340,
+      "extraPerSeatFactDocuments": 500,
+      "combinedPayloadDocumentsWithDuplicatedFacts": 840,
+      "chunkAndAttributeJsonBytes": 130100,
+      "largestPayloadJsonBytes": 614,
+      "singleFactMapJsonBytes": 226721,
+      "duplicatedFactJsonBytes": 206720
+    },
+    {
+      "rows": 1,
+      "columns": 500,
+      "cells": 500,
+      "seats": 500,
+      "chunkSize": 3,
+      "chunks": 167,
+      "chunkAndAttributeDocuments": 334,
+      "extraPerSeatFactDocuments": 500,
+      "combinedPayloadDocumentsWithDuplicatedFacts": 834,
+      "chunkAndAttributeJsonBytes": 131077,
+      "largestPayloadJsonBytes": 621,
+      "singleFactMapJsonBytes": 228175,
+      "duplicatedFactJsonBytes": 208174
+    },
+    {
+      "rows": 500,
+      "columns": 1,
+      "cells": 500,
+      "seats": 500,
+      "chunkSize": 3,
+      "chunks": 500,
+      "chunkAndAttributeDocuments": 1000,
+      "extraPerSeatFactDocuments": 500,
+      "combinedPayloadDocumentsWithDuplicatedFacts": 1500,
+      "chunkAndAttributeJsonBytes": 167670,
+      "largestPayloadJsonBytes": 243,
+      "singleFactMapJsonBytes": 228171,
+      "duplicatedFactJsonBytes": 208170
+    }
+  ],
+  "nextCandidate": "Reuse chunk and attribute document families; derive logical facts in memory. Keep manual numbering mode/text and consumed cell number explicit. Candidate only, no production schema adoption.",
+  "newTotalWrites": null,
+  "referenceBudget": null,
+  "expressionBudget": null,
+  "realDeviceTested": false,
+  "nextGate": [
+    "Server-validated manual and automatic construction including consumed-number and display-uniqueness checks.",
+    "Complete old-seat enumeration with ID lookup into the new completed source; latest authorization and public-base checks.",
+    "Emulator rejection/publication regression and measured complete-pipeline writes, references, expression evaluation and capacity."
+  ]
+}
