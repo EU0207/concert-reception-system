@@ -1,0 +1,135 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-50隔離検証。親と旧構成は試験前提で、完成候補は発行しない。
+    match /sourceProofShows/{p}/sections/{sectionNamespace} {
+      function construction_scope(p,x) { return x.schemaVersion == 2 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+      function construction_roleValid(p,r) {
+        return construction_scope(p,r) && r.active == true && r.revision is int && r.revision > 0
+          && r.role in ['owner','deputy','temporary','receptionist']
+          && r.receptionBaselineRevision is int && r.receptionBaselineRevision >= 0 && r.receptionBaselineRevision < r.revision
+          && r.startsAt is timestamp && r.endsAt is timestamp && r.startsAt <= request.time && request.time < r.endsAt;
+      }
+      function construction_providerValid(provider,role) { return role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+      function construction_currentPreparation(d,s,r) { return d.preparedRoleRevision == r.revision && s.roleRevision == r.revision; }
+      function construction_generalPreparation(d,s,r) {
+        return r.role == 'temporary' && r.receptionBaselineRevision > 0
+          && d.preparedRoleRevision == r.receptionBaselineRevision && s.roleRevision == r.receptionBaselineRevision;
+      }
+      function construction_sessionShape(p,uid,s) {
+        return s.keys().hasAll(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+          && s.keys().hasOnly(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+          && construction_scope(p,s) && s.deviceUid == uid && s.humanUid is string && s.humanUid.size() > 0
+          && s.active is bool && s.emailVerified == true && s.authProvider is string && s.roleRevision is int
+          && s.revision is int && s.revision > 0 && s.issuedAt is timestamp && s.expiresAt is timestamp
+          && s.humanAuthTime is timestamp && s.humanAuthTime <= s.issuedAt
+          && s.issuedAt <= request.time && s.issuedAt < s.expiresAt && s.expiresAt <= s.issuedAt + duration.value(12,'h');
+      }
+      function construction_recentHumanAt(s,at) { return s.humanAuthTime <= at && at <= s.humanAuthTime + duration.value(15,'m'); }
+      function construction_recentHuman(s) { return construction_recentHumanAt(s,request.time); }
+      function construction_identity(p,d,s,r) {
+        let managerRole = r.role in ['owner','deputy'];
+        return request.auth.token.firebase.sign_in_provider == 'anonymous'
+          && d.schemaVersion == 2 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+          // 形式と認証時刻の出所はissueSessionが検査し、更新権限もそこで閉じる。
+          && s.schemaVersion == 2 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true
+          && s.humanUid == d.humanUid && s.expiresAt > request.time
+          && r.schemaVersion == 2 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt
+          && (managerRole ? s.authProvider == 'google.com' : s.authProvider == 'password')
+  ;
+      }
+      function construction_authorizedLevel(p,level) {
+        let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+        let managerRole = r.role in ['owner','deputy'];
+        return construction_identity(p,d,s,r)
+          && (level == 0 ? (managerRole || r.role in ['temporary','receptionist']) && (construction_currentPreparation(d,s,r) || construction_generalPreparation(d,s,r))
+            : construction_currentPreparation(d,s,r) && (level == 3 ? r.role == 'temporary'
+              : managerRole && (level == 1 || construction_recentHuman(s))));
+      }
+      function construction_authorized(p,edit) { return construction_authorizedLevel(p,edit ? 1 : 0); }
+      function uuid(x) { return x is string && x.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+      function shape(x,keys) { return x is map && x.keys().toSet() == keys.toSet(); }
+      function attrs(x) {
+        let e = x.get('emergencyChange',null);
+        let keys = x.keys();
+        return x is map && keys.hasAll(['category','usable']) && keys.hasOnly(['category','usable','reservedLabel','displayOrder','emergencyChange'])
+          && x.category in ['general','reserved','special'] && x.usable is bool
+          && (!('reservedLabel' in x) || x.reservedLabel is string)
+          && (!('displayOrder' in x) || x.displayOrder is int && x.displayOrder >= 0)
+          && (!('emergencyChange' in x) || shape(e,['kind','reason']) && e.kind in ['add','renumber','move'] && e.reason is string && e.reason.trim().size() > 0);
+      }
+      function cellShape(c) {
+        let keys = c.keys();
+        return c is map && keys.hasAll(['cellId','row','column','kind']) && keys.hasOnly(['cellId','row','column','kind','seatId','consumedNumber'])
+          && uuid(c.cellId) && c.row is int && c.column is int && c.kind in ['seat','gap','space','aisle','unset']
+          && (c.kind == 'seat' ? 'seatId' in c && uuid(c.seatId) : !('seatId' in c))
+          && (!('consumedNumber' in c) || c.consumedNumber is int && c.consumedNumber > 0);
+      }
+      function validNumber(item,line) {
+        let c = item.cell;
+        let n = item.numbering;
+        return c.kind != 'seat' ? n == null
+          : n is map && (n.mode == 'automatic' ? shape(n,['mode','number']) && n.number is int && n.number >= line.startNumber && n.number < line.nextAutomaticNumber && !('consumedNumber' in c)
+            : n.mode == 'manual' && shape(n,['mode','manualNumber']) && n.manualNumber is string && n.manualNumber.trim().size() > 0);
+      }
+      function slot(h,c,a,b,lines,i) {
+        let x = c.content[i];
+        let old = b.content[i];
+        let cell = x.cell;
+        let attributes = a.values[i];
+        let line = lines[h.axis == 'horizontal' ? c.row : cell.column];
+        return shape(x,['cell','numbering']) && cellShape(cell) && cell.row == c.row && cell.column == c.startColumn+i
+          && cell.cellId == old.cell.cellId && cell.get('consumedNumber',null) == old.cell.get('consumedNumber',null)
+          && validNumber(x,line)
+          && (old.cell.kind == 'seat' ? x == old
+            : x.cell.kind == 'seat' ? x.numbering.mode == 'manual' && !('seatId' in old.cell)
+              : x == old);
+      }
+      function label(item,line) { return item.cell.kind != 'seat' ? '' : item.numbering.mode == 'manual' ? item.numbering.manualNumber.trim() : (line.prefix+string(item.numbering.number)).trim(); }
+      function distinct(h,c,lines,i,j) {
+        let x = c.content[i]; let y = c.content[j];
+        let lx = lines[h.axis == 'horizontal' ? c.row : x.cell.column];
+        let ly = lines[h.axis == 'horizontal' ? c.row : y.cell.column];
+        return x.cell.cellId != y.cell.cellId && (x.cell.kind != 'seat' || y.cell.kind != 'seat'
+          || x.cell.seatId != y.cell.seatId && (lx.lineId != ly.lineId || label(x,lx) != label(y,ly)));
+      }
+      function documents(h,c,a,b,lines) {
+        let count = c.content.size();
+        return shape(c,['formatVersion','row','startColumn','content']) && shape(a,['formatVersion','row','startColumn','values'])
+          && c.formatVersion == 2 && a.formatVersion == 2 && c.row == a.row && c.startColumn == a.startColumn
+          && c.row == b.row && c.startColumn == b.startColumn && c.content is list && a.values is list
+          && count > 0 && count <= 2 && count == b.content.size() && a.values.size() == count
+          && slot(h,c,a,b,lines,0) && (count < 2 || slot(h,c,a,b,lines,1) && distinct(h,c,lines,0,1));
+      }
+      function createChunk(g,id,c) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let control = get(/databases/$(database)/documents/sourceProofShows/$(p)/control/current).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        let b = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/chunks/$(id)).data;
+        let a = getAfter(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/attributes/$(id)).data;
+        return request.auth != null && construction_authorized(p,true) && h.environmentId == 'FAKE-environment' && h.performanceId == p && h.sectionId == sectionNamespace && h.generation == g
+          && h.status == 'building' && control.activeGeneration == g && control.revision == h.controlRevision && control.phase == 'preparing'
+          && catalog.sectionId == sectionNamespace && catalog.generation == g && catalog.lines == h.lines
+          && c.row >= 0 && c.row < h.rows && c.startColumn >= 0 && c.startColumn < h.columns && c.startColumn % 2 == 0
+          && id == string(c.row)+'-'+string(c.startColumn)
+          && c.content.size() == (h.columns-c.startColumn < 2 ? h.columns-c.startColumn : 2)
+          && documents(h,c,a,b,catalog.lines);
+      }
+      function createAttributes(g,id,a) {
+        let c = getAfter(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(id)).data;
+        return request.auth != null
+          && !exists(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(id))
+          && shape(a,['formatVersion','row','startColumn','values'])
+          && a.formatVersion == 2 && c.formatVersion == 2 && a.row == c.row && a.startColumn == c.startColumn
+          && a.values is list && a.values.size() == c.content.size()
+          && (c.content[0].cell.kind == 'seat' ? attrs(a.values[0]) : a.values[0] == null)
+          && (c.content.size() < 2 || (c.content[1].cell.kind == 'seat' ? attrs(a.values[1]) : a.values[1] == null));
+      }
+      match /generations/{g}/chunks/{id} { allow create: if createChunk(g,id,request.resource.data); }
+      match /generations/{g}/attributes/{id} { allow create: if createAttributes(g,id,request.resource.data); }
+    }
+    match /{document=**} { allow read,write: if false; }
+  }
+}
