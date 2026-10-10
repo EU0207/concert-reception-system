@@ -1,0 +1,391 @@
+{
+  "executedAt": "2026-10-10T16:37:37.450Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "selectedCase": "all",
+  "scope": "Same-shape replacement with a server-validated complete comparison; 28 new-section regressions and 16 replacement scenarios. New-section construction -> client candidate emission -> atomic publication, Auth and Firestore Emulator. 18 initial regression and 10 multi-section scenarios; no admin-seeded candidate. Authorization uses common performance roles/devices/sessions; registrations/control and empty public canonical state are fixtures; construction bootstrap uses ordinary requests. No changed geometry/line settings, manual numbering, live slide or full business regression, adoption, SDK, IndexedDB or actual device proof.",
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "8977c91f04c38ad77864c8512a28ea92ce615abdae1c39dde83ace086b1196ce",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "staging.mjs": "a065faacead3b6a1858ce293a88f5fd15f234fcbd91489c1d89e55cd2caedd83",
+    "publication.mjs": "5824d6f0c8ab212d21ddf8314375c0bbecf65c50af3e6d4ecfa90b34531ddb9a",
+    "transport.mjs": "20cb07af055d23f4c7e6e36e92d4fdcb62cd8697104464943a589ebb336da552",
+    "emulator.mjs": "22f282b3d320c0151f15338001060cc99361476ab08663e3489d52a240c99dc4",
+    "budgets.mjs": "554fbbaee68c0065b7bb3fd50e45d96520e4b33c402102513ae8dea507c7f36e",
+    "bootstrap.mjs": "72eec9ed150892c4f51039429866df4ae5799450a5ebe84aa6ad70029139d652",
+    "multiple.mjs": "f04bae8afa2fa722a748b728d206a98e3dcc1a942c511113450b358b95c31602",
+    "replacement.mjs": "47974badba9ca88541778ac427f2089d6ae0bc774a7613fc2220276640e300d1",
+    "../../GD91-46/firestore.rules": "4e7e2679aa1e60f2c963678509d8718b1f2e7632d874f4392307b2dbe90f549d",
+    "../../GD91-42/tests/business.mjs": "5cbd3f2110b77640319e82498e626674cb4538958a82cd829e2af44375eda32c",
+    "../../GD91-45/firestore.rules": "7f99349cfde1d830e6f14939fce9a5ac6c4e5f06e33a3bf6d79700895c9c5c58",
+    "../../GD91-45/tests/staging.mjs": "9ef830571e08791f22762b29347e847d170b72c837cc916fc10ef77607149ce6",
+    "../../GD91-45/tests/emulator.mjs": "264ed29e4111be0d0e89059d219b07daa2816897536423c26892046098fb67b1",
+    "../../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../../GD91-42/tests/support.mjs": "db9c33077065724ac817f58ea88bc72d62a524d0fedf6927a327d5cc0ce9b4f1",
+    "../../GD91-44/firestore.rules": "5316b687b3da384fd53c73f081f1427dc84a5c74976d456270fe83e2b4938e5c",
+    "../../GD91-44/tests/support.mjs": "5d958bf5f44f4f3c1da686180a0ba29f3e7a08608e454806b079da6733c47436",
+    "../../GD91-44/tests/transport.mjs": "0ca7653c321147d984a1f76389e3aca28c398c2e8213dd1609e04e9691703321",
+    "../../GD91-44/tests/budgets.mjs": "6cd15cdd999fb50d78f85e517ba093f8b16128d1ab581c5dacce001e74b936d4",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "8977c91f04c38ad77864c8512a28ea92ce615abdae1c39dde83ace086b1196ce",
+    "../firebase.json": "332ab477e9d69cf34004bda905488512dfca9eb2dc9cbb1390cc27ffa9cb5a51",
+    "staging.mjs": "a065faacead3b6a1858ce293a88f5fd15f234fcbd91489c1d89e55cd2caedd83",
+    "publication.mjs": "5824d6f0c8ab212d21ddf8314375c0bbecf65c50af3e6d4ecfa90b34531ddb9a",
+    "transport.mjs": "20cb07af055d23f4c7e6e36e92d4fdcb62cd8697104464943a589ebb336da552",
+    "emulator.mjs": "22f282b3d320c0151f15338001060cc99361476ab08663e3489d52a240c99dc4",
+    "budgets.mjs": "554fbbaee68c0065b7bb3fd50e45d96520e4b33c402102513ae8dea507c7f36e",
+    "bootstrap.mjs": "72eec9ed150892c4f51039429866df4ae5799450a5ebe84aa6ad70029139d652",
+    "multiple.mjs": "f04bae8afa2fa722a748b728d206a98e3dcc1a942c511113450b358b95c31602",
+    "replacement.mjs": "47974badba9ca88541778ac427f2089d6ae0bc774a7613fc2220276640e300d1",
+    "../../GD91-46/firestore.rules": "4e7e2679aa1e60f2c963678509d8718b1f2e7632d874f4392307b2dbe90f549d",
+    "../../GD91-42/tests/business.mjs": "5cbd3f2110b77640319e82498e626674cb4538958a82cd829e2af44375eda32c",
+    "../../GD91-45/firestore.rules": "7f99349cfde1d830e6f14939fce9a5ac6c4e5f06e33a3bf6d79700895c9c5c58",
+    "../../GD91-45/tests/staging.mjs": "9ef830571e08791f22762b29347e847d170b72c837cc916fc10ef77607149ce6",
+    "../../GD91-45/tests/emulator.mjs": "264ed29e4111be0d0e89059d219b07daa2816897536423c26892046098fb67b1",
+    "../../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../../GD91-42/tests/support.mjs": "db9c33077065724ac817f58ea88bc72d62a524d0fedf6927a327d5cc0ce9b4f1",
+    "../../GD91-44/firestore.rules": "5316b687b3da384fd53c73f081f1427dc84a5c74976d456270fe83e2b4938e5c",
+    "../../GD91-44/tests/support.mjs": "5d958bf5f44f4f3c1da686180a0ba29f3e7a08608e454806b079da6733c47436",
+    "../../GD91-44/tests/transport.mjs": "0ca7653c321147d984a1f76389e3aca28c398c2e8213dd1609e04e9691703321",
+    "../../GD91-44/tests/budgets.mjs": "6cd15cdd999fb50d78f85e517ba093f8b16128d1ab581c5dacce001e74b936d4",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../../GD91-16/codec.mjs": "8bda760d1da65550bb1615b2ea8dbda76184684d5534bf84f16f5cf381a1789d",
+    "../../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683"
+  },
+  "budgets": {
+    "publication": [
+      8,
+      5,
+      6
+    ],
+    "sameSeatSet": [
+      8,
+      5,
+      6
+    ],
+    "assignmentProbe": [
+      9,
+      3,
+      3
+    ],
+    "candidateEmission": [
+      8
+    ],
+    "comparisonStart": [
+      10
+    ],
+    "comparisonStep": [
+      8
+    ],
+    "replacementEmission": [
+      9,
+      4
+    ]
+  },
+  "reports": [
+    {
+      "id": "C01",
+      "label": "validated preparation emits a candidate then publishes atomically",
+      "status": "passed",
+      "clientCandidateWrites": 1,
+      "publicationWrites": 3,
+      "properSubsetsDenied": 6,
+      "adminCandidateWrites": 0
+    },
+    {
+      "id": "C02",
+      "label": "all unset cells produce an empty seat set",
+      "status": "passed",
+      "emptySeatSet": true
+    },
+    {
+      "id": "C03",
+      "label": "manifest claims must equal the server validated registry",
+      "status": "passed",
+      "forgeriesDenied": 15
+    },
+    {
+      "id": "C04",
+      "label": "missing chunks cannot be skipped or declared complete",
+      "status": "passed",
+      "incompleteDenied": 3
+    },
+    {
+      "id": "C05",
+      "label": "missing attributes cannot advance construction",
+      "status": "passed",
+      "missingAttributesDenied": true
+    },
+    {
+      "id": "C06",
+      "label": "forged numbering cannot lead to a candidate",
+      "status": "passed",
+      "invalidNumbersDenied": true
+    },
+    {
+      "id": "C07",
+      "label": "latest publication role and device restrictions apply to emission",
+      "status": "passed",
+      "authorizationDenied": 5
+    },
+    {
+      "id": "C08",
+      "label": "issued candidates cannot be rewritten or deleted",
+      "status": "passed",
+      "immutableCandidate": true
+    },
+    {
+      "id": "C09",
+      "label": "candidate emission seals the source head against later slides",
+      "status": "passed",
+      "sourceMutationDenied": true
+    },
+    {
+      "id": "C10",
+      "label": "publication still rechecks the latest role after emission",
+      "status": "passed",
+      "publicationReauthorization": true
+    },
+    {
+      "id": "C11",
+      "label": "another performance cannot use the completed source",
+      "status": "passed",
+      "crossPerformanceDenied": true
+    },
+    {
+      "id": "C12",
+      "label": "publication before candidate emission rejects without exposing staging",
+      "status": "passed",
+      "stagingNotPublic": true
+    },
+    {
+      "id": "C13",
+      "label": "five hundred validated seats are emitted and published without truncation",
+      "status": "passed",
+      "seats": 500,
+      "constructionRequests": 852,
+      "constructionWrites": 1038,
+      "emissionWrites": 1,
+      "publicationWrites": 3
+    },
+    {
+      "id": "C14",
+      "label": "this new-section emitter cannot silently replace an existing publication",
+      "status": "passed",
+      "replacementOutsideScope": true
+    },
+    {
+      "id": "C15",
+      "label": "control revision and performance-day boundary are checked at emission",
+      "status": "passed",
+      "controlDenied": 3
+    },
+    {
+      "id": "C16",
+      "label": "source slide before emission requires a fresh verified source",
+      "status": "passed",
+      "unsealedChangedHeadDenied": true
+    },
+    {
+      "id": "C17",
+      "label": "emission and source mutation in the same commit are rejected together",
+      "status": "passed",
+      "mixedCommitDenied": true
+    },
+    {
+      "id": "C18",
+      "label": "concurrent emission and source mutation cannot both succeed",
+      "status": "passed",
+      "completeWinners": 1,
+      "lockAbortRecovery": false,
+      "candidateWon": true
+    },
+    {
+      "id": "M01",
+      "label": "another prepared section preserves the published section and assignments",
+      "status": "passed",
+      "sections": 2,
+      "assignedAndProtectedSeatPreserved": true
+    },
+    {
+      "id": "M02",
+      "label": "concurrent section additions reject the stale plan and can be replanned",
+      "status": "passed",
+      "completeWinners": 1,
+      "replannedSections": 3,
+      "lockAbortRecovery": false
+    },
+    {
+      "id": "M03",
+      "label": "source head must match its section namespace even with valid authorization",
+      "status": "passed",
+      "authorizedNamespaceMismatchDenied": true
+    },
+    {
+      "id": "M04",
+      "label": "candidate cannot attach one generation to another section",
+      "status": "passed",
+      "crossSectionCandidateDenied": true
+    },
+    {
+      "id": "M05",
+      "label": "publication rejects foreign cell identity despite local construction validity",
+      "status": "passed",
+      "foreignIdentityPublicationDenied": true
+    },
+    {
+      "id": "M06",
+      "label": "an empty section retains all five hundred assignments and their revision",
+      "status": "passed",
+      "people": 500,
+      "assignmentValuesAndRevisionUnchanged": true,
+      "publicationWrites": 3
+    },
+    {
+      "id": "M07",
+      "label": "adding seats retains all five hundred occupied seats and prior sections",
+      "status": "passed",
+      "people": 500,
+      "seats": 502,
+      "otherSectionsPreserved": true
+    },
+    {
+      "id": "M08",
+      "label": "sealing one section does not freeze another preparation",
+      "status": "passed",
+      "sourceSealLimitedToSection": true
+    },
+    {
+      "id": "M09",
+      "label": "a common role revision change stops preparation in every section",
+      "status": "passed",
+      "revokedSections": 2,
+      "preparationStopped": true
+    },
+    {
+      "id": "M10",
+      "label": "section preparations do not create duplicate authorization records",
+      "status": "passed",
+      "duplicateAuthorizationDocuments": 0
+    },
+    {
+      "id": "R01",
+      "label": "all 500 assigned seats survive an unchanged replacement",
+      "status": "passed",
+      "seats": 500,
+      "preparationRequests": 851,
+      "preparationWrites": 1033,
+      "comparisonRequests": 171,
+      "comparisonWrites": 171,
+      "scanChunks": 170,
+      "assignedValuesAndRevisionUnchanged": true,
+      "changedSeats": 0
+    },
+    {
+      "id": "R02",
+      "label": "server comparison proves the single changed unassigned seat",
+      "status": "passed",
+      "changedSeats": 1,
+      "publicationWrites": 3
+    },
+    {
+      "id": "R03",
+      "label": "changing an assigned seat rejects the entire publication",
+      "status": "passed",
+      "assignedChangeDenied": true
+    },
+    {
+      "id": "R04",
+      "label": "a protected ticket seat rejects publication even with an empty assignment",
+      "status": "passed",
+      "ticketChangeDenied": true,
+      "ticketStateFixture": true
+    },
+    {
+      "id": "R05",
+      "label": "removing an unassigned seat preserves numbering as a gap",
+      "status": "passed",
+      "removedSeats": 1,
+      "retiredIdsRetained": true
+    },
+    {
+      "id": "R06",
+      "label": "a forged comparison cannot omit an attribute change",
+      "status": "passed",
+      "hiddenChangeDenied": true
+    },
+    {
+      "id": "R07",
+      "label": "a forged comparison cannot invent an unchanged seat",
+      "status": "passed",
+      "inventedChangeDenied": true
+    },
+    {
+      "id": "R08",
+      "label": "comparison cannot skip, rewind or reuse the wrong chunk",
+      "status": "passed",
+      "cursorForgeriesDenied": 3
+    },
+    {
+      "id": "R09",
+      "label": "incomplete and falsified changed manifests cannot be emitted",
+      "status": "passed",
+      "incompleteOrHiddenManifestDenied": 2
+    },
+    {
+      "id": "R10",
+      "label": "comparison initialization rejects a stale base and seeded changes",
+      "status": "passed",
+      "falseInitializationDenied": 2
+    },
+    {
+      "id": "R11",
+      "label": "a valid abort is blocked after comparison fixes the source",
+      "status": "passed",
+      "validAbortBeforeComparison": true,
+      "sourceFrozen": true,
+      "proofDeletionDenied": true
+    },
+    {
+      "id": "R12",
+      "label": "candidate and local preparation pointer cannot be sent partially",
+      "status": "passed",
+      "emissionSubsetsDenied": 2,
+      "emissionWrites": 2
+    },
+    {
+      "id": "R13",
+      "label": "latest permission and common control apply to comparison and emission",
+      "status": "passed",
+      "revokedOrStaleRequestsDenied": 4
+    },
+    {
+      "id": "R14",
+      "label": "line prefix changes are explicitly outside the same-shape comparison",
+      "status": "passed",
+      "changedLineSettingsDenied": true,
+      "changedGeometryDenied": true
+    },
+    {
+      "id": "R15",
+      "label": "a second replacement starts from the previously published replacement",
+      "status": "passed",
+      "sequentialReplacements": 2
+    },
+    {
+      "id": "R16",
+      "label": "lost publication response is recoverable without another commit",
+      "status": "passed",
+      "operationLookupRecovers": true,
+      "duplicateCommitDenied": true
+    }
+  ]
+}

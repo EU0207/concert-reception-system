@@ -1,0 +1,1554 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-42隔離候補。業務形式10で既存保存と表示名正本を接続する。
+    match /preparedSeatShows/{p}/sections/{sectionNamespace} {
+      function construction_scope(p,x) { return x.schemaVersion == 2 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+      function construction_roleValid(p,r) {
+        return construction_scope(p,r) && r.active == true && r.revision is int && r.revision > 0
+          && r.role in ['owner','deputy','temporary','receptionist']
+          && r.receptionBaselineRevision is int && r.receptionBaselineRevision >= 0 && r.receptionBaselineRevision < r.revision
+          && r.startsAt is timestamp && r.endsAt is timestamp && r.startsAt <= request.time && request.time < r.endsAt;
+      }
+      function construction_providerValid(provider,role) { return role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+      function construction_currentPreparation(d,s,r) { return d.preparedRoleRevision == r.revision && s.roleRevision == r.revision; }
+      function construction_generalPreparation(d,s,r) {
+        return r.role == 'temporary' && r.receptionBaselineRevision > 0
+          && d.preparedRoleRevision == r.receptionBaselineRevision && s.roleRevision == r.receptionBaselineRevision;
+      }
+      function construction_sessionShape(p,uid,s) {
+        return s.keys().hasAll(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+          && s.keys().hasOnly(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+          && construction_scope(p,s) && s.deviceUid == uid && s.humanUid is string && s.humanUid.size() > 0
+          && s.active is bool && s.emailVerified == true && s.authProvider is string && s.roleRevision is int
+          && s.revision is int && s.revision > 0 && s.issuedAt is timestamp && s.expiresAt is timestamp
+          && s.humanAuthTime is timestamp && s.humanAuthTime <= s.issuedAt
+          && s.issuedAt <= request.time && s.issuedAt < s.expiresAt && s.expiresAt <= s.issuedAt + duration.value(12,'h');
+      }
+      function construction_recentHumanAt(s,at) { return s.humanAuthTime <= at && at <= s.humanAuthTime + duration.value(15,'m'); }
+      function construction_recentHuman(s) { return construction_recentHumanAt(s,request.time); }
+      function construction_identity(p,d,s,r) {
+        let managerRole = r.role in ['owner','deputy'];
+        return request.auth.token.firebase.sign_in_provider == 'anonymous'
+          && d.schemaVersion == 2 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+          // 形式と認証時刻の出所はissueSessionが検査し、更新権限もそこで閉じる。
+          && s.schemaVersion == 2 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true
+          && s.humanUid == d.humanUid && s.expiresAt > request.time
+          && r.schemaVersion == 2 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt
+          && (managerRole ? s.authProvider == 'google.com' : s.authProvider == 'password')
+  ;
+      }
+      function construction_authorizedLevel(p,level) {
+        let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+        let managerRole = r.role in ['owner','deputy'];
+        return construction_identity(p,d,s,r)
+          && (level == 0 ? (managerRole || r.role in ['temporary','receptionist']) && (construction_currentPreparation(d,s,r) || construction_generalPreparation(d,s,r))
+            : construction_currentPreparation(d,s,r) && (level == 3 ? r.role == 'temporary'
+              : managerRole && (level == 1 || construction_recentHuman(s))));
+      }
+      function construction_authorized(p,edit) { return construction_authorizedLevel(p,edit ? 1 : 0); }
+      function construction_issueSession(p,uid,a) {
+        let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(uid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(request.auth.uid)).data;
+        return request.auth.token.email_verified == true && construction_providerValid(request.auth.token.firebase.sign_in_provider,r.role)
+          && construction_scope(p,d) && d.active == true && d.deviceUid == uid && d.humanUid == request.auth.uid
+          && construction_roleValid(p,r) && construction_sessionShape(p,uid,a) && a.active == true && a.humanUid == request.auth.uid
+          && (construction_currentPreparation(d,a,r) || construction_generalPreparation(d,a,r))
+          && a.authProvider == request.auth.token.firebase.sign_in_provider
+          && a.humanAuthTime == timestamp.date(1970,1,1) + duration.value(request.auth.token.auth_time,'s')
+          && a.issuedAt == request.time && a.expiresAt > request.time && a.expiresAt <= r.endsAt;
+      }
+      function construction_revokeSession(p,uid,b,a) {
+        return request.auth.token.firebase.sign_in_provider in ['google.com','password'] && b.humanUid == request.auth.uid
+          && construction_scope(p,b) && b.deviceUid == uid && a.diff(b).affectedKeys().hasOnly(['active','revision'])
+          && a.active == false && a.revision == b.revision + 1;
+      }
+      function construction_manager(p) { return request.auth != null && construction_authorized(p,true); }
+      function construction_active(p) { return request.auth != null && construction_authorized(p,false); }
+      function construction_highImpact(p) { return request.auth != null && construction_authorizedLevel(p,2); }
+      function construction_transition(b,a) {
+        return (b.role == 'receptionist' && a.role == 'temporary' && a.receptionBaselineRevision == b.revision
+          || b.role == 'temporary' && a.role == 'receptionist' && a.receptionBaselineRevision == 0)
+          && a.revision == b.revision + 1;
+      }
+      function construction_roleChange(p,uid,b,a) {
+        let e = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/authorizationEvents/$(a.operationId)).data;
+        return construction_highImpact(p) && construction_roleValid(p,b) && construction_roleValid(p,a) && construction_transition(b,a)
+          && a.diff(b).affectedKeys().hasOnly(['role','revision','receptionBaselineRevision','operationId','changedAt'])
+          && construction_uuid(a.operationId) && a.changedAt == request.time
+          && e.kind == 'roleChange' && e.subjectUid == uid && e.operationId == a.operationId
+          && e.deviceUid == request.auth.uid && e.beforeRevision == b.revision && e.afterRevision == a.revision;
+      }
+      function construction_roleEvent(p,id,e) {
+        let b = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(e.subjectUid)).data;
+        let a = getAfter(/databases/$(database)/documents/publicationShows/$(p)/roles/$(e.subjectUid)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        return construction_highImpact(p) && e.keys().hasAll(['kind','subjectUid','operationId','deviceUid','humanUid','beforeRevision','afterRevision','occurredAt'])
+          && e.keys().hasOnly(['kind','subjectUid','operationId','deviceUid','humanUid','beforeRevision','afterRevision','occurredAt'])
+          && e.kind == 'roleChange' && e.operationId == id && construction_uuid(id) && e.deviceUid == request.auth.uid && e.occurredAt == request.time
+          && e.humanUid == s.humanUid
+          && construction_transition(b,a) && a.operationId == id && a.changedAt == request.time
+          && e.beforeRevision == b.revision && e.afterRevision == a.revision;
+      }
+      function construction_prepareDevice(p,uid,b,a) {
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(request.auth.uid)).data;
+        let e = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/preparationReceipts/$(a.preparationOperationId)).data;
+        return request.auth.token.email_verified == true && construction_providerValid(request.auth.token.firebase.sign_in_provider,r.role)
+          && construction_roleValid(p,r) && construction_scope(p,b) && b.active == true && b.deviceUid == uid && b.humanUid == request.auth.uid
+          && b.preparedRoleRevision != r.revision && a.preparedRoleRevision == r.revision
+          && a.diff(b).affectedKeys().hasOnly(['preparedRoleRevision','preparedAt','preparationOperationId'])
+          && construction_uuid(a.preparationOperationId) && a.preparedAt == request.time
+          && e.deviceUid == uid && e.humanUid == request.auth.uid && e.roleRevision == r.revision && e.operationId == a.preparationOperationId;
+      }
+      function construction_preparationReceipt(p,id,e) {
+        let b = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(e.deviceUid)).data;
+        let a = getAfter(/databases/$(database)/documents/publicationShows/$(p)/devices/$(e.deviceUid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(request.auth.uid)).data;
+        return e.keys().hasAll(['operationId','deviceUid','humanUid','roleRevision','occurredAt']) && e.keys().hasOnly(['operationId','deviceUid','humanUid','roleRevision','occurredAt'])
+          && request.auth.token.email_verified == true && construction_providerValid(request.auth.token.firebase.sign_in_provider,r.role) && construction_roleValid(p,r)
+          && construction_scope(p,b) && b.active == true && b.deviceUid == e.deviceUid && b.humanUid == request.auth.uid
+          && e.humanUid == request.auth.uid && e.roleRevision == r.revision && e.operationId == id && construction_uuid(id) && e.occurredAt == request.time
+          && b.preparedRoleRevision != r.revision && a.preparedRoleRevision == r.revision && a.preparationOperationId == id && a.preparedAt == request.time;
+      }
+      function construction_head(p, g) { return get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data; }
+      function construction_nextHead(p, g) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data; }
+      function construction_event(p, g, id) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/operations/$(id)).data; }
+      function construction_control(p) { return get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/control/current).data; }
+      function construction_fence(p, b, a, e) {
+        return a.revision == b.revision + 1 && a.operationId != b.operationId && a.operationId is string
+          && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+          && e.controlRevision == construction_control(p).revision;
+      }
+      function construction_uuid(id) { return id is string && id.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+      function construction_registry(p, g) { return get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/idRegistry/current).data; }
+      function construction_nextRegistry(p, g) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/idRegistry/current).data; }
+      function construction_currentBase(p,g,a) {
+        let b = construction_head(p,a.basePublishedGeneration);
+        return a.basePublishedGeneration != g && (b.status == 'countReady' || b.status == 'building' && b.cursor == b.rows * b.columns) && b.sectionId == a.sectionId && a.basePublishedRevision == b.revision;
+      }
+
+      // 新旧の構成を固定してから全セルを順に比較する。同じ形・列設定だけが対象。
+      function replacementProofStart(p,g,a) {
+        let h = construction_head(p,g);
+        let old = construction_head(p,a.baseGeneration);
+        let catalog = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        let oldCatalog = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(a.baseGeneration)/lineCatalog/current).data;
+        let v = beforeVersion(p);
+        let c = control(p);
+        let selected = construction_selection(p);
+        return a.keys().hasAll(['generation','baseGeneration','sectionId','rows','columns','chunkSize','controlRevision','cursor','lastChunk','changedSeatIds'])
+          && a.keys().hasOnly(['generation','baseGeneration','sectionId','rows','columns','chunkSize','controlRevision','cursor','lastChunk','changedSeatIds'])
+          && a.generation == g && construction_uuid(g) && a.sectionId == sectionNamespace
+          && a.baseGeneration == h.basePublishedGeneration && a.baseGeneration != g && a.baseGeneration == v.sections[sectionNamespace]
+          && selected.activeGeneration == g && selected.publishedGeneration == a.baseGeneration
+          && h.status == 'building' && h.cursor == h.rows * h.columns && h.revision == 0 && h.sourceRevision == 0
+          && (old.status == 'countReady' || old.status == 'building' && old.cursor == old.rows * old.columns)
+          && old.sectionId == h.sectionId && old.initializationId == a.baseGeneration && h.initializationId == g
+          && h.rows == old.rows && h.columns == old.columns && h.chunkSize == 3 && old.chunkSize == 3
+          && h.axis == old.axis && h.seatOrder == old.seatOrder && h.initialNumbered == old.initialNumbered
+          && h.rowOffset == 0 && h.columnOffset == 0 && old.rowOffset == 0 && old.columnOffset == 0
+          && catalog.lines == oldCatalog.lines && catalog.lineIds == oldCatalog.lineIds
+          && catalog.cursor == (h.axis == 'horizontal' ? h.rows : h.columns)
+          && a.rows == h.rows && a.columns == h.columns && a.chunkSize == h.chunkSize
+          && preparation(p,c) && a.controlRevision == c.revision && h.controlRevision == c.revision
+          && a.cursor == 0 && a.lastChunk == '' && a.changedSeatIds == [];
+      }
+      function replacementChanged(c,n,a,z,j) {
+        return j < c.cells.size() && c.cells[j].kind == 'seat'
+          && (c.cells[j] != n.cells[j] || a.values[j] != z.values[j]) ? [c.cells[j].seatId] : [];
+      }
+      function replacementProofStep(p,g,b,a) {
+        let old = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(b.baseGeneration)/chunks/$(a.lastChunk)).data;
+        let next = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(a.lastChunk)).data;
+        let attrs = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(b.baseGeneration)/attributes/$(a.lastChunk)).data;
+        let nextAttrs = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/attributes/$(a.lastChunk)).data;
+        let c = control(p);
+        let changed = replacementChanged(old,next,attrs,nextAttrs,0).concat(replacementChanged(old,next,attrs,nextAttrs,1)).concat(replacementChanged(old,next,attrs,nextAttrs,2));
+        return a.diff(b).affectedKeys().hasOnly(['cursor','lastChunk','changedSeatIds'])
+          && preparation(p,c) && c.revision == b.controlRevision && b.cursor < b.rows * b.columns
+          && old.row * b.columns + old.startColumn == b.cursor
+          && old.row == next.row && old.startColumn == next.startColumn && old.cells.size() == next.cells.size()
+          && old.cells.size() > 0 && old.cells.size() <= 3 && a.cursor == b.cursor + old.cells.size()
+          && a.changedSeatIds is list && a.changedSeatIds.size() == a.changedSeatIds.toSet().size()
+          && a.changedSeatIds.toSet() == b.changedSeatIds.concat(changed).toSet();
+      }
+      function replacementSelection(p,b,a) {
+        let m = getAfter(/databases/$(database)/documents/publicationShows/$(p)/candidates/$(b.activeGeneration)).data;
+        return construction_selectionShape(a) && b.activeGeneration != '' && b.publishedGeneration != ''
+          && a.revision == b.revision + 1 && a.operationId == b.activeGeneration
+          && a.activeGeneration == '' && a.publishedGeneration == b.activeGeneration
+          && m.generation == b.activeGeneration && m.baseGeneration == b.publishedGeneration && m.sectionId == sectionNamespace && m.ready;
+      }
+
+      function construction_initial(p, g, a) {
+        let catalog = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        let selected = construction_nextSelection(p);
+        return a.keys().hasAll(["sectionId","sectionName","rows","columns","axis","seatOrder","stagePosition","initialNumbered","rowOffset","columnOffset","rowCounts","columnCounts","nonEmptyCount","sourceRevision","revision","operationId","status","cursor","lastChunk","controlRevision","initializationId","chunkSize","numberCursors","numberSpan","basePublishedGeneration","basePublishedRevision"]) && a.keys().hasOnly(["sectionId","sectionName","rows","columns","axis","seatOrder","stagePosition","initialNumbered","rowOffset","columnOffset","rowCounts","columnCounts","nonEmptyCount","sourceRevision","revision","operationId","status","cursor","lastChunk","controlRevision","initializationId","chunkSize","numberCursors","numberSpan","basePublishedGeneration","basePublishedRevision"])
+          && construction_uuid(a.sectionId) && a.sectionId == sectionNamespace && a.sectionName is string && a.sectionName.size() > 0
+          && a.rows is int && a.columns is int && a.rows > 0 && a.columns > 0 && a.rows <= 100 && a.columns <= 100
+          && a.axis in ['horizontal', 'vertical'] && a.seatOrder in ['forward', 'reverse'] && a.stagePosition in ['top', 'left']
+          && a.numberSpan in [2,4] && a.chunkSize in [1, 2, 3, 4, 5] && a.initialNumbered is bool && a.rowOffset == 0 && a.columnOffset == 0
+          && a.numberCursors == {} && a.rowCounts == {} && a.columnCounts == {} && a.nonEmptyCount == 0
+          && a.status == 'building' && a.cursor == 0 && a.lastChunk == '' && a.sourceRevision == 0 && a.revision == 0 && a.operationId == ''
+          && a.initializationId == g && construction_uuid(g) && selected.activeGeneration == g && a.controlRevision == construction_control(p).revision
+          && catalog.initializationId == g && catalog.sectionId == a.sectionId && catalog.cursor == 0
+          && a.basePublishedGeneration is string && a.basePublishedRevision is int && a.basePublishedGeneration == selected.publishedGeneration
+          && (a.basePublishedGeneration == '' ? a.basePublishedRevision == 0 : a.basePublishedRevision >= 0 && construction_currentBase(p,g,a));
+      }
+      function construction_occupied(c, j) { return j < c.cells.size() && c.cells[j].kind != 'unset' ? 1 : 0; }
+      function construction_validSlot(c, j) {
+        let v = c.cells[j];
+        return v.keys().hasOnly(['cellId', 'row', 'column', 'kind', 'seatId', 'numberValue'])
+          && v.cellId == c.cellIds[j] && construction_uuid(v.cellId) && v.row == c.row && v.column == c.startColumn + j
+          && v.kind in ['unset', 'seat', 'gap', 'space', 'aisle']
+          && (v.kind == 'seat' ? construction_uuid(v.seatId) : v.seatId == '')
+          && (v.kind in ['seat', 'gap']
+            ? v.numberValue is int && v.numberValue > 0 && v.numberValue <= 9007199254740991 && c.numberKeys[j] is string
+            : v.numberValue == null && c.numberKeys[j] == '');
+      }
+      function construction_validChunk(b, c, id) {
+        return c.keys().hasAll(['row', 'startColumn', 'cells', 'cellIds', 'numberKeys']) && c.keys().hasOnly(['row', 'startColumn', 'cells', 'cellIds', 'numberKeys'])
+          && c.row is int && c.startColumn is int && c.row >= 0 && c.row < b.rows && c.startColumn >= 0 && c.startColumn < b.columns
+          && c.row * b.columns + c.startColumn == b.cursor && id == string(c.row) + '-' + string(c.startColumn)
+          && c.cells is list && c.cellIds is list && c.cells.size() == (b.columns - c.startColumn < b.chunkSize ? b.columns - c.startColumn : b.chunkSize)
+          && c.numberKeys is list && c.numberKeys.size() == c.cells.size()
+          && c.cellIds.size() == c.cells.size() && c.cellIds.toSet().size() == c.cells.size()
+          && construction_validSlot(c, 0) && (c.cells.size() < 2 || construction_validSlot(c, 1))
+          && (c.cells.size() < 3 || construction_validSlot(c, 2)) && (c.cells.size() < 4 || construction_validSlot(c, 3)) && (c.cells.size() < 5 || construction_validSlot(c, 4));
+      }
+      function construction_marker(a) {
+        let e = a.get('emergencyChange', null);
+        return e == null || e is map && e.keys().hasOnly(['kind', 'reason']) && e.kind in ['add', 'renumber', 'move']
+          && e.reason is string && e.reason.matches('.*\\S.*');
+      }
+      function construction_validAttribute(c, a, j) {
+        let v = a.values[j];
+        return c.cells[j].kind == 'seat'
+          ? v is map && v.keys().hasOnly(['category', 'usable', 'reservedLabel', 'displayOrder', 'emergencyChange'])
+            && v.category in ['general', 'reserved', 'special'] && v.usable is bool && v.get('reservedLabel', '') is string
+            && v.get('displayOrder', 0) is int && v.get('displayOrder', 0) >= 0 && construction_marker(v)
+          : v == null;
+      }
+      function construction_createAttributes(p, g, id, a) {
+        let h = construction_head(p, g);
+        let c = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(id)).data;
+        return construction_pending(p, g) && h.status == 'building' && h.controlRevision == construction_control(p).revision && c.row * h.columns + c.startColumn == h.cursor
+          && a.keys().hasAll(['row', 'startColumn', 'values']) && a.keys().hasOnly(['row', 'startColumn', 'values'])
+          && a.row == c.row && a.startColumn == c.startColumn && a.values is list && a.values.size() == c.cells.size()
+          && construction_validAttribute(c, a, 0) && (c.cells.size() < 2 || construction_validAttribute(c, a, 1))
+          && (c.cells.size() < 3 || construction_validAttribute(c, a, 2)) && (c.cells.size() < 4 || construction_validAttribute(c, a, 3)) && (c.cells.size() < 5 || construction_validAttribute(c, a, 4));
+      }
+      function construction_columnDelta(b, a, c, j) {
+        let key = string(c.startColumn + j);
+        return a.columnCounts.get(key, 0) == b.columnCounts.get(key, 0) + construction_occupied(c, j)
+          && (j < c.cells.size() || a.columnCounts.keys().hasAny([key]) == b.columnCounts.keys().hasAny([key]));
+      }
+      function construction_ingest(p, g, b, a) {
+        let c = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(a.lastChunk)).data;
+        let delta = construction_occupied(c, 0) + construction_occupied(c, 1) + construction_occupied(c, 2) + construction_occupied(c, 3) + construction_occupied(c, 4);
+        let row = string(c.row);
+        let ids = construction_nextRegistry(p, g);
+        let proof = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/numberProofs/$(a.lastChunk)).data;
+        return ids.cursor == a.cursor && ids.initializationId == b.initializationId && b.status == 'building' && b.cursor < b.rows * b.columns
+          && exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/attributes/$(a.lastChunk))
+          && proof.progress == c.cells.size() && a.numberCursors == proof.numberCursors && c.row * b.columns + c.startColumn == b.cursor
+          && a.diff(b).affectedKeys().hasOnly(['cursor', 'lastChunk', 'nonEmptyCount', 'rowCounts', 'columnCounts', 'numberCursors'])
+          && a.cursor == b.cursor + c.cells.size() && a.nonEmptyCount == b.nonEmptyCount + delta
+          && a.rowCounts.diff(b.rowCounts).affectedKeys().hasOnly([row]) && a.rowCounts.get(row, 0) == b.rowCounts.get(row, 0) + delta
+          && a.columnCounts.diff(b.columnCounts).affectedKeys().hasOnly([string(c.startColumn + 0), string(c.startColumn + 1), string(c.startColumn + 2), string(c.startColumn + 3), string(c.startColumn + 4)])
+          && construction_columnDelta(b, a, c, 0) && construction_columnDelta(b, a, c, 1) && construction_columnDelta(b, a, c, 2) && construction_columnDelta(b, a, c, 3) && construction_columnDelta(b, a, c, 4);
+      }
+      function construction_finish(p, g, b, a) {
+        let e = construction_event(p, g, a.operationId);
+        let n = construction_nextSelection(p);
+        let v = construction_nextVersions(p);
+        return v.generation == g && v.sectionId == b.sectionId && v.operationId == a.operationId
+          && construction_positive(v.values.commit) && v.values.commit > 1 && v.values.layout == 1 && v.values.source == 1 && b.status == 'building' && b.cursor == b.rows * b.columns && a.status == 'countReady'
+          && a.diff(b).affectedKeys().hasOnly(['status', 'sourceRevision', 'revision', 'operationId'])
+          && a.sourceRevision == 1 && a.revision == 1 && a.operationId != ''
+          && n.publishedGeneration == g && n.activeGeneration == '' && n.operationId == a.operationId
+          && e.kind == 'initialCounterProof' && e.deviceUid == request.auth.uid && e.initializationId == b.initializationId
+          && e.controlRevision == b.controlRevision;
+      }
+      function construction_versions(p) { return get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data; }
+      function construction_nextVersions(p) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data; }
+      function construction_positive(n) { return n is int && n > 0 && n <= 9007199254740991; }
+      function construction_versionShape(v) {
+        return v.keys().hasAll(['commit','layout','source','assignment','attendee','ticket','control','reception'])
+          && v.keys().hasOnly(['commit','layout','source','assignment','attendee','ticket','control','reception'])
+          && construction_positive(v.commit) && construction_positive(v.layout) && construction_positive(v.source) && construction_positive(v.assignment)
+          && construction_positive(v.attendee) && construction_positive(v.ticket) && construction_positive(v.control) && construction_positive(v.reception);
+      }
+      function construction_changedVersions(b,a) {
+        return construction_receptionAdvance(b,a,true) && a.diff(b).affectedKeys().hasOnly(['values','operationId']) && construction_uuid(a.operationId)
+          && construction_versionShape(b.values) && a.values.keys() == b.values.keys()
+          && a.values.diff(b.values).affectedKeys().hasOnly(['commit','layout','reception'])
+          && a.values.commit == b.values.commit+1 && a.values.layout == b.values.layout+1;
+      }
+      function construction_validSlide(b, a, e) {
+        let row = ((e.dr < 0 ? 0 : b.rows - 1) - b.rowOffset + b.rows) % b.rows;
+        let column = ((e.dc < 0 ? 0 : b.columns - 1) - b.columnOffset + b.columns) % b.columns;
+        return b.status == 'countReady' && b.initialNumbered && b.nonEmptyCount > 0 && e.dr is int && e.dc is int
+          && ((e.dr in [-1, 1] && e.dc == 0) || (e.dc in [-1, 1] && e.dr == 0))
+          && a.diff(b).affectedKeys().hasOnly(['revision', 'operationId', 'rowOffset', 'columnOffset'])
+          && a.rowOffset == (b.rowOffset + e.dr + b.rows) % b.rows && a.columnOffset == (b.columnOffset + e.dc + b.columns) % b.columns
+          && (e.dr != 0 ? b.rowCounts.get(string(row), 0) == 0 : b.columnCounts.get(string(column), 0) == 0);
+      }
+      function construction_slideHead(p,g,b,a) {
+        let v = construction_versions(p);
+        let n = construction_nextVersions(p);
+        let e = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/operations/$(a.operationId)).data;
+        let c = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/control/current).data;
+        return v.schemaVersion == 10 && v.performanceId == p && v.generation == g && v.sectionId == b.sectionId
+          && v.values.layout == b.revision && v.values.source == b.sourceRevision && v.values.control == c.revision
+          && e.environmentId == v.environmentId && e.performanceId == p && e.generation == g && e.sectionId == b.sectionId
+          && e.expectedVersions == v.values && e.deviceUid == request.auth.uid && e.kind == 'slide'
+          && e.baseRevision == b.revision && e.revision == a.revision
+          && n.operationId == a.operationId && e.resultVersions == n.values && construction_changedVersions(v,n) && construction_validSlide(b,a,e);
+      }
+      // headの更新へ相互に結び、3件の一部だけを確定させない。認可はhead更新で評価する。
+      function construction_slideVersion(p,b,a) {
+        let h = construction_head(p,b.generation);
+        let n = construction_nextHead(p,b.generation);
+        return construction_changedVersions(b,a) && h.revision == b.values.layout && n.revision == a.values.layout
+          && n.operationId == a.operationId && n.revision == h.revision+1;
+      }
+      function construction_updateHead(p, g, b, a) {
+        return b.status == 'building' ? construction_pending(p, g) && (a.status == 'aborted' ? construction_abortInitial(p, g, b, a)
+            : b.controlRevision == construction_control(p).revision && (a.status == 'building' ? construction_ingest(p, g, b, a) : construction_finish(p, g, b, a)))
+          : construction_published(p, g) && construction_slideHead(p, g, b, a);
+      }
+      function construction_createChunk(p, g, id) {
+        let h = construction_head(p, g);
+        let catalog = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        return construction_pending(p, g) && h.status == 'building' && h.controlRevision == construction_control(p).revision && catalog.sectionId == h.sectionId && catalog.cursor == construction_lineCount(h)
+          && construction_validChunk(h, request.resource.data, id);
+      }
+      function construction_structuralEvent(p, g, id, e) {
+        let b = construction_head(p, g);
+        let a = construction_nextHead(p, g);
+        return a.operationId == id && ((e.kind == 'abortInitial' && b.status == 'building' && a.status == 'aborted'
+            && e.keys().hasOnly(['kind', 'generation', 'deviceUid', 'initializationId', 'controlRevision']))
+          || (e.kind == 'initialCounterProof' && b.status == 'building' && a.status == 'countReady'
+            && e.keys().hasOnly(['kind', 'generation', 'deviceUid', 'initializationId', 'controlRevision']))
+          || (e.kind == 'slide' && b.status == 'countReady' && a.status == 'countReady' && a.revision == b.revision + 1
+            && e.deviceUid == request.auth.uid && e.baseRevision == b.revision && e.revision == a.revision
+            && e.keys().hasAll(['kind','deviceUid','environmentId','performanceId','generation','sectionId','expectedVersions','resultVersions','baseRevision','revision','dr','dc'])
+            && e.keys().hasOnly(['kind','deviceUid','environmentId','performanceId','generation','sectionId','expectedVersions','resultVersions','baseRevision','revision','dr','dc'])));
+      }
+      // 列IDは通常の列設定追加と同じ要求で予約する。
+      function construction_createRegistry(p, g, a) {
+        let h = construction_head(p, g);
+        let catalog = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        let line = catalog.lines['0'];
+        return construction_pending(p,g) && h.controlRevision == construction_control(p).revision && catalog.sectionId == h.sectionId && catalog.cursor == 1 && a.usedNumbers == {} && a.seatIds == {}
+          && a.keys().hasAll(['initializationId','cursor','lineCursor','usedIds','usedNumbers','seatIds']) && a.keys().hasOnly(['initializationId','cursor','lineCursor','usedIds','usedNumbers','seatIds'])
+          && h.status == 'building' && h.cursor == 0 && a.cursor == 0 && a.lineCursor == 1 && a.initializationId == g
+          && line.lineId != h.sectionId && a.usedIds.keys().toSet() == [h.sectionId,line.lineId].toSet() && a.usedIds.values().toSet() == [true].toSet();
+      }
+      function construction_seatId(c, j) { return j < c.cells.size() ? c.cells[j].seatId : ''; }
+      function construction_seat(c, j) { return j < c.cells.size() && c.cells[j].kind == 'seat' ? 1 : 0; }
+      function construction_consumed(c, j) { return j < c.cells.size() && c.cells[j].kind in ['seat', 'gap'] ? 1 : 0; }
+      function construction_ingestRegistry(p, g, h, b, a) {
+        let n = construction_nextHead(p, g);
+        let c = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(n.lastChunk)).data;
+        let cells = c.cellIds.toSet();
+        let seats = [construction_seatId(c, 0), construction_seatId(c, 1), construction_seatId(c, 2), construction_seatId(c, 3), construction_seatId(c, 4)].toSet().difference([''].toSet());
+        let delta = a.usedIds.diff(b.usedIds);
+        let numbers = c.numberKeys.toSet().difference([''].toSet());
+        let numberDelta = a.usedNumbers.diff(b.usedNumbers);
+        let seatDelta = a.seatIds.diff(b.seatIds);
+        return h.status == 'building' && n.status == 'building' && n.cursor == h.cursor + c.cells.size()
+          && b.cursor == h.cursor && a.cursor == n.cursor && b.initializationId == h.initializationId
+          && a.diff(b).affectedKeys().hasOnly(['cursor', 'usedIds', 'usedNumbers', 'seatIds'])
+          && seats.size() == construction_seat(c, 0) + construction_seat(c, 1) + construction_seat(c, 2) + construction_seat(c, 3) + construction_seat(c, 4)
+          && seatDelta.addedKeys() == seats && seatDelta.changedKeys().size() == 0 && seatDelta.removedKeys().size() == 0
+          && (a.seatIds.size() == 0 || a.seatIds.values().toSet() == [true].toSet())
+          && cells.intersection(seats).size() == 0 && delta.addedKeys() == cells.union(seats)
+          && delta.changedKeys().size() == 0 && delta.removedKeys().size() == 0
+          && numbers.size() == construction_consumed(c, 0) + construction_consumed(c, 1) + construction_consumed(c, 2) + construction_consumed(c, 3) + construction_consumed(c, 4)
+          && numberDelta.addedKeys() == numbers && numberDelta.changedKeys().size() == 0 && numberDelta.removedKeys().size() == 0
+          && (a.usedNumbers.size() == 0 || a.usedNumbers.values().toSet() == [true].toSet())
+          && a.usedIds.values().toSet() == [true].toSet();
+      }
+      function construction_updateRegistry(p, g, b, a) {
+        let h = construction_head(p, g);
+        return b.lineCursor < construction_lineCount(h) ? construction_appendLineId(p, g, h, b, a) : construction_ingestRegistry(p, g, h, b, a);
+      }
+      function construction_lineCount(h) { return h.axis == 'horizontal' ? h.rows : h.columns; }
+      function construction_emptyCatalog(p, g, a) {
+        let h = construction_nextHead(p, g);
+        return a.keys().hasAll(['sectionId','initializationId','cursor','lines','lineIds']) && a.keys().hasOnly(['sectionId','initializationId','cursor','lines','lineIds'])
+          && a.sectionId == h.sectionId && a.initializationId == g && h.status == 'building' && h.cursor == 0
+          && a.cursor == 0 && a.lines == {} && a.lineIds == [];
+      }
+      function construction_lineShape(h, line, index) {
+        return line.keys().hasAll(['lineId','index','name','prefix','startNumber','nextAutomaticNumber']) && line.keys().hasOnly(['lineId','index','name','prefix','startNumber','nextAutomaticNumber'])
+          && construction_uuid(line.lineId) && line.index == index && line.name is string && line.name.matches('.*\\S.*') && line.prefix is string
+          && line.startNumber is int && line.startNumber > 0 && line.nextAutomaticNumber is int && line.nextAutomaticNumber <= 9007199254740991
+          && line.nextAutomaticNumber >= line.startNumber && line.nextAutomaticNumber - line.startNumber <= (h.axis == 'horizontal' ? h.columns : h.rows);
+      }
+      function construction_appendCatalog(p, g, b, a) {
+        let h = construction_head(p, g);
+        let line = a.lines[string(b.cursor)];
+        let ids = construction_nextRegistry(p, g);
+        return construction_pending(p, g) && h.status == 'building' && h.cursor == 0 && h.controlRevision == construction_control(p).revision && b.cursor < construction_lineCount(h)
+          && a.diff(b).affectedKeys().hasOnly(['cursor','lines','lineIds']) && a.cursor == b.cursor + 1 && construction_lineShape(h, line, b.cursor)
+          && a.lines.diff(b.lines).addedKeys() == [string(b.cursor)].toSet() && a.lines.diff(b.lines).changedKeys().size() == 0 && a.lines.diff(b.lines).removedKeys().size() == 0
+          && a.lineIds == b.lineIds.concat([line.lineId]) && ids.lineCursor == a.cursor && ids.usedIds[line.lineId] == true;
+      }
+      function construction_appendLineId(p, g, h, b, a) {
+        let catalog = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        let line = catalog.lines[string(b.lineCursor)];
+        let delta = a.usedIds.diff(b.usedIds);
+        return h.status == 'building' && h.cursor == 0 && b.cursor == 0 && a.lineCursor == b.lineCursor + 1 && catalog.cursor == a.lineCursor
+          && a.diff(b).affectedKeys().hasOnly(['lineCursor','usedIds']) && delta.addedKeys() == [line.lineId].toSet()
+          && delta.changedKeys().size() == 0 && delta.removedKeys().size() == 0 && a.usedIds[line.lineId] == true;
+      }
+      function construction_slotKey(h,c,j) { return string(h.axis == 'horizontal' ? c.row : c.startColumn + (j < c.cells.size() ? j : 0)); }
+      function construction_numberSlot(h, c, a, j, lines, b) {
+        let key = construction_slotKey(h,c,j);
+        let line = lines[key];
+        let delta = h.seatOrder == 'forward' ? 1 : -1;
+        let v = c.cells[j];
+        let before = h.axis == 'horizontal' && j > b.progress ? a.steps[j-1] : b.numberCursors.get(key, delta == 1 ? line.startNumber : line.nextAutomaticNumber-1);
+        let after = before + (v.kind in ['seat','gap'] ? delta : 0);
+        let last = h.axis != 'horizontal' || j == a.progress-1;
+        let end = h.axis == 'horizontal' ? c.startColumn+c.cells.size() == h.columns : c.row == h.rows-1;
+        return a.steps[j] == after
+          && (v.kind in ['seat','gap'] ? v.numberValue == before && before >= line.startNumber && before < line.nextAutomaticNumber && c.numberKeys[j] == line.lineId+':'+string(before)
+            : v.numberValue == null && c.numberKeys[j] == '')
+          && (!last || a.numberCursors[key] == after && (!end || h.axis == 'horizontal' && a.progress != c.cells.size() || after == (delta == 1 ? line.nextAutomaticNumber : line.startNumber-1)));
+      }
+      function construction_validateNumberPart(p,g,h,c,b,a,lines) {
+        return construction_pending(p,g) && h.status == 'building' && h.controlRevision == construction_control(p).revision && c.row*h.columns+c.startColumn == h.cursor
+          && a.keys().hasAll(['row','startColumn','numberCursors','steps','progress']) && a.keys().hasOnly(['row','startColumn','numberCursors','steps','progress'])
+          && a.row == c.row && a.startColumn == c.startColumn && b.progress < c.cells.size() && a.progress == (b.progress+h.numberSpan < c.cells.size() ? b.progress+h.numberSpan : c.cells.size())
+          && a.steps is list && a.steps.size() == a.progress && a.steps == b.steps.concat(a.progress == b.progress+1 ? [a.steps[b.progress]] : a.progress == b.progress+2 ? [a.steps[b.progress],a.steps[b.progress+1]] : a.progress == b.progress+3 ? [a.steps[b.progress],a.steps[b.progress+1],a.steps[b.progress+2]] : [a.steps[b.progress],a.steps[b.progress+1],a.steps[b.progress+2],a.steps[b.progress+3]])
+          && a.numberCursors is map && a.numberCursors.diff(b.numberCursors).affectedKeys().hasOnly([construction_slotKey(h,c,b.progress),construction_slotKey(h,c,a.progress-1)])
+          && construction_numberSlot(h,c,a,b.progress,lines,b) && (a.progress == b.progress+1 || construction_numberSlot(h,c,a,b.progress+1,lines,b))
+          && (a.progress <= b.progress+2 || construction_numberSlot(h,c,a,b.progress+2,lines,b)) && (a.progress <= b.progress+3 || construction_numberSlot(h,c,a,b.progress+3,lines,b));
+      }
+      function construction_createNumberProof(p,g,id,a) {
+        let h = construction_head(p,g);
+        let c = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(id)).data;
+        let catalog = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        return construction_validateNumberPart(p,g,h,c,{'progress':0,'steps':[],'numberCursors':h.numberCursors},a,catalog.lines);
+      }
+      function construction_updateNumberProof(p,g,id,b,a) {
+        let h = construction_head(p,g);
+        let c = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(id)).data;
+        let catalog = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        return construction_validateNumberPart(p,g,h,c,b,a,catalog.lines);
+      }
+      function construction_selection(p) { return get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/selection/current).data; }
+      function construction_nextSelection(p) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/selection/current).data; }
+      function construction_pending(p, g) { let s = construction_selection(p); return s.activeGeneration == g; }
+      function construction_published(p, g) { return construction_selection(p).publishedGeneration == g; }
+      function construction_selectionShape(a) {
+        return a.keys().hasAll(['revision', 'activeGeneration', 'publishedGeneration', 'operationId'])
+          && a.keys().hasOnly(['revision', 'activeGeneration', 'publishedGeneration', 'operationId'])
+          && a.revision is int && a.revision > 0 && a.activeGeneration is string && a.publishedGeneration is string && construction_uuid(a.operationId);
+      }
+      function construction_initialTarget(p, a) {
+        let h = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(a.activeGeneration)/head/current).data;
+        return construction_uuid(a.activeGeneration) && a.operationId == a.activeGeneration && h.basePublishedGeneration == a.publishedGeneration
+          && h.status == 'building' && h.cursor == 0 && h.initializationId == a.activeGeneration;
+      }
+      function construction_changeSelection(p, b, a) {
+        return construction_selectionShape(a) && a.revision == b.revision + 1 && a.operationId != b.operationId
+          && (b.activeGeneration == '' ? a.publishedGeneration == b.publishedGeneration && construction_initialTarget(p, a)
+            : construction_completedTarget(p, b, a));
+      }
+      function construction_completedTarget(p, b, a) {
+        let h = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(b.activeGeneration)/head/current).data;
+        return a.activeGeneration == '' && h.operationId == a.operationId
+          && (a.publishedGeneration == b.publishedGeneration && h.status == 'aborted'
+            || b.publishedGeneration == '' && a.publishedGeneration == b.activeGeneration && h.status == 'countReady');
+      }
+      function construction_abortInitial(p, g, b, a) {
+        let e = construction_event(p, g, a.operationId);
+        let n = construction_nextSelection(p);
+        return a.status == 'aborted' && a.diff(b).affectedKeys().hasOnly(['status', 'revision', 'operationId'])
+          && a.revision == b.revision + 1 && construction_uuid(a.operationId) && a.operationId != b.operationId
+          && n.activeGeneration == '' && n.publishedGeneration == construction_selection(p).publishedGeneration && n.operationId == a.operationId
+          && e.kind == 'abortInitial' && e.initializationId == g && e.deviceUid == request.auth.uid && e.controlRevision == construction_control(p).revision;
+      }
+      function construction_createEvent(p,g,id,e) {
+        return e.kind == 'initialCounterProof' ? construction_publicationEvent(p,g,id,e) : construction_structuralEvent(p,g,id,e);
+      }
+      function construction_publicationEvent(p,g,id,e) {
+        let b = construction_versions(p);
+        let a = construction_nextVersions(p);
+        return construction_businessScope(p,e) && construction_uuid(id) && e.operationId == id && e.generation == g && e.initializationId == g
+          && e.deviceUid == request.auth.uid && e.controlRevision == b.values.control
+          && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','generation','deviceUid','initializationId','controlRevision','expectedVersions','resultVersions'])
+          && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','generation','deviceUid','initializationId','controlRevision','expectedVersions','resultVersions'])
+          && b.values.layout == 0 && a.values.layout == 1 && a.operationId == id
+          && e.expectedVersions == b.values && e.resultVersions == a.values;
+      }
+      function construction_initialAssignment(p,a) {
+        let b = construction_head(p,a.generation);
+        let h = construction_nextHead(p,a.generation);
+        let ids = construction_registry(p,a.generation);
+        return a.keys().hasAll(['schemaVersion','environmentId','performanceId','generation','revision','operationId','assignments'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','generation','revision','operationId','assignments','lastKind']) && a.lastKind == 'initial'
+          && construction_businessScope(p,a) && construction_uuid(a.generation) && construction_uuid(a.operationId) && a.revision == 1 && a.assignments is map
+          && b.status == 'building' && b.revision == 0 && b.sourceRevision == 0 && b.cursor == b.rows * b.columns
+          && h.status == 'countReady' && h.revision == 1 && h.sourceRevision == 1 && h.operationId == a.operationId
+          && ids.initializationId == a.generation && ids.cursor == b.cursor && ids.lineCursor == construction_lineCount(b)
+          && a.assignments.keys().toSet() == ids.seatIds.keys().toSet() && a.assignments.values().toSet().hasOnly(['']);
+      }
+      function construction_initialVersion(p,b,a) {
+        let h = construction_nextHead(p,a.generation);
+        let c = construction_control(p);
+        let s = construction_nextAssignment(p);
+        let person = construction_people(p);
+        let ticket = construction_tickets(p);
+        return construction_receptionAdvance(b,a,true) && construction_businessScope(p,b) && a.keys() == b.keys() && b.generation == '' && b.sectionId == ''
+          && b.values.layout == 0 && b.values.source == 0 && b.values.assignment == 0
+          && a.diff(b).affectedKeys().hasOnly(['sectionId','generation','operationId','values']) && construction_uuid(a.generation) && construction_uuid(a.sectionId)
+          && a.sectionId == h.sectionId && construction_uuid(a.operationId) && a.operationId != b.operationId
+          && h.status == 'countReady' && h.revision == 1 && h.sourceRevision == 1 && h.operationId == a.operationId
+          && construction_businessScope(p,s) && s.generation == a.generation && s.operationId == a.operationId && s.revision == 1
+          && construction_businessScope(p,person) && person.revision == b.values.attendee && construction_businessScope(p,ticket) && ticket.revision == b.values.ticket
+          && ticket.protectedAttendeeIds.size() == 0 && c.environmentId == b.environmentId && c.revision == b.values.control
+          && a.values.diff(b.values).affectedKeys().hasOnly(['commit','layout','source','assignment','reception'])
+          && construction_positive(a.values.commit) && a.values.commit == b.values.commit+1 && a.values.layout == 1 && a.values.source == 1 && a.values.assignment == 1;
+      }
+      function construction_firstPublication(p,b,a) {
+        let h = construction_head(p,b.activeGeneration);
+        let n = construction_nextHead(p,b.activeGeneration);
+        return construction_selectionShape(a) && a.revision == b.revision+1 && a.operationId != b.operationId && b.publishedGeneration == '' && construction_uuid(b.activeGeneration)
+          && a.activeGeneration == '' && a.publishedGeneration == b.activeGeneration && a.operationId == n.operationId
+          && h.status == 'building' && n.status == 'countReady' && n.revision == h.revision+1;
+      }
+      function construction_businessScope(p,x) { return x.schemaVersion == 10 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+      function construction_operation(p,id) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/operations/$(id)).data; }
+      function construction_people(p) { return get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendeeState/current).data; }
+      function construction_tickets(p) { return get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/ticketState/current).data; }
+      function construction_assignment(p) { return get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/assignmentState/current).data; }
+      function construction_nextAssignment(p) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/assignmentState/current).data; }
+      function construction_nextPeople(p) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendeeState/current).data; }
+      function construction_peopleShape(p,a) {
+        return construction_businessScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','attendeeId','eligibleAttendeeIds'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','attendeeId','eligibleAttendeeIds','cancelOperationId','cancelNoTicketOperationId','labelOperationId'])
+          && construction_positive(a.revision) && construction_uuid(a.operationId) && a.attendeeId is string
+          && a.eligibleAttendeeIds is list && a.eligibleAttendeeIds.size() <= 500 && a.eligibleAttendeeIds.size() == a.eligibleAttendeeIds.toSet().size();
+      }
+      function construction_ticketShape(p,a) {
+        return construction_businessScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','protectedAttendeeIds'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','protectedAttendeeIds'])
+          && construction_positive(a.revision) && construction_uuid(a.operationId) && a.protectedAttendeeIds is list && a.protectedAttendeeIds.size() == 0;
+      }
+      function construction_bootstrapIndex(p,a,isPerson) {
+        let v = construction_nextVersions(p);
+        return !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current)
+          && (isPerson ? construction_peopleShape(p,a) && a.attendeeId == '' && a.eligibleAttendeeIds.size() == 0 : construction_ticketShape(p,a))
+          && a.revision == 1 && v.operationId == a.operationId && v.values.commit == 1;
+      }
+      function construction_bootstrapEvent(p,id,e) {
+        let v = construction_nextVersions(p);
+        return !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current)
+          && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendeeState/current)
+          && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/ticketState/current)
+          && construction_businessScope(p,e) && construction_uuid(id) && e.operationId == id && e.deviceUid == request.auth.uid
+          && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions'])
+          && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions'])
+          && e.generation == '' && e.expectedVersions == null && e.resultVersions == v.values && v.operationId == id;
+      }
+      function construction_bootstrapVersion(p,a) {
+        let c = construction_control(p);
+        let person = construction_nextPeople(p);
+        let ticket = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/ticketState/current).data;
+        let e = construction_operation(p,a.operationId);
+        return construction_manager(p) && construction_businessScope(p,a)
+          && a.keys().hasAll(['schemaVersion','environmentId','performanceId','sectionId','generation','operationId','values','labelOperationId'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','sectionId','generation','operationId','values','labelOperationId'])
+          && construction_uuid(a.operationId) && a.sectionId == '' && a.generation == ''
+          && a.values.keys().hasAll(['commit','layout','source','assignment','attendee','ticket','control','reception'])
+          && a.values.keys().hasOnly(['commit','layout','source','assignment','attendee','ticket','control','reception'])
+          && a.labelOperationId == '' && a.values.reception == 1 && a.values.commit == 1 && a.values.layout == 0 && a.values.source == 0 && a.values.assignment == 0
+          && a.values.attendee == 1 && a.values.ticket == 1 && construction_positive(c.revision) && a.values.control == c.revision && c.environmentId == a.environmentId
+          && person.operationId == a.operationId && ticket.operationId == a.operationId && person.revision == 1 && ticket.revision == 1
+          && e.operationId == a.operationId && e.kind == 'bootstrapBusiness' && e.deviceUid == request.auth.uid
+          && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/operations/$(a.operationId))
+          && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/selection/current)
+          && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/assignmentState/current);
+      }
+      function construction_layoutReady(p,b) {
+        let h = construction_head(p,b.generation);
+        return h.status == 'countReady' && h.sectionId == b.sectionId && h.revision == b.values.layout && h.sourceRevision == b.values.source;
+      }
+      function construction_layoutGuard(p,b) {
+        return b.values.layout == 0
+          ? b.generation == '' && b.sectionId == '' && b.values.source == 0 && b.values.assignment == 0
+            && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/assignmentState/current)
+          : construction_layoutReady(p,b);
+      }
+      function construction_versionBase(p,b,a) {
+        return construction_businessScope(p,b) && a.keys() == b.keys()
+          && a.diff(b).affectedKeys().hasOnly(['operationId','values']) && construction_uuid(a.operationId) && a.operationId != b.operationId
+          && construction_positive(a.values.commit) && a.values.commit == b.values.commit+1;
+      }
+      function construction_normalVersion(p,b,a) {
+        let c = construction_control(p);
+        let e = construction_operation(p,a.operationId);
+        return e.kind == 'cancelWithoutTicket' ? construction_noTicketVersion(p,b,a,e,c)
+          : construction_versionBase(p,b,a) && construction_saveManager(p,c,b)  && b.values.control == c.revision && b.environmentId == c.environmentId
+          && e.operationId == a.operationId && e.generation == b.generation && e.expectedVersions == b.values && e.resultVersions == a.values
+          && (e.kind in ['attendeeCreate','attendeeUpdate'] ? construction_attendeeVersion(p,b,a,e)
+            : e.kind == 'controlFence' ? construction_controlVersion(p,b,a,e,c) : b.values.layout > 0 && construction_assignmentVersion(p,b,a,e,c));
+      }
+      function construction_occupiedIds(map) { return map.values().removeAll(['']); }
+      function construction_attendeeVersion(p,b,a,e) {
+        let n = construction_nextPeople(p);
+        return construction_receptionAdvance(b,a,e.kind == 'attendeeCreate' || e.payload.before.attendancePlan != e.payload.after.attendancePlan)
+          && a.values.diff(b.values).affectedKeys().hasOnly(['commit','attendee','reception']) && a.values.attendee == b.values.attendee+1
+          && construction_businessScope(p,n) && n.revision == a.values.attendee && n.operationId == a.operationId && n.attendeeId == e.payload.attendeeId
+          && (e.kind == 'attendeeCreate' ? construction_registeredLabel(p,e)
+            : e.payload.before.attendancePlan == e.payload.after.attendancePlan ? e.payload.before.diff(e.payload.after).affectedKeys().hasOnly(['paid','revision','operationId']) : construction_returningFence(p,b,n));
+      }
+      function construction_attendeeAssignment(p,b,n) {
+        let s = construction_assignment(p);
+        return construction_businessScope(p,s) && s.revision == b.values.assignment && construction_occupiedIds(s.assignments).toSet().hasOnly(n.eligibleAttendeeIds);
+      }
+      // 隔離検証用の版更新。実際の受付開始・停止を実装したものではない。
+      function construction_controlVersion(p,b,a,e,c) {
+        let n = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/control/current).data;
+        return construction_receptionAdvance(b,a,false) && e.deviceUid == request.auth.uid && a.values.diff(b.values).affectedKeys().hasOnly(['commit','control','reception'])
+          && construction_positive(a.values.control) && a.values.control == b.values.control+1 && n.revision == a.values.control
+          && n.diff(c).affectedKeys() == ['revision'].toSet() && e.payload.before == c && e.payload.after == n;
+      }
+      function construction_controlWrite(p,b,a) {
+        let v = construction_versions(p);
+        let n = construction_nextVersions(p);
+        let e = construction_operation(p,n.operationId);
+        return e.kind == 'controlFence' && e.payload.keys().hasAll(['before','after']) && e.payload.keys().hasOnly(['before','after'])
+          && e.payload.before == b && e.payload.after == a && n.values.control == v.values.control+1 && n.values.commit == v.values.commit+1;
+      }
+      function construction_assignmentVersion(p,b,a,e,c) {
+        let s = construction_nextAssignment(p);
+        let person = construction_people(p);
+        let ticket = construction_tickets(p);
+        let ids = construction_occupiedIds(s.assignments);
+        return construction_receptionAdvance(b,a,true) && e.kind in ['assign','move','swap','unassign','bulkAssign'] && e.deviceUid == request.auth.uid
+          && a.values.diff(b.values).affectedKeys().hasOnly(['commit','assignment','reception']) && construction_positive(a.values.assignment) && a.values.assignment == b.values.assignment+1
+          && construction_businessScope(p,s) && s.revision == a.values.assignment && s.operationId == a.operationId
+          && construction_businessScope(p,person) && person.revision == b.values.attendee && construction_businessScope(p,ticket) && ticket.revision == b.values.ticket
+          && ids.size() <= 500 && ids.size() == ids.toSet().size() && ids.toSet().hasOnly(person.eligibleAttendeeIds)
+          && (e.kind == 'unassign' ? !ticket.protectedAttendeeIds.hasAny([e.payload.before1]) : true)
+          && (e.kind == 'move' && ticket.protectedAttendeeIds.hasAny([e.payload.before1]) || e.kind == 'swap' && c.firstReceptionStartedAt != null
+            ? e.payload.reason is string && e.payload.reason.matches('(?s).*\\S.*') : true)
+          && (e.kind == 'bulkAssign' ? ticket.protectedAttendeeIds.size() == 0 : true);
+      }
+      function construction_profileShape(p,id,a) {
+        return construction_businessScope(p,a) && construction_uuid(id) && a.attendeeId == id && construction_uuid(a.buyerId)
+          && a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','buyerId','attendancePlan','paid','revision','operationId'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','buyerId','attendancePlan','paid','revision','operationId','cancelOperationId','cancelNoTicketOperationId'])
+          && a.attendancePlan in ['planned','notAttending']
+          && a.paid is bool && construction_positive(a.revision) && construction_uuid(a.operationId);
+      }
+      function construction_profileWrite(p,id,b,a,creating) {
+        let v = construction_versions(p);
+        let n = construction_nextVersions(p);
+        let i = construction_nextPeople(p);
+        let e = construction_operation(p,a.operationId);
+        return construction_profileShape(p,id,a) && n.values.attendee == v.values.attendee+1 && n.values.commit == v.values.commit+1
+          && n.operationId == a.operationId && i.operationId == a.operationId && i.attendeeId == id
+          && e.payload.keys().hasAll(['attendeeId','before','after']) && e.payload.keys().hasOnly(creating ? ['attendeeId','before','after','label'] : ['attendeeId','before','after'])
+          && e.payload.attendeeId == id && e.payload.after == a
+          && (creating ? a.revision == 1 && e.kind == 'attendeeCreate' && e.payload.before == null && e.deviceUid == request.auth.uid
+            : a.revision == b.revision+1 && a.diff(b).affectedKeys().hasOnly(['paid','attendancePlan','revision','operationId'])
+              && a.diff(b).affectedKeys().hasAny(['paid','attendancePlan']) && !(b.attendancePlan == 'planned' && a.attendancePlan == 'notAttending') && e.kind == 'attendeeUpdate' && e.payload.before == b
+              && e.deviceUid == (a.diff(b).affectedKeys().hasOnly(['paid','revision','operationId']) ? '' : request.auth.uid));
+      }
+      function construction_peopleUpdate(p,b,a) {
+        let v = construction_versions(p);
+        let n = construction_nextVersions(p);
+        let e = construction_operation(p,a.operationId);
+        let profile = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendees/$(a.attendeeId)).data;
+        let expected = profile.attendancePlan == 'planned' ? b.eligibleAttendeeIds.toSet().union([a.attendeeId].toSet()) : b.eligibleAttendeeIds.toSet().difference([a.attendeeId].toSet());
+        return construction_peopleShape(p,a) && construction_uuid(a.attendeeId) && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeId','eligibleAttendeeIds'])
+          && b.revision == v.values.attendee && a.revision == b.revision+1 && a.revision == n.values.attendee
+          && n.values.commit == v.values.commit+1 && n.operationId == a.operationId && e.payload.attendeeId == a.attendeeId
+          && e.kind in ['attendeeCreate','attendeeUpdate'] && profile.operationId == a.operationId && profile == e.payload.after
+          && a.eligibleAttendeeIds.toSet() == expected;
+      }
+      function construction_smallAssignment(e,b,a) {
+        let x = e.payload;
+        let changes = a.diff(b).affectedKeys();
+        return x.keys().hasAll(['seat1','seat2','before1','before2','after1','after2','reason'])
+          && x.keys().hasOnly(['seat1','seat2','before1','before2','after1','after2','reason'])
+          && x.seat1 != x.seat2 && b.keys().hasAll([x.seat1]) && (x.seat2 == '' || b.keys().hasAll([x.seat2]))
+          && changes == [x.seat1,x.seat2].removeAll(['']).toSet() && x.reason is string
+          && x.before1 == b[x.seat1] && x.after1 == a[x.seat1] && x.before2 == b.get(x.seat2,'') && x.after2 == a.get(x.seat2,'')
+          && (e.kind == 'assign' && x.seat2 == '' && x.before1 == '' && x.after1 != ''
+            || e.kind == 'unassign' && x.seat2 == '' && x.before1 != '' && x.after1 == ''
+            || e.kind == 'move' && x.seat2 != '' && x.before1 != '' && x.after1 == '' && x.before2 == '' && x.after2 == x.before1
+            || e.kind == 'swap' && x.seat2 != '' && x.before1 != '' && x.before2 != '' && x.after1 == x.before2 && x.after2 == x.before1);
+      }
+      function construction_assignmentUpdate(p,b,a) {
+        let v = construction_versions(p);
+        let n = construction_nextVersions(p);
+        let h = construction_head(p,v.generation);
+        let ids = construction_registry(p,v.generation);
+        let e = construction_operation(p,a.operationId);
+        return construction_businessScope(p,a) && a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments','lastKind']) && a.lastKind == e.kind
+          && b.generation == v.generation && b.revision == v.values.assignment && a.revision == b.revision+1 && a.revision == n.values.assignment
+          && a.operationId == n.operationId && n.values.commit == v.values.commit+1 && h.revision == v.values.layout
+          && ids.initializationId == v.generation && ids.cursor == h.rows*h.columns && ids.lineCursor == construction_lineCount(h)
+          && a.assignments is map && a.assignments.keys().toSet() == ids.seatIds.keys().toSet() && a.assignments.diff(b.assignments).affectedKeys().size() > 0
+          && (e.kind == 'bulkAssign' ? e.payload.keys().hasAll(['before','after','reason']) && e.payload.keys().hasOnly(['before','after','reason'])
+            && e.payload.before == b.assignments && e.payload.after == a.assignments && e.payload.reason is string
+            && construction_occupiedIds(b.assignments).toSet().difference(construction_occupiedIds(a.assignments).toSet()).size() == 0
+            : construction_smallAssignment(e,b.assignments,a.assignments));
+      }
+      function construction_normalEvent(p,id,e) {
+        let v = construction_versions(p);
+        let n = construction_nextVersions(p);
+        return construction_businessScope(p,e) && construction_uuid(id) && e.operationId == id && e.generation == v.generation
+          && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+          && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+          && e.kind in ['attendeeCreate','attendeeUpdate','assign','move','swap','unassign','bulkAssign','controlFence'] && e.deviceUid is string
+          && n.operationId == id && n.values.commit == v.values.commit+1 && e.expectedVersions == v.values && e.resultVersions == n.values;
+      }
+
+      // 中央の認可、券の正本、索引と履歴へ検査を分担する。証拠の参照予算も各分岐を別に算定する。
+      function construction_qrScope(p,a) { return a.schemaVersion == 10 && a.environmentId == 'FAKE-environment' && a.performanceId == p; }
+      function construction_nextTicket(p,id) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/tickets/$(id)).data; }
+      function construction_nextTicketIndex(p) { return getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/ticketState/current).data; }
+      function construction_ticketRecord(p,id,a) {
+        return construction_qrScope(p,a) && construction_uuid(id) && a.attendeeId == id && a.ticketId == id
+          && a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','ticketId','revision','operationId','lastKind','currentCycle','cycleClosed','everIssued','issued','sent','issuedAt','sentAt','activeCredentialId','activeCode','credentialVersion','ticketRevision','previousCredentialId','previousCode','expectedVersions','resultVersions','closedSeatId'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','ticketId','revision','operationId','lastKind','currentCycle','cycleClosed','everIssued','issued','sent','issuedAt','sentAt','activeCredentialId','activeCode','credentialVersion','ticketRevision','previousCredentialId','previousCode','expectedVersions','resultVersions','closedSeatId'])
+          && construction_positive(a.revision) && construction_uuid(a.operationId) && a.lastKind in ['qrCreate','ticketCheck','qrReissue','cancelAttendance']
+          && construction_positive(a.currentCycle) && a.cycleClosed is bool && a.cycleClosed == (a.lastKind == 'cancelAttendance') && a.everIssued is bool && a.issued is bool && a.sent is bool
+          && (a.issuedAt == null || a.issuedAt is timestamp) && (a.sentAt == null || a.sentAt is timestamp)
+          && a.activeCredentialId is string && a.activeCode is string && a.credentialVersion is int
+          && (a.activeCredentialId == '' ? a.activeCode == '' && (a.cycleClosed ? a.credentialVersion >= 0 : a.credentialVersion == 0)
+            : a.activeCredentialId.matches('^[A-Za-z0-9_-]{21}[AQgw]$') && a.activeCode.matches('^[23456789ABCDEFGHJKMNPQRSTVWXYZ]{8}$') && construction_positive(a.credentialVersion))
+          && construction_positive(a.ticketRevision) && a.previousCredentialId is string && a.previousCode is string
+          && a.expectedVersions is map && a.resultVersions is map && a.closedSeatId is string
+          && (!a.issued || a.everIssued);
+      }
+      function construction_ticketAudit(a) {
+        return a == null ? null : {'revision':a.revision,'issued':a.issued,'sent':a.sent,'issuedAt':a.issuedAt,'sentAt':a.sentAt,
+          'currentCycle':a.currentCycle,'cycleClosed':a.cycleClosed,'everIssued':a.everIssued,'credentialVersion':a.credentialVersion};
+      }
+      function construction_ticketVersion(p,b,a) {
+        let c = construction_control(p);
+        let e = construction_operation(p,a.operationId);
+        return construction_receptionAdvance(b,a,e.kind != 'ticketCheck') && construction_versionBase(p,b,a) && construction_saveManager(p,c,b) && b.values.control == c.revision && b.environmentId == c.environmentId
+          && a.values.keys() == b.values.keys() && a.values.diff(b.values).affectedKeys().hasOnly(['commit','ticket','reception'])
+          && a.values.ticket == b.values.ticket+1 && construction_positive(a.values.ticket)
+          && e.kind in ['qrCreate','ticketCheck','qrReissue'] && e.operationId == a.operationId && e.generation == b.generation
+          && e.expectedVersions == b.values && e.resultVersions == a.values
+          && e.deviceUid == (e.kind == 'ticketCheck' ? '' : request.auth.uid);
+      }
+      function construction_ticketEvent(p,id,e) {
+        let v = construction_versions(p);
+        let n = construction_nextVersions(p);
+        let t = construction_nextTicket(p,e.payload.attendeeId);
+        let before = e.payload.creating ? null : get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/tickets/$(e.payload.attendeeId)).data;
+        return construction_businessScope(p,e) && construction_uuid(id) && e.operationId == id && e.generation == v.generation
+          && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+          && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+          && e.kind in ['qrCreate','ticketCheck','qrReissue'] && e.kind == t.lastKind
+          && e.payload.keys().hasAll(['attendeeId','creating','before','after'])
+          && (e.kind == 'qrReissue' ? e.payload.keys().hasOnly(['attendeeId','creating','before','after','reason','stopConfirmed','confirmedControlVersion'])
+            && !e.payload.creating && e.payload.reason is string && e.payload.reason.size() <= 500 && e.payload.reason.matches('.*[^ \t\r\n].*')
+            && e.payload.stopConfirmed == true && e.payload.confirmedControlVersion == n.values.control
+            : e.payload.keys().hasOnly(['attendeeId','creating','before','after']))
+          && e.payload.creating is bool && e.payload.attendeeId == t.attendeeId
+          && e.payload.before == construction_ticketAudit(before) && e.payload.after == construction_ticketAudit(t)
+          && (!e.payload.creating || !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/tickets/$(e.payload.attendeeId)))
+          && n.operationId == id && n.values.commit == v.values.commit+1 && e.expectedVersions == v.values && e.resultVersions == n.values
+          && t.operationId == id && t.expectedVersions == e.expectedVersions && t.resultVersions == e.resultVersions;
+      }
+      function construction_qrLinks(p,a) {
+        let c = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/credentials/$(a.activeCredentialId)).data;
+        let k = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/confirmationCodes/$(a.activeCode)).data;
+        return c.ticketId == a.ticketId && c.currentCycle == a.currentCycle && c.credentialVersion == a.credentialVersion
+          && c.createdOperationId == a.operationId && c.status == 'active'
+          && k.credentialId == a.activeCredentialId && k.ticketId == a.ticketId && k.createdOperationId == a.operationId && k.active == true;
+      }
+      function construction_revokedLinks(p,a) {
+        let c = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/credentials/$(a.previousCredentialId)).data;
+        let k = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/confirmationCodes/$(a.previousCode)).data;
+        return c.ticketId == a.ticketId && c.currentCycle == a.currentCycle && c.credentialVersion == a.credentialVersion-(a.lastKind == 'qrReissue' ? 1 : 0)
+          && c.status == 'revoked' && c.revokedOperationId == a.operationId
+          && k.ticketId == a.ticketId && k.credentialId == a.previousCredentialId && k.active == false && k.revokedOperationId == a.operationId;
+      }
+      function construction_credentialRevoke(p,id,b,a) {
+        let t = construction_nextTicket(p,b.ticketId);
+        return construction_qrScope(p,b) && t.lastKind in ['qrReissue','cancelAttendance'] && t.previousCredentialId == id && t.currentCycle == b.currentCycle
+          && t.credentialVersion == b.credentialVersion+(t.lastKind == 'qrReissue' ? 1 : 0) && b.status == 'active' && b.revokedOperationId == ''
+          && a.status == 'revoked' && a.revokedOperationId == t.operationId
+          && a.diff(b).affectedKeys().hasOnly(['status','revokedOperationId']);
+      }
+      function construction_codeRevoke(p,id,b,a) {
+        let t = construction_nextTicket(p,b.ticketId);
+        return construction_qrScope(p,b) && t.lastKind in ['qrReissue','cancelAttendance'] && t.previousCode == id && t.previousCredentialId == b.credentialId
+          && b.active == true && b.revokedOperationId == '' && a.active == false && a.revokedOperationId == t.operationId
+          && a.diff(b).affectedKeys().hasOnly(['active','revokedOperationId']);
+      }
+
+      function construction_assignedForQr(p,id,n) {
+        let s = construction_assignment(p);
+        return construction_businessScope(p,s) && n.values.layout > 0 && s.generation == n.generation
+          && s.revision == n.values.assignment && construction_occupiedIds(s.assignments).hasAny([id]);
+      }
+      function construction_eligibleForCheck(p,id,n) {
+        let i = construction_people(p);
+        return construction_businessScope(p,i) && i.revision == n.values.attendee && i.eligibleAttendeeIds.hasAny([id]);
+      }
+      function construction_checkChanges(b,a) {
+        let changed = a.diff(b).affectedKeys();
+        return changed.hasOnly(['revision','operationId','lastKind','ticketRevision','expectedVersions','resultVersions','issued','sent','issuedAt','sentAt','everIssued'])
+          && a.everIssued == (b.everIssued || a.issued)
+          && (a.issued != b.issued && a.sent == b.sent && a.sentAt == b.sentAt && a.issuedAt == request.time
+            || a.sent != b.sent && a.issued == b.issued && a.issuedAt == b.issuedAt && a.sentAt == request.time);
+      }
+      function construction_noTicketSeatFence(p,b,a,e) {
+        return b.values.layout == 0
+          ? e.payload.oldSeatId == '' && a.values.assignment == 0 && b.generation == ''
+            && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/assignmentState/current)
+          : construction_noTicketExistingLayout(p,b,a,e);
+      }
+      function construction_noTicketExistingLayout(p,b,a,e) {
+        let s = construction_assignment(p);
+        return construction_businessScope(p,s) && s.generation == b.generation && s.revision == b.values.assignment
+          && (e.payload.oldSeatId == ''
+            ? !construction_occupiedIds(s.assignments).hasAny([e.payload.attendeeId]) && a.values.assignment == b.values.assignment
+            : construction_uuid(e.payload.oldSeatId) && s.assignments[e.payload.oldSeatId] == e.payload.attendeeId
+              && a.values.assignment == b.values.assignment+1 && construction_noTicketNextAssignment(p,a));
+      }
+      function construction_noTicketNextAssignment(p,a) {
+        let s = construction_nextAssignment(p);
+        return s.operationId == a.operationId && s.revision == a.values.assignment;
+      }
+      function construction_noTicketVersion(p,b,a,e,c) {
+        let i = construction_nextPeople(p);
+        let t = construction_tickets(p);
+        return construction_receptionAdvance(b,a,true) && construction_versionBase(p,b,a) && construction_saveManager(p,c,b) && b.values.control == c.revision && b.environmentId == c.environmentId
+          && e.kind == 'cancelWithoutTicket' && e.operationId == a.operationId && e.deviceUid == request.auth.uid && e.generation == b.generation
+          && e.expectedVersions == b.values && e.resultVersions == a.values
+          && a.values.keys() == b.values.keys() && a.values.diff(b.values).affectedKeys().hasOnly(['commit','attendee','assignment','reception'])
+          && a.values.attendee == b.values.attendee+1 && i.operationId == a.operationId && i.revision == a.values.attendee && i.attendeeId == e.payload.attendeeId
+          && construction_businessScope(p,t) && t.revision == b.values.ticket && !t.protectedAttendeeIds.hasAny([i.attendeeId])
+          && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/tickets/$(i.attendeeId)) && construction_noTicketSeatFence(p,b,a,e);
+      }
+      function construction_noTicketProfile(p,id,b,a) {
+        let n = construction_nextVersions(p);
+        let i = construction_nextPeople(p);
+        let e = construction_operation(p,a.operationId);
+        return construction_profileShape(p,id,a) && b.attendancePlan == 'planned' && a.attendancePlan == 'notAttending' && a.revision == b.revision+1
+          && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendancePlan','cancelNoTicketOperationId'])
+          && a.cancelNoTicketOperationId == a.operationId && n.operationId == a.operationId && e.kind == 'cancelWithoutTicket' && e.payload.attendeeId == id
+          && i.attendeeId == id && i.operationId == a.operationId && i.revision == n.values.attendee;
+      }
+      function construction_noTicketPeople(p,b,a) {
+        let n = construction_nextVersions(p);
+        let e = construction_operation(p,a.operationId);
+        let profile = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendees/$(a.attendeeId)).data;
+        return construction_peopleShape(p,a) && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeId','eligibleAttendeeIds','cancelNoTicketOperationId'])
+          && a.cancelNoTicketOperationId == a.operationId && a.revision == b.revision+1 && b.revision == e.expectedVersions.attendee && a.revision == n.values.attendee
+          && n.operationId == a.operationId && e.kind == 'cancelWithoutTicket' && e.payload.attendeeId == a.attendeeId
+          && profile.attendeeId == a.attendeeId && profile.operationId == a.operationId && profile.attendancePlan == 'notAttending'
+          && b.eligibleAttendeeIds.hasAny([a.attendeeId]) && a.eligibleAttendeeIds.toSet() == b.eligibleAttendeeIds.toSet().difference([a.attendeeId].toSet());
+      }
+      function construction_noTicketAssignment(p,b,a) {
+        let e = construction_operation(p,a.operationId);
+        return construction_businessScope(p,a) && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','generation','revision','operationId','assignments','lastKind','cancelledAttendeeId','cancelOperationId'])
+          && a.lastKind == 'cancelWithoutTicket' && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments','lastKind','cancelledAttendeeId','cancelOperationId'])
+          && a.cancelOperationId == a.operationId && e.kind == a.lastKind && a.cancelledAttendeeId == e.payload.attendeeId && construction_uuid(e.payload.oldSeatId)
+          && a.generation == b.generation && b.revision == e.expectedVersions.assignment && a.revision == b.revision+1 && a.revision == e.resultVersions.assignment
+          && b.assignments[e.payload.oldSeatId] == a.cancelledAttendeeId && a.assignments[e.payload.oldSeatId] == ''
+          && a.assignments.keys() == b.assignments.keys() && a.assignments.diff(b.assignments).affectedKeys() == [e.payload.oldSeatId].toSet();
+      }
+      function construction_noTicketEvent(p,id,e) {
+        let n = construction_nextVersions(p);
+        return construction_businessScope(p,e) && construction_uuid(id) && e.operationId == id && e.deviceUid == request.auth.uid && e.kind == 'cancelWithoutTicket'
+          && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+          && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+          && n.operationId == id && n.values == e.resultVersions
+          && e.payload.keys().hasAll(['attendeeId','oldSeatId','ticketAbsent','confirmedPrimary','confirmedControlVersion'])
+          && e.payload.keys().hasOnly(['attendeeId','oldSeatId','ticketAbsent','confirmedPrimary','confirmedControlVersion'])
+          && construction_uuid(e.payload.attendeeId) && e.payload.oldSeatId is string && e.payload.ticketAbsent == true
+          && e.payload.confirmedPrimary == true
+          && e.payload.confirmedControlVersion == e.expectedVersions.control;
+      }
+
+      function construction_cancelVersion(p,b,a) {
+        let c = construction_control(p);
+        let e = construction_operation(p,a.operationId);
+        return construction_receptionAdvance(b,a,true) && construction_versionBase(p,b,a) && construction_saveManager(p,c,b) && b.values.control == c.revision && b.environmentId == c.environmentId
+          && a.values.keys() == b.values.keys() && a.values.diff(b.values).affectedKeys().hasOnly(['commit','attendee','assignment','ticket','reception'])
+          && a.values.attendee == b.values.attendee+1 && a.values.ticket == b.values.ticket+1
+          && e.kind == 'cancelAttendance' && e.operationId == a.operationId && e.deviceUid == request.auth.uid && e.generation == b.generation
+          && e.expectedVersions == b.values && e.resultVersions == a.values
+          && (e.payload.oldSeatId == '' ? a.values.assignment == b.values.assignment && construction_cancelNoSeatFence(p,b,e)
+            : construction_uuid(e.payload.oldSeatId) && a.values.assignment == b.values.assignment+1);
+      }
+      function construction_cancelNoSeatFence(p,b,e) {
+        return b.values.layout == 0
+          ? b.values.assignment == 0 && b.generation == '' && !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/assignmentState/current)
+          : construction_cancelExistingNoSeat(p,b,e);
+      }
+      function construction_cancelExistingNoSeat(p,b,e) {
+        let s = construction_assignment(p);
+        return construction_businessScope(p,s) && s.generation == b.generation && s.revision == b.values.assignment
+          && !construction_occupiedIds(s.assignments).hasAny([e.payload.attendeeId]);
+      }
+      function construction_cancelTicket(p,id,b,a) {
+        let person = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendees/$(id)).data;
+        return !b.cycleClosed && a.cycleClosed && a.currentCycle == b.currentCycle
+          && (b.activeCredentialId != '' ? construction_uuid(a.closedSeatId) && a.previousCredentialId == b.activeCredentialId && a.previousCode == b.activeCode && construction_revokedLinks(p,a)
+            : b.activeCode == '' && b.credentialVersion == 0 && a.previousCredentialId == '' && a.previousCode == '')
+          && a.activeCredentialId == '' && a.activeCode == '' && a.credentialVersion == b.credentialVersion && a.everIssued == b.everIssued
+          && !a.issued && !a.sent && a.issuedAt == null && a.sentAt == null && (a.closedSeatId == '' || construction_uuid(a.closedSeatId))
+          && person.attendeeId == id && person.operationId == a.operationId && person.attendancePlan == 'notAttending'
+          && a.diff(b).affectedKeys().hasOnly(['revision','operationId','lastKind','ticketRevision','expectedVersions','resultVersions','cycleClosed','activeCredentialId','activeCode','issued','sent','issuedAt','sentAt','previousCredentialId','previousCode','closedSeatId']);
+      }
+      function construction_cancelProfile(p,id,b,a) {
+        let t = construction_nextTicket(p,id);
+        let i = construction_nextPeople(p);
+        return construction_profileShape(p,id,a) && b.attendancePlan == 'planned' && a.attendancePlan == 'notAttending' && a.revision == b.revision+1
+          && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendancePlan','cancelOperationId']) && a.cancelOperationId == a.operationId && a.operationId == t.operationId
+          && t.lastKind == 'cancelAttendance' && t.attendeeId == id && i.attendeeId == id && i.operationId == t.operationId && i.revision == t.resultVersions.attendee;
+      }
+      function construction_cancelPeople(p,b,a) {
+        let t = construction_nextTicket(p,a.attendeeId);
+        return construction_peopleShape(p,a) && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeId','eligibleAttendeeIds','cancelOperationId']) && a.cancelOperationId == a.operationId
+          && t.lastKind == 'cancelAttendance' && a.operationId == t.operationId && a.attendeeId == t.attendeeId
+          && b.revision == t.expectedVersions.attendee && a.revision == b.revision+1 && a.revision == t.resultVersions.attendee
+          && b.eligibleAttendeeIds.hasAny([a.attendeeId]) && a.eligibleAttendeeIds.toSet() == b.eligibleAttendeeIds.toSet().difference([a.attendeeId].toSet());
+      }
+      function construction_cancelAssignment(p,b,a) {
+        let t = construction_nextTicket(p,request.resource.data.cancelledAttendeeId);
+        return construction_businessScope(p,a) && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','generation','revision','operationId','assignments','lastKind','cancelledAttendeeId','cancelOperationId']) && a.lastKind == 'cancelAttendance'
+          && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments','lastKind','cancelledAttendeeId','cancelOperationId'])
+          && a.cancelOperationId == a.operationId && t.lastKind == 'cancelAttendance' && t.attendeeId == a.cancelledAttendeeId && a.operationId == t.operationId
+          && a.generation == b.generation && b.revision == t.expectedVersions.assignment && a.revision == b.revision+1 && a.revision == t.resultVersions.assignment
+          && b.assignments[t.closedSeatId] == t.attendeeId && a.assignments[t.closedSeatId] == ''
+          && a.assignments.keys() == b.assignments.keys() && a.assignments.diff(b.assignments).affectedKeys() == [t.closedSeatId].toSet();
+      }
+      function construction_cancelEvent(p,id,e) {
+        let t = construction_nextTicket(p,e.payload.attendeeId);
+        let before = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/tickets/$(e.payload.attendeeId)).data;
+        return construction_businessScope(p,e) && construction_uuid(id) && e.operationId == id && e.deviceUid == request.auth.uid && e.kind == 'cancelAttendance'
+          && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+          && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','generation','expectedVersions','resultVersions','payload'])
+          && t.lastKind == e.kind && t.operationId == id && t.expectedVersions == e.expectedVersions && t.resultVersions == e.resultVersions
+          && e.payload.keys().hasAll(['attendeeId','creating','before','after','oldSeatId','confirmedPrimary','confirmedTicketWarning','stopConfirmed','confirmedControlVersion'])
+          && e.payload.keys().hasOnly(['attendeeId','creating','before','after','oldSeatId','confirmedPrimary','confirmedTicketWarning','stopConfirmed','confirmedControlVersion'])
+          && e.payload.creating == false && e.payload.before == construction_ticketAudit(before) && e.payload.after == construction_ticketAudit(t)
+          && e.payload.oldSeatId == t.closedSeatId && e.payload.confirmedPrimary == true && e.payload.confirmedTicketWarning is bool
+          && (!(before.issued || before.everIssued || before.sent || before.sentAt != null || before.activeCredentialId != '') || e.payload.confirmedTicketWarning == true)
+          && e.payload.stopConfirmed is bool && (before.activeCredentialId == '' || e.payload.stopConfirmed == true)
+          && e.payload.confirmedControlVersion == e.expectedVersions.control
+          && (t.closedSeatId == '' || construction_cancelResultAssignment(p,e,t));
+      }
+      function construction_cancelResultAssignment(p,e,t) {
+        let s = construction_nextAssignment(p);
+        return s.operationId == e.operationId && s.revision == e.resultVersions.assignment && s.assignments[t.closedSeatId] == '';
+      }
+
+      function construction_ticketWrite(p,id,b,a,creating) {
+        let n = construction_nextVersions(p);
+        let i = construction_nextTicketIndex(p);
+        return construction_ticketRecord(p,id,a) && n.operationId == a.operationId && a.resultVersions == n.values
+          && a.ticketRevision == n.values.ticket && (creating || a.ticketRevision > b.ticketRevision)
+          && i.operationId == a.operationId && i.revision == n.values.ticket && i.attendeeId == id
+          && (creating ? a.revision == 1 && a.currentCycle == 1 : a.revision == b.revision+1)
+          && (a.lastKind == 'cancelAttendance' ? !creating && construction_cancelTicket(p,id,b,a)
+            : a.lastKind == 'qrReissue' ? !creating && !b.cycleClosed && b.activeCredentialId != ''
+            && a.activeCredentialId != b.activeCredentialId && a.activeCode != b.activeCode
+            && a.previousCredentialId == b.activeCredentialId && a.previousCode == b.activeCode
+            && a.credentialVersion == b.credentialVersion+1 && construction_qrLinks(p,a) && construction_revokedLinks(p,a)
+            && a.diff(b).affectedKeys().hasOnly(['revision','operationId','lastKind','ticketRevision','expectedVersions','resultVersions','activeCredentialId','activeCode','credentialVersion','previousCredentialId','previousCode'])
+            : a.lastKind == 'qrCreate' ? construction_assignedForQr(p,id,n) && a.activeCredentialId != '' && a.credentialVersion == 1
+              && a.previousCredentialId == '' && a.previousCode == '' && a.closedSeatId == '' && construction_qrLinks(p,a)
+              && (creating || b.cycleClosed ? a.issued == false && a.sent == false && a.issuedAt == null && a.sentAt == null && a.everIssued == false
+                && (creating || a.currentCycle == b.currentCycle+1)
+                : b.activeCredentialId == '' && a.diff(b).affectedKeys().hasOnly(['revision','operationId','lastKind','ticketRevision','expectedVersions','resultVersions','activeCredentialId','activeCode','credentialVersion']))
+            : construction_eligibleForCheck(p,id,n) && (creating || b.cycleClosed
+              ? a.activeCredentialId == '' && a.previousCredentialId == '' && a.previousCode == '' && a.closedSeatId == '' && a.credentialVersion == 0 && a.everIssued == a.issued
+                && (creating || a.currentCycle == b.currentCycle+1 && construction_assignedForQr(p,id,n))
+                && (a.issued && a.issuedAt == request.time && !a.sent && a.sentAt == null || a.sent && a.sentAt == request.time && !a.issued && a.issuedAt == null)
+              : construction_checkChanges(b,a)));
+      }
+      function construction_ticketIndexUpdate(p,b,a) {
+        let t = construction_nextTicket(p,a.attendeeId);
+        let protected = !t.cycleClosed && (t.issued || t.everIssued || t.activeCredentialId != '');
+        let expected = protected ? b.protectedAttendeeIds.toSet().union([a.attendeeId].toSet()) : b.protectedAttendeeIds.toSet().difference([a.attendeeId].toSet());
+        return construction_businessScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','protectedAttendeeIds','attendeeId'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','protectedAttendeeIds','attendeeId'])
+          && a.diff(b).affectedKeys().hasOnly(['revision','operationId','protectedAttendeeIds','attendeeId'])
+          && a.revision == b.revision+1 && a.revision == t.ticketRevision
+          && t.operationId == a.operationId && a.attendeeId == t.attendeeId
+          && a.protectedAttendeeIds is list && a.protectedAttendeeIds.size() <= 500
+          && a.protectedAttendeeIds.size() == a.protectedAttendeeIds.toSet().size() && a.protectedAttendeeIds.toSet() == expected;
+      }
+      function construction_credentialCreate(p,id,a) {
+        let t = construction_nextTicket(p,a.ticketId);
+        return construction_qrScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','ticketId','currentCycle','credentialVersion','status','createdOperationId','revokedOperationId'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','ticketId','currentCycle','credentialVersion','status','createdOperationId','revokedOperationId'])
+          && t.activeCredentialId == id && t.currentCycle == a.currentCycle && t.credentialVersion == a.credentialVersion
+          && t.lastKind in ['qrCreate','qrReissue'] && t.operationId == a.createdOperationId
+          && a.status == 'active' && a.revokedOperationId == '';
+      }
+      function construction_codeCreate(p,id,a) {
+        let t = construction_nextTicket(p,a.ticketId);
+        return construction_qrScope(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','ticketId','credentialId','active','createdOperationId','revokedOperationId'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','ticketId','credentialId','active','createdOperationId','revokedOperationId'])
+          && t.activeCode == id && t.activeCredentialId == a.credentialId && t.lastKind in ['qrCreate','qrReissue']
+          && t.operationId == a.createdOperationId && a.active == true && a.revokedOperationId == '';
+      }
+
+
+      function construction_receptionAdvance(b,a,changed) { return a.values.reception == b.values.reception + (changed ? 1 : 0); }
+      function construction_saveManager(p,c,b) {
+        let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+        return construction_identity(p,d,s,r) && construction_currentPreparation(d,s,r) && r.role in ['owner','deputy']
+          && c.state in ['preparing','operating'] && (construction_day(c) ? d.preparedDataSchemaVersion == 10 && d.preparedDataRevision == b.values.reception : request.time < c.dayStartsAt && c.state == 'preparing');
+      }
+      function construction_registeredLabel(p,e) {
+        let l = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendeeLabels/$(e.payload.attendeeId)).data;
+        return l.operationId == e.operationId && l.revision == 1;
+      }
+      function construction_returningFence(p,b,n) {
+        let t = construction_tickets(p);
+        return construction_layoutGuard(p,b) && (b.values.layout == 0 ? !exists(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/assignmentState/current) : construction_attendeeAssignment(p,b,n))
+          && construction_businessScope(p,t) && t.revision == b.values.ticket && t.protectedAttendeeIds.toSet().hasOnly(n.eligibleAttendeeIds);
+      }
+      function construction_registrationLabel(p,id,a) {
+        let b = construction_versions(p);
+        let v = construction_nextVersions(p);
+        let e = construction_operation(p,a.operationId);
+        return construction_labelShape(p,id,a) && a.revision == 1 && e.kind == 'attendeeCreate' && e.payload.attendeeId == id
+          && e.payload.label == a && v.operationId == a.operationId && v.values.commit == b.values.commit+1;
+      }
+      function construction_labelCentral(p,b,a) {
+        let c = construction_control(p);
+        let e = construction_operation(p,a.operationId);
+        let i = construction_nextPeople(p);
+        let t = construction_tickets(p);
+        return construction_labelAdvance(p,b,a,e) && construction_businessScope(p,c) && c.revision == b.values.control && c.dayStartsAt < c.dayEndsAt
+          && construction_writeIdentity(p,c,e,b.values.reception) && i.operationId == a.operationId && i.attendeeId == e.attendeeId && i.revision == a.values.attendee
+          && i.labelOperationId == a.operationId && a.labelOperationId == a.operationId && construction_businessScope(p,t) && t.revision == b.values.ticket
+          && (!t.protectedAttendeeIds.hasAny([e.attendeeId]) || construction_nonblank(e.reason))
+          && e.kind == 'labelChange' && (!e.onDay || construction_ownPair(p,e,c.revision,a.values.reception));
+      }
+      function construction_dayAt(c,t) { return c.dayStartsAt <= t && t < c.dayEndsAt; }
+      function construction_day(c) { return construction_dayAt(c,request.time); }
+      function construction_nonblank(s) { return s is string && s.matches('(?s).*[^\\s　].*'); }
+      function construction_labelShape(p,id,a) {
+        return a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','seatDisplayName','revision','operationId'])
+          && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','seatDisplayName','revision','operationId'])
+          && construction_businessScope(p,a) && a.attendeeId == id && construction_uuid(id) && construction_uuid(a.operationId)
+          && a.revision is int && a.revision > 0 && a.seatDisplayName is string
+          && a.seatDisplayName.replace('[ 　]','').matches('(?s)^.{1,6}$')
+          && a.seatDisplayName.matches('[^\\r\\n\\t]*') && construction_nonblank(a.seatDisplayName);
+      }
+      function construction_writeIdentity(p,c,e,reception) {
+        let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+        return construction_identity(p,d,s,r) && construction_currentPreparation(d,s,r) && e.actorUid == d.humanUid && e.deviceUid == request.auth.uid
+          && (construction_day(c) ? e.kind == 'labelChange' && e.onDay == true && construction_nonblank(e.reason)
+              && d.preparedDataSchemaVersion == 10 && d.preparedDataRevision == reception
+              && (r.role in ['owner','deputy'] && c.state in ['preparing','operating'] || r.role == 'temporary' && c.state == 'operating')
+            : request.time < c.dayStartsAt && e.onDay == false && r.role in ['owner','deputy'] && c.state == 'preparing');
+      }
+      function construction_labelAdvance(p,b,a,e) {
+        return construction_businessScope(p,b) && construction_businessScope(p,a) && a.diff(b).affectedKeys().hasOnly(['values','operationId','labelOperationId'])
+          && a.values.diff(b.values).affectedKeys().hasOnly(['commit','attendee','reception'])
+          && a.values.commit == b.values.commit + 1 && a.values.attendee == b.values.attendee + 1
+          && a.values.reception == b.values.reception + 1 && a.operationId == e.operationId
+          && e.beforeValues == b.values && e.afterValues == a.values && e.confirmed == true
+          && construction_uuid(e.operationId) && construction_uuid(e.attendeeId);
+      }
+      function construction_ownPair(p,e,controlRevision,reception) {
+        let h = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/dayEvents/$(e.actorUid)/entries/$(e.operationId)).data;
+        return h.operationId == e.operationId && h.attendeeId == e.attendeeId && h.kind == e.kind
+          && h.actorUid == e.actorUid && h.deviceUid == e.deviceUid && h.reason == e.reason
+          && h.controlRevision == controlRevision && h.receptionRevision == reception;
+      }
+      function construction_labelWrite(p,id,a,creating) {
+        let b = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data;
+        let v = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data;
+        let e = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/operations/$(a.operationId)).data;
+        return construction_labelShape(p,id,a) && construction_labelAdvance(p,b,v,e) && e.attendeeId == id && a.operationId == v.operationId && e.afterLabel == a
+          && (creating ? e.kind == 'register' && a.revision == 1 && e.beforeLabel == null
+            : e.kind == 'labelChange' && construction_labelShape(p,id,resource.data) && e.beforeLabel == resource.data
+              && a.revision == resource.data.revision + 1 && a.seatDisplayName != resource.data.seatDisplayName
+              && a.diff(resource.data).affectedKeys().hasOnly(['seatDisplayName','revision','operationId']));
+      }
+      function construction_labelIndexWrite(p,b,a) {
+        let v = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data;
+        let w = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data;
+        let l = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendeeLabels/$(a.attendeeId)).data;
+        return construction_businessScope(p,a) && construction_businessScope(p,b) && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','eligibleAttendeeIds','revision','operationId','attendeeId','labelOperationId','cancelOperationId','cancelNoTicketOperationId'])
+          && a.diff(b).affectedKeys().hasOnly(['eligibleAttendeeIds','revision','operationId','attendeeId','labelOperationId'])
+          && b.revision == v.values.attendee && a.revision == w.values.attendee && a.revision == b.revision + 1
+          && a.labelOperationId == a.operationId && w.values.commit == v.values.commit + 1 && a.operationId == w.operationId && a.operationId == l.operationId
+          && a.eligibleAttendeeIds is list && a.eligibleAttendeeIds.size() <= 500 && a.eligibleAttendeeIds.size() == a.eligibleAttendeeIds.toSet().size()
+          && l.revision > 1 && b.eligibleAttendeeIds.hasAny([a.attendeeId]) && a.eligibleAttendeeIds == b.eligibleAttendeeIds;
+      }
+      function construction_labelOperation(p,id,e) {
+        let b = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data;
+        let a = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data;
+        return e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','attendeeId','actorUid','deviceUid','beforeValues','afterValues','confirmed','onDay','reason','beforeLabel','afterLabel','profile','occurredAt'])
+          && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','attendeeId','actorUid','deviceUid','beforeValues','afterValues','confirmed','onDay','reason','beforeLabel','afterLabel','profile','occurredAt'])
+          && construction_businessScope(p,e) && e.operationId == id && e.kind in ['register','labelChange'] && e.occurredAt == request.time
+          && e.actorUid is string && e.onDay is bool && e.reason is string && (e.kind == 'register' || e.profile == null)
+          && construction_labelAdvance(p,b,a,e);
+      }
+      function construction_ownEvent(p,uid,id,e) {
+        let b = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendeeLabels/$(e.attendeeId)).data;
+        let a = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/attendeeLabels/$(e.attendeeId)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let o = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/operations/$(id)).data;
+        return e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','attendeeId','actorUid','deviceUid','beforeRevision','afterRevision','controlRevision','receptionRevision','reason','occurredAt'])
+          && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','attendeeId','actorUid','deviceUid','beforeRevision','afterRevision','controlRevision','receptionRevision','reason','occurredAt'])
+          && construction_businessScope(p,e) && e.operationId == id && e.kind == 'labelChange' && e.actorUid == uid && uid == s.humanUid
+          && e.deviceUid == request.auth.uid && e.occurredAt == request.time && construction_nonblank(e.reason)
+          && e.beforeRevision == b.revision && e.afterRevision == a.revision && a.revision == b.revision + 1
+          && a.operationId == id && o.operationId == id && o.attendeeId == e.attendeeId && o.onDay == true && e.reason == o.reason;
+      }
+      function construction_assigned(p,id) {
+        let v = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/versions/current).data;
+        let a = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/assignmentState/current).data;
+        let s = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/selection/current).data;
+        return construction_businessScope(p,v) && construction_businessScope(p,a) && v.values.layout > 0
+          && a.revision == v.values.assignment && a.generation == v.generation && s.publishedGeneration == v.generation && a.assignments.values().hasAny([id]);
+      }
+      function construction_labelRead(p,id) {
+        let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+        return construction_identity(p,d,s,r) && (r.role in ['owner','deputy'] ? construction_currentPreparation(d,s,r)
+          : r.role in ['temporary','receptionist'] && (construction_currentPreparation(d,s,r) || construction_generalPreparation(d,s,r))
+            && get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/control/current).data.state != 'closed' && construction_assigned(p,id));
+      }
+      function construction_ownDayRead(p,uid) {
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let c = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/control/current).data;
+        return construction_manager(p) || uid == s.humanUid && construction_authorizedLevel(p,3) && c.state in ['operating','ended'];
+      }
+      function construction_publicRead(p) {
+        let c = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/control/current).data;
+        return construction_businessScope(p,c) && construction_active(p) && (c.state != 'closed' || construction_manager(p));
+      }
+
+        match /control/current { allow get: if construction_publicRead(p); allow update: if request.auth != null && construction_controlWrite(p,resource.data,request.resource.data); }
+        match /attendeeState/current {
+          allow update: if request.auth != null && request.resource.data.get('labelOperationId','') == request.resource.data.operationId && construction_labelIndexWrite(p,resource.data,request.resource.data);
+          allow create: if request.auth != null && construction_bootstrapIndex(p,request.resource.data,true);
+          allow update: if request.auth != null && request.resource.data.get('labelOperationId','') != request.resource.data.operationId && request.resource.data.get('cancelNoTicketOperationId','') == request.resource.data.operationId && construction_noTicketPeople(p,resource.data,request.resource.data);
+          allow update: if request.auth != null && request.resource.data.get('labelOperationId','') != request.resource.data.operationId && request.resource.data.get('cancelNoTicketOperationId','') != request.resource.data.operationId && (request.resource.data.eligibleAttendeeIds.size() < resource.data.eligibleAttendeeIds.size() && request.resource.data.operationId != resource.data.operationId
+            ? (request.resource.data.get('cancelOperationId','') == request.resource.data.operationId ? construction_cancelPeople(p,resource.data,request.resource.data) : construction_peopleUpdate(p,resource.data,request.resource.data)) : construction_peopleUpdate(p,resource.data,request.resource.data));
+        }
+        match /ticketState/current {
+          allow create: if request.auth != null && construction_bootstrapIndex(p,request.resource.data,false);
+          allow update: if request.auth != null && construction_ticketIndexUpdate(p,resource.data,request.resource.data);
+        }
+        match /tickets/{id} {
+          allow get: if construction_manager(p);
+          allow create: if request.auth != null && construction_ticketWrite(p,id,null,request.resource.data,true);
+          allow update: if request.auth != null && construction_ticketWrite(p,id,resource.data,request.resource.data,false);
+        }
+        match /credentials/{id} {
+          allow get: if construction_active(p) && construction_qrScope(p,resource.data);
+          allow create: if request.auth != null && construction_credentialCreate(p,id,request.resource.data);
+          allow update: if request.auth != null && construction_credentialRevoke(p,id,resource.data,request.resource.data);
+        }
+        match /confirmationCodes/{id} {
+          allow get: if construction_manager(p);
+          allow create: if request.auth != null && construction_codeCreate(p,id,request.resource.data);
+          allow update: if request.auth != null && construction_codeRevoke(p,id,resource.data,request.resource.data);
+        }
+        match /attendees/{id} {
+          allow get: if construction_manager(p);
+          allow create: if request.auth != null && construction_profileWrite(p,id,null,request.resource.data,true);
+          allow update: if request.auth != null && request.resource.data.get('labelOperationId','') != request.resource.data.operationId && request.resource.data.get('cancelNoTicketOperationId','') == request.resource.data.operationId && construction_noTicketProfile(p,id,resource.data,request.resource.data);
+          allow update: if request.auth != null && request.resource.data.get('labelOperationId','') != request.resource.data.operationId && request.resource.data.get('cancelNoTicketOperationId','') != request.resource.data.operationId && (request.resource.data.get('cancelOperationId','') == request.resource.data.operationId
+            ? construction_cancelProfile(p,id,resource.data,request.resource.data) : construction_profileWrite(p,id,resource.data,request.resource.data,false));
+        }
+        match /operations/{id} {
+          allow create: if request.auth != null && request.resource.data.kind == 'labelChange' && construction_labelOperation(p,id,request.resource.data);
+          allow create: if request.auth != null && request.resource.data.kind == 'cancelWithoutTicket' && construction_noTicketEvent(p,id,request.resource.data);
+          allow get: if construction_manager(p);
+          allow create: if request.auth != null && request.resource.data.kind != 'cancelWithoutTicket' && request.resource.data.kind != 'labelChange' && (request.resource.data.kind in ['initialCounterProof','slide','abortInitial']
+            ? construction_createEvent(p,request.resource.data.generation,id,request.resource.data)
+            : request.resource.data.kind == 'cancelAttendance' ? construction_cancelEvent(p,id,request.resource.data) : request.resource.data.kind in ['qrCreate','ticketCheck','qrReissue'] ? construction_ticketEvent(p,id,request.resource.data)
+            : request.resource.data.kind == 'bootstrapBusiness' ? construction_bootstrapEvent(p,id,request.resource.data) : construction_normalEvent(p,id,request.resource.data));
+        }
+
+        match /attendeeLabels/{id} {
+          allow get: if request.auth != null && construction_labelShape(p,id,resource.data) && construction_labelRead(p,id);
+          allow create: if request.auth != null && construction_registrationLabel(p,id,request.resource.data);
+          allow update: if request.auth != null && construction_labelWrite(p,id,request.resource.data,false);
+        }
+        match /dayEvents/{uid}/entries/{id} {
+          allow get: if request.auth != null && construction_ownDayRead(p,uid);
+          allow list: if request.auth != null && request.query.limit != null && request.query.limit <= 100 && construction_ownDayRead(p,uid);
+          allow create: if request.auth != null && construction_ownEvent(p,uid,id,request.resource.data);
+        }
+        match /dateProbes/{id} { allow create: if construction_manager(p) && request.resource.data.expected == construction_dayAt(construction_control(p),request.resource.data.at); }
+        match /roles/{uid} {
+          allow update: if request.auth != null && construction_roleChange(p,uid,resource.data,request.resource.data);
+        }
+        match /devices/{uid} {
+          allow update: if request.auth != null && construction_prepareDevice(p,uid,resource.data,request.resource.data);
+        }
+        match /authorizationEvents/{id} {
+          allow create: if request.auth != null && construction_roleEvent(p,id,request.resource.data);
+          allow get: if construction_manager(p);
+        }
+        match /preparationReceipts/{id} {
+          allow create: if request.auth != null && construction_preparationReceipt(p,id,request.resource.data);
+        }
+        // 操作別認可の試験専用。実際の受付や臨時管理者の業務書込みではない。
+        match /clockProbes/{id} {
+          allow create: if construction_manager(p) && request.resource.data.keys().hasAll(['humanAuthTime','clock'])
+            && request.resource.data.keys().hasOnly(['humanAuthTime','clock'])
+            && request.resource.data.humanAuthTime is timestamp && request.resource.data.clock is timestamp
+            && construction_recentHumanAt(request.resource.data,request.resource.data.clock);
+        }
+        match /authorizationProbes/{id} {
+          allow create: if request.resource.data.keys().hasOnly(['level']) && request.resource.data.level in [0,1,2,3]
+            && request.auth != null && construction_authorizedLevel(p,request.resource.data.level);
+        }
+        match /sessions/{uid} {
+          allow get: if request.auth != null && resource.data.humanUid == request.auth.uid && construction_scope(p,resource.data)
+            && request.auth.token.firebase.sign_in_provider in ['google.com','password'];
+          allow create: if request.auth != null && request.resource.data.revision == 1 && construction_issueSession(p,uid,request.resource.data);
+          allow update: if request.auth != null && (
+            construction_revokeSession(p,uid,resource.data,request.resource.data)
+            || request.resource.data.revision == resource.data.revision + 1
+              && resource.data.humanUid == request.auth.uid && request.resource.data.deviceUid == resource.data.deviceUid
+              && construction_issueSession(p,uid,request.resource.data));
+        }
+        match /assignmentState/current {
+          allow update: if request.auth != null && request.resource.data.lastKind == 'cancelWithoutTicket' && construction_noTicketAssignment(p,resource.data,request.resource.data);
+          allow get: if construction_manager(p) || construction_active(p) && construction_selection(p).publishedGeneration != '';
+          allow create: if request.auth != null && construction_initialAssignment(p,request.resource.data);
+          allow update: if request.auth != null && request.resource.data.lastKind != 'cancelAttendance' && request.resource.data.lastKind != 'cancelWithoutTicket' && construction_assignmentUpdate(p,resource.data,request.resource.data);
+          allow update: if request.auth != null && request.resource.data.lastKind == 'cancelAttendance' && construction_cancelAssignment(p,resource.data,request.resource.data);
+        }
+        match /versions/current {
+          allow get: if construction_publicRead(p) && construction_businessScope(p,resource.data) && (resource.data.generation != '' ? construction_published(p,resource.data.generation) : construction_manager(p));
+          allow create: if request.auth != null && construction_bootstrapVersion(p,request.resource.data);
+          allow update: if request.auth != null && request.resource.data.labelOperationId == request.resource.data.operationId && construction_labelCentral(p,resource.data,request.resource.data);
+          allow update: if request.auth != null && request.resource.data.labelOperationId != request.resource.data.operationId && (request.resource.data.values.ticket != resource.data.values.ticket
+            ? (request.resource.data.values.attendee != resource.data.values.attendee ? construction_cancelVersion(p,resource.data,request.resource.data) : construction_ticketVersion(p,resource.data,request.resource.data))
+            : resource.data.values.layout == 0 && request.resource.data.values.layout == 1 ? construction_initialVersion(p,resource.data,request.resource.data) : request.resource.data.values.layout != resource.data.values.layout ? construction_slideVersion(p,resource.data,request.resource.data) : construction_normalVersion(p,resource.data,request.resource.data));
+        }
+
+        match /{privateCollection}/{id} {
+          allow get: if privateCollection in ['devices', 'sessions', 'roles', 'control', 'attendeeState', 'ticketState'] && construction_manager(p);
+          allow write: if false;
+        }
+        match /selection/current {
+          allow get: if construction_manager(p) || construction_active(p) && resource.data.publishedGeneration != '';
+          allow create: if construction_manager(p) && construction_selectionShape(request.resource.data) && request.resource.data.revision == 1 && request.resource.data.publishedGeneration == '' && construction_initialTarget(p, request.resource.data);
+          allow update: if resource.data.publishedGeneration == '' && request.resource.data.publishedGeneration != ''
+            ? request.auth != null && construction_firstPublication(p,resource.data,request.resource.data)
+            : construction_manager(p) && construction_changeSelection(p, resource.data, request.resource.data);
+        }
+        match /selection/current { allow update: if construction_manager(p) && replacementSelection(p,resource.data,request.resource.data); }
+        match /seatReferences/current { allow get: if construction_active(p) && construction_selection(p).publishedGeneration != ''; }
+        match /generations/{g} {
+          match /replacementProof/current {
+            allow get: if construction_manager(p);
+            allow create: if construction_manager(p) && replacementProofStart(p,g,request.resource.data);
+            allow update: if construction_manager(p) && replacementProofStep(p,g,resource.data,request.resource.data);
+            allow delete: if false;
+          }
+          match /lineCatalog/current {
+            allow get: if construction_manager(p) || construction_active(p) && construction_published(p,g) && construction_head(p,g).status == 'countReady';
+            allow create: if construction_manager(p) && construction_emptyCatalog(p,g,request.resource.data);
+            allow update: if construction_manager(p) && construction_appendCatalog(p,g,resource.data,request.resource.data);
+          }
+          match /idRegistry/current {
+            allow get: if construction_manager(p);
+            allow create: if construction_manager(p) && construction_createRegistry(p, g, request.resource.data);
+            allow update: if construction_manager(p) && construction_updateRegistry(p, g, resource.data, request.resource.data);
+          }
+          match /head/current {
+            allow get: if construction_manager(p) || construction_active(p) && construction_published(p, g) && resource.data.status == 'countReady';
+            allow create: if construction_manager(p) && construction_initial(p, g, request.resource.data);
+            allow update: if construction_manager(p) && !existsAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/replacementProof/current) && (resource.data.status != 'countReady' || !existsAfter(/databases/$(database)/documents/publicationShows/$(p)/candidates/$(g))) && construction_updateHead(p, g, resource.data, request.resource.data);
+          }
+          match /chunks/{id} {
+            allow get: if construction_manager(p) || construction_active(p) && construction_published(p, g) && construction_head(p, g).status == 'countReady';
+            allow create: if construction_manager(p) && construction_createChunk(p, g, id);
+          }
+          match /attributes/{id} {
+            allow get: if construction_manager(p) || construction_active(p) && construction_published(p, g) && construction_head(p, g).status == 'countReady';
+            allow create: if construction_manager(p) && construction_createAttributes(p, g, id, request.resource.data);
+          }
+          match /numberProofs/{id} {
+            allow get: if construction_manager(p) || construction_active(p) && construction_published(p,g) && construction_head(p,g).status == 'countReady';
+            allow create: if construction_manager(p) && construction_createNumberProof(p,g,id,request.resource.data);
+            allow update: if construction_manager(p) && construction_updateNumberProof(p,g,id,resource.data,request.resource.data);
+          }
+        }
+      // GD91-44の公開境界だけを確認する隔離候補。
+    }
+    function scope(p,x) { return x.schemaVersion == 2 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+    function roleValid(p,r) {
+      return scope(p,r) && r.active == true && r.revision is int && r.revision > 0
+        && r.role in ['owner','deputy','temporary','receptionist']
+        && r.receptionBaselineRevision is int && r.receptionBaselineRevision >= 0 && r.receptionBaselineRevision < r.revision
+        && r.startsAt is timestamp && r.endsAt is timestamp && r.startsAt <= request.time && request.time < r.endsAt;
+    }
+    function providerValid(provider,role) { return role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+    function currentPreparation(d,s,r) { return d.preparedRoleRevision == r.revision && s.roleRevision == r.revision; }
+    function generalPreparation(d,s,r) {
+      return r.role == 'temporary' && r.receptionBaselineRevision > 0
+        && d.preparedRoleRevision == r.receptionBaselineRevision && s.roleRevision == r.receptionBaselineRevision;
+    }
+    function sessionShape(p,uid,s) {
+      return s.keys().hasAll(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+        && s.keys().hasOnly(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+        && scope(p,s) && s.deviceUid == uid && s.humanUid is string && s.humanUid.size() > 0
+        && s.active is bool && s.emailVerified == true && s.authProvider is string && s.roleRevision is int
+        && s.revision is int && s.revision > 0 && s.issuedAt is timestamp && s.expiresAt is timestamp
+        && s.humanAuthTime is timestamp && s.humanAuthTime <= s.issuedAt
+        && s.issuedAt <= request.time && s.issuedAt < s.expiresAt && s.expiresAt <= s.issuedAt + duration.value(12,'h');
+    }
+    function recentHumanAt(s,at) { return s.humanAuthTime <= at && at <= s.humanAuthTime + duration.value(15,'m'); }
+    function recentHuman(s) { return recentHumanAt(s,request.time); }
+    function identity(p,d,s,r) {
+      let managerRole = r.role in ['owner','deputy'];
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && d.schemaVersion == 2 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+        // 形式と認証時刻の出所はissueSessionが検査し、更新権限もそこで閉じる。
+        && s.schemaVersion == 2 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true
+        && s.humanUid == d.humanUid && s.expiresAt > request.time
+        && r.schemaVersion == 2 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt
+        && (managerRole ? s.authProvider == 'google.com' : s.authProvider == 'password')
+;
+    }
+    function authorizedLevel(p,level) {
+      let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+      let managerRole = r.role in ['owner','deputy'];
+      return identity(p,d,s,r)
+        && (level == 0 ? (managerRole || r.role in ['temporary','receptionist']) && (currentPreparation(d,s,r) || generalPreparation(d,s,r))
+          : currentPreparation(d,s,r) && (level == 3 ? r.role == 'temporary'
+            : managerRole && (level == 1 || recentHuman(s))));
+    }
+    function authorized(p,edit) { return authorizedLevel(p,edit ? 1 : 0); }
+    function issueSession(p,uid,a) {
+      let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(uid)).data;
+      let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(request.auth.uid)).data;
+      return request.auth.token.email_verified == true && providerValid(request.auth.token.firebase.sign_in_provider,r.role)
+        && scope(p,d) && d.active == true && d.deviceUid == uid && d.humanUid == request.auth.uid
+        && roleValid(p,r) && sessionShape(p,uid,a) && a.active == true && a.humanUid == request.auth.uid
+        && (currentPreparation(d,a,r) || generalPreparation(d,a,r))
+        && a.authProvider == request.auth.token.firebase.sign_in_provider
+        && a.humanAuthTime == timestamp.date(1970,1,1) + duration.value(request.auth.token.auth_time,'s')
+        && a.issuedAt == request.time && a.expiresAt > request.time && a.expiresAt <= r.endsAt;
+    }
+    function revokeSession(p,uid,b,a) {
+      return request.auth.token.firebase.sign_in_provider in ['google.com','password'] && b.humanUid == request.auth.uid
+        && scope(p,b) && b.deviceUid == uid && a.diff(b).affectedKeys().hasOnly(['active','revision'])
+        && a.active == false && a.revision == b.revision + 1;
+    }
+    function manager(p) { return request.auth != null && authorized(p,true); }
+    // 公開境界だけの形式1。完成候補と業務初期値は試験で前提投入する。
+    function uuid(id) { return id is string && id.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+    function proto(p,x) { return x.schemaVersion == 1 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+    function beforeVersion(p) { return get(/databases/$(database)/documents/publicationShows/$(p)/versions/current).data; }
+    function afterVersion(p) { return getAfter(/databases/$(database)/documents/publicationShows/$(p)/versions/current).data; }
+    function beforeAssignment(p) { return get(/databases/$(database)/documents/publicationShows/$(p)/assignmentState/current).data; }
+    function afterAssignment(p) { return getAfter(/databases/$(database)/documents/publicationShows/$(p)/assignmentState/current).data; }
+    function nextEvent(p,id) { return getAfter(/databases/$(database)/documents/publicationShows/$(p)/operations/$(id)).data; }
+    function candidate(p,g) { return get(/databases/$(database)/documents/publicationShows/$(p)/candidates/$(g)).data; }
+    function previous(p,m) { return m.baseGeneration == '' ? {'seatIds': [],'entityIds': []} : candidate(p,m.baseGeneration); }
+    function protectedSeats(p) { return get(/databases/$(database)/documents/publicationShows/$(p)/ticketProtection/current).data; }
+    function eligible(p) { return get(/databases/$(database)/documents/publicationShows/$(p)/eligible/current).data; }
+    function control(p) { return get(/databases/$(database)/documents/publicationShows/$(p)/control/current).data; }
+    function preparation(p,c) { return proto(p,c) && c.state == 'preparing' && c.revision > 0 && request.time < c.dayStartsAt; }
+    function integer(n) { return n is int && n >= 0 && n <= 9007199254740991; }
+    function assignmentShape(p,a) {
+      return proto(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','publicationOperationId','assignments'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','publicationOperationId','assignments'])
+        && integer(a.revision) && uuid(a.operationId) && uuid(a.publicationOperationId) && a.assignments is map;
+    }
+    function common(p,b,a,e,c) {
+      return preparation(p,c) && a.keys() == b.keys() && a.values.keys() == b.values.keys() && a.values.control == c.revision
+        && a.diff(b).affectedKeys().hasOnly(['operationId','values','sections','seatIds','usedIds','usedGenerations'])
+        && uuid(a.operationId) && integer(a.values.commit) && integer(a.values.reception)
+        && a.values.commit == b.values.commit+1 && a.values.reception == b.values.reception+1 && a.operationId != b.operationId
+        && proto(p,e) && e.operationId == a.operationId && e.deviceUid == request.auth.uid && e.controlRevision == c.revision
+        && e.expectedVersions == b.values && e.resultVersions == a.values;
+    }
+    function readyCandidate(p,e,m,old,b,a) {
+      return proto(p,m) && m.ready == true && m.generation == e.generation && uuid(m.generation) && uuid(m.sectionId)
+        && m.sectionId == e.sectionId && m.baseGeneration == e.baseGeneration
+        && m.seatIds is list && m.entityIds is list && m.changedSeatIds is list
+        && m.seatIds.size() == m.seatIds.toSet().size() && m.entityIds.size() == m.entityIds.toSet().size()
+        && m.entityIds.toSet().hasAll(m.seatIds) && m.entityIds.toSet().hasAll([m.sectionId])
+        && (m.baseGeneration == '' ? !b.sections.keys().hasAny([m.sectionId])
+          : proto(p,old) && old.ready == true && old.generation == m.baseGeneration && old.sectionId == m.sectionId && b.sections[m.sectionId] == m.baseGeneration)
+        && !b.usedGenerations.hasAny([m.generation]) && a.usedGenerations.toSet() == b.usedGenerations.toSet().union([m.generation].toSet())
+        && m.entityIds.toSet().intersection(b.usedIds.toSet()).difference(old.entityIds.toSet()).size() == 0
+        && a.usedIds.toSet() == b.usedIds.toSet().union(m.entityIds.toSet())
+        && a.sections[m.sectionId] == m.generation && a.sections.diff(b.sections).affectedKeys().hasOnly([m.sectionId])
+        && a.seatIds.toSet() == b.seatIds.toSet().difference(old.seatIds.toSet()).union(m.seatIds.toSet())
+        && m.changedSeatIds.toSet().difference(old.seatIds.toSet()).size() == 0;
+    }
+    function publicationAssignment(p,b,a,e,m,old,business) {
+      let s = business.before;
+      let n = business.after;
+      let t = business.tickets;
+      let removed = old.seatIds.toSet().difference(m.seatIds.toSet());
+      let added = m.seatIds.toSet().difference(old.seatIds.toSet());
+      let changed = m.changedSeatIds.toSet().union(removed);
+      let keyChange = b.sections.size() == 0 || removed.size() > 0 || added.size() > 0;
+      return s.revision == b.values.assignment && n.revision == a.values.assignment
+        && s.assignments.keys().toSet() == b.seatIds.toSet() && n.assignments.keys().toSet() == a.seatIds.toSet()
+        && e.removed.keys().toSet() == removed && e.removed.values().hasOnly(['']) && s.assignments.diff(e.removed).unchangedKeys() == removed
+        && e.added.keys().toSet() == added && e.added.values().hasOnly(['']) && n.assignments.diff(e.added).unchangedKeys() == added
+        && e.changed.keys().toSet() == changed && e.changed.values().hasOnly(['']) && s.assignments.diff(e.changed).unchangedKeys() == changed
+        && n.assignments.diff(s.assignments).changedKeys().size() == 0
+        && proto(p,t) && t.revision == b.values.ticket && t.seatIds.toSet().intersection(changed).size() == 0
+        && n.publicationOperationId == a.operationId
+        && (keyChange ? n.operationId == a.operationId && n.revision == s.revision+1
+          : n.assignments == s.assignments && n.operationId == s.operationId && n.revision == s.revision);
+    }
+    function publication(p,b,a,e) {
+      let c = control(p);
+      let m = candidate(p,e.generation);
+      let old = previous(p,m);
+      let n = afterAssignment(p);
+      let keyChange = b.sections.size() == 0 || old.seatIds.toSet() != m.seatIds.toSet();
+      return common(p,b,a,e,c)
+        && a.values.diff(b.values).affectedKeys().hasOnly(['commit','layout','source','assignment','reception'])
+        && integer(a.values.layout) && integer(a.values.source) && a.values.layout == b.values.layout+1 && a.values.source == b.values.source+1
+        && n.publicationOperationId == a.operationId && n.revision == a.values.assignment
+        && (keyChange ? a.values.assignment == b.values.assignment+1 : a.values.assignment == b.values.assignment);
+    }
+    // 通常業務の再実装ではなく、キー固定を確認する準備期間専用プローブ。
+    function assignmentProbe(p,b,a,e) {
+      let c = control(p);
+      let s = beforeAssignment(p);
+      let n = afterAssignment(p);
+      let people = eligible(p);
+      let t = protectedSeats(p);
+      return common(p,b,a,e,c) && b.values.layout > 0 && a.diff(b).affectedKeys().hasOnly(['operationId','values'])
+        && a.values.diff(b.values).affectedKeys().hasOnly(['commit','assignment','reception']) && integer(a.values.assignment) && a.values.assignment == b.values.assignment+1
+        && s.revision == b.values.assignment && n.revision == a.values.assignment && n.operationId == a.operationId
+        && s.assignments.keys().toSet() == b.seatIds.toSet() && n.assignments.keys() == s.assignments.keys()
+        && n.assignments.diff(s.assignments).affectedKeys().size() > 0
+        && proto(p,people) && people.revision == b.values.attendee && n.assignments.values().removeAll(['']).size() <= 500
+        && n.assignments.values().removeAll(['']).toSet().hasOnly(people.attendeeIds)
+        && n.assignments.values().removeAll(['']).size() == n.assignments.values().removeAll(['']).toSet().size()
+        && proto(p,t) && t.revision == b.values.ticket && t.seatIds.size() == 0;
+    }
+    function versionUpdate(p,b,a) {
+      let e = nextEvent(p,a.operationId);
+      return manager(p) && (e.kind == 'publishSection' ? publication(p,b,a,e) : e.kind == 'assignmentProbe' && assignmentProbe(p,b,a,e));
+    }
+    function assignmentUpdate(p,b,a) {
+      let v = beforeVersion(p);
+      let n = afterVersion(p);
+      let e = nextEvent(p,a.publicationOperationId != b.publicationOperationId ? a.publicationOperationId : a.operationId);
+      return assignmentShape(p,a) && a.keys() == b.keys() && n.values.commit == v.values.commit+1
+        && a.revision == n.values.assignment
+        && (e.kind == 'publishSection' ? a.publicationOperationId == n.operationId && a.publicationOperationId != b.publicationOperationId
+          && a.diff(b).affectedKeys().hasOnly(['revision','operationId','publicationOperationId','assignments']) && publicationChild(p,v,n,e,b,a)
+          : e.kind == 'assignmentProbe' && a.operationId == n.operationId && a.operationId != b.operationId && a.revision == b.revision+1
+            && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments']));
+    }
+    function publicationChild(p,v,n,e,b,a) {
+      let m = candidate(p,e.generation);
+      let old = previous(p,m);
+      let t = protectedSeats(p);
+      return publicationAssignment(p,v,n,e,m,old,{'before':b,'after':a,'tickets':t});
+    }
+    function eventCreate(p,id,e) {
+      let b = beforeVersion(p);
+      let a = afterVersion(p);
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      return proto(p,e) && uuid(id) && e.operationId == id && e.deviceUid == request.auth.uid && e.humanUid == s.humanUid
+        && e.occurredAt == request.time && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','sectionId','generation','baseGeneration','removed','added','changed','occurredAt'])
+        && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','sectionId','generation','baseGeneration','removed','added','changed','occurredAt'])
+        && e.kind in ['publishSection','assignmentProbe'] && e.removed is map && e.added is map && e.changed is map
+        && e.expectedVersions == b.values && e.resultVersions == a.values && a.operationId == id && a.values.commit == b.values.commit+1
+        && (e.kind == 'publishSection' ? publicationProof(p,b,a,e) : true);
+    }
+    function publicationProof(p,b,a,e) {
+      let m = candidate(p,e.generation);
+      let old = previous(p,m);
+      return readyCandidate(p,e,m,old,b,a)
+        && a.seatIds.size() == a.seatIds.toSet().size() && a.usedIds.size() == a.usedIds.toSet().size() && a.usedGenerations.size() == a.usedGenerations.toSet().size();
+    }
+
+    // 新規区画の検査済み台帳から完成候補を発行する。既存区画の差替えは許可しない。
+    function newSectionCandidate(p,g,m) {
+      let h = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(m.sectionId)/generations/$(g)/head/current).data;
+      let ids = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(m.sectionId)/generations/$(g)/idRegistry/current).data;
+      let selected = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(m.sectionId)/selection/current).data;
+      let b = beforeVersion(p);
+      let c = control(p);
+      return proto(p,m) && preparation(p,c) && h.controlRevision == c.revision
+        && m.keys().hasAll(['schemaVersion','environmentId','performanceId','sectionId','generation','baseGeneration','ready','seatIds','entityIds','changedSeatIds'])
+        && m.keys().hasOnly(['schemaVersion','environmentId','performanceId','sectionId','generation','baseGeneration','ready','seatIds','entityIds','changedSeatIds'])
+        && uuid(g) && h.initializationId == g && h.sectionId == m.sectionId && h.status == 'countReady'
+        && h.revision == 1 && h.sourceRevision == 1 && h.basePublishedGeneration == ''
+        && selected.publishedGeneration == g && selected.activeGeneration == ''
+        && ids.initializationId == g && ids.cursor == h.rows * h.columns && ids.lineCursor == (h.axis == 'horizontal' ? h.rows : h.columns)
+        && m.generation == g && m.baseGeneration == '' && m.ready == true && m.changedSeatIds == []
+        && m.seatIds is list && m.seatIds.size() == m.seatIds.toSet().size() && m.seatIds.toSet() == ids.seatIds.keys().toSet()
+        && m.entityIds is list && m.entityIds.size() == m.entityIds.toSet().size() && m.entityIds.toSet() == ids.usedIds.keys().toSet()
+        && !b.sections.keys().hasAny([m.sectionId]);
+    }
+
+    function replacementCandidate(p,g,m) {
+      let h = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(m.sectionId)/generations/$(g)/head/current).data;
+      let ids = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(m.sectionId)/generations/$(g)/idRegistry/current).data;
+      let selected = getAfter(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(m.sectionId)/selection/current).data;
+      let proof = get(/databases/$(database)/documents/preparedSeatShows/$(p)/sections/$(m.sectionId)/generations/$(g)/replacementProof/current).data;
+      let b = beforeVersion(p);
+      let c = control(p);
+      return proto(p,m) && preparation(p,c) && h.controlRevision == c.revision && proof.controlRevision == c.revision
+        && m.keys().hasAll(['schemaVersion','environmentId','performanceId','sectionId','generation','baseGeneration','ready','seatIds','entityIds','changedSeatIds'])
+        && m.keys().hasOnly(['schemaVersion','environmentId','performanceId','sectionId','generation','baseGeneration','ready','seatIds','entityIds','changedSeatIds'])
+        && uuid(g) && h.initializationId == g && h.sectionId == m.sectionId && h.status == 'building'
+        && h.revision == 0 && h.sourceRevision == 0 && h.basePublishedGeneration == m.baseGeneration
+        && h.cursor == h.rows * h.columns && proof.cursor == h.cursor && proof.rows == h.rows && proof.columns == h.columns
+        && proof.generation == g && proof.baseGeneration == m.baseGeneration && proof.sectionId == m.sectionId
+        && selected.publishedGeneration == g && selected.activeGeneration == '' && selected.operationId == g
+        && ids.initializationId == g && ids.cursor == h.cursor && ids.lineCursor == (h.axis == 'horizontal' ? h.rows : h.columns)
+        && m.generation == g && m.ready == true && m.baseGeneration == b.sections[m.sectionId] && m.baseGeneration != ''
+        && m.changedSeatIds is list && m.changedSeatIds.size() == m.changedSeatIds.toSet().size() && m.changedSeatIds.toSet() == proof.changedSeatIds.toSet()
+        && m.seatIds is list && m.seatIds.size() == m.seatIds.toSet().size() && m.seatIds.toSet() == ids.seatIds.keys().toSet()
+        && m.entityIds is list && m.entityIds.size() == m.entityIds.toSet().size() && m.entityIds.toSet() == ids.usedIds.keys().toSet();
+    }
+
+    match /publicationShows/{p} {
+      match /sessions/{uid} {
+        allow create: if request.auth != null && issueSession(p,uid,request.resource.data) && request.resource.data.revision == 1;
+        allow update: if request.auth != null && revokeSession(p,uid,resource.data,request.resource.data);
+        allow get: if manager(p);
+      }
+      match /versions/current { allow get: if manager(p); allow update: if versionUpdate(p,resource.data,request.resource.data); }
+      match /assignmentState/current { allow get: if manager(p); allow update: if assignmentUpdate(p,resource.data,request.resource.data); }
+      match /operations/{id} { allow get: if manager(p); allow create: if eventCreate(p,id,request.resource.data); }
+      match /candidates/{g} { allow get: if manager(p); allow create: if manager(p) && (request.resource.data.baseGeneration == '' ? newSectionCandidate(p,g,request.resource.data) : replacementCandidate(p,g,request.resource.data)); allow update, delete: if false; }
+      match /{document=**} { allow read,write: if false; }
+    }
+  }
+}
