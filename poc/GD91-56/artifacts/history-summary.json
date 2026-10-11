@@ -1,0 +1,154 @@
+{
+  "executedAt": "2026-10-11T07:30:38.765Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "08f5eddb68b94895650d8f3e5a41e5973ad57523bf151ee5b5664b1971fff306",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "history-emulator.mjs": "0ac6144056efcde671f48c688c2bbb02ae64cff37cb415a9168a4af057f51621",
+    "comparison-support.mjs": "93ca1c0d20b61cdd02b6f5845fefe76802b530a6c8f98ff70cb5d25143ac2048",
+    "global-support.mjs": "df36fdd46d14984d90c2fd30ed7053bb9373cfaf57a698be4020a7087095436b",
+    "support.mjs": "fb8faeaf2bf1bc8f29f67cd23e54f73d6120573daf216630abd3450426f4274c",
+    "transport.mjs": "c1670c9bd7d5c1196dd9bdc39ed3d6ced4554d1e9bb4504dc6bb7d1e6921618e",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "08f5eddb68b94895650d8f3e5a41e5973ad57523bf151ee5b5664b1971fff306",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "history-emulator.mjs": "0ac6144056efcde671f48c688c2bbb02ae64cff37cb415a9168a4af057f51621",
+    "comparison-support.mjs": "93ca1c0d20b61cdd02b6f5845fefe76802b530a6c8f98ff70cb5d25143ac2048",
+    "global-support.mjs": "df36fdd46d14984d90c2fd30ed7053bb9373cfaf57a698be4020a7087095436b",
+    "support.mjs": "fb8faeaf2bf1bc8f29f67cd23e54f73d6120573daf216630abd3450426f4274c",
+    "transport.mjs": "c1670c9bd7d5c1196dd9bdc39ed3d6ced4554d1e9bb4504dc6bb7d1e6921618e",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Ordinary base fact/manifest issuance from trusted published raw fixtures, complete new-seat indexing and old non-seat consumption history. No publication or full business eligibility proof.",
+  "referenceUpperBounds": {
+    "baseFactCreate": 9,
+    "baseManifestStart": 7,
+    "baseManifestStep": 8,
+    "newCellFactCreate": 9,
+    "cellComparisonStart": 6,
+    "cellComparisonStep": 8,
+    "globalIds": 8,
+    "numberScan": 9,
+    "comparisonResult": 10
+  },
+  "reports": [
+    {
+      "id": "H01",
+      "label": "ordinary extraction covers seats and all non-seat cells",
+      "status": "passed",
+      "oldCells": 10,
+      "oldSeats": 2,
+      "baseFactsOwnerInjected": false
+    },
+    {
+      "id": "H02",
+      "label": "manual additions from gap space aisle and unset preserve history",
+      "status": "passed",
+      "convertedKinds": 4,
+      "gapConsumptionRetained": true
+    },
+    {
+      "id": "H03",
+      "label": "old fact content slot binding and path cannot be forged",
+      "status": "passed"
+    },
+    {
+      "id": "H04",
+      "label": "old fact needs published matching raw sources",
+      "status": "passed",
+      "corruptPublishedSourceFixture": true
+    },
+    {
+      "id": "H05",
+      "label": "manifest cannot begin precompleted or with invented dimensions",
+      "status": "passed"
+    },
+    {
+      "id": "H06",
+      "label": "manifest must visit every old cell and derive seat mapping",
+      "status": "passed"
+    },
+    {
+      "id": "H07",
+      "label": "missing fact and partial manifest cannot become comparison bases",
+      "status": "passed"
+    },
+    {
+      "id": "H08",
+      "label": "new cell facts need completed local proof and exact contents",
+      "status": "passed"
+    },
+    {
+      "id": "H09",
+      "label": "all new seats require exact source indexes before global proof",
+      "status": "passed",
+      "missingSecondSeatIndexRejected": true
+    },
+    {
+      "id": "H10",
+      "label": "missing former non-seat cell source blocks comparison",
+      "status": "passed"
+    },
+    {
+      "id": "H11",
+      "label": "lost changed and invented consumed numbers are rejected",
+      "status": "passed",
+      "directFragmentMutation": true,
+      "wholeNumberScanBypassedToIsolateHistoryCheck": true
+    },
+    {
+      "id": "H12",
+      "label": "former non-seat cannot silently become automatic numbered seat",
+      "status": "passed",
+      "directFragmentMutation": true,
+      "wholeNumberScanBypassedToIsolateHistoryCheck": true
+    },
+    {
+      "id": "H13",
+      "label": "cell comparison cannot skip reorder reset or cross generation",
+      "status": "passed"
+    },
+    {
+      "id": "H14",
+      "label": "result requires complete old cell scan even when seats complete",
+      "status": "passed"
+    },
+    {
+      "id": "H15",
+      "label": "latest authority and base revocation stop history operations",
+      "status": "passed",
+      "revocationAfterSourcePreparation": true
+    },
+    {
+      "id": "H16",
+      "label": "concurrent manifest and cell scans advance once and resume",
+      "status": "passed",
+      "transportFaultInjected": false
+    },
+    {
+      "id": "H17",
+      "label": "source indexes and complete manifest cannot be overwritten",
+      "status": "passed"
+    },
+    {
+      "id": "H18",
+      "label": "mixed cells complete with ordinary sources and retained gap",
+      "status": "passed",
+      "oldCells": 10,
+      "newSeats": 2,
+      "newNonSeatFacts": 8,
+      "baseFactWrites": 10,
+      "baseManifestWrites": 11,
+      "cellComparisonWrites": 11
+    }
+  ]
+}
