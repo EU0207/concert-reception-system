@@ -1,0 +1,64 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "6f39f8512e606296a3f3e714194f43a685b5413c9157f19a89740acbf4e6c2cf",
+    "../roster.rules": "ae82a7f676c657c4b43021863103e1ee856fef681c12bde577bf957cfa34493e",
+    "../projection.mjs": "33181fd6fc2e746288186f6878abde8fcba4b918962b67a160f27b4d8eda92fb",
+    "../firebase.json": "71bd3e850735663e09f89ad886162a7f7165b4bafd271a47a1012feae1b5b2c2",
+    "../node_modules/.cache/firestore.rules": "523422ed974440a65b08b1cf2fbac807cf7ee723a3de8e86656a8e92d7644d23",
+    "support.mjs": "70437d7c3b918c8a00fa3fff4acf5d5d23fbee5b1d7b89cad9037c8ff61f0860",
+    "structure.mjs": "70da48e253c8ff12c51d6486d7ac8b63e873a6961bae0f83fa69a539d76fd72d",
+    "initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "budgets.mjs": "975e823e6261941edb65266ffd3fcc859b1d2794c4374c50a039989dc4b2b956",
+    "emulator.mjs": "2e9f94fba42cf66784b9bbaccda3a12f3113448446037aed2e0b7b4172a2184e",
+    "regression.mjs": "dad9f4d1472e756d6186f10049146e964dad8a08e04c28260e390bcd75b42b69",
+    "../../GD91-66/allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d",
+    "../../GD91-65/tests/support.mjs": "4a83699c72bae3ff6dcdde563b6e8431ac2f91e68943c3f28e45c6a99f49324f",
+    "../../GD91-64/tests/support.mjs": "8550e70d49d158c3c4e4e86027d24c3ec779e4dfb46737582c19be6608b2d988",
+    "../../GD91-62/tests/support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "6f39f8512e606296a3f3e714194f43a685b5413c9157f19a89740acbf4e6c2cf",
+    "../roster.rules": "ae82a7f676c657c4b43021863103e1ee856fef681c12bde577bf957cfa34493e",
+    "../projection.mjs": "33181fd6fc2e746288186f6878abde8fcba4b918962b67a160f27b4d8eda92fb",
+    "../firebase.json": "71bd3e850735663e09f89ad886162a7f7165b4bafd271a47a1012feae1b5b2c2",
+    "../node_modules/.cache/firestore.rules": "523422ed974440a65b08b1cf2fbac807cf7ee723a3de8e86656a8e92d7644d23",
+    "support.mjs": "70437d7c3b918c8a00fa3fff4acf5d5d23fbee5b1d7b89cad9037c8ff61f0860",
+    "structure.mjs": "70da48e253c8ff12c51d6486d7ac8b63e873a6961bae0f83fa69a539d76fd72d",
+    "initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "budgets.mjs": "975e823e6261941edb65266ffd3fcc859b1d2794c4374c50a039989dc4b2b956",
+    "emulator.mjs": "2e9f94fba42cf66784b9bbaccda3a12f3113448446037aed2e0b7b4172a2184e",
+    "regression.mjs": "dad9f4d1472e756d6186f10049146e964dad8a08e04c28260e390bcd75b42b69",
+    "../../GD91-66/allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d",
+    "../../GD91-65/tests/support.mjs": "4a83699c72bae3ff6dcdde563b6e8431ac2f91e68943c3f28e45c6a99f49324f",
+    "../../GD91-64/tests/support.mjs": "8550e70d49d158c3c4e4e86027d24c3ec779e4dfb46737582c19be6608b2d988",
+    "../../GD91-62/tests/support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0"
+  },
+  "reports": [
+    {
+      "id": "R01",
+      "label": "ordinary initialization and registration create complete roster metadata",
+      "status": "passed",
+      "normalWritesPerRegistration": 5,
+      "rosterSeeded": false
+    },
+    {
+      "id": "R02",
+      "label": "initialization rejects nonempty or absent roster metadata",
+      "status": "passed",
+      "forgeriesDenied": 2
+    },
+    {
+      "id": "R03",
+      "label": "all proper registration subsets leave no orphan profile metadata label or event",
+      "status": "passed",
+      "properSubsetsDenied": 30
+    },
+    {
+      "id": "R04",
+      "label": "forged fields extra member removal and profile projection mismatch rejected",
+      "status": "passed",
+      "forgeriesDenied": 9
+    }
+  ],
+  "error": "AssertionError [ERR_ASSERTION]: {\"status\":200,\"body\":{\"writeResults\":[{\"updateTime\":\"2026-10-11T17:50:35.338312Z\"},{\"updateTime\":\"2026-10-11T17:50:35.338312Z\"},{\"updateTime\":\"2026-10-11T17:50:35.338312Z\"},{\"updateTime\":\"2026-10-11T17:50:35.338312Z\",\"transformResults\":[{\"timestampValue\":\"2026-10-11T17:50:35.329Z\"}]}],\"commitTime\":\"2026-10-11T17:50:35.338312Z\"}}\n    at reject (file:///C:/dev/concert-reception-system/poc/GD91-62/tests/support.mjs:56:137)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-67/tests/emulator.mjs:21:290\n    at async run (file:///C:/dev/concert-reception-system/poc/GD91-67/tests/emulator.mjs:9:137)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-67/tests/emulator.mjs:21:2"
+}
