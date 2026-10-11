@@ -1,0 +1,197 @@
+{
+  "executedAt": "2026-10-11T05:33:02.144Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "33408166c607395c40ac746466524238a89a5803bd6e2a38be75a990b8787c05",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "local-regression.mjs": "ca49b4d7855229edcac2d0d734b20b5f02a6d6b1cea5d402ef2d05ef0150f9b1",
+    "support.mjs": "f81f7903781897afbbe15599519664d6f16ba455f2ceeb99df8a55e70bf140c2",
+    "transport.mjs": "78f65c71b6ab206b5898d788e53d64c35ac50013a8b63702f76a60d66112aeb2",
+    "../../GD91-51/firestore.rules": "4507dc90053cdb03a3054c026b7ee3233926961aa409cb1b0f22658b1b343171",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "33408166c607395c40ac746466524238a89a5803bd6e2a38be75a990b8787c05",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "local-regression.mjs": "ca49b4d7855229edcac2d0d734b20b5f02a6d6b1cea5d402ef2d05ef0150f9b1",
+    "support.mjs": "f81f7903781897afbbe15599519664d6f16ba455f2ceeb99df8a55e70bf140c2",
+    "transport.mjs": "78f65c71b6ab206b5898d788e53d64c35ac50013a8b63702f76a60d66112aeb2",
+    "../../GD91-51/firestore.rules": "4507dc90053cdb03a3054c026b7ee3233926961aa409cb1b0f22658b1b343171",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Isolated preparing-phase four-step grouped local fragment proof. Parent/catalog/old source and identity session are fixtures. No global uniqueness, numbering cursor proof, complete candidate/publication, full business regression, adoption, SDK or actual-device proof.",
+  "referenceUpperBounds": {
+    "stagingChunk": 6,
+    "stagingAttributes": 2,
+    "stagingBatchSumWithoutCacheDiscount": 8,
+    "proofStep": 9,
+    "progressRead": 5
+  },
+  "reports": [
+    {
+      "id": "P01",
+      "label": "all automatic fragments and final partial fragment finish four grouped steps",
+      "status": "passed",
+      "fragments": 3
+    },
+    {
+      "id": "P02",
+      "label": "manual from all four former non-seat types completes",
+      "status": "passed",
+      "sourceKinds": [
+        "gap",
+        "space",
+        "aisle",
+        "unset"
+      ]
+    },
+    {
+      "id": "P03",
+      "label": "four axes and orders complete",
+      "status": "passed",
+      "directions": 4
+    },
+    {
+      "id": "P04",
+      "label": "500 mixed seats finish all fragment proofs with measured writes",
+      "status": "passed",
+      "seats": 500,
+      "fragments": 250,
+      "stagingRequests": 250,
+      "stagingWrites": 500,
+      "proofRequests": 1000,
+      "proofWrites": 1000,
+      "totalRequests": 1250,
+      "totalWrites": 1500,
+      "fixtureWritesExcluded": true,
+      "fullPublicationCostMeasured": false
+    },
+    {
+      "id": "P05",
+      "label": "geometry rejects changed ID and coordinate",
+      "status": "passed"
+    },
+    {
+      "id": "P06",
+      "label": "consumed gap cannot disappear or change",
+      "status": "passed"
+    },
+    {
+      "id": "P07",
+      "label": "new manual seat cannot invent consumption",
+      "status": "passed"
+    },
+    {
+      "id": "P08",
+      "label": "mixed numbering fields and blank number rejected",
+      "status": "passed"
+    },
+    {
+      "id": "P09",
+      "label": "retained automatic number cannot change",
+      "status": "passed"
+    },
+    {
+      "id": "P10",
+      "label": "non-seat numbering rejected",
+      "status": "passed"
+    },
+    {
+      "id": "P11",
+      "label": "missing and invalid attributes rejected",
+      "status": "passed"
+    },
+    {
+      "id": "P12",
+      "label": "empty reason and invalid emergency kind rejected",
+      "status": "passed"
+    },
+    {
+      "id": "P13",
+      "label": "trimmed display duplicate rejected in final step",
+      "status": "passed"
+    },
+    {
+      "id": "P14",
+      "label": "duplicate seat IDs rejected in final step",
+      "status": "passed"
+    },
+    {
+      "id": "P15",
+      "label": "proof cannot start completed or skip a step",
+      "status": "passed"
+    },
+    {
+      "id": "P16",
+      "label": "proof binding cannot be changed",
+      "status": "passed"
+    },
+    {
+      "id": "P17",
+      "label": "proof before data or from another fragment rejected",
+      "status": "passed"
+    },
+    {
+      "id": "P18",
+      "label": "staged data and final proofs immutable to overwrite or deletion",
+      "status": "passed"
+    },
+    {
+      "id": "P19",
+      "label": "duplicate advance does not advance twice",
+      "status": "passed"
+    },
+    {
+      "id": "P20",
+      "label": "control revision and published base rechecked between steps",
+      "status": "passed"
+    },
+    {
+      "id": "P21",
+      "label": "revoked device and stale role preparation rejected between steps",
+      "status": "passed"
+    },
+    {
+      "id": "P22",
+      "label": "anonymous without device and unauthenticated proof rejected",
+      "status": "passed"
+    },
+    {
+      "id": "P23",
+      "label": "partial staging and client completion forging rejected",
+      "status": "passed"
+    },
+    {
+      "id": "P24",
+      "label": "unknown cell field rejected and literal manual label preserved",
+      "status": "passed"
+    },
+    {
+      "id": "P25",
+      "label": "ordinary client queries progress and resumes; revoked and foreign device cannot read",
+      "status": "passed"
+    },
+    {
+      "id": "P26",
+      "label": "both cells with complete optional seat attributes pass grouped validation",
+      "status": "passed"
+    },
+    {
+      "id": "P27",
+      "label": "non-seat attributes are rejected in their cell group",
+      "status": "passed"
+    },
+    {
+      "id": "P28",
+      "label": "latest role and session revoked before final proof prevents completion",
+      "status": "passed"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-11T05:30:48.530Z",
+  "suiteCompleted": false,
+  "hashesRecordedAfterFailure": true,
+  "passedBeforeFailure": 19,
+  "failureCase": "G20",
+  "actualStatus": 409,
+  "incorrectExpectedStatus": 403,
+  "cause": "Create-only precondition on existing immutable result returns ALREADY_EXISTS. Query result still succeeded. Test expectation corrected; no Rules relaxation.",
+  "sourceHashes": {
+    "../firestore.rules": "33408166c607395c40ac746466524238a89a5803bd6e2a38be75a990b8787c05",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "global-emulator.mjs": "0871e1d644493a69fa84653f75e0e426725b5e74aa4fde16793d7377e45f4b2c",
+    "global-support.mjs": "3723c69b00596c09f0987c4fca3d01e18ee80846de598a996cad75c4ef3e0917",
+    "support.mjs": "f81f7903781897afbbe15599519664d6f16ba455f2ceeb99df8a55e70bf140c2",
+    "transport.mjs": "78f65c71b6ab206b5898d788e53d64c35ac50013a8b63702f76a60d66112aeb2",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "changedLines": [
+    {
+      "before": "await run('G20','lost acknowledgment is resolved by reading immutable result',async()=>{const f=await fixture();const{state}=await complete(f),expected=finish(f,state);assert.deepEqual(await stored(f,'structureProof/current',f.manager.token),expected);denied(await put(f,'structureProof/current',expected,false));assert.deepEqual(await stored(f,'structureProof/current',f.manager.token),expected);return{responseDiscardedAndReadBack:true,networkFaultInjected:false};});",
+      "after": "await run('G20','lost acknowledgment is resolved by reading immutable result',async()=>{const f=await fixture();const{state}=await complete(f),expected=finish(f,state);assert.deepEqual(await stored(f,'structureProof/current',f.manager.token),expected);assert.equal((await put(f,'structureProof/current',expected,false)).status,409);assert.deepEqual(await stored(f,'structureProof/current',f.manager.token),expected);return{responseDiscardedAndReadBack:true,networkFaultInjected:false,replayStatus:409};});"
+    },
+    {
+      "before": "await run('G25','client cannot issue parents or publication completion',async()=>{const f=await fixture();await complete(f);for(const path of ['head/current','lineCatalog/current','candidates/current','complete/current'])denied(await put(f,path,{...binding(f)},false));});",
+      "after": "await run('G25','client cannot issue parents or publication completion',async()=>{const f=await fixture();await complete(f);for(const path of ['head/current','lineCatalog/current'])denied(await put(f,path,{...binding(f)},true));for(const path of ['candidates/current','complete/current'])denied(await put(f,path,{...binding(f)},false));});"
+    }
+  ]
+}
