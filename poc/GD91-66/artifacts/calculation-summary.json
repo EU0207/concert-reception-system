@@ -1,0 +1,157 @@
+{
+  "started": "2026-10-11T17:30:06.330Z",
+  "finished": "2026-10-11T17:30:06.411Z",
+  "node": "v24.19.0",
+  "scope": "pure calculation; no Firebase/SDK/browser",
+  "sourceHashesBefore": {
+    "allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d",
+    "tests.mjs": "6091fcdf920b05e32d9312efcd9e1c08e3c33bc6edbcf2deb2e42e7f949f45e5"
+  },
+  "sourceHashesAfter": {
+    "allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d",
+    "tests.mjs": "6091fcdf920b05e32d9312efcd9e1c08e3c33bc6edbcf2deb2e42e7f949f45e5"
+  },
+  "total": 27,
+  "passed": 27,
+  "results": [
+    {
+      "id": "RES-005-T01",
+      "subject": "10人を12席の先頭へ配置",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T02",
+      "subject": "11人は一部も配置しない",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T03",
+      "subject": "3人組→2人組→個人の順",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T04",
+      "subject": "空席総数が足りても連続不足は未配置",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T05",
+      "subject": "特別席・確保席・使用不可を除外",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T06",
+      "subject": "列・区画をまたいで配置しない",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T07",
+      "subject": "個人客の名簿順",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T08",
+      "subject": "生成済みランダム順を使用・記録",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T09",
+      "subject": "理由付き手動分割で全員固定",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T10",
+      "subject": "解除後はBの4連続席へ再配置し旧席解放",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T11",
+      "subject": "取消しで元の固定・理由へ復元し版は進める",
+      "passed": true
+    },
+    {
+      "id": "RES-005-T12",
+      "subject": "一人でも発行履歴／有効QRがあれば3操作拒否",
+      "passed": true
+    },
+    {
+      "id": "E01",
+      "subject": "同人数は最初の名簿位置・候補は区画と列表示順",
+      "passed": true
+    },
+    {
+      "id": "E02",
+      "subject": "縦横・逆順と自由席番号でもセル位置で連続判定",
+      "passed": true
+    },
+    {
+      "id": "E03",
+      "subject": "不参加・発券済み・一部既配置グループを組み替えない",
+      "passed": true
+    },
+    {
+      "id": "E04",
+      "subject": "大グループ配置不能でも別単位の配置案を保持",
+      "passed": true
+    },
+    {
+      "id": "E05",
+      "subject": "理由・全員分の席数・重複・他客の席を検査",
+      "passed": true
+    },
+    {
+      "id": "E06",
+      "subject": "再配置不能時に元の席を解放しない",
+      "passed": true
+    },
+    {
+      "id": "E07",
+      "subject": "不完全名簿・重複・未知参照・不参加割当を拒否",
+      "passed": true
+    },
+    {
+      "id": "E08",
+      "subject": "全期待版と公演・環境を照合",
+      "passed": true
+    },
+    {
+      "id": "E09",
+      "subject": "ランダム順の重複・不足・別人を拒否し再計算で維持",
+      "passed": true
+    },
+    {
+      "id": "E10",
+      "subject": "古い解除履歴・別公演・直前以外の取消しを拒否",
+      "passed": true
+    },
+    {
+      "id": "E11",
+      "subject": "入金・表示名・券参照を変更せず一般不可席を使用しない",
+      "passed": true
+    },
+    {
+      "id": "E12",
+      "subject": "手動分割は特別席も可・自動配置では選ばない",
+      "passed": true
+    },
+    {
+      "id": "E13",
+      "subject": "500人・複数区画で名簿順と逆順の計算を再現",
+      "passed": true,
+      "attendees": 500,
+      "seats": 500,
+      "sections": 2,
+      "databaseWrites": "not connected"
+    },
+    {
+      "id": "E14",
+      "subject": "500人中の50グループと個人を混在配置",
+      "passed": true
+    },
+    {
+      "id": "E15",
+      "subject": "取消しの差分へ他客・他グループを混入させない",
+      "passed": true
+    }
+  ]
+}
