@@ -1,0 +1,150 @@
+{
+  "filter": null,
+  "sourceHashes": {
+    "../../GD91-69/generate.mjs": "04d7ee676d848ef1aeb5eb03aa9d2bf36e39dfa822cb20e5fe1ae9fc2432d847",
+    "../../GD91-69/geometry.rules": "47ec5345787c219bfd6e8a6101bcda0064ab12f06d1ec46dd0e986f4fdee8c40",
+    "../../GD91-69/tests/support.mjs": "14e720f6e66dc434a48ee6933829b55a860dcd9e65b8852aad94367b6dc0c183",
+    "../../GD91-69/tests/data.mjs": "d22bf575a51cffee937955a62b32a46fea11f0fa48b10646e1344fbfea71705d",
+    "../../GD91-69/tests/structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "../../GD91-69/tests/budgets.mjs": "f010becac441693fd790324592dc56b75671443867f2b1d59461b128e4a7abcc",
+    "../../GD91-69/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-69/tests/regression.mjs": "708b42d6d94d9cecea07396d8598d520638b8a0637a29cce52cde2ca7c76080c",
+    "../../GD91-69/node_modules/.cache/firestore.rules": "e9dd8a3fd5e41169a31d05662719bac9acaed872366be279c344390599ce1261",
+    "../../GD91-69/node_modules/.cache/bulk-support.mjs": "0d927510afc54e83aa07636afde30849b41144d6d8734316ecf359422960c71d",
+    "../generate.mjs": "019ae9b82a200b779dee733f78f4e7b13ddaf14bf5775234b362e8dd0b56f9a4",
+    "../bulk.rules": "390e26a8cca45e7a27ebb5759602277f64651ebd47b4477432c31cb509612b51",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "36248dae7717a1b60918485dc3fb0128b854610cfcc45e391203353ec55b8472",
+    "support.mjs": "af8785bfd0d7f912e0e7ee7ceee703772a248ec968dc9486979e80414df2d783",
+    "emulator.mjs": "01567dcd83ec239065a0f5ddf115b5d3f834d53bba6534204e4273ad67981016"
+  },
+  "endSourceHashes": {
+    "../../GD91-69/generate.mjs": "04d7ee676d848ef1aeb5eb03aa9d2bf36e39dfa822cb20e5fe1ae9fc2432d847",
+    "../../GD91-69/geometry.rules": "47ec5345787c219bfd6e8a6101bcda0064ab12f06d1ec46dd0e986f4fdee8c40",
+    "../../GD91-69/tests/support.mjs": "14e720f6e66dc434a48ee6933829b55a860dcd9e65b8852aad94367b6dc0c183",
+    "../../GD91-69/tests/data.mjs": "d22bf575a51cffee937955a62b32a46fea11f0fa48b10646e1344fbfea71705d",
+    "../../GD91-69/tests/structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "../../GD91-69/tests/budgets.mjs": "f010becac441693fd790324592dc56b75671443867f2b1d59461b128e4a7abcc",
+    "../../GD91-69/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-69/tests/regression.mjs": "708b42d6d94d9cecea07396d8598d520638b8a0637a29cce52cde2ca7c76080c",
+    "../../GD91-69/node_modules/.cache/firestore.rules": "e9dd8a3fd5e41169a31d05662719bac9acaed872366be279c344390599ce1261",
+    "../../GD91-69/node_modules/.cache/bulk-support.mjs": "0d927510afc54e83aa07636afde30849b41144d6d8734316ecf359422960c71d",
+    "../generate.mjs": "019ae9b82a200b779dee733f78f4e7b13ddaf14bf5775234b362e8dd0b56f9a4",
+    "../bulk.rules": "390e26a8cca45e7a27ebb5759602277f64651ebd47b4477432c31cb509612b51",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "36248dae7717a1b60918485dc3fb0128b854610cfcc45e391203353ec55b8472",
+    "support.mjs": "af8785bfd0d7f912e0e7ee7ceee703772a248ec968dc9486979e80414df2d783",
+    "emulator.mjs": "01567dcd83ec239065a0f5ddf115b5d3f834d53bba6534204e4273ad67981016"
+  },
+  "reports": [
+    {
+      "id": "G01",
+      "status": "passed",
+      "assigned": 3
+    },
+    {
+      "id": "G02",
+      "status": "passed",
+      "operations": 4
+    },
+    {
+      "id": "G03",
+      "status": "passed",
+      "derivedMembership": true,
+      "forgedAppendDenied": true
+    },
+    {
+      "id": "G04",
+      "status": "passed",
+      "properSubsetsDenied": 6,
+      "preparationNotPublished": true
+    },
+    {
+      "id": "G05",
+      "status": "passed",
+      "headerForgeriesDenied": 6
+    },
+    {
+      "id": "G06",
+      "status": "passed",
+      "forgedCompletionDenied": 3
+    },
+    {
+      "id": "G07",
+      "status": "passed",
+      "nonconsecutiveGroupDenied": true
+    },
+    {
+      "id": "G08",
+      "status": "passed",
+      "partialGroupDenied": true
+    },
+    {
+      "id": "G09",
+      "status": "passed",
+      "currentTicketProtectionVariants": 2
+    },
+    {
+      "id": "G10",
+      "status": "passed",
+      "fixedGroupRetained": true
+    },
+    {
+      "id": "G11",
+      "status": "passed",
+      "cancelledMemberNotSilentlyRemoved": true
+    },
+    {
+      "id": "G12",
+      "status": "passed",
+      "sameIdResultQuery": true,
+      "physicalResponseLossInjected": false
+    },
+    {
+      "id": "G13",
+      "status": "passed",
+      "distinctStaff": true,
+      "statuses": [
+        200,
+        403
+      ],
+      "atMostOneCommit": true
+    },
+    {
+      "id": "G14",
+      "status": "passed",
+      "latestRevocationEnforced": true,
+      "revocationFixture": true
+    },
+    {
+      "id": "G15",
+      "status": "passed",
+      "crossAuthorConfirmationDenied": true
+    },
+    {
+      "id": "G16",
+      "status": "passed",
+      "manualOperationCannotForgeGroupState": true
+    },
+    {
+      "id": "G17",
+      "status": "passed",
+      "blankSplitReasonDenied": true
+    },
+    {
+      "id": "G18",
+      "status": "passed",
+      "unusableSeatDenied": true
+    },
+    {
+      "id": "G19",
+      "status": "passed",
+      "rosterChangeInvalidatesProof": true
+    },
+    {
+      "id": "G20",
+      "status": "passed",
+      "undoMustUseConfirmedOriginalReason": true
+    }
+  ]
+}
