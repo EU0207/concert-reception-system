@@ -8,7 +8,7 @@
 - 編集案は画面内で計算する。下書きは端末保存、共有と確定は別操作（承認済みCONF-074）。交換は両者を一体で確定する。
 - 発券後は移動・交換のみ。通常の席替えはQRを維持し、未設定化は不参加処理で旧QRを無効化する（承認済みCONF-070）。
 
-**未決定：** GD91-01～61は個別範囲でレビュー承認済み。V1 #165はPR #175で承認・統合し完了。GD91-60によるV2 #166の第1条件はPR #176でレビュー承認済み。GD91-61のSDK限定14件はPR #177でレビュー承認済み。[合同検証の残条件](../technical-validation/seat-business-integration-validation.md#今回の判定とissueの残条件)と、[GD91-53の分担](../technical-validation/seat-save-validation.md#gd91-53-保存方式検証の完了計画)に沿って業務回帰・保持回収を確認し、採否を判断する。本番未着手。
+**未決定：** GD91-01～61は個別範囲でレビュー承認済み。V1 #165はPR #175で承認・統合し完了。V2 #166の第1条件とSDK限定結果はPR #176・177で承認済み。GD91-62は通常登録・入金と未発券の手動席設定20件が合格しレビュー待ち。[合同検証の残条件](../technical-validation/seat-business-integration-validation.md#今回の判定とissueの残条件)と、[GD91-53の分担](../technical-validation/seat-save-validation.md#gd91-53-保存方式検証の完了計画)に沿って業務回帰・保持回収を確認し、採否を判断する。本番未着手。
 
 **業務回答：** [CONF-071](#conf-071-業務回答と変更設計)で2点を承認済み。交換理由は初回本番受付開始前は不要、開始後は停止中も必須。番号・位置の個別編集は理由付きでお客様未割当席だけに許可する。行列拡張と舞台左／上の技術設計は引き続きIn Review。
 
@@ -459,6 +459,8 @@ DD-91-T01完了まで、本番保存の物理スキーマとRulesは未確定で
 [GD91-35の順序](../technical-validation/seat-save-validation.md#gd91-35-正式認可との差分と合同検証順)の段階Bを継続する。GD91-58までの個別結果・計画は承認済み。過去の件数と比較は[検証索引](../technical-validation/seat-save-validation.md#検証索引)へ集約する。
 
 GD91-61の構成公開・開始に限るSDK結果は[合同検証記録](../technical-validation/seat-business-integration-validation.md#sdk保存の判定と制約)へ追跡する。通信停止APIだけに依存せず、明示保存と同一ID照会を分ける。端末永続化・実ブラウザーと全業務回帰は未完了。
+
+GD91-62の[業務接続の流れと判定](../technical-validation/seat-business-integration-validation.md#業務接続の流れと判定)では、通常登録・入金と未発券の手動設定・移動交換を同じ共通版へ接続した。500人の登録を確認したが、500席配置と複数区画、発券済み操作は未完了。主要試験の部分範囲として扱い、本番実装の合格に拡張しない。
 
 GD91-59による#165の4条件はPR #175で承認・統合済み。GD91-60は本人認可・公演状態をV1へ接続し、自動47件を確認した。[第1条件の判定と残作業](../technical-validation/seat-business-integration-validation.md#今回の判定とissueの残条件)を正本とする。初期役割・登録済み端末と業務初期値、配布目録は前提投入。専用編集・業務全体と500人更新は#166、最大容量・費用と回収は#167、採否は#168に残す。
 
