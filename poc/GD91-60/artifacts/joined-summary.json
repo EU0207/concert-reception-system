@@ -1,0 +1,168 @@
+{
+  "executedAt": "2026-10-11T11:21:35.599Z",
+  "scope": "V1 construction plus A/B formal identity, state version coupling and exact imported 500-seat handoff. Business routes C not executed; no SDK, IndexedDB or real-device claim.",
+  "reports": [
+    {
+      "id": "J01",
+      "label": "normal human session issues and publishes the complete V1 candidate",
+      "status": "passed",
+      "normalHumanSession": true,
+      "normalStructureAndCandidateIssued": true,
+      "normalPublication": true,
+      "rootSeededPrerequisites": [
+        "initial roles and registered device",
+        "old layout and business baseline",
+        "construction head and control"
+      ]
+    },
+    {
+      "id": "J02",
+      "label": "normal reception start invalidates an already issued candidate without partial publication",
+      "status": "passed",
+      "oldCandidateRejectedAfterStart": true,
+      "oldCandidateRejectedAfterStop": true,
+      "firstStartPreserved": true
+    },
+    {
+      "id": "J03",
+      "label": "state transition after proof scanning prevents final candidate issuance",
+      "status": "passed",
+      "ordinaryCandidateFinalizationDenied": true,
+      "noCandidateCreated": true
+    },
+    {
+      "id": "J04",
+      "label": "concurrent publication and start apply at most one; transient dual rejection preserves data for explicit retry",
+      "status": "passed",
+      "races": 10,
+      "results": [
+        {
+          "initialStatuses": [
+            403,
+            409
+          ],
+          "initialSuccesses": 0,
+          "explicitRetry": true,
+          "retriedSameOperationId": "eb420760-821c-4dd7-8250-b376971cb355",
+          "winner": "publication"
+        },
+        {
+          "initialStatuses": [
+            200,
+            409
+          ],
+          "initialSuccesses": 1,
+          "explicitRetry": false,
+          "winner": "publication"
+        },
+        {
+          "initialStatuses": [
+            403,
+            409
+          ],
+          "initialSuccesses": 0,
+          "explicitRetry": true,
+          "retriedSameOperationId": "c90f806b-2eaf-49f6-8418-e45ae24e565a",
+          "winner": "publication"
+        },
+        {
+          "initialStatuses": [
+            403,
+            409
+          ],
+          "initialSuccesses": 0,
+          "explicitRetry": true,
+          "retriedSameOperationId": "73b05e86-382d-4958-91a6-b2e8fac21e08",
+          "winner": "start"
+        },
+        {
+          "initialStatuses": [
+            200,
+            409
+          ],
+          "initialSuccesses": 1,
+          "explicitRetry": false,
+          "winner": "publication"
+        },
+        {
+          "initialStatuses": [
+            403,
+            409
+          ],
+          "initialSuccesses": 0,
+          "explicitRetry": true,
+          "retriedSameOperationId": "62275c5d-782b-422c-98e2-ddc4f57337d4",
+          "winner": "start"
+        },
+        {
+          "initialStatuses": [
+            200,
+            409
+          ],
+          "initialSuccesses": 1,
+          "explicitRetry": false,
+          "winner": "publication"
+        },
+        {
+          "initialStatuses": [
+            403,
+            409
+          ],
+          "initialSuccesses": 0,
+          "explicitRetry": true,
+          "retriedSameOperationId": "1c0232dc-23ab-4e57-8fe2-827647f4b56e",
+          "winner": "start"
+        },
+        {
+          "initialStatuses": [
+            403,
+            409
+          ],
+          "initialSuccesses": 0,
+          "explicitRetry": true,
+          "retriedSameOperationId": "aaa460e3-5269-4f4e-a746-cb9d5ce5b8ac",
+          "winner": "publication"
+        },
+        {
+          "initialStatuses": [
+            403,
+            409
+          ],
+          "initialSuccesses": 0,
+          "explicitRetry": true,
+          "retriedSameOperationId": "4cb3e792-e46a-4794-9f04-2274aaed91cd",
+          "winner": "start"
+        }
+      ],
+      "maximumInitialSuccesses": 1,
+      "finalSuccessesPerRace": 1,
+      "automaticRetryImplemented": false,
+      "sharedControlLayoutAndReceptionVersion": true,
+      "noPartialLoserState": true
+    },
+    {
+      "id": "J05",
+      "label": "the exact V1 handoff retains all 500 IDs assignments and immutable candidate under normal identity",
+      "status": "passed",
+      "exactHandoffImported": true,
+      "seatCount": 500,
+      "allAssignmentsPreserved": true,
+      "candidateReissuedInThisCase": false,
+      "businessSavesNotYetConnected": true
+    },
+    {
+      "id": "J06",
+      "label": "live role device and session revocation denies all three construction authorization paths",
+      "status": "passed",
+      "constructionCandidateAndPublicationDenials": 12,
+      "normalIdentityShared": true
+    },
+    {
+      "id": "J07",
+      "label": "no proper subset of the four transition writes changes control or common version",
+      "status": "passed",
+      "properSubsetsDenied": 14,
+      "normalTransitionWrites": 4
+    }
+  ]
+}

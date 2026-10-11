@@ -1,0 +1,148 @@
+{
+  "executedAt": "2026-10-11T11:20:52.024Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-58/firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "completion-emulator.mjs": "600e8a5070963fe3f5b4058def4d17c1d5744509d6f854320d53ed3f3efede9d",
+    "response-loss.mjs": "8fe6b5dba3a5b8f5acf3f71cdd14527ed94ade965bcada8403a5268313abce44",
+    "resume-query.mjs": "eec2d78f3f914a55cbe2ef7dd02dfb32ed5083832cf0c611c3a22134eb467964",
+    "publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-58/firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "completion-emulator.mjs": "600e8a5070963fe3f5b4058def4d17c1d5744509d6f854320d53ed3f3efede9d",
+    "response-loss.mjs": "8fe6b5dba3a5b8f5acf3f71cdd14527ed94ade965bcada8403a5268313abce44",
+    "resume-query.mjs": "eec2d78f3f914a55cbe2ef7dd02dfb32ed5083832cf0c611c3a22134eb467964",
+    "publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "V1 completion evidence supplement: changed geometry/axis/manual candidates and publication; genuine local HTTP response loss before/after commit and fresh process result/progress query. V1 validation functions preserved in the expanded GD91-60 Rules; sessions now issued by normal human requests. Dedicated extension/individual/day operation eligibility remains a V2 gate, not proven here. IndexedDB, SDK and real devices not tested.",
+  "reports": [
+    {
+      "id": "F01",
+      "label": "changed rectangular geometry publishes through complete ordinary proofs",
+      "status": "passed",
+      "rows": 3,
+      "columns": 3,
+      "tailFragments": 3,
+      "generalPreparationReplacement": true,
+      "dedicatedExtensionAuthorized": false
+    },
+    {
+      "id": "F02",
+      "label": "new border automatic seat and gap keep old numbering and counters",
+      "status": "passed",
+      "generalPreparationReplacement": true,
+      "dedicatedExtensionAuthorized": false
+    },
+    {
+      "id": "F03",
+      "label": "changed axis and line settings publish only with full old-seat change list",
+      "status": "passed",
+      "changedOldSeats": 6
+    },
+    {
+      "id": "F04",
+      "label": "changed axis cannot bypass assigned or ticket protection",
+      "status": "passed",
+      "protectedVariants": 2
+    },
+    {
+      "id": "F05",
+      "label": "all four non-seat kinds reach candidate and publication with gap history retained",
+      "status": "passed",
+      "convertedKinds": 4,
+      "operationSpecificDayPermissionVerified": false
+    },
+    {
+      "id": "F06",
+      "label": "line prefix change survives publication with all IDs retained",
+      "status": "passed",
+      "changedOldSeats": 5
+    },
+    {
+      "id": "F07",
+      "label": "protected reverse-origin extension is not silently authorized as generic replacement",
+      "status": "passed",
+      "axes": 2,
+      "failClosed": true,
+      "dedicatedOriginNormalizationRequiredByV2": true
+    },
+    {
+      "id": "F08",
+      "label": "lost response after publication commits all state and same ID resolves success",
+      "status": "passed",
+      "clientResponseLost": true,
+      "upstreamCommitted": true,
+      "proxyRequests": 1,
+      "sameOperationReadback": true
+    },
+    {
+      "id": "F09",
+      "label": "disconnect before sending upstream leaves state unchanged and same ID can be retried",
+      "status": "passed",
+      "clientResponseLost": true,
+      "upstreamCommitted": false,
+      "proxyRequests": 1,
+      "retryCommittedOnce": true
+    },
+    {
+      "id": "F10",
+      "label": "fresh client process resolves lost publication response using same operation ID",
+      "status": "passed",
+      "freshNodeProcess": true,
+      "indexedDbTested": false
+    },
+    {
+      "id": "F11",
+      "label": "lost candidate response resolves immutable candidate without duplicate issuance",
+      "status": "passed",
+      "clientResponseLost": true,
+      "upstreamCommitted": true,
+      "proxyRequests": 1,
+      "candidateOperationId": "f9de966a-fb39-4f3f-b221-58bcd6290dd4"
+    },
+    {
+      "id": "F12",
+      "label": "fresh process resumes partial comparison from stored cursor before candidate publication",
+      "status": "passed",
+      "resumedCursor": 1,
+      "oldSeatCount": 5,
+      "localPersistenceNotTested": true
+    },
+    {
+      "id": "F13",
+      "label": "candidate cannot authorize on-day operation through preparation publication route",
+      "status": "passed",
+      "dayPermissionDelegatedToV2": true
+    },
+    {
+      "id": "F14",
+      "label": "dedicated operation tags cannot bypass the published candidate and event contracts",
+      "status": "passed",
+      "clientRouteAssertionRejected": true
+    }
+  ]
+}
