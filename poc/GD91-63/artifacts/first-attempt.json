@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-11",
+  "failures": [
+    {
+      "stage": "Rules generation",
+      "error": "Replacement pattern matched two functions; exact-one assertion stopped generation",
+      "action": "Include the function return prefix in the replacement pattern",
+      "dynamicTestsStarted": false
+    },
+    {
+      "stage": "Test module import",
+      "error": "Old GD91-42 helper asserts demo-concert-seat-gd91-42, while the joined fixture requires demo-concert-seat-gd91-60",
+      "action": "Keep the same cryptographic random generation locally and remove the old helper import with its project assertion",
+      "dynamicTestsStarted": false
+    }
+  ],
+  "authorizationWeakened": false,
+  "sourceHashesCapturedDuringFailedExecution": false
+}
