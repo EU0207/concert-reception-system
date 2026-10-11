@@ -70,7 +70,7 @@
 |---|---|---|---|---|---|---|
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 開発者、設計担当者、テスト担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
 | 座席保存の技術検証記録 | [seat-save-validation.md](development/technical-validation/seat-save-validation.md) | #101の索引とGD91-01～57を追跡する。GD91-56まで個別範囲を承認済み。全体検査・候補発行の結果本文は別記録へ集約。方式未採用、後続の端末保存・実機試験も追跡 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残作業・承認変更時 | In Review |
-| 座席構成の完成検証記録 | [seat-completion-validation.md](development/technical-validation/seat-completion-validation.md) | #165の全体検査・完成候補を追跡。GD91-54～56は限定承認済み、GD91-57はレビュー待ち | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | In Review |
+| 座席構成の完成検証記録 | [seat-completion-validation.md](development/technical-validation/seat-completion-validation.md) | #165の全体検査・完成候補を追跡。GD91-54～57は限定承認済み | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | In Review |
 | 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-validation/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 開発者、設計担当者、テスト担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
 | RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/technical-validation/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 開発者、設計担当者、テスト担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
 | POC-001開始承認依頼書 | [poc-001-approval-request.md](development/technical-validation/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | Approved |
