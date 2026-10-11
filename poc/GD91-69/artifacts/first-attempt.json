@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-12",
+  "scope": "Local synthetic PoC; final GD91-68 rules preserved for group allocation",
+  "findings": [
+    {"finding": "A slide test imported an unexported transport decoder", "resolution": "Import data from the existing transport module"},
+    {"finding": "New section publication after first layout incorrectly routed to firstEvent", "resolution": "Distinguish an empty section base from an empty whole-performance layout; verify ordinary additional publication including occupied seat and QR retention"},
+    {"finding": "Three-seat and then two-seat progress requests reached the 1000-expression limit", "resolution": "Reject both experimental formats; preserve the GD91-68 one-seat progress rule without weakening its validation"},
+    {"finding": "A replacement of the expected progress count produced a stale assertion even though 500 assignments had persisted", "resolution": "Set the exact 500 progress expectation and rerun the entire new suite"},
+    {"finding": "Inherited static-comparison metadata included candidateProof although geometry intentionally extends that function", "resolution": "Compute preserved and changed functions against the actual GD91-69 rules and regenerate all 108 regression results"}
+  ],
+  "rawEvidence": "failed-*.json retained; final results are the six unfiltered summary/regression files",
+  "notClaimed": ["production adoption", "full issue 166 completion", "layout extension and dedicated seat editing", "SDK, IndexedDB and physical device coverage", "production latency and billed operations"]
+}
