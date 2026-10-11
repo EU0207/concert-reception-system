@@ -1,0 +1,198 @@
+    function lifeKind(k) { return k in ['qrCreate','ticketCheck','qrReissue','cancelAttendance','returnAttendance']; }
+    function lifeNextTicket(p,id) { return getAfter(/databases/$(database)/documents/publicationShows/$(p)/tickets/$(id)).data; }
+    function lifeOldTicket(p,id) { return get(/databases/$(database)/documents/publicationShows/$(p)/tickets/$(id)).data; }
+    function lifeNextProtection(p) { return getAfter(/databases/$(database)/documents/publicationShows/$(p)/ticketProtection/current).data; }
+    function lifeAudit(t) { return t == null ? null : {'revision':t.revision,'issued':t.issued,'sent':t.sent,'issuedAt':t.issuedAt,'sentAt':t.sentAt,'currentCycle':t.currentCycle,'cycleClosed':t.cycleClosed,'everIssued':t.everIssued,'credentialVersion':t.credentialVersion}; }
+    function lifeVersion(p,b,a,e) {
+      let c = control(p);
+      return manager(p) && coreBase(p,b,a,e,c) && uuid(e.targetId)
+        && a.values.diff(b.values).affectedKeys().hasOnly(['commit','ticket','attendee','assignment','reception'])
+        && (e.kind == 'returnAttendance' ? lifeReturnVersion(p,b,a,e)
+          : a.values.ticket == b.values.ticket+1 && a.values.attendee == b.values.attendee+(e.kind == 'cancelAttendance' ? 1 : 0)
+            && a.values.assignment == b.values.assignment+(e.kind == 'cancelAttendance' ? 1 : 0)
+            && a.values.reception == b.values.reception+(e.kind == 'ticketCheck' ? 0 : 1));
+    }
+    function lifeReturnVersion(p,b,a,e) {
+      let t = lifeOldTicket(p,e.targetId);
+      let s = beforeAssignment(p);
+      return a.values.ticket == b.values.ticket && a.values.assignment == b.values.assignment
+        && a.values.attendee == b.values.attendee+1 && a.values.reception == b.values.reception+1
+        && t.cycleClosed == true && t.activeCredentialId == '' && !s.assignments.values().hasAny([e.targetId]);
+    }
+    function lifeShape(p,id,a) {
+      return proto(p,a) && a.attendeeId == id && uuid(id) && uuid(a.operationId) && lifeKind(a.lastKind) && a.lastKind != 'returnAttendance'
+        && a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','revision','operationId','lastKind','currentCycle','cycleClosed','everIssued','issued','sent','issuedAt','sentAt','activeCredentialId','activeCode','credentialVersion','previousCredentialId','previousCode','operationSeatId','expectedVersions','resultVersions','eventPayload'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','revision','operationId','lastKind','currentCycle','cycleClosed','everIssued','issued','sent','issuedAt','sentAt','activeCredentialId','activeCode','credentialVersion','previousCredentialId','previousCode','operationSeatId','expectedVersions','resultVersions','eventPayload'])
+        && integer(a.revision) && a.revision > 0 && integer(a.currentCycle) && a.currentCycle > 0 && integer(a.credentialVersion)
+        && a.issued is bool && a.sent is bool && a.everIssued is bool && a.cycleClosed is bool
+        && a.eventPayload.keys().hasAll(['seatId','before','after','reason','confirmedPrimary','confirmedTicketWarning','stopConfirmed'])
+        && a.eventPayload.keys().hasOnly(['seatId','before','after','reason','confirmedPrimary','confirmedTicketWarning','stopConfirmed'])
+        && a.eventPayload.seatId == a.operationSeatId && uuid(a.operationSeatId)
+        && a.eventPayload.reason is string && a.eventPayload.reason.size() <= 500
+        && a.eventPayload.confirmedPrimary is bool && a.eventPayload.confirmedTicketWarning is bool && a.eventPayload.stopConfirmed is bool;
+    }
+    function lifeTicket(p,id,b,a,creating) {
+      let v = afterVersion(p);
+      let i = lifeNextProtection(p);
+      let s = beforeAssignment(p);
+      return lifeShape(p,id,a) && v.operationId == a.operationId && a.resultVersions == v.values && i.operationId == a.operationId
+        && i.revision == v.values.ticket && s.revision == a.expectedVersions.assignment && s.assignments[a.operationSeatId] == id
+        && a.eventPayload.before == lifeAudit(b) && a.eventPayload.after == lifeAudit(a)
+        && (creating ? a.revision == 1 : a.revision == b.revision+1)
+        && (a.lastKind == 'cancelAttendance' ? !creating && lifeCancelTicket(p,id,b,a)
+          : corePeople(p).attendeeIds.hasAny([id]) && lifeNormalTicket(p,b,a,creating));
+    }
+    function lifeNormalTicket(p,b,a,creating) {
+      return a.cycleClosed == false && (creating ? a.currentCycle == 1 : a.currentCycle == b.currentCycle+(b.cycleClosed ? 1 : 0))
+        && (a.lastKind == 'qrReissue' ? !creating && !b.cycleClosed && b.activeCredentialId != ''
+          && a.activeCredentialId != b.activeCredentialId && a.activeCode != b.activeCode && a.previousCredentialId == b.activeCredentialId && a.previousCode == b.activeCode
+          && a.credentialVersion == b.credentialVersion+1 && a.eventPayload.stopConfirmed == true && a.eventPayload.reason.matches('.*\\S.*')
+          && lifeKeptCheck(b,a) && lifeLinks(p,a) && lifeRevokedLinks(p,b,a)
+          : a.lastKind == 'qrCreate' ? (creating || b.cycleClosed || b.activeCredentialId == '') && a.credentialVersion == 1
+            && a.previousCredentialId == '' && a.previousCode == '' && lifeLinks(p,a)
+            && (creating || b.cycleClosed ? lifeFreshCheck(a) : lifeKeptCheck(b,a))
+            : a.lastKind == 'ticketCheck' && (creating || b.cycleClosed ? lifeFreshTicketCheck(a) : lifeCheck(b,a)));
+    }
+    function lifeFreshCheck(a) { return !a.issued && !a.sent && !a.everIssued && a.issuedAt == null && a.sentAt == null; }
+    function lifeFreshTicketCheck(a) {
+      return a.activeCredentialId == '' && a.activeCode == '' && a.previousCredentialId == '' && a.previousCode == '' && a.credentialVersion == 0
+        && a.everIssued == a.issued && (a.issued && a.issuedAt == request.time && !a.sent && a.sentAt == null || a.sent && a.sentAt == request.time && !a.issued && a.issuedAt == null);
+    }
+    function lifeKeptCheck(b,a) { return a.issued == b.issued && a.sent == b.sent && a.issuedAt == b.issuedAt && a.sentAt == b.sentAt && a.everIssued == b.everIssued; }
+    function lifeCheck(b,a) {
+      return a.activeCredentialId == b.activeCredentialId && a.activeCode == b.activeCode && a.previousCredentialId == b.previousCredentialId && a.previousCode == b.previousCode && a.credentialVersion == b.credentialVersion
+        && a.everIssued == (b.everIssued || a.issued)
+        && (a.issued != b.issued && a.issuedAt == request.time && a.sent == b.sent && a.sentAt == b.sentAt
+          || a.sent != b.sent && a.sentAt == request.time && a.issued == b.issued && a.issuedAt == b.issuedAt);
+    }
+    function lifeLinks(p,a) {
+      let q = getAfter(/databases/$(database)/documents/publicationShows/$(p)/credentials/$(a.activeCredentialId)).data;
+      let c = getAfter(/databases/$(database)/documents/publicationShows/$(p)/confirmationCodes/$(a.activeCode)).data;
+      return a.activeCredentialId.matches('^[A-Za-z0-9_-]{22}$') && a.activeCode.matches('^[23456789ABCDEFGHJKMNPQRSTVWXYZ]{8}$')
+        && q.createdOperationId == a.operationId && q.status == 'active' && c.createdOperationId == a.operationId && c.active == true;
+    }
+    function lifeRevokedLinks(p,b,a) {
+      let q = getAfter(/databases/$(database)/documents/publicationShows/$(p)/credentials/$(b.activeCredentialId)).data;
+      let c = getAfter(/databases/$(database)/documents/publicationShows/$(p)/confirmationCodes/$(b.activeCode)).data;
+      return q.status == 'revoked' && c.active == false && q.revokedOperationId == a.operationId && c.revokedOperationId == a.operationId;
+    }
+    function lifeCancelTicket(p,id,b,a) {
+      let profile = coreNextProfile(p,id);
+      return !b.cycleClosed && a.currentCycle == b.currentCycle && a.cycleClosed && !a.issued && !a.sent && a.issuedAt == null && a.sentAt == null
+        && a.everIssued == b.everIssued && a.credentialVersion == b.credentialVersion && a.activeCredentialId == '' && a.activeCode == ''
+        && a.previousCredentialId == b.activeCredentialId && a.previousCode == b.activeCode
+        && profile.operationId == a.operationId && profile.attendancePlan == 'notAttending'
+        && a.eventPayload.confirmedPrimary == true
+        && (!(b.issued || b.everIssued || b.sent || b.sentAt != null || b.activeCredentialId != '') || a.eventPayload.confirmedTicketWarning == true)
+        && (b.activeCredentialId == '' || a.eventPayload.stopConfirmed == true && lifeRevokedLinks(p,b,a));
+    }
+    function lifeProtection(p,b,a) {
+      return a.kind in ['move','swap'] ? lifeAllocationIndex(p,b,a) : lifeTicketProtection(p,b,a);
+    }
+    function lifeAllocationIndex(p,b,a) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      return a.kind == e.kind && e.kind in ['move','swap'] && a.operationId == v.operationId && a.revision == v.values.ticket && a.revision == b.revision+1
+        && b.revision == e.expectedVersions.ticket;
+    }
+    function lifeTicketProtection(p,b,a) {
+      let t = lifeNextTicket(p,a.targetId);
+      let protected = !t.cycleClosed && (t.issued || t.everIssued || t.activeCredentialId != '');
+      return proto(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','seatIds','targetId','kind'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','seatIds','targetId','kind'])
+        && a.kind == t.lastKind && a.operationId == t.operationId && a.targetId == t.attendeeId && a.revision == b.revision+1 && a.revision == t.resultVersions.ticket && b.revision == t.expectedVersions.ticket
+        && a.seatIds is list && a.seatIds.size() == a.seatIds.toSet().size()
+        && a.seatIds.toSet() == (protected ? b.seatIds.toSet().union([t.operationSeatId].toSet()) : b.seatIds.toSet().difference([t.operationSeatId].toSet()));
+    }
+    function lifeAllocationProtection(p,b,a,e,t) {
+      let n = lifeNextProtection(p);
+      let x = e.payload;
+      let expected = e.kind == 'move' && t.seatIds.hasAny([x.seat1]) ? t.seatIds.toSet().difference([x.seat1].toSet()).union([x.seat2].toSet())
+        : e.kind == 'swap' && t.seatIds.hasAny([x.seat1]) != t.seatIds.hasAny([x.seat2]) ? t.seatIds.toSet().difference([x.seat1,x.seat2].toSet()).union([t.seatIds.hasAny([x.seat1]) ? x.seat2 : x.seat1].toSet()) : t.seatIds.toSet();
+      let changed = expected != t.seatIds.toSet();
+      return proto(p,t) && t.revision == b.values.ticket && a.values.ticket == b.values.ticket+(changed ? 1 : 0)
+        && (!changed ? n == t : proto(p,n) && n.keys() == t.keys() && n.diff(t).affectedKeys().hasOnly(['revision','operationId','seatIds','kind'])
+          && n.kind == e.kind && n.revision == t.revision+1 && n.operationId == a.operationId && n.seatIds.size() == n.seatIds.toSet().size() && n.seatIds.toSet() == expected)
+        && (e.kind in ['assign','unassign'] ? !t.seatIds.hasAny([x.seat1]) : e.kind != 'move' || !t.seatIds.hasAny([x.seat1]) || x.reason.matches('.*\\S.*'));
+    }
+    function lifeProfile(p,id,b,a) {
+      return a.attendancePlan == 'notAttending' ? lifeCancelProfile(p,id,b,a) : lifeReturnProfile(p,id,b,a);
+    }
+    function lifeCancelProfile(p,id,b,a) {
+      let t = lifeNextTicket(p,id);
+      let people = coreNextPeople(p);
+      return proto(p,a) && a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['attendancePlan','revision','operationId'])
+        && a.revision == b.revision+1 && a.operationId == t.operationId && t.lastKind == 'cancelAttendance'
+        && b.attendancePlan == 'planned' && a.attendancePlan == 'notAttending' && people.operationId == a.operationId && people.cancelledAttendeeId == id && people.revision == t.resultVersions.attendee;
+    }
+    function lifeReturnProfile(p,id,b,a) {
+      let v = afterVersion(p);
+      let people = coreNextPeople(p);
+      let e = nextEvent(p,a.operationId);
+      return proto(p,a) && a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['attendancePlan','revision','operationId'])
+        && a.revision == b.revision+1 && a.operationId == v.operationId && e.targetId == id && people.operationId == a.operationId
+        && (e.kind == 'cancelAttendance' ? b.attendancePlan == 'planned' && a.attendancePlan == 'notAttending'
+          : e.kind == 'returnAttendance' && b.attendancePlan == 'notAttending' && a.attendancePlan == 'planned');
+    }
+    function lifePeople(p,b,a) {
+      return a.attendeeIds.size() < b.attendeeIds.size() ? lifeCancelPeople(p,b,a) : lifeReturnPeople(p,b,a);
+    }
+    function lifeCancelPeople(p,b,a) {
+      let s = afterAssignment(p);
+      return proto(p,a) && a.keys().toSet() == b.keys().toSet().union(['cancelledAttendeeId'].toSet())
+        && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeIds','cancelledAttendeeId'])
+        && a.operationId == s.operationId && a.cancelledAttendeeId == s.cancelledAttendeeId
+        && a.revision == b.revision+1 && b.attendeeIds.hasAny([a.cancelledAttendeeId]) && a.attendeeIds == b.attendeeIds.removeAll([a.cancelledAttendeeId]);
+    }
+    function lifeReturnPeople(p,b,a) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      let person = coreNextProfile(p,e.targetId);
+      return a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeIds'])
+        && a.operationId == v.operationId && a.revision == v.values.attendee && a.revision == b.revision+1 && b.revision == e.expectedVersions.attendee
+        && person.operationId == a.operationId && person.attendeeId == e.targetId
+        && (e.kind == 'cancelAttendance' ? b.attendeeIds.hasAny([e.targetId]) && a.attendeeIds == b.attendeeIds.removeAll([e.targetId])
+          : e.kind == 'returnAttendance' && !b.attendeeIds.hasAny([e.targetId]) && a.attendeeIds == b.attendeeIds.concat([e.targetId]) && a.attendeeIds.size() <= 500);
+    }
+    function lifeAssignment(p,b,a) {
+      let t = lifeNextTicket(p,a.cancelledAttendeeId);
+      return assignmentShape(p,a) && a.keys().hasAny(['cancelledAttendeeId']) && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments','cancelledAttendeeId'])
+        && a.publicationOperationId == b.publicationOperationId && a.revision == b.revision+1 && a.operationId == t.operationId && t.lastKind == 'cancelAttendance'
+        && a.revision == t.resultVersions.assignment && b.revision == t.expectedVersions.assignment
+        && a.assignments.keys() == b.assignments.keys() && b.assignments[t.operationSeatId] == t.attendeeId && a.assignments[t.operationSeatId] == ''
+        && a.assignments.diff(b.assignments).affectedKeys() == [t.operationSeatId].toSet();
+    }
+    function lifeEvent(p,id,e) {
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      return proto(p,e) && uuid(id) && e.operationId == id && e.humanUid == s.humanUid && e.deviceUid == request.auth.uid && e.occurredAt == request.time
+        && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','targetId','payload','occurredAt'])
+        && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','targetId','payload','occurredAt'])
+        && (e.kind == 'returnAttendance' ? lifeReturnEvent(p,e) : lifeTicketEvent(p,e));
+    }
+    function lifeTicketEvent(p,e) {
+      let t = lifeNextTicket(p,e.targetId);
+      return e.kind == t.lastKind && e.operationId == t.operationId && e.expectedVersions == t.expectedVersions && e.resultVersions == t.resultVersions && e.controlRevision == e.expectedVersions.control && e.payload == t.eventPayload;
+    }
+    function lifeReturnEvent(p,e) {
+      let v = afterVersion(p);
+      let person = coreNextProfile(p,e.targetId);
+      return person.operationId == e.operationId && e.operationId == v.operationId && e.payload.keys().hasOnly(['attendancePlan']) && e.payload.attendancePlan == 'planned';
+    }
+    function lifeCredential(p,id,a) {
+      let t = lifeNextTicket(p,a.ticketId);
+      return proto(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','ticketId','currentCycle','credentialVersion','status','createdOperationId','revokedOperationId'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','ticketId','currentCycle','credentialVersion','status','createdOperationId','revokedOperationId'])
+        && id == t.activeCredentialId && a.currentCycle == t.currentCycle && a.credentialVersion == t.credentialVersion && a.status == 'active' && a.createdOperationId == t.operationId && a.revokedOperationId == '';
+    }
+    function lifeCode(p,id,a) {
+      let t = lifeNextTicket(p,a.ticketId);
+      return proto(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','ticketId','credentialId','active','createdOperationId','revokedOperationId'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','ticketId','credentialId','active','createdOperationId','revokedOperationId'])
+        && id == t.activeCode && a.credentialId == t.activeCredentialId && a.active == true && a.createdOperationId == t.operationId && a.revokedOperationId == '';
+    }
+    function lifeRevoke(p,id,b,a,isCode) {
+      let t = lifeNextTicket(p,b.ticketId);
+      return a.keys() == b.keys() && t.operationId == a.revokedOperationId && t.lastKind in ['qrReissue','cancelAttendance'] && a.revokedOperationId != b.revokedOperationId
+        && (isCode ? b.active == true && a.active == false && id == t.previousCode && a.diff(b).affectedKeys().hasOnly(['active','revokedOperationId'])
+          : b.status == 'active' && a.status == 'revoked' && id == t.previousCredentialId && a.diff(b).affectedKeys().hasOnly(['status','revokedOperationId']));
+    }
