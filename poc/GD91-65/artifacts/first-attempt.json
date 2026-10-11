@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-12",
+  "scope": "GD91-65 isolated validation",
+  "initialCheckpoint": "78af3e2",
+  "firstRun": {
+    "newScenarios": 18,
+    "regressionScenarios": 56,
+    "result": "passed before adding corruption case N19",
+    "evidence": [
+      "first-initial-summary.json",
+      "first-branches-regression.json",
+      "first-lifecycle-regression.json"
+    ]
+  },
+  "additionalCorruptionCase": {
+    "case": "N19",
+    "observed": "Layout version zero with a preexisting invalid assignment document incorrectly allowed ordinary attendee registration (HTTP 200).",
+    "cause": "The profile-index cycle checked roster integrity but did not distinguish an absent seating map from inconsistent assignment storage.",
+    "correction": "Replace the redundant profile-to-index reference with a layout-state fence. Retain version-to-index and index-to-profile/label validation. Normal registration and payment reference budgets stay unchanged.",
+    "coverage": [
+      "zero layout with assignment present",
+      "positive layout with assignment absent",
+      "positive layout with wrong assignment revision"
+    ],
+    "finalEvidence": [
+      "initial-summary.json",
+      "branches-regression.json",
+      "lifecycle-regression.json"
+    ],
+    "productionAffected": false
+  },
+  "deskReview": {
+    "case": "N20",
+    "finding": "An orphan historical initialization event must not substitute for creating all four initial documents.",
+    "correction": "Move the two index-absence checks to the new initialization event and require operation-event absence at the root. Reference budget is 18 total and 9 maximum; no cache discount.",
+    "finalNewScenarios": 20,
+    "finalRegressionScenarios": 56
+  }
+}

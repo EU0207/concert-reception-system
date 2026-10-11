@@ -1,0 +1,405 @@
+{
+  "executedAt": "2026-10-11T16:13:15.653Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "sourceHashes": {
+    "../../GD91-65/generate.mjs": "0998b63904612b03ccb39de911772a3dccfd3bd773e7c20d8d455427de1d9054",
+    "../../GD91-65/initial.rules": "15285c443540be27ad36fa5c3d4ce00eb8881c99218e69601122527a98aca2d3",
+    "../../GD91-65/tests/budgets.mjs": "61362c6e3dd5894364f3f5b7e46e84d5387063c33af341d41ef30dfd5c745ff9",
+    "../../GD91-65/tests/regression.mjs": "6365dcc75b6492257def702fd3cd156ede023ca794f6ba0843dcb51189cd3691",
+    "../../GD91-65/node_modules/.cache/firestore.rules": "a9458997208cf753d762c9d909cec4f5a06654f05987ef7caae4949bb526bd6c",
+    "../generate.mjs": "c84ba1f6315630f3f56aeaec32c300812b7a78e57311508a15ee2ca6b2b2a7de",
+    "../branches.rules": "accf59491e6869865f576ff9fe5008f9d1412f99c1df4906fb3c666516e8f94a",
+    "../firebase.json": "75f7dc183c78492abb9300dca66c9c292c2a2e6b60225bb75688ce2b2df079a3",
+    "../node_modules/.cache/firestore.rules": "20d9da46ce146e4776f143d964efce046aa9287d61f9f5b75a543fc791653cf6",
+    "support.mjs": "8550e70d49d158c3c4e4e86027d24c3ec779e4dfb46737582c19be6608b2d988",
+    "budgets.mjs": "99b44243b47730e5968cbffcac3332023c260feab8a3fec63826dea3f24aae49",
+    "emulator.mjs": "0475ab96317004b0380a6fea98f55d270eb7073af5c2a29d81ff3b6b215a98d2",
+    "regression.mjs": "82bee267015565f8fbda4c346c042317550d640718533c9b729f094f2730d8d5",
+    "../../GD91-63/generate.mjs": "cd58a97a7f1141e3a7ebba2b07b7b58109368a2dc31de80031f5e547f1ad10d4",
+    "../../GD91-63/lifecycle.rules": "b6b9ee76e873ca30cd8ef83a79e7c5c7ffde4642f5db5050f1989ee2fd88c209",
+    "../../GD91-63/tests/support.mjs": "6cdd13651ec51e61b25d024fbbb6c791f23ac03f815d7d3b6c80c5f073da5caf",
+    "../../GD91-62/business.rules": "d042fc6e8e18ba8c871c3a831f6ec2c302468b1c3f74b95ab0301ef500c284d1",
+    "../../GD91-62/generate.mjs": "ded019d0771248801e96ee5a1be9f3bd6c0ebb92759987614c01f2ae8a888121",
+    "../../GD91-62/tests/support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../../GD91-65/generate.mjs": "0998b63904612b03ccb39de911772a3dccfd3bd773e7c20d8d455427de1d9054",
+    "../../GD91-65/initial.rules": "15285c443540be27ad36fa5c3d4ce00eb8881c99218e69601122527a98aca2d3",
+    "../../GD91-65/tests/budgets.mjs": "61362c6e3dd5894364f3f5b7e46e84d5387063c33af341d41ef30dfd5c745ff9",
+    "../../GD91-65/tests/regression.mjs": "6365dcc75b6492257def702fd3cd156ede023ca794f6ba0843dcb51189cd3691",
+    "../../GD91-65/node_modules/.cache/firestore.rules": "a9458997208cf753d762c9d909cec4f5a06654f05987ef7caae4949bb526bd6c",
+    "../generate.mjs": "c84ba1f6315630f3f56aeaec32c300812b7a78e57311508a15ee2ca6b2b2a7de",
+    "../branches.rules": "accf59491e6869865f576ff9fe5008f9d1412f99c1df4906fb3c666516e8f94a",
+    "../firebase.json": "75f7dc183c78492abb9300dca66c9c292c2a2e6b60225bb75688ce2b2df079a3",
+    "../node_modules/.cache/firestore.rules": "20d9da46ce146e4776f143d964efce046aa9287d61f9f5b75a543fc791653cf6",
+    "support.mjs": "8550e70d49d158c3c4e4e86027d24c3ec779e4dfb46737582c19be6608b2d988",
+    "budgets.mjs": "99b44243b47730e5968cbffcac3332023c260feab8a3fec63826dea3f24aae49",
+    "emulator.mjs": "0475ab96317004b0380a6fea98f55d270eb7073af5c2a29d81ff3b6b215a98d2",
+    "regression.mjs": "82bee267015565f8fbda4c346c042317550d640718533c9b729f094f2730d8d5",
+    "../../GD91-63/generate.mjs": "cd58a97a7f1141e3a7ebba2b07b7b58109368a2dc31de80031f5e547f1ad10d4",
+    "../../GD91-63/lifecycle.rules": "b6b9ee76e873ca30cd8ef83a79e7c5c7ffde4642f5db5050f1989ee2fd88c209",
+    "../../GD91-63/tests/support.mjs": "6cdd13651ec51e61b25d024fbbb6c791f23ac03f815d7d3b6c80c5f073da5caf",
+    "../../GD91-62/business.rules": "d042fc6e8e18ba8c871c3a831f6ec2c302468b1c3f74b95ab0301ef500c284d1",
+    "../../GD91-62/generate.mjs": "ded019d0771248801e96ee5a1be9f3bd6c0ebb92759987614c01f2ae8a888121",
+    "../../GD91-62/tests/support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "budgets": {
+    "initialization": [
+      9,
+      2,
+      2,
+      5
+    ],
+    "firstPublication": [
+      8,
+      3,
+      5
+    ],
+    "registration": [
+      7,
+      3,
+      4,
+      3,
+      3
+    ],
+    "paid": [
+      7,
+      4,
+      3,
+      3
+    ],
+    "unprotectedSingle": [
+      10,
+      4,
+      3
+    ],
+    "unprotectedPair": [
+      10,
+      5,
+      3
+    ],
+    "protectedPair": [
+      10,
+      5,
+      3,
+      2
+    ],
+    "qrCreate": [
+      5,
+      6,
+      1,
+      2,
+      1,
+      1
+    ],
+    "ticketCheck": [
+      5,
+      4,
+      1,
+      2
+    ],
+    "qrReissue": [
+      5,
+      8,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1
+    ],
+    "cancelQrAssigned": [
+      5,
+      6,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      1
+    ],
+    "cancelNoQrAssigned": [
+      5,
+      4,
+      1,
+      2,
+      2,
+      1,
+      1
+    ],
+    "returnClosedTicket": [
+      8,
+      3,
+      6,
+      3
+    ],
+    "returnNoTicket": [
+      7,
+      3,
+      6,
+      3
+    ],
+    "cancelNoTicketAssigned": [
+      9,
+      2,
+      4,
+      3,
+      2
+    ],
+    "cancelNoTicketUnassigned": [
+      9,
+      2,
+      3,
+      3
+    ],
+    "cancelNoQrUnassigned": [
+      5,
+      4,
+      1,
+      2,
+      2,
+      1
+    ],
+    "assignProtectedPerson": [
+      10,
+      4,
+      3,
+      2
+    ],
+    "publication": [
+      8,
+      6,
+      6
+    ],
+    "state": [
+      7,
+      1,
+      3,
+      4
+    ]
+  },
+  "preservedFunctions": [
+    "scope",
+    "roleValid",
+    "providerValid",
+    "currentPreparation",
+    "generalPreparation",
+    "sessionShape",
+    "recentHumanAt",
+    "recentHuman",
+    "identity",
+    "authorizedLevel",
+    "authorized",
+    "issueSession",
+    "revokeSession",
+    "manager",
+    "common",
+    "readyCandidate",
+    "publicationAssignment",
+    "publication",
+    "stateVersion",
+    "stateWrite",
+    "stateEvent"
+  ],
+  "filter": null,
+  "scope": "No-ticket and QR-less cancellation with assigned/unassigned and roster-first branches; same normally issued manager session and canonical versions as GD91-63. Four-seat/single-section local REST test. Empty layout initial root is seeded; no production bootstrap, physical devices, SDK, IndexedDB or reception generation.",
+  "reports": [
+    {
+      "id": "M01",
+      "label": "assigned cancellation without ticket uses five writes atomically",
+      "status": "passed",
+      "writes": 5,
+      "properSubsetsDenied": 30
+    },
+    {
+      "id": "M02",
+      "label": "unassigned cancellation leaves existing assignment and its revision untouched",
+      "status": "passed",
+      "writes": 4,
+      "properSubsetsDenied": 14
+    },
+    {
+      "id": "M03",
+      "label": "roster first cancellation and return do not fabricate a seating map or ticket",
+      "status": "passed",
+      "cancelWrites": 4,
+      "returnWrites": 4,
+      "properSubsetsDenied": 14,
+      "initialVersionAndIndexesSeeded": true
+    },
+    {
+      "id": "M04",
+      "label": "no ticket confirmation and forged profile index or version changes are rejected",
+      "status": "passed",
+      "forgeriesDenied": 7
+    },
+    {
+      "id": "M05",
+      "label": "a ticket created after confirmation invalidates the no ticket proposal",
+      "status": "passed",
+      "oldProposalDenied": true,
+      "reconfirmedExistingTicketWrites": 7
+    },
+    {
+      "id": "M06",
+      "label": "a QR created after confirmation invalidates the old cancellation path",
+      "status": "passed",
+      "staleAndMissingStopDenied": 2
+    },
+    {
+      "id": "M07",
+      "label": "different staff racing first ticket and cancellation commit at most once",
+      "status": "passed",
+      "distinctPeopleAndDevices": true,
+      "initialStatuses": [
+        200,
+        409
+      ],
+      "initialSuccesses": 1,
+      "finalSuccesses": 1
+    },
+    {
+      "id": "M08",
+      "label": "return without ticket is atomic and first later QR starts cycle one",
+      "status": "passed",
+      "properSubsetsDenied": 14,
+      "firstCycle": 1
+    },
+    {
+      "id": "M09",
+      "label": "unassigned existing ticket cancellation uses six writes with no empty qualification",
+      "status": "passed",
+      "writes": 6,
+      "properSubsetsDenied": 62
+    },
+    {
+      "id": "M10",
+      "label": "existing ticket before layout can close and return without a placeholder map",
+      "status": "passed",
+      "properSubsetsDenied": 62,
+      "cancelWrites": 6,
+      "returnWrites": 4
+    },
+    {
+      "id": "M11",
+      "label": "clearing issued or sent checkboxes retains the additional cancellation warning",
+      "status": "passed",
+      "historyWarningsRetained": 2
+    },
+    {
+      "id": "M12",
+      "label": "QR less cancellation still requires primary confirmation but no stop declaration",
+      "status": "passed",
+      "confirmationDenials": 2,
+      "stopNotRequired": true
+    },
+    {
+      "id": "M13",
+      "label": "later assignment carries historical ticket protection from person to seat atomically",
+      "status": "passed",
+      "writes": 4,
+      "properSubsetsDenied": 14,
+      "unassignDenied": true
+    },
+    {
+      "id": "M14",
+      "label": "closed ticket cannot reopen before assignment and then advances only one cycle",
+      "status": "passed",
+      "unassignedReopenDenied": 2,
+      "newCycle": 2
+    },
+    {
+      "id": "M15",
+      "label": "both new cancellation branches retain role device session and foreign show fences",
+      "status": "passed",
+      "revocationAndForeignDenials": 8
+    },
+    {
+      "id": "M16",
+      "label": "a seated person cannot claim the no seat branch or forge a missing layout",
+      "status": "passed",
+      "forgedNoSeatDenials": 2
+    },
+    {
+      "id": "M17",
+      "label": "ordinary customer update and marker-only bypasses cannot cancel attendance",
+      "status": "passed",
+      "ordinaryAndMarkerBypassDenied": 2
+    },
+    {
+      "id": "M18",
+      "label": "payment or other registration invalidates old cancellation without losing input facts",
+      "status": "passed",
+      "staleBranchesDenied": 2,
+      "paymentRetained": true
+    },
+    {
+      "id": "M19",
+      "label": "cancel return markers do not break later payment registration or existing ticket cancellation",
+      "status": "passed",
+      "mixedSequenceCompleted": true,
+      "currentCycle": 2
+    },
+    {
+      "id": "M20",
+      "label": "same operation result can be queried and replay cannot double cancel",
+      "status": "passed",
+      "replaysDenied": 2,
+      "resultQueryVerified": true,
+      "actualResponseLossNotInjected": true
+    },
+    {
+      "id": "M21",
+      "label": "operating and stopped states allow cancellation while ended denies it",
+      "status": "passed",
+      "operatingAndStoppedAccepted": true,
+      "endedDenied": true
+    },
+    {
+      "id": "M22",
+      "label": "cancellation preserves another persons seat ticket payment label and seeded reception",
+      "status": "passed",
+      "otherPersonPreserved": true,
+      "seededReceptionPreserved": true,
+      "not500People": true
+    },
+    {
+      "id": "M23",
+      "label": "no ticket cancellation cannot change unrelated versions or published identifiers",
+      "status": "passed",
+      "unrelatedVersionAndIdentityChangesDenied": 5
+    },
+    {
+      "id": "M24",
+      "label": "a forged QR or assignment cannot be appended to a no ticket cancellation",
+      "status": "passed",
+      "extraTicketQrAndAssignmentDenied": 3,
+      "orphanEventDenied": true
+    }
+  ]
+}

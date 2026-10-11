@@ -1,0 +1,74 @@
+    function initIndex(p,a,id,people) {
+      return proto(p,a) && (people ? a == {'schemaVersion':1,'environmentId':'FAKE-environment','performanceId':p,'revision':1,'operationId':id,'attendeeIds':[]}
+        : a == {'schemaVersion':1,'environmentId':'FAKE-environment','performanceId':p,'revision':1,'operationId':id,'seatIds':[],'protectedAttendeeIds':[]});
+    }
+    function initVersion(p,a) {
+      let c = control(p);
+      let people = getAfter(/databases/$(database)/documents/publicationShows/$(p)/eligible/current).data;
+      let tickets = getAfter(/databases/$(database)/documents/publicationShows/$(p)/ticketProtection/current).data;
+      let e = nextEvent(p,a.operationId);
+      return manager(p) && preparation(p,c) && uuid(a.operationId)
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/operations/$(a.operationId))
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/assignmentState/current)
+        && a == {'schemaVersion':1,'environmentId':'FAKE-environment','performanceId':p,'operationId':a.operationId,
+          'values':{'commit':1,'layout':0,'source':0,'assignment':0,'attendee':1,'ticket':1,'control':c.revision,'reception':1},'sections':{},'seatIds':[],'usedIds':[],'usedGenerations':[]}
+        && initIndex(p,people,a.operationId,true) && initIndex(p,tickets,a.operationId,false)
+        && e.kind == 'bootstrapBusiness' && e.operationId == a.operationId && e.expectedVersions == null && e.resultVersions == a.values;
+    }
+    function initChild(p,a,people) {
+      let v = afterVersion(p);
+      return !exists(/databases/$(database)/documents/publicationShows/$(p)/versions/current)
+        && v.values.commit == 1 && initIndex(p,a,v.operationId,people);
+    }
+    function initEvent(p,id,e) {
+      let v = afterVersion(p);
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      return !exists(/databases/$(database)/documents/publicationShows/$(p)/versions/current)
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/eligible/current)
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/ticketProtection/current)
+        && proto(p,e) && uuid(id) && e.keys().toSet() == ['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','occurredAt'].toSet()
+        && e.operationId == id && v.operationId == id && v.values.commit == 1 && e.kind == 'bootstrapBusiness'
+        && e.deviceUid == request.auth.uid && e.humanUid == s.humanUid && e.occurredAt == request.time
+        && e.controlRevision == v.values.control && e.expectedVersions == null && e.resultVersions == v.values;
+    }
+    function firstBase(p,b) {
+      return proto(p,b) && b.values.layout == 0 && b.values.source == 0 && b.values.assignment == 0
+        && b.sections == {} && b.seatIds == [] && b.usedIds == [] && b.usedGenerations == [];
+    }
+    function coreRosterState(p,v) {
+      let s = v.values.layout == 0 ? null : beforeAssignment(p);
+      return v.values.layout == 0 ? firstBase(p,v) && !exists(/databases/$(database)/documents/publicationShows/$(p)/assignmentState/current)
+        : v.values.source > 0 && v.values.assignment > 0 && v.sections.size() > 0 && proto(p,s)
+          && s.revision == v.values.assignment && s.assignments.keys().toSet() == v.seatIds.toSet();
+    }
+    function firstVersion(p,b,a,e) {
+      let c = control(p);
+      let m = candidate(p,e.generation);
+      let n = afterAssignment(p);
+      return manager(p) && firstBase(p,b) && common(p,b,a,e,c) && e.kind == 'publishSection' && m.baseGeneration == ''
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/assignmentState/current)
+        && a.values == {'commit':b.values.commit+1,'layout':1,'source':1,'assignment':1,'attendee':b.values.attendee,'ticket':b.values.ticket,'control':b.values.control,'reception':b.values.reception+1}
+        && readyCandidate(p,e,m,{'seatIds':[],'entityIds':[]},b,a)
+        && n.publicationOperationId == a.operationId && n.operationId == a.operationId && n.revision == 1;
+    }
+    function firstAssignment(p,a) {
+      let b = beforeVersion(p);
+      let n = afterVersion(p);
+      let t = protectedSeats(p);
+      return firstBase(p,b) && assignmentShape(p,a) && !a.keys().hasAny(['cancelledAttendeeId','cancelNoTicketOperationId'])
+        && n.values.layout == 1 && n.values.source == 1 && n.values.assignment == 1 && n.values.commit == b.values.commit+1
+        && a.operationId == n.operationId && a.publicationOperationId == n.operationId && a.revision == 1
+        && a.assignments.keys().toSet() == n.seatIds.toSet() && a.assignments.values().hasOnly([''])
+        && proto(p,t) && t.revision == b.values.ticket && t.seatIds == [];
+    }
+    function firstEvent(p,id,e) {
+      let b = beforeVersion(p);
+      let a = afterVersion(p);
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      return firstBase(p,b) && proto(p,e) && uuid(id) && e.operationId == id && e.deviceUid == request.auth.uid && e.humanUid == s.humanUid
+        && e.occurredAt == request.time && e.keys().toSet() == ['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','sectionId','generation','baseGeneration','removed','added','changed','occurredAt'].toSet()
+        && e.kind == 'publishSection' && e.baseGeneration == '' && e.removed == {} && e.changed == {}
+        && e.added.keys().toSet() == a.seatIds.toSet() && e.added.values().hasOnly([''])
+        && e.expectedVersions == b.values && e.resultVersions == a.values && a.operationId == id && a.values.commit == b.values.commit+1
+        && publicationProof(p,b,a,e);
+    }
