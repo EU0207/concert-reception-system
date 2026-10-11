@@ -1,0 +1,34 @@
+{
+  "recordedAt": "2026-10-11T06:39:52.742Z",
+  "suiteCompleted": false,
+  "hashesRecordedAfterFailure": true,
+  "passedBeforeFailure": 7,
+  "failureCase": "S08",
+  "cause": "Row extension test omitted required new line settings. Fixture corrected; Rules unchanged. Missing-seat test strengthened and invalid-catalog cases added before full rerun.",
+  "sourceHashes": {
+    "../firestore.rules": "dd5f27bcfbc37ab7cc859454f635aa067ac56a8625784f8381432f1255395f2c",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "comparison-emulator.mjs": "83c0ab1fb501c3e2a57c0bf7b70a18abcad448d848c71bef367f587814ce82d0",
+    "comparison-support.mjs": "722177f2d0aae140b292785607e0a8a3f87abdcde267f73fc9d339c99beb3f92",
+    "global-support.mjs": "90c55bc7a6e90d81164b60bd1ebdf54d01061a783e57d9fe51cc544d99a8877d",
+    "support.mjs": "cbfc55ffd9b8b08208b610cb72f858f397f753bf6f91e54d561e3e4b50268bfa",
+    "transport.mjs": "797908574e41c05e0c1a16a5570fea257028c47b7369d653d864de33aa30de06",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "changedLines": [
+    {
+      "before": "await run('S08','appended unset row or column preserves old seat ID facts',async()=>{for(const dimension of ['rows','columns']){const f=await setup({rows:2,columns:5,mixed:false},m=>Object.assign(m,extend(m,{dimension,count:1},{maxCells:10000}).after));await protect(f,f.oldIds,f.oldIds);const a=await finish(f);assert.deepEqual(a.changedSeatIds,[]);}return{extensions:2,physicalExtensionAuthorizationVerified:false};});",
+      "after": "await run('S08','appended unset row or column preserves old seat ID facts',async()=>{for(const dimension of ['rows','columns']){const f=await setup({rows:2,columns:5,mixed:false},m=>Object.assign(m,extend(m,{dimension,count:1,...(dimension==='rows'?{lines:[{name:'追加列'}]}:{})},{maxCells:10000}).after));await protect(f,f.oldIds,f.oldIds);const a=await finish(f);assert.deepEqual(a.changedSeatIds,[]);}return{extensions:2,physicalExtensionAuthorizationVerified:false};});"
+    },
+    {
+      "before": "await run('S11','missing old seat cannot be omitted by compare or result',async()=>{const f=await setup();await prepare(f);const first=f.oldIds[0];f.oldIds.unshift(randomUUID());await seed(doc(f,'baseSeats/current',f.old.generation),{generation:f.old.generation,sectionId:f.section,seatIds:f.oldIds});let a=initial(f);ok(await put(f,'seatComparison/current',a,false));denied(await put(f,'seatComparison/current',{...a,cursor:1,lastSeatId:first}));denied(await put(f,'comparisonResult/current',result(f,a),false));return{missingOldSourceFixture:true};});",
+      "after": "await run('S11','missing old seat cannot be omitted by compare or result',async()=>{const f=await setup({mixed:false},m=>{const old=m.seats.shift(),c=m.section.cells.find(c=>c.seatId===old.seatId);c.kind='gap';c.consumedNumber=old.number;delete c.seatId;});await prepare(f);const a=initial(f);ok(await put(f,'seatComparison/current',a,false));denied(await put(f,'seatComparison/current',{...a,cursor:1,lastSeatId:f.oldIds[0]}));denied(await put(f,'comparisonResult/current',result(f,a),false));return{oldSeatOmittedFromNewCandidate:true};});"
+    },
+    {
+      "before": "",
+      "after": "await run('S18','catalog rejects invalid line metadata and duplicate line IDs',async()=>{for(const kind of ['index','counter','section','duplicate']){const f=await fixture({rows:2});f.next.generation=randomUUID();f.head.generation=f.next.generation;if(kind==='index')f.head.lines[0].index=8;if(kind==='counter')f.head.lines[0].nextAutomaticNumber=0;if(kind==='section')f.head.lines[0].lineId=f.section;if(kind==='duplicate')f.head.lines[1].lineId=f.head.lines[0].lineId;await seed(doc(f,'head/current'),f.head);await changeControl(f,{});let a={sectionId:f.section,generation:f.next.generation,cursor:0,lines:[],lineIds:[]};ok(await put(f,'lineCatalog/current',a,false));if(kind==='duplicate'){a={...a,cursor:1,lines:[f.head.lines[0]],lineIds:[f.head.lines[0].lineId]};ok(await put(f,'lineCatalog/current',a));}const l=f.head.lines[a.cursor];denied(await put(f,'lineCatalog/current',{...a,cursor:a.cursor+1,lines:a.lines.concat([l]),lineIds:a.lineIds.concat([l.lineId])}));}return{invalidParentMetadataFixture:true};});\n"
+    }
+  ]
+}
