@@ -1,0 +1,106 @@
+{
+  "executedAt": "2026-10-11T11:54:39.796Z",
+  "sourceHashes": {
+    "../sdk-adapter.mjs": "02653144fd39856cf847868f820e957447ef654685b26b066da22055dd3a5c61",
+    "sdk-emulator.mjs": "f6db26caafbf4d236f8796100cb05bb27acbbf38f6e36d3542e66b5c566efc2a",
+    "../../GD91-60/firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "../../POC-001/package.json": "c2664ba0db5cc6f70d1297f1d8c1ba95e7b00eb04d08394a0881ff9576904125",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/tests/budgets.mjs": "273972964614386fb62290091ba7f99e7b2f9a5dd21d1061bc4ab243b90eddfe",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-59/firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../../GD91-39/firestore.rules": "add9e7fa196388f0a77578762cd4d0233a648f8e1b90134d31f656aee7ef2289",
+    "../../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../sdk-adapter.mjs": "02653144fd39856cf847868f820e957447ef654685b26b066da22055dd3a5c61",
+    "sdk-emulator.mjs": "f6db26caafbf4d236f8796100cb05bb27acbbf38f6e36d3542e66b5c566efc2a",
+    "../../GD91-60/firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "../../POC-001/package.json": "c2664ba0db5cc6f70d1297f1d8c1ba95e7b00eb04d08394a0881ff9576904125",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/tests/budgets.mjs": "273972964614386fb62290091ba7f99e7b2f9a5dd21d1061bc4ab243b90eddfe",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-59/firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../../GD91-39/firestore.rules": "add9e7fa196388f0a77578762cd4d0233a648f8e1b90134d31f656aee7ef2289",
+    "../../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "passed": [
+    {
+      "id": "S01",
+      "label": "SDK transaction publishes the ordinary completed candidate",
+      "status": "passed",
+      "callbacks": 1,
+      "writes": 3,
+      "writesPerCommit": 3,
+      "elapsedMs": 7643
+    },
+    {
+      "id": "S02",
+      "label": "SDK state transition advances the shared version atomically",
+      "status": "passed",
+      "writesPerCommit": 4,
+      "commonVersion": 2,
+      "elapsedMs": 1568
+    },
+    {
+      "id": "S03",
+      "label": "same ID and payload return the existing result without another update",
+      "status": "passed",
+      "replays": 2,
+      "callbacks": 2,
+      "writes": 0,
+      "elapsedMs": 1496
+    },
+    {
+      "id": "S04",
+      "label": "same ID with a different event is rejected before writes",
+      "status": "passed",
+      "code": "operation-id-conflict",
+      "callbacks": 1,
+      "writes": 0,
+      "elapsedMs": 1453
+    },
+    {
+      "id": "S05",
+      "label": "a stale confirmed proposal is not rebuilt from new state",
+      "status": "passed",
+      "code": "stale-version",
+      "callbacks": 1,
+      "writes": 0,
+      "elapsedMs": 1598
+    },
+    {
+      "id": "S06",
+      "label": "revoked identity returns permission-denied without application resend",
+      "status": "passed",
+      "code": "permission-denied",
+      "callbacks": 1,
+      "writes": 0,
+      "resultNotMisreportedAbsent": true,
+      "elapsedMs": 1450
+    }
+  ],
+  "error": {
+    "name": "AssertionError",
+    "code": "ERR_ASSERTION",
+    "message": "AssertionError [ERR_ASSERTION]: unexpected success\n    at rejected (file:///C:/dev/concert-reception-system/poc/GD91-61/tests/sdk-emulator.mjs:16:59)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-61/tests/sdk-emulator.mjs:30:234\n    at async run (file:///C:/dev/concert-reception-system/poc/GD91-61/tests/sdk-emulator.mjs:22:100)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-61/tests/sdk-emulator.mjs:30:2"
+  }
+}

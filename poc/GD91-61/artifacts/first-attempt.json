@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-11",
+  "scope": "Local SDK validation setup and test corrections; authorization conditions unchanged",
+  "events": [
+    {
+      "fact": "Restricted emulator launch could not open its local hub. Escalated local execution reached configuration validation.",
+      "response": "Run the local demo emulator with approved execution permissions; no production connection."
+    },
+    {
+      "fact": "Firebase CLI rejected a Rules path outside the new configuration directory.",
+      "response": "Use the existing GD91-60 configuration directly, without copying or changing Rules."
+    },
+    {
+      "fact": "The first dynamic run passed S01-S06, then a transaction succeeded despite disableNetwork. The original offline expectation was incorrect.",
+      "response": "Preserve the failure. Make this behavior S07 negative control; test the explicit send guard separately and add actual transport failure injection."
+    },
+    {
+      "fact": "The second run passed S01-S13. The HTTP/1 proxy did not receive the Node SDK gRPC request, so S14 failed its fault-injection assertion.",
+      "response": "Use a local HTTP/2 proxy matching the Node transport. Require observed rejected requests, then rerun the entire suite. Do not count an unavailable response without observing the injected fault."
+    },
+    {
+      "fact": "The third run passed S01-S13. A plain-text HTTP 503 response was not a valid gRPC fault and was decoded as RESOURCE_EXHAUSTED.",
+      "response": "Return gRPC status 14 with proper HTTP/2 trailers. Require three observed failed transaction callbacks and rejected requests, then rerun the full suite."
+    }
+  ],
+  "prevention": "Distinguish SDK network-control state from actual transport failure. Verify the injected fault reached the intended transport. Hash sources and rerun all cases after corrections.",
+  "untested": "Browser transport, actual radio outage, Auth SDK, encrypted IndexedDB operation journal, genuine acknowledgement loss and real devices."
+}

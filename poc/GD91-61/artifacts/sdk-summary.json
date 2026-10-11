@@ -1,0 +1,461 @@
+{
+  "executedAt": "2026-10-11T12:00:56.096Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "firebase": "12.18.0",
+    "transport": "Firebase Web SDK in Node.js, in-memory cache, local emulator only"
+  },
+  "sourceHashes": {
+    "../sdk-adapter.mjs": "db2c018d7a3960874b579aa87d9650c8d982fe58ea812f999ad270936261fcd1",
+    "sdk-emulator.mjs": "546d11881a43d189d0407f65cd3061c7f44bd5478d458336d9e653db02bad11a",
+    "proxy.mjs": "98063cd2688d8db9d80f9b83cda09913834bb23f13d768b4562aff3dd0bea254",
+    "../../GD91-60/firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "../../POC-001/package.json": "c2664ba0db5cc6f70d1297f1d8c1ba95e7b00eb04d08394a0881ff9576904125",
+    "../../POC-001/package-lock.json": "d7c8b46a3a39083ff47ffa4fdcf558f8b3a8f1604a2e561b499570d2f678b9a6",
+    "../../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0",
+    "../../POC-001/node_modules/@firebase/firestore/dist/common-DjihRWhV.node.mjs": "3bd0025959a3b03fd98fb14dfe3b98de1e4506303dd99b286456f30120ef9649",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/tests/budgets.mjs": "273972964614386fb62290091ba7f99e7b2f9a5dd21d1061bc4ab243b90eddfe",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-59/firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../../GD91-39/firestore.rules": "add9e7fa196388f0a77578762cd4d0233a648f8e1b90134d31f656aee7ef2289",
+    "../../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../sdk-adapter.mjs": "db2c018d7a3960874b579aa87d9650c8d982fe58ea812f999ad270936261fcd1",
+    "sdk-emulator.mjs": "546d11881a43d189d0407f65cd3061c7f44bd5478d458336d9e653db02bad11a",
+    "proxy.mjs": "98063cd2688d8db9d80f9b83cda09913834bb23f13d768b4562aff3dd0bea254",
+    "../../GD91-60/firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "../../POC-001/package.json": "c2664ba0db5cc6f70d1297f1d8c1ba95e7b00eb04d08394a0881ff9576904125",
+    "../../POC-001/package-lock.json": "d7c8b46a3a39083ff47ffa4fdcf558f8b3a8f1604a2e561b499570d2f678b9a6",
+    "../../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0",
+    "../../POC-001/node_modules/@firebase/firestore/dist/common-DjihRWhV.node.mjs": "3bd0025959a3b03fd98fb14dfe3b98de1e4506303dd99b286456f30120ef9649",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/tests/budgets.mjs": "273972964614386fb62290091ba7f99e7b2f9a5dd21d1061bc4ab243b90eddfe",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-59/firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../../GD91-39/firestore.rules": "add9e7fa196388f0a77578762cd4d0233a648f8e1b90134d31f656aee7ef2289",
+    "../../GD91-42/firestore.rules": "66a9da347bcf7267ba717f2ff6a218db22efa043aee58bb87db14beeb18a71e3",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "budgets": {
+    "state": [
+      7,
+      1,
+      3,
+      4
+    ],
+    "roleChange": [
+      4,
+      6
+    ],
+    "session": [
+      2
+    ],
+    "preparation": [
+      4,
+      5
+    ],
+    "quarantine": [
+      6,
+      1,
+      1
+    ],
+    "publication": [
+      8,
+      6,
+      6
+    ],
+    "read": {
+      "reception": 4,
+      "closedManager": 7,
+      "dayTemporary": 7,
+      "management": 3,
+      "selfRole": 4,
+      "preparationResult": 3
+    },
+    "policy": {
+      "reception": 5,
+      "temporaryManager": 5,
+      "temporaryStaff": 8,
+      "postCorrection": 5
+    }
+  },
+  "comparison": {
+    "preservedFunctions": [
+      "scope",
+      "roleValid",
+      "providerValid",
+      "currentPreparation",
+      "generalPreparation",
+      "sessionShape",
+      "recentHumanAt",
+      "recentHuman",
+      "identity",
+      "authorizedLevel",
+      "authorized",
+      "issueSession",
+      "revokeSession",
+      "manager",
+      "candidateProof",
+      "common",
+      "readyCandidate",
+      "publicationAssignment",
+      "publication",
+      "versionUpdate",
+      "assignmentUpdate",
+      "eventCreate"
+    ],
+    "cacheDiscount": false,
+    "expressionEvaluationMeasured": false
+  },
+  "scope": "SDK publication/state transactions, fixed proposals, error classification, ID result lookup and offline negative control. No browser, Auth SDK, IndexedDB, real response loss, full business C or real devices.",
+  "reports": [
+    {
+      "id": "S01",
+      "label": "SDK transaction publishes the ordinary completed candidate",
+      "status": "passed",
+      "callbacks": 1,
+      "writes": 3,
+      "writesPerCommit": 3,
+      "elapsedMs": 7756
+    },
+    {
+      "id": "S02",
+      "label": "SDK state transition advances the shared version atomically",
+      "status": "passed",
+      "writesPerCommit": 4,
+      "commonVersion": 2,
+      "elapsedMs": 1591
+    },
+    {
+      "id": "S03",
+      "label": "same ID and payload return the existing result without another update",
+      "status": "passed",
+      "replays": 2,
+      "callbacks": 2,
+      "writes": 0,
+      "elapsedMs": 1406
+    },
+    {
+      "id": "S04",
+      "label": "same ID with a different event is rejected before writes",
+      "status": "passed",
+      "code": "operation-id-conflict",
+      "callbacks": 1,
+      "writes": 0,
+      "elapsedMs": 1429
+    },
+    {
+      "id": "S05",
+      "label": "a stale confirmed proposal is not rebuilt from new state",
+      "status": "passed",
+      "code": "stale-version",
+      "callbacks": 1,
+      "writes": 0,
+      "elapsedMs": 1513
+    },
+    {
+      "id": "S06",
+      "label": "revoked identity returns permission-denied without application resend",
+      "status": "passed",
+      "code": "permission-denied",
+      "callbacks": 1,
+      "writes": 0,
+      "resultNotMisreportedAbsent": true,
+      "elapsedMs": 1455
+    },
+    {
+      "id": "S07",
+      "label": "negative control: disableNetwork does not block a transaction in this SDK runtime",
+      "status": "passed",
+      "callbacks": 1,
+      "writes": 3,
+      "negativeControlOnly": true,
+      "disableNetworkNotASendGuard": true,
+      "elapsedMs": 1446
+    },
+    {
+      "id": "S08",
+      "label": "negative control: writeBatch queues while offline and sends on reconnect",
+      "status": "passed",
+      "automaticallyAppliedOnReconnect": true,
+      "negativeControlOnly": true,
+      "excludedFromAdapter": true,
+      "elapsedMs": 1593
+    },
+    {
+      "id": "S09",
+      "label": "discarded success is recovered by another SDK instance with the original ID",
+      "status": "passed",
+      "discardedAcknowledgement": true,
+      "newClientInstance": true,
+      "callbacks": 1,
+      "writes": 0,
+      "processRestartTested": false,
+      "elapsedMs": 1458
+    },
+    {
+      "id": "S10",
+      "label": "offline result lookup is unknown and must not authorize resend",
+      "status": "passed",
+      "lookup": {
+        "state": "unknown",
+        "code": "unavailable"
+      },
+      "automaticResend": false,
+      "elapsedMs": 1453
+    },
+    {
+      "id": "S11",
+      "label": "ten SDK publication versus start races preserve one result and fixed proposals",
+      "status": "passed",
+      "raceCount": 10,
+      "races": [
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 2,
+              "writes": 8
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 2,
+              "writes": 8
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 1,
+              "writes": 4
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 1,
+              "writes": 4
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 1,
+              "writes": 4
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 1,
+              "writes": 4
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 1,
+              "writes": 4
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "committed",
+            "permission-denied"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 1,
+              "writes": 4
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "publication"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 2,
+              "writes": 8
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        },
+        {
+          "initialSuccesses": 1,
+          "codes": [
+            "permission-denied",
+            "committed"
+          ],
+          "traces": [
+            {
+              "callbacks": 1,
+              "writes": 3
+            },
+            {
+              "callbacks": 2,
+              "writes": 8
+            }
+          ],
+          "explicitRetry": false,
+          "winner": "start"
+        }
+      ],
+      "maximumInitialSuccesses": 1,
+      "finalSuccessesPerRace": 1,
+      "recomputeProposalOnRetry": false,
+      "elapsedMs": 25295
+    },
+    {
+      "id": "S12",
+      "label": "a malformed partial SDK transaction is denied with no changes",
+      "status": "passed",
+      "code": "permission-denied",
+      "noPartialState": true,
+      "elapsedMs": 1394
+    },
+    {
+      "id": "S13",
+      "label": "explicit offline guard makes no callback and reconnect alone leaves the operation absent",
+      "status": "passed",
+      "code": "explicit-offline",
+      "callbacks": 0,
+      "writes": 0,
+      "elapsedMs": 1419
+    },
+    {
+      "id": "S14",
+      "label": "injected gRPC UNAVAILABLE exhausts bounded retries without queuing; recovery needs explicit send",
+      "status": "passed",
+      "code": "unavailable",
+      "callbacks": 3,
+      "writes": 0,
+      "proxy": {
+        "forwarded": 4,
+        "rejected": 3
+      },
+      "explicitSendAfterRecovery": true,
+      "realRadioOutageTested": false,
+      "elapsedMs": 3601
+    }
+  ]
+}
