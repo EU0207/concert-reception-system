@@ -1,0 +1,32 @@
+{
+  "executedAt": "2026-10-11T08:59:30.711Z",
+  "suiteCompleted": false,
+  "successfulBusinessSuite": false,
+  "passedBeforeFailure": 13,
+  "failedCase": "Q14",
+  "hashesRecordedAfterFailure": true,
+  "sourceHashes": {
+    "../firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "publication-emulator.mjs": "65bb25731d3fb7fc5d2f7161bc4ed83cd9082543a4248068af986735f76d4821",
+    "publication-support.mjs": "6a1494b75817e6e5f2f6f3cb6f4770fe4e7a6f95ea6a22a065a77fce251a1dfe",
+    "publication-budgets.mjs": "d8535bf860ff943d8c9d410f4b08bb22fa1a16f73864a1cf29817bc41c54304d",
+    "candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "1ff3dc6ee56dabe846f4e7094db6a3b258fb12f0dfd8deb9c748b2ef2620f6c2",
+    "transport.mjs": "6677baad1af7e09cb5e7076e84a9d2ae9329e20e115006bf13542122131137d8",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "cause": "The fixture publication seatIds shared the oldIds array. Appending a foreign section seat also appended it to the old-section comparison input.",
+  "resolution": "Clone publication fixture before adding foreign section IDs. Production Rules unchanged.",
+  "changedLines": [
+    {
+      "file": "publication-emulator.mjs",
+      "before": "await prime(f);await primeBusiness(f);const section=randomUUID()",
+      "after": "await prime(f);await primeBusiness(f);f.publicationVersion=structuredClone(f.publicationVersion);const section=randomUUID()"
+    }
+  ]
+}

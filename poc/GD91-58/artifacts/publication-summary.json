@@ -1,0 +1,163 @@
+{
+  "executedAt": "2026-10-11T09:00:28.921Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "publication-emulator.mjs": "64d07f6d011389a331b222e0a78129b5975267f2162fc835f2564a5e6904de23",
+    "publication-support.mjs": "6a1494b75817e6e5f2f6f3cb6f4770fe4e7a6f95ea6a22a065a77fce251a1dfe",
+    "publication-budgets.mjs": "d8535bf860ff943d8c9d410f4b08bb22fa1a16f73864a1cf29817bc41c54304d",
+    "candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "1ff3dc6ee56dabe846f4e7094db6a3b258fb12f0dfd8deb9c748b2ef2620f6c2",
+    "transport.mjs": "6677baad1af7e09cb5e7076e84a9d2ae9329e20e115006bf13542122131137d8",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "18b37ee4a46180b8729de83a3d822e1ef3932f277c24691f8a72cf2600f80465",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "publication-emulator.mjs": "64d07f6d011389a331b222e0a78129b5975267f2162fc835f2564a5e6904de23",
+    "publication-support.mjs": "6a1494b75817e6e5f2f6f3cb6f4770fe4e7a6f95ea6a22a065a77fce251a1dfe",
+    "publication-budgets.mjs": "d8535bf860ff943d8c9d410f4b08bb22fa1a16f73864a1cf29817bc41c54304d",
+    "candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "1ff3dc6ee56dabe846f4e7094db6a3b258fb12f0dfd8deb9c748b2ef2620f6c2",
+    "transport.mjs": "6677baad1af7e09cb5e7076e84a9d2ae9329e20e115006bf13542122131137d8",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Ordinary GD91-57 candidates connected to GD91-47 three-write atomic publication in preparation period; latest version/control and assignment/ticket checks. Dedicated edit eligibility and full business workflows remain unverified.",
+  "referenceUpperBounds": {
+    "publication": [
+      8,
+      6,
+      6
+    ],
+    "assignmentProbe": [
+      9,
+      3,
+      3
+    ]
+  },
+  "reports": [
+    {
+      "id": "Q01",
+      "label": "ordinary proof candidate publishes version assignment and event together",
+      "status": "passed",
+      "ordinaryCandidate": true,
+      "atomicWrites": 3
+    },
+    {
+      "id": "Q02",
+      "label": "every incomplete atomic write subset is rejected without partial state",
+      "status": "passed",
+      "incompleteSubsets": 6
+    },
+    {
+      "id": "Q03",
+      "label": "candidate expected versions checked again at publication",
+      "status": "passed",
+      "changedVersions": 8,
+      "fixtureBusinessVersionChanges": true
+    },
+    {
+      "id": "Q04",
+      "label": "latest assignment protects changed seat while unchanged assignment survives",
+      "status": "passed",
+      "sameRevisionFixtureForIsolatedProtection": true
+    },
+    {
+      "id": "Q05",
+      "label": "latest ticket protection rejects changed seat and preserves unchanged seat",
+      "status": "passed",
+      "sameRevisionFixtureForIsolatedProtection": true
+    },
+    {
+      "id": "Q06",
+      "label": "change maps and assignment keys or occupants cannot be forged",
+      "status": "passed"
+    },
+    {
+      "id": "Q07",
+      "label": "operation and completed candidate are immutable",
+      "status": "passed"
+    },
+    {
+      "id": "Q08",
+      "label": "latest role device and session revocation stops publication and result query",
+      "status": "passed",
+      "fixtureRevocations": true
+    },
+    {
+      "id": "Q09",
+      "label": "current phase day boundary and control revision checked at publication",
+      "status": "passed"
+    },
+    {
+      "id": "Q10",
+      "label": "source active generation base phase and revision checked at publication",
+      "status": "passed"
+    },
+    {
+      "id": "Q11",
+      "label": "concurrent same operation commits once then result can be queried",
+      "status": "passed",
+      "physicalNetworkFaultInjected": false,
+      "resultQuery": true
+    },
+    {
+      "id": "Q12",
+      "label": "different operations competing for same version cannot both publish",
+      "status": "passed"
+    },
+    {
+      "id": "Q13",
+      "label": "foreign credentials and wrong event scope fail atomically",
+      "status": "passed"
+    },
+    {
+      "id": "Q14",
+      "label": "publication retains foreign section assignment from a scoped fixture",
+      "status": "passed",
+      "foreignSectionFixture": true
+    },
+    {
+      "id": "Q15",
+      "label": "candidate and old generation must still match latest section mapping",
+      "status": "passed"
+    },
+    {
+      "id": "Q16",
+      "label": "canonical version lists and event counters cannot be forged",
+      "status": "passed"
+    },
+    {
+      "id": "Q17",
+      "label": "ticket revision mismatch and malformed assignment publication cannot pass",
+      "status": "passed"
+    },
+    {
+      "id": "Q18",
+      "label": "ordinary assignment probe invalidates a previously completed candidate",
+      "status": "passed",
+      "ordinaryAssignmentProbe": true,
+      "fullBusinessRegression": false
+    },
+    {
+      "id": "Q19",
+      "label": "two ordinarily validated candidates publish sequentially without losing either section",
+      "status": "passed",
+      "ordinaryNewCandidates": 2,
+      "ordinaryPublications": 2,
+      "oldSectionsFixture": true
+    }
+  ]
+}
