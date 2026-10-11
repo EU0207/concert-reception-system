@@ -1,0 +1,17 @@
+{
+  "observedAt": "2026-10-11",
+  "generationFailure": {
+    "cause": "An abbreviated replacement pattern matched three functions rather than the single intended assignment shape.",
+    "action": "Selected the complete shape expression and restricted the mutation of coreAssignment to its function body.",
+    "runtimeTestsStarted": false
+  },
+  "regressionFailure": {
+    "newBranchesPassed": 24,
+    "oldCasesPassedBeforeFailure": ["L01", "L02", "L03", "L04"],
+    "failedCase": "L05",
+    "observedError": "PERMISSION_DENIED: maximum of 1000 expressions to evaluate has been reached",
+    "cause": "The protected-person assignment condition increased the already complex move/swap decision tree.",
+    "action": "Rebuild the affected protection set from the two resulting assignments and the protected-person list, without changing authorization or business constraints.",
+    "limit": "No numeric expression usage or billing measurement; the emulator exposes the rejected upper bound, not a headroom value."
+  }
+}

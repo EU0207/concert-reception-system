@@ -1,0 +1,160 @@
+    function lifeVersion(p,b,a,e) {
+      let c = control(p);
+      return manager(p) && coreBase(p,b,a,e,c) && uuid(e.targetId)
+        && a.values.diff(b.values).affectedKeys().hasOnly(['commit','ticket','attendee','assignment','reception'])
+        && (e.kind == 'cancelWithoutTicket' ? branchVersion(p,b,a,e)
+          : e.kind == 'returnAttendance' ? lifeReturnVersion(p,b,a,e)
+          : a.values.ticket == b.values.ticket+1 && a.values.attendee == b.values.attendee+(e.kind == 'cancelAttendance' ? 1 : 0)
+            && a.values.assignment == b.values.assignment+(e.kind == 'cancelAttendance' && e.payload.seatId != '' ? 1 : 0)
+            && a.values.reception == b.values.reception+(e.kind == 'ticketCheck' ? 0 : 1));
+    }
+    function lifeReturnVersion(p,b,a,e) {
+      let present = exists(/databases/$(database)/documents/publicationShows/$(p)/tickets/$(e.targetId));
+      return a.values.ticket == b.values.ticket && a.values.assignment == b.values.assignment
+        && a.values.attendee == b.values.attendee+1 && a.values.reception == b.values.reception+1
+        && (!present || branchClosedTicket(p,e.targetId)) && branchSeatFence(p,b,e.targetId,'');
+    }
+    function branchClosedTicket(p,id) {
+      let t = lifeOldTicket(p,id);
+      return t.cycleClosed == true && t.activeCredentialId == '';
+    }
+    function branchSeatFence(p,v,id,seatId) {
+      return v.values.layout == 0
+        ? seatId == '' && v.values.assignment == 0 && v.sections.size() == 0 && v.seatIds.size() == 0
+          && !exists(/databases/$(database)/documents/publicationShows/$(p)/assignmentState/current)
+        : branchExistingSeat(p,v,id,seatId);
+    }
+    function branchExistingSeat(p,v,id,seatId) {
+      let s = beforeAssignment(p);
+      return s.revision == v.values.assignment
+        && (seatId == '' ? !s.assignments.values().hasAny([id]) : s.assignments[seatId] == id);
+    }
+    function lifeTicket(p,id,b,a,creating) {
+      let v = afterVersion(p);
+      let i = lifeNextProtection(p);
+      return lifeShape(p,id,a) && v.operationId == a.operationId && a.resultVersions == v.values && i.operationId == a.operationId
+        && i.revision == v.values.ticket && branchTicketSeat(p,id,b,a,creating,v)
+        && a.eventPayload.before == lifeAudit(b) && a.eventPayload.after == lifeAudit(a)
+        && (creating ? a.revision == 1 : a.revision == b.revision+1)
+        && (a.lastKind == 'cancelAttendance' ? !creating && lifeCancelTicket(p,id,b,a)
+          : corePeople(p).attendeeIds.hasAny([id]) && lifeNormalTicket(p,b,a,creating));
+    }
+    function branchTicketSeat(p,id,b,a,creating,v) {
+      return branchSeatFence(p,{'values':{'layout':v.values.layout,'assignment':a.expectedVersions.assignment},'sections':v.sections,'seatIds':v.seatIds},id,a.operationSeatId)
+        && (a.operationSeatId != '' || (a.lastKind == 'cancelAttendance' ? !creating && b.activeCredentialId == ''
+          : a.lastKind == 'ticketCheck' && (creating || !b.cycleClosed)));
+    }
+    function lifeShape(p,id,a) {
+      return proto(p,a) && a.attendeeId == id && uuid(id) && uuid(a.operationId) && a.lastKind in ['qrCreate','ticketCheck','qrReissue','cancelAttendance']
+        && a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','revision','operationId','lastKind','currentCycle','cycleClosed','everIssued','issued','sent','issuedAt','sentAt','activeCredentialId','activeCode','credentialVersion','previousCredentialId','previousCode','operationSeatId','expectedVersions','resultVersions','eventPayload'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','revision','operationId','lastKind','currentCycle','cycleClosed','everIssued','issued','sent','issuedAt','sentAt','activeCredentialId','activeCode','credentialVersion','previousCredentialId','previousCode','operationSeatId','expectedVersions','resultVersions','eventPayload'])
+        && integer(a.revision) && a.revision > 0 && integer(a.currentCycle) && a.currentCycle > 0 && integer(a.credentialVersion)
+        && a.issued is bool && a.sent is bool && a.everIssued is bool && a.cycleClosed is bool
+        && a.eventPayload.keys().hasAll(['seatId','before','after','reason','confirmedPrimary','confirmedTicketWarning','stopConfirmed'])
+        && a.eventPayload.keys().hasOnly(['seatId','before','after','reason','confirmedPrimary','confirmedTicketWarning','stopConfirmed'])
+        && a.eventPayload.seatId == a.operationSeatId && (a.operationSeatId == '' || uuid(a.operationSeatId))
+        && a.eventPayload.reason is string && a.eventPayload.reason.size() <= 500
+        && a.eventPayload.confirmedPrimary is bool && a.eventPayload.confirmedTicketWarning is bool && a.eventPayload.stopConfirmed is bool;
+    }
+    function lifeProtection(p,b,a) {
+      return a.kind in ['assign','move','swap'] ? lifeAllocationIndex(p,b,a) : lifeTicketProtection(p,b,a);
+    }
+    function lifeAllocationIndex(p,b,a) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      return a.kind == e.kind && e.kind in ['assign','move','swap'] && a.operationId == v.operationId && a.revision == v.values.ticket && a.revision == b.revision+1
+        && b.revision == e.expectedVersions.ticket;
+    }
+    function lifeTicketProtection(p,b,a) {
+      let t = lifeNextTicket(p,a.targetId);
+      let protected = !t.cycleClosed && (t.issued || t.everIssued || t.activeCredentialId != '');
+      let oldPeople = b.get('protectedAttendeeIds',[]).toSet();
+      let oldSeats = b.seatIds.toSet();
+      return proto(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','revision','operationId','seatIds','protectedAttendeeIds','targetId','kind'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','revision','operationId','seatIds','protectedAttendeeIds','targetId','kind'])
+        && a.kind == t.lastKind && a.operationId == t.operationId && a.targetId == t.attendeeId && a.revision == b.revision+1 && a.revision == t.resultVersions.ticket && b.revision == t.expectedVersions.ticket
+        && a.seatIds is list && a.seatIds.size() == a.seatIds.toSet().size() && !a.seatIds.hasAny([''])
+        && a.protectedAttendeeIds is list && a.protectedAttendeeIds.size() == a.protectedAttendeeIds.toSet().size()
+        && a.protectedAttendeeIds.toSet() == (protected ? oldPeople.union([t.attendeeId].toSet()) : oldPeople.difference([t.attendeeId].toSet()))
+        && a.seatIds.toSet() == (t.operationSeatId == '' ? oldSeats : protected ? oldSeats.union([t.operationSeatId].toSet()) : oldSeats.difference([t.operationSeatId].toSet()));
+    }
+    function lifeAllocationProtection(p,b,a,e,t) {
+      let n = lifeNextProtection(p);
+      let x = e.payload;
+      let people = t.get('protectedAttendeeIds',[]);
+      let expected = t.seatIds.toSet().difference([x.seat1,x.seat2].toSet())
+        .union((people.hasAny([x.after1]) ? [x.seat1] : []).toSet())
+        .union((people.hasAny([x.after2]) ? [x.seat2] : []).toSet());
+      let changed = expected != t.seatIds.toSet();
+      return proto(p,t) && (t.keys().hasAny(['protectedAttendeeIds']) || t.seatIds.size() == 0)
+        && t.revision == b.values.ticket && a.values.ticket == b.values.ticket+(changed ? 1 : 0)
+        && (!changed ? n == t : proto(p,n) && n.keys() == t.keys() && n.diff(t).affectedKeys().hasOnly(['revision','operationId','seatIds','kind'])
+          && n.kind == e.kind && n.revision == t.revision+1 && n.operationId == a.operationId && n.seatIds.size() == n.seatIds.toSet().size() && n.seatIds.toSet() == expected)
+        && (e.kind == 'unassign' ? !t.seatIds.hasAny([x.seat1]) : e.kind != 'move' || !t.seatIds.hasAny([x.seat1]) || x.reason.matches('.*\\S.*'));
+    }
+    function lifeCancelPeople(p,b,a) {
+      return a.get('cancelNoSeatOperationId','') == a.operationId ? branchNoSeatPeople(p,b,a) : branchSeatedPeople(p,b,a);
+    }
+    function branchSeatedPeople(p,b,a) {
+      let s = afterAssignment(p);
+      return proto(p,a) && a.keys().toSet() == b.keys().toSet().union(['cancelledAttendeeId'].toSet())
+        && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeIds','cancelledAttendeeId'])
+        && a.operationId == s.operationId && a.cancelledAttendeeId == s.cancelledAttendeeId
+        && a.revision == b.revision+1 && b.attendeeIds.hasAny([a.cancelledAttendeeId]) && a.attendeeIds == b.attendeeIds.removeAll([a.cancelledAttendeeId]);
+    }
+    function branchNoSeatPeople(p,b,a) {
+      let t = lifeNextTicket(p,a.cancelledAttendeeId);
+      return proto(p,a) && a.keys().toSet() == b.keys().toSet().union(['cancelledAttendeeId','cancelNoSeatOperationId'].toSet())
+        && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeIds','cancelledAttendeeId','cancelNoSeatOperationId'])
+        && t.lastKind == 'cancelAttendance' && t.operationSeatId == '' && t.operationId == a.operationId && a.revision == t.resultVersions.attendee
+        && a.revision == b.revision+1 && b.attendeeIds.hasAny([a.cancelledAttendeeId]) && a.attendeeIds == b.attendeeIds.removeAll([a.cancelledAttendeeId]);
+    }
+    function branchVersion(p,b,a,e) {
+      let person = coreNextProfile(p,e.targetId);
+      return a.values.ticket == b.values.ticket && a.values.attendee == b.values.attendee+1
+        && a.values.assignment == b.values.assignment+(e.payload.seatId == '' ? 0 : 1) && a.values.reception == b.values.reception+1
+        && person.operationId == a.operationId && person.attendancePlan == 'notAttending' && person.cancelNoTicketOperationId == a.operationId
+        && e.payload.keys().hasAll(['seatId','confirmedPrimary']) && e.payload.keys().hasOnly(['seatId','confirmedPrimary']) && e.payload.confirmedPrimary == true
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/tickets/$(e.targetId))
+        && !existsAfter(/databases/$(database)/documents/publicationShows/$(p)/tickets/$(e.targetId))
+        && branchSeatFence(p,b,e.targetId,e.payload.seatId);
+    }
+    function branchProfile(p,id,b,a) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      let people = coreNextPeople(p);
+      return proto(p,a) && a.keys().toSet() == b.keys().toSet().union(['cancelNoTicketOperationId'].toSet())
+        && a.diff(b).affectedKeys().hasOnly(['attendancePlan','revision','operationId','cancelNoTicketOperationId'])
+        && a.revision == b.revision+1 && b.attendancePlan == 'planned' && a.attendancePlan == 'notAttending'
+        && a.operationId == v.operationId && e.kind == 'cancelWithoutTicket' && e.targetId == id
+        && people.operationId == a.operationId && people.cancelNoTicketOperationId == a.operationId && people.cancelledAttendeeId == id;
+    }
+    function branchPeople(p,b,a) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      let person = coreNextProfile(p,e.targetId);
+      return proto(p,a) && a.keys().toSet() == b.keys().toSet().union(['cancelNoTicketOperationId','cancelledAttendeeId'].toSet())
+        && a.diff(b).affectedKeys().hasOnly(['revision','operationId','attendeeIds','cancelNoTicketOperationId','cancelledAttendeeId'])
+        && e.kind == 'cancelWithoutTicket' && a.operationId == v.operationId && person.operationId == a.operationId && a.cancelledAttendeeId == e.targetId
+        && a.revision == v.values.attendee && a.revision == b.revision+1 && b.revision == e.expectedVersions.attendee
+        && b.attendeeIds.hasAny([e.targetId]) && a.attendeeIds == b.attendeeIds.removeAll([e.targetId])
+        && (e.payload.seatId == '' || branchNextAssignment(p,a.operationId,e.targetId));
+    }
+    function branchNextAssignment(p,op,id) {
+      let s = afterAssignment(p);
+      return s.operationId == op && s.cancelNoTicketOperationId == op && s.cancelledAttendeeId == id;
+    }
+    function branchAssignment(p,b,a) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      return assignmentShape(p,a) && a.keys().toSet() == b.keys().toSet().union(['cancelNoTicketOperationId','cancelledAttendeeId'].toSet())
+        && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments','cancelNoTicketOperationId','cancelledAttendeeId'])
+        && e.kind == 'cancelWithoutTicket' && e.targetId == a.cancelledAttendeeId && e.payload.seatId != ''
+        && a.publicationOperationId == b.publicationOperationId && a.revision == b.revision+1 && a.operationId == v.operationId
+        && a.revision == v.values.assignment && b.revision == e.expectedVersions.assignment
+        && a.assignments.keys() == b.assignments.keys() && b.assignments[e.payload.seatId] == e.targetId && a.assignments[e.payload.seatId] == ''
+        && a.assignments.diff(b.assignments).affectedKeys() == [e.payload.seatId].toSet();
+    }
+    function branchEvent(p,e) {
+      return afterVersion(p).operationId == e.operationId && e.controlRevision == e.expectedVersions.control;
+    }
