@@ -1,0 +1,9 @@
+{
+  "executedAt": "2026-10-11T09:23:28.105Z",
+  "testsStarted": false,
+  "cause": "Firebase CLI rejects a Rules path outside its project directory.",
+  "resolution": "Copy GD91-58 Rules unchanged into the isolated directory and verify byte equality.",
+  "configurationBefore": "{\n  \"firestore\": {\n    \"rules\": \"../GD91-58/firestore.rules\"\n  },\n  \"emulators\": {\n    \"auth\": {\n      \"host\": \"127.0.0.1\",\n      \"port\": 9191\n    },\n    \"firestore\": {\n      \"host\": \"127.0.0.1\",\n      \"port\": 8181\n    },\n    \"hub\": {\n      \"host\": \"127.0.0.1\",\n      \"port\": 4401\n    },\n    \"logging\": {\n      \"host\": \"127.0.0.1\",\n      \"port\": 4501\n    },\n    \"ui\": {\n      \"enabled\": false\n    },\n    \"singleProjectMode\": true\n  }\n}\n",
+  "configurationBeforeSha256": "9c3577f7008c8500323772d3bd21190f1e1cd10657ed33bf71fde3a7dc7f1da0",
+  "configurationAfterSha256": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d"
+}
