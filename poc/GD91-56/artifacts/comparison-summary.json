@@ -1,0 +1,151 @@
+{
+  "executedAt": "2026-10-11T07:32:21.911Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "08f5eddb68b94895650d8f3e5a41e5973ad57523bf151ee5b5664b1971fff306",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "comparison-emulator.mjs": "5155eccf5fef3967741deb5839e60fb4989a5d88ce6174438d6f8e9ffa2453c1",
+    "comparison-support.mjs": "93ca1c0d20b61cdd02b6f5845fefe76802b530a6c8f98ff70cb5d25143ac2048",
+    "global-support.mjs": "df36fdd46d14984d90c2fd30ed7053bb9373cfaf57a698be4020a7087095436b",
+    "support.mjs": "fb8faeaf2bf1bc8f29f67cd23e54f73d6120573daf216630abd3450426f4274c",
+    "transport.mjs": "c1670c9bd7d5c1196dd9bdc39ed3d6ced4554d1e9bb4504dc6bb7d1e6921618e",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "08f5eddb68b94895650d8f3e5a41e5973ad57523bf151ee5b5664b1971fff306",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "comparison-emulator.mjs": "5155eccf5fef3967741deb5839e60fb4989a5d88ce6174438d6f8e9ffa2453c1",
+    "comparison-support.mjs": "93ca1c0d20b61cdd02b6f5845fefe76802b530a6c8f98ff70cb5d25143ac2048",
+    "global-support.mjs": "df36fdd46d14984d90c2fd30ed7053bb9373cfaf57a698be4020a7087095436b",
+    "support.mjs": "fb8faeaf2bf1bc8f29f67cd23e54f73d6120573daf216630abd3450426f4274c",
+    "transport.mjs": "c1670c9bd7d5c1196dd9bdc39ed3d6ced4554d1e9bb4504dc6bb7d1e6921618e",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Ordinary catalog and new seat-source issuance; all old seats compared by ID with attribute/prefix and appended unset geometry changes. Published old raw head/catalog/chunks/attributes, parent and protected business seat lists are fixtures. Base manifest and facts issued through ordinary requests. Not complete publication eligibility, retired non-seat/consumption history, full business regression, SDK/device or adoption proof.",
+  "referenceUpperBounds": {
+    "catalogStartAndUpdate": 5,
+    "seatFactCreate": 9,
+    "comparisonStart": 6,
+    "comparisonStep": 8,
+    "comparisonResult": 10,
+    "progressRead": 5
+  },
+  "reports": [
+    {
+      "id": "S01",
+      "label": "catalog is issued by ordinary requests with exact head lines",
+      "status": "passed"
+    },
+    {
+      "id": "S02",
+      "label": "catalog cannot be forged reset or extend past its end",
+      "status": "passed"
+    },
+    {
+      "id": "S03",
+      "label": "incomplete catalog blocks local proof",
+      "status": "passed",
+      "truncatedCatalogFixture": true
+    },
+    {
+      "id": "S04",
+      "label": "seat source is derived from immutable completed fragment",
+      "status": "passed"
+    },
+    {
+      "id": "S05",
+      "label": "forged seat source content slot and ID rejected",
+      "status": "passed"
+    },
+    {
+      "id": "S06",
+      "label": "seat source requires final local proof and is immutable",
+      "status": "passed"
+    },
+    {
+      "id": "S07",
+      "label": "all 500 old seats compare by seat ID and unchanged protected seats pass",
+      "status": "passed",
+      "seats": 500,
+      "catalogWrites": 11,
+      "localAndGlobalWrites": 2253,
+      "seatFactWrites": 500,
+      "comparisonWrites": 501,
+      "resultWrites": 1,
+      "baseCellFactWrites": 500,
+      "baseManifestWrites": 501,
+      "cellComparisonWrites": 501,
+      "totalCandidateWrites": 4768,
+      "totalCandidateRequests": 4518,
+      "baseAndProtectionFixtureWritesExcluded": true,
+      "publicationCostMeasured": false
+    },
+    {
+      "id": "S08",
+      "label": "appended unset row or column preserves old seat ID facts",
+      "status": "passed",
+      "extensions": 2,
+      "physicalExtensionAuthorizationVerified": false
+    },
+    {
+      "id": "S09",
+      "label": "changed line prefix and optional attributes are detected",
+      "status": "passed"
+    },
+    {
+      "id": "S10",
+      "label": "assigned or ticket protected changed seat blocks result",
+      "status": "passed"
+    },
+    {
+      "id": "S11",
+      "label": "missing old seat cannot be omitted by compare or result",
+      "status": "passed",
+      "oldSeatOmittedFromNewCandidate": true
+    },
+    {
+      "id": "S12",
+      "label": "comparison cannot skip forge or conceal changed seats",
+      "status": "passed"
+    },
+    {
+      "id": "S13",
+      "label": "result requires full structural and old-seat proofs",
+      "status": "passed"
+    },
+    {
+      "id": "S14",
+      "label": "result binding totals and change list cannot be forged",
+      "status": "passed"
+    },
+    {
+      "id": "S15",
+      "label": "latest protection revision and role revocation stop result",
+      "status": "passed"
+    },
+    {
+      "id": "S16",
+      "label": "comparison concurrency progresses once and result can be queried",
+      "status": "passed",
+      "transportFaultInjected": false
+    },
+    {
+      "id": "S17",
+      "label": "foreign devices stale bases and publication forgery rejected",
+      "status": "passed"
+    },
+    {
+      "id": "S18",
+      "label": "catalog rejects invalid line metadata and duplicate line IDs",
+      "status": "passed",
+      "invalidParentMetadataFixture": true
+    }
+  ]
+}
