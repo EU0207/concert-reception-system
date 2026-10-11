@@ -9,7 +9,7 @@
 | 目的 | #101の限定検証を、結果・費用・未検証範囲と証拠へ追跡する |
 | 読者 | 開発者、設計担当者、テスト担当者 |
 | 状態 | In Review |
-| 承認範囲 | GD91-01～55は各PRで定めた限定範囲を承認済み。正式な範囲は[詳細設計の承認情報](../detailed-design/seat-management-detail-design.md#この文書について)を参照。未実施試験と方式全体は承認扱いにしない |
+| 承認範囲 | GD91-01～56は各PRで定めた限定範囲を承認済み。正式な範囲は[詳細設計の承認情報](../detailed-design/seat-management-detail-design.md#この文書について)を参照。未実施試験と方式全体は承認扱いにしない |
 | 関連Issue | [#91](https://github.com/EU0207/concert-reception-system/issues/91)、[#101](https://github.com/EU0207/concert-reception-system/issues/101) |
 
 依頼者の業務回答を変更しない。技術レビューは開発側で行い、依頼者へ詳細設計全体の承認を求めない。
