@@ -1,0 +1,38 @@
+{
+  "Attempt": 1,
+  "Phase": "Rules compile before first scenario",
+  "TestsPassed": 0,
+  "RulesHashBeforeRepair": "d23b12c6c12c9fc3f29c07322005dd606349795dd048df2c240b70d19a3b9e74",
+  "Error": "Unexpected match at L731; string replacement interpreted a dollar suffix in a regex as replacement syntax",
+  "Repair": "Insert literal function text with a replacement callback and verify function bodies",
+  "followup": {
+    "attempt": 2,
+    "phase": "A01 timestamp assertion after 18 B/C cases",
+    "passedBeforeFailure": 18,
+    "cause": "Equivalent RFC3339 timestamp strings differ only in zero milliseconds",
+    "repair": "Compare epoch milliseconds; preserve exact authority conditions",
+    "sourceHash": "b02e0c3dfca1ee8a11691760053ce921ec30f7145661c8f684933ab8b98545f3"
+  },
+  "thirdAttempt": {
+    "phase": "first V1 fixture after 26 A/B cases",
+    "passedBeforeFailure": 26,
+    "cause": "Session expiration computed after role expiration with the same one-hour offset, so issuance correctly refused",
+    "repair": "Give the fixture session a shorter lifetime; do not weaken role-expiration verification",
+    "sourceHashesRecordedIn": "failed-run artifact",
+    "secondaryRuntime": "Node child exited with Windows asynchronous handle assertion after the failed request"
+  },
+  "fourthAttempt": {
+    "phase": "J04 after 43 passed cases",
+    "passedBeforeFailure": 43,
+    "cause": "Concurrent commits acquired versions and control in opposite orders; emulator reported transaction lock timeout and neither request succeeded",
+    "repair": "Use a stable common-version-first write order on the state adapter, retaining the exactly-one-success assertion",
+    "sourceHashesRecordedIn": "failed-run-1791717120657.json"
+  },
+  "fifthAttempt": {
+    "phase": "ten-race J04 followup",
+    "cause": "Common-version-first order is insufficient: observed 409 ABORTED lock timeout and 403 Rules service-call error, with no request committed",
+    "repair": "Require at most one initial success; for the specifically observed transient dual rejection verify all state and both operation IDs before explicit same-ID retry, then require one final success and reject loser reapply",
+    "automaticRetryImplemented": false,
+    "sdkAndProductionConcurrencyStillUnverified": true
+  }
+}
