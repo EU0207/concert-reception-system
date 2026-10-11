@@ -1,0 +1,95 @@
+{
+  "executedAt": "2026-10-10T19:08:01.065Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "steps": 3,
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "01c53c3009281343fb57e99a2a3eac4457cee44d7368cf460060c3992a26802e",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "diagnostic.mjs": "ae8dfe24bc19dc192837eb36e140e158a70679fe8e24dc9edcd5b150e5d713ca",
+    "support.mjs": "eb4222d3e87d9c47cb3e577ead59f143520ca71e7a2aad82dd61fbfcab7959ba",
+    "transport.mjs": "679dbed3f8b412af6c0d26f039ba12a73b26c9efc3abfe131e0eab583c409fba",
+    "../../GD91-51/firestore.rules": "4507dc90053cdb03a3054c026b7ee3233926961aa409cb1b0f22658b1b343171",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "01c53c3009281343fb57e99a2a3eac4457cee44d7368cf460060c3992a26802e",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "diagnostic.mjs": "ae8dfe24bc19dc192837eb36e140e158a70679fe8e24dc9edcd5b150e5d713ca",
+    "support.mjs": "eb4222d3e87d9c47cb3e577ead59f143520ca71e7a2aad82dd61fbfcab7959ba",
+    "transport.mjs": "679dbed3f8b412af6c0d26f039ba12a73b26c9efc3abfe131e0eab583c409fba",
+    "../../GD91-51/firestore.rules": "4507dc90053cdb03a3054c026b7ee3233926961aa409cb1b0f22658b1b343171",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Six valid inputs comparing grouped local proof only. No adverse-input regression, full candidate, publication, total save cost, production or actual-device proof.",
+  "accepted": 6,
+  "expressionLimited": 0,
+  "reports": [
+    {
+      "id": "C01",
+      "label": "manual from gap",
+      "inputValidatedByCodec": true,
+      "submittedCells": 2,
+      "completed": 3,
+      "limitedAt": null,
+      "outcome": "accepted",
+      "progressAndDataReadbackChecked": true
+    },
+    {
+      "id": "C02",
+      "label": "manual from space",
+      "inputValidatedByCodec": true,
+      "submittedCells": 2,
+      "completed": 3,
+      "limitedAt": null,
+      "outcome": "accepted",
+      "progressAndDataReadbackChecked": true
+    },
+    {
+      "id": "C03",
+      "label": "retained automatic seats",
+      "inputValidatedByCodec": true,
+      "submittedCells": 2,
+      "completed": 3,
+      "limitedAt": null,
+      "outcome": "accepted",
+      "progressAndDataReadbackChecked": true
+    },
+    {
+      "id": "C04",
+      "label": "manual from aisle",
+      "inputValidatedByCodec": true,
+      "submittedCells": 2,
+      "completed": 3,
+      "limitedAt": null,
+      "outcome": "accepted",
+      "progressAndDataReadbackChecked": true
+    },
+    {
+      "id": "C05",
+      "label": "manual final single cell",
+      "inputValidatedByCodec": true,
+      "submittedCells": 1,
+      "completed": 3,
+      "limitedAt": null,
+      "outcome": "accepted",
+      "progressAndDataReadbackChecked": true
+    },
+    {
+      "id": "C06",
+      "label": "single automatic cell",
+      "inputValidatedByCodec": true,
+      "submittedCells": 1,
+      "completed": 3,
+      "limitedAt": null,
+      "outcome": "accepted",
+      "progressAndDataReadbackChecked": true
+    }
+  ]
+}
