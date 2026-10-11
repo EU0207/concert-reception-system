@@ -1,0 +1,259 @@
+{
+  "executedAt": "2026-10-11T12:41:43.390Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "sourceHashes": {
+    "../business.rules": "d042fc6e8e18ba8c871c3a831f6ec2c302468b1c3f74b95ab0301ef500c284d1",
+    "../generate.mjs": "ded019d0771248801e96ee5a1be9f3bd6c0ebb92759987614c01f2ae8a888121",
+    "../firebase.json": "7886b3ee104f19ab57cdfd27fb04f084f0f80feb5f1dc237f76c9a9d9cdd009e",
+    "../node_modules/.cache/firestore.rules": "864b1c91c659456cd17a04a55e76cf7417125e7a0f940d01f24f1e5f53048f0f",
+    "support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0",
+    "budgets.mjs": "06b15441431a6440108b961966729cfa5dc21b4bc3c71cd3925b3d842b008575",
+    "emulator.mjs": "3e69ab6b52f6b968cd2eaa9720165f36f5bc3bf128b8ea7706e02447c3ed014d",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../business.rules": "d042fc6e8e18ba8c871c3a831f6ec2c302468b1c3f74b95ab0301ef500c284d1",
+    "../generate.mjs": "ded019d0771248801e96ee5a1be9f3bd6c0ebb92759987614c01f2ae8a888121",
+    "../firebase.json": "7886b3ee104f19ab57cdfd27fb04f084f0f80feb5f1dc237f76c9a9d9cdd009e",
+    "../node_modules/.cache/firestore.rules": "864b1c91c659456cd17a04a55e76cf7417125e7a0f940d01f24f1e5f53048f0f",
+    "support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0",
+    "budgets.mjs": "06b15441431a6440108b961966729cfa5dc21b4bc3c71cd3925b3d842b008575",
+    "emulator.mjs": "3e69ab6b52f6b968cd2eaa9720165f36f5bc3bf128b8ea7706e02447c3ed014d",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "budgets": {
+    "registration": [
+      7,
+      3,
+      4,
+      3,
+      3
+    ],
+    "paid": [
+      7,
+      4,
+      3,
+      3
+    ],
+    "singleAssignment": [
+      9,
+      5,
+      3
+    ],
+    "pairAssignment": [
+      9,
+      7,
+      3
+    ],
+    "publication": [
+      8,
+      6,
+      6
+    ],
+    "state": [
+      7,
+      1,
+      3,
+      4
+    ]
+  },
+  "preservedFunctions": [
+    "scope",
+    "roleValid",
+    "providerValid",
+    "currentPreparation",
+    "generalPreparation",
+    "sessionShape",
+    "recentHumanAt",
+    "recentHuman",
+    "identity",
+    "authorizedLevel",
+    "authorized",
+    "issueSession",
+    "revokeSession",
+    "manager",
+    "candidateProof",
+    "common",
+    "readyCandidate",
+    "publicationAssignment",
+    "publication",
+    "stateVersion",
+    "stateWrite",
+    "stateEvent"
+  ],
+  "scope": "GD91-60 same canonical roots and ordinary candidate publication joined to registration, separated label, payment and unissued manual assign/unassign/move/swap. 500 people registration only; four seats. No bulk placement, ticket creation/cancellation, dedicated edits, projection issuance, shared drafts, SDK or real devices.",
+  "reports": [
+    {
+      "id": "K01",
+      "label": "ordinary registration writes both name-separated sources index version and history",
+      "status": "passed",
+      "writes": 5,
+      "normalAuthAndCandidate": true,
+      "nameSeparated": true
+    },
+    {
+      "id": "K02",
+      "label": "all proper registration subsets are rejected with no orphan sources",
+      "status": "passed",
+      "properSubsetsDenied": 30,
+      "writes": 5
+    },
+    {
+      "id": "K03",
+      "label": "malformed profile name index and history cannot bypass registration",
+      "status": "passed",
+      "forgeriesDenied": 12
+    },
+    {
+      "id": "K04",
+      "label": "a normally registered person is assigned and unassigned without deleting seat identity",
+      "status": "passed",
+      "sourcePreserved": true,
+      "seatIdsPreserved": true
+    },
+    {
+      "id": "K05",
+      "label": "empty-seat movement changes only the two endpoints atomically",
+      "status": "passed",
+      "writes": 3,
+      "publicationPointerPreserved": true
+    },
+    {
+      "id": "K06",
+      "label": "swap reason follows first reception start and remains required after stop",
+      "status": "passed",
+      "beforeStartReasonOptional": true,
+      "afterStartAndStopReasonRequired": true,
+      "firstStartPreserved": true
+    },
+    {
+      "id": "K07",
+      "label": "duplicate allocation and invented attendees are rejected",
+      "status": "passed",
+      "duplicateAndUnregisteredDenied": 2
+    },
+    {
+      "id": "K08",
+      "label": "every proper three-write assignment subset leaves all old state",
+      "status": "passed",
+      "properSubsetsDenied": 6
+    },
+    {
+      "id": "K09",
+      "label": "registration and allocation share the same optimistic version fence",
+      "status": "passed",
+      "bothDirectionsOldProposalRejected": true
+    },
+    {
+      "id": "K10",
+      "label": "two normally authenticated staff assign the same seat at most once and retain operation IDs",
+      "status": "passed",
+      "normalStaffSessions": 2,
+      "distinctPeopleAndDevices": true,
+      "initialStatuses": [
+        200,
+        403
+      ],
+      "initialSuccesses": 1,
+      "explicitRetry": false,
+      "finalSuccesses": 1
+    },
+    {
+      "id": "K11",
+      "label": "live role device and session revocation deny business writes",
+      "status": "passed",
+      "revocationDenials": 6
+    },
+    {
+      "id": "K12",
+      "label": "foreign performance and forged actor cannot use the same proposal",
+      "status": "passed",
+      "foreignTokenAndScopeDenied": 2
+    },
+    {
+      "id": "K13",
+      "label": "the destination must be a usable seat in the current published candidate",
+      "status": "passed",
+      "unusableAndWrongSectionDenied": 2
+    },
+    {
+      "id": "K14",
+      "label": "direct requests cannot hide extra changes or forge assignment history",
+      "status": "passed",
+      "forgedRequestsDenied": 8
+    },
+    {
+      "id": "K15",
+      "label": "ordinary registration invalidates a previously completed publication proposal",
+      "status": "passed",
+      "normalBusinessInvalidatesCandidate": true,
+      "publicationUnchanged": true
+    },
+    {
+      "id": "K16",
+      "label": "old assignment probe cannot bypass ordinary business and protected-ticket gate",
+      "status": "passed",
+      "probeDenied": true,
+      "ticketProtectedRouteStillClosed": true,
+      "ticketsRootSeeded": true
+    },
+    {
+      "id": "K17",
+      "label": "reapplying a committed registration does not create a second history or advance versions",
+      "status": "passed",
+      "sameIdQueried": true,
+      "duplicateCommitDenied": true,
+      "acknowledgementLossInjected": false
+    },
+    {
+      "id": "K18",
+      "label": "payment-only change preserves the label allocation and reception version",
+      "status": "passed",
+      "writes": 4,
+      "noLabelOrSeatChange": true,
+      "receptionVersionUnchanged": true,
+      "buyerChangeDenied": true
+    },
+    {
+      "id": "K19",
+      "label": "ended performance cannot keep saving through preparation business routes",
+      "status": "passed",
+      "endedDenied": true,
+      "postPerformanceCorrectionNotImplemented": true
+    },
+    {
+      "id": "K20",
+      "label": "five hundred ordinary registrations keep IDs and reject the 501st without changing sources",
+      "status": "passed",
+      "ordinaryRegisteredPeople": 500,
+      "writesPerRegistration": 5,
+      "normalRegistrationWrites": 2500,
+      "limitOverflowDenied": true,
+      "seatCount": 4,
+      "multipleSectionsTested": false,
+      "all500AssignmentsTested": false
+    }
+  ]
+}
