@@ -120,13 +120,12 @@
         && branchSeatFence(p,b,e.targetId,e.payload.seatId);
     }
     function branchProfile(p,id,b,a) {
-      let v = afterVersion(p);
       let e = nextEvent(p,a.operationId);
       let people = coreNextPeople(p);
       return proto(p,a) && a.keys().toSet() == b.keys().toSet().union(['cancelNoTicketOperationId'].toSet())
         && a.diff(b).affectedKeys().hasOnly(['attendancePlan','revision','operationId','cancelNoTicketOperationId'])
         && a.revision == b.revision+1 && b.attendancePlan == 'planned' && a.attendancePlan == 'notAttending'
-        && a.operationId == v.operationId && e.kind == 'cancelWithoutTicket' && e.targetId == id
+        && e.operationId == a.operationId && e.kind == 'cancelWithoutTicket' && e.targetId == id
         && people.operationId == a.operationId && people.cancelNoTicketOperationId == a.operationId && people.cancelledAttendeeId == id;
     }
     function branchPeople(p,b,a) {
@@ -156,5 +155,7 @@
         && a.assignments.diff(b.assignments).affectedKeys() == [e.payload.seatId].toSet();
     }
     function branchEvent(p,e) {
-      return afterVersion(p).operationId == e.operationId && e.controlRevision == e.expectedVersions.control;
+      let profile = coreNextProfile(p,e.targetId);
+      return afterVersion(p).operationId == e.operationId && profile.operationId == e.operationId
+        && profile.attendancePlan == 'notAttending' && e.controlRevision == e.expectedVersions.control;
     }
