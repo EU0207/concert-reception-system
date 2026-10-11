@@ -8,8 +8,7 @@
       let tickets = getAfter(/databases/$(database)/documents/publicationShows/$(p)/ticketProtection/current).data;
       let e = nextEvent(p,a.operationId);
       return manager(p) && preparation(p,c) && uuid(a.operationId)
-        && !exists(/databases/$(database)/documents/publicationShows/$(p)/eligible/current)
-        && !exists(/databases/$(database)/documents/publicationShows/$(p)/ticketProtection/current)
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/operations/$(a.operationId))
         && !exists(/databases/$(database)/documents/publicationShows/$(p)/assignmentState/current)
         && a == {'schemaVersion':1,'environmentId':'FAKE-environment','performanceId':p,'operationId':a.operationId,
           'values':{'commit':1,'layout':0,'source':0,'assignment':0,'attendee':1,'ticket':1,'control':c.revision,'reception':1},'sections':{},'seatIds':[],'usedIds':[],'usedGenerations':[]}
@@ -25,6 +24,8 @@
       let v = afterVersion(p);
       let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
       return !exists(/databases/$(database)/documents/publicationShows/$(p)/versions/current)
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/eligible/current)
+        && !exists(/databases/$(database)/documents/publicationShows/$(p)/ticketProtection/current)
         && proto(p,e) && uuid(id) && e.keys().toSet() == ['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','occurredAt'].toSet()
         && e.operationId == id && v.operationId == id && v.values.commit == 1 && e.kind == 'bootstrapBusiness'
         && e.deviceUid == request.auth.uid && e.humanUid == s.humanUid && e.occurredAt == request.time
@@ -33,6 +34,12 @@
     function firstBase(p,b) {
       return proto(p,b) && b.values.layout == 0 && b.values.source == 0 && b.values.assignment == 0
         && b.sections == {} && b.seatIds == [] && b.usedIds == [] && b.usedGenerations == [];
+    }
+    function coreRosterState(p,v) {
+      let s = v.values.layout == 0 ? null : beforeAssignment(p);
+      return v.values.layout == 0 ? firstBase(p,v) && !exists(/databases/$(database)/documents/publicationShows/$(p)/assignmentState/current)
+        : v.values.source > 0 && v.values.assignment > 0 && v.sections.size() > 0 && proto(p,s)
+          && s.revision == v.values.assignment && s.assignments.keys().toSet() == v.seatIds.toSet();
     }
     function firstVersion(p,b,a,e) {
       let c = control(p);

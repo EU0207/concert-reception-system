@@ -2,13 +2,13 @@
   "date": "2026-10-12",
   "filter": null,
   "sourceHashes": {
-    "../generate.mjs": "99b43c0104a2046062a8d90f5802f4b4eb2243aaba4b5478355991bd7e389803",
-    "../initial.rules": "3c12607675bd7a8b621ec366d8645d30ecfdaf51e42c1214e5f665abecd046fa",
+    "../generate.mjs": "0998b63904612b03ccb39de911772a3dccfd3bd773e7c20d8d455427de1d9054",
+    "../initial.rules": "15285c443540be27ad36fa5c3d4ce00eb8881c99218e69601122527a98aca2d3",
     "../firebase.json": "71bd3e850735663e09f89ad886162a7f7165b4bafd271a47a1012feae1b5b2c2",
-    "../node_modules/.cache/firestore.rules": "1cd2a9d116de5ed3f433fb0527f9cd3d43d3de628c78852b421ddd8676d84ac3",
+    "../node_modules/.cache/firestore.rules": "a9458997208cf753d762c9d909cec4f5a06654f05987ef7caae4949bb526bd6c",
     "support.mjs": "4a83699c72bae3ff6dcdde563b6e8431ac2f91e68943c3f28e45c6a99f49324f",
-    "budgets.mjs": "436e08a0b2ea9515a30890e763d8d83f3de619920f78fe405f6e07f0b524241c",
-    "emulator.mjs": "4698e5d341a8e373ee747587a6cc679db3d221ac11a1b0b8b48a9a3337bfa232",
+    "budgets.mjs": "61362c6e3dd5894364f3f5b7e46e84d5387063c33af341d41ef30dfd5c745ff9",
+    "emulator.mjs": "5868e8b20b86b336ffac19f6ae80e3b307bbd43bcfca19b0f9b7c5070a83ba1e",
     "regression.mjs": "6365dcc75b6492257def702fd3cd156ede023ca794f6ba0843dcb51189cd3691",
     "../../GD91-64/generate.mjs": "c84ba1f6315630f3f56aeaec32c300812b7a78e57311508a15ee2ca6b2b2a7de",
     "../../GD91-64/branches.rules": "accf59491e6869865f576ff9fe5008f9d1412f99c1df4906fb3c666516e8f94a",
@@ -32,13 +32,13 @@
     "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
   },
   "endSourceHashes": {
-    "../generate.mjs": "99b43c0104a2046062a8d90f5802f4b4eb2243aaba4b5478355991bd7e389803",
-    "../initial.rules": "3c12607675bd7a8b621ec366d8645d30ecfdaf51e42c1214e5f665abecd046fa",
+    "../generate.mjs": "0998b63904612b03ccb39de911772a3dccfd3bd773e7c20d8d455427de1d9054",
+    "../initial.rules": "15285c443540be27ad36fa5c3d4ce00eb8881c99218e69601122527a98aca2d3",
     "../firebase.json": "71bd3e850735663e09f89ad886162a7f7165b4bafd271a47a1012feae1b5b2c2",
-    "../node_modules/.cache/firestore.rules": "1cd2a9d116de5ed3f433fb0527f9cd3d43d3de628c78852b421ddd8676d84ac3",
+    "../node_modules/.cache/firestore.rules": "a9458997208cf753d762c9d909cec4f5a06654f05987ef7caae4949bb526bd6c",
     "support.mjs": "4a83699c72bae3ff6dcdde563b6e8431ac2f91e68943c3f28e45c6a99f49324f",
-    "budgets.mjs": "436e08a0b2ea9515a30890e763d8d83f3de619920f78fe405f6e07f0b524241c",
-    "emulator.mjs": "4698e5d341a8e373ee747587a6cc679db3d221ac11a1b0b8b48a9a3337bfa232",
+    "budgets.mjs": "61362c6e3dd5894364f3f5b7e46e84d5387063c33af341d41ef30dfd5c745ff9",
+    "emulator.mjs": "5868e8b20b86b336ffac19f6ae80e3b307bbd43bcfca19b0f9b7c5070a83ba1e",
     "regression.mjs": "6365dcc75b6492257def702fd3cd156ede023ca794f6ba0843dcb51189cd3691",
     "../../GD91-64/generate.mjs": "c84ba1f6315630f3f56aeaec32c300812b7a78e57311508a15ee2ca6b2b2a7de",
     "../../GD91-64/branches.rules": "accf59491e6869865f576ff9fe5008f9d1412f99c1df4906fb3c666516e8f94a",
@@ -63,10 +63,10 @@
   },
   "budgets": {
     "initialization": [
-      10,
+      9,
       2,
       2,
-      3
+      5
     ],
     "firstPublication": [
       8,
@@ -358,6 +358,21 @@
       "status": "passed",
       "latestControlChecked": true,
       "partialPublicationAbsent": true
+    },
+    {
+      "id": "N19",
+      "label": "roster update distinguishes absent layout from corrupt assignment state",
+      "status": "passed",
+      "corruptStatesDenied": 3,
+      "faultStateSeeded": true
+    },
+    {
+      "id": "N20",
+      "label": "initialization cannot reuse orphan historical event or mix with a late existing index",
+      "status": "passed",
+      "orphanEventReuseDenied": true,
+      "lateIndexDenied": true,
+      "faultStateSeeded": true
     }
   ],
   "scope": "REST, Auth and Firestore emulators only; four seats one section; role device control and construction input head seeded; business initialization indexes roster proofs candidate and publication use ordinary authenticated requests; no SDK physical devices or 500 people"
