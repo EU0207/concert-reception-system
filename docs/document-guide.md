@@ -25,7 +25,7 @@
 
 同じ説明を複数箇所へ転記せず、正本へリンクする。Git管理する設計文書では通常のMarkdown見出しを使い、検証結果と過去の経緯は技術検証記録へ分離し、設計書には現在の契約と主要試験ケースを残す。折りたたみはGitHubのIssue・PR本文で使用する。承認条件と例外は省略せず、未実施の試験を明示する。以後の新規作成と更新対象へ適用する。
 
-検証の中間結果は確認範囲ごとに1コミットへまとめ、同じIssueのブランチで作業を続ける。対象項目の全検証完了、Issueの完了条件充足、または開発者の判断が必要になった時点でPRへまとめる。PR冒頭には完了条件との対応を示し、詳細な実行記録は正本へリンクする。重要な制約は途中でも報告する。
+検証の中間結果は確認範囲ごとに1コミットへまとめ、同じIssueのブランチで作業を続ける。検証単位は着手時のIssueと完了条件で定め、計算・入力接続・回帰試験だけで新たな完了単位を作らない。全検証完了、Issueの完了条件充足、または具体的な開発判断が必要な時点でPRへまとめる。明示的な中間提出の依頼がある場合も、確認済み範囲と残条件を示す。コミット数を区切りの基準にしない。PR冒頭には完了条件との対応を示し、詳細記録へリンクする。重要な制約は途中でも報告する。
 
 ### 詳細設計と技術試験の役割分担
 
@@ -75,7 +75,7 @@
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 開発者、設計担当者、テスト担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
 | 座席保存の技術検証記録 | [seat-save-validation.md](development/technical-validation/seat-save-validation.md) | #101の索引とGD91-01～65を追跡。65まで承認済み。V1 #165完了、V2 #166の初回公開は限定結果。方式未採用 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残作業・承認変更時 | In Review |
 | 座席構成の完成検証記録 | [seat-completion-validation.md](development/technical-validation/seat-completion-validation.md) | #165の全体検査・完成候補の証拠。GD91-54～59とV1の4条件は承認・統合済み | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | Approved |
-| 席・券・権限の合同検証記録 | [seat-business-integration-validation.md](development/technical-validation/seat-business-integration-validation.md) | #166の4条件と証拠。GD91-60～67は個別承認済み。67の通常名簿参照と回帰88件をグループ配置保存の完了と区別する | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | In Review |
+| 席・券・権限の合同検証記録 | [seat-business-integration-validation.md](development/technical-validation/seat-business-integration-validation.md) | #166の4条件と証拠。GD91-68・69の配置保存・スライドと500人・2区画はIn Review。専用編集・下書き等の残条件を冒頭に集約 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | In Review |
 | 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-validation/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 開発者、設計担当者、テスト担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
 | RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/technical-validation/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 開発者、設計担当者、テスト担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
 | POC-001開始承認依頼書 | [poc-001-approval-request.md](development/technical-validation/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | Approved |
