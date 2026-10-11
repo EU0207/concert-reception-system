@@ -1,0 +1,118 @@
+    // 通常登録・未発券の手動席設定を、完成候補と同じ共通版へ接続する隔離候補。
+    function coreKind(k) { return k in ['attendeeCreate','attendeePaid','assign','unassign','move','swap']; }
+    function corePeople(p) { return get(/databases/$(database)/documents/publicationShows/$(p)/eligible/current).data; }
+    function coreNextPeople(p) { return getAfter(/databases/$(database)/documents/publicationShows/$(p)/eligible/current).data; }
+    function coreNextProfile(p,id) { return getAfter(/databases/$(database)/documents/publicationShows/$(p)/attendees/$(id)).data; }
+    function coreNextLabel(p,id) { return getAfter(/databases/$(database)/documents/publicationShows/$(p)/attendeeLabels/$(id)).data; }
+    function coreBase(p,b,a,e,c) {
+      return proto(p,e) && coreKind(e.kind) && uuid(a.operationId) && a.operationId != b.operationId
+        && e.operationId == a.operationId && e.deviceUid == request.auth.uid && e.controlRevision == c.revision
+        && c.state in ['preparing','operating'] && b.values.control == c.revision && a.values.control == c.revision
+        && e.expectedVersions == b.values && e.resultVersions == a.values && a.keys() == b.keys()
+        && a.diff(b).affectedKeys().hasOnly(['operationId','values']) && a.values.keys() == b.values.keys()
+        && a.values.commit == b.values.commit+1 && integer(a.values.commit);
+    }
+    function coreVersion(p,b,a,e) {
+      let c = control(p);
+      return manager(p) && coreBase(p,b,a,e,c)
+        && (e.kind in ['attendeeCreate','attendeePaid'] ? corePersonVersion(p,b,a,e) : coreAssignmentVersion(p,b,a,e,c));
+    }
+    function corePersonVersion(p,b,a,e) {
+      let old = corePeople(p);
+      let next = coreNextPeople(p);
+      return a.values.diff(b.values).affectedKeys().hasOnly(['commit','attendee','reception'])
+        && a.values.attendee == b.values.attendee+1 && integer(a.values.attendee)
+        && a.values.reception == b.values.reception+(e.kind == 'attendeeCreate' ? 1 : 0)
+        && proto(p,old) && proto(p,next) && next.keys() == old.keys()
+        && next.diff(old).affectedKeys().hasOnly(['revision','operationId','attendeeIds'])
+        && old.revision == b.values.attendee && next.revision == a.values.attendee && next.operationId == a.operationId
+        && (e.kind == 'attendeeCreate' ? !old.attendeeIds.hasAny([e.targetId]) && next.attendeeIds == old.attendeeIds.concat([e.targetId])
+          && next.attendeeIds.size() <= 500 : old.attendeeIds.hasAny([e.targetId]) && next.attendeeIds == old.attendeeIds);
+    }
+    function coreProfile(p,id,a,creating) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      let index = coreNextPeople(p);
+      return proto(p,a) && uuid(id) && a.attendeeId == id && uuid(a.buyerId) && a.attendancePlan == 'planned'
+        && a.paid is bool && a.revision is int && a.revision > 0
+        && a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','buyerId','attendancePlan','paid','revision','operationId'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','buyerId','attendancePlan','paid','revision','operationId'])
+        && v.operationId == a.operationId && e.operationId == a.operationId && e.targetId == id
+        && index.operationId == a.operationId && index.revision == v.values.attendee && index.attendeeIds.hasAny([id])
+        && e.payload.after == a && (creating ? e.kind == 'attendeeCreate' && e.payload.before == null && a.revision == 1 : e.kind == 'attendeePaid');
+    }
+    function corePaid(p,id,b,a) {
+      return coreProfile(p,id,a,false) && a.diff(b).affectedKeys().hasOnly(['paid','revision','operationId'])
+        && a.revision == b.revision+1 && nextEvent(p,a.operationId).payload.before == b;
+    }
+    function coreIndex(p,b,a) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      let profile = coreNextProfile(p,e.targetId);
+      return a.keys() == b.keys() && v.operationId == a.operationId && a.revision == v.values.attendee
+        && profile.operationId == a.operationId && profile.attendeeId == e.targetId
+        && (e.kind == 'attendeeCreate' ? coreNextLabel(p,e.targetId).operationId == a.operationId : e.kind == 'attendeePaid');
+    }
+    function coreLabel(p,id,a) {
+      let v = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      let profile = coreNextProfile(p,id);
+      return proto(p,a) && a.keys().hasAll(['schemaVersion','environmentId','performanceId','attendeeId','seatDisplayName','revision','operationId'])
+        && a.keys().hasOnly(['schemaVersion','environmentId','performanceId','attendeeId','seatDisplayName','revision','operationId'])
+        && a.attendeeId == id && a.revision == 1 && a.seatDisplayName is string && a.seatDisplayName.size() > 0 && a.seatDisplayName.size() <= 6
+        && a.seatDisplayName.matches('.*\\S.*') && e.kind == 'attendeeCreate' && e.targetId == id
+        && e.payload.label == a && profile.operationId == a.operationId && v.operationId == a.operationId;
+    }
+    function coreAssignmentVersion(p,b,a,e,c) {
+      let old = beforeAssignment(p);
+      let next = afterAssignment(p);
+      let people = corePeople(p);
+      let tickets = protectedSeats(p);
+      return b.values.layout > 0 && a.values.diff(b.values).affectedKeys().hasOnly(['commit','assignment','reception'])
+        && a.values.assignment == b.values.assignment+1 && a.values.reception == b.values.reception+1
+        && old.revision == b.values.assignment && next.revision == a.values.assignment && next.operationId == a.operationId
+        && next.assignments.keys() == old.assignments.keys() && old.assignments.keys().toSet() == b.seatIds.toSet()
+        && proto(p,people) && people.revision == b.values.attendee
+        && next.assignments.values().removeAll(['']).toSet().hasOnly(people.attendeeIds)
+        && next.assignments.values().removeAll(['']).size() == next.assignments.values().removeAll(['']).toSet().size()
+        // 券保護の通常更新は後続で接続する。現段階で発券済みの経路は許可しない。
+        && proto(p,tickets) && tickets.revision == b.values.ticket && tickets.seatIds.size() == 0
+        && (e.kind == 'swap' && c.firstReceptionStartedAt != null ? e.payload.reason.matches('.*\\S.*') : true);
+    }
+    function coreSeat(p,v,sectionId,seatId) {
+      let g = v.sections[sectionId];
+      let m = candidate(p,g);
+      let fact = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionId)/generations/$(g)/seatFacts/$(seatId)).data;
+      return m.ready == true && m.sectionId == sectionId && m.generation == g && m.seatIds.hasAny([seatId])
+        && fact.generation == g && fact.fact.item.cell.seatId == seatId && fact.fact.attributes.usable == true;
+    }
+    function coreAssignment(p,b,a) {
+      let v = beforeVersion(p);
+      let n = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      let x = e.payload;
+      return assignmentShape(p,a) && a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments'])
+        && a.publicationOperationId == b.publicationOperationId && a.operationId == n.operationId && a.revision == b.revision+1 && a.revision == n.values.assignment
+        && e.kind in ['assign','unassign','move','swap'] && e.operationId == a.operationId
+        && x.keys().hasAll(['seat1','seat2','section1','section2','before1','before2','after1','after2','reason'])
+        && x.keys().hasOnly(['seat1','seat2','section1','section2','before1','before2','after1','after2','reason'])
+        && x.reason is string && x.reason.size() <= 500 && x.seat1 != x.seat2
+        && coreSeat(p,v,x.section1,x.seat1) && x.before1 == b.assignments[x.seat1] && x.after1 == a.assignments[x.seat1]
+        && (e.kind in ['assign','unassign'] ? x.seat2 == '' && x.section2 == '' && x.before2 == '' && x.after2 == ''
+          && a.assignments.diff(b.assignments).affectedKeys() == [x.seat1].toSet()
+          && (e.kind == 'assign' ? x.before1 == '' && uuid(x.after1) : uuid(x.before1) && x.after1 == '')
+          : coreSeat(p,v,x.section2,x.seat2) && uuid(x.before1) && x.before2 == b.assignments[x.seat2] && x.after2 == a.assignments[x.seat2]
+            && a.assignments.diff(b.assignments).affectedKeys() == [x.seat1,x.seat2].toSet()
+            && (e.kind == 'move' ? x.before2 == '' && x.after1 == '' && x.after2 == x.before1
+              : uuid(x.before2) && x.after1 == x.before2 && x.after2 == x.before1));
+    }
+    function coreEvent(p,id,e) {
+      let b = beforeVersion(p);
+      let a = afterVersion(p);
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      return proto(p,e) && uuid(id) && e.operationId == id && coreKind(e.kind) && e.deviceUid == request.auth.uid && e.humanUid == s.humanUid
+        && e.occurredAt == request.time && e.keys().hasAll(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','targetId','payload','occurredAt'])
+        && e.keys().hasOnly(['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','targetId','payload','occurredAt'])
+        && e.expectedVersions == b.values && e.resultVersions == a.values && a.operationId == id && a.values.commit == b.values.commit+1
+        && (e.kind in ['attendeeCreate','attendeePaid'] ? uuid(e.targetId) && e.payload.keys().hasOnly(['before','after','label']) : e.targetId == '');
+    }
