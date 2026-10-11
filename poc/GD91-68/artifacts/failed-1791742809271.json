@@ -1,0 +1,20 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "355a9c821463be438f607584166ac7ec3351dc7788b8a35628c6106627127729",
+    "../bulk.rules": "1ce46e6b553d42ffff487b280eee2d95760fdf62224a4f660fb7f3786c48087b",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "c6a607494e8e6641fd9612e67b4eb41289be0fc0712dd961e41ffaf063592854",
+    "support.mjs": "75ad7716f079fc232921fc3abc797f7e21d266cb990d95197e6f17f081cf2189",
+    "emulator.mjs": "15f64415cec80b2c9372ce8a20a11e707243683d2399c372cea72fa85ac98d02"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "355a9c821463be438f607584166ac7ec3351dc7788b8a35628c6106627127729",
+    "../bulk.rules": "1ce46e6b553d42ffff487b280eee2d95760fdf62224a4f660fb7f3786c48087b",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "c6a607494e8e6641fd9612e67b4eb41289be0fc0712dd961e41ffaf063592854",
+    "support.mjs": "75ad7716f079fc232921fc3abc797f7e21d266cb990d95197e6f17f081cf2189",
+    "emulator.mjs": "15f64415cec80b2c9372ce8a20a11e707243683d2399c372cea72fa85ac98d02"
+  },
+  "reports": [],
+  "error": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":403,\"message\":\"\\nevaluation error at L1524:131 for 'update' @ L1524, false for 'update' @ L1529, evaluation error at L1525:57 for 'create' @ L1525, false for 'create' @ L1529, evaluation error at L1526:75 for 'create' @ L1526, false for 'create' @ L1529, false for 'create' @ L1526, false for 'create' @ L1529, false for 'create' @ L1525, false for 'create' @ L1529, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L1524, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L1529\",\"status\":\"PERMISSION_DENIED\"}}\n\n403 !== 200\n"
+}

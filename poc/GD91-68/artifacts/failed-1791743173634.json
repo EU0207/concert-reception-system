@@ -1,0 +1,26 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "c985917efc4e67eb22aa3c2d5b73d5e8e3f7daf8224d732fef1c94ca2aaeecd0",
+    "../bulk.rules": "46981f10a341dc41b6aba169dd0b5a9ad8a50883bc6797f010a7abe3c154a2ce",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "28cbfdc70614ccdb875b5352dc9fff4ba166b3d4367354dfaa2820456c6931a7",
+    "support.mjs": "b29fa122248933b12616a80c5eca215ec14dfb69ca38d459b9797bba162f7026",
+    "emulator.mjs": "15f64415cec80b2c9372ce8a20a11e707243683d2399c372cea72fa85ac98d02"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "c985917efc4e67eb22aa3c2d5b73d5e8e3f7daf8224d732fef1c94ca2aaeecd0",
+    "../bulk.rules": "46981f10a341dc41b6aba169dd0b5a9ad8a50883bc6797f010a7abe3c154a2ce",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "28cbfdc70614ccdb875b5352dc9fff4ba166b3d4367354dfaa2820456c6931a7",
+    "support.mjs": "b29fa122248933b12616a80c5eca215ec14dfb69ca38d459b9797bba162f7026",
+    "emulator.mjs": "15f64415cec80b2c9372ce8a20a11e707243683d2399c372cea72fa85ac98d02"
+  },
+  "reports": [
+    {
+      "id": "G01",
+      "status": "passed",
+      "assigned": 3
+    }
+  ],
+  "error": "Error: UNDO_SCOPE"
+}
