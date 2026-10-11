@@ -1,0 +1,143 @@
+{
+  "executedAt": "2026-10-11T07:49:59.948Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "00f360f3d2ddc046b171c1b82df41aade2ed53934d1e39b83525fc9207f88b4b",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "candidate-emulator.mjs": "3eba78b77dd56d75de1a5e5fbebc7533919b2712531ce143b7fb30303cf53eef",
+    "candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "22c449ce4a64ac28befc9a833b9545a40f26ec415a978d213842d3e241bb1df8",
+    "transport.mjs": "a89e0ac3ad1c57a41a89d69736492fe41faad21f115f9a3effa8a6dc39a89f9b",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "00f360f3d2ddc046b171c1b82df41aade2ed53934d1e39b83525fc9207f88b4b",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "candidate-emulator.mjs": "3eba78b77dd56d75de1a5e5fbebc7533919b2712531ce143b7fb30303cf53eef",
+    "candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "22c449ce4a64ac28befc9a833b9545a40f26ec415a978d213842d3e241bb1df8",
+    "transport.mjs": "a89e0ac3ad1c57a41a89d69736492fe41faad21f115f9a3effa8a6dc39a89f9b",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Ordinary complete candidate from source and comparison proofs plus exact seat/entity sets; latest business-version binding and entity reuse checks. Parent, published old raw/candidate and business versions are fixtures. Dedicated edit eligibility and atomic publication remain unconnected.",
+  "referenceUpperBounds": {
+    "candidateSeatsStart": 5,
+    "candidateSeatsStep": 8,
+    "candidateCreate": 10,
+    "candidateRead": 3
+  },
+  "reports": [
+    {
+      "id": "C01",
+      "label": "ordinary complete proofs issue immutable canonical candidate",
+      "status": "passed",
+      "candidateOwnerInjected": false,
+      "publicationExecuted": false
+    },
+    {
+      "id": "C02",
+      "label": "candidate cannot be asserted before proofs exist",
+      "status": "passed"
+    },
+    {
+      "id": "C03",
+      "label": "partial seat manifest cannot issue candidate",
+      "status": "passed"
+    },
+    {
+      "id": "C04",
+      "label": "seat manifest cannot skip forge or invent seats",
+      "status": "passed"
+    },
+    {
+      "id": "C05",
+      "label": "manifest requires completed local proof and seat source",
+      "status": "passed"
+    },
+    {
+      "id": "C06",
+      "label": "lower proofs cannot bypass comparison result",
+      "status": "passed",
+      "comparisonResultOmitted": true
+    },
+    {
+      "id": "C07",
+      "label": "candidate seats entities and change list are exact",
+      "status": "passed"
+    },
+    {
+      "id": "C08",
+      "label": "candidate target scope operation and proof plan cannot be forged",
+      "status": "passed"
+    },
+    {
+      "id": "C09",
+      "label": "latest business version invalidates candidate preparation",
+      "status": "passed",
+      "businessVersionChanges": 8,
+      "normalBusinessWritesTested": false
+    },
+    {
+      "id": "C10",
+      "label": "candidate expected version cannot be forged",
+      "status": "passed"
+    },
+    {
+      "id": "C11",
+      "label": "latest phase active generation and base stop candidate",
+      "status": "passed"
+    },
+    {
+      "id": "C12",
+      "label": "revoked role device and session stop creation and query",
+      "status": "passed"
+    },
+    {
+      "id": "C13",
+      "label": "foreign and anonymous missing credentials cannot create or query",
+      "status": "passed"
+    },
+    {
+      "id": "C14",
+      "label": "foreign section and retired entity reuse rejected",
+      "status": "passed",
+      "foreignAndRetiredIdsFixture": true
+    },
+    {
+      "id": "C15",
+      "label": "candidate base must match published section and trusted old candidate",
+      "status": "passed",
+      "oldCandidateFixture": true
+    },
+    {
+      "id": "C16",
+      "label": "concurrent candidate creation commits once and result is queried",
+      "status": "passed",
+      "transportFaultInjected": false
+    },
+    {
+      "id": "C17",
+      "label": "manifest concurrency advances once and completion cannot reset",
+      "status": "passed"
+    },
+    {
+      "id": "C18",
+      "label": "candidate issuance leaves publication and business version untouched",
+      "status": "passed",
+      "candidateIssued": true,
+      "published": false,
+      "productionEligibilityVerified": false
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "executedAt": "2026-10-11T07:53:28.998Z",
+  "runtime": {
+    "node": "v24.19.0"
+  },
+  "hashLineEndings": "LF",
+  "sourceHashes": {
+    "../firestore.rules": "00f360f3d2ddc046b171c1b82df41aade2ed53934d1e39b83525fc9207f88b4b",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "global-emulator.mjs": "027b760c183ea28925701ec8e8e3e256aa233e1e503c67e575b9cfde8523f98f",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "22c449ce4a64ac28befc9a833b9545a40f26ec415a978d213842d3e241bb1df8",
+    "transport.mjs": "a89e0ac3ad1c57a41a89d69736492fe41faad21f115f9a3effa8a6dc39a89f9b",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../firestore.rules": "00f360f3d2ddc046b171c1b82df41aade2ed53934d1e39b83525fc9207f88b4b",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "global-emulator.mjs": "027b760c183ea28925701ec8e8e3e256aa233e1e503c67e575b9cfde8523f98f",
+    "global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "support.mjs": "22c449ce4a64ac28befc9a833b9545a40f26ec415a978d213842d3e241bb1df8",
+    "transport.mjs": "a89e0ac3ad1c57a41a89d69736492fe41faad21f115f9a3effa8a6dc39a89f9b",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "scope": "Isolated same-shape single-section preparing-phase global ID/display and numbering scans. Trusted parent/old source/session fixtures. Ordinary catalog issuance confirmed; no complete parent issuance, changed shape, protected assignments/tickets, cross-section ID registry, complete publication candidate, SDK/device or adoption proof.",
+  "referenceUpperBounds": {
+    "initialIds": 6,
+    "initialNumbers": 5,
+    "scanIds": 8,
+    "scanNumbers": 9,
+    "structureProof": 7,
+    "progressRead": 5
+  },
+  "reports": [
+    {
+      "id": "G01",
+      "label": "all automatic seats and final partial fragment complete",
+      "status": "passed",
+      "seats": 5,
+      "fragments": 3
+    },
+    {
+      "id": "G02",
+      "label": "manual additions from every non-seat type retain gap consumption",
+      "status": "passed",
+      "sourceKinds": [
+        "gap",
+        "space",
+        "aisle",
+        "unset"
+      ],
+      "literalLabelsPreserved": true
+    },
+    {
+      "id": "G03",
+      "label": "both axes and both numbering directions complete",
+      "status": "passed",
+      "directions": 4
+    },
+    {
+      "id": "G04",
+      "label": "500 mixed seats are verified from stored fragments",
+      "status": "passed",
+      "seats": 500,
+      "cells": 500,
+      "fragments": 250,
+      "localRequests": 1250,
+      "localWrites": 1500,
+      "globalRequests": 753,
+      "globalWrites": 753,
+      "totalRequests": 2514,
+      "totalWrites": 2764,
+      "catalogWrites": 11,
+      "seatFactWrites": 500,
+      "registryUtf8JsonBytes": 71752,
+      "fixtureAndReadbackExcluded": true,
+      "fullPublicationCostMeasured": false
+    },
+    {
+      "id": "G05",
+      "label": "cross-fragment manual display duplicate after trimming rejected",
+      "status": "passed"
+    },
+    {
+      "id": "G06",
+      "label": "cross-fragment seat ID duplicate rejected",
+      "status": "passed"
+    },
+    {
+      "id": "G07",
+      "label": "seat IDs cannot collide with cell section or line IDs",
+      "status": "passed"
+    },
+    {
+      "id": "G08",
+      "label": "same display in different lines is allowed",
+      "status": "passed"
+    },
+    {
+      "id": "G09",
+      "label": "cross-fragment duplicate cell in corrupt base fixture rejected",
+      "status": "passed",
+      "corruptBaseFixture": true,
+      "normalBaseIssuanceVerified": false
+    },
+    {
+      "id": "G10",
+      "label": "initial registry cannot omit reserved IDs or forge fields",
+      "status": "passed"
+    },
+    {
+      "id": "G11",
+      "label": "global scan cannot skip repeat or use wrong fragment",
+      "status": "passed"
+    },
+    {
+      "id": "G12",
+      "label": "registry cannot drop prior entries forge values or add unrelated IDs",
+      "status": "passed"
+    },
+    {
+      "id": "G13",
+      "label": "only completed local proof may enter either global scan",
+      "status": "passed"
+    },
+    {
+      "id": "G14",
+      "label": "global binding fields are immutable",
+      "status": "passed"
+    },
+    {
+      "id": "G15",
+      "label": "number scan cannot start partway through or with prefilled counters",
+      "status": "passed"
+    },
+    {
+      "id": "G16",
+      "label": "number scan rejects skipped cells forged counters and other line changes",
+      "status": "passed"
+    },
+    {
+      "id": "G17",
+      "label": "completion needs both scans across every cell",
+      "status": "passed"
+    },
+    {
+      "id": "G18",
+      "label": "completion rejects forged totals operation and binding",
+      "status": "passed"
+    },
+    {
+      "id": "G19",
+      "label": "duplicate concurrent advance changes progress once",
+      "status": "passed"
+    },
+    {
+      "id": "G20",
+      "label": "lost acknowledgment is resolved by reading immutable result",
+      "status": "passed",
+      "responseDiscardedAndReadBack": true,
+      "networkFaultInjected": false,
+      "replayStatus": 409
+    },
+    {
+      "id": "G21",
+      "label": "current control base and phase are rechecked for each scan",
+      "status": "passed"
+    },
+    {
+      "id": "G22",
+      "label": "device role and session revocation stop global scan and completion",
+      "status": "passed"
+    },
+    {
+      "id": "G23",
+      "label": "unauthenticated and foreign devices cannot advance or read",
+      "status": "passed"
+    },
+    {
+      "id": "G24",
+      "label": "global scans resume after process-state reconstruction",
+      "status": "passed",
+      "sdkRestartVerified": false,
+      "storedProgressRestored": true
+    },
+    {
+      "id": "G25",
+      "label": "client cannot issue parents or publication completion",
+      "status": "passed"
+    },
+    {
+      "id": "G26",
+      "label": "mismatched local proof binding cannot be reused",
+      "status": "passed",
+      "corruptProofFixture": true
+    },
+    {
+      "id": "G27",
+      "label": "missing consumption sequence in corrupt base cannot complete",
+      "status": "passed",
+      "corruptBaseAndProofFixtures": true
+    },
+    {
+      "id": "G28",
+      "label": "two sections in one show and generation keep separate progress",
+      "status": "passed",
+      "sections": 2,
+      "sameShow": true,
+      "crossSectionIdentityUniquenessVerified": false
+    }
+  ]
+}
