@@ -1,0 +1,11 @@
+    // 通常登録時に全名簿の配置参照を追加し、不参加でも所属と名簿順は保持する。
+    function rosterFields(a) {
+      return (a.groupId == null || uuid(a.groupId)) && integer(a.rosterOrder);
+    }
+    function rosterAppend(b,a,id,profile) {
+      return b.roster is map && a.roster is map && !b.roster.keys().hasAny([id])
+        && a.roster.keys().toSet() == b.roster.keys().toSet().union([id].toSet())
+        && a.roster.diff(b.roster).affectedKeys() == [id].toSet()
+        && profile.rosterOrder == b.roster.size() && rosterFields(profile)
+        && a.roster[id] == {'groupId':profile.groupId,'rosterOrder':profile.rosterOrder};
+    }

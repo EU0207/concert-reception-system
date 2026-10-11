@@ -1,0 +1,7 @@
+{
+  "date": "2026-10-12",
+  "case": "R05",
+  "observation": "The test changed the payment plan object after its REST writes had been encoded. The request contained a valid unchanged profile and succeeded, so the negative assertion failed.",
+  "correction": "Rebuild the encoded payment writes after fault injection. Preserve the failed run and repeat the entire new suite and existing regression with one rules candidate.",
+  "rulesChangedForThisCorrection": false
+}
