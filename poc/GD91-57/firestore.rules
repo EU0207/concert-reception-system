@@ -1,0 +1,488 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GD91-57隔離候補。完成候補の発行と公開は許可しない。
+    match /sourceProofShows/{p}/sections/{sectionNamespace} {
+      function construction_scope(p,x) { return x.schemaVersion == 2 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+      function construction_roleValid(p,r) {
+        return construction_scope(p,r) && r.active == true && r.revision is int && r.revision > 0
+          && r.role in ['owner','deputy','temporary','receptionist']
+          && r.receptionBaselineRevision is int && r.receptionBaselineRevision >= 0 && r.receptionBaselineRevision < r.revision
+          && r.startsAt is timestamp && r.endsAt is timestamp && r.startsAt <= request.time && request.time < r.endsAt;
+      }
+      function construction_providerValid(provider,role) { return role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+      function construction_currentPreparation(d,s,r) { return d.preparedRoleRevision == r.revision && s.roleRevision == r.revision; }
+      function construction_generalPreparation(d,s,r) {
+        return r.role == 'temporary' && r.receptionBaselineRevision > 0
+          && d.preparedRoleRevision == r.receptionBaselineRevision && s.roleRevision == r.receptionBaselineRevision;
+      }
+      function construction_sessionShape(p,uid,s) {
+        return s.keys().hasAll(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+          && s.keys().hasOnly(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+          && construction_scope(p,s) && s.deviceUid == uid && s.humanUid is string && s.humanUid.size() > 0
+          && s.active is bool && s.emailVerified == true && s.authProvider is string && s.roleRevision is int
+          && s.revision is int && s.revision > 0 && s.issuedAt is timestamp && s.expiresAt is timestamp
+          && s.humanAuthTime is timestamp && s.humanAuthTime <= s.issuedAt
+          && s.issuedAt <= request.time && s.issuedAt < s.expiresAt && s.expiresAt <= s.issuedAt + duration.value(12,'h');
+      }
+      function construction_recentHumanAt(s,at) { return s.humanAuthTime <= at && at <= s.humanAuthTime + duration.value(15,'m'); }
+      function construction_recentHuman(s) { return construction_recentHumanAt(s,request.time); }
+      function construction_identity(p,d,s,r) {
+        let managerRole = r.role in ['owner','deputy'];
+        return request.auth.token.firebase.sign_in_provider == 'anonymous'
+          && d.schemaVersion == 2 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+          // 形式と認証時刻の出所はissueSessionが検査し、更新権限もそこで閉じる。
+          && s.schemaVersion == 2 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true
+          && s.humanUid == d.humanUid && s.expiresAt > request.time
+          && r.schemaVersion == 2 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt
+          && (managerRole ? s.authProvider == 'google.com' : s.authProvider == 'password')
+  ;
+      }
+      function construction_authorizedLevel(p,level) {
+        let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+        let managerRole = r.role in ['owner','deputy'];
+        return construction_identity(p,d,s,r)
+          && (level == 0 ? (managerRole || r.role in ['temporary','receptionist']) && (construction_currentPreparation(d,s,r) || construction_generalPreparation(d,s,r))
+            : construction_currentPreparation(d,s,r) && (level == 3 ? r.role == 'temporary'
+              : managerRole && (level == 1 || construction_recentHuman(s))));
+      }
+      function construction_authorized(p,edit) { return construction_authorizedLevel(p,edit ? 1 : 0); }
+      function uuid(x) { return x is string && x.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'); }
+      function shape(x,keys) { return x is map && x.keys().toSet() == keys.toSet(); }
+      function attrs(x) {
+        let e = x.get('emergencyChange',null);
+        let keys = x.keys();
+        return x is map && keys.hasAll(['category','usable']) && keys.hasOnly(['category','usable','reservedLabel','displayOrder','emergencyChange'])
+          && x.category in ['general','reserved','special'] && x.usable is bool
+          && (!('reservedLabel' in x) || x.reservedLabel is string)
+          && (!('displayOrder' in x) || x.displayOrder is int && x.displayOrder >= 0)
+          && (!('emergencyChange' in x) || shape(e,['kind','reason']) && e.kind in ['add','renumber','move'] && e.reason is string && e.reason.trim().size() > 0);
+      }
+      function cellShape(c) {
+        let keys = c.keys();
+        return c is map && keys.hasAll(['cellId','row','column','kind']) && keys.hasOnly(['cellId','row','column','kind','seatId','consumedNumber'])
+          && uuid(c.cellId) && c.row is int && c.column is int && c.kind in ['seat','gap','space','aisle','unset']
+          && (c.kind == 'seat' ? 'seatId' in c && uuid(c.seatId) : !('seatId' in c))
+          && (!('consumedNumber' in c) || c.consumedNumber is int && c.consumedNumber > 0);
+      }
+      function validNumber(item,line) {
+        let c = item.cell;
+        let n = item.numbering;
+        return c.kind != 'seat' ? n == null
+          : n is map && (n.mode == 'automatic' ? shape(n,['mode','number']) && n.number is int && n.number >= line.startNumber && n.number < line.nextAutomaticNumber && !('consumedNumber' in c)
+            : n.mode == 'manual' && shape(n,['mode','manualNumber']) && n.manualNumber is string && n.manualNumber.trim().size() > 0);
+      }
+      function label(item,line) { return item.cell.kind != 'seat' ? '' : item.numbering.mode == 'manual' ? item.numbering.manualNumber.trim() : (line.prefix+string(item.numbering.number)).trim(); }
+      function distinct(h,c,lines,i,j) {
+        let x = c.content[i]; let y = c.content[j];
+        let lx = lines[h.axis == 'horizontal' ? c.row : x.cell.column];
+        let ly = lines[h.axis == 'horizontal' ? c.row : y.cell.column];
+        return x.cell.cellId != y.cell.cellId && (x.cell.kind != 'seat' || y.cell.kind != 'seat'
+          || x.cell.seatId != y.cell.seatId && (lx.lineId != ly.lineId || label(x,lx) != label(y,ly)));
+      }
+      function header(g,h) {
+        let control = get(/databases/$(database)/documents/sourceProofShows/$(p)/control/current).data;
+        return request.auth != null && construction_authorized(p,true)
+          && h.environmentId == 'FAKE-environment' && h.performanceId == p && h.sectionId == sectionNamespace && h.generation == g && h.status == 'building'
+          && control.phase == 'preparing' && control.revision == h.controlRevision && control.activeGeneration == g && control.publishedGeneration == h.baseGeneration;
+      }
+      function stage(g,id,c) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let a = getAfter(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/attributes/$(id)).data;
+        return header(g,h) && shape(c,['formatVersion','row','startColumn','content']) && c.formatVersion == 2
+          && c.row is int && c.startColumn is int && c.row >= 0 && c.row < h.rows && c.startColumn >= 0 && c.startColumn < h.columns && c.startColumn % 2 == 0
+          && id == string(c.row)+'-'+string(c.startColumn) && c.content is list && c.content.size() == (h.columns-c.startColumn < 2 ? h.columns-c.startColumn : 2)
+          && a.row == c.row && a.startColumn == c.startColumn && a.values.size() == c.content.size();
+      }
+      function stageAttributes(g,id,a) {
+        let c = getAfter(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(id)).data;
+        return request.auth != null && !exists(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(id))
+          && shape(a,['formatVersion','row','startColumn','values']) && a.formatVersion == 2 && a.row == c.row && a.startColumn == c.startColumn
+          && a.values is list && a.values.size() == c.content.size();
+      }
+      function geometry(c,b,i) {
+        let x = c.content[i]; let old = b.content[i]; let cell = x.cell;
+        return shape(x,['cell','numbering']) && cellShape(cell)
+          && cell.row == c.row && cell.column == c.startColumn+i && cell.cellId == old.cell.cellId
+          && cell.get('consumedNumber',null) == old.cell.get('consumedNumber',null);
+      }
+      function numbering(h,c,b,lines,i) {
+        let x = c.content[i]; let old = b.content[i];
+        let line = lines[h.axis == 'horizontal' ? c.row : x.cell.column];
+        return validNumber(x,line) && (old.cell.kind == 'seat' ? x == old
+          : x.cell.kind == 'seat' ? x.numbering.mode == 'manual' && !('seatId' in old.cell) : x == old);
+      }
+      function attribute(c,a,i) { return c.content[i].cell.kind == 'seat' ? attrs(a.values[i]) : a.values[i] == null; }
+      function proof(g,id,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        let c = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(id)).data;
+        let attributes = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/attributes/$(id)).data;
+        let b = h.get('comparisonPlan','sameShape') == 'seatId' ? c : get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/chunks/$(id)).data;
+        return header(g,h) && shape(a,['formatVersion','generation','baseGeneration','controlRevision','chunkId','step']) && a.formatVersion == 1
+          && a.generation == g && a.baseGeneration == h.baseGeneration && a.controlRevision == h.controlRevision && a.chunkId == id
+          && a.step is int && a.step >= 1 && a.step <= 4 && catalog.generation == g && catalog.sectionId == sectionNamespace && catalog.lines == h.lines
+          && c.content.size() == b.content.size() && c.row == b.row && c.startColumn == b.startColumn
+          && (a.step == 1 ? (h.get('comparisonPlan','sameShape') == 'seatId' ? flexibleCell(h,c,catalog.lines,0) : geometry(c,b,0) && numbering(h,c,b,catalog.lines,0))
+            : a.step == 2 ? c.content.size() == 1 || (h.get('comparisonPlan','sameShape') == 'seatId' ? flexibleCell(h,c,catalog.lines,1) : geometry(c,b,1) && numbering(h,c,b,catalog.lines,1))
+            : a.step == 3 ? attribute(c,attributes,0) && (c.content.size() == 1 || attribute(c,attributes,1))
+            : c.content.size() == 1 || distinct(h,c,catalog.lines,0,1));
+      }
+      function binding(g,h,a) {
+        return a.formatVersion == 1 && a.generation == g && a.baseGeneration == h.baseGeneration && a.controlRevision == h.controlRevision;
+      }
+      function startIds(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        return header(g,h) && binding(g,h,a) && shape(a,['formatVersion','generation','baseGeneration','controlRevision','cursor','lastChunk','usedIds','usedLabels'])
+          && a.cursor == 0 && a.lastChunk == '' && a.usedLabels == {} && a.usedIds is map
+          && catalog.generation == g && catalog.sectionId == sectionNamespace && catalog.lines == h.lines
+          && catalog.lineIds.size() == (h.axis == 'horizontal' ? h.rows : h.columns)
+          && catalog.lineIds.concat([sectionNamespace]).toSet().size() == catalog.lineIds.size()+1
+          && a.usedIds.keys().toSet() == catalog.lineIds.concat([sectionNamespace]).toSet() && a.usedIds.values().toSet() == [true].toSet();
+      }
+      function slotIds(c,i) { return i >= c.content.size() ? [] : c.content[i].cell.kind == 'seat' ? [c.content[i].cell.cellId,c.content[i].cell.seatId] : [c.content[i].cell.cellId]; }
+      function slotLabels(h,c,lines,i) {
+        let x = c.content[i < c.content.size() ? i : 0];
+        let line = lines[h.axis == 'horizontal' ? c.row : x.cell.column];
+        return i >= c.content.size() || x.cell.kind != 'seat' ? [] : [line.lineId+':'+label(x,line)];
+      }
+      function additions(b,a,values) {
+        let delta = a.diff(b);
+        return values.size() == values.toSet().size() && delta.addedKeys() == values.toSet()
+          && delta.changedKeys().size() == 0 && delta.removedKeys().size() == 0 && (a.size() == 0 || a.values().toSet() == [true].toSet());
+      }
+      function readyPiece(g,h,c,id) {
+        let proof = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/proofs/$(id)).data;
+        return binding(g,h,proof) && proof.chunkId == id && proof.step == 4 && c.row >= 0 && c.row < h.rows && c.startColumn >= 0 && c.startColumn < h.columns;
+      }
+      function scanIds(g,b,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let c = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(a.lastChunk)).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        return header(g,h) && binding(g,h,b) && a.diff(b).affectedKeys().hasOnly(['cursor','lastChunk','usedIds','usedLabels'])
+          && b.cursor < h.rows*h.columns && c.row*h.columns+c.startColumn == b.cursor && a.cursor == b.cursor+c.content.size()
+          && readyPiece(g,h,c,a.lastChunk) && catalog.lines == h.lines && catalog.generation == g && catalog.sectionId == sectionNamespace
+          && additions(b.usedIds,a.usedIds,slotIds(c,0).concat(slotIds(c,1)))
+          && additions(b.usedLabels,a.usedLabels,slotLabels(h,c,catalog.lines,0).concat(slotLabels(h,c,catalog.lines,1))) ;
+      }
+      function startNumbers(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        return header(g,h) && binding(g,h,a) && shape(a,['formatVersion','generation','baseGeneration','controlRevision','cursor','lastChunk','numberCursors'])
+          && a.cursor == 0 && a.lastChunk == '' && a.numberCursors == {};
+      }
+      function numberSlot(h,c,lines,b,a) {
+        let i = b.cursor - c.row*h.columns-c.startColumn;
+        let x = c.content[i];
+        let key = string(h.axis == 'horizontal' ? x.cell.row : x.cell.column);
+        let line = lines[h.axis == 'horizontal' ? x.cell.row : x.cell.column];
+        let delta = h.seatOrder == 'forward' ? 1 : -1;
+        let before = b.numberCursors.get(key,delta == 1 ? line.startNumber : line.nextAutomaticNumber-1);
+        let consumed = x.cell.kind == 'seat' && x.numbering.mode == 'automatic' ? x.numbering.number : x.cell.get('consumedNumber',null);
+        let after = before + (consumed == null ? 0 : delta);
+        let end = h.axis == 'horizontal' ? x.cell.column == h.columns-1 : x.cell.row == h.rows-1;
+        return a.numberCursors is map && a.numberCursors.diff(b.numberCursors).affectedKeys().hasOnly([key]) && a.numberCursors[key] == after
+          && (consumed == null || consumed == before && before >= line.startNumber && before < line.nextAutomaticNumber)
+          && (!end || after == (delta == 1 ? line.nextAutomaticNumber : line.startNumber-1));
+      }
+      function scanNumbers(g,b,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let c = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(a.lastChunk)).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        return header(g,h) && binding(g,h,b) && a.diff(b).affectedKeys().hasOnly(['cursor','lastChunk','numberCursors'])
+          && b.cursor < h.rows*h.columns && a.cursor == b.cursor+1 && b.cursor >= c.row*h.columns+c.startColumn && b.cursor < c.row*h.columns+c.startColumn+c.content.size()
+          && readyPiece(g,h,c,a.lastChunk) && catalog.lines == h.lines && catalog.generation == g && catalog.sectionId == sectionNamespace
+          && numberSlot(h,c,catalog.lines,b,a) && indexedSeat(g,c,a.lastChunk,b.cursor-c.row*h.columns-c.startColumn);
+      }
+      function finishStructure(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let ids = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/globalIds/current).data;
+        let numbers = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/numberScan/current).data;
+        return header(g,h) && binding(g,h,a) && binding(g,h,ids) && binding(g,h,numbers)
+          && shape(a,['formatVersion','generation','baseGeneration','controlRevision','operationId','proofPlan','cells','seats'])
+          && a.operationId == g && a.proofPlan == 'GD91-57' && a.cells == h.rows*h.columns && a.seats == ids.usedLabels.size()
+          && ids.cursor == a.cells && numbers.cursor == a.cells;
+      }
+
+      function startCatalog(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        return header(g,h) && shape(a,['sectionId','generation','cursor','lines','lineIds']) && a.sectionId == sectionNamespace && a.generation == g && a.cursor == 0 && a.lines == [] && a.lineIds == [];
+      }
+      function scanCatalog(g,b,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let line = h.lines[b.cursor];
+        return header(g,h) && a.diff(b).affectedKeys().hasOnly(['cursor','lines','lineIds']) && b.cursor < (h.axis == 'horizontal' ? h.rows : h.columns)
+          && shape(line,['lineId','index','name','prefix','startNumber','nextAutomaticNumber']) && uuid(line.lineId) && line.lineId != sectionNamespace && !(line.lineId in b.lineIds)
+          && line.index == b.cursor && line.name is string && line.name.trim().size() > 0 && line.prefix is string
+          && line.startNumber is int && line.startNumber > 0 && line.nextAutomaticNumber is int && line.nextAutomaticNumber >= line.startNumber
+          && a.cursor == b.cursor+1 && a.lines == b.lines.concat([line]) && a.lineIds == b.lineIds.concat([line.lineId]);
+      }
+      function flexibleCell(h,c,lines,i) {
+        let x = c.content[i]; let cell = x.cell;
+        return shape(x,['cell','numbering']) && cellShape(cell) && cell.row == c.row && cell.column == c.startColumn+i
+          && validNumber(x,lines[h.axis == 'horizontal' ? cell.row : cell.column]);
+      }
+      function seatFact(g,id,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let c = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(a.chunkId)).data;
+        let attrsDoc = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/attributes/$(a.chunkId)).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        let item = c.content[a.slot];
+        let line = catalog.lines[h.axis == 'horizontal' ? item.cell.row : item.cell.column];
+        return header(g,h) && binding(g,h,a) && shape(a,['formatVersion','generation','baseGeneration','controlRevision','chunkId','slot','fact'])
+          && a.slot is int && a.slot >= 0 && a.slot < c.content.size() && readyPiece(g,h,c,a.chunkId)
+          && catalog.lines == h.lines && catalog.generation == g && catalog.sectionId == sectionNamespace
+          && item.cell.kind == 'seat' && item.cell.seatId == id
+          && a.fact == {'item':item,'attributes':attrsDoc.values[a.slot],'lineId':line.lineId,'prefix':item.numbering.mode == 'automatic' ? line.prefix : ''};
+      }
+      function startComparison(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let old = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/baseSeats/current).data;
+        return header(g,h) && binding(g,h,a) && shape(a,['formatVersion','generation','baseGeneration','controlRevision','cursor','lastSeatId','changedSeatIds'])
+          && binding(g,h,old) && old.cursor == old.rows*old.columns && old.sectionId == sectionNamespace && a.cursor == 0 && a.lastSeatId == '' && a.changedSeatIds == [];
+      }
+      function scanComparison(g,b,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let old = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/baseSeats/current).data;
+        let id = old.seatIds[b.cursor];
+        let before = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/baseCellFacts/$(old.seatCells[id])).data;
+        let after = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/seatFacts/$(id)).data;
+        return header(g,h) && binding(g,h,b) && binding(g,h,after) && binding(g,h,old) && old.cursor == old.rows*old.columns && old.sectionId == sectionNamespace
+          && binding(g,h,before) && before.sectionId == sectionNamespace && before.fact.item.cell.seatId == id && after.fact.item.cell.seatId == id
+          && a.diff(b).affectedKeys().hasOnly(['cursor','lastSeatId','changedSeatIds']) && b.cursor < old.seatIds.size() && a.cursor == b.cursor+1 && a.lastSeatId == id
+          && after.fact.item.cell.get('consumedNumber',null) == before.fact.item.cell.get('consumedNumber',null)
+          && a.changedSeatIds == b.changedSeatIds.concat(before.fact == after.fact ? [] : [id]);
+      }
+      function finishComparison(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let structure = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/structureProof/current).data;
+        let comparison = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/seatComparison/current).data;
+        let old = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/baseSeats/current).data;
+        let cells = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/cellComparison/current).data;
+        let protected = get(/databases/$(database)/documents/sourceProofShows/$(p)/protection/current).data;
+        return header(g,h) && binding(g,h,a) && binding(g,h,structure) && binding(g,h,comparison)
+          && shape(a,['formatVersion','generation','baseGeneration','controlRevision','operationId','proofPlan','changedSeatIds','protectionRevision','seats'])
+          && a.operationId == g && a.proofPlan == 'GD91-57' && a.seats == structure.seats && a.changedSeatIds == comparison.changedSeatIds
+          && old.sectionId == sectionNamespace && binding(g,h,old) && old.cursor == old.rows*old.columns && comparison.cursor == old.seatIds.size() && binding(g,h,cells) && cells.cursor == old.cellIds.size()
+          && protected.revision == h.protectionRevision && a.protectionRevision == protected.revision
+          && a.changedSeatIds.toSet().intersection(protected.assignedSeatIds.concat(protected.ticketSeatIds).toSet()).size() == 0;
+      }
+
+      function baseSource(g,h,b) {
+        return b.generation == h.baseGeneration && b.sectionId == sectionNamespace && b.status == 'published'
+          && b.environmentId == h.environmentId && b.performanceId == p && b.rows > 0 && b.columns > 0;
+      }
+      function baseCellFact(g,id,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let b = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/head/current).data;
+        let c = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/chunks/$(a.chunkId)).data;
+        let attrsDoc = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/attributes/$(a.chunkId)).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/lineCatalog/current).data;
+        let item = c.content[a.slot];
+        let line = catalog.lines[b.axis == 'horizontal' ? item.cell.row : item.cell.column];
+        return header(g,h) && baseSource(g,h,b) && binding(g,h,a) && a.sectionId == sectionNamespace
+          && shape(a,['formatVersion','generation','baseGeneration','controlRevision','sectionId','chunkId','slot','fact'])
+          && a.slot is int && a.slot >= 0 && a.slot < c.content.size() && item.cell.cellId == id
+          && catalog.sectionId == sectionNamespace && catalog.generation == h.baseGeneration && catalog.lines == b.lines
+          && a.fact == {'item':item,'attributes':attrsDoc.values[a.slot],'lineId':line.lineId,'prefix':item.cell.kind == 'seat' && item.numbering.mode == 'automatic' ? line.prefix : ''};
+      }
+      function startBase(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let b = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/head/current).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/lineCatalog/current).data;
+        return header(g,h) && baseSource(g,h,b) && binding(g,h,a) && a.sectionId == sectionNamespace
+          && shape(a,['formatVersion','generation','baseGeneration','controlRevision','sectionId','rows','columns','cursor','lastChunk','cellIds','seatIds','seatCells','usedIds'])
+          && a.rows == b.rows && a.columns == b.columns && a.cursor == 0 && a.lastChunk == '' && a.cellIds == [] && a.seatIds == [] && a.seatCells == {}
+          && catalog.generation == h.baseGeneration && catalog.sectionId == sectionNamespace && catalog.lines == b.lines
+          && a.usedIds is map && a.usedIds.keys().toSet() == catalog.lineIds.concat([sectionNamespace]).toSet() && a.usedIds.values().toSet() == [true].toSet();
+      }
+      function scanBase(g,b,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let c = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/chunks/$(a.lastChunk)).data;
+        let i = b.cursor - c.row*b.columns-c.startColumn;
+        let x = c.content[i].cell;
+        let f = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/baseCellFacts/$(x.cellId)).data;
+        let seat = x.kind == 'seat';
+        return header(g,h) && binding(g,h,b) && binding(g,h,f) && b.cursor < b.rows*b.columns
+          && a.diff(b).affectedKeys().hasOnly(['cursor','lastChunk','cellIds','seatIds','seatCells','usedIds']) && i >= 0 && i < c.content.size()
+          && a.cursor == b.cursor+1 && f.chunkId == a.lastChunk && f.slot == i && f.fact.item == c.content[i]
+          && a.cellIds == b.cellIds.concat([x.cellId]) && a.seatIds == b.seatIds.concat(seat ? [x.seatId] : [])
+          && additions(b.usedIds,a.usedIds,seat ? [x.cellId,x.seatId] : [x.cellId])
+          && (seat ? a.seatCells.diff(b.seatCells).affectedKeys() == [x.seatId].toSet() && a.seatCells[x.seatId] == x.cellId : a.seatCells == b.seatCells);
+      }
+      function indexedSeat(g,c,id,i) {
+        let needed = i < c.content.size() && c.content[i].cell.kind == 'seat';
+        let source = needed ? get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/seatFacts/$(c.content[i].cell.seatId)).data : null;
+        return !needed || source.chunkId == id && source.slot == i;
+      }
+      function newCellFact(g,id,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let c = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(a.chunkId)).data;
+        let attrsDoc = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/attributes/$(a.chunkId)).data;
+        let catalog = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/lineCatalog/current).data;
+        let item = c.content[a.slot];
+        let line = catalog.lines[h.axis == 'horizontal' ? item.cell.row : item.cell.column];
+        return header(g,h) && binding(g,h,a) && shape(a,['formatVersion','generation','baseGeneration','controlRevision','chunkId','slot','fact'])
+          && a.slot is int && a.slot >= 0 && a.slot < c.content.size() && readyPiece(g,h,c,a.chunkId) && item.cell.cellId == id
+          && catalog.lines == h.lines && catalog.generation == g && catalog.sectionId == sectionNamespace
+          && a.fact == {'item':item,'attributes':attrsDoc.values[a.slot],'lineId':line.lineId,'prefix':item.cell.kind == 'seat' && item.numbering.mode == 'automatic' ? line.prefix : ''};
+      }
+      function startCellComparison(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let old = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/baseSeats/current).data;
+        return header(g,h) && binding(g,h,a) && shape(a,['formatVersion','generation','baseGeneration','controlRevision','cursor','lastCellId'])
+          && binding(g,h,old) && old.cursor == old.rows*old.columns && a.cursor == 0 && a.lastCellId == '';
+      }
+      function cellHistory(g,h,before,after) {
+        return binding(g,h,after) && after.fact.item.cell.cellId == before.fact.item.cell.cellId
+          && after.fact.item.cell.get('consumedNumber',null) == before.fact.item.cell.get('consumedNumber',null)
+          && (after.fact.item.cell.kind != 'seat' || after.fact.item.numbering.mode == 'manual');
+      }
+      function scanCellComparison(g,b,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let old = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/baseSeats/current).data;
+        let id = old.cellIds[b.cursor];
+        let before = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/baseCellFacts/$(id)).data;
+        return header(g,h) && binding(g,h,b) && binding(g,h,before) && b.cursor < old.cellIds.size()
+          && a.diff(b).affectedKeys().hasOnly(['cursor','lastCellId']) && a.cursor == b.cursor+1 && a.lastCellId == id
+          && (before.fact.item.cell.kind == 'seat' || cellHistory(g,h,before,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/cellFacts/$(id)).data));
+      }
+
+
+      function startCandidateSeats(g,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        return header(g,h) && binding(g,h,a) && shape(a,['formatVersion','generation','baseGeneration','controlRevision','cursor','lastChunk','seatIds'])
+          && a.cursor == 0 && a.lastChunk == '' && a.seatIds == [];
+      }
+      function scanCandidateSeats(g,b,a) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data;
+        let c = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/chunks/$(a.lastChunk)).data;
+        let i = b.cursor-c.row*h.columns-c.startColumn;
+        let x = c.content[i].cell;
+        return header(g,h) && binding(g,h,b) && b.cursor < h.rows*h.columns && i >= 0 && i < c.content.size()
+          && readyPiece(g,h,c,a.lastChunk) && indexedSeat(g,c,a.lastChunk,i)
+          && a.diff(b).affectedKeys().hasOnly(['cursor','lastChunk','seatIds']) && a.cursor == b.cursor+1
+          && a.seatIds == b.seatIds.concat(x.kind == 'seat' ? [x.seatId] : []);
+      }
+
+      match /generations/{g} {
+        match /candidateSeats/current { allow create: if startCandidateSeats(g,request.resource.data); allow update: if scanCandidateSeats(g,resource.data,request.resource.data); allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data); }
+
+        match /baseCellFacts/{id} { allow create: if baseCellFact(g,id,request.resource.data); }
+        match /baseSeats/current { allow create: if startBase(g,request.resource.data); allow update: if scanBase(g,resource.data,request.resource.data); allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data); }
+        match /cellFacts/{id} { allow create: if newCellFact(g,id,request.resource.data); }
+        match /cellComparison/current { allow create: if startCellComparison(g,request.resource.data); allow update: if scanCellComparison(g,resource.data,request.resource.data); allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data); }
+
+        match /lineCatalog/current { allow create: if startCatalog(g,request.resource.data); allow update: if scanCatalog(g,resource.data,request.resource.data); allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data); }
+        match /seatFacts/{id} { allow create: if seatFact(g,id,request.resource.data); allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data); }
+        match /seatComparison/current { allow create: if startComparison(g,request.resource.data); allow update: if scanComparison(g,resource.data,request.resource.data); allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data); }
+        match /comparisonResult/current { allow create: if finishComparison(g,request.resource.data); allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data); }
+
+        match /globalIds/current {
+          allow create: if startIds(g,request.resource.data);
+          allow update: if scanIds(g,resource.data,request.resource.data);
+          allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data);
+        }
+        match /numberScan/current {
+          allow create: if startNumbers(g,request.resource.data);
+          allow update: if scanNumbers(g,resource.data,request.resource.data);
+          allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data);
+        }
+        match /structureProof/current {
+          allow create: if finishStructure(g,request.resource.data);
+          allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data);
+        }
+        match /chunks/{id} { allow create: if stage(g,id,request.resource.data); }
+        match /attributes/{id} { allow create: if stageAttributes(g,id,request.resource.data); }
+        match /proofs/{id} {
+          allow get: if header(g,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/head/current).data);
+          allow create: if request.resource.data.step == 1 && proof(g,id,request.resource.data);
+          allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['step'])
+            && request.resource.data.step == resource.data.step+1 && proof(g,id,request.resource.data);
+        }
+      }
+    }
+
+    match /publicationShows/{p}/candidates/{g} {
+      function construction_scope(p,x) { return x.schemaVersion == 2 && x.environmentId == 'FAKE-environment' && x.performanceId == p; }
+      function construction_roleValid(p,r) {
+        return construction_scope(p,r) && r.active == true && r.revision is int && r.revision > 0
+          && r.role in ['owner','deputy','temporary','receptionist']
+          && r.receptionBaselineRevision is int && r.receptionBaselineRevision >= 0 && r.receptionBaselineRevision < r.revision
+          && r.startsAt is timestamp && r.endsAt is timestamp && r.startsAt <= request.time && request.time < r.endsAt;
+      }
+      function construction_providerValid(provider,role) { return role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+      function construction_currentPreparation(d,s,r) { return d.preparedRoleRevision == r.revision && s.roleRevision == r.revision; }
+      function construction_generalPreparation(d,s,r) {
+        return r.role == 'temporary' && r.receptionBaselineRevision > 0
+          && d.preparedRoleRevision == r.receptionBaselineRevision && s.roleRevision == r.receptionBaselineRevision;
+      }
+      function construction_sessionShape(p,uid,s) {
+        return s.keys().hasAll(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+          && s.keys().hasOnly(['schemaVersion','environmentId','performanceId','deviceUid','humanUid','active','emailVerified','authProvider','roleRevision','revision','issuedAt','expiresAt','humanAuthTime'])
+          && construction_scope(p,s) && s.deviceUid == uid && s.humanUid is string && s.humanUid.size() > 0
+          && s.active is bool && s.emailVerified == true && s.authProvider is string && s.roleRevision is int
+          && s.revision is int && s.revision > 0 && s.issuedAt is timestamp && s.expiresAt is timestamp
+          && s.humanAuthTime is timestamp && s.humanAuthTime <= s.issuedAt
+          && s.issuedAt <= request.time && s.issuedAt < s.expiresAt && s.expiresAt <= s.issuedAt + duration.value(12,'h');
+      }
+      function construction_recentHumanAt(s,at) { return s.humanAuthTime <= at && at <= s.humanAuthTime + duration.value(15,'m'); }
+      function construction_recentHuman(s) { return construction_recentHumanAt(s,request.time); }
+      function construction_identity(p,d,s,r) {
+        let managerRole = r.role in ['owner','deputy'];
+        return request.auth.token.firebase.sign_in_provider == 'anonymous'
+          && d.schemaVersion == 2 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+          // 形式と認証時刻の出所はissueSessionが検査し、更新権限もそこで閉じる。
+          && s.schemaVersion == 2 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true
+          && s.humanUid == d.humanUid && s.expiresAt > request.time
+          && r.schemaVersion == 2 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt
+          && (managerRole ? s.authProvider == 'google.com' : s.authProvider == 'password')
+  ;
+      }
+      function construction_authorizedLevel(p,level) {
+        let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+        let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+        let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+        let managerRole = r.role in ['owner','deputy'];
+        return construction_identity(p,d,s,r)
+          && (level == 0 ? (managerRole || r.role in ['temporary','receptionist']) && (construction_currentPreparation(d,s,r) || construction_generalPreparation(d,s,r))
+            : construction_currentPreparation(d,s,r) && (level == 3 ? r.role == 'temporary'
+              : managerRole && (level == 1 || construction_recentHuman(s))));
+      }
+      function construction_authorized(p,edit) { return construction_authorizedLevel(p,edit ? 1 : 0); }
+
+      function candidateProof(m) {
+        let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(m.sectionId)/generations/$(g)/head/current).data;
+        let ids = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(m.sectionId)/generations/$(g)/globalIds/current).data;
+        let seats = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(m.sectionId)/generations/$(g)/candidateSeats/current).data;
+        let result = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(m.sectionId)/generations/$(g)/comparisonResult/current).data;
+        let v = get(/databases/$(database)/documents/publicationShows/$(p)/versions/current).data;
+        let control = get(/databases/$(database)/documents/sourceProofShows/$(p)/control/current).data;
+        let old = get(/databases/$(database)/documents/publicationShows/$(p)/candidates/$(m.baseGeneration)).data;
+        return request.auth != null && construction_authorized(p,true)
+          && m.keys().toSet() == ['schemaVersion','environmentId','performanceId','sectionId','generation','baseGeneration','ready','seatIds','entityIds','changedSeatIds','operationId','proofPlan','expectedVersions'].toSet()
+          && m.schemaVersion == 1 && m.environmentId == h.environmentId && m.environmentId == 'FAKE-environment' && m.performanceId == p
+          && m.sectionId == h.sectionId && h.performanceId == p && h.generation == g && h.status == 'building'
+          && m.generation == g && m.operationId == g && m.proofPlan == 'GD91-57' && m.ready == true && m.baseGeneration == h.baseGeneration && g != h.baseGeneration
+          && control.phase == 'preparing' && control.revision == h.controlRevision && control.activeGeneration == g && control.publishedGeneration == h.baseGeneration
+          && v.schemaVersion == 1 && v.environmentId == m.environmentId && v.performanceId == p && v.sections[m.sectionId] == m.baseGeneration && v.values.control == control.revision
+          && m.expectedVersions == h.expectedVersions && m.expectedVersions == v.values && !v.usedGenerations.hasAny([g])
+          && ids.generation == g && ids.baseGeneration == h.baseGeneration && ids.controlRevision == h.controlRevision && ids.cursor == h.rows*h.columns
+          && seats.generation == g && seats.baseGeneration == h.baseGeneration && seats.controlRevision == h.controlRevision && seats.cursor == ids.cursor
+          && result.generation == g && result.baseGeneration == h.baseGeneration && result.controlRevision == h.controlRevision && result.proofPlan == 'GD91-57' && result.operationId == g
+          && m.seatIds == seats.seatIds && m.seatIds.size() == m.seatIds.toSet().size() && m.seatIds.size() == result.seats
+          && m.entityIds is list && m.entityIds.size() == m.entityIds.toSet().size() && m.entityIds.toSet() == ids.usedIds.keys().toSet().union([g].toSet())
+          && m.entityIds.toSet().hasAll(m.seatIds) && m.changedSeatIds == result.changedSeatIds
+          && old.schemaVersion == 1 && old.environmentId == m.environmentId && old.performanceId == p && old.sectionId == m.sectionId && old.generation == m.baseGeneration && old.ready == true
+          && m.entityIds.toSet().intersection(v.usedIds.toSet()).difference(old.entityIds.toSet()).size() == 0;
+      }
+      allow create: if candidateProof(request.resource.data);
+      allow get: if request.auth != null && construction_authorized(p,true);
+      allow update,delete: if false;
+    }
+
+    match /{document=**} { allow read,write: if false; }
+  }
+}
