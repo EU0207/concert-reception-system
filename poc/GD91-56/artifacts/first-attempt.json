@@ -1,0 +1,53 @@
+{
+  "recordedAt": "2026-10-11T07:22:55.206Z",
+  "suiteCompleted": false,
+  "passedBeforeFailure": 0,
+  "hashesRecordedAfterFailure": true,
+  "sourceHashes": {
+    "../firestore.rules": "3842ad38a81e32f781a658f0196b42f9849cb73abcc2492a930b417ad65afb42",
+    "../firebase.json": "3796998eedfb2ab45ed72f30ec21547544a54ee72e39105dae49dd2a7bf1bf7d",
+    "history-emulator.mjs": "b419ca6243716907aafcd9b9d960f8d0d4baff1c292d692e41f78466780882c6",
+    "comparison-support.mjs": "93ca1c0d20b61cdd02b6f5845fefe76802b530a6c8f98ff70cb5d25143ac2048",
+    "global-support.mjs": "df36fdd46d14984d90c2fd30ed7053bb9373cfaf57a698be4020a7087095436b",
+    "support.mjs": "fb8faeaf2bf1bc8f29f67cd23e54f73d6120573daf216630abd3450426f4274c",
+    "transport.mjs": "c1670c9bd7d5c1196dd9bdc39ed3d6ced4554d1e9bb4504dc6bb7d1e6921618e",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "failedCase": "H01",
+  "reason": "MapDiff.affectedKeys() already returns Set; calling toSet() is invalid.",
+  "changedLines": [
+    {
+      "file": "../firestore.rules",
+      "before": "a.seatCells.diff(b.seatCells).affectedKeys().toSet() == [x.seatId].toSet()",
+      "after": "a.seatCells.diff(b.seatCells).affectedKeys() == [x.seatId].toSet()"
+    },
+    {
+      "file": "../firestore.rules",
+      "before": "&& additions(b.usedLabels,a.usedLabels,slotLabels(h,c,catalog.lines,0).concat(slotLabels(h,c,catalog.lines,1))) && indexedSeat(g,c,a.lastChunk,0) && indexedSeat(g,c,a.lastChunk,1);",
+      "after": "&& additions(b.usedLabels,a.usedLabels,slotLabels(h,c,catalog.lines,0).concat(slotLabels(h,c,catalog.lines,1))) ;"
+    },
+    {
+      "file": "../firestore.rules",
+      "before": "&& numberSlot(h,c,catalog.lines,b,a);",
+      "after": "&& numberSlot(h,c,catalog.lines,b,a) && indexedSeat(g,c,a.lastChunk,b.cursor-c.row*h.columns-c.startColumn);"
+    },
+    {
+      "file": "history-emulator.mjs",
+      "before": "await run('H09','all new seats require exact source indexes before global proof',async()=>{\n const f=await setup({mixed:false}),p=parts(f)[0];await stage(f,p,4,false);const s=await start(f);\n denied(await put(f,'globalIds/current',nextIds(f,p,s.ids)));\n const id=p.chunk.content[0].cell.seatId;ok(await put(f,'seatFacts/'+id,factBody(f,p,0),false));\n denied(await put(f,'globalIds/current',nextIds(f,p,s.ids)));\n ok(await put(f,'seatFacts/'+p.chunk.content[1].cell.seatId,factBody(f,p,1),false));ok(await put(f,'globalIds/current',nextIds(f,p,s.ids)));\n return {missingSecondSeatIndexRejected:true};\n});\n",
+      "after": "await run('H09','all new seats require exact source indexes before global proof',async()=>{\n const f=await setup({mixed:false}),p=parts(f)[0];await stage(f,p,4,false);const s=await start(f);\n let a=nextNumber(f,p,s.numbers);denied(await put(f,'numberScan/current',a));\n const id=p.chunk.content[0].cell.seatId;ok(await put(f,'seatFacts/'+id,factBody(f,p,0),false));ok(await put(f,'numberScan/current',a));\n const b=nextNumber(f,p,a);denied(await put(f,'numberScan/current',b));\n ok(await put(f,'seatFacts/'+p.chunk.content[1].cell.seatId,factBody(f,p,1),false));ok(await put(f,'numberScan/current',b));\n return {missingSecondSeatIndexRejected:true};\n});\n"
+    },
+    {
+      "file": "history-emulator.mjs",
+      "before": "start,nextIds,changeControl",
+      "after": "start,nextIds,nextNumber,changeControl"
+    },
+    {
+      "file": "history-emulator.mjs",
+      "before": "globalIds:10,comparisonResult:10",
+      "after": "globalIds:8,numberScan:9,comparisonResult:10"
+    }
+  ],
+  "correction": "Remove redundant toSet and rerun every suite."
+}
