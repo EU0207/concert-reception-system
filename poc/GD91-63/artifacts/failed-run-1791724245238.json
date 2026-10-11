@@ -1,0 +1,74 @@
+{
+  "executedAt": "2026-10-11T13:10:45.238Z",
+  "sourceHashes": {
+    "../generate.mjs": "cd58a97a7f1141e3a7ebba2b07b7b58109368a2dc31de80031f5e547f1ad10d4",
+    "../lifecycle.rules": "b6b9ee76e873ca30cd8ef83a79e7c5c7ffde4642f5db5050f1989ee2fd88c209",
+    "../firebase.json": "75f7dc183c78492abb9300dca66c9c292c2a2e6b60225bb75688ce2b2df079a3",
+    "../node_modules/.cache/firestore.rules": "b8594bce3361589b0c29158fe15c8ce591acd7a744eb77a743db310b4d419378",
+    "support.mjs": "334de23de6d4443701777a95b6b5fca42c4d3aa64dcbb7388b1fcb5656db1b8c",
+    "budgets.mjs": "0af326469757bbf7889cfc52a10757b1edd39fc3a1eceaf2da514e41a2515b52",
+    "emulator.mjs": "0e47b354993e326a6e02eed685530cd4a12cdd13918366aa0988ce34d2ed499f",
+    "../../GD91-62/business.rules": "d042fc6e8e18ba8c871c3a831f6ec2c302468b1c3f74b95ab0301ef500c284d1",
+    "../../GD91-62/generate.mjs": "ded019d0771248801e96ee5a1be9f3bd6c0ebb92759987614c01f2ae8a888121",
+    "../../GD91-62/tests/support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "cd58a97a7f1141e3a7ebba2b07b7b58109368a2dc31de80031f5e547f1ad10d4",
+    "../lifecycle.rules": "b6b9ee76e873ca30cd8ef83a79e7c5c7ffde4642f5db5050f1989ee2fd88c209",
+    "../firebase.json": "75f7dc183c78492abb9300dca66c9c292c2a2e6b60225bb75688ce2b2df079a3",
+    "../node_modules/.cache/firestore.rules": "b8594bce3361589b0c29158fe15c8ce591acd7a744eb77a743db310b4d419378",
+    "support.mjs": "334de23de6d4443701777a95b6b5fca42c4d3aa64dcbb7388b1fcb5656db1b8c",
+    "budgets.mjs": "0af326469757bbf7889cfc52a10757b1edd39fc3a1eceaf2da514e41a2515b52",
+    "emulator.mjs": "0e47b354993e326a6e02eed685530cd4a12cdd13918366aa0988ce34d2ed499f",
+    "../../GD91-62/business.rules": "d042fc6e8e18ba8c871c3a831f6ec2c302468b1c3f74b95ab0301ef500c284d1",
+    "../../GD91-62/generate.mjs": "ded019d0771248801e96ee5a1be9f3bd6c0ebb92759987614c01f2ae8a888121",
+    "../../GD91-62/tests/support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "passed": [
+    {
+      "id": "L01",
+      "label": "ordinary registration published seats and first credential are joined",
+      "status": "passed",
+      "firstQrWrites": 6,
+      "normalAuthAndPublication": true
+    },
+    {
+      "id": "L02",
+      "label": "every proper six-write first credential subset leaves old state",
+      "status": "passed",
+      "properSubsetsDenied": 62
+    },
+    {
+      "id": "L03",
+      "label": "first credential requires a registered assigned person and forbids extra changes",
+      "status": "passed",
+      "forgeriesDenied": 7
+    }
+  ],
+  "error": {
+    "name": "AssertionError",
+    "message": "{\"error\":{\"code\":403,\"message\":\"\\nevaluation error at L1217:76 for 'update' @ L1217, false for 'update' @ L1222, evaluation error at L1218:83 for 'update' @ L1218, false for 'update' @ L1222, evaluation error at L1219:75 for 'create' @ L1219, false for 'create' @ L1222, evaluation error at L1172:84 for 'update' @ L1172, false for 'update' @ L1222, false for 'update' @ L1218, false for 'update' @ L1222, false for 'create' @ L1219, false for 'create' @ L1222, false for 'update' @ L1217, false for 'update' @ L1222\",\"status\":\"PERMISSION_DENIED\"}}\n\n403 !== 200\n"
+  }
+}
