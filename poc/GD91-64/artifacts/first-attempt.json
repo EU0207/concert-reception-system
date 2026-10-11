@@ -1,0 +1,27 @@
+{
+  "observedAt": "2026-10-11",
+  "generationFailure": {
+    "cause": "An abbreviated replacement pattern matched three functions rather than the single intended assignment shape.",
+    "action": "Selected the complete shape expression and restricted the mutation of coreAssignment to its function body.",
+    "runtimeTestsStarted": false
+  },
+  "regressionFailure": {
+    "newBranchesPassed": 24,
+    "oldCasesPassedBeforeFailure": [
+      "L01",
+      "L02",
+      "L03",
+      "L04"
+    ],
+    "failedCase": "L05",
+    "observedError": "PERMISSION_DENIED: maximum of 1000 expressions to evaluate has been reached",
+    "cause": "The protected-person assignment condition increased the already complex move/swap decision tree.",
+    "action": "Rebuild the affected protection set from the two resulting assignments and the protected-person list, without changing authorization or business constraints.",
+    "limit": "No numeric expression usage or billing measurement; the emulator exposes the rejected upper bound, not a headroom value."
+  },
+  "deskReviewCorrection": {
+    "finding": "The no-ticket event checked the common operation ID but did not directly check the changed customer. An initial root operation ID may have no history event.",
+    "action": "Bind the event to the changed customer and move the redundant version lookup out of the profile check. Add an event-only rejection case on the empty initial root. Preserve the same read budget.",
+    "evidence": "Negative case M24; this was identified by desk review, not observed in the earlier emulator failure."
+  }
+}
