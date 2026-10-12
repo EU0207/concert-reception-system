@@ -1,0 +1,40 @@
+{
+  "scope": "browser-storage-only",
+  "sourceHashes": {
+    "storage-tests.mjs": "b95796c4556040a9f33dc9aee29dca11987af0584146790b36ca77894a269e6c",
+    "cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "vite.config.mjs": "6f156a5a564d71084fd6ad427491f7e3d40c21b3b5620585319c05f2a1177347"
+  },
+  "endSourceHashes": {
+    "storage-tests.mjs": "b95796c4556040a9f33dc9aee29dca11987af0584146790b36ca77894a269e6c",
+    "cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "vite.config.mjs": "6f156a5a564d71084fd6ad427491f7e3d40c21b3b5620585319c05f2a1177347"
+  },
+  "reports": [
+    {
+      "id": "S-key-loss",
+      "status": "passed",
+      "ciphertextRetainedWithoutSilentKeyReplacement": true
+    },
+    {
+      "id": "S-aad-splice",
+      "status": "passed",
+      "sameDeviceKeyCannotDecryptOtherUserRecord": true
+    },
+    {
+      "id": "S-future-format",
+      "status": "passed",
+      "unsupportedFormatNotAdopted": true
+    },
+    {
+      "id": "S-byte-limit",
+      "status": "passed",
+      "rejectedBeforeKeyOrRecordCreation": true,
+      "productPeopleLimitNotTested": true
+    }
+  ],
+  "firestoreRequests": 0,
+  "serverRulesVerified": false
+}
