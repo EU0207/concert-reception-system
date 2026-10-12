@@ -1,0 +1,56 @@
+{
+  "sourceHashes": {
+    "retention.mjs": "b5db185b08da98e74a61037a2119aaa88df2c03e6eae04fe9c78b1703de4056e",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../GD91-73/tests/transport-partials.mjs": "56c90bc88e16dc176d4891233ed72571ee8d88129cf596532784e6b641e009a5"
+  },
+  "endSourceHashes": {
+    "retention.mjs": "b5db185b08da98e74a61037a2119aaa88df2c03e6eae04fe9c78b1703de4056e",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../GD91-73/tests/transport-partials.mjs": "56c90bc88e16dc176d4891233ed72571ee8d88129cf596532784e6b641e009a5"
+  },
+  "reports": [
+    {
+      "id": "current-canonical",
+      "status": "passed",
+      "deleteDenied": true,
+      "documentRetained": true
+    },
+    {
+      "id": "current-geometry",
+      "status": "passed",
+      "deleteDenied": true,
+      "documentRetained": true
+    },
+    {
+      "id": "retired-geometry",
+      "status": "passed",
+      "deleteDenied": true,
+      "documentRetained": true
+    },
+    {
+      "id": "operation-result",
+      "status": "passed",
+      "deleteDenied": true,
+      "documentRetained": true
+    },
+    {
+      "id": "shared-result",
+      "status": "passed",
+      "deleteDenied": true,
+      "documentRetained": true
+    },
+    {
+      "id": "unverified-retirement",
+      "status": "passed",
+      "transitionDenied": true
+    },
+    {
+      "id": "same-id-result-survives",
+      "status": "passed",
+      "operationAndSharedResultsReadable": true
+    }
+  ],
+  "safeReclamationSuccessTested": false,
+  "positiveDeletionImplemented": false
+}
