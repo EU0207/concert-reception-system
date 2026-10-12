@@ -1,0 +1,342 @@
+{
+  "date": "2026-10-12",
+  "filter": null,
+  "sourceHashes": {
+    "../../GD91-73/generate.mjs": "a05adb4b216e7645b08e05a9c7d29ef1188cdbb7d023a329a730d52b46a41313",
+    "../../GD91-73/index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../../GD91-73/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../../GD91-73/tests/budgets.mjs": "360a3c69405c5dcd9744ce8f71b569f243ad3a065a46ac12ecf083a05522c1fc",
+    "../../GD91-73/tests/regression.mjs": "1376a3f46276f0afb25826711ee0e5fa05048322baf9634d7a2b23544e3d846a",
+    "../../GD91-73/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-73/tests/transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../../GD91-73/tests/regression-final.mjs": "a007b8b0b141d112bda15682d56eb6559ba827b764d7190a49ecc920d475bc5b",
+    "../../GD91-71/generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../../GD91-71/individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../../GD91-71/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/budgets.mjs": "1b39ba708cb10babada6cfb87822b4dab5e63fbafb3fbb24bfaef321ef8af6c0",
+    "../../GD91-71/tests/regression.mjs": "1cb57d4a13d3c2dc472cb7dbe3ae719b91b95803116deb7559c3b3553517d87d",
+    "../../GD91-71/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../GD91-71/node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../../GD91-71/node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../../GD91-71/node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../../GD91-71/node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "../generate.mjs": "6f39f8512e606296a3f3e714194f43a685b5413c9157f19a89740acbf4e6c2cf",
+    "../roster.rules": "ae82a7f676c657c4b43021863103e1ee856fef681c12bde577bf957cfa34493e",
+    "../projection.mjs": "33181fd6fc2e746288186f6878abde8fcba4b918962b67a160f27b4d8eda92fb",
+    "../firebase.json": "71bd3e850735663e09f89ad886162a7f7165b4bafd271a47a1012feae1b5b2c2",
+    "../node_modules/.cache/firestore.rules": "523422ed974440a65b08b1cf2fbac807cf7ee723a3de8e86656a8e92d7644d23",
+    "support.mjs": "82220b1f0688a566492ef1ed05ee2cde7f82891762118b5bb4cc6b2c718b7dae",
+    "structure.mjs": "70da48e253c8ff12c51d6486d7ac8b63e873a6961bae0f83fa69a539d76fd72d",
+    "initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "budgets.mjs": "975e823e6261941edb65266ffd3fcc859b1d2794c4374c50a039989dc4b2b956",
+    "emulator.mjs": "43dc98fe006e6d338f1c8f9f9f7d0881883b0dd8da5f40c9e9316eda8a09c960",
+    "regression.mjs": "dad9f4d1472e756d6186f10049146e964dad8a08e04c28260e390bcd75b42b69",
+    "../../GD91-66/allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d",
+    "../../GD91-65/generate.mjs": "0998b63904612b03ccb39de911772a3dccfd3bd773e7c20d8d455427de1d9054",
+    "../../GD91-65/tests/support.mjs": "4a83699c72bae3ff6dcdde563b6e8431ac2f91e68943c3f28e45c6a99f49324f",
+    "../../GD91-64/generate.mjs": "c84ba1f6315630f3f56aeaec32c300812b7a78e57311508a15ee2ca6b2b2a7de",
+    "../../GD91-64/tests/support.mjs": "8550e70d49d158c3c4e4e86027d24c3ec779e4dfb46737582c19be6608b2d988",
+    "../../GD91-63/generate.mjs": "cd58a97a7f1141e3a7ebba2b07b7b58109368a2dc31de80031f5e547f1ad10d4",
+    "../../GD91-63/tests/support.mjs": "6cdd13651ec51e61b25d024fbbb6c791f23ac03f815d7d3b6c80c5f073da5caf",
+    "../../GD91-62/generate.mjs": "ded019d0771248801e96ee5a1be9f3bd6c0ebb92759987614c01f2ae8a888121",
+    "../../GD91-62/tests/support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "endSourceHashes": {
+    "../../GD91-73/generate.mjs": "a05adb4b216e7645b08e05a9c7d29ef1188cdbb7d023a329a730d52b46a41313",
+    "../../GD91-73/index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../../GD91-73/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../../GD91-73/tests/budgets.mjs": "360a3c69405c5dcd9744ce8f71b569f243ad3a065a46ac12ecf083a05522c1fc",
+    "../../GD91-73/tests/regression.mjs": "1376a3f46276f0afb25826711ee0e5fa05048322baf9634d7a2b23544e3d846a",
+    "../../GD91-73/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-73/tests/transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../../GD91-73/tests/regression-final.mjs": "a007b8b0b141d112bda15682d56eb6559ba827b764d7190a49ecc920d475bc5b",
+    "../../GD91-71/generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../../GD91-71/individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../../GD91-71/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/budgets.mjs": "1b39ba708cb10babada6cfb87822b4dab5e63fbafb3fbb24bfaef321ef8af6c0",
+    "../../GD91-71/tests/regression.mjs": "1cb57d4a13d3c2dc472cb7dbe3ae719b91b95803116deb7559c3b3553517d87d",
+    "../../GD91-71/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../GD91-71/node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../../GD91-71/node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../../GD91-71/node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../../GD91-71/node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "../generate.mjs": "6f39f8512e606296a3f3e714194f43a685b5413c9157f19a89740acbf4e6c2cf",
+    "../roster.rules": "ae82a7f676c657c4b43021863103e1ee856fef681c12bde577bf957cfa34493e",
+    "../projection.mjs": "33181fd6fc2e746288186f6878abde8fcba4b918962b67a160f27b4d8eda92fb",
+    "../firebase.json": "71bd3e850735663e09f89ad886162a7f7165b4bafd271a47a1012feae1b5b2c2",
+    "../node_modules/.cache/firestore.rules": "523422ed974440a65b08b1cf2fbac807cf7ee723a3de8e86656a8e92d7644d23",
+    "support.mjs": "82220b1f0688a566492ef1ed05ee2cde7f82891762118b5bb4cc6b2c718b7dae",
+    "structure.mjs": "70da48e253c8ff12c51d6486d7ac8b63e873a6961bae0f83fa69a539d76fd72d",
+    "initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "budgets.mjs": "975e823e6261941edb65266ffd3fcc859b1d2794c4374c50a039989dc4b2b956",
+    "emulator.mjs": "43dc98fe006e6d338f1c8f9f9f7d0881883b0dd8da5f40c9e9316eda8a09c960",
+    "regression.mjs": "dad9f4d1472e756d6186f10049146e964dad8a08e04c28260e390bcd75b42b69",
+    "../../GD91-66/allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d",
+    "../../GD91-65/generate.mjs": "0998b63904612b03ccb39de911772a3dccfd3bd773e7c20d8d455427de1d9054",
+    "../../GD91-65/tests/support.mjs": "4a83699c72bae3ff6dcdde563b6e8431ac2f91e68943c3f28e45c6a99f49324f",
+    "../../GD91-64/generate.mjs": "c84ba1f6315630f3f56aeaec32c300812b7a78e57311508a15ee2ca6b2b2a7de",
+    "../../GD91-64/tests/support.mjs": "8550e70d49d158c3c4e4e86027d24c3ec779e4dfb46737582c19be6608b2d988",
+    "../../GD91-63/generate.mjs": "cd58a97a7f1141e3a7ebba2b07b7b58109368a2dc31de80031f5e547f1ad10d4",
+    "../../GD91-63/tests/support.mjs": "6cdd13651ec51e61b25d024fbbb6c791f23ac03f815d7d3b6c80c5f073da5caf",
+    "../../GD91-62/generate.mjs": "ded019d0771248801e96ee5a1be9f3bd6c0ebb92759987614c01f2ae8a888121",
+    "../../GD91-62/tests/support.mjs": "c4a9eacf46efa3c0f7a276eafb1bd5f3b580face1b7fd8758c04b275287b5af0",
+    "../../GD91-60/tests/publication-support.mjs": "f159987366c780cfb7653563fd5a2abea205251a2177040184a16866d07bb3fc",
+    "../../GD91-60/tests/access-support.mjs": "89fd27202d06c600b94556a4aebd22714919397e3c9a34a50dc740adc3f304c3",
+    "../../GD91-60/tests/support.mjs": "c2d3ccee2137907e199bbee9c306b8d007c55df9a950794e9cca47762c597fd9",
+    "../../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../../GD91-60/tests/comparison-support.mjs": "db9fe70d5caec42a25b92d2f08a9ab00e830ed0f7a204af8b8e70c7c88063a34",
+    "../../GD91-60/tests/candidate-support.mjs": "3b7db127545df9da89d084147d3ae61dbec380be1d9566a64586b28fa38a5e17",
+    "../../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../../GD91-60/firestore.rules": "2b6a3427287a25a9da847b68230bb4f68f8201ec7830d5aa80f45af06b50576c",
+    "../../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a"
+  },
+  "budgets": {
+    "initialization": [
+      9,
+      2,
+      2,
+      5
+    ],
+    "firstPublication": [
+      8,
+      3,
+      5
+    ],
+    "registration": [
+      7,
+      3,
+      4,
+      3,
+      3
+    ],
+    "paid": [
+      7,
+      4,
+      3,
+      3
+    ],
+    "unprotectedSingle": [
+      10,
+      4,
+      3
+    ],
+    "unprotectedPair": [
+      10,
+      5,
+      3
+    ],
+    "protectedPair": [
+      10,
+      5,
+      3,
+      2
+    ],
+    "qrCreate": [
+      5,
+      6,
+      1,
+      2,
+      1,
+      1
+    ],
+    "ticketCheck": [
+      5,
+      4,
+      1,
+      2
+    ],
+    "qrReissue": [
+      5,
+      8,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1
+    ],
+    "cancelQrAssigned": [
+      5,
+      6,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      1
+    ],
+    "cancelNoQrAssigned": [
+      5,
+      4,
+      1,
+      2,
+      2,
+      1,
+      1
+    ],
+    "returnClosedTicket": [
+      8,
+      3,
+      6,
+      3
+    ],
+    "returnNoTicket": [
+      7,
+      3,
+      6,
+      3
+    ],
+    "cancelNoTicketAssigned": [
+      9,
+      2,
+      4,
+      3,
+      2
+    ],
+    "cancelNoTicketUnassigned": [
+      9,
+      2,
+      3,
+      3
+    ],
+    "cancelNoQrUnassigned": [
+      5,
+      4,
+      1,
+      2,
+      2,
+      1
+    ],
+    "assignProtectedPerson": [
+      10,
+      4,
+      3,
+      2
+    ],
+    "publication": [
+      8,
+      6,
+      6
+    ],
+    "state": [
+      7,
+      1,
+      3,
+      4
+    ]
+  },
+  "preservedFunctions": 33,
+  "reports": [
+    {
+      "id": "R01",
+      "label": "ordinary initialization and registration create complete roster metadata",
+      "status": "passed",
+      "normalWritesPerRegistration": 5,
+      "rosterSeeded": false
+    },
+    {
+      "id": "R02",
+      "label": "initialization rejects nonempty or absent roster metadata",
+      "status": "passed",
+      "forgeriesDenied": 2
+    },
+    {
+      "id": "R03",
+      "label": "all proper registration subsets leave no orphan profile metadata label or event",
+      "status": "passed",
+      "properSubsetsDenied": 30
+    },
+    {
+      "id": "R04",
+      "label": "forged fields extra member removal and profile projection mismatch rejected",
+      "status": "passed",
+      "forgeriesDenied": 9
+    },
+    {
+      "id": "R05",
+      "label": "metadata cannot change through payment and standalone writes",
+      "status": "passed",
+      "mutationRoutesDenied": 4
+    },
+    {
+      "id": "R06",
+      "label": "cancellation retains whole group and later registration does not reuse order",
+      "status": "passed",
+      "groupNotSilentlyShrunk": true,
+      "restorationKeepsOrder": true
+    },
+    {
+      "id": "R07",
+      "label": "issued or QR protected member excludes its whole group in calculation",
+      "status": "passed",
+      "protectionVariants": 2,
+      "assignmentPersistenceTested": false
+    },
+    {
+      "id": "R08",
+      "label": "two staff at same append position commit one whole roster entry",
+      "status": "passed",
+      "initialStatuses": [
+        200,
+        403
+      ],
+      "finalEntries": 1,
+      "explicitRetryIfBothFailed": true
+    },
+    {
+      "id": "R09",
+      "label": "stale registration after cancellation cannot hide membership",
+      "status": "passed",
+      "staleProposalDenied": true
+    },
+    {
+      "id": "R10",
+      "label": "role device session and foreign-show token revoke append",
+      "status": "passed",
+      "lateDenials": 4
+    },
+    {
+      "id": "R11",
+      "label": "projection rejects mixed scopes stale versions and missing or corrupt metadata",
+      "status": "passed",
+      "invalidInputsDenied": 7
+    },
+    {
+      "id": "R12",
+      "label": "normal 500 registrations create complete metadata and enforce current limit",
+      "status": "passed",
+      "ordinaryRegistrations": 500,
+      "rosterSeeded": false,
+      "indexJsonBytes": 57235,
+      "limit501Denied": true,
+      "seatsPublished": 0
+    }
+  ],
+  "scope": "Auth/Firestore emulator REST; roster initialization and registration ordinary requests; allocation only memory; no group assignment persistence SDK IndexedDB or devices"
+}

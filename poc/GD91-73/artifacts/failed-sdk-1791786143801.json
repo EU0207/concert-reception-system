@@ -1,0 +1,39 @@
+{
+  "sourceHashes": {
+    "transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "sdk.mjs": "6dc8f0943bdd10144d2f9c66691287fd9802a66d4a10681e9a7602417b932b35",
+    "support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../sdk-adapter.mjs": "2785f6bdeffff799606d5de3e185bb9d10759b76a2ee48dfb59645bdc359d1ed",
+    "../node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "endSourceHashes": {
+    "transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "sdk.mjs": "6dc8f0943bdd10144d2f9c66691287fd9802a66d4a10681e9a7602417b932b35",
+    "support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../sdk-adapter.mjs": "2785f6bdeffff799606d5de3e185bb9d10759b76a2ee48dfb59645bdc359d1ed",
+    "../node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "reports": [
+    {
+      "id": "K01",
+      "kind": "bootstrapBusiness",
+      "status": "passed",
+      "writes": 5,
+      "sourceProposalWrites": 4
+    }
+  ],
+  "error": {
+    "message": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":500,\"status\":\"UNKNOWN\"}}\n\n500 !== 200\n",
+    "stack": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":500,\"status\":\"UNKNOWN\"}}\n\n500 !== 200\n\n    at ok (file:///C:/dev/concert-reception-system/poc/GD91-60/tests/transport.mjs:59:20)\n    at scan (file:///C:/dev/concert-reception-system/poc/GD91-60/tests/global-support.mjs:29:87)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async complete (file:///C:/dev/concert-reception-system/poc/GD91-60/tests/global-support.mjs:30:89)\n    at async Module.prepareFirst (file:///C:/dev/concert-reception-system/poc/GD91-69/tests/structure.mjs:21:24)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-73/tests/sdk.mjs:11:96"
+  }
+}
