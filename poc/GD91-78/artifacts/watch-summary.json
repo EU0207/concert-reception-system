@@ -1,0 +1,245 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "ab7f8ead5109344cb7c5060e6c7d6988758b327c1da592c6e7d168d93bc961b2",
+    "watch-client.mjs": "7cacebdb126395f6fe0113b85af601a375b492102955b6764b14cb28308acbe9",
+    "generate.mjs": "6b1b513935d3ba708edfac3ad839998347315edcca56bd889eed852256e82caf",
+    "node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-77/receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "../GD91-77/node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0",
+    "summarize.mjs": "fc7765fadfb5ea0f3b45576eca0aa9cce4de574b77cf4be0e8102c15be46adcc",
+    "artifacts/failed-1791817302893.json": "58bc5e3e540c1b39c138f2a7472e4eb5f85a2f4208f17a97a1a77c582d8c5f47"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "ab7f8ead5109344cb7c5060e6c7d6988758b327c1da592c6e7d168d93bc961b2",
+    "watch-client.mjs": "7cacebdb126395f6fe0113b85af601a375b492102955b6764b14cb28308acbe9",
+    "generate.mjs": "6b1b513935d3ba708edfac3ad839998347315edcca56bd889eed852256e82caf",
+    "node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-77/receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "../GD91-77/node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0",
+    "summarize.mjs": "fc7765fadfb5ea0f3b45576eca0aa9cce4de574b77cf4be0e8102c15be46adcc",
+    "artifacts/failed-1791817302893.json": "58bc5e3e540c1b39c138f2a7472e4eb5f85a2f4208f17a97a1a77c582d8c5f47"
+  },
+  "reports": [
+    {
+      "id": "L-timestamp-precision",
+      "status": "passed",
+      "protobufCanonicalWidths": [
+        0,
+        3,
+        6,
+        9
+      ],
+      "nanosecondsPreserved": true
+    },
+    {
+      "id": "L-600",
+      "status": "passed",
+      "people": 600,
+      "independentHumans": 6,
+      "independentDevices": 6,
+      "receiptWrites": 600,
+      "writeRequests": 204,
+      "receivedByEach": [
+        600,
+        600,
+        600,
+        600,
+        600,
+        600
+      ],
+      "stats": [
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 14,
+          "cacheSnapshots": 134,
+          "deliveredDocuments": 35,
+          "duplicates": 4501,
+          "saves": 13,
+          "applied": 14,
+          "maximumSnapshotSize": 600
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 9,
+          "cacheSnapshots": 140,
+          "deliveredDocuments": 20,
+          "duplicates": 986,
+          "saves": 8,
+          "applied": 9,
+          "maximumSnapshotSize": 600
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 11,
+          "cacheSnapshots": 136,
+          "deliveredDocuments": 24,
+          "duplicates": 2218,
+          "saves": 10,
+          "applied": 11,
+          "maximumSnapshotSize": 600
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 24,
+          "cacheSnapshots": 126,
+          "deliveredDocuments": 87,
+          "duplicates": 8531,
+          "saves": 23,
+          "applied": 24,
+          "maximumSnapshotSize": 600
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 8,
+          "cacheSnapshots": 140,
+          "deliveredDocuments": 19,
+          "duplicates": 336,
+          "saves": 7,
+          "applied": 8,
+          "maximumSnapshotSize": 600
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 14,
+          "cacheSnapshots": 134,
+          "deliveredDocuments": 35,
+          "duplicates": 4426,
+          "saves": 13,
+          "applied": 14,
+          "maximumSnapshotSize": 600
+        }
+      ],
+      "idleObservationMs": 1000,
+      "idleApplicationQueries": 0,
+      "normalRegistrationVerified": false
+    },
+    {
+      "id": "L-1000",
+      "status": "failed",
+      "people": 1000,
+      "expectedByEach": 1000,
+      "receivedByEach": [
+        114,
+        114,
+        174,
+        126,
+        120,
+        162
+      ],
+      "stats": [
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 8,
+          "cacheSnapshots": 216,
+          "deliveredDocuments": 21,
+          "duplicates": 357,
+          "saves": 7,
+          "applied": 8,
+          "maximumSnapshotSize": 114
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 8,
+          "cacheSnapshots": 225,
+          "deliveredDocuments": 21,
+          "duplicates": 381,
+          "saves": 7,
+          "applied": 8,
+          "maximumSnapshotSize": 114
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 10,
+          "cacheSnapshots": 221,
+          "deliveredDocuments": 27,
+          "duplicates": 627,
+          "saves": 9,
+          "applied": 10,
+          "maximumSnapshotSize": 174
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 8,
+          "cacheSnapshots": 178,
+          "deliveredDocuments": 21,
+          "duplicates": 408,
+          "saves": 7,
+          "applied": 8,
+          "maximumSnapshotSize": 126
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 8,
+          "cacheSnapshots": 174,
+          "deliveredDocuments": 21,
+          "duplicates": 423,
+          "saves": 7,
+          "applied": 8,
+          "maximumSnapshotSize": 120
+        },
+        {
+          "starts": 1,
+          "stops": 0,
+          "serverSnapshots": 9,
+          "cacheSnapshots": 217,
+          "deliveredDocuments": 24,
+          "duplicates": 474,
+          "saves": 8,
+          "applied": 9,
+          "maximumSnapshotSize": 162
+        }
+      ],
+      "error": {
+        "message": "observation-timeout",
+        "code": "ERR_ASSERTION"
+      },
+      "rootCauseConfirmed": false,
+      "observationTimeoutMs": 60000
+    }
+  ],
+  "sourceFailure": "artifacts/failed-1791817302893.json",
+  "unexecutedLifecycleCases": [
+    "offline-reconnect",
+    "stop-resume",
+    "role-revocation",
+    "performance-stop",
+    "save-failure",
+    "equal-timestamp-boundary",
+    "scope-mismatch"
+  ],
+  "suitePassed": false,
+  "productionFreeTierVerified": false,
+  "normalRegistrationVerified": false,
+  "realDeviceVerified": false,
+  "durableJournalVerified": false,
+  "sharingLatencyRequirementVerified": false,
+  "wireBytesMeasured": false,
+  "sdkAuthRefreshVerified": false,
+  "historicalDirectApiSecurityVerified": false,
+  "tested3000": false
+}

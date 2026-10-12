@@ -1,0 +1,33 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "204a94c8831231af494b2d0420f68eafb3a5ab4a431449b364cca56e7a03cc93",
+    "watch-client.mjs": "d84104a4f3d13f1b2c6588c40d7ebf843dd78a24a47b024504d32be34e21517f",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-77/receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "../GD91-77/node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "204a94c8831231af494b2d0420f68eafb3a5ab4a431449b364cca56e7a03cc93",
+    "watch-client.mjs": "d84104a4f3d13f1b2c6588c40d7ebf843dd78a24a47b024504d32be34e21517f",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-77/receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "../GD91-77/node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "reports": [],
+  "error": {
+    "message": "Expected values to be strictly equal:\n+ actual - expected\n\n+ {\n+   code: 'ERR_ASSERTION',\n+   message: 'event-content-conflict'\n+ }\n- null\n",
+    "code": "ERR_ASSERTION"
+  }
+}
