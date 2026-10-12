@@ -1,0 +1,20 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "71197bd03fabb091a2e1e8d540435f91fd7d8d8e3119085ae647c40b2f7b2b8f",
+    "../index.rules": "e4cc1e7438b694488d7befbe220f1f1bc9a8f25d334a71fd7b181e5a4f20dc15",
+    "../node_modules/.cache/firestore.rules": "9793aaca2e2f2fca33e8b243fde7510f78fd909c8804a818803e3e68aab726f3",
+    "transport-hook.mjs": "5e056f444b15ff88d75554c1c8e4803cbe8de5eab0e87dfacf7736839585f084",
+    "critical.mjs": "61aaa2c283e0ab9ba36f1bf920e6ac7d6039a9574751d7361cc300719484af72"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "71197bd03fabb091a2e1e8d540435f91fd7d8d8e3119085ae647c40b2f7b2b8f",
+    "../index.rules": "e4cc1e7438b694488d7befbe220f1f1bc9a8f25d334a71fd7b181e5a4f20dc15",
+    "../node_modules/.cache/firestore.rules": "9793aaca2e2f2fca33e8b243fde7510f78fd909c8804a818803e3e68aab726f3",
+    "transport-hook.mjs": "5e056f444b15ff88d75554c1c8e4803cbe8de5eab0e87dfacf7736839585f084",
+    "critical.mjs": "61aaa2c283e0ab9ba36f1bf920e6ac7d6039a9574751d7361cc300719484af72"
+  },
+  "error": {
+    "message": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":403,\"message\":\"\\nevaluation error at L1801:176 for 'update' @ L1801, false for 'update' @ L1806, evaluation error at L1802:142 for 'update' @ L1802, false for 'update' @ L1806, evaluation error at L1803:75 for 'create' @ L1803, false for 'create' @ L1806, evaluation error at L1756:143 for 'update' @ L1756, false for 'update' @ L1806, evaluation error at L1751:24 for 'update' @ L1751, false for 'update' @ L1806, false for 'update' @ L1756, false for 'update' @ L1806, false for 'update' @ L1802, false for 'update' @ L1806, false for 'create' @ L1803, false for 'create' @ L1806, false for 'update' @ L1751, false for 'update' @ L1806, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L1801, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L1806\",\"status\":\"PERMISSION_DENIED\"}}\n\n403 !== 200\n",
+    "stack": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":403,\"message\":\"\\nevaluation error at L1801:176 for 'update' @ L1801, false for 'update' @ L1806, evaluation error at L1802:142 for 'update' @ L1802, false for 'update' @ L1806, evaluation error at L1803:75 for 'create' @ L1803, false for 'create' @ L1806, evaluation error at L1756:143 for 'update' @ L1756, false for 'update' @ L1806, evaluation error at L1751:24 for 'update' @ L1751, false for 'update' @ L1806, false for 'update' @ L1756, false for 'update' @ L1806, false for 'update' @ L1802, false for 'update' @ L1806, false for 'create' @ L1803, false for 'create' @ L1806, false for 'update' @ L1751, false for 'update' @ L1806, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L1801, Unable to evaluate the expression as the maximum of 1000 expressions to evaluate has been reached. for 'update' @ L1806\",\"status\":\"PERMISSION_DENIED\"}}\n\n403 !== 200\n\n    at ok (file:///C:/dev/concert-reception-system/poc/GD91-60/tests/transport.mjs:59:20)\n    at Module.apply (file:///C:/dev/concert-reception-system/poc/GD91-64/tests/support.mjs:23:34)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-73/tests/critical.mjs:12:1"
+  }
+}

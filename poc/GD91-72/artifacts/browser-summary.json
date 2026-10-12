@@ -1,0 +1,90 @@
+{
+  "filter": null,
+  "browser": "installed Microsoft Edge, headless, isolated persistent profile",
+  "sourceHashes": {
+    "browser.mjs": "864651ace3caaab6e03b17e67a2901c41de1bed4c631ed44dc79cd832e47b20b",
+    "support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../local-draft.mjs": "d4b41cfbd4807ee1e387857febbf08e37f0196d2c8f9eab481e0b041386726ba",
+    "../browser.html": "79884cb03e51b7f75c5f47535bac802f0a2e499b4fd54277e4a52a82e570381a",
+    "../vite.config.mjs": "631215f256833a4d82d0106ba2bf85fcc91e52b36707546aeb77d99b82266630",
+    "../sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../node_modules/.cache/firestore.rules": "c88f930dd205ee28d2e2bf6178c62a8693ebf06f1f2f4ef0b0cc62048ac2ed41",
+    "../../POC-004/src/crypto.ts": "fe348f5a9a7716d9f13496d23ecd24767b2b10d75501878dcb8104d21a7ab6b5"
+  },
+  "endSourceHashes": {
+    "browser.mjs": "864651ace3caaab6e03b17e67a2901c41de1bed4c631ed44dc79cd832e47b20b",
+    "support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../local-draft.mjs": "d4b41cfbd4807ee1e387857febbf08e37f0196d2c8f9eab481e0b041386726ba",
+    "../browser.html": "79884cb03e51b7f75c5f47535bac802f0a2e499b4fd54277e4a52a82e570381a",
+    "../vite.config.mjs": "631215f256833a4d82d0106ba2bf85fcc91e52b36707546aeb77d99b82266630",
+    "../sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../node_modules/.cache/firestore.rules": "c88f930dd205ee28d2e2bf6178c62a8693ebf06f1f2f4ef0b0cc62048ac2ed41",
+    "../../POC-004/src/crypto.ts": "fe348f5a9a7716d9f13496d23ecd24767b2b10d75501878dcb8104d21a7ab6b5"
+  },
+  "reports": [
+    {
+      "id": "B01",
+      "status": "passed",
+      "seats": 500,
+      "encrypted": true,
+      "firestoreRequests": 0,
+      "successAfterTransactionComplete": true
+    },
+    {
+      "id": "B02",
+      "status": "passed",
+      "pageReload": true,
+      "browserProcessRestart": true,
+      "samePersistentProfile": true
+    },
+    {
+      "id": "B03",
+      "status": "passed",
+      "crossUserAndPerformanceIsolated": true,
+      "revokedContextDenied": true,
+      "wrongPassphraseDenied": true,
+      "authorityContextPrecondition": true
+    },
+    {
+      "id": "B04",
+      "status": "passed",
+      "transactionAbortKeepsPrevious": true,
+      "staleLocalVersionDenied": true,
+      "physicalQuotaAndPowerLossNotTested": true
+    },
+    {
+      "id": "B05",
+      "status": "passed",
+      "loadedModuleWorksOffline": true,
+      "reconnectDoesNotSend": true,
+      "offlineApplicationStartupNotTested": true
+    },
+    {
+      "id": "B06",
+      "status": "passed",
+      "proposalPersistedBeforeSend": true,
+      "explicitOfflineDenied": true,
+      "noSendOnEnableNetwork": true
+    },
+    {
+      "id": "B07",
+      "status": "passed",
+      "browserRestartRecoversOriginalIdAndPayload": true,
+      "discardedSuccessAcknowledgement": true,
+      "doubleCommitPrevented": true,
+      "actualPacketLossNotInjected": true
+    },
+    {
+      "id": "B08",
+      "status": "passed",
+      "sharedDraftRecovery": true,
+      "canonicalUnchanged": true,
+      "localSaveFirestoreRequests": 0
+    },
+    {
+      "id": "B09",
+      "status": "passed",
+      "draftCannotOverrideOwnerOrPerformance": true
+    }
+  ]
+}

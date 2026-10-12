@@ -1,0 +1,38 @@
+{
+  "sourceHashes": {
+    "shared.mjs": "d685a1beac838e703c94210cc38e5d09b0566131519dbb7f1b4977fb14b4b34f",
+    "support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../sdk-adapter.mjs": "ca2c8ebc68587e7ed7f40943dcd15f051e1099f83a9d76c3b3d4c1c9e3d3c03a",
+    "../generate.mjs": "a05adb4b216e7645b08e05a9c7d29ef1188cdbb7d023a329a730d52b46a41313",
+    "../index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502"
+  },
+  "endSourceHashes": {
+    "shared.mjs": "d685a1beac838e703c94210cc38e5d09b0566131519dbb7f1b4977fb14b4b34f",
+    "support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../sdk-adapter.mjs": "ca2c8ebc68587e7ed7f40943dcd15f051e1099f83a9d76c3b3d4c1c9e3d3c03a",
+    "../generate.mjs": "a05adb4b216e7645b08e05a9c7d29ef1188cdbb7d023a329a730d52b46a41313",
+    "../index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502"
+  },
+  "reports": [
+    {
+      "id": "S01",
+      "status": "passed",
+      "twoHumansAndDevices": true,
+      "oneWinner": true,
+      "noPartialLosingRecord": true
+    },
+    {
+      "id": "S02",
+      "status": "passed",
+      "currentSelectionAndImmutablePastVersion": true
+    }
+  ],
+  "error": {
+    "message": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n409 !== 403\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n409 !== 403\n\n    at file:///C:/dev/concert-reception-system/poc/GD91-73/tests/shared.mjs:11:187\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async run (file:///C:/dev/concert-reception-system/poc/GD91-73/tests/shared.mjs:7:125)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-73/tests/shared.mjs:11:2"
+  }
+}

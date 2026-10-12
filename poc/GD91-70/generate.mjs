@@ -1,0 +1,33 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+await import('../GD91-69/generate.mjs');
+let rules=fs.readFileSync(new URL('../GD91-69/node_modules/.cache/firestore.rules',import.meta.url),'utf8').replace(/\r\n/g,'\n');
+function replace(a,b){assert.equal(rules.split(a).length-1,1,a);rules=rules.replace(a,()=>b);}
+function body(n){const start=rules.indexOf('    function '+n+'(');assert(start>=0,n);let i=rules.indexOf('{',start),d=1;while(d){i++;if(rules[i]==='{')d++;if(rules[i]==='}')d--;}return rules.slice(start,i+1);}
+replace('          && a.changedSeatIds == b.changedSeatIds.concat(before.fact == after.fact ? [] : [id]);','          && a.changedSeatIds == b.changedSeatIds.concat((h.get("edit",null) == null ? before.fact == after.fact : extensionFact(h,before.fact,after.fact)) ? [] : [id]);');
+replace("&& validNumber(x,lines[h.axis == 'horizontal' ? cell.row : cell.column]);", "&& validNumber(x,lines[h.axis == 'horizontal' ? cell.row : cell.column])\n          && (h.get('edit',null) == null || extensionCell(h,cell));");
+replace("&& (before.fact.item.cell.kind == 'seat' || cellHistory(g,h,before,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/cellFacts/$(id)).data));", "&& (before.fact.item.cell.kind == 'seat' || (h.get('edit',null) == null ? cellHistory(g,h,before,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/cellFacts/$(id)).data) : extensionFact(h,before.fact,get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(g)/cellFacts/$(id)).data.fact)));");
+replace('&& b.environmentId == h.environmentId && b.performanceId == p && b.rows > 0 && b.columns > 0;', '&& b.environmentId == h.environmentId && b.performanceId == p && b.rows > 0 && b.columns > 0\n          && (h.get("edit",null) == null || h.axis == b.axis && h.seatOrder == b.seatOrder && h.edit.kind == "extend");');
+// 旧列の名前・採番設定を拡張や余白移動に便乗して変更しない。
+let scan=body('scanCatalog');scan=scan.replace('let line = h.lines[b.cursor];','let line = h.lines[b.cursor];\n        let old = h.get("edit",null) == null ? null : get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(sectionNamespace)/generations/$(h.baseGeneration)/head/current).data;');
+scan=scan.replace('return header(g,h) &&','return (old == null || extensionLine(h,old,line,b.cursor)) && header(g,h) &&');replace(body('scanCatalog'),scan);
+// 検査済みの旧構成と移動量を一つの封印文書に結合し、最終候補の参照数を増やさない。
+replace("let old = m.baseGeneration == '' ? {'entityIds':[]} : get(/databases/$(database)/documents/publicationShows/$(p)/candidates/$(m.baseGeneration)).data;", "let prior = m.baseGeneration == '' ? {'entityIds':[]} : m.get('edit',null) == null ? get(/databases/$(database)/documents/publicationShows/$(p)/candidates/$(m.baseGeneration)).data : get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(m.sectionId)/generations/$(g)/editSeal/current).data;\n        let old = m.get('edit',null) == null ? prior : prior.candidate;");
+replace("&& m.keys().toSet() == ['schemaVersion','environmentId','performanceId','sectionId','generation','baseGeneration','ready','seatIds','entityIds','changedSeatIds','operationId','proofPlan','expectedVersions','geometry'].toSet()", "&& m.keys().hasAll(['schemaVersion','environmentId','performanceId','sectionId','generation','baseGeneration','ready','seatIds','entityIds','changedSeatIds','operationId','proofPlan','expectedVersions','geometry'])\n          && m.keys().hasOnly(['schemaVersion','environmentId','performanceId','sectionId','generation','baseGeneration','ready','seatIds','entityIds','changedSeatIds','operationId','proofPlan','expectedVersions','geometry','edit'])\n          && m.get('edit',null) == h.get('edit',null) && (m.get('edit',null) == null || prior.edit == m.edit && prior.expectedVersions == v.values)");
+replace('    match /publicationShows/{p} {', fs.readFileSync(new URL('extension.rules',import.meta.url),'utf8')+'\n    match /publicationShows/{p} {');
+replace("e.kind == 'slideSection' ? slideVersion(p,b,a,e) : manager(p)", "e.kind == 'slideSection' ? slideVersion(p,b,a,e) : e.kind == 'extendSection' ? extensionVersion(p,b,a,e) : manager(p)");
+replace("e.kind == 'publishSection' ? a.publicationOperationId", "e.kind in ['publishSection','extendSection'] ? a.publicationOperationId");
+replace("&& e.kind in ['publishSection','assignmentProbe']", "&& e.kind in ['publishSection','extendSection','assignmentProbe']");
+replace("request.resource.data.kind == 'publishSection' && eventCreate(p,id,request.resource.data)", "request.resource.data.kind in ['publishSection','extendSection'] && eventCreate(p,id,request.resource.data)");
+let event=body('eventCreate');event=event.replace("'changed','occurredAt'])\n        && e.kind", "'changed','occurredAt','edit'])\n        && e.kind").replace("e.kind == 'publishSection' ? publicationProof", "e.kind in ['publishSection','extendSection'] ? publicationProof");replace(body('eventCreate'),event);
+replace("return m.proofPlan == 'GD91-57'", "return (e.kind == 'extendSection' ? e.edit == m.edit && m.edit.kind == 'extend' && m.changedSeatIds == [] && m.seatIds.toSet() == old.seatIds.toSet() : m.get('edit',null) == null) && m.proofPlan == 'GD91-57'");
+replace("&& e.kind in ['publishSection','extendSection','assignmentProbe']", "&& (e.kind == 'extendSection' ? e.keys().hasAll(['edit']) : !e.keys().hasAny(['edit']))\n        && e.kind in ['publishSection','extendSection','assignmentProbe']");
+replace("let old = creating ? defaultSectionView(p,section,m) : b;", "let old = creating || b.generation != m.generation ? defaultSectionView(p,section,m) : b;");
+fs.mkdirSync(new URL('node_modules/.cache/',import.meta.url),{recursive:true});fs.writeFileSync(new URL('node_modules/.cache/firestore.rules',import.meta.url),rules);
+console.log(JSON.stringify({generatedFrom:'GD91-69',extension:'extension.rules',finalWrites:3}));
+for(const name of ['global-support','comparison-support','candidate-support']){
+ const original=new URL('../GD91-60/tests/'+name+'.mjs',import.meta.url);
+ let source=fs.readFileSync(original,'utf8').replace(/\r\n/g,'\n');
+ if(name==='global-support')source=source.replace('controlRevision:1});','controlRevision:f.head.controlRevision});');
+ source=source.replace(/from (['"])(\.[^'"]+)\1/g,(_,q,p)=>'from '+q+(p==='./global-support.mjs'?new URL('node_modules/.cache/global-support.mjs',import.meta.url):new URL(p,original)).href+q);
+ fs.writeFileSync(new URL('node_modules/.cache/'+name+'.mjs',import.meta.url),source);
+}

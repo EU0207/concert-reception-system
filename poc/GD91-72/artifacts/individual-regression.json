@@ -1,0 +1,130 @@
+{
+  "filter": null,
+  "sourceHashes": {
+    "../../GD91-72/generate.mjs": "602e6192217e824c4c2d42618ffd250a5215102dc49769268a0d0e39a9b7cb45",
+    "../../GD91-72/distribution.rules": "129569f3a9f65d0f7db9b650f6d37a9c6cd8a1f36be7d0c72d3e31e65f0d8ad8",
+    "../../GD91-72/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../../GD91-72/tests/budgets.mjs": "83d8a0775f7ce9d8f65fee7589bd4862ddd35929a4d3b039528c559ae947b136",
+    "../../GD91-72/tests/regression.mjs": "94db254df57a147a293f3b6970e3bd826ff674bfdef37a626f2d4325ad4c356a",
+    "../../GD91-72/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-72/node_modules/.cache/firestore.rules": "c88f930dd205ee28d2e2bf6178c62a8693ebf06f1f2f4ef0b0cc62048ac2ed41",
+    "../../GD91-71/generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../../GD91-71/individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../../GD91-71/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/budgets.mjs": "1b39ba708cb10babada6cfb87822b4dab5e63fbafb3fbb24bfaef321ef8af6c0",
+    "../../GD91-71/tests/regression.mjs": "1cb57d4a13d3c2dc472cb7dbe3ae719b91b95803116deb7559c3b3553517d87d",
+    "../../GD91-71/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../GD91-71/node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../../GD91-71/node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../../GD91-71/node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../../GD91-71/node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "emulator.mjs": "3cc1c66172165cd6a1fc0dd24fb9e8a2606bad423b09492ba709de336244382d"
+  },
+  "endSourceHashes": {
+    "../../GD91-72/generate.mjs": "602e6192217e824c4c2d42618ffd250a5215102dc49769268a0d0e39a9b7cb45",
+    "../../GD91-72/distribution.rules": "129569f3a9f65d0f7db9b650f6d37a9c6cd8a1f36be7d0c72d3e31e65f0d8ad8",
+    "../../GD91-72/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../../GD91-72/tests/budgets.mjs": "83d8a0775f7ce9d8f65fee7589bd4862ddd35929a4d3b039528c559ae947b136",
+    "../../GD91-72/tests/regression.mjs": "94db254df57a147a293f3b6970e3bd826ff674bfdef37a626f2d4325ad4c356a",
+    "../../GD91-72/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-72/node_modules/.cache/firestore.rules": "c88f930dd205ee28d2e2bf6178c62a8693ebf06f1f2f4ef0b0cc62048ac2ed41",
+    "../../GD91-71/generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../../GD91-71/individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../../GD91-71/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/budgets.mjs": "1b39ba708cb10babada6cfb87822b4dab5e63fbafb3fbb24bfaef321ef8af6c0",
+    "../../GD91-71/tests/regression.mjs": "1cb57d4a13d3c2dc472cb7dbe3ae719b91b95803116deb7559c3b3553517d87d",
+    "../../GD91-71/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../GD91-71/node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../../GD91-71/node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../../GD91-71/node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../../GD91-71/node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "emulator.mjs": "3cc1c66172165cd6a1fc0dd24fb9e8a2606bad423b09492ba709de336244382d"
+  },
+  "reports": [
+    {
+      "id": "I01",
+      "status": "passed",
+      "manualNumber": true,
+      "seatIdAndOtherSeatsRetained": true,
+      "nextNumberRetained": true
+    },
+    {
+      "id": "I02",
+      "status": "passed",
+      "sameLineAndCrossLine": true,
+      "sourceBecomesSpace": true,
+      "labelRetained": true
+    },
+    {
+      "id": "I03",
+      "status": "passed",
+      "fourNonSeatKinds": true,
+      "gapConsumptionRetained": true,
+      "existingSeatsRetained": true,
+      "newSeatUnassigned": true
+    },
+    {
+      "id": "I04",
+      "status": "passed",
+      "latestAssignmentPreventsEdit": true,
+      "stalePreviewRejected": true
+    },
+    {
+      "id": "I05",
+      "status": "passed",
+      "unrelatedSeatChangeDenied": true
+    },
+    {
+      "id": "I06",
+      "status": "passed",
+      "properSubsetsDenied": 6,
+      "replayDenied": true,
+      "sameIdResultReadable": true
+    },
+    {
+      "id": "I07",
+      "status": "passed",
+      "ordinaryOperatingState": true,
+      "markerAndReasonSaved": true
+    },
+    {
+      "id": "I08",
+      "status": "passed",
+      "reasonAndGenericKindForgeryDenied": true
+    },
+    {
+      "id": "I09",
+      "status": "passed",
+      "slideThenRenumberThenExtendThenSlide": true,
+      "oldAutomaticNumbersNotRescanned": true
+    }
+  ]
+}

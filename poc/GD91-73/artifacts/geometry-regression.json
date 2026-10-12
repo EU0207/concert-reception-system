@@ -1,0 +1,161 @@
+{
+  "filter": null,
+  "sourceHashes": {
+    "../../GD91-73/generate.mjs": "a05adb4b216e7645b08e05a9c7d29ef1188cdbb7d023a329a730d52b46a41313",
+    "../../GD91-73/index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../../GD91-73/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../../GD91-73/tests/budgets.mjs": "360a3c69405c5dcd9744ce8f71b569f243ad3a065a46ac12ecf083a05522c1fc",
+    "../../GD91-73/tests/regression.mjs": "1376a3f46276f0afb25826711ee0e5fa05048322baf9634d7a2b23544e3d846a",
+    "../../GD91-73/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-73/tests/transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../../GD91-71/generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../../GD91-71/individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../../GD91-71/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/budgets.mjs": "1b39ba708cb10babada6cfb87822b4dab5e63fbafb3fbb24bfaef321ef8af6c0",
+    "../../GD91-71/tests/regression.mjs": "1cb57d4a13d3c2dc472cb7dbe3ae719b91b95803116deb7559c3b3553517d87d",
+    "../../GD91-71/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../GD91-71/node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../../GD91-71/node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../../GD91-71/node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../../GD91-71/node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "../generate.mjs": "04d7ee676d848ef1aeb5eb03aa9d2bf36e39dfa822cb20e5fe1ae9fc2432d847",
+    "../geometry.rules": "47ec5345787c219bfd6e8a6101bcda0064ab12f06d1ec46dd0e986f4fdee8c40",
+    "../progress.rules": "71867a78b701c2c7bffd87ce392006459ba0557e70a2baafb0d9a0a4f5686b46",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "e9dd8a3fd5e41169a31d05662719bac9acaed872366be279c344390599ce1261",
+    "../node_modules/.cache/bulk-support.mjs": "0d927510afc54e83aa07636afde30849b41144d6d8734316ecf359422960c71d",
+    "support.mjs": "14e720f6e66dc434a48ee6933829b55a860dcd9e65b8852aad94367b6dc0c183",
+    "data.mjs": "d22bf575a51cffee937955a62b32a46fea11f0fa48b10646e1344fbfea71705d",
+    "structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "emulator.mjs": "0ad57974c84d0b588c3f637a4be4e1b53152980ae9d17f7625a6506904039cad",
+    "../../GD91-68/generate.mjs": "019ae9b82a200b779dee733f78f4e7b13ddaf14bf5775234b362e8dd0b56f9a4",
+    "../../GD91-68/bulk.rules": "390e26a8cca45e7a27ebb5759602277f64651ebd47b4477432c31cb509612b51",
+    "../../GD91-68/tests/support.mjs": "af8785bfd0d7f912e0e7ee7ceee703772a248ec968dc9486979e80414df2d783",
+    "../../GD91-66/allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d"
+  },
+  "endSourceHashes": {
+    "../../GD91-73/generate.mjs": "a05adb4b216e7645b08e05a9c7d29ef1188cdbb7d023a329a730d52b46a41313",
+    "../../GD91-73/index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../../GD91-73/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../../GD91-73/tests/budgets.mjs": "360a3c69405c5dcd9744ce8f71b569f243ad3a065a46ac12ecf083a05522c1fc",
+    "../../GD91-73/tests/regression.mjs": "1376a3f46276f0afb25826711ee0e5fa05048322baf9634d7a2b23544e3d846a",
+    "../../GD91-73/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-73/tests/transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../../GD91-71/generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../../GD91-71/individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../../GD91-71/firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/budgets.mjs": "1b39ba708cb10babada6cfb87822b4dab5e63fbafb3fbb24bfaef321ef8af6c0",
+    "../../GD91-71/tests/regression.mjs": "1cb57d4a13d3c2dc472cb7dbe3ae719b91b95803116deb7559c3b3553517d87d",
+    "../../GD91-71/tests/initial-support.mjs": "dac0819f60a2b912d38e101c6a647483c52bcb829492755dd8fb76ea0619986c",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../GD91-71/node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../../GD91-71/node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../../GD91-71/node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../../GD91-71/node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "../generate.mjs": "04d7ee676d848ef1aeb5eb03aa9d2bf36e39dfa822cb20e5fe1ae9fc2432d847",
+    "../geometry.rules": "47ec5345787c219bfd6e8a6101bcda0064ab12f06d1ec46dd0e986f4fdee8c40",
+    "../progress.rules": "71867a78b701c2c7bffd87ce392006459ba0557e70a2baafb0d9a0a4f5686b46",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "e9dd8a3fd5e41169a31d05662719bac9acaed872366be279c344390599ce1261",
+    "../node_modules/.cache/bulk-support.mjs": "0d927510afc54e83aa07636afde30849b41144d6d8734316ecf359422960c71d",
+    "support.mjs": "14e720f6e66dc434a48ee6933829b55a860dcd9e65b8852aad94367b6dc0c183",
+    "data.mjs": "d22bf575a51cffee937955a62b32a46fea11f0fa48b10646e1344fbfea71705d",
+    "structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "emulator.mjs": "0ad57974c84d0b588c3f637a4be4e1b53152980ae9d17f7625a6506904039cad",
+    "../../GD91-68/generate.mjs": "019ae9b82a200b779dee733f78f4e7b13ddaf14bf5775234b362e8dd0b56f9a4",
+    "../../GD91-68/bulk.rules": "390e26a8cca45e7a27ebb5759602277f64651ebd47b4477432c31cb509612b51",
+    "../../GD91-68/tests/support.mjs": "af8785bfd0d7f912e0e7ee7ceee703772a248ec968dc9486979e80414df2d783",
+    "../../GD91-66/allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d"
+  },
+  "reports": [
+    {
+      "id": "V01",
+      "status": "passed",
+      "writesPerSlide": 3,
+      "seatWrites": 0,
+      "reasonField": false
+    },
+    {
+      "id": "V02",
+      "status": "passed",
+      "assignedSeatAndQrRetained": true
+    },
+    {
+      "id": "V03",
+      "status": "passed",
+      "properSubsetsDenied": 6,
+      "boundaryAndInvalidDeltaDenied": true
+    },
+    {
+      "id": "V04",
+      "status": "passed",
+      "operatingAndStoppedAllowedWithoutReason": true,
+      "ordinaryStateTransitions": 2
+    },
+    {
+      "id": "V05",
+      "status": "passed",
+      "ordinarySections": 2,
+      "oldAssignmentKeysRetained": true
+    },
+    {
+      "id": "V06",
+      "status": "passed",
+      "changedSeats": 3,
+      "proofWrites": 3,
+      "maxFactReferences": 1
+    },
+    {
+      "id": "V07",
+      "status": "passed",
+      "changedSeats": 9,
+      "proofWrites": 9,
+      "crossUnitProgress": true
+    },
+    {
+      "id": "V08",
+      "status": "passed",
+      "ordinaryPeople": 500,
+      "ordinarySections": 2,
+      "groups": 50,
+      "groupSize": 10,
+      "oldIdsNumbersRetained": true,
+      "assignmentSeeded": false,
+      "allocationRequests": 503,
+      "allocationWrites": 505,
+      "headerJsonBytes": 183998,
+      "eventJsonBytes": 61265,
+      "proofAndCommitMs": 19660,
+      "totalLocalElapsedMs": 122549,
+      "productionLatencyMeasured": false
+    },
+    {
+      "id": "V09",
+      "status": "passed",
+      "forgeriesDenied": 6
+    },
+    {
+      "id": "V10",
+      "status": "passed",
+      "staleAndReplayDenied": true,
+      "sameIdResultReadable": true
+    },
+    {
+      "id": "V11",
+      "status": "passed",
+      "existingOccupiedSeatAndQrRetained": true,
+      "ordinaryAdditionalSection": true
+    }
+  ]
+}
