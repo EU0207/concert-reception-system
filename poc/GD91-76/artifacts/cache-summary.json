@@ -1,0 +1,320 @@
+{
+  "scope": "browser-storage-and-node-rest-read-integration",
+  "browser": "installed Microsoft Edge, headless, isolated persistent profile",
+  "sourceHashes": {
+    "cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "cached-reader.mjs": "54a160f6d075c8722a438bfc90d819296e450745d7c4a2904afacd023552e7bd",
+    "browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "vite.config.mjs": "6f156a5a564d71084fd6ad427491f7e3d40c21b3b5620585319c05f2a1177347",
+    "validate.mjs": "9fe59f167f250cd271d81248c369b2aa252b5ad335978f0ced501fb544573634",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-75/read-client.mjs": "bf6c0241767688246fabbac6adcd35e68a41dc4bbb0c3dd78848955b9de38bf3",
+    "../GD91-75/projection.mjs": "cecf80ffb74fbb3b5b46533647fd5c9dd1d07faa66e88719b0215f38d871012a",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502"
+  },
+  "endSourceHashes": {
+    "cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "cached-reader.mjs": "54a160f6d075c8722a438bfc90d819296e450745d7c4a2904afacd023552e7bd",
+    "browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "vite.config.mjs": "6f156a5a564d71084fd6ad427491f7e3d40c21b3b5620585319c05f2a1177347",
+    "validate.mjs": "9fe59f167f250cd271d81248c369b2aa252b5ad335978f0ced501fb544573634",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-75/read-client.mjs": "bf6c0241767688246fabbac6adcd35e68a41dc4bbb0c3dd78848955b9de38bf3",
+    "../GD91-75/projection.mjs": "cecf80ffb74fbb3b5b46533647fd5c9dd1d07faa66e88719b0215f38d871012a",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502"
+  },
+  "reports": [
+    {
+      "id": "P-600",
+      "status": "passed",
+      "people": 600,
+      "cold": {
+        "requests": 805,
+        "requestedDocuments": 2408,
+        "cacheHits": 0,
+        "saves": 1
+      },
+      "afterBrowserRestart": {
+        "requests": 204,
+        "requestedDocuments": 606,
+        "cacheHits": 1802,
+        "saves": 0
+      },
+      "encryptedBytes": 597932,
+      "nonExtractableKeyPersisted": true,
+      "localSaveFirestoreWrites": 0,
+      "seedMethod": "owner-read-fixture-only",
+      "normalRegistrationAndCommitVerified": false,
+      "sixAuthenticatedClients": {
+        "distinctPeople": 6,
+        "distinctDevices": 6,
+        "cold": [
+          {
+            "requests": 805,
+            "requestedDocuments": 2408,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 805,
+            "requestedDocuments": 2408,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 805,
+            "requestedDocuments": 2408,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 805,
+            "requestedDocuments": 2408,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 805,
+            "requestedDocuments": 2408,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 805,
+            "requestedDocuments": 2408,
+            "cacheHits": 0,
+            "saves": 1
+          }
+        ],
+        "afterRestart": [
+          {
+            "requests": 204,
+            "requestedDocuments": 606,
+            "cacheHits": 1802,
+            "saves": 0
+          },
+          {
+            "requests": 204,
+            "requestedDocuments": 606,
+            "cacheHits": 1802,
+            "saves": 0
+          },
+          {
+            "requests": 204,
+            "requestedDocuments": 606,
+            "cacheHits": 1802,
+            "saves": 0
+          },
+          {
+            "requests": 204,
+            "requestedDocuments": 606,
+            "cacheHits": 1802,
+            "saves": 0
+          },
+          {
+            "requests": 204,
+            "requestedDocuments": 606,
+            "cacheHits": 1802,
+            "saves": 0
+          },
+          {
+            "requests": 204,
+            "requestedDocuments": 606,
+            "cacheHits": 1802,
+            "saves": 0
+          }
+        ],
+        "parallelWarmAssembly": true,
+        "browserStorageProfiles": 1
+      },
+      "modeledSixDeviceReadsAfterRestart": 13356
+    },
+    {
+      "id": "P-1000",
+      "status": "passed",
+      "people": 1000,
+      "cold": {
+        "requests": 1341,
+        "requestedDocuments": 4008,
+        "cacheHits": 0,
+        "saves": 1
+      },
+      "afterBrowserRestart": {
+        "requests": 338,
+        "requestedDocuments": 1006,
+        "cacheHits": 3002,
+        "saves": 0
+      },
+      "encryptedBytes": 996555,
+      "nonExtractableKeyPersisted": true,
+      "localSaveFirestoreWrites": 0,
+      "seedMethod": "owner-read-fixture-only",
+      "normalRegistrationAndCommitVerified": false,
+      "sixAuthenticatedClients": {
+        "distinctPeople": 6,
+        "distinctDevices": 6,
+        "cold": [
+          {
+            "requests": 1341,
+            "requestedDocuments": 4008,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 1341,
+            "requestedDocuments": 4008,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 1341,
+            "requestedDocuments": 4008,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 1341,
+            "requestedDocuments": 4008,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 1341,
+            "requestedDocuments": 4008,
+            "cacheHits": 0,
+            "saves": 1
+          },
+          {
+            "requests": 1341,
+            "requestedDocuments": 4008,
+            "cacheHits": 0,
+            "saves": 1
+          }
+        ],
+        "afterRestart": [
+          {
+            "requests": 338,
+            "requestedDocuments": 1006,
+            "cacheHits": 3002,
+            "saves": 0
+          },
+          {
+            "requests": 338,
+            "requestedDocuments": 1006,
+            "cacheHits": 3002,
+            "saves": 0
+          },
+          {
+            "requests": 338,
+            "requestedDocuments": 1006,
+            "cacheHits": 3002,
+            "saves": 0
+          },
+          {
+            "requests": 338,
+            "requestedDocuments": 1006,
+            "cacheHits": 3002,
+            "saves": 0
+          },
+          {
+            "requests": 338,
+            "requestedDocuments": 1006,
+            "cacheHits": 3002,
+            "saves": 0
+          },
+          {
+            "requests": 338,
+            "requestedDocuments": 1006,
+            "cacheHits": 3002,
+            "saves": 0
+          }
+        ],
+        "parallelWarmAssembly": true,
+        "browserStorageProfiles": 1
+      },
+      "modeledSixDeviceReadsAfterRestart": 22176
+    },
+    {
+      "id": "P-scope-isolation",
+      "status": "passed",
+      "differentUserPerformanceAndDeviceNotLoaded": true
+    },
+    {
+      "id": "P-impostor-humanUid",
+      "status": "passed",
+      "rulesDeniesBeforeLocalLoad": true
+    },
+    {
+      "id": "P-impostor-deviceUid",
+      "status": "passed",
+      "rulesDeniesBeforeLocalLoad": true
+    },
+    {
+      "id": "P-stale-index",
+      "status": "passed",
+      "previousEncryptedCachePreserved": true
+    },
+    {
+      "id": "P-save-abort",
+      "status": "passed",
+      "atomicRollbackKeepsPrevious": true,
+      "physicalDiskFullNotTested": true
+    },
+    {
+      "id": "P-label-revision",
+      "status": "passed",
+      "newVersionFetchedAndEncrypted": true,
+      "newIv": true
+    },
+    {
+      "id": "P-ciphertext-tamper",
+      "status": "passed",
+      "aesGcmRejectsAlteration": true
+    },
+    {
+      "id": "P-stale-local-save",
+      "status": "passed",
+      "staleWriterCannotOverwrite": true
+    },
+    {
+      "id": "P-local-save-race",
+      "status": "passed",
+      "oneWriterOnly": true,
+      "independentCacheUnchanged": true
+    },
+    {
+      "id": "P-online-authority-unavailable",
+      "status": "passed",
+      "noLocalReleaseOrAutomaticRetry": true,
+      "encryptedCachePreserved": true
+    },
+    {
+      "id": "P-closed-performance",
+      "status": "passed",
+      "generalReaderLockedBeforeDecryption": true,
+      "encryptedCachePreserved": true
+    },
+    {
+      "id": "P-revoked",
+      "status": "passed",
+      "lockedBeforeDecryption": true,
+      "keyAndEncryptedCachePreserved": true
+    },
+    {
+      "id": "P-reactivated",
+      "status": "passed",
+      "originalKeyAndCacheReusableAfterServerAuthorization": true
+    }
+  ],
+  "browserFirestoreRequests": 0,
+  "tested3000": false,
+  "productionFreeTierVerified": false,
+  "offlineApplicationStartupVerified": false,
+  "authorityChecks": "Rules selfRoles/humanUid and deviceStatus/deviceUid before decrypt; publicIndex before and after reuse"
+}

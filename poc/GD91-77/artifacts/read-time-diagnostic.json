@@ -1,0 +1,31 @@
+{
+  "sourceHashes": {
+    "read-time-diagnostic.mjs": "cccd59cfb1d41e02a1419585715a14a4cf9802725ee5ea527933d21309f3aa2b",
+    "receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011"
+  },
+  "reports": [
+    {
+      "id": "revoked-current",
+      "httpStatus": 403,
+      "documents": 0
+    },
+    {
+      "id": "revoked-historical",
+      "httpStatus": 200,
+      "documents": 1
+    },
+    {
+      "id": "anonymous-current",
+      "httpStatus": 403,
+      "documents": 0
+    },
+    {
+      "id": "anonymous-historical",
+      "httpStatus": 403,
+      "documents": 0
+    }
+  ],
+  "productionReproduced": false,
+  "safeToAdoptHistoricalRead": false
+}
