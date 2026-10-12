@@ -1,0 +1,202 @@
+{
+  "scope": "read-path-only",
+  "sourceHashes": {
+    "read-client.mjs": "bf6c0241767688246fabbac6adcd35e68a41dc4bbb0c3dd78848955b9de38bf3",
+    "projection.mjs": "cecf80ffb74fbb3b5b46533647fd5c9dd1d07faa66e88719b0215f38d871012a",
+    "fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "validate.mjs": "975836f22f0c8fdf509e6b97cfd49471a4c412b9b30eb0fdc4657ba0daa9d5a2",
+    "../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502"
+  },
+  "endSourceHashes": {
+    "read-client.mjs": "bf6c0241767688246fabbac6adcd35e68a41dc4bbb0c3dd78848955b9de38bf3",
+    "projection.mjs": "cecf80ffb74fbb3b5b46533647fd5c9dd1d07faa66e88719b0215f38d871012a",
+    "fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "validate.mjs": "975836f22f0c8fdf509e6b97cfd49471a4c412b9b30eb0fdc4657ba0daa9d5a2",
+    "../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502"
+  },
+  "reports": [
+    {
+      "id": "R-10",
+      "status": "passed",
+      "people": 10,
+      "seedMethod": "owner-read-fixture-only",
+      "normalRegistrationAndCommitVerified": false,
+      "fixtureDocuments": 51,
+      "baseline": {
+        "requests": 56,
+        "requestedDocuments": 56,
+        "cacheHits": 0,
+        "maximumBatch": 1
+      },
+      "cold": {
+        "requests": 24,
+        "requestedDocuments": 56,
+        "cacheHits": 0,
+        "maximumBatch": 3
+      },
+      "warm": {
+        "requests": 8,
+        "requestedDocuments": 14,
+        "cacheHits": 42
+      },
+      "modeledSixDeviceReads": {
+        "cold": 1116,
+        "warm": 384
+      },
+      "costModelNotBillingMeasurement": true
+    },
+    {
+      "id": "R-500",
+      "status": "passed",
+      "people": 500,
+      "seedMethod": "owner-read-fixture-only",
+      "normalRegistrationAndCommitVerified": false,
+      "fixtureDocuments": 1756,
+      "baseline": {
+        "requests": 2006,
+        "requestedDocuments": 2006,
+        "cacheHits": 0,
+        "maximumBatch": 1
+      },
+      "cold": {
+        "requests": 673,
+        "requestedDocuments": 2006,
+        "cacheHits": 0,
+        "maximumBatch": 3
+      },
+      "warm": {
+        "requests": 171,
+        "requestedDocuments": 504,
+        "cacheHits": 1502
+      },
+      "modeledSixDeviceReads": {
+        "cold": 35226,
+        "warm": 11154
+      },
+      "costModelNotBillingMeasurement": true
+    },
+    {
+      "id": "R-600",
+      "status": "passed",
+      "people": 600,
+      "seedMethod": "owner-read-fixture-only",
+      "normalRegistrationAndCommitVerified": false,
+      "fixtureDocuments": 2106,
+      "baseline": {
+        "requests": 2406,
+        "requestedDocuments": 2406,
+        "cacheHits": 0,
+        "maximumBatch": 1
+      },
+      "cold": {
+        "requests": 805,
+        "requestedDocuments": 2406,
+        "cacheHits": 0,
+        "maximumBatch": 3
+      },
+      "warm": {
+        "requests": 204,
+        "requestedDocuments": 604,
+        "cacheHits": 1802
+      },
+      "modeledSixDeviceReads": {
+        "cold": 42186,
+        "warm": 13344
+      },
+      "costModelNotBillingMeasurement": true
+    },
+    {
+      "id": "R-1000",
+      "status": "passed",
+      "people": 1000,
+      "seedMethod": "owner-read-fixture-only",
+      "normalRegistrationAndCommitVerified": false,
+      "fixtureDocuments": 3506,
+      "baseline": {
+        "requests": 4006,
+        "requestedDocuments": 4006,
+        "cacheHits": 0,
+        "maximumBatch": 1
+      },
+      "cold": {
+        "requests": 1341,
+        "requestedDocuments": 4006,
+        "cacheHits": 0,
+        "maximumBatch": 3
+      },
+      "warm": {
+        "requests": 338,
+        "requestedDocuments": 1004,
+        "cacheHits": 3002
+      },
+      "modeledSixDeviceReads": {
+        "cold": 70266,
+        "warm": 22164
+      },
+      "costModelNotBillingMeasurement": true
+    },
+    {
+      "id": "D-arrival-refresh",
+      "status": "passed",
+      "cachedGeometryDoesNotHideNewArrival": true
+    },
+    {
+      "id": "D-label-revision",
+      "status": "passed",
+      "mutableNameNotReusedAcrossVersions": true
+    },
+    {
+      "id": "D-stale-index",
+      "status": "passed",
+      "unconfirmedCacheDiscarded": true
+    },
+    {
+      "id": "D-private-in-batch",
+      "status": "passed",
+      "mixedPrivateDocumentRejected": true
+    },
+    {
+      "id": "D-reader-cache-isolation",
+      "status": "passed"
+    },
+    {
+      "id": "D-unpublished-generation",
+      "status": "passed"
+    },
+    {
+      "id": "D-revoked-with-cache",
+      "status": "passed",
+      "serverAuthorizationBeforeReuse": true
+    }
+  ],
+  "productionFreeTierVerified": false,
+  "costAssumptions": {
+    "dependentDocumentsPerBatchMaximum": 5,
+    "extraReceptionExistsPerPerson": 1,
+    "separateHttpRequestsDoNotShareRuleReads": true,
+    "sameBatchDependencyChargedOnce": true,
+    "referenceBudgetWithoutCache": {
+      "scope": "operating-receptionist-read-path-only",
+      "sectionDisplay": {
+        "perDocumentMaximum": 8,
+        "documentsPerRequest": 2,
+        "requestMaximum": 16
+      },
+      "otherProjectionReads": {
+        "perDocumentMaximum": 6,
+        "documentsPerRequest": 3,
+        "requestMaximum": 18
+      }
+    }
+  },
+  "registrationOver500StillBlockedByOldRules": true,
+  "tested3000": false
+}
