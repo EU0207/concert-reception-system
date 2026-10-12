@@ -26,6 +26,7 @@ const authorization=result('authorization');assert.equal(authorization.reports.l
 for(const r of authorization.reports){assert.equal(r.stoppedWithoutEvent,false);assert.equal(r.currentReadStatus,403);assert.equal(r.historicalReadStatus,200);
   assert.equal(r.historicalDocuments,1);assert.equal(r.afterNewEvent.failure.code,'permission-denied');assert.equal(r.afterNewEvent.records,1);assert.equal(r.freshListenError,'permission-denied');}
 const regression=result('regression');assert.equal(regression.reports.length,3);assert(regression.reports.every(r=>r.status==='passed'));
+assert.equal(regression.reports[0].previousRecordsRetained,1);assert.equal(regression.reports[0].recordsAfterRecovery,2);
 const minimal=result('minimal-authorization');assert.equal(minimal.permissionDependencies,1);assert.equal(minimal.applicationSeatRulesUsed,false);
 assert.equal(minimal.stoppedWithoutItemChange,false);assert.equal(minimal.currentStatus,403);assert.equal(minimal.historicalStatus,200);assert.equal(minimal.historicalDocuments,1);
 assert.equal(minimal.afterItemChange.size,1);assert.equal(minimal.afterItemChange.error,'permission-denied');assert.equal(minimal.freshError,'permission-denied');

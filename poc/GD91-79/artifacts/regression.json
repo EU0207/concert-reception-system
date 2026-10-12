@@ -1,13 +1,13 @@
 {
   "sourceHashes": {
-    "regression.mjs": "669b21f92fcb12ac1a0260cd238d98ee1f87a1bb822a07d9bef130a984be6aa1",
+    "regression.mjs": "dda9c0a3d963a3010083c4603dfd74c424d6e0c63ef589a9f2e7710bceb63620",
     "../GD91-78/watch-client.mjs": "7cacebdb126395f6fe0113b85af601a375b492102955b6764b14cb28308acbe9",
     "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
     "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
     "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0"
   },
   "endSourceHashes": {
-    "regression.mjs": "669b21f92fcb12ac1a0260cd238d98ee1f87a1bb822a07d9bef130a984be6aa1",
+    "regression.mjs": "dda9c0a3d963a3010083c4603dfd74c424d6e0c63ef589a9f2e7710bceb63620",
     "../GD91-78/watch-client.mjs": "7cacebdb126395f6fe0113b85af601a375b492102955b6764b14cb28308acbe9",
     "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
     "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
@@ -17,7 +17,8 @@
     {
       "id": "save-failure",
       "status": "passed",
-      "inputRetained": true,
+      "previousRecordsRetained": 1,
+      "recordsAfterRecovery": 2,
       "displayBeforeDurableSave": false,
       "explicitRestartRecovers": true,
       "realIndexedDB": false
