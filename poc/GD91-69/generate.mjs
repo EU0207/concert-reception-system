@@ -1,0 +1,24 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+await import('../GD91-68/generate.mjs');
+let rules=fs.readFileSync(new URL('../GD91-68/node_modules/.cache/firestore.rules',import.meta.url),'utf8').replace(/\r\n/g,'\n');
+function replace(a,b){assert.equal(rules.split(a).length-1,1,a);rules=rules.replace(a,()=>b);}
+replace("&& v.values.layout == 0 && v.values.source == 0 && v.values.assignment == 0 && v.sections == {} && v.seatIds == []\n          && shape(a", "&& !v.sections.keys().hasAny([sectionNamespace])\n          && shape(a");
+replace("m.baseGeneration == '' ? v.values.layout == 0 && v.values.source == 0 && v.values.assignment == 0 && v.sections == {} && v.seatIds == [] :", "m.baseGeneration == '' ? !v.sections.keys().hasAny([m.sectionId]) :");
+replace("['formatVersion','generation','baseGeneration','controlRevision','cursor','lastChunk','seatIds'])", "['formatVersion','generation','baseGeneration','controlRevision','cursor','lastChunk','seatIds','envelope'])");
+replace("&& a.cursor == 0 && a.lastChunk == '' && a.seatIds == [];", "&& a.cursor == 0 && a.lastChunk == '' && a.seatIds == [] && a.envelope == null;");
+replace("a.diff(b).affectedKeys().hasOnly(['cursor','lastChunk','seatIds'])", "a.diff(b).affectedKeys().hasOnly(['cursor','lastChunk','seatIds','envelope'])");
+replace("&& a.seatIds == b.seatIds.concat(x.kind == 'seat' ? [x.seatId] : []);", "&& a.seatIds == b.seatIds.concat(x.kind == 'seat' ? [x.seatId] : []) && validEnvelope(b.envelope,a.envelope,x);");
+replace("'proofPlan','expectedVersions'].toSet()", "'proofPlan','expectedVersions','geometry'].toSet()");
+replace('&& m.seatIds == seats.seatIds && m.seatIds.size()', "&& m.geometry == {'rows':h.rows,'columns':h.columns,'envelope':seats.envelope}\n          && m.seatIds == seats.seatIds && m.seatIds.size()");
+replace("bulkVersion(p,b,a,e) : manager(p)", "bulkVersion(p,b,a,e) : e.kind == 'slideSection' ? slideVersion(p,b,a,e) : manager(p)");
+replace("bulkEvent(p,id,request.resource.data) : request.resource.data.kind == 'publishSection'", "bulkEvent(p,id,request.resource.data) : request.resource.data.kind == 'slideSection' ? slideEvent(p,id,request.resource.data) : request.resource.data.kind == 'publishSection'");
+replace("request.resource.data.kind == 'publishSection' && request.resource.data.baseGeneration == '' ? firstEvent", "request.resource.data.kind == 'publishSection' && request.resource.data.expectedVersions.layout == 0 ? firstEvent");
+replace('    match /publicationShows/{p} {',fs.readFileSync(new URL('geometry.rules',import.meta.url),'utf8')+'\n    match /publicationShows/{p} {');
+fs.mkdirSync(new URL('node_modules/.cache/',import.meta.url),{recursive:true});fs.writeFileSync(new URL('node_modules/.cache/firestore.rules',import.meta.url),rules);
+const original=new URL('../GD91-68/tests/support.mjs',import.meta.url);
+let support=fs.readFileSync(original,'utf8').replace(/\r\n/g,'\n');
+const first=support.indexOf('export async function calculationSnapshot('),last=support.indexOf('export async function bulk(');
+assert(first>=0&&last>first);support=support.slice(0,first)+"import {calculationSnapshot} from '"+new URL('tests/data.mjs',import.meta.url).href+"';\n"+support.slice(last);
+support=support.replace(/from (['"])(\.[^'"]+)\1/g,(_,q,p)=>'from '+q+new URL(p,original).href+q);
+fs.writeFileSync(new URL('node_modules/.cache/bulk-support.mjs',import.meta.url),support);
+console.log(JSON.stringify({generatedFrom:'GD91-68',extension:'geometry.rules',slideWrites:3}));

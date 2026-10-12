@@ -1,0 +1,34 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "920dc19e4eeb2f1b9ca38142194ffaed00d65e1e877494bebde02d584d4c4588",
+    "../geometry.rules": "47ec5345787c219bfd6e8a6101bcda0064ab12f06d1ec46dd0e986f4fdee8c40",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "f7dfa79bd087253fb2194e25466b151c0aa2b28d80b0cbfcc02c65cebb99710c",
+    "../node_modules/.cache/bulk-support.mjs": "0d927510afc54e83aa07636afde30849b41144d6d8734316ecf359422960c71d",
+    "support.mjs": "6c3f8a8578315aadc6b5eafe1f8beddb226066e630d3d660147c854e5f57f453",
+    "data.mjs": "d22bf575a51cffee937955a62b32a46fea11f0fa48b10646e1344fbfea71705d",
+    "structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "emulator.mjs": "3a34fc6d6f0e584371fcbd8e1a15cfa4276df5e4cba98dd846369e75bcbdbd59",
+    "../../GD91-68/generate.mjs": "019ae9b82a200b779dee733f78f4e7b13ddaf14bf5775234b362e8dd0b56f9a4",
+    "../../GD91-68/bulk.rules": "390e26a8cca45e7a27ebb5759602277f64651ebd47b4477432c31cb509612b51",
+    "../../GD91-68/tests/support.mjs": "af8785bfd0d7f912e0e7ee7ceee703772a248ec968dc9486979e80414df2d783",
+    "../../GD91-66/allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "920dc19e4eeb2f1b9ca38142194ffaed00d65e1e877494bebde02d584d4c4588",
+    "../geometry.rules": "47ec5345787c219bfd6e8a6101bcda0064ab12f06d1ec46dd0e986f4fdee8c40",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "f7dfa79bd087253fb2194e25466b151c0aa2b28d80b0cbfcc02c65cebb99710c",
+    "../node_modules/.cache/bulk-support.mjs": "0d927510afc54e83aa07636afde30849b41144d6d8734316ecf359422960c71d",
+    "support.mjs": "6c3f8a8578315aadc6b5eafe1f8beddb226066e630d3d660147c854e5f57f453",
+    "data.mjs": "d22bf575a51cffee937955a62b32a46fea11f0fa48b10646e1344fbfea71705d",
+    "structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "emulator.mjs": "3a34fc6d6f0e584371fcbd8e1a15cfa4276df5e4cba98dd846369e75bcbdbd59",
+    "../../GD91-68/generate.mjs": "019ae9b82a200b779dee733f78f4e7b13ddaf14bf5775234b362e8dd0b56f9a4",
+    "../../GD91-68/bulk.rules": "390e26a8cca45e7a27ebb5759602277f64651ebd47b4477432c31cb509612b51",
+    "../../GD91-68/tests/support.mjs": "af8785bfd0d7f912e0e7ee7ceee703772a248ec968dc9486979e80414df2d783",
+    "../../GD91-66/allocation.mjs": "96c55f1ff54bb62f93f76692f09e0169dab7814661a2c274f9383017dc6a8b4d"
+  },
+  "reports": [],
+  "error": "TypeError: base.data is not a function"
+}

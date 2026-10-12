@@ -1,0 +1,20 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "c985917efc4e67eb22aa3c2d5b73d5e8e3f7daf8224d732fef1c94ca2aaeecd0",
+    "../bulk.rules": "1ce46e6b553d42ffff487b280eee2d95760fdf62224a4f660fb7f3786c48087b",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "cfe2b86231f95b53d3e36b2c9bdfcb325d82fbaf1cefb438e359ad8ebd543720",
+    "support.mjs": "5ffedf9f1de151988d2e6d74c6084a6f7176982b840c3a3e02883b3c052a81c7",
+    "emulator.mjs": "15f64415cec80b2c9372ce8a20a11e707243683d2399c372cea72fa85ac98d02"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "c985917efc4e67eb22aa3c2d5b73d5e8e3f7daf8224d732fef1c94ca2aaeecd0",
+    "../bulk.rules": "1ce46e6b553d42ffff487b280eee2d95760fdf62224a4f660fb7f3786c48087b",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "cfe2b86231f95b53d3e36b2c9bdfcb325d82fbaf1cefb438e359ad8ebd543720",
+    "support.mjs": "5ffedf9f1de151988d2e6d74c6084a6f7176982b840c3a3e02883b3c052a81c7",
+    "emulator.mjs": "15f64415cec80b2c9372ce8a20a11e707243683d2399c372cea72fa85ac98d02"
+  },
+  "reports": [],
+  "error": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":500,\"status\":\"UNKNOWN\"}}\n\n500 !== 200\n"
+}

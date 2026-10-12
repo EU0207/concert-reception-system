@@ -1,0 +1,20 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "c985917efc4e67eb22aa3c2d5b73d5e8e3f7daf8224d732fef1c94ca2aaeecd0",
+    "../bulk.rules": "d8941b932fe74f690903d0f2ce24fe9204f23d96dbd82bdf36e8f9716dced729",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "20bc275c1624cc33ff175681ad78af75cd8036d5e5f75cd06a1fd08477e84a14",
+    "support.mjs": "b29fa122248933b12616a80c5eca215ec14dfb69ca38d459b9797bba162f7026",
+    "emulator.mjs": "15f64415cec80b2c9372ce8a20a11e707243683d2399c372cea72fa85ac98d02"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "c985917efc4e67eb22aa3c2d5b73d5e8e3f7daf8224d732fef1c94ca2aaeecd0",
+    "../bulk.rules": "d8941b932fe74f690903d0f2ce24fe9204f23d96dbd82bdf36e8f9716dced729",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "20bc275c1624cc33ff175681ad78af75cd8036d5e5f75cd06a1fd08477e84a14",
+    "support.mjs": "b29fa122248933b12616a80c5eca215ec14dfb69ca38d459b9797bba162f7026",
+    "emulator.mjs": "15f64415cec80b2c9372ce8a20a11e707243683d2399c372cea72fa85ac98d02"
+  },
+  "reports": [],
+  "error": "Error: {\"progress\":{\"unit\":0,\"member\":1,\"seenSeats\":[\"4acfb707-3b17-4d85-a544-0c1633074a4c\"],\"seenPeople\":[\"c0312130-acf3-4c91-b9a3-1e8db85e397c\"],\"sectionId\":\"89fb5b53-aad8-48fa-bb5d-b9010815fc97\",\"lineId\":\"1403740d-974d-4ec3-8159-f566bd610c03\",\"row\":0,\"column\":0},\"unit\":{\"groupId\":\"cdf52d7b-001f-4eee-82f1-4f6d46cbf741\",\"members\":[\"c0312130-acf3-4c91-b9a3-1e8db85e397c\",\"04d924b1-c04a-4469-ac52-0c09d44c98f4\"],\"seats\":[\"4acfb707-3b17-4d85-a544-0c1633074a4c\",\"7f4f1223-77ab-484e-ae1d-1392272babd6\"],\"sections\":[\"89fb5b53-aad8-48fa-bb5d-b9010815fc97\",\"89fb5b53-aad8-48fa-bb5d-b9010815fc97\"]},\"response\":{\"status\":500,\"body\":{\"error\":{\"code\":500,\"status\":\"UNKNOWN\"}}}}"
+}

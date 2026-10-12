@@ -1,0 +1,124 @@
+    function groupAppend(b,a,id,profile) {
+      let g = profile.groupId;
+      return b.groups is map && a.groups is map && (g == null ? a.groups == b.groups
+        : a.groups.diff(b.groups).affectedKeys() == [g].toSet()
+          && a.groups[g] == b.groups.get(g,[]).concat([id]));
+    }
+    function bulkKind(k) { return k in ['autoAllocation','splitGroup','unlockGroup','reallocateGroup','undoReallocation']; }
+    function bulkPlan(p,id) { return get(/databases/$(database)/documents/publicationShows/$(p)/bulkPlans/$(id)).data; }
+    function bulkFixed(s,g) { return s.groups.get(g,{'fixed':false,'manualReason':null}); }
+    function bulkGroup(p,h,people,tickets) {
+      let ids = people.groups.get(h.groupId,[]);
+      let old = bulkFixed(h.before,h.groupId);
+      let next = bulkFixed(h.after,h.groupId);
+      return uuid(h.groupId) && ids.size() > 0 && ids.size() <= 10
+        && ids.toSet().hasOnly(people.attendeeIds) && !ids.hasAny(tickets.protectedAttendeeIds)
+        && h.beforeChanges.values().hasOnly(ids.concat([''])) && h.afterChanges.values().hasOnly(ids.concat(['']))
+        && h.after.groups.diff(h.before.groups).affectedKeys().hasOnly([h.groupId])
+        && next.keys().toSet() == ['fixed','manualReason'].toSet()
+        && (h.kind == 'splitGroup' ? next.fixed == true && next.manualReason == h.reason && h.reason.matches('.*\\S.*')
+          : h.kind == 'unlockGroup' ? old.fixed == true && next == {'fixed':false,'manualReason':old.manualReason} && h.after.assignments == h.before.assignments
+          : h.kind == 'reallocateGroup' ? old.fixed == false && next == old : false);
+    }
+    function bulkPrevious(p,h) {
+      let e = get(/databases/$(database)/documents/publicationShows/$(p)/operations/$(h.baseOperationId)).data;
+      return e.resultVersions == h.expectedVersions && e.operationId == h.baseOperationId && e.payload.groupId == h.groupId
+        && (h.kind == 'reallocateGroup' ? e.kind == 'unlockGroup' && h.undoGroups == e.payload.before.groups
+          : e.kind == 'reallocateGroup' && h.after.assignments == e.payload.before.assignments && h.after.groups == e.payload.undoGroups);
+    }
+    function bulkHeader(p,id,h) {
+      let v = beforeVersion(p);
+      let s = beforeAssignment(p);
+      let c = control(p);
+      let people = eligible(p);
+      let tickets = protectedSeats(p);
+      return manager(p) && preparation(p,c) && proto(p,h) && uuid(id) && h.operationId == id && bulkKind(h.kind)
+        && h.keys().toSet() == ['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','expectedVersions','baseOperationId','before','after','beforeChanges','afterChanges','groupId','reason','units','order','undoGroups'].toSet()
+        && h.deviceUid == request.auth.uid && h.humanUid == get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data.humanUid
+        && h.expectedVersions == v.values && h.baseOperationId == v.operationId && v.values.control == c.revision && v.values.layout > 0
+        && h.before == s && s.revision == v.values.assignment && h.after.keys() == s.keys()
+        && h.after.operationId == id && h.after.bulkOperationId == id && h.after.revision == s.revision+1 && h.after.publicationOperationId == s.publicationOperationId
+        && h.after.diff(s).affectedKeys().hasOnly(['operationId','revision','assignments','groups','bulkOperationId']) && h.after.assignments.keys() == s.assignments.keys()
+        && people.revision == v.values.attendee && tickets.revision == v.values.ticket
+        && h.after.assignments.values().removeAll(['']).toSet().hasOnly(people.attendeeIds)
+        && h.after.assignments.values().removeAll(['']).size() == h.after.assignments.values().removeAll(['']).toSet().size()
+        && h.beforeChanges.keys() == h.afterChanges.keys() && h.beforeChanges.keys().toSet() == h.after.assignments.diff(s.assignments).affectedKeys()
+        && s.assignments.diff(h.beforeChanges).unchangedKeys() == h.beforeChanges.keys().toSet()
+        && h.after.assignments.diff(h.afterChanges).unchangedKeys() == h.afterChanges.keys().toSet()
+        && h.reason is string && h.reason.size() <= 500 && h.units is list && h.units.size() <= 500 && h.order is list
+        && (h.kind == 'autoAllocation' ? h.groupId == null && h.after.groups == s.groups && h.beforeChanges.size() > 0 && h.beforeChanges.values().hasOnly(['']) && !h.afterChanges.values().hasAny(['']) && h.undoGroups == {}
+          : h.kind == 'undoReallocation' ? h.units == [] && bulkPrevious(p,h) && people.groups[h.groupId].toSet().hasOnly(people.attendeeIds) && !people.groups[h.groupId].hasAny(tickets.protectedAttendeeIds)
+          : bulkGroup(p,h,people,tickets) && (h.kind == 'unlockGroup' ? h.units == [] && h.undoGroups == {}
+            : h.units.size() == 1 && h.units[0].groupId == h.groupId && (h.kind == 'reallocateGroup' ? bulkPrevious(p,h) : h.undoGroups == {})));
+    }
+    function bulkStart() { return {'unit':0,'member':0,'seenSeats':[],'seenPeople':[],'sectionId':'','lineId':'','row':0,'column':0}; }
+    function bulkAdvance(p,h,b,a) {
+      let unit = h.units[b.unit];
+      let person = unit.members[b.member];
+      let seat = unit.seats[b.member];
+      let section = unit.sections[b.member];
+      let v = beforeVersion(p);
+      let people = eligible(p);
+      let tickets = protectedSeats(p);
+      let f = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(section)/generations/$(v.sections[section])/seatFacts/$(seat)).data;
+      return unit.keys().toSet() == ['groupId','members','seats','sections'].toSet()
+          && unit.members.size() > 0 && unit.members.size() <= 10 && unit.members.size() == unit.seats.size() && unit.seats.size() == unit.sections.size()
+          && (unit.groupId == null && unit.members.size() == 1 && people.roster[person].groupId == null
+            || unit.groupId != null && uuid(unit.groupId) && unit.members == people.groups[unit.groupId] && unit.members.toSet().hasOnly(people.attendeeIds) && !unit.members.hasAny(tickets.protectedAttendeeIds)
+              && (h.kind == 'autoAllocation' && bulkFixed(h.before,unit.groupId).fixed == false && !unit.members.hasAny(h.before.assignments.values()) || h.kind != 'autoAllocation' && unit.groupId == h.groupId))
+          && people.attendeeIds.hasAny([person]) && !tickets.protectedAttendeeIds.hasAny([person])
+          && !b.seenSeats.hasAny([seat]) && !b.seenPeople.hasAny([person]) && h.after.assignments[seat] == person
+          && f.generation == v.sections[section] && f.fact.item.cell.seatId == seat && f.fact.attributes.usable == true
+          && (h.kind == 'splitGroup' || f.fact.attributes.category == 'general')
+          && (b.member == 0 || h.kind == 'splitGroup' || section == b.sectionId && f.fact.lineId == b.lineId
+            && ((f.fact.item.cell.row == b.row && (f.fact.item.cell.column == b.column+1 || f.fact.item.cell.column == b.column-1))
+              || (f.fact.item.cell.column == b.column && (f.fact.item.cell.row == b.row+1 || f.fact.item.cell.row == b.row-1))))
+        && a.keys() == b.keys() && a.seenSeats == b.seenSeats.concat([seat]) && a.seenPeople == b.seenPeople.concat([person])
+        && (b.member+1 == unit.members.size() && a.unit == b.unit+1 && a.member == 0 && a.sectionId == '' && a.lineId == '' && a.row == 0 && a.column == 0
+          || b.member+1 != unit.members.size() && a.unit == b.unit && a.member == b.member+1 && a.sectionId == section && a.lineId == f.fact.lineId && a.row == f.fact.item.cell.row && a.column == f.fact.item.cell.column);
+    }
+    function bulkProgress(p,id,b,a,creating) {
+      let h = bulkPlan(p,id);
+      let v = beforeVersion(p);
+      let c = control(p);
+      return manager(p) && preparation(p,c) && h.expectedVersions == v.values && c.revision == v.values.control
+        && (creating && a == bulkStart() || !creating && b.unit < h.units.size() && bulkAdvance(p,h,b,a));
+    }
+    function bulkCompleted(p,h) {
+      let q = get(/databases/$(database)/documents/publicationShows/$(p)/bulkPlans/$(h.operationId)/progress/current).data;
+      return q.unit == h.units.size() && q.member == 0
+        && (h.kind == 'autoAllocation' ? q.seenSeats.toSet() == h.afterChanges.keys().toSet()
+          : h.kind in ['splitGroup','reallocateGroup'] ? q.seenPeople.toSet() == eligible(p).groups[h.groupId].toSet() : q == bulkStart());
+    }
+    function bulkVersion(p,b,a,e) {
+      let h = bulkPlan(p,a.operationId);
+      let c = control(p);
+      return manager(p) && preparation(p,c) && b.values == h.expectedVersions && c.revision == b.values.control && e.operationId == a.operationId
+        && a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['operationId','values'])
+        && a.values == {'commit':b.values.commit+1,'layout':b.values.layout,'source':b.values.source,'assignment':b.values.assignment+1,'attendee':b.values.attendee,'ticket':b.values.ticket,'control':b.values.control,'reception':b.values.reception+1}
+        && afterAssignment(p) == h.after && bulkCompleted(p,h);
+    }
+    function bulkAssignment(p,b,a) {
+      let h = bulkPlan(p,a.operationId);
+      let v = afterVersion(p);
+      return b == h.before && a == h.after && v.operationId == a.operationId && v.values.assignment == a.revision;
+    }
+    function bulkEvent(p,id,e) {
+      let h = bulkPlan(p,id);
+      let b = beforeVersion(p);
+      let a = afterVersion(p);
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      return proto(p,e) && e.keys().toSet() == ['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','targetId','payload','occurredAt'].toSet()
+        && e.operationId == id && e.kind == h.kind && h.deviceUid == request.auth.uid && e.deviceUid == request.auth.uid && e.humanUid == h.humanUid && e.humanUid == s.humanUid && e.controlRevision == b.values.control
+        && e.expectedVersions == b.values && e.resultVersions == a.values && a.operationId == id && a.values.commit == b.values.commit+1
+        && e.targetId == '' && e.occurredAt == request.time && e.payload == {'before':h.before,'after':h.after,'groupId':h.groupId,'reason':h.reason,'order':h.order,'undoGroups':h.undoGroups};
+    }
+    match /publicationShows/{p}/bulkPlans/{id} {
+      allow create: if bulkHeader(p,id,request.resource.data);
+      allow get: if manager(p);
+      match /progress/current {
+        allow create: if bulkProgress(p,id,null,request.resource.data,true);
+        allow update: if bulkProgress(p,id,resource.data,request.resource.data,false);
+        allow get: if manager(p);
+      }
+    }

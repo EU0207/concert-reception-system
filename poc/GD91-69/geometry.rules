@@ -1,0 +1,52 @@
+    function validBound(old,next,n,minimum) {
+      return (minimum && n < old || !minimum && n > old) ? next == n : next == old;
+    }
+    function validEnvelope(b,a,x) {
+      return x.kind == 'unset' ? a == b : b == null ? a == {'minRow':x.row,'maxRow':x.row,'minColumn':x.column,'maxColumn':x.column}
+        : a.keys() == b.keys() && validBound(b.minRow,a.minRow,x.row,true) && validBound(b.maxRow,a.maxRow,x.row,false)
+          && validBound(b.minColumn,a.minColumn,x.column,true) && validBound(b.maxColumn,a.maxColumn,x.column,false);
+    }
+    function defaultSectionView(p,section,m) {
+      return {'schemaVersion':1,'environmentId':'FAKE-environment','performanceId':p,'sectionId':section,'generation':m.generation,
+        'rows':m.geometry.rows,'columns':m.geometry.columns,'rowOffset':0,'columnOffset':0,'revision':0,'operationId':m.generation};
+    }
+    function slideView(p,section,b,a,creating) {
+      let v = beforeVersion(p);
+      let n = afterVersion(p);
+      let e = nextEvent(p,a.operationId);
+      let m = candidate(p,v.sections[section]);
+      let old = creating ? defaultSectionView(p,section,m) : b;
+      let x = m.geometry.envelope;
+      return proto(p,a) && a.keys() == old.keys() && e.kind == 'slideSection' && a.operationId == n.operationId
+        && a.sectionId == section && a.generation == v.sections[section] && old.generation == a.generation
+        && a.diff(old).affectedKeys().hasOnly(['rowOffset','columnOffset','revision','operationId']) && a.revision == old.revision+1
+        && e.payload.before == old && e.payload.after == a && e.payload.sectionId == section
+        && e.payload.dr in [-1,0,1] && e.payload.dc in [-1,0,1] && (e.payload.dr == 0 ? e.payload.dc != 0 : e.payload.dc == 0)
+        && a.rowOffset == old.rowOffset+e.payload.dr && a.columnOffset == old.columnOffset+e.payload.dc
+        && x != null && x.minRow+a.rowOffset >= 0 && x.maxRow+a.rowOffset < a.rows && x.minColumn+a.columnOffset >= 0 && x.maxColumn+a.columnOffset < a.columns;
+    }
+    function slideVersion(p,b,a,e) {
+      let c = control(p);
+      let x = getAfter(/databases/$(database)/documents/publicationShows/$(p)/sectionViews/$(e.payload.sectionId)).data;
+      return manager(p) && proto(p,c) && c.state in ['preparing','operating'] && c.revision == b.values.control
+        && a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['operationId','values']) && x.operationId == a.operationId
+        && e.operationId == a.operationId && e.expectedVersions == b.values
+        && a.values == {'commit':b.values.commit+1,'layout':b.values.layout+1,'source':b.values.source,'assignment':b.values.assignment,'attendee':b.values.attendee,'ticket':b.values.ticket,'control':b.values.control,'reception':b.values.reception+1};
+    }
+    function slideEvent(p,id,e) {
+      let b = beforeVersion(p);
+      let a = afterVersion(p);
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      let x = getAfter(/databases/$(database)/documents/publicationShows/$(p)/sectionViews/$(e.payload.sectionId)).data;
+      return proto(p,e) && uuid(id) && e.operationId == id && e.kind == 'slideSection'
+        && e.keys().toSet() == ['schemaVersion','environmentId','performanceId','operationId','kind','deviceUid','humanUid','controlRevision','expectedVersions','resultVersions','targetId','payload','occurredAt'].toSet()
+        && e.payload.keys().toSet() == ['sectionId','before','after','dr','dc'].toSet() && e.targetId == e.payload.sectionId
+        && e.deviceUid == request.auth.uid && e.humanUid == s.humanUid && e.controlRevision == b.values.control && e.occurredAt == request.time
+        && e.expectedVersions == b.values && e.resultVersions == a.values && a.operationId == id && a.values.commit == b.values.commit+1
+        && x == e.payload.after && x.operationId == id;
+    }
+    match /publicationShows/{p}/sectionViews/{section} {
+      allow create: if slideView(p,section,null,request.resource.data,true);
+      allow update: if slideView(p,section,resource.data,request.resource.data,false);
+      allow get: if manager(p);
+    }

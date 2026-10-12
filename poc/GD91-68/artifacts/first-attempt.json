@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-12",
+  "scope": "Local synthetic PoC failures, followed by full 20 + 88 scenario rerun",
+  "findings": [
+    {"finding":"Initial publication exceeded 1000 expressions after extension","resolution":"Keep initial publication dispatch first; validate newly created assignment fields in its create rule and require existsAfter from version update"},
+    {"finding":"A draft optimization admitted version and event without assignment, detected by existing N07 proper-subset regression","resolution":"Restore mandatory existsAfter dependency; N07 and full regression now pass"},
+    {"finding":"Emulator returned UNKNOWN with ternary predicate internal exception for computed progress maps","resolution":"Compare progress fields directly with explicit boolean alternatives"},
+    {"finding":"Split header exceeded 1000 expressions","resolution":"Do not revalidate canonical immutable fields already preserved by exact before snapshot and restricted after delta"},
+    {"finding":"Undo history adapter used payload.kind instead of event.kind","resolution":"Use stored event kind when deriving pre-unlock fixed state"},
+    {"finding":"Protected later assignment N09 exceeded 1000 expressions with new routing","resolution":"Keep existing kinds first; route bulk assignment via immutable-per-normal-operation bulkOperationId instead of an extra event reference"}
+  ],
+  "rawFailureEvidence": "failed-*.json and failed-run-*.json retained",
+  "final": {"newScenarios":20,"rerunScenarios":88,"sameRules":true,"filter":null},
+  "notClaimed": ["500 attendee assignment persistence","SDK and IndexedDB","physical devices","full issue 166 completion","production adoption"]
+}
