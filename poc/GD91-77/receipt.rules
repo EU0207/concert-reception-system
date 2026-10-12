@@ -1,0 +1,27 @@
+    // 隔離PoC。通常稼働中の受付追記と差分取得だけを追加する。
+    function deltaReceipt(p,id,a) {
+      let c = control(p);
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      let t = get(/databases/$(database)/documents/publicationShows/$(p)/tickets/$(a.attendeeId)).data;
+      return active(p) && proto(p,a) && uuid(id) && a.eventId == id
+        && a.keys().toSet() == ['schemaVersion','environmentId','performanceId','eventId','deviceUid','humanUid',
+          'sequence','sourceControlRevision','attendeeId','credentialVersion','kind','reason','observedAt','receivedAt'].toSet()
+        && a.deviceUid == request.auth.uid && a.humanUid == s.humanUid
+        && integer(a.sequence) && a.sequence > 0 && uuid(a.attendeeId)
+        && c.state == 'operating' && a.sourceControlRevision == c.revision
+        && proto(p,t) && t.attendeeId == a.attendeeId && t.cycleClosed == false
+        && t.activeCredentialId != '' && a.credentialVersion == t.credentialVersion
+        && a.kind in ['firstReception','reread'] && a.reason is string && a.reason.size() <= 500
+        && (a.kind == 'firstReception' ? a.reason == '' : a.reason.matches('.*\\S.*'))
+        && a.observedAt is timestamp && a.observedAt <= request.time && a.receivedAt == request.time;
+    }
+    function deltaRead(p) {
+      // 稼働中の共通4参照。閉演・停止後の分岐はこの取得候補に含めない。
+      return active(p) && control(p).state == 'operating';
+    }
+    match /publicationShows/{p}/receiptEvents/{id} {
+      allow create: if request.auth != null && deltaReceipt(p,id,request.resource.data);
+      allow get: if deltaRead(p);
+      allow list: if deltaRead(p) && limited();
+      allow update,delete: if false;
+    }
