@@ -1,0 +1,130 @@
+{
+  "filter": null,
+  "sourceHashes": {
+    "../generate.mjs": "019ae9b82a200b779dee733f78f4e7b13ddaf14bf5775234b362e8dd0b56f9a4",
+    "../bulk.rules": "390e26a8cca45e7a27ebb5759602277f64651ebd47b4477432c31cb509612b51",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "36248dae7717a1b60918485dc3fb0128b854610cfcc45e391203353ec55b8472",
+    "support.mjs": "af8785bfd0d7f912e0e7ee7ceee703772a248ec968dc9486979e80414df2d783",
+    "emulator.mjs": "01567dcd83ec239065a0f5ddf115b5d3f834d53bba6534204e4273ad67981016"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "019ae9b82a200b779dee733f78f4e7b13ddaf14bf5775234b362e8dd0b56f9a4",
+    "../bulk.rules": "390e26a8cca45e7a27ebb5759602277f64651ebd47b4477432c31cb509612b51",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "36248dae7717a1b60918485dc3fb0128b854610cfcc45e391203353ec55b8472",
+    "support.mjs": "af8785bfd0d7f912e0e7ee7ceee703772a248ec968dc9486979e80414df2d783",
+    "emulator.mjs": "01567dcd83ec239065a0f5ddf115b5d3f834d53bba6534204e4273ad67981016"
+  },
+  "reports": [
+    {
+      "id": "G01",
+      "status": "passed",
+      "assigned": 3
+    },
+    {
+      "id": "G02",
+      "status": "passed",
+      "operations": 4
+    },
+    {
+      "id": "G03",
+      "status": "passed",
+      "derivedMembership": true,
+      "forgedAppendDenied": true
+    },
+    {
+      "id": "G04",
+      "status": "passed",
+      "properSubsetsDenied": 6,
+      "preparationNotPublished": true
+    },
+    {
+      "id": "G05",
+      "status": "passed",
+      "headerForgeriesDenied": 6
+    },
+    {
+      "id": "G06",
+      "status": "passed",
+      "forgedCompletionDenied": 3
+    },
+    {
+      "id": "G07",
+      "status": "passed",
+      "nonconsecutiveGroupDenied": true
+    },
+    {
+      "id": "G08",
+      "status": "passed",
+      "partialGroupDenied": true
+    },
+    {
+      "id": "G09",
+      "status": "passed",
+      "currentTicketProtectionVariants": 2
+    },
+    {
+      "id": "G10",
+      "status": "passed",
+      "fixedGroupRetained": true
+    },
+    {
+      "id": "G11",
+      "status": "passed",
+      "cancelledMemberNotSilentlyRemoved": true
+    },
+    {
+      "id": "G12",
+      "status": "passed",
+      "sameIdResultQuery": true,
+      "physicalResponseLossInjected": false
+    },
+    {
+      "id": "G13",
+      "status": "passed",
+      "distinctStaff": true,
+      "statuses": [
+        200,
+        403
+      ],
+      "atMostOneCommit": true
+    },
+    {
+      "id": "G14",
+      "status": "passed",
+      "latestRevocationEnforced": true,
+      "revocationFixture": true
+    },
+    {
+      "id": "G15",
+      "status": "passed",
+      "crossAuthorConfirmationDenied": true
+    },
+    {
+      "id": "G16",
+      "status": "passed",
+      "manualOperationCannotForgeGroupState": true
+    },
+    {
+      "id": "G17",
+      "status": "passed",
+      "blankSplitReasonDenied": true
+    },
+    {
+      "id": "G18",
+      "status": "passed",
+      "unusableSeatDenied": true
+    },
+    {
+      "id": "G19",
+      "status": "passed",
+      "rosterChangeInvalidatesProof": true
+    },
+    {
+      "id": "G20",
+      "status": "passed",
+      "undoMustUseConfirmedOriginalReason": true
+    }
+  ]
+}

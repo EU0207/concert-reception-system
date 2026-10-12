@@ -1,0 +1,11 @@
+    function bulkProgress(p,id,b,a,creating) {
+      let h = bulkPlan(p,id);
+      let v = beforeVersion(p);
+      let refs = {'version':v,'people':eligible(p),'tickets':protectedSeats(p)};
+      return manager(p) && h.expectedVersions == v.values && request.time < h.preparingUntil
+        && (creating && a == {'state':bulkStart(),'steps':[]}
+          || !creating && a.keys().toSet() == ['state','steps'].toSet() && a.steps is list && a.steps.size() > 0 && a.steps.size() <= 2
+            && b.state.unit < h.units.size() && bulkAdvance(p,h,b.state,a.steps[0],refs)
+            && (a.steps.size() < 2 || a.steps[0].unit < h.units.size() && bulkAdvance(p,h,a.steps[0],a.steps[1],refs))
+            && a.state == a.steps[a.steps.size()-1]);
+    }
