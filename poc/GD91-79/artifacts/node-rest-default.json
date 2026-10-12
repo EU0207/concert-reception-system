@@ -1,0 +1,75 @@
+{
+  "people": 1000,
+  "transport": "default",
+  "sender": "REST",
+  "receiptWrites": 1000,
+  "requests": 336,
+  "writeMs": 48846,
+  "states": [
+    {
+      "callbacks": 104,
+      "confirmed": 456,
+      "initial": true,
+      "pending": 0,
+      "cache": 0,
+      "error": null
+    },
+    {
+      "callbacks": 108,
+      "confirmed": 477,
+      "initial": true,
+      "pending": 0,
+      "cache": 0,
+      "error": null
+    },
+    {
+      "callbacks": 148,
+      "confirmed": 651,
+      "initial": true,
+      "pending": 0,
+      "cache": 0,
+      "error": null
+    },
+    {
+      "callbacks": 148,
+      "confirmed": 651,
+      "initial": true,
+      "pending": 0,
+      "cache": 0,
+      "error": null
+    },
+    {
+      "callbacks": 148,
+      "confirmed": 651,
+      "initial": true,
+      "pending": 0,
+      "cache": 0,
+      "error": null
+    },
+    {
+      "callbacks": 148,
+      "confirmed": 651,
+      "initial": true,
+      "pending": 0,
+      "cache": 0,
+      "error": null
+    }
+  ],
+  "converged": false,
+  "observationAfterWriteMs": 10000,
+  "productionRootCauseConfirmed": false,
+  "sharingLatencyVerified": false,
+  "tested3000": false,
+  "sourceHashes": {
+    "node-rest-diagnostic.mjs": "b7113e033152ce1ff347dfccebc73357bd2d12f8ce107138d28b9220bb2757a8",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a"
+  },
+  "endSourceHashes": {
+    "node-rest-diagnostic.mjs": "b7113e033152ce1ff347dfccebc73357bd2d12f8ce107138d28b9220bb2757a8",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a"
+  }
+}

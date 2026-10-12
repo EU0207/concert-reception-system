@@ -1,0 +1,79 @@
+{
+  "people": 600,
+  "transport": "default",
+  "independentIdentities": 6,
+  "browserContexts": 6,
+  "receiptWrites": 600,
+  "requests": 204,
+  "writeMs": 29835,
+  "states": [
+    {
+      "callbacks": 113,
+      "confirmed": 600,
+      "cache": 0,
+      "pending": 0,
+      "error": null
+    },
+    {
+      "callbacks": 113,
+      "confirmed": 600,
+      "cache": 0,
+      "pending": 0,
+      "error": null
+    },
+    {
+      "callbacks": 113,
+      "confirmed": 600,
+      "cache": 0,
+      "pending": 0,
+      "error": null
+    },
+    {
+      "callbacks": 113,
+      "confirmed": 600,
+      "cache": 0,
+      "pending": 0,
+      "error": null
+    },
+    {
+      "callbacks": 113,
+      "confirmed": 600,
+      "cache": 0,
+      "pending": 0,
+      "error": null
+    },
+    {
+      "callbacks": 113,
+      "confirmed": 600,
+      "cache": 0,
+      "pending": 0,
+      "error": null
+    }
+  ],
+  "converged": true,
+  "observationAfterWriteMs": 10000,
+  "browserVersion": "155.0.4283.45",
+  "sender": "REST",
+  "realDevices": false,
+  "sharingLatencyVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "sourceHashes": {
+    "browser-diagnostic.mjs": "1a7126e3e7601f606c136b7c403e87559b6065ebaed8a670a6042f9f59e3fb68",
+    "browser-watch.mjs": "24b1f5f622cbc762287417f256cdce4b8794dd745afc89b83f0bea3400de2a5a",
+    "browser.html": "2351f69348955f99762ed7c0cd283771136d7b777aed6442355205c15d55295f",
+    "vite.config.mjs": "521517ce869c48760ca18e9694bac954aa0e63ef599b6cbf3ecf923227f6a4c0",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a"
+  },
+  "endSourceHashes": {
+    "browser-diagnostic.mjs": "1a7126e3e7601f606c136b7c403e87559b6065ebaed8a670a6042f9f59e3fb68",
+    "browser-watch.mjs": "24b1f5f622cbc762287417f256cdce4b8794dd745afc89b83f0bea3400de2a5a",
+    "browser.html": "2351f69348955f99762ed7c0cd283771136d7b777aed6442355205c15d55295f",
+    "vite.config.mjs": "521517ce869c48760ca18e9694bac954aa0e63ef599b6cbf3ecf923227f6a4c0",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a"
+  }
+}

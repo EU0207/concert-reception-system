@@ -1,0 +1,104 @@
+{
+  "sourceHashes": {
+    "authorization.mjs": "69ae71f7a075baff0bd7b6c07af14e9d76304504299c608d17d8d96dc39a2125",
+    "../GD91-78/watch-client.mjs": "7cacebdb126395f6fe0113b85af601a375b492102955b6764b14cb28308acbe9",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a"
+  },
+  "endSourceHashes": {
+    "authorization.mjs": "69ae71f7a075baff0bd7b6c07af14e9d76304504299c608d17d8d96dc39a2125",
+    "../GD91-78/watch-client.mjs": "7cacebdb126395f6fe0113b85af601a375b492102955b6764b14cb28308acbe9",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a"
+  },
+  "reports": [
+    {
+      "kind": "role",
+      "fixturePeople": 10,
+      "stoppedWithoutEvent": false,
+      "observationMs": 10000,
+      "currentReadStatus": 403,
+      "historicalReadStatus": 200,
+      "historicalDocuments": 1,
+      "before": 1,
+      "afterNewEvent": {
+        "running": false,
+        "failure": {
+          "code": "permission-denied",
+          "message": "\nevaluation error at L1878:22 for 'list' @ L1878, false for 'list' @ L1882, false for 'list' @ L1878, false for 'list' @ L1882"
+        },
+        "records": 1
+      },
+      "freshListenError": "permission-denied",
+      "newEventOwnerInjected": false
+    },
+    {
+      "kind": "device",
+      "fixturePeople": 10,
+      "stoppedWithoutEvent": false,
+      "observationMs": 10000,
+      "currentReadStatus": 403,
+      "historicalReadStatus": 200,
+      "historicalDocuments": 1,
+      "before": 1,
+      "afterNewEvent": {
+        "running": false,
+        "failure": {
+          "code": "permission-denied",
+          "message": "\nevaluation error at L1878:22 for 'list' @ L1878, false for 'list' @ L1882, false for 'list' @ L1878, false for 'list' @ L1882"
+        },
+        "records": 1
+      },
+      "freshListenError": "permission-denied",
+      "newEventOwnerInjected": false
+    },
+    {
+      "kind": "session",
+      "fixturePeople": 10,
+      "stoppedWithoutEvent": false,
+      "observationMs": 10000,
+      "currentReadStatus": 403,
+      "historicalReadStatus": 200,
+      "historicalDocuments": 1,
+      "before": 1,
+      "afterNewEvent": {
+        "running": false,
+        "failure": {
+          "code": "permission-denied",
+          "message": "\nevaluation error at L1878:22 for 'list' @ L1878, false for 'list' @ L1882, false for 'list' @ L1878, false for 'list' @ L1882"
+        },
+        "records": 1
+      },
+      "freshListenError": "permission-denied",
+      "newEventOwnerInjected": false
+    },
+    {
+      "kind": "control",
+      "fixturePeople": 10,
+      "stoppedWithoutEvent": false,
+      "observationMs": 10000,
+      "currentReadStatus": 403,
+      "historicalReadStatus": 200,
+      "historicalDocuments": 1,
+      "before": 1,
+      "afterNewEvent": {
+        "running": false,
+        "failure": {
+          "code": "permission-denied",
+          "message": "\nevaluation error at L1878:22 for 'list' @ L1878, false for 'list' @ L1882, false for 'list' @ L1878, false for 'list' @ L1882"
+        },
+        "records": 1
+      },
+      "freshListenError": "permission-denied",
+      "newEventOwnerInjected": true
+    }
+  ],
+  "productionReproduced": false,
+  "serverAuthorizationVerified": false,
+  "clientStopIsSecurityProof": false,
+  "tested3000": false
+}
