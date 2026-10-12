@@ -1,0 +1,1100 @@
+{
+  "people": 1000,
+  "mode": "mixed",
+  "identities": 6,
+  "sdkInstances": 7,
+  "writes": 1000,
+  "requests": 336,
+  "writeMs": 31096,
+  "convergedBeforeExplicitRead": false,
+  "beforeGet": [
+    {
+      "callbacks": 147,
+      "serverOnly": 5,
+      "fromCache": 0,
+      "pending": 142,
+      "confirmedSize": 72,
+      "last": {
+        "size": 539,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 450
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 491,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 390
+        },
+        {
+          "size": 497,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 399
+        },
+        {
+          "size": 500,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 402
+        },
+        {
+          "size": 503,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 405
+        },
+        {
+          "size": 509,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 414
+        },
+        {
+          "size": 512,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 417
+        },
+        {
+          "size": 518,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 426
+        },
+        {
+          "size": 521,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 429
+        },
+        {
+          "size": 524,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 432
+        },
+        {
+          "size": 527,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 435
+        },
+        {
+          "size": 536,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 444
+        },
+        {
+          "size": 539,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 450
+        }
+      ]
+    },
+    {
+      "callbacks": 149,
+      "serverOnly": 7,
+      "fromCache": 0,
+      "pending": 142,
+      "confirmedSize": 108,
+      "last": {
+        "size": 557,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 465
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 503,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 402
+        },
+        {
+          "size": 506,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 405
+        },
+        {
+          "size": 515,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 414
+        },
+        {
+          "size": 518,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 417
+        },
+        {
+          "size": 527,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 426
+        },
+        {
+          "size": 527,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 429
+        },
+        {
+          "size": 530,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 432
+        },
+        {
+          "size": 533,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 435
+        },
+        {
+          "size": 539,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 444
+        },
+        {
+          "size": 545,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 450
+        },
+        {
+          "size": 557,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 462
+        },
+        {
+          "size": 557,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 465
+        }
+      ]
+    },
+    {
+      "callbacks": 160,
+      "serverOnly": 6,
+      "fromCache": 0,
+      "pending": 154,
+      "confirmedSize": 96,
+      "last": {
+        "size": 620,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 540
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 569,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 477
+        },
+        {
+          "size": 572,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 480
+        },
+        {
+          "size": 572,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 483
+        },
+        {
+          "size": 575,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 486
+        },
+        {
+          "size": 581,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 492
+        },
+        {
+          "size": 581,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 495
+        },
+        {
+          "size": 584,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 498
+        },
+        {
+          "size": 596,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 510
+        },
+        {
+          "size": 602,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 516
+        },
+        {
+          "size": 608,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 525
+        },
+        {
+          "size": 614,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 531
+        },
+        {
+          "size": 620,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 540
+        }
+      ]
+    },
+    {
+      "callbacks": 165,
+      "serverOnly": 5,
+      "fromCache": 0,
+      "pending": 160,
+      "confirmedSize": 72,
+      "last": {
+        "size": 620,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 549
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 566,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 486
+        },
+        {
+          "size": 572,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 492
+        },
+        {
+          "size": 575,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 495
+        },
+        {
+          "size": 575,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 498
+        },
+        {
+          "size": 587,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 510
+        },
+        {
+          "size": 590,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 516
+        },
+        {
+          "size": 599,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 525
+        },
+        {
+          "size": 605,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 531
+        },
+        {
+          "size": 614,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 540
+        },
+        {
+          "size": 614,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 543
+        },
+        {
+          "size": 617,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 546
+        },
+        {
+          "size": 620,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 549
+        }
+      ]
+    },
+    {
+      "callbacks": 167,
+      "serverOnly": 5,
+      "fromCache": 0,
+      "pending": 162,
+      "confirmedSize": 81,
+      "last": {
+        "size": 643,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 558
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 586,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 495
+        },
+        {
+          "size": 589,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 498
+        },
+        {
+          "size": 598,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 510
+        },
+        {
+          "size": 604,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 516
+        },
+        {
+          "size": 613,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 525
+        },
+        {
+          "size": 616,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 531
+        },
+        {
+          "size": 625,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 540
+        },
+        {
+          "size": 628,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 543
+        },
+        {
+          "size": 631,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 546
+        },
+        {
+          "size": 634,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 549
+        },
+        {
+          "size": 637,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 552
+        },
+        {
+          "size": 643,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 558
+        }
+      ]
+    },
+    {
+      "callbacks": 161,
+      "serverOnly": 5,
+      "fromCache": 0,
+      "pending": 156,
+      "confirmedSize": 81,
+      "last": {
+        "size": 601,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 531
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 550,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 471
+        },
+        {
+          "size": 556,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 477
+        },
+        {
+          "size": 556,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 480
+        },
+        {
+          "size": 559,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 483
+        },
+        {
+          "size": 562,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 486
+        },
+        {
+          "size": 568,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 492
+        },
+        {
+          "size": 571,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 495
+        },
+        {
+          "size": 574,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 498
+        },
+        {
+          "size": 583,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 510
+        },
+        {
+          "size": 589,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 516
+        },
+        {
+          "size": 595,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 525
+        },
+        {
+          "size": 601,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 531
+        }
+      ]
+    }
+  ],
+  "restCurrentReadSize": 1000,
+  "restExactEventIds": true,
+  "directReadSize": 539,
+  "directReadHasPendingWrites": true,
+  "directReadFromCache": false,
+  "afterExplicitRead": false,
+  "afterGet": [
+    {
+      "callbacks": 157,
+      "serverOnly": 5,
+      "fromCache": 0,
+      "pending": 152,
+      "confirmedSize": 72,
+      "last": {
+        "size": 581,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 498
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 536,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 444
+        },
+        {
+          "size": 539,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 450
+        },
+        {
+          "size": 551,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 462
+        },
+        {
+          "size": 554,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 465
+        },
+        {
+          "size": 560,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 471
+        },
+        {
+          "size": 563,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 477
+        },
+        {
+          "size": 566,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 480
+        },
+        {
+          "size": 569,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 483
+        },
+        {
+          "size": 572,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 486
+        },
+        {
+          "size": 575,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 492
+        },
+        {
+          "size": 578,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 495
+        },
+        {
+          "size": 581,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 498
+        }
+      ]
+    },
+    {
+      "callbacks": 157,
+      "serverOnly": 7,
+      "fromCache": 0,
+      "pending": 150,
+      "confirmedSize": 108,
+      "last": {
+        "size": 587,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 498
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 539,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 444
+        },
+        {
+          "size": 545,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 450
+        },
+        {
+          "size": 557,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 462
+        },
+        {
+          "size": 557,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 465
+        },
+        {
+          "size": 563,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 471
+        },
+        {
+          "size": 569,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 477
+        },
+        {
+          "size": 572,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 480
+        },
+        {
+          "size": 575,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 483
+        },
+        {
+          "size": 578,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 486
+        },
+        {
+          "size": 581,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 492
+        },
+        {
+          "size": 584,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 495
+        },
+        {
+          "size": 587,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 498
+        }
+      ]
+    },
+    {
+      "callbacks": 178,
+      "serverOnly": 6,
+      "fromCache": 0,
+      "pending": 172,
+      "confirmedSize": 96,
+      "last": {
+        "size": 680,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 606
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 644,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 564
+        },
+        {
+          "size": 647,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 567
+        },
+        {
+          "size": 647,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 570
+        },
+        {
+          "size": 650,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 573
+        },
+        {
+          "size": 653,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 576
+        },
+        {
+          "size": 656,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 579
+        },
+        {
+          "size": 662,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 588
+        },
+        {
+          "size": 665,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 591
+        },
+        {
+          "size": 668,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 594
+        },
+        {
+          "size": 671,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 597
+        },
+        {
+          "size": 677,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 603
+        },
+        {
+          "size": 680,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 606
+        }
+      ]
+    },
+    {
+      "callbacks": 184,
+      "serverOnly": 5,
+      "fromCache": 0,
+      "pending": 179,
+      "confirmedSize": 72,
+      "last": {
+        "size": 683,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 624
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 644,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 576
+        },
+        {
+          "size": 647,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 579
+        },
+        {
+          "size": 653,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 588
+        },
+        {
+          "size": 656,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 591
+        },
+        {
+          "size": 659,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 594
+        },
+        {
+          "size": 662,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 597
+        },
+        {
+          "size": 665,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 603
+        },
+        {
+          "size": 668,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 606
+        },
+        {
+          "size": 674,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 615
+        },
+        {
+          "size": 677,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 618
+        },
+        {
+          "size": 680,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 621
+        },
+        {
+          "size": 683,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 624
+        }
+      ]
+    },
+    {
+      "callbacks": 185,
+      "serverOnly": 5,
+      "fromCache": 0,
+      "pending": 180,
+      "confirmedSize": 81,
+      "last": {
+        "size": 700,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 630
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 658,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 579
+        },
+        {
+          "size": 664,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 588
+        },
+        {
+          "size": 667,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 591
+        },
+        {
+          "size": 667,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 594
+        },
+        {
+          "size": 670,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 597
+        },
+        {
+          "size": 676,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 603
+        },
+        {
+          "size": 679,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 606
+        },
+        {
+          "size": 688,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 615
+        },
+        {
+          "size": 691,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 618
+        },
+        {
+          "size": 694,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 621
+        },
+        {
+          "size": 694,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 624
+        },
+        {
+          "size": 700,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 630
+        }
+      ]
+    },
+    {
+      "callbacks": 180,
+      "serverOnly": 5,
+      "fromCache": 0,
+      "pending": 175,
+      "confirmedSize": 81,
+      "last": {
+        "size": 664,
+        "fromCache": false,
+        "pending": true,
+        "confirmedDocuments": 606
+      },
+      "error": null,
+      "trace": [
+        {
+          "size": 628,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 564
+        },
+        {
+          "size": 631,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 567
+        },
+        {
+          "size": 634,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 570
+        },
+        {
+          "size": 637,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 573
+        },
+        {
+          "size": 637,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 576
+        },
+        {
+          "size": 640,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 579
+        },
+        {
+          "size": 649,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 588
+        },
+        {
+          "size": 652,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 591
+        },
+        {
+          "size": 655,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 594
+        },
+        {
+          "size": 655,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 597
+        },
+        {
+          "size": 661,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 603
+        },
+        {
+          "size": 664,
+          "fromCache": false,
+          "pending": true,
+          "confirmedDocuments": 606
+        }
+      ]
+    }
+  ],
+  "orderedRestExactEventIds": true,
+  "freshSdkReadSize": 1000,
+  "freshSdkReadHasPendingWrites": false,
+  "observationAfterWritesMs": 15000,
+  "productionRootCauseConfirmed": false,
+  "sharingLatencyVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "sourceHashes": {
+    "diagnose.mjs": "acb4f9e3a4aeb1c18ad6a4e2171d893820a24d43e24d013703180df60612acf5",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "endSourceHashes": {
+    "diagnose.mjs": "acb4f9e3a4aeb1c18ad6a4e2171d893820a24d43e24d013703180df60612acf5",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  }
+}
