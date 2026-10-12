@@ -13,6 +13,7 @@
 - `meter.mjs`：ローカル要求の成功書込み数、GET回数とREST JSONのバイト数を計測する。認証情報と本文を結果へ出力しない。送信文書の容量計算は[公式の算定規則](https://firebase.google.com/docs/firestore/storage-size)に基づくモデルであり、索引を含む保存容量・課金量ではない。
 - `analyze.mjs`：旧分岐別予算へ索引分を加え、減算なしの参照予算を再算定する。差替え時の`baseSeats/current`主要フィールドと構成書込みの下限を計算する。
 - `retention.mjs`：現行・退役構成、正本と操作結果の削除拒否を確認する。削除可能な対象を安全に回収できた試験とは区別する。
+- `capacity-estimate.mjs`：500人の計測とV2 SDKのQR・発行チェックの書込み数から600人・1,000人を概算する。前日までに準備を分散する場合の予算も出す。負荷試験と無料成立の保証値にはしない。追加依存・通信なしで`node poc/GD91-74/capacity-estimate.mjs`を実行し、`artifacts/capacity-estimate.json`へ出力する。
 
 全体判定と主要数値は[容量・費用と回収の記録](../../docs/development/technical-validation/seat-capacity-validation.md)を参照する。結果は`artifacts/measurement.json`、`analysis.json`と`retention.json`へ保持する。途中で失敗した結果を全件合格へ数えない。
 
