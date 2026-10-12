@@ -1,0 +1,198 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "1c3fef24dbc60e2f66aec61ac6da4c30a5117af5ab0e16edf29982df053865eb",
+    "receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "generate.mjs": "f9491e9a4119d1399973fd8ebc2d33f32326c660b9b40b09f375f83b804ed3b6",
+    "node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-75/read-client.mjs": "bf6c0241767688246fabbac6adcd35e68a41dc4bbb0c3dd78848955b9de38bf3",
+    "../GD91-75/projection.mjs": "cecf80ffb74fbb3b5b46533647fd5c9dd1d07faa66e88719b0215f38d871012a",
+    "../GD91-76/cached-reader.mjs": "54a160f6d075c8722a438bfc90d819296e450745d7c4a2904afacd023552e7bd",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "1c3fef24dbc60e2f66aec61ac6da4c30a5117af5ab0e16edf29982df053865eb",
+    "receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "generate.mjs": "f9491e9a4119d1399973fd8ebc2d33f32326c660b9b40b09f375f83b804ed3b6",
+    "node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-75/read-client.mjs": "bf6c0241767688246fabbac6adcd35e68a41dc4bbb0c3dd78848955b9de38bf3",
+    "../GD91-75/projection.mjs": "cecf80ffb74fbb3b5b46533647fd5c9dd1d07faa66e88719b0215f38d871012a",
+    "../GD91-76/cached-reader.mjs": "54a160f6d075c8722a438bfc90d819296e450745d7c4a2904afacd023552e7bd",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2"
+  },
+  "reports": [
+    {
+      "id": "R-600",
+      "status": "passed",
+      "people": 600,
+      "normalReceiptWrites": 600,
+      "normalWriteRequests": 204,
+      "independentHumans": 6,
+      "independentDevices": 6,
+      "receivedByEach": [
+        600,
+        600,
+        600,
+        600,
+        600,
+        600
+      ],
+      "warmGeometry": {
+        "requests": 4,
+        "documents": 6
+      },
+      "overlapReads": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "legacyPersonStatusRequests": 0,
+      "normalRegistrationAndTicketIssuingVerified": false,
+      "browserStorageAndTimingVerified": false
+    },
+    {
+      "id": "R-1000",
+      "status": "passed",
+      "people": 1000,
+      "normalReceiptWrites": 1000,
+      "normalWriteRequests": 336,
+      "independentHumans": 6,
+      "independentDevices": 6,
+      "receivedByEach": [
+        1000,
+        1000,
+        1000,
+        1000,
+        1000,
+        1000
+      ],
+      "warmGeometry": {
+        "requests": 4,
+        "documents": 6
+      },
+      "overlapReads": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "legacyPersonStatusRequests": 0,
+      "normalRegistrationAndTicketIssuingVerified": false,
+      "browserStorageAndTimingVerified": false
+    },
+    {
+      "id": "R-lost-response",
+      "status": "passed",
+      "sameIdResult": true,
+      "observedAtCompared": true,
+      "noDuplicateCreate": true
+    },
+    {
+      "id": "R-forged-human",
+      "status": "passed"
+    },
+    {
+      "id": "R-forged-device",
+      "status": "passed"
+    },
+    {
+      "id": "R-unknown-ticket",
+      "status": "passed"
+    },
+    {
+      "id": "R-old-credential",
+      "status": "passed"
+    },
+    {
+      "id": "R-extra-personal-field",
+      "status": "passed"
+    },
+    {
+      "id": "R-reread-without-reason",
+      "status": "passed"
+    },
+    {
+      "id": "R-atomic-subset",
+      "status": "passed",
+      "validWriteNotPartiallyCommitted": true
+    },
+    {
+      "id": "R-immutable-event",
+      "status": "passed"
+    },
+    {
+      "id": "R-cross-performance",
+      "status": "passed"
+    },
+    {
+      "id": "R-revoked",
+      "status": "passed"
+    },
+    {
+      "id": "R-revoked-between-pages",
+      "status": "passed",
+      "latestAuthorityCheckedOnEachPage": true,
+      "partialCursorResumes": true
+    },
+    {
+      "id": "R-stopped",
+      "status": "passed",
+      "lateArrivalRouteNotTested": true
+    },
+    {
+      "id": "R-save-before-cursor",
+      "status": "passed",
+      "injectedFailure": true,
+      "realIndexedDBNotTested": true
+    },
+    {
+      "id": "R-cursor-restart",
+      "status": "passed",
+      "sameTimestampInclusive": true,
+      "processRestartNotTested": true
+    },
+    {
+      "id": "R-arrival-during-pages",
+      "status": "passed",
+      "timestampUpperBoundAndNextSync": true
+    },
+    {
+      "id": "R-conflict-derivation",
+      "status": "passed",
+      "bothInitialEventsRetained": true,
+      "arrivalOrderIndependent": true,
+      "sequenceCollisionDetected": true
+    },
+    {
+      "id": "R-concurrent-sync",
+      "status": "passed",
+      "singleInFlightQueryChain": true
+    },
+    {
+      "id": "R-journal-scope",
+      "status": "passed",
+      "differentHumanCannotReuseJournal": true
+    }
+  ],
+  "productionFreeTierVerified": false,
+  "normalRegistrationVerified": false,
+  "realDeviceVerified": false,
+  "timingVerified": false,
+  "tested3000": false,
+  "historicalReadSelectorUsed": false,
+  "historicalDirectApiSecurityVerified": false
+}

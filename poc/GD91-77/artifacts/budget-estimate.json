@@ -1,0 +1,59 @@
+{
+  "sourceHashes": {
+    "budget-estimate.mjs": "7dd6b0c99da72d09c4313b2d2e78795a8359564f6962784a8d2fde3379dcce8b",
+    "artifacts/receipt-summary.json": "d712c15014c4633a1d83d78b195e84f07a18544fcdbd84da9984f2c3629bd819"
+  },
+  "estimate": [
+    {
+      "people": 600,
+      "clients": 6,
+      "pollsPerClient": 360,
+      "queryCount": 2196,
+      "geometry": 156,
+      "writerRules": 3600,
+      "receiveDocuments": 5760,
+      "queryRules": 8784,
+      "indexReadAllowance": 2196,
+      "modeledReads": 20496,
+      "withSafetyFactor2": 40992,
+      "freeDailyReads": 50000,
+      "modeledReadsWithOneBoundaryRepeatPerPoll": 45312,
+      "receiptWrites": 600,
+      "fullDayFreeTierVerified": false
+    },
+    {
+      "people": 1000,
+      "clients": 6,
+      "pollsPerClient": 360,
+      "queryCount": 2220,
+      "geometry": 156,
+      "writerRules": 6000,
+      "receiveDocuments": 8160,
+      "queryRules": 8880,
+      "indexReadAllowance": 2220,
+      "modeledReads": 25416,
+      "withSafetyFactor2": 50832,
+      "freeDailyReads": 50000,
+      "modeledReadsWithOneBoundaryRepeatPerPoll": 55152,
+      "receiptWrites": 1000,
+      "fullDayFreeTierVerified": false
+    }
+  ],
+  "assumptions": {
+    "receptionMinutes": 30,
+    "pollSeconds": 5,
+    "queryPageSize": 100,
+    "writeRuleReferencesPerEvent": 6,
+    "readRuleReferencesPerQuery": 4,
+    "indexReadsPerQuery": 1,
+    "indexScansMeasured": false,
+    "clockBoundaryRepeatBoundVerified": false,
+    "preparationAndIrregularOperationsIncluded": false,
+    "retriesAndReentryIncluded": false,
+    "productPollingModeAdopted": false
+  },
+  "productionBillingMeasured": false,
+  "normalRegistrationVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
