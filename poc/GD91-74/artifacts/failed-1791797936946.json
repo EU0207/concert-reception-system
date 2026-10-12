@@ -1,0 +1,381 @@
+{
+  "sourceHashes": {
+    "meter.mjs": "be9b45971100004c7b8d1400d1e1a9332facbb58ca908effc94f329aa379fc9e",
+    "measure.mjs": "08d33938208e586d27f195d3640146702351b01ef0a669b143d4ff57f0c42f04",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../GD91-73/tests/transport-partials.mjs": "56c90bc88e16dc176d4891233ed72571ee8d88129cf596532784e6b641e009a5",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-69/tests/structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223"
+  },
+  "endSourceHashes": {
+    "meter.mjs": "be9b45971100004c7b8d1400d1e1a9332facbb58ca908effc94f329aa379fc9e",
+    "measure.mjs": "08d33938208e586d27f195d3640146702351b01ef0a669b143d4ff57f0c42f04",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../GD91-73/tests/transport-partials.mjs": "56c90bc88e16dc176d4891233ed72571ee8d88129cf596532784e6b641e009a5",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-69/tests/structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223"
+  },
+  "reports": [
+    {
+      "people": 10,
+      "seats": 10,
+      "sections": 2,
+      "publicDownloadGetRequests": 56,
+      "status": "passed",
+      "elapsedMs": 4316
+    }
+  ],
+  "phases": {
+    "10/fixture": {
+      "normal": {
+        "requests": 1,
+        "reads": 0,
+        "writes": 1,
+        "failed": 0,
+        "maxRestJsonBytes": 904
+      },
+      "fixtureOwner": {
+        "requests": 4,
+        "reads": 0,
+        "writes": 4,
+        "failed": 0,
+        "maxRestJsonBytes": 615
+      }
+    },
+    "10/initialize": {
+      "normal": {
+        "requests": 2,
+        "reads": 1,
+        "writes": 5,
+        "failed": 0,
+        "maxRestJsonBytes": 3930
+      },
+      "fixtureOwner": {
+        "requests": 1,
+        "reads": 1,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/construction-0": {
+      "normal": {
+        "requests": 58,
+        "reads": 1,
+        "writes": 62,
+        "failed": 0,
+        "maxRestJsonBytes": 2612
+      },
+      "fixtureOwner": {
+        "requests": 6,
+        "reads": 4,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2498
+      }
+    },
+    "10/publish-0": {
+      "normal": {
+        "requests": 3,
+        "reads": 1,
+        "writes": 5,
+        "failed": 0,
+        "maxRestJsonBytes": 6564
+      },
+      "fixtureOwner": {
+        "requests": 3,
+        "reads": 3,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/construction-1": {
+      "normal": {
+        "requests": 65,
+        "reads": 6,
+        "writes": 67,
+        "failed": 0,
+        "maxRestJsonBytes": 8871
+      },
+      "fixtureOwner": {
+        "requests": 9,
+        "reads": 7,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2498
+      }
+    },
+    "10/register": {
+      "normal": {
+        "requests": 30,
+        "reads": 20,
+        "writes": 60,
+        "failed": 0,
+        "maxRestJsonBytes": 11993
+      },
+      "fixtureOwner": {
+        "requests": 30,
+        "reads": 30,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/allocation-plan": {
+      "normal": {
+        "requests": 6,
+        "reads": 6,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/allocation-proof": {
+      "normal": {
+        "requests": 12,
+        "reads": 0,
+        "writes": 12,
+        "failed": 0,
+        "maxRestJsonBytes": 8656
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/allocation-confirm": {
+      "normal": {
+        "requests": 2,
+        "reads": 1,
+        "writes": 4,
+        "failed": 0,
+        "maxRestJsonBytes": 11811
+      },
+      "fixtureOwner": {
+        "requests": 1,
+        "reads": 1,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/reader-fixture": {
+      "normal": {
+        "requests": 1,
+        "reads": 0,
+        "writes": 1,
+        "failed": 0,
+        "maxRestJsonBytes": 902
+      },
+      "fixtureOwner": {
+        "requests": 2,
+        "reads": 0,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 622
+      }
+    },
+    "10/public-download": {
+      "normal": {
+        "requests": 56,
+        "reads": 56,
+        "writes": 0,
+        "failed": 2,
+        "maxRestJsonBytes": 0
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/share": {
+      "normal": {
+        "requests": 3,
+        "reads": 2,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2574
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/recovery": {
+      "normal": {
+        "requests": 1,
+        "reads": 1,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "500/fixture": {
+      "normal": {
+        "requests": 1,
+        "reads": 0,
+        "writes": 1,
+        "failed": 0,
+        "maxRestJsonBytes": 904
+      },
+      "fixtureOwner": {
+        "requests": 4,
+        "reads": 0,
+        "writes": 4,
+        "failed": 0,
+        "maxRestJsonBytes": 615
+      }
+    },
+    "500/initialize": {
+      "normal": {
+        "requests": 2,
+        "reads": 1,
+        "writes": 5,
+        "failed": 0,
+        "maxRestJsonBytes": 3930
+      },
+      "fixtureOwner": {
+        "requests": 1,
+        "reads": 1,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "500/construction-0": {
+      "normal": {
+        "requests": 1513,
+        "reads": 1,
+        "writes": 1637,
+        "failed": 0,
+        "maxRestJsonBytes": 48709
+      },
+      "fixtureOwner": {
+        "requests": 6,
+        "reads": 4,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2504
+      }
+    },
+    "500/publish-0": {
+      "normal": {
+        "requests": 3,
+        "reads": 1,
+        "writes": 5,
+        "failed": 0,
+        "maxRestJsonBytes": 103094
+      },
+      "fixtureOwner": {
+        "requests": 3,
+        "reads": 3,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "500/construction-1": {
+      "normal": {
+        "requests": 1520,
+        "reads": 6,
+        "writes": 1642,
+        "failed": 0,
+        "maxRestJsonBytes": 187721
+      },
+      "fixtureOwner": {
+        "requests": 9,
+        "reads": 7,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2504
+      }
+    },
+    "500/register": {
+      "normal": {
+        "requests": 1436,
+        "reads": 958,
+        "writes": 2868,
+        "failed": 1,
+        "maxRestJsonBytes": 281973
+      },
+      "fixtureOwner": {
+        "requests": 1434,
+        "reads": 1434,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    }
+  },
+  "largestSentDocuments": [
+    {
+      "path": "publicationShows/FAKE-ba2ac34b-0d55-4f05-9e92-d6b30b802f8f/eligible/current",
+      "bytes": 101589,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-ba2ac34b-0d55-4f05-9e92-d6b30b802f8f/versions/current",
+      "bytes": 56764,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-ba2ac34b-0d55-4f05-9e92-d6b30b802f8f/publicIndex/current",
+      "bytes": 38148,
+      "partial": false
+    },
+    {
+      "path": "sourceProofShows/FAKE-ba2ac34b-0d55-4f05-9e92-d6b30b802f8f/sections/f2a6757f-df50-477c-bdb6-eb335093fc34/generations/3323093b-4554-49de-a8ca-16a7dce3eaf4/globalIds/current",
+      "bytes": 31126,
+      "partial": false
+    },
+    {
+      "path": "sourceProofShows/FAKE-ba2ac34b-0d55-4f05-9e92-d6b30b802f8f/sections/dc55f02c-5633-4d84-b8d7-24427f105458/generations/bb271350-a9b5-4c3b-8a8b-d5e0d2fce31c/globalIds/current",
+      "bytes": 31126,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-ba2ac34b-0d55-4f05-9e92-d6b30b802f8f/candidates/3323093b-4554-49de-a8ca-16a7dce3eaf4",
+      "bytes": 28847,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-ba2ac34b-0d55-4f05-9e92-d6b30b802f8f/candidates/bb271350-a9b5-4c3b-8a8b-d5e0d2fce31c",
+      "bytes": 28847,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-ba2ac34b-0d55-4f05-9e92-d6b30b802f8f/assignmentState/current",
+      "bytes": 19466,
+      "partial": false
+    }
+  ],
+  "error": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":499,\"message\":\"Failed to read message.\",\"status\":\"CANCELLED\"}}\n\n499 !== 200\n"
+}

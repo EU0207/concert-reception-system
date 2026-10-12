@@ -1,0 +1,119 @@
+{
+  "kind": "arithmetic-projection-not-load-test",
+  "sources": {
+    "artifacts/measurement.json": "090af3a2354cd846042a9f6bb6cfd72294e074d90bc2e9d4846ab5e47927384f",
+    "../GD91-73/artifacts/sdk-summary.json": "ed6364f5ca72ac394ddf407c68a27f878bdfcd7d37730399ee60d3fa2bbd71ec",
+    "capacity-estimate.mjs": "5029803bde9dd853854386ca3aada5e34214864105669f578a44ed966d4c7c48"
+  },
+  "quotaSource": "https://firebase.google.com/docs/firestore/quotas",
+  "verifiedOn": "2026-10-12",
+  "calibration": {
+    "people": 500,
+    "observedWrites": 6799,
+    "observedFullDownloadGets": 2006
+  },
+  "assumptions": {
+    "sameQuotaDay": true,
+    "sections": 2,
+    "seatsPerPerson": 1,
+    "nonSeatCells": 0,
+    "qrCreatesPerPerson": 1,
+    "issueChecksPerPerson": 1,
+    "fullDownloadsPerDevice": 1,
+    "devices": 6,
+    "formula": "base=13.5N+49; with QR and issue check=25.5N+49; download GET=4N+6",
+    "validLayout": "各区画5行・偶数列（Nは20の倍数）。他の配置の費用は別途評価。",
+    "excluded": [
+      "受付・再入場の同期",
+      "修正・再発行と再試行",
+      "端末登録と入力headの通常発行",
+      "Rules依存読取りとクエリー・索引読取り",
+      "通路などの非席セル",
+      "履歴・バックアップ・回収",
+      "保存容量・通信量と他のFirebaseサービス",
+      "同じプロジェクトの他操作・過去データ"
+    ]
+  },
+  "freeDailyWrites": 20000,
+  "planningReserveRatio": 0.2,
+  "writeOnlyLinearBoundaryPeople": 782,
+  "writeOnlyLinearBoundaryWithReservePeople": 625,
+  "estimates": [
+    {
+      "people": 500,
+      "baseMeasuredAtThisHeadcount": true,
+      "baseWrites": 6799,
+      "qrAndIssueCheckWrites": 6000,
+      "sameQuotaDayModeledWrites": 12799,
+      "remainingDailyWrites": 7201,
+      "fullDownloadGetsPerDevice": 2006,
+      "sixDeviceFullDownloadGets": 12036,
+      "splitPreparationQuotaDays": {
+        "layoutRegistrationAllocationWrites": 6799,
+        "qrAndIssueCheckWrites": 6000,
+        "eachModeledPreparationDayWithinWriteQuota": true,
+        "eventDayWrites": null,
+        "eventDayFeasibilityVerified": false
+      },
+      "withinDevelopmentFreeTierGuaranteeScope": true,
+      "freeTierFeasibilityVerified": false
+    },
+    {
+      "people": 600,
+      "baseMeasuredAtThisHeadcount": false,
+      "baseWrites": 8149,
+      "qrAndIssueCheckWrites": 7200,
+      "sameQuotaDayModeledWrites": 15349,
+      "remainingDailyWrites": 4651,
+      "fullDownloadGetsPerDevice": 2406,
+      "sixDeviceFullDownloadGets": 14436,
+      "splitPreparationQuotaDays": {
+        "layoutRegistrationAllocationWrites": 8149,
+        "qrAndIssueCheckWrites": 7200,
+        "eachModeledPreparationDayWithinWriteQuota": true,
+        "eventDayWrites": null,
+        "eventDayFeasibilityVerified": false
+      },
+      "withinDevelopmentFreeTierGuaranteeScope": true,
+      "freeTierFeasibilityVerified": false
+    },
+    {
+      "people": 1000,
+      "baseMeasuredAtThisHeadcount": false,
+      "baseWrites": 13549,
+      "qrAndIssueCheckWrites": 12000,
+      "sameQuotaDayModeledWrites": 25549,
+      "remainingDailyWrites": -5549,
+      "fullDownloadGetsPerDevice": 4006,
+      "sixDeviceFullDownloadGets": 24036,
+      "splitPreparationQuotaDays": {
+        "layoutRegistrationAllocationWrites": 13549,
+        "qrAndIssueCheckWrites": 12000,
+        "eachModeledPreparationDayWithinWriteQuota": true,
+        "eventDayWrites": null,
+        "eventDayFeasibilityVerified": false
+      },
+      "withinDevelopmentFreeTierGuaranteeScope": true,
+      "freeTierFeasibilityVerified": false
+    },
+    {
+      "people": 1020,
+      "baseMeasuredAtThisHeadcount": false,
+      "baseWrites": 13819,
+      "qrAndIssueCheckWrites": 12240,
+      "sameQuotaDayModeledWrites": 26059,
+      "remainingDailyWrites": -6059,
+      "fullDownloadGetsPerDevice": 4086,
+      "sixDeviceFullDownloadGets": 24516,
+      "splitPreparationQuotaDays": {
+        "layoutRegistrationAllocationWrites": 13819,
+        "qrAndIssueCheckWrites": 12240,
+        "eachModeledPreparationDayWithinWriteQuota": true,
+        "eventDayWrites": null,
+        "eventDayFeasibilityVerified": false
+      },
+      "withinDevelopmentFreeTierGuaranteeScope": false,
+      "freeTierFeasibilityVerified": false
+    }
+  ]
+}
