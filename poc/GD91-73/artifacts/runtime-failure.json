@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-12",
+  "environment": "local Firebase Emulator, fake data only",
+  "observed": "HTTP 500 UNKNOWN during roster R12 and SDK initial structure scan",
+  "causeFromLocalLog": "java.lang.OutOfMemoryError: Java heap space",
+  "logSource": "firestore-debug.log, lines 116682-116878",
+  "applicationOrRulesChange": false,
+  "response": "Restart the isolated Emulator with bounded process-local Java heap and rerun incomplete suites. Preserve full completed suites only after source hash checks.",
+  "productionCapacityConclusion": "not measured"
+}

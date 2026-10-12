@@ -1,0 +1,94 @@
+{
+  "filter": null,
+  "browser": "installed Microsoft Edge, headless, isolated persistent profile",
+  "sourceHashes": {
+    "transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "browser.mjs": "f052e14c5accbd563c4529ccabddd827d0aebf94b5dd665ebd386757e0f3e786",
+    "support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../local-draft.mjs": "cdab67892338220049bcf05bf745b752e6d5bb6e49f3d72d7283cc4593d14fea",
+    "../browser.html": "79884cb03e51b7f75c5f47535bac802f0a2e499b4fd54277e4a52a82e570381a",
+    "../vite.config.mjs": "45d774385cfa4d68ef4f4fd6dbbdb10a8a2a3734da76e0031a29457e7a7863ae",
+    "../sdk-adapter.mjs": "2785f6bdeffff799606d5de3e185bb9d10759b76a2ee48dfb59645bdc359d1ed",
+    "../node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../../POC-004/src/crypto.ts": "fe348f5a9a7716d9f13496d23ecd24767b2b10d75501878dcb8104d21a7ab6b5"
+  },
+  "endSourceHashes": {
+    "transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "../../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "browser.mjs": "f052e14c5accbd563c4529ccabddd827d0aebf94b5dd665ebd386757e0f3e786",
+    "support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../local-draft.mjs": "cdab67892338220049bcf05bf745b752e6d5bb6e49f3d72d7283cc4593d14fea",
+    "../browser.html": "79884cb03e51b7f75c5f47535bac802f0a2e499b4fd54277e4a52a82e570381a",
+    "../vite.config.mjs": "45d774385cfa4d68ef4f4fd6dbbdb10a8a2a3734da76e0031a29457e7a7863ae",
+    "../sdk-adapter.mjs": "2785f6bdeffff799606d5de3e185bb9d10759b76a2ee48dfb59645bdc359d1ed",
+    "../node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../../POC-004/src/crypto.ts": "fe348f5a9a7716d9f13496d23ecd24767b2b10d75501878dcb8104d21a7ab6b5"
+  },
+  "reports": [
+    {
+      "id": "B01",
+      "status": "passed",
+      "seats": 500,
+      "encrypted": true,
+      "firestoreRequests": 0,
+      "successAfterTransactionComplete": true
+    },
+    {
+      "id": "B02",
+      "status": "passed",
+      "pageReload": true,
+      "browserProcessRestart": true,
+      "samePersistentProfile": true
+    },
+    {
+      "id": "B03",
+      "status": "passed",
+      "crossUserAndPerformanceIsolated": true,
+      "revokedContextDenied": true,
+      "wrongPassphraseDenied": true,
+      "authorityContextPrecondition": true
+    },
+    {
+      "id": "B04",
+      "status": "passed",
+      "transactionAbortKeepsPrevious": true,
+      "staleLocalVersionDenied": true,
+      "physicalQuotaAndPowerLossNotTested": true
+    },
+    {
+      "id": "B05",
+      "status": "passed",
+      "loadedModuleWorksOffline": true,
+      "reconnectDoesNotSend": true,
+      "offlineApplicationStartupNotTested": true
+    },
+    {
+      "id": "B06",
+      "status": "passed",
+      "proposalPersistedBeforeSend": true,
+      "explicitOfflineDenied": true,
+      "noSendOnEnableNetwork": true
+    },
+    {
+      "id": "B07",
+      "status": "passed",
+      "browserRestartRecoversOriginalIdAndPayload": true,
+      "discardedSuccessAcknowledgement": true,
+      "doubleCommitPrevented": true,
+      "actualPacketLossNotInjected": true
+    },
+    {
+      "id": "B08",
+      "status": "passed",
+      "sharedDraftRecovery": true,
+      "canonicalUnchanged": true,
+      "localSaveFirestoreRequests": 0
+    },
+    {
+      "id": "B09",
+      "status": "passed",
+      "draftCannotOverrideOwnerOrPerformance": true
+    }
+  ]
+}
