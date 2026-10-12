@@ -1,0 +1,57 @@
+{
+  "scope": "mock-transport-unit-only",
+  "sourceHashes": {
+    "transport-tests.mjs": "0dd6459fd2bce72d4751a1d3c172affb7539e47db29e8b50ca3dca4d9ef15135",
+    "read-client.mjs": "bf6c0241767688246fabbac6adcd35e68a41dc4bbb0c3dd78848955b9de38bf3",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2"
+  },
+  "endSourceHashes": {
+    "transport-tests.mjs": "0dd6459fd2bce72d4751a1d3c172affb7539e47db29e8b50ca3dca4d9ef15135",
+    "read-client.mjs": "bf6c0241767688246fabbac6adcd35e68a41dc4bbb0c3dd78848955b9de38bf3",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2"
+  },
+  "reports": [
+    {
+      "id": "U-response-order",
+      "status": "passed"
+    },
+    {
+      "id": "U-missing-required",
+      "status": "passed"
+    },
+    {
+      "id": "U-response-incomplete",
+      "status": "passed"
+    },
+    {
+      "id": "U-response-duplicate",
+      "status": "passed"
+    },
+    {
+      "id": "U-response-unknown",
+      "status": "passed"
+    },
+    {
+      "id": "U-partial-session",
+      "status": "passed"
+    },
+    {
+      "id": "U-quota-keeps-cache-no-retry",
+      "status": "passed"
+    },
+    {
+      "id": "U-lost-response-no-retry",
+      "status": "passed"
+    },
+    {
+      "id": "U-denied-entry-clears-cache",
+      "status": "passed"
+    },
+    {
+      "id": "U-cache-copy-isolation",
+      "status": "passed"
+    }
+  ],
+  "rulesVerified": false,
+  "browserPersistenceVerified": false
+}
