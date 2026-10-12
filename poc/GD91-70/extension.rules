@@ -1,0 +1,63 @@
+    function translatedCell(h,b,a) {
+      let e = h.edit;
+      return a.diff(b).affectedKeys().hasOnly(['row','column'])
+        && a.row == (b.row+e.rowOffset+e.oldRows)%e.oldRows+e.rowDelta
+        && a.column == (b.column+e.columnOffset+e.oldColumns)%e.oldColumns+e.columnDelta;
+    }
+    function extensionCell(h,c) {
+      let e = h.edit;
+      let existing = c.row >= e.rowDelta && c.row < e.rowDelta+e.oldRows
+        && c.column >= e.columnDelta && c.column < e.columnDelta+e.oldColumns;
+      return existing || c.kind == 'unset' && !c.keys().hasAny(['seatId','consumedNumber']);
+    }
+    function extensionFact(h,b,a) {
+      return a.keys() == b.keys() && a.attributes == b.attributes && a.lineId == b.lineId && a.prefix == b.prefix
+        && a.item.keys() == b.item.keys() && a.item.numbering == b.item.numbering && translatedCell(h,b.item.cell,a.item.cell);
+    }
+    function extensionLine(h,old,line,index) {
+      let count = old.lines.size();
+      let offset = h.axis == 'horizontal' ? h.edit.rowOffset : h.edit.columnOffset;
+      let prior = old.lines[(index-offset+count)%count];
+      return index >= count || line.diff(prior).affectedKeys().hasOnly(['index']) && line.lineId == prior.lineId;
+    }
+    function extensionDescriptor(h,old,view) {
+      let e = h.edit;
+      let vertical = e.dimension == 'rows';
+      let prepend = h.seatOrder == 'reverse' && (h.axis == 'vertical' ? vertical : !vertical);
+      return e.keys().toSet() == ['kind','dimension','count','oldRows','oldColumns','rowDelta','columnDelta','rowOffset','columnOffset','reason'].toSet()
+        && e.kind == 'extend' && e.dimension in ['rows','columns'] && e.count is int && e.count > 0
+        && e.reason is string && e.reason.size() <= 500 && e.oldRows == old.geometry.rows && e.oldColumns == old.geometry.columns
+        && h.rows == e.oldRows+(vertical ? e.count : 0) && h.columns == e.oldColumns+(vertical ? 0 : e.count)
+        && e.rowDelta == (prepend && vertical ? e.count : 0) && e.columnDelta == (prepend && !vertical ? e.count : 0)
+        && e.rowOffset == view.rowOffset && e.columnOffset == view.columnOffset;
+    }
+    function extensionSeal(p,section,g,a) {
+      let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(section)/generations/$(g)/head/current).data;
+      let v = beforeVersion(p);
+      let old = candidate(p,h.baseGeneration);
+      let result = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(section)/generations/$(g)/comparisonResult/current).data;
+      let viewExists = exists(/databases/$(database)/documents/publicationShows/$(p)/sectionViews/$(section));
+      let rawView = viewExists ? get(/databases/$(database)/documents/publicationShows/$(p)/sectionViews/$(section)).data : null;
+      let view = rawView == null || rawView.generation != old.generation ? defaultSectionView(p,section,old) : rawView;
+      return manager(p) && a.keys().toSet() == ['candidate','edit','expectedVersions'].toSet()
+        && a.candidate == old && a.edit == h.edit && a.expectedVersions == v.values && h.expectedVersions == v.values
+        && h.sectionId == section && h.generation == g && h.baseGeneration == v.sections[section]
+        && result.generation == g && result.baseGeneration == h.baseGeneration && result.changedSeatIds == [] && result.seats == old.seatIds.size()
+        && extensionDescriptor(h,old,view);
+    }
+    function extensionVersion(p,b,a,e) {
+      let c = control(p);
+      let m = candidate(p,e.generation);
+      let n = afterAssignment(p);
+      return manager(p) && proto(p,c) && c.state in ['preparing','operating'] && c.revision == b.values.control
+        && m.edit.kind == 'extend' && e.edit == m.edit && m.expectedVersions == b.values && m.baseGeneration == b.sections[m.sectionId]
+        && (c.firstReceptionStartedAt == null && request.time < c.dayStartsAt || m.edit.reason.matches('.*\\S.*'))
+        && a.keys() == b.keys() && a.diff(b).affectedKeys().hasOnly(['operationId','values','sections','usedIds','usedGenerations']) && a.seatIds == b.seatIds
+        && a.values == {'commit':b.values.commit+1,'layout':b.values.layout+1,'source':b.values.source+1,'assignment':b.values.assignment,'attendee':b.values.attendee,'ticket':b.values.ticket,'control':b.values.control,'reception':b.values.reception+1}
+        && e.operationId == a.operationId && e.expectedVersions == b.values && e.resultVersions == a.values && e.controlRevision == c.revision
+        && n.publicationOperationId == a.operationId && n.revision == a.values.assignment;
+    }
+    match /sourceProofShows/{p}/sections/{section}/generations/{g}/editSeal/current {
+      allow create: if extensionSeal(p,section,g,request.resource.data);
+      allow get: if manager(p);
+    }
