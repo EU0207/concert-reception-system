@@ -1,0 +1,29 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "7a99f007cf4433f27abdeb5d36d12d9f66bc89d4c8ac75ee8b7386c2b36be7ff",
+    "../extension.rules": "5cdad93c31d30443c9a2559d7061db40e6ee805b6aa5fd38cd9637f448fd2d8b",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "da968ccfe4fea3418b8a355e12e5ffa557080dbef4425c18954d86d2babba739",
+    "../node_modules/.cache/global-support.mjs": "80fea1673cfc0863a1803b95783e581416004e6c679997208ef5af7ac4319f38",
+    "../node_modules/.cache/comparison-support.mjs": "0ae3809eb351940368d9dca7068b27a6b82ee7f345949db6b75df2ffe485b9b6",
+    "../node_modules/.cache/candidate-support.mjs": "0bececd66795b555946157e0bb0515f99a92036e8e7911fd50498fd4a41aa4d8",
+    "support.mjs": "7dee4aff4ec2a455dba2f42f7a25a72004c693313d1ac93996f14754a9a8b10a",
+    "emulator.mjs": "1256e13cf62754acb69f4798d5f632c15081685e0fa10bde387ddd6a1e91545f"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "7a99f007cf4433f27abdeb5d36d12d9f66bc89d4c8ac75ee8b7386c2b36be7ff",
+    "../extension.rules": "5cdad93c31d30443c9a2559d7061db40e6ee805b6aa5fd38cd9637f448fd2d8b",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "da968ccfe4fea3418b8a355e12e5ffa557080dbef4425c18954d86d2babba739",
+    "../node_modules/.cache/global-support.mjs": "80fea1673cfc0863a1803b95783e581416004e6c679997208ef5af7ac4319f38",
+    "../node_modules/.cache/comparison-support.mjs": "0ae3809eb351940368d9dca7068b27a6b82ee7f345949db6b75df2ffe485b9b6",
+    "../node_modules/.cache/candidate-support.mjs": "0bececd66795b555946157e0bb0515f99a92036e8e7911fd50498fd4a41aa4d8",
+    "support.mjs": "7dee4aff4ec2a455dba2f42f7a25a72004c693313d1ac93996f14754a9a8b10a",
+    "emulator.mjs": "1256e13cf62754acb69f4798d5f632c15081685e0fa10bde387ddd6a1e91545f"
+  },
+  "reports": [],
+  "error": {
+    "message": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":403,\"message\":\"\\nevaluation error at L1640:131 for 'update' @ L1640, false for 'update' @ L1645, evaluation error at L1641:142 for 'update' @ L1641, false for 'update' @ L1645, evaluation error at L1642:75 for 'create' @ L1642, false for 'create' @ L1645, false for 'update' @ L1640, false for 'update' @ L1645, false for 'create' @ L1642, false for 'create' @ L1645\",\"status\":\"PERMISSION_DENIED\"}}\n\n403 !== 200\n",
+    "stack": "AssertionError [ERR_ASSERTION]: {\"error\":{\"code\":403,\"message\":\"\\nevaluation error at L1640:131 for 'update' @ L1640, false for 'update' @ L1645, evaluation error at L1641:142 for 'update' @ L1641, false for 'update' @ L1645, evaluation error at L1642:75 for 'create' @ L1642, false for 'create' @ L1645, false for 'update' @ L1640, false for 'update' @ L1645, false for 'create' @ L1642, false for 'create' @ L1645\",\"status\":\"PERMISSION_DENIED\"}}\n\n403 !== 200\n\n    at ok (file:///C:/dev/concert-reception-system/poc/GD91-60/tests/transport.mjs:59:20)\n    at confirmExtension (file:///C:/dev/concert-reception-system/poc/GD91-70/tests/support.mjs:33:45)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-70/tests/emulator.mjs:8:351\n    at async run (file:///C:/dev/concert-reception-system/poc/GD91-70/tests/emulator.mjs:6:125)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-70/tests/emulator.mjs:8:2"
+  }
+}

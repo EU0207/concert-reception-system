@@ -1,0 +1,35 @@
+{
+  "filter": "E01",
+  "sourceHashes": {
+    "../generate.mjs": "3e35bbf0d3883f3663e5f30a42a7e7a685f70fa745c07ec1360521e2e43fa18d",
+    "../extension.rules": "5cdad93c31d30443c9a2559d7061db40e6ee805b6aa5fd38cd9637f448fd2d8b",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "763ab7d0cfc9f1a9043677fa03ee1cf31a95fcceda2a8d213d307af7eb31c544",
+    "../node_modules/.cache/global-support.mjs": "80fea1673cfc0863a1803b95783e581416004e6c679997208ef5af7ac4319f38",
+    "../node_modules/.cache/comparison-support.mjs": "0ae3809eb351940368d9dca7068b27a6b82ee7f345949db6b75df2ffe485b9b6",
+    "../node_modules/.cache/candidate-support.mjs": "0bececd66795b555946157e0bb0515f99a92036e8e7911fd50498fd4a41aa4d8",
+    "support.mjs": "7dee4aff4ec2a455dba2f42f7a25a72004c693313d1ac93996f14754a9a8b10a",
+    "emulator.mjs": "1256e13cf62754acb69f4798d5f632c15081685e0fa10bde387ddd6a1e91545f"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "3e35bbf0d3883f3663e5f30a42a7e7a685f70fa745c07ec1360521e2e43fa18d",
+    "../extension.rules": "5cdad93c31d30443c9a2559d7061db40e6ee805b6aa5fd38cd9637f448fd2d8b",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "763ab7d0cfc9f1a9043677fa03ee1cf31a95fcceda2a8d213d307af7eb31c544",
+    "../node_modules/.cache/global-support.mjs": "80fea1673cfc0863a1803b95783e581416004e6c679997208ef5af7ac4319f38",
+    "../node_modules/.cache/comparison-support.mjs": "0ae3809eb351940368d9dca7068b27a6b82ee7f345949db6b75df2ffe485b9b6",
+    "../node_modules/.cache/candidate-support.mjs": "0bececd66795b555946157e0bb0515f99a92036e8e7911fd50498fd4a41aa4d8",
+    "support.mjs": "7dee4aff4ec2a455dba2f42f7a25a72004c693313d1ac93996f14754a9a8b10a",
+    "emulator.mjs": "1256e13cf62754acb69f4798d5f632c15081685e0fa10bde387ddd6a1e91545f"
+  },
+  "reports": [
+    {
+      "id": "E01",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "newCellsUnset": true,
+      "assignedSeatAndQrRetained": true
+    }
+  ]
+}
