@@ -1,0 +1,413 @@
+{
+  "sourceHashes": {
+    "meter.mjs": "7f52de3d87faca540885804497189b32cd39fc00911a744d4ba98bb00e5a9aa3",
+    "measure.mjs": "08d33938208e586d27f195d3640146702351b01ef0a669b143d4ff57f0c42f04",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../GD91-73/tests/transport-partials.mjs": "56c90bc88e16dc176d4891233ed72571ee8d88129cf596532784e6b641e009a5",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-69/tests/structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223"
+  },
+  "endSourceHashes": {
+    "meter.mjs": "7f52de3d87faca540885804497189b32cd39fc00911a744d4ba98bb00e5a9aa3",
+    "measure.mjs": "08d33938208e586d27f195d3640146702351b01ef0a669b143d4ff57f0c42f04",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "../GD91-73/projection.mjs": "cd2c10ec97d50741e01c17c17c6a088aa6e48681ac20969019c4b331af6035d0",
+    "../GD91-73/tests/transport-partials.mjs": "56c90bc88e16dc176d4891233ed72571ee8d88129cf596532784e6b641e009a5",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-69/tests/structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223"
+  },
+  "reports": [
+    {
+      "people": 10,
+      "seats": 10,
+      "sections": 2,
+      "publicDownloadGetRequests": 56,
+      "status": "passed",
+      "elapsedMs": 13400
+    }
+  ],
+  "phases": {
+    "10/fixture": {
+      "normal": {
+        "requests": 1,
+        "reads": 0,
+        "writes": 1,
+        "failed": 0,
+        "maxRestJsonBytes": 904
+      },
+      "fixtureOwner": {
+        "requests": 4,
+        "reads": 0,
+        "writes": 4,
+        "failed": 0,
+        "maxRestJsonBytes": 615
+      }
+    },
+    "10/initialize": {
+      "normal": {
+        "requests": 2,
+        "reads": 1,
+        "writes": 5,
+        "failed": 0,
+        "maxRestJsonBytes": 3930
+      },
+      "fixtureOwner": {
+        "requests": 1,
+        "reads": 1,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/construction-0": {
+      "normal": {
+        "requests": 58,
+        "reads": 1,
+        "writes": 62,
+        "failed": 0,
+        "maxRestJsonBytes": 2612
+      },
+      "fixtureOwner": {
+        "requests": 6,
+        "reads": 4,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2498
+      }
+    },
+    "10/publish-0": {
+      "normal": {
+        "requests": 3,
+        "reads": 1,
+        "writes": 5,
+        "failed": 0,
+        "maxRestJsonBytes": 6564
+      },
+      "fixtureOwner": {
+        "requests": 3,
+        "reads": 3,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/construction-1": {
+      "normal": {
+        "requests": 65,
+        "reads": 6,
+        "writes": 67,
+        "failed": 0,
+        "maxRestJsonBytes": 8871
+      },
+      "fixtureOwner": {
+        "requests": 9,
+        "reads": 7,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2498
+      }
+    },
+    "10/register": {
+      "normal": {
+        "requests": 30,
+        "reads": 20,
+        "writes": 60,
+        "failed": 0,
+        "maxRestJsonBytes": 11993
+      },
+      "fixtureOwner": {
+        "requests": 30,
+        "reads": 30,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/allocation-plan": {
+      "normal": {
+        "requests": 6,
+        "reads": 6,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/allocation-proof": {
+      "normal": {
+        "requests": 12,
+        "reads": 0,
+        "writes": 12,
+        "failed": 0,
+        "maxRestJsonBytes": 8656
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/allocation-confirm": {
+      "normal": {
+        "requests": 2,
+        "reads": 1,
+        "writes": 4,
+        "failed": 0,
+        "maxRestJsonBytes": 11811
+      },
+      "fixtureOwner": {
+        "requests": 1,
+        "reads": 1,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/reader-fixture": {
+      "normal": {
+        "requests": 1,
+        "reads": 0,
+        "writes": 1,
+        "failed": 0,
+        "maxRestJsonBytes": 902
+      },
+      "fixtureOwner": {
+        "requests": 2,
+        "reads": 0,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 622
+      }
+    },
+    "10/public-download": {
+      "normal": {
+        "requests": 56,
+        "reads": 56,
+        "writes": 0,
+        "failed": 2,
+        "maxRestJsonBytes": 0
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/share": {
+      "normal": {
+        "requests": 3,
+        "reads": 2,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2574
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "10/recovery": {
+      "normal": {
+        "requests": 1,
+        "reads": 1,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "500/fixture": {
+      "normal": {
+        "requests": 1,
+        "reads": 0,
+        "writes": 1,
+        "failed": 0,
+        "maxRestJsonBytes": 904
+      },
+      "fixtureOwner": {
+        "requests": 4,
+        "reads": 0,
+        "writes": 4,
+        "failed": 0,
+        "maxRestJsonBytes": 615
+      }
+    },
+    "500/initialize": {
+      "normal": {
+        "requests": 2,
+        "reads": 1,
+        "writes": 5,
+        "failed": 0,
+        "maxRestJsonBytes": 3930
+      },
+      "fixtureOwner": {
+        "requests": 1,
+        "reads": 1,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "500/construction-0": {
+      "normal": {
+        "requests": 1513,
+        "reads": 1,
+        "writes": 1637,
+        "failed": 0,
+        "maxRestJsonBytes": 48709
+      },
+      "fixtureOwner": {
+        "requests": 6,
+        "reads": 4,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2504
+      }
+    },
+    "500/publish-0": {
+      "normal": {
+        "requests": 3,
+        "reads": 1,
+        "writes": 5,
+        "failed": 0,
+        "maxRestJsonBytes": 103094
+      },
+      "fixtureOwner": {
+        "requests": 3,
+        "reads": 3,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "500/construction-1": {
+      "normal": {
+        "requests": 1520,
+        "reads": 6,
+        "writes": 1642,
+        "failed": 0,
+        "maxRestJsonBytes": 187721
+      },
+      "fixtureOwner": {
+        "requests": 9,
+        "reads": 7,
+        "writes": 2,
+        "failed": 0,
+        "maxRestJsonBytes": 2504
+      }
+    },
+    "500/register": {
+      "normal": {
+        "requests": 1500,
+        "reads": 1000,
+        "writes": 3000,
+        "failed": 0,
+        "maxRestJsonBytes": 288201
+      },
+      "fixtureOwner": {
+        "requests": 1500,
+        "reads": 1500,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "500/allocation-plan": {
+      "normal": {
+        "requests": 6,
+        "reads": 6,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    },
+    "500/allocation-proof": {
+      "normal": {
+        "requests": 30,
+        "reads": 0,
+        "writes": 29,
+        "failed": 1,
+        "maxRestJsonBytes": 246989
+      },
+      "fixtureOwner": {
+        "requests": 0,
+        "reads": 0,
+        "writes": 0,
+        "failed": 0,
+        "maxRestJsonBytes": 0
+      }
+    }
+  },
+  "largestSentDocuments": [
+    {
+      "path": "publicationShows/FAKE-14ebabca-6b0e-4e74-a09f-e1d50b48068a/bulkPlans/525cbb63-05ac-46fa-8681-a34965ec1190",
+      "bytes": 174087,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-14ebabca-6b0e-4e74-a09f-e1d50b48068a/eligible/current",
+      "bytes": 106239,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-14ebabca-6b0e-4e74-a09f-e1d50b48068a/versions/current",
+      "bytes": 56764,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-14ebabca-6b0e-4e74-a09f-e1d50b48068a/publicIndex/current",
+      "bytes": 38148,
+      "partial": false
+    },
+    {
+      "path": "sourceProofShows/FAKE-14ebabca-6b0e-4e74-a09f-e1d50b48068a/sections/a2c807fa-c53d-42a6-8256-23dac9d5a18a/generations/49eb7c4d-fc9a-4469-a266-7ed5b2d55092/globalIds/current",
+      "bytes": 31126,
+      "partial": false
+    },
+    {
+      "path": "sourceProofShows/FAKE-14ebabca-6b0e-4e74-a09f-e1d50b48068a/sections/5e9ba218-cb8c-4827-bf4e-c496d3272276/generations/a82ed19d-f45b-408b-a7aa-1ba110c65412/globalIds/current",
+      "bytes": 31126,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-14ebabca-6b0e-4e74-a09f-e1d50b48068a/candidates/49eb7c4d-fc9a-4469-a266-7ed5b2d55092",
+      "bytes": 28847,
+      "partial": false
+    },
+    {
+      "path": "publicationShows/FAKE-14ebabca-6b0e-4e74-a09f-e1d50b48068a/candidates/a82ed19d-f45b-408b-a7aa-1ba110c65412",
+      "bytes": 28847,
+      "partial": false
+    }
+  ],
+  "error": "Error: {\"progress\":{\"unit\":2,\"member\":8,\"seenSeats\":[\"953faeff-d8fe-4bff-be83-a3f94c7f8f7b\",\"95cbf4be-b663-475e-b3f8-791cd1fedabe\",\"41fe4dee-3af3-4855-a926-881dbf6e09d3\",\"c3068f97-5188-44ca-8c7c-6e0683bef178\",\"517554dc-8861-457b-aa4d-c73bb3326346\",\"655f129e-64e3-4d54-a3b8-bcc1e0c7826f\",\"8709d9f1-d04e-41bc-a501-ed29139a5bc7\",\"65195b60-c249-4954-b75e-38e90077eea5\",\"20f7a411-fa7a-4a85-bd37-a79343631b0c\",\"c9ff66b4-0801-4915-b669-61e7632cabad\",\"7b013db6-bbc0-4ed4-ae2b-2633542572b9\",\"35bbd1bd-af0c-4a3d-99ce-33275bef668f\",\"263f4377-a2ea-4756-aa64-0c1aeacdc891\",\"cd5f39dc-10dc-4d4e-9335-aa7f9f299458\",\"3237e4c6-9ec5-4011-b155-fd1292fb1dd1\",\"bfdac95f-a21f-43b9-96d3-43415da4c3be\",\"340a9766-d85d-4f4b-a836-3f2a787e1aeb\",\"bf6de477-77bf-4aa2-920b-2a72b8f21349\",\"559d36b9-bcd1-4603-8e9d-f75dd1eb2eca\",\"47298ace-f441-4aa2-bcbf-648c0f78a2f9\",\"075680b4-5a54-4653-aeb6-786d65027528\",\"cf4e5119-9ef2-4739-bf4d-1be7d82b3fe4\",\"03c137d1-484a-4a2a-a1fc-ab0606f64a98\",\"d599c85d-feb1-423c-85df-f9d3caf8c1e2\",\"a67b0b08-565f-4e49-8bfe-23794f0f0fb1\",\"c9b4048c-e47a-494c-ba92-b572a22a149a\",\"e2e496c7-f57f-4c6a-a24e-778021951666\",\"1aa85591-b73f-4dd8-928d-e1522cdaf495\"],\"seenPeople\":[\"c1781b14-892b-4952-b547-29e478708e53\",\"5a522535-ece9-4885-8609-9c85145d26d5\",\"5215a21b-57f3-467e-8c9f-851805e48df7\",\"a2c11e1a-6e15-4321-ad16-ffd205c0ecd0\",\"a5db8856-20c5-40ba-931f-32265534aab1\",\"e4ef1ce4-9678-4fd2-ae9f-bf99c8dd2a5e\",\"e94968aa-ed92-48dc-9498-0b6393b07654\",\"da8c053e-c2ea-43be-8b9b-9ee7365f4c65\",\"7fd8e248-1395-4b5f-a971-560d63c333d0\",\"452c4b27-42c4-47d9-89d5-7465759b2b5d\",\"3eb355f2-036a-4f8e-8f8e-3341a4255af2\",\"a3a82a5a-1840-4ec7-8ca9-f594f25fafe9\",\"5ac81cee-c479-431d-a568-d17d47dabcc2\",\"e500e9cb-509e-49cc-8b41-4445642612b9\",\"0e1e8e8b-8124-42ef-b2bd-99b036c626dc\",\"9f917ed8-9e87-494b-aeab-ca2c06ce20ca\",\"75bd7d22-37c7-4fbe-b089-c09536599677\",\"d6ce90f9-44dd-447a-bd5b-6846eddc7c15\",\"94038bad-7fe5-49dd-830e-21de79aa2fff\",\"f0dc1c5e-5485-4415-bd63-9bd3184b2ee7\",\"d6c95aff-5e4d-45c0-b50c-e3d78c0b7e17\",\"ae1a5c56-89af-43f0-97cf-299185b2ffee\",\"6885134d-37d2-4373-afc9-0eca60488691\",\"c856dec3-c109-439f-846e-f1b736ead8fb\",\"406b87ec-7344-4c36-a7c2-7de99560cb9b\",\"2faa80c7-3ad4-4596-a905-3f8880d3f673\",\"ea967e87-7124-4260-a5c0-fe8bf8c3bea7\",\"970a4a88-04e8-4224-8635-870876ce163f\"],\"sectionId\":\"a2c807fa-c53d-42a6-8256-23dac9d5a18a\",\"lineId\":\"d1468791-4c9a-4bde-a8af-4721f0f54a6b\",\"row\":0,\"column\":27},\"response\":{\"status\":500,\"body\":{\"error\":{\"code\":500,\"status\":\"UNKNOWN\"}}}}"
+}

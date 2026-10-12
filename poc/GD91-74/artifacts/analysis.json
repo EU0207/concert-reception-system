@@ -1,0 +1,299 @@
+{
+  "ruleHash": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+  "ruleSourceUtf8Bytes": 166641,
+  "ruleSourceBelow256KiB": true,
+  "references": [
+    {
+      "kind": "registration",
+      "priorPerWriteCounts": [
+        7,
+        3,
+        4,
+        3,
+        3
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 23,
+      "within20": false,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "paid",
+      "priorPerWriteCounts": [
+        7,
+        4,
+        3,
+        3
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 20,
+      "within20": true,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "unprotectedSingle",
+      "priorPerWriteCounts": [
+        10,
+        4,
+        3
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 20,
+      "within20": true,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "unprotectedPair",
+      "priorPerWriteCounts": [
+        10,
+        5,
+        3
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 21,
+      "within20": false,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "protectedPair",
+      "priorPerWriteCounts": [
+        10,
+        5,
+        3,
+        2
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 23,
+      "within20": false,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "qrCreate",
+      "priorPerWriteCounts": [
+        5,
+        6,
+        1,
+        2,
+        1,
+        1
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 19,
+      "within20": true,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "ticketCheck",
+      "priorPerWriteCounts": [
+        5,
+        4,
+        1,
+        2
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 15,
+      "within20": true,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "qrReissue",
+      "priorPerWriteCounts": [
+        5,
+        8,
+        1,
+        2,
+        1,
+        1,
+        1,
+        1
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 23,
+      "within20": false,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "cancelQrAssigned",
+      "priorPerWriteCounts": [
+        5,
+        6,
+        1,
+        2,
+        1,
+        1,
+        2,
+        1,
+        1
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 23,
+      "within20": false,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "cancelNoQrAssigned",
+      "priorPerWriteCounts": [
+        5,
+        4,
+        1,
+        2,
+        2,
+        1,
+        1
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 19,
+      "within20": true,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "returnClosedTicket",
+      "priorPerWriteCounts": [
+        7,
+        3,
+        6,
+        3
+      ],
+      "eventExtra": 1,
+      "indexReferences": 2,
+      "total": 22,
+      "within20": false,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "publication",
+      "priorPerWriteCounts": [
+        8,
+        6,
+        6
+      ],
+      "eventExtra": 1,
+      "indexReferences": 4,
+      "total": 25,
+      "within20": false,
+      "latestPerWriteAnalysisComplete": false
+    },
+    {
+      "kind": "state",
+      "priorPerWriteCounts": [
+        7,
+        1,
+        3,
+        4
+      ],
+      "eventExtra": 2,
+      "indexReferences": 2,
+      "total": 19,
+      "within20": true,
+      "latestPerWriteAnalysisComplete": false
+    }
+  ],
+  "referenceAssumptions": {
+    "priorBudgets": "GD91-63の到達分岐別机上予算。GD91-73は既存関数本文を保持",
+    "eventExtra": 1,
+    "indexOrdinary": 2,
+    "indexConstruction": 4,
+    "cacheDiscount": false,
+    "actualRulesExpressionCountsMeasured": false
+  },
+  "capacity": [
+    {
+      "cells": 10,
+      "seats": 10,
+      "majorFieldsDocumentLowerBoundBytes": 2526,
+      "aboveDocumentLimit": false,
+      "constructionMinimumWrites": 65,
+      "constructionFormula": "2*cells + 7*ceil(cells/2) + seats; one section, even width",
+      "belowFullWriteCount": true,
+      "oneDayFreeWriteBudgetExceeded": false
+    },
+    {
+      "cells": 500,
+      "seats": 500,
+      "majorFieldsDocumentLowerBoundBytes": 112286,
+      "aboveDocumentLimit": false,
+      "constructionMinimumWrites": 3250,
+      "constructionFormula": "2*cells + 7*ceil(cells/2) + seats; one section, even width",
+      "belowFullWriteCount": true,
+      "oneDayFreeWriteBudgetExceeded": false
+    },
+    {
+      "cells": 1000,
+      "seats": 500,
+      "majorFieldsDocumentLowerBoundBytes": 149786,
+      "aboveDocumentLimit": false,
+      "constructionMinimumWrites": 6000,
+      "constructionFormula": "2*cells + 7*ceil(cells/2) + seats; one section, even width",
+      "belowFullWriteCount": true,
+      "oneDayFreeWriteBudgetExceeded": false
+    },
+    {
+      "cells": 2000,
+      "seats": 2000,
+      "majorFieldsDocumentLowerBoundBytes": 448286,
+      "aboveDocumentLimit": false,
+      "constructionMinimumWrites": 13000,
+      "constructionFormula": "2*cells + 7*ceil(cells/2) + seats; one section, even width",
+      "belowFullWriteCount": true,
+      "oneDayFreeWriteBudgetExceeded": false
+    },
+    {
+      "cells": 5000,
+      "seats": 5000,
+      "majorFieldsDocumentLowerBoundBytes": 1120286,
+      "aboveDocumentLimit": true,
+      "constructionMinimumWrites": 32500,
+      "constructionFormula": "2*cells + 7*ceil(cells/2) + seats; one section, even width",
+      "belowFullWriteCount": true,
+      "oneDayFreeWriteBudgetExceeded": true
+    },
+    {
+      "cells": 10000,
+      "seats": 10000,
+      "majorFieldsDocumentLowerBoundBytes": 2240286,
+      "aboveDocumentLimit": true,
+      "constructionMinimumWrites": 65000,
+      "constructionFormula": "2*cells + 7*ceil(cells/2) + seats; one section, even width",
+      "belowFullWriteCount": true,
+      "oneDayFreeWriteBudgetExceeded": true
+    },
+    {
+      "cells": 10000,
+      "seats": 500,
+      "majorFieldsDocumentLowerBoundBytes": 824786,
+      "aboveDocumentLimit": false,
+      "constructionMinimumWrites": 55500,
+      "constructionFormula": "2*cells + 7*ceil(cells/2) + seats; one section, even width",
+      "belowFullWriteCount": true,
+      "oneDayFreeWriteBudgetExceeded": true
+    }
+  ],
+  "productLimitsApproved": false,
+  "indexStorageAndWireProtocolMeasured": false,
+  "retention": {
+    "currentGenerationPinned": true,
+    "usedIdsMonotonic": true,
+    "deletePermitImplemented": false,
+    "localDraftPinsPublished": false,
+    "automaticTtlAdopted": false
+  },
+  "sources": {
+    "meter.mjs": "7f52de3d87faca540885804497189b32cd39fc00911a744d4ba98bb00e5a9aa3",
+    "analyze.mjs": "bf0f2c4cc7787de4f2fc43bbc28fc7e58ddf0448952a937506bb831ad273c5ce",
+    "../GD91-63/tests/budgets.mjs": "0af326469757bbf7889cfc52a10757b1edd39fc3a1eceaf2da514e41a2515b52",
+    "../GD91-60/tests/global-support.mjs": "0eef07d556c244b78b30d30653c0317df61ea82319ad0612b44416300be2eaca",
+    "../GD91-69/tests/structure.mjs": "d656f4cd2c3debfac71bd9091dbce70d458da7e2e2e1fef4cc7d606979847a33",
+    "../GD91-73/index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../GD91-73/node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502"
+  }
+}
