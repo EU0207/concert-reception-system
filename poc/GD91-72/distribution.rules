@@ -1,0 +1,82 @@
+    function receptionBuild(p,g,a) {
+      let v = beforeVersion(p);
+      return manager(p) && uuid(g) && a == {'generation':g,'expectedVersions':v.values,'seatIds':v.seatIds,'sections':v.sections.keys()};
+    }
+    function receptionGeometry(p,g,id,a) {
+      let h = get(/databases/$(database)/documents/publicationShows/$(p)/receptionBuilds/$(g)).data;
+      let v = beforeVersion(p);
+      let f = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(a.sectionId)/generations/$(v.sections[a.sectionId])/seatFacts/$(id)).data.fact;
+      let m = candidate(p,v.sections[a.sectionId]);
+      let hasView = exists(/databases/$(database)/documents/publicationShows/$(p)/sectionViews/$(a.sectionId));
+      let raw = hasView ? get(/databases/$(database)/documents/publicationShows/$(p)/sectionViews/$(a.sectionId)).data : null;
+      let view = raw == null || raw.generation != m.generation ? defaultSectionView(p,a.sectionId,m) : raw;
+      let marker = f.attributes.get('emergencyChange',{'kind':'','reason':''});
+      return manager(p) && h.expectedVersions == v.values && h.seatIds.hasAny([id])
+        && a == {'seatId':id,'sectionId':a.sectionId,'row':f.item.cell.row+view.rowOffset,'column':f.item.cell.column+view.columnOffset,
+          'seatNumber':editLabel(f).trim(),'category':f.attributes.category,'usable':f.attributes.usable,
+          'emergencyKind':marker.kind,'emergencyReason':marker.reason,'revision':v.values.reception};
+    }
+    function receptionRow(p,g,id,a) {
+      let h = get(/databases/$(database)/documents/publicationShows/$(p)/receptionBuilds/$(g)).data;
+      let v = beforeVersion(p);
+      let s = beforeAssignment(p);
+      let person = s.assignments[id];
+      let label = person == '' ? '' : get(/databases/$(database)/documents/publicationShows/$(p)/attendeeLabels/$(person)).data.seatDisplayName;
+      let geometry = get(/databases/$(database)/documents/publicationShows/$(p)/receptionBuilds/$(g)/geometry/$(id)).data;
+      let hasArrival = person != '' && exists(/databases/$(database)/documents/publicationShows/$(p)/receptionRecords/$(person));
+      let arrival = hasArrival ? get(/databases/$(database)/documents/publicationShows/$(p)/receptionRecords/$(person)).data.status : 'notReceived';
+      return manager(p) && h.expectedVersions == v.values && s.revision == v.values.assignment && h.seatIds.hasAny([id])
+        && arrival in ['notReceived','received','cancelled']
+        && a.keys().toSet() == geometry.keys().toSet().union(['seatDisplayName','receptionStatus'].toSet())
+        && a.diff(geometry).changedKeys().size() == 0 && a.seatDisplayName == label && a.receptionStatus == arrival
+        && geometry.revision == v.values.reception;
+    }
+    function receptionProgress(p,g,b,a,creating) {
+      let h = get(/databases/$(database)/documents/publicationShows/$(p)/receptionBuilds/$(g)).data;
+      let v = beforeVersion(p);
+      return manager(p) && h.expectedVersions == v.values && (creating ? a == {'cursor':0,'lastSeatId':''}
+        : b.cursor < h.seatIds.size() && a == {'cursor':b.cursor+1,'lastSeatId':h.seatIds[b.cursor]}
+          && get(/databases/$(database)/documents/publicationShows/$(p)/receptionBuilds/$(g)/rows/$(a.lastSeatId)).data.revision == v.values.reception);
+    }
+    function receptionHead(p,a) {
+      let v = beforeVersion(p);
+      let h = get(/databases/$(database)/documents/publicationShows/$(p)/receptionBuilds/$(a.generation)).data;
+      let q = get(/databases/$(database)/documents/publicationShows/$(p)/receptionBuilds/$(a.generation)/progress/current).data;
+      return manager(p) && h.expectedVersions == v.values && q.cursor == h.seatIds.size()
+        && a == {'generation':h.generation,'revision':v.values.reception,'seatCount':h.seatIds.size(),'sections':h.sections};
+    }
+    function currentReception(p,g) {
+      let h = get(/databases/$(database)/documents/publicationShows/$(p)/receptionHead/current).data;
+      return normalRead(p) && h.generation == g && h.revision == beforeVersion(p).values.reception;
+    }
+    function sharedDraft(p,id,a) {
+      let v = beforeVersion(p);
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      return manager(p) && control(p).state != 'closed' && proto(p,a) && uuid(id) && a.operationId == id
+        && a.deviceUid == request.auth.uid && a.humanUid == s.humanUid && a.expectedVersions == v.values
+        && a.keys().toSet() == ['schemaVersion','environmentId','performanceId','operationId','deviceUid','humanUid','expectedVersions','baseVersions','formatVersion','payload','occurredAt'].toSet()
+        && a.baseVersions.keys() == v.values.keys() && validDraftBase(a.baseVersions,v.values) && a.formatVersion == 1 && a.payload is map
+        && a.payload.keys().toSet() == ['iv','ciphertext','keyId'].toSet()
+        && a.payload.iv is string && a.payload.ciphertext is string && a.payload.keyId is string
+        && a.payload.iv.size() > 0 && a.payload.ciphertext.size() > 0 && a.payload.ciphertext.size() <= 524288
+        && a.occurredAt == request.time;
+    }
+    function validDraftBase(b,v) {
+      return integer(b.commit) && b.commit <= v.commit && integer(b.layout) && b.layout <= v.layout
+        && integer(b.source) && b.source <= v.source && integer(b.assignment) && b.assignment <= v.assignment
+        && integer(b.attendee) && b.attendee <= v.attendee && integer(b.ticket) && b.ticket <= v.ticket
+        && integer(b.control) && b.control <= v.control && integer(b.reception) && b.reception <= v.reception;
+    }
+    match /publicationShows/{p}/receptionBuilds/{g} {
+      allow create: if receptionBuild(p,g,request.resource.data);
+      allow get: if manager(p);
+      match /geometry/{id} { allow create: if receptionGeometry(p,g,id,request.resource.data); allow get: if manager(p); }
+      match /rows/{id} { allow create: if receptionRow(p,g,id,request.resource.data); allow get: if manager(p) || currentReception(p,g); allow list: if currentReception(p,g) && limited(); }
+      match /progress/current { allow create: if receptionProgress(p,g,null,request.resource.data,true); allow update: if receptionProgress(p,g,resource.data,request.resource.data,false); allow get: if manager(p); }
+    }
+    match /publicationShows/{p}/receptionHead/current {
+      allow create: if receptionHead(p,request.resource.data);
+      allow update: if request.resource.data.revision > resource.data.revision && receptionHead(p,request.resource.data);
+      allow get: if manager(p) || normalRead(p) && resource.data.revision == beforeVersion(p).values.reception;
+    }
+    match /publicationShows/{p}/sharedDrafts/{id} { allow create: if sharedDraft(p,id,request.resource.data); }

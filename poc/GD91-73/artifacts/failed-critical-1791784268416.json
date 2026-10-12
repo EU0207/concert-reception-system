@@ -1,0 +1,20 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "11f0703ce460884c15dc7fd691e5040cdfd562f371d9df7a8b11f690d1f108f4",
+    "../index.rules": "0c3ad6040ed758c49bed3c61e45ff58a591a9a6577ff28623f62f035efd4482d",
+    "../node_modules/.cache/firestore.rules": "7863d808a0a730bdd943188b1328064dd02a2805be3e311376590c318b372817",
+    "transport-hook.mjs": "67e07f7e5b2588c1bb5f9bcdd4b11c96a2f52670b63068e41db90bf2affb5b78",
+    "critical.mjs": "61aaa2c283e0ab9ba36f1bf920e6ac7d6039a9574751d7361cc300719484af72"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "11f0703ce460884c15dc7fd691e5040cdfd562f371d9df7a8b11f690d1f108f4",
+    "../index.rules": "0c3ad6040ed758c49bed3c61e45ff58a591a9a6577ff28623f62f035efd4482d",
+    "../node_modules/.cache/firestore.rules": "7863d808a0a730bdd943188b1328064dd02a2805be3e311376590c318b372817",
+    "transport-hook.mjs": "67e07f7e5b2588c1bb5f9bcdd4b11c96a2f52670b63068e41db90bf2affb5b78",
+    "critical.mjs": "61aaa2c283e0ab9ba36f1bf920e6ac7d6039a9574751d7361cc300719484af72"
+  },
+  "error": {
+    "message": "Error: normal section display preparation failed: {\"error\":{\"code\":403,\"message\":\"\\nfalse for 'create' @ L1806\",\"status\":\"PERMISSION_DENIED\"}}",
+    "stack": "Error: normal section display preparation failed: {\"error\":{\"code\":403,\"message\":\"\\nfalse for 'create' @ L1806\",\"status\":\"PERMISSION_DENIED\"}}\n    at globalThis.fetch (file:///C:/dev/concert-reception-system/poc/GD91-73/tests/transport-hook.mjs:19:21)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async request (file:///C:/dev/concert-reception-system/poc/GD91-60/tests/transport.mjs:20:13)\n    at async Module.publish (file:///C:/dev/concert-reception-system/poc/GD91-68/tests/support.mjs:17:64)\n    at async Module.fixture (file:///C:/dev/concert-reception-system/poc/GD91-71/tests/support.mjs:39:160)\n    at async file:///C:/dev/concert-reception-system/poc/GD91-73/tests/critical.mjs:8:9"
+  }
+}

@@ -1,0 +1,12 @@
+import './transport-hook.mjs';
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const original=new URL('../../GD91-60/tests/access-emulator.mjs',import.meta.url);
+let source=fs.readFileSync(original,'utf8').replace(/\r\n/g,'\n');
+const start=source.indexOf("await record('B01'"),end=source.indexOf('const endSourceHashes='),cases=source.slice(start,end);assert(start>0&&end>start);
+const extra=['generate.mjs','index.rules','tests/access-regression.mjs','tests/transport-hook.mjs','node_modules/.cache/firestore.rules'].map(p=>'../../GD91-73/'+p);
+source=source.replace(/sources\s*=\s*\[/,m=>m+extra.map(p=>JSON.stringify(p)).join(',')+',');
+source=source.replace(/from (['"])(\.[^'"]+)\1/g,(_,q,p)=>'from '+q+new URL(p,original).href+q);
+source=source.replaceAll('new URL(p,import.meta.url)','new URL(p,'+JSON.stringify(original.href)+')');
+source=source.replace("new URL('../artifacts/emulator-summary.json',import.meta.url)","new URL('"+new URL('../artifacts/access-regression.json',import.meta.url).href+"')");
+assert.equal(source.slice(source.indexOf("await record('B01'"),source.indexOf('const endSourceHashes=')),cases);
+const generated=new URL('../node_modules/.cache/access-regression.mjs',import.meta.url);fs.writeFileSync(generated,source);await import(generated.href);

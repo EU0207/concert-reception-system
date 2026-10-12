@@ -1,0 +1,18 @@
+{
+  "sourceHashes": {
+    "../generate.mjs": "a05adb4b216e7645b08e05a9c7d29ef1188cdbb7d023a329a730d52b46a41313",
+    "../index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "critical.mjs": "61aaa2c283e0ab9ba36f1bf920e6ac7d6039a9574751d7361cc300719484af72"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "a05adb4b216e7645b08e05a9c7d29ef1188cdbb7d023a329a730d52b46a41313",
+    "../index.rules": "5ac3e1b1c3aec326209fb37af073dfb463fe492a26b70864df7499c28d453233",
+    "../node_modules/.cache/firestore.rules": "23dd655996cc95e4cbd948891d387695b8c2441c76adeedec8750b35e6835502",
+    "transport-hook.mjs": "a5644d7be278e1fec6eaea41a885a82738139f972c64f0e997ecc8ef5abe0b69",
+    "critical.mjs": "61aaa2c283e0ab9ba36f1bf920e6ac7d6039a9574751d7361cc300719484af72"
+  },
+  "protectedMove": true,
+  "protectedSwap": true
+}

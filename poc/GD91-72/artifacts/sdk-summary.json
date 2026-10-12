@@ -1,0 +1,183 @@
+{
+  "filter": null,
+  "sourceHashes": {
+    "sdk.mjs": "962f49022e346c7eecd2070aaedb3cf74bffefa3c2d70f86e4a394874bcd8330",
+    "support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../node_modules/.cache/firestore.rules": "c88f930dd205ee28d2e2bf6178c62a8693ebf06f1f2f4ef0b0cc62048ac2ed41",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "endSourceHashes": {
+    "sdk.mjs": "962f49022e346c7eecd2070aaedb3cf74bffefa3c2d70f86e4a394874bcd8330",
+    "support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../node_modules/.cache/firestore.rules": "c88f930dd205ee28d2e2bf6178c62a8693ebf06f1f2f4ef0b0cc62048ac2ed41",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "reports": [
+    {
+      "id": "K01",
+      "kind": "bootstrapBusiness",
+      "status": "passed",
+      "writes": 4
+    },
+    {
+      "id": "K02",
+      "kind": "publishSection",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K03",
+      "kind": "attendeeCreate",
+      "status": "passed",
+      "writes": 5
+    },
+    {
+      "id": "K04",
+      "kind": "attendeeCreate",
+      "status": "passed",
+      "writes": 5
+    },
+    {
+      "id": "K05",
+      "kind": "attendeePaid",
+      "status": "passed",
+      "writes": 4
+    },
+    {
+      "id": "K06",
+      "kind": "assign",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K07",
+      "kind": "unassign",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K08",
+      "kind": "assign",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K09",
+      "kind": "assign",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K10",
+      "kind": "swap",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K11",
+      "kind": "move",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K12",
+      "kind": "qrCreate",
+      "status": "passed",
+      "writes": 6
+    },
+    {
+      "id": "K13",
+      "kind": "ticketCheck",
+      "status": "passed",
+      "writes": 4
+    },
+    {
+      "id": "K14",
+      "kind": "qrReissue",
+      "status": "passed",
+      "writes": 8
+    },
+    {
+      "id": "K15",
+      "kind": "cancelAttendance",
+      "status": "passed",
+      "writes": 9
+    },
+    {
+      "id": "K16",
+      "kind": "returnAttendance",
+      "status": "passed",
+      "writes": 4
+    },
+    {
+      "id": "K17",
+      "kind": "autoAllocation",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K18",
+      "kind": "slideSection",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K19",
+      "kind": "extendSection",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K20",
+      "kind": "seatEdit",
+      "status": "passed",
+      "writes": 3
+    },
+    {
+      "id": "K21",
+      "kind": "shared",
+      "status": "passed",
+      "writes": 1
+    },
+    {
+      "id": "K22",
+      "kind": "state",
+      "status": "passed",
+      "writes": 4
+    },
+    {
+      "id": "K23",
+      "kind": "stale-proposal",
+      "status": "passed",
+      "writes": 0
+    },
+    {
+      "id": "K24",
+      "kind": "same-id-different-content",
+      "status": "passed",
+      "writes": 0
+    },
+    {
+      "id": "K25",
+      "kind": "revoked-authority",
+      "status": "passed",
+      "resultNotMisreportedAbsent": true
+    },
+    {
+      "id": "K26",
+      "kind": "two-staff-sdk-race",
+      "status": "passed",
+      "initialSuccesses": 1,
+      "finalSuccesses": 1,
+      "distinctPeopleAndDevices": true
+    }
+  ]
+}

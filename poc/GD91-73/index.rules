@@ -1,0 +1,64 @@
+    function publicIndexFence(p,versions) {
+      return getAfter(/databases/$(database)/documents/publicationShows/$(p)/publicIndex/current).data.versions == versions;
+    }
+    function publicIndexWrite(p,a,creating) {
+      let v = afterVersion(p);
+      let s = v.seatIds.size() == 0 ? null : afterAssignment(p);
+      return request.auth != null && (creating ? !exists(/databases/$(database)/documents/publicationShows/$(p)/versions/current)
+        : a.versions.commit == resource.data.versions.commit+1)
+        && a == {'schemaVersion':1,'environmentId':'FAKE-environment','performanceId':p,
+          'versions':v.values,'sections':v.sections,'seatIds':v.seatIds,'assignments':s == null ? {} : s.assignments}
+        && (creating || v.values.source == resource.data.versions.source || publicDisplayFence(p,v));
+    }
+    function publicDisplayFence(p,v) {
+      let e = nextEvent(p,v.operationId);
+      let d = get(/databases/$(database)/documents/publicationShows/$(p)/sectionDisplay/$(e.generation)).data;
+      return d.generation == v.sections[e.sectionId] && d.sectionId == e.sectionId;
+    }
+    function publicDisplayWrite(p,g,a) {
+      let m = candidate(p,g);
+      return manager(p) && control(p).state in ['preparing','operating'] && m.ready == true && m.generation == g
+        && a == {'schemaVersion':1,'environmentId':'FAKE-environment','performanceId':p,'sectionId':m.sectionId,
+          'generation':g,'rows':m.geometry.rows,'columns':m.geometry.columns,'name':a.name,'stagePosition':a.stagePosition}
+        && a.name is string && a.name.matches('.*\\S.*') && a.name.size() <= 100 && a.stagePosition in ['left','top'];
+    }
+    function publicGeneration(p,section,g) {
+      return normalRead(p) && get(/databases/$(database)/documents/publicationShows/$(p)/publicIndex/current).data.sections.get(section,'') == g;
+    }
+    function publicPerson(p,id) {
+      return normalRead(p) && get(/databases/$(database)/documents/publicationShows/$(p)/publicIndex/current).data.assignments.values().hasAny([id]);
+    }
+    match /publicationShows/{p}/publicIndex/current {
+      allow create: if publicIndexWrite(p,request.resource.data,true);
+      allow update: if publicIndexWrite(p,request.resource.data,false);
+      allow get: if normalRead(p);
+    }
+    match /publicationShows/{p}/sectionDisplay/{g} {
+      allow create: if publicDisplayWrite(p,g,request.resource.data);
+      allow get: if manager(p) || publicGeneration(p,resource.data.sectionId,g);
+    }
+    match /sourceProofShows/{p}/sections/{section}/generations/{g} {
+      match /chunks/{id} { allow get: if publicGeneration(p,section,g); }
+      match /attributes/{id} { allow get: if publicGeneration(p,section,g); }
+      match /seatFacts/{id} { allow get: if publicGeneration(p,section,g); }
+    }
+    match /publicationShows/{p}/sectionViews/{section} { allow get: if publicGeneration(p,section,resource.data.generation); }
+    match /publicationShows/{p}/attendeeLabels/{id} { allow get: if publicPerson(p,id); }
+    match /publicationShows/{p}/receptionRecords/{id} {
+      allow get: if publicPerson(p,id) && (!exists(/databases/$(database)/documents/publicationShows/$(p)/receptionRecords/$(id)) || resource.data.keys().hasOnly(['status']));
+    }
+    function sharedSelectionFence(p,id,a) {
+      let h = getAfter(/databases/$(database)/documents/publicationShows/$(p)/sharedDraftHead/current).data;
+      return a.expectedSharedVersion is int && a.expectedSharedVersion >= 0 && h.operationId == id && h.revision == a.expectedSharedVersion+1;
+    }
+    function sharedSelection(p,a,creating) {
+      let d = getAfter(/databases/$(database)/documents/publicationShows/$(p)/sharedDrafts/$(a.operationId)).data;
+      return request.auth != null && !exists(/databases/$(database)/documents/publicationShows/$(p)/sharedDrafts/$(a.operationId))
+        && a == {'schemaVersion':1,'environmentId':'FAKE-environment','performanceId':p,'operationId':d.operationId,'revision':d.expectedSharedVersion+1}
+        && (creating ? d.expectedSharedVersion == 0 : d.expectedSharedVersion == resource.data.revision);
+    }
+    match /publicationShows/{p}/sharedDraftHead/current {
+      allow create: if sharedSelection(p,request.resource.data,true);
+      allow update: if sharedSelection(p,request.resource.data,false);
+      allow get: if manager(p);
+    }

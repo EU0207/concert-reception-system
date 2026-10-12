@@ -1,0 +1,99 @@
+{
+  "filter": null,
+  "sourceHashes": {
+    "../generate.mjs": "538cefc0a6c57aa97aaf439f3e0228ab17da6a81dc9b893e327361672a0043b4",
+    "../extension.rules": "eb469cb31e8361982623bbe593407a3cb1e2bf55e779f8351c7e9dcdb798fc5a",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "a5235ea7ff805cf82032af3ab8557f273ffafe1b182e5b5b0a236a9122015583",
+    "../node_modules/.cache/global-support.mjs": "80fea1673cfc0863a1803b95783e581416004e6c679997208ef5af7ac4319f38",
+    "../node_modules/.cache/comparison-support.mjs": "0ae3809eb351940368d9dca7068b27a6b82ee7f345949db6b75df2ffe485b9b6",
+    "../node_modules/.cache/candidate-support.mjs": "0bececd66795b555946157e0bb0515f99a92036e8e7911fd50498fd4a41aa4d8",
+    "support.mjs": "7dee4aff4ec2a455dba2f42f7a25a72004c693313d1ac93996f14754a9a8b10a",
+    "emulator.mjs": "d9a47aec247bfc2a856e69aa695e71cccb61f441d2af87ed558d498a16a0edc8"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "538cefc0a6c57aa97aaf439f3e0228ab17da6a81dc9b893e327361672a0043b4",
+    "../extension.rules": "eb469cb31e8361982623bbe593407a3cb1e2bf55e779f8351c7e9dcdb798fc5a",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "a5235ea7ff805cf82032af3ab8557f273ffafe1b182e5b5b0a236a9122015583",
+    "../node_modules/.cache/global-support.mjs": "80fea1673cfc0863a1803b95783e581416004e6c679997208ef5af7ac4319f38",
+    "../node_modules/.cache/comparison-support.mjs": "0ae3809eb351940368d9dca7068b27a6b82ee7f345949db6b75df2ffe485b9b6",
+    "../node_modules/.cache/candidate-support.mjs": "0bececd66795b555946157e0bb0515f99a92036e8e7911fd50498fd4a41aa4d8",
+    "support.mjs": "7dee4aff4ec2a455dba2f42f7a25a72004c693313d1ac93996f14754a9a8b10a",
+    "emulator.mjs": "d9a47aec247bfc2a856e69aa695e71cccb61f441d2af87ed558d498a16a0edc8"
+  },
+  "reports": [
+    {
+      "id": "E01",
+      "status": "passed",
+      "axis": "horizontal",
+      "order": "reverse",
+      "newCellsUnset": true,
+      "assignedSeatAndQrRetained": true
+    },
+    {
+      "id": "E02",
+      "status": "passed",
+      "geometryCombinations": 5,
+      "oldNumbersAndIdsRetained": true
+    },
+    {
+      "id": "E03",
+      "status": "passed",
+      "slideThenExtend": true,
+      "oldViewNotReused": true,
+      "secondExtension": true
+    },
+    {
+      "id": "E04",
+      "status": "passed",
+      "operatingRequiresReason": true,
+      "stoppedStillRequiresReason": true,
+      "firstReceptionPreserved": true
+    },
+    {
+      "id": "E05",
+      "status": "passed",
+      "properSubsetsDenied": 6
+    },
+    {
+      "id": "E06",
+      "status": "passed",
+      "seatAttributesAndNewNonUnsetCellsDenied": true,
+      "unexpectedExceptionsNotAccepted": true
+    },
+    {
+      "id": "E07",
+      "status": "passed",
+      "ordinaryPeople": 500,
+      "groups": 50,
+      "existingSeats": 500,
+      "newUnsetCells": 5,
+      "extensionLocalElapsedMs": 81173,
+      "finalWrites": 3,
+      "productionLatencyMeasured": false
+    },
+    {
+      "id": "E08",
+      "status": "passed",
+      "staleAfterOrdinaryRegistrationDenied": true
+    },
+    {
+      "id": "E09",
+      "status": "passed",
+      "latestRoleRevocationDenied": true
+    },
+    {
+      "id": "E10",
+      "status": "passed",
+      "twoSameVersionRequestsOneCommit": true,
+      "sameIdResultReadable": true,
+      "replayDenied": true
+    },
+    {
+      "id": "E11",
+      "status": "passed",
+      "genericPublicationCannotBypassExtensionReason": true
+    }
+  ]
+}

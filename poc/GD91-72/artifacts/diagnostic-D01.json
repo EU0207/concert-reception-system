@@ -1,0 +1,40 @@
+{
+  "filter": "D01",
+  "sourceHashes": {
+    "../generate.mjs": "602e6192217e824c4c2d42618ffd250a5215102dc49769268a0d0e39a9b7cb45",
+    "../distribution.rules": "129569f3a9f65d0f7db9b650f6d37a9c6cd8a1f36be7d0c72d3e31e65f0d8ad8",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "c88f930dd205ee28d2e2bf6178c62a8693ebf06f1f2f4ef0b0cc62048ac2ed41",
+    "support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "emulator.mjs": "fba3a793e376a1eb7a895e87f2276c014a82dc5179962a6583e5dea9c723619f",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../GD91-71/node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../../GD91-71/node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../../GD91-71/node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "602e6192217e824c4c2d42618ffd250a5215102dc49769268a0d0e39a9b7cb45",
+    "../distribution.rules": "129569f3a9f65d0f7db9b650f6d37a9c6cd8a1f36be7d0c72d3e31e65f0d8ad8",
+    "../firebase.json": "57b2cc55b1795270c82695414a3013c0df3cdf5d365f0c822dbab0640ca59dfb",
+    "../node_modules/.cache/firestore.rules": "c88f930dd205ee28d2e2bf6178c62a8693ebf06f1f2f4ef0b0cc62048ac2ed41",
+    "support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "emulator.mjs": "fba3a793e376a1eb7a895e87f2276c014a82dc5179962a6583e5dea9c723619f",
+    "../../GD91-71/tests/support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "../../GD91-71/tests/initial-layout.mjs": "dfe1940aee153c8ba8b123065f1b79382c514d633bbe4b01a85442098a835223",
+    "../../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../../GD91-71/node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../../GD91-71/node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../../GD91-71/node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211"
+  },
+  "reports": [
+    {
+      "id": "D01",
+      "status": "passed",
+      "ordinaryDistribution": true,
+      "generalReader": true,
+      "privateFieldsExcluded": true
+    }
+  ]
+}
