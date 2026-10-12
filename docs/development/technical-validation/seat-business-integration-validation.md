@@ -21,6 +21,21 @@
 
 受付データと配布目録の発行は前提投入のまま。REST・Emulatorの自動結合試験を、実ブラウザー・実機の合格や本番方式採用へ読み替えない。#167・168のゲートを維持する。
 
+## GD91-71 未割当席編集と個別追加
+
+状態：In Review。2026-10-12、[新9件](../../../poc/GD91-71/artifacts/individual-summary.json)と同じ候補による既存130件が合格。回帰は[拡張11件](../../../poc/GD91-71/artifacts/extension-regression.json)、[スライド等11件](../../../poc/GD91-71/artifacts/geometry-regression.json)、[配置20件](../../../poc/GD91-71/artifacts/bulk-regression.json)、[名簿12件](../../../poc/GD91-71/artifacts/roster-regression.json)、[初期化20件](../../../poc/GD91-71/artifacts/initial-regression.json)、[不参加24件](../../../poc/GD91-71/artifacts/branches-regression.json)、[券32件](../../../poc/GD91-71/artifacts/lifecycle-regression.json)。計139シナリオ。各filter=null、記録対象の前後ハッシュ一致。旧候補の結果は加算しない。
+
+| 範囲 | 結果・限界 |
+|---|---|
+| I01～03 | 手入力番号への変更と同列・跨列の位置移動、非席4種からの追加を保存。既存席ID・他席と列の次番号を保持。欠番の追加は消費番号を維持 |
+| I04～08 | 編集案作成後の席設定と対象外変更、部分送信6通りを拒否。理由・種別偽装を拒否し、運用中の緊急印・理由を保持。同一IDの履歴照会と再適用拒否を確認 |
+| I09 | スライド→番号編集→未セル拡張→スライドを接続。初回の自動採番順を再要求せず、既存番号を維持 |
+| 既存130件 | 同じRulesで構成・名簿とグループ配置、券・不参加を回帰。500人配置済みの逆方向拡張と500人・2区画配置を含む |
+
+editDetailsで対象前後を検査し、editSealへ旧候補・期待版と比較結果を結合する。確定時は最新の未割当・券保護を再確認する。机上の確定参照は7＋6＋6＝19、文書単位最大10、キャッシュ減算なし。式評価数・余裕と費用は未測定。[詳細契約](../detailed-design/seat-management-detail-design.md#未割当席の専用編集gd91-71)と[手順・前提](../../../poc/GD91-71/README.md)へ追跡する。
+
+この候補の緊急印はkind・reasonだけであり、操作IDと時刻は履歴側に記録する。論理印の全物理項目・出力と画面は未確認。共有下書き・受付データの通常発行、SDK・端末保存と実機も残る。#166の中間コミットとして継続する。
+
 ## GD91-70 行列拡張と移動量の引継ぎ
 
 状態：In Review。2026-10-12、[新11件](../../../poc/GD91-70/artifacts/extension-summary.json)と同じRulesの既存119件が合格。回帰は[スライド等11件](../../../poc/GD91-70/artifacts/geometry-regression.json)、[配置20件](../../../poc/GD91-70/artifacts/bulk-regression.json)、[名簿12件](../../../poc/GD91-70/artifacts/roster-regression.json)、[初期化20件](../../../poc/GD91-70/artifacts/initial-regression.json)、[不参加24件](../../../poc/GD91-70/artifacts/branches-regression.json)、[券32件](../../../poc/GD91-70/artifacts/lifecycle-regression.json)。計130シナリオで、各filterはnull、記録対象の前後ハッシュが一致する。過去候補の合格を加算しない。

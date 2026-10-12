@@ -1,0 +1,45 @@
+    function editPosition(h,b,a) {
+      let e = h.edit;
+      return a.row == (b.row+e.rowOffset+e.oldRows)%e.oldRows && a.column == (b.column+e.columnOffset+e.oldColumns)%e.oldColumns;
+    }
+    function individualCell(h,b,a) {
+      let e = h.edit;
+      return e.kind in ['add','move'] && b.item.cell.cellId == e.targetCellId
+        ? a.item.cell.diff(b.item.cell).affectedKeys().hasOnly(['row','column','kind','seatId'])
+          && editPosition(h,b.item.cell,a.item.cell) && a.item.cell.kind == 'seat' && a.item.cell.seatId == e.seatId
+          && a.item.cell.get('consumedNumber',null) == b.item.cell.get('consumedNumber',null)
+        : extensionFact(h,b,a);
+    }
+    function editedAttributes(h,b,a) {
+      return a.diff(b).affectedKeys().hasOnly(['emergencyChange'])
+        && a.emergencyChange == {'kind':h.edit.kind,'reason':h.edit.reason};
+    }
+    function editLabel(f) { return f.item.numbering.mode == 'automatic' ? f.prefix+string(f.item.numbering.number) : f.item.numbering.manualNumber; }
+    function individualDetails(p,section,g,a) {
+      let h = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(section)/generations/$(g)/head/current).data;
+      let e = h.edit;
+      let before = e.kind == 'add' ? null : get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(section)/generations/$(g)/baseCellFacts/$(e.sourceCellId)).data.fact;
+      let target = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(section)/generations/$(g)/baseCellFacts/$(e.targetCellId)).data.fact;
+      let after = get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(section)/generations/$(g)/seatFacts/$(e.seatId)).data.fact;
+      let sourceAfter = e.kind != 'move' ? null : get(/databases/$(database)/documents/sourceProofShows/$(p)/sections/$(section)/generations/$(g)/cellFacts/$(e.sourceCellId)).data.fact;
+      return manager(p) && a == {'generation':g,'edit':e} && e.kind in ['add','renumber','move']
+        && e.reason is string && e.reason.matches('.*\\S.*') && e.reason.size() <= 500 && uuid(e.seatId)
+        && after.item.cell.seatId == e.seatId && after.item.cell.cellId == e.targetCellId && editPosition(h,target.item.cell,after.item.cell)
+        && after.attributes.emergencyChange == {'kind':e.kind,'reason':e.reason}
+        && (e.kind == 'add' ? e.sourceCellId == '' && target.item.cell.kind in ['unset','space','aisle','gap']
+          && after.item.numbering.mode == 'manual' && after.item.numbering.manualNumber.size() <= 64
+          && after.attributes == {'category':'general','usable':true,'emergencyChange':{'kind':e.kind,'reason':e.reason}}
+          : before.item.cell.kind == 'seat' && before.item.cell.seatId == e.seatId && editedAttributes(h,before.attributes,after.attributes)
+          && (e.kind == 'renumber' ? e.sourceCellId == e.targetCellId && translatedCell(h,before.item.cell,after.item.cell)
+            && after.lineId == before.lineId && after.item.numbering.mode == 'manual' && after.item.numbering.manualNumber.size() <= 64
+            && after.item.numbering.manualNumber != editLabel(before)
+            : e.sourceCellId != e.targetCellId && target.item.cell.kind in ['unset','space']
+              && sourceAfter.item.cell.cellId == e.sourceCellId && editPosition(h,before.item.cell,sourceAfter.item.cell)
+              && sourceAfter.item.cell.kind == 'space' && sourceAfter.item.cell.keys().hasOnly(['cellId','row','column','kind'])
+              && sourceAfter.item.numbering == null && sourceAfter.attributes == null
+              && editLabel(after) == editLabel(before)));
+    }
+    match /sourceProofShows/{p}/sections/{section}/generations/{g}/editDetails/current {
+      allow create: if individualDetails(p,section,g,request.resource.data);
+      allow get: if manager(p);
+    }

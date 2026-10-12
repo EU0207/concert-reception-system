@@ -1,0 +1,34 @@
+{
+  "filter": "I01",
+  "sourceHashes": {
+    "../generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "emulator.mjs": "2912a4555f7eb5adbe270ad07c8c6f6e6c90875d5ee7c0ed905d5217826fba12"
+  },
+  "endSourceHashes": {
+    "../generate.mjs": "dd561ada8ced8a73ca3edc199a01def43a973188325b701348acda095f62a664",
+    "../individual.rules": "c7c821f76e7f318c99fbe1000ff5e0d824ecc75cf478751be4cc8b0e3775b521",
+    "../node_modules/.cache/firestore.rules": "8a4d9f681a3ea35fafd4628c1ef60968baf7c5dc168ee950a05e59b4c0a8b249",
+    "../node_modules/.cache/global-support.mjs": "05694497d4f8020d05b49e632ef400f79a67adece9834dcd9acf2215913f452a",
+    "../node_modules/.cache/comparison-support.mjs": "6001d8ab5c52017a66f302a2d57786b8146d109849f2341b8d03a63fff4b3e98",
+    "../node_modules/.cache/candidate-support.mjs": "dfff215fc5f4c250d011cc8ef802362435e9e52cd1fc52303613b61751d0e211",
+    "support.mjs": "cd89f83d1bfbf9d4688ecd74c137963de7290c448a707b3757024a85929333ac",
+    "model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "emulator.mjs": "2912a4555f7eb5adbe270ad07c8c6f6e6c90875d5ee7c0ed905d5217826fba12"
+  },
+  "reports": [
+    {
+      "id": "I01",
+      "status": "passed",
+      "manualNumber": true,
+      "seatIdAndOtherSeatsRetained": true,
+      "nextNumberRetained": true
+    }
+  ]
+}
