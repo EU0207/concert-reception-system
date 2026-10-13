@@ -1,0 +1,53 @@
+{
+  "sourceHashes": {
+    "boundary-tests.mjs": "e811f0ffd0f4eaaa56dcd7c6a2dad46f62e0b06ba6669129909b65f97204c79a",
+    "watch-client.mjs": "7cacebdb126395f6fe0113b85af601a375b492102955b6764b14cb28308acbe9",
+    "node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "endSourceHashes": {
+    "boundary-tests.mjs": "e811f0ffd0f4eaaa56dcd7c6a2dad46f62e0b06ba6669129909b65f97204c79a",
+    "watch-client.mjs": "7cacebdb126395f6fe0113b85af601a375b492102955b6764b14cb28308acbe9",
+    "node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "reports": [
+    {
+      "id": "B-sdk-duplicate-create",
+      "status": "passed"
+    },
+    {
+      "id": "B-sdk-atomic-denial",
+      "status": "passed",
+      "validSubsetNotCommitted": true
+    },
+    {
+      "id": "B-cross-performance",
+      "status": "passed"
+    },
+    {
+      "id": "B-saturation",
+      "status": "passed",
+      "fixturePeople": 10,
+      "ownerInjectedEvents": 2047,
+      "totalEvents": 2048,
+      "previousRecordsRetained": true,
+      "fullSuccessNotReported": true,
+      "notAPersonCapacityTest": true
+    },
+    {
+      "id": "B-rules-query-limit",
+      "status": "passed"
+    }
+  ],
+  "productionLimitsVerified": false,
+  "tested3000": false
+}

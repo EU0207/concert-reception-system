@@ -1,0 +1,661 @@
+{
+  "sourceHashes": {
+    "probe.mjs": "ccf0c575878d98f696e952b6feb391fbbdcbdcf748d510334f42d5f1d5b0f672",
+    "remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1",
+    "remote.rules": "3be8d574f26d20e0f3a790dd9e50ca4c39c9a24154bc01e1106fbbe8d5a7cd0f",
+    "deny.rules": "ed1e7c11f025d9464e80e4c4584711c474a0c9b0e07802618de8d02dddadec87",
+    "generate-rules.mjs": "795702a3764c43d230a97b5667a02349254d368f78625b29378b66c1035655d4",
+    "../GD91-79/minimal.rules": "33881467f03a91c2b3ad34582018aa4569ba349224d5d888d958515e91b17d5f",
+    "../GD91-77/receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9"
+  },
+  "endSourceHashes": {
+    "probe.mjs": "ccf0c575878d98f696e952b6feb391fbbdcbdcf748d510334f42d5f1d5b0f672",
+    "remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1",
+    "remote.rules": "3be8d574f26d20e0f3a790dd9e50ca4c39c9a24154bc01e1106fbbe8d5a7cd0f",
+    "deny.rules": "ed1e7c11f025d9464e80e4c4584711c474a0c9b0e07802618de8d02dddadec87",
+    "generate-rules.mjs": "795702a3764c43d230a97b5667a02349254d368f78625b29378b66c1035655d4",
+    "../GD91-79/minimal.rules": "33881467f03a91c2b3ad34582018aa4569ba349224d5d888d958515e91b17d5f",
+    "../GD91-77/receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "../GD91-78/node_modules/.cache/firestore.rules": "787e473b81c37915bee525976e7db269c81e5bfe600b568bc109b0766d9cddc9"
+  },
+  "reports": [
+    {
+      "kind": "minimal",
+      "baseline": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 200,
+        "documents": 1,
+        "code": null
+      },
+      "stoppedWithoutItemChange": true,
+      "stopObservationMs": 10000,
+      "observedElapsedMs": 1072,
+      "afterItemChange": {
+        "records": 1,
+        "error": "permission-denied",
+        "serverSnapshots": 1
+      },
+      "freshListenError": "permission-denied",
+      "normalPrincipal": "Firebase-ID-token",
+      "ownerSeededMetadata": true,
+      "sessionIssuanceVerified": false
+    },
+    {
+      "kind": "role",
+      "baseline": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 200,
+        "documents": 1,
+        "code": null
+      },
+      "stoppedWithoutItemChange": true,
+      "stopObservationMs": 10000,
+      "observedElapsedMs": 894,
+      "afterItemChange": {
+        "records": 1,
+        "error": "permission-denied",
+        "serverSnapshots": 1
+      },
+      "freshListenError": "permission-denied",
+      "normalPrincipal": "Firebase-ID-token",
+      "ownerSeededMetadata": true,
+      "sessionIssuanceVerified": false
+    },
+    {
+      "kind": "device",
+      "baseline": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 200,
+        "documents": 1,
+        "code": null
+      },
+      "stoppedWithoutItemChange": true,
+      "stopObservationMs": 10000,
+      "observedElapsedMs": 985,
+      "afterItemChange": {
+        "records": 1,
+        "error": "permission-denied",
+        "serverSnapshots": 1
+      },
+      "freshListenError": "permission-denied",
+      "normalPrincipal": "Firebase-ID-token",
+      "ownerSeededMetadata": true,
+      "sessionIssuanceVerified": false
+    },
+    {
+      "kind": "session",
+      "baseline": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 200,
+        "documents": 1,
+        "code": null
+      },
+      "stoppedWithoutItemChange": true,
+      "stopObservationMs": 10000,
+      "observedElapsedMs": 744,
+      "afterItemChange": {
+        "records": 1,
+        "error": "permission-denied",
+        "serverSnapshots": 1
+      },
+      "freshListenError": "permission-denied",
+      "normalPrincipal": "Firebase-ID-token",
+      "ownerSeededMetadata": true,
+      "sessionIssuanceVerified": false
+    },
+    {
+      "kind": "control",
+      "baseline": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": "PERMISSION_DENIED"
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0,
+          "code": null
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1,
+          "code": null
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 200,
+        "documents": 1,
+        "code": null
+      },
+      "stoppedWithoutItemChange": true,
+      "stopObservationMs": 10000,
+      "observedElapsedMs": 818,
+      "afterItemChange": {
+        "records": 1,
+        "error": "permission-denied",
+        "serverSnapshots": 1
+      },
+      "freshListenError": "permission-denied",
+      "normalPrincipal": "Firebase-ID-token",
+      "ownerSeededMetadata": true,
+      "sessionIssuanceVerified": false
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "documentsDeleted": 27,
+    "usersDeleted": 2,
+    "authRestored": true
+  },
+  "managementAndOwnerRequests": 76,
+  "normalRequests": 92,
+  "sdkApplicationCalls": 13,
+  "ownerWrites": 32,
+  "applicationRequests": 181,
+  "sdkInternalWireRequestsMeasured": false,
+  "productionIdentityServiceTested": true,
+  "productionFreeTierVerified": false,
+  "fullApplicationAuthorizationVerified": false,
+  "realDevicesVerified": false,
+  "tested3000": false
+}

@@ -1,0 +1,1 @@
+{"firestore":{"rules":"minimal.rules"},"emulators":{"auth":{"host":"127.0.0.1","port":9191},"firestore":{"host":"127.0.0.1","port":8181},"ui":{"enabled":false},"singleProjectMode":true}}

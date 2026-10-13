@@ -1,0 +1,16 @@
+{
+  "readOnlyVerification": true,
+  "rulesClosed": true,
+  "emptyFixtureCollectionGroups": 6,
+  "authUsersRemaining": 0,
+  "authSettingsRestored": true,
+  "billingAccountUnlinked": true,
+  "requests": 12,
+  "combinedApplicationRequests": 193,
+  "sdkInternalWireRequestsMeasured": false,
+  "sourceHashes": {
+    "verify-cleanup.mjs": "a5a3fea703d0319b9bf072e819f56c1cad95944b342ac5a0a64d0033829b2b39",
+    "remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1",
+    "deny.rules": "ed1e7c11f025d9464e80e4c4584711c474a0c9b0e07802618de8d02dddadec87"
+  }
+}
