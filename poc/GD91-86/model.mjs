@@ -1,0 +1,8 @@
+import {randomUUID} from 'node:crypto';
+export const initial=()=>({commit:{revision:1,operationId:'initial'},seats:{'cell-0':{personId:'a',revision:1},'cell-1':{personId:'b',revision:1},'cell-2':{personId:'none',revision:1}},people:{a:{seatId:'cell-0',revision:1,active:true,displayName:'架空A'},b:{seatId:'cell-1',revision:1,active:true,displayName:'架空B'},c:{seatId:'none',revision:1,active:true,displayName:'架空C'}},view:{'cell-0':{personId:'a',revision:1,displayName:'架空A'},'cell-1':{personId:'b',revision:1,displayName:'架空B'},'cell-2':{personId:'none',revision:1,displayName:''}},tickets:{a:{credentialRef:'FAKE-issued-a',everIssued:true},b:{credentialRef:'FAKE-issued-b',everIssued:true},c:{credentialRef:'',everIssued:false}}});
+export function proposal(f,state,kind,seatA,seatB='none',person='none',id=randomUUID()){
+  const a=state.seats[seatA].personId,b=seatB==='none'?'none':state.seats[seatB].personId,afterA=kind==='swap'?b:kind==='assign'?person:'none',afterB=kind==='swap'?a:kind==='move'?a:'none',revision=state.commit.revision+1;
+  const body={commit:{revision,operationId:id},['operations/'+id]:{kind,seatA,seatB,beforeA:a,beforeB:b,afterA,afterB,expectedRevision:state.commit.revision,resultRevision:revision,humanUid:f.human.uid}};
+  for(const[s,p]of[[seatA,afterA],[seatB,afterB]])if(s!=='none'){body['seats/'+s]={personId:p,revision};body['view/'+s]={personId:p,revision,displayName:p==='none'?'':state.people[p].displayName};}
+  for(const p of new Set([a,b,afterA,afterB].filter(p=>p!=='none'))){const seatId=p===afterA?seatA:p===afterB?seatB:'none';body['people/'+p]={...state.people[p],seatId,revision};}return body;
+}

@@ -1,0 +1,22 @@
+{
+  "sourceHashes": {
+    "google-login-local.mjs": "6530a9154e918d5234d210e8ed4fb72f0dc90f15dfcbcfbf6189c2831c09ccb0",
+    "google-login-server.mjs": "338fb391292a818a7574853027c034cf9305be6887f24dbeb3e84815ba5f4bf9",
+    "google-login.mjs": "febf5f22f1824651f990611e8f1935ca2858eecb5b4383d7bf191fb049245861",
+    "google-login.html": "5fb2c62d7a244f78a0c3ea324915e017a867dd0a65b46f71340829a794a48609"
+  },
+  "endSourceHashes": {
+    "google-login-local.mjs": "6530a9154e918d5234d210e8ed4fb72f0dc90f15dfcbcfbf6189c2831c09ccb0",
+    "google-login-server.mjs": "338fb391292a818a7574853027c034cf9305be6887f24dbeb3e84815ba5f4bf9",
+    "google-login.mjs": "febf5f22f1824651f990611e8f1935ca2858eecb5b4383d7bf191fb049245861",
+    "google-login.html": "5fb2c62d7a244f78a0c3ea324915e017a867dd0a65b46f71340829a794a48609"
+  },
+  "loginAttemptsBounded": true,
+  "foreignOriginRejected": true,
+  "tokenBeforeBeginRejected": true,
+  "duplicateTokenRejected": true,
+  "outsideWorkspaceFilesBlocked": true,
+  "clientUsesInMemoryPersistence": true,
+  "externalFirebaseConnected": false,
+  "realGoogleAccountUsed": false
+}
