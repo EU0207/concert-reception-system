@@ -1,0 +1,82 @@
+{
+  "sourceHashes": {
+    "lease-window.mjs": "98086c97edf5fdb3e70d067e0ca63e9f0dc5d4e839b11772904ecd0a68d7f25d",
+    "candidates.rules": "e41ddd5b709521b49ae25e5c75ade9ab4ad583c3139e02b93897ba15e924600b",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1",
+    "../GD91-80/deny.rules": "ed1e7c11f025d9464e80e4c4584711c474a0c9b0e07802618de8d02dddadec87"
+  },
+  "endSourceHashes": {
+    "lease-window.mjs": "98086c97edf5fdb3e70d067e0ca63e9f0dc5d4e839b11772904ecd0a68d7f25d",
+    "candidates.rules": "e41ddd5b709521b49ae25e5c75ade9ab4ad583c3139e02b93897ba15e924600b",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1",
+    "../GD91-80/deny.rules": "ed1e7c11f025d9464e80e4c4584711c474a0c9b0e07802618de8d02dddadec87"
+  },
+  "results": {
+    "leaseDurationMs": 20000,
+    "beforeExpiry": [
+      {
+        "method": "get",
+        "current": {
+          "httpStatus": 403,
+          "documents": 0
+        },
+        "historical": {
+          "httpStatus": 200,
+          "documents": 1
+        }
+      },
+      {
+        "method": "query",
+        "current": {
+          "httpStatus": 403,
+          "documents": 0
+        },
+        "historical": {
+          "httpStatus": 200,
+          "documents": 1
+        }
+      }
+    ],
+    "afterExpiry": [
+      {
+        "method": "get",
+        "current": {
+          "httpStatus": 403,
+          "documents": 0
+        },
+        "historical": {
+          "httpStatus": 403,
+          "documents": 0
+        }
+      },
+      {
+        "method": "query",
+        "current": {
+          "httpStatus": 403,
+          "documents": 0
+        },
+        "historical": {
+          "httpStatus": 403,
+          "documents": 0
+        }
+      }
+    ],
+    "otherActivePrincipal": {
+      "httpStatus": 200,
+      "documents": 1
+    },
+    "immediateHistoricalRevocationVerified": false
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "documentsDeleted": 3,
+    "usersDeleted": 2,
+    "authRestored": true
+  },
+  "normalRequests": 10,
+  "managementAndOwnerRequests": 16,
+  "sdkApplicationCalls": 2,
+  "applicationRequests": 28,
+  "sdkInternalWireRequestsMeasured": false,
+  "productionFreeTierVerified": false
+}

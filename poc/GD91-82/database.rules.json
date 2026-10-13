@@ -1,0 +1,17 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "checks": {
+      "$run": {
+        "events": {
+          ".read": "auth != null && auth.token.firebase.sign_in_provider === 'anonymous' && root.child('checks').child($run).child('devices').child(auth.uid).isString() && root.child('checks').child($run).child('roles').child(root.child('checks').child($run).child('devices').child(auth.uid).val()).val() === true && root.child('checks').child($run).child('sessions').child(auth.uid).val() === true && root.child('checks').child($run).child('control').val() === true",
+          ".write": false,
+          ".indexOn": [
+            "value"
+          ]
+        }
+      }
+    }
+  }
+}
