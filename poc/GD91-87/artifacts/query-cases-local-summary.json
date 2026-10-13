@@ -1,0 +1,56 @@
+{
+  "sourceHashes": {
+    "query-cases-local.mjs": "209839d9c012baa9588ec4ab5f0b9ceaa92e9c3894b039a31f9a10dff3e5396e",
+    "query-cases.mjs": "4e31cc4a0b3d6cf4d8ebea876f9befdc30283d927095836bd0cec0d097951330",
+    "receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "endSourceHashes": {
+    "query-cases-local.mjs": "209839d9c012baa9588ec4ab5f0b9ceaa92e9c3894b039a31f9a10dff3e5396e",
+    "query-cases.mjs": "4e31cc4a0b3d6cf4d8ebea876f9befdc30283d927095836bd0cec0d097951330",
+    "receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "reports": [
+    {
+      "kind": "session-expiry",
+      "freshQueryRejected": true,
+      "validDeviceReceivesNewEvent": true,
+      "expiredChildNewEvents": 0,
+      "expiredValueNewEvents": 0,
+      "restStreamNewEvents": 0,
+      "restStreamCancelled": true,
+      "sdkChildCancellationObserved": false,
+      "sdkValueCancellationObserved": false,
+      "sameOperationLookupMatches": true,
+      "roleAndSessionExpiryCoincide": false,
+      "clockOnlyDisconnectClaimed": false
+    },
+    {
+      "kind": "role-and-session-expiry",
+      "freshQueryRejected": true,
+      "validDeviceReceivesNewEvent": true,
+      "expiredChildNewEvents": 0,
+      "expiredValueNewEvents": 0,
+      "restStreamNewEvents": 0,
+      "restStreamCancelled": true,
+      "sdkChildCancellationObserved": false,
+      "sdkValueCancellationObserved": false,
+      "sameOperationLookupMatches": true,
+      "roleAndSessionExpiryCoincide": true,
+      "clockOnlyDisconnectClaimed": false
+    }
+  ],
+  "maxJsonNodes": 95,
+  "expiryWindowMs": 10000,
+  "filteredQuery": true,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false
+}

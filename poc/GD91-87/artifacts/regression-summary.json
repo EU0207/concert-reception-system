@@ -1,0 +1,308 @@
+{
+  "sourceHashes": {
+    "regression.mjs": "b5698272e4698daad9231d99f52a4ae38983e16904e4cd989baa0b8365f90e41",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "generate.mjs": "d49579ffa3cb11dec1bbc22b7c9bb44f25e9627b6e3e5e40ef235952411761ec",
+    "receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "../GD91-86/database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/authorization-tests.mjs": "f7084a77fa84f953f81ae7abb464a354432295e2aedd118e66f417d2c9c99544",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/capacity-tests.mjs": "b775f96770bfd643b4faddb2886f3a2b6692ea5d727e4acb00333dc12e4a4687",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a"
+  },
+  "endSourceHashes": {
+    "regression.mjs": "b5698272e4698daad9231d99f52a4ae38983e16904e4cd989baa0b8365f90e41",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "generate.mjs": "d49579ffa3cb11dec1bbc22b7c9bb44f25e9627b6e3e5e40ef235952411761ec",
+    "receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "../GD91-86/database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/authorization-tests.mjs": "f7084a77fa84f953f81ae7abb464a354432295e2aedd118e66f417d2c9c99544",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/capacity-tests.mjs": "b775f96770bfd643b4faddb2886f3a2b6692ea5d727e4acb00333dc12e4a4687",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a"
+  },
+  "reports": [
+    {
+      "id": "A-owner",
+      "generalRead": true,
+      "management": true,
+      "temporary": false
+    },
+    {
+      "id": "A-deputy",
+      "generalRead": true,
+      "management": true,
+      "temporary": false
+    },
+    {
+      "id": "A-temporary",
+      "generalRead": true,
+      "management": false,
+      "temporary": true
+    },
+    {
+      "id": "A-receptionist",
+      "generalRead": true,
+      "management": false,
+      "temporary": false
+    },
+    {
+      "id": "A-session-forgery",
+      "mutationsRejected": 8
+    },
+    {
+      "id": "A-cross-human",
+      "denied": true
+    },
+    {
+      "id": "A-unverified",
+      "denied": true
+    },
+    {
+      "id": "A-wrong-provider",
+      "denied": true
+    },
+    {
+      "id": "A-self-escalation",
+      "denied": true
+    },
+    {
+      "id": "A-malformed-role",
+      "invalidStatesRejected": 5,
+      "statesSeeded": true
+    },
+    {
+      "id": "A-device-revocation",
+      "stoppedDeviceDenied": true,
+      "otherContinues": true
+    },
+    {
+      "id": "A-session-revocation",
+      "revokeAndReissue": true
+    },
+    {
+      "id": "A-expiration",
+      "denied": true,
+      "expiredStateSeeded": true
+    },
+    {
+      "id": "A-recent-auth",
+      "highImpactDenied": true,
+      "oldTimeSeeded": true
+    },
+    {
+      "id": "A-promotion-preparation",
+      "baselineGeneralOnly": true,
+      "newPreparationRequired": true
+    },
+    {
+      "id": "A-demotion",
+      "oldPrivilegeDenied": true,
+      "newGeneralPreparationRequired": true
+    },
+    {
+      "id": "A-control",
+      "receptionStopped": true,
+      "closedEditingDenied": true
+    },
+    {
+      "id": "G-partial-and-duplicate",
+      "missingLocationsRejected": 6,
+      "duplicateIdsAndLabelsRejected": true
+    },
+    {
+      "id": "G-escaped-labels",
+      "distinctReservedForms": 8,
+      "duplicateSameLineRejected": true,
+      "otherLineAllowed": true
+    },
+    {
+      "id": "G-slot-and-schema-bounds",
+      "oversizedAndUnknownFieldsRejected": true,
+      "invalidKeyStatus": 400,
+      "controlInValueStatus": 401
+    },
+    {
+      "id": "G-roster-max-fields",
+      "maxName50AndTenFields200Accepted": true,
+      "partWidth4": true
+    },
+    {
+      "id": "G-publication-boundary",
+      "onlyReadyPublished": true,
+      "privateAndNoncurrentReadDenied": true,
+      "pastOperationRejected": true
+    },
+    {
+      "id": "G-pin-and-collection",
+      "currentAndReferencedProtected": true,
+      "republishDuringGCRejected": true,
+      "interruptedGCResumed": true,
+      "operationResultRetained": true
+    },
+    {
+      "id": "G-unpublished-collection",
+      "failedBuildingGenerationCollected": true
+    },
+    {
+      "id": "S-partial-and-isolation",
+      "partsRejected": 2,
+      "receptionHeadUnchanged": true,
+      "generalReadDenied": true
+    },
+    {
+      "id": "S-concurrent-and-resume",
+      "singleWinner": true,
+      "resultMatches": true,
+      "secondCommitNotSentDuringLookup": true,
+      "physicalPacketLoss": false
+    },
+    {
+      "id": "S-shared-retention",
+      "selectedDraftGenerationProtected": true
+    },
+    {
+      "id": "S-stale-base-and-old-id",
+      "staleBaseRejected": true,
+      "oldIdNotReused": true
+    },
+    {
+      "id": "C-600-2",
+      "people": 600,
+      "sections": 2,
+      "cells": 1200,
+      "layoutParts": 38,
+      "rosterParts": 150,
+      "maxLayoutPartBytes": 3745,
+      "maxRosterPartBytes": 25393,
+      "maxRequestBytes": 25904,
+      "headBytes": 95,
+      "storageBytes": 4064538,
+      "preparation": {
+        "requests": 195,
+        "requestBodyBytes": 4173706,
+        "responseBodyBytes": 4095701,
+        "ownerRequests": 0,
+        "userRequests": 195
+      },
+      "initialPlusTwoRestDownloadsForSixEnvironments": {
+        "requests": 726,
+        "requestBodyBytes": 0,
+        "responseBodyBytes": 2342280,
+        "ownerRequests": 0,
+        "userRequests": 726
+      },
+      "measuredBodiesOnly": true,
+      "sdkReconnectMeasured": false,
+      "fullBusinessBudgetVerified": false
+    },
+    {
+      "id": "C-600-16",
+      "people": 600,
+      "sections": 16,
+      "cells": 1200,
+      "layoutParts": 38,
+      "rosterParts": 150,
+      "maxLayoutPartBytes": 3821,
+      "maxRosterPartBytes": 25397,
+      "maxRequestBytes": 25918,
+      "headBytes": 96,
+      "storageBytes": 4074532,
+      "preparation": {
+        "requests": 209,
+        "requestBodyBytes": 4186310,
+        "responseBodyBytes": 4110663,
+        "ownerRequests": 0,
+        "userRequests": 209
+      },
+      "initialPlusTwoRestDownloadsForSixEnvironments": {
+        "requests": 726,
+        "requestBodyBytes": 0,
+        "responseBodyBytes": 2382816,
+        "ownerRequests": 0,
+        "userRequests": 726
+      },
+      "measuredBodiesOnly": true,
+      "sdkReconnectMeasured": false,
+      "fullBusinessBudgetVerified": false
+    },
+    {
+      "id": "C-1000-2",
+      "people": 1000,
+      "sections": 2,
+      "cells": 2000,
+      "layoutParts": 63,
+      "rosterParts": 250,
+      "maxLayoutPartBytes": 3809,
+      "maxRosterPartBytes": 25397,
+      "maxRequestBytes": 25918,
+      "headBytes": 96,
+      "storageBytes": 6784238,
+      "preparation": {
+        "requests": 320,
+        "requestBodyBytes": 6970809,
+        "responseBodyBytes": 6836503,
+        "ownerRequests": 0,
+        "userRequests": 320
+      },
+      "initialPlusTwoRestDownloadsForSixEnvironments": {
+        "requests": 1176,
+        "requestBodyBytes": 0,
+        "responseBodyBytes": 3969966,
+        "ownerRequests": 0,
+        "userRequests": 1176
+      },
+      "measuredBodiesOnly": true,
+      "sdkReconnectMeasured": false,
+      "fullBusinessBudgetVerified": false
+    },
+    {
+      "id": "C-1000-16",
+      "people": 1000,
+      "sections": 16,
+      "cells": 2000,
+      "layoutParts": 63,
+      "rosterParts": 250,
+      "maxLayoutPartBytes": 3885,
+      "maxRosterPartBytes": 25401,
+      "maxRequestBytes": 25932,
+      "headBytes": 97,
+      "storageBytes": 6797732,
+      "preparation": {
+        "requests": 334,
+        "requestBodyBytes": 6988913,
+        "responseBodyBytes": 6858468,
+        "ownerRequests": 0,
+        "userRequests": 334
+      },
+      "initialPlusTwoRestDownloadsForSixEnvironments": {
+        "requests": 1176,
+        "requestBodyBytes": 0,
+        "responseBodyBytes": 4037502,
+        "ownerRequests": 0,
+        "userRequests": 1176
+      },
+      "measuredBodiesOnly": true,
+      "sdkReconnectMeasured": false,
+      "fullBusinessBudgetVerified": false
+    }
+  ],
+  "metrics": {
+    "requests": 5130,
+    "requestBodyBytes": 22816506,
+    "responseBodyBytes": 56501578,
+    "ownerRequests": 104,
+    "userRequests": 5026
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

@@ -1,0 +1,32 @@
+{
+  "sourceHashes": {
+    "query-authorization.mjs": "292e80c204a8d3e473d6685b0c110dea8c65be6848596996a00779e307348d2d",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "endSourceHashes": {
+    "query-authorization.mjs": "292e80c204a8d3e473d6685b0c110dea8c65be6848596996a00779e307348d2d",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "freshQueryStatus": 401,
+  "validChildEvents": 1,
+  "expiredChildEvents": 0,
+  "expiredChildCancellation": null,
+  "expiredValueNewEvents": 0,
+  "expiredValueCancellation": null,
+  "independentStreamStatus": 200,
+  "independentStreamNewEvents": 0,
+  "independentStreamCancellation": "cancel",
+  "observationAfterValidDeliveryMs": 1500,
+  "clockOnlyDisconnectClaimed": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false
+}
