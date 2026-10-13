@@ -88,6 +88,6 @@ node poc/GD91-79/audit.mjs
 node poc/GD91-78/audit.mjs
 ```
 
-外部確認は未承認・未実行。無料600人必須・1,000人目標は維持し、3,000人は検証しない。外部Firebaseと課金設定は変更していない。
+GD91-79では外部確認は未実行。2026-10-13、開発者がTECH-DD91-079のAを承認した。[GD91-80の接続準備](../GD91-80/README.md)へ引き継ぐ。無料600人必須・1,000人目標は維持し、3,000人は検証しない。外部Firebaseと課金設定はまだ変更していない。
 
 公式根拠：[SDK通知と未確定情報](https://firebase.google.com/docs/firestore/query-data/listen)、[RESTの認証主体](https://firebase.google.com/docs/firestore/use-rest-api)、[readTime](https://firebase.google.com/docs/firestore/reference/rest/v1/projects.databases.documents/runQuery)、[Emulatorと本番の差](https://firebase.google.com/docs/emulator-suite/connect_firestore)。これらの資料だけで、今回の現象の原因を公式に確認済みとは扱わない。
