@@ -3,7 +3,8 @@ export const emptyEvent=seats=>({commit:{revision:1,operationId:'initial'},seats
 export const profile=(i=0)=>({name:'架'.repeat(50),displayName:'架空来場者名',paid:false,extra:Object.fromEntries(Array.from({length:10},(_,j)=>['f'+j,'補'.repeat(200)]))});
 export function command(f,state,kind,target,options={}){
   const id=options.id??randomUUID(), revision=state.commit.revision+1;
-  const op={kind,target,expectedRevision:state.commit.revision,resultRevision:revision,sourceControlRevision:options.controlRevision??1,humanUid:f.human.uid,confirmedPrimary:options.confirmedPrimary??true,confirmedTicketWarning:options.confirmedTicketWarning??true,stopConfirmed:options.stopConfirmed??true,paid:options.paid??false,newCredential:'',newCode:''};
+  const oldTicket=state.tickets?.[target];
+  const op={kind,target,expectedRevision:state.commit.revision,resultRevision:revision,sourceControlRevision:options.controlRevision??1,humanUid:f.human.uid,confirmedPrimary:options.confirmedPrimary??true,confirmedTicketWarning:options.confirmedTicketWarning??true,stopConfirmed:options.stopConfirmed??true,paid:options.paid??false,issued:options.issued??true,sent:options.sent??true,newCredential:'',newCode:'',previousCredential:oldTicket?.credentialRef??'',previousCode:oldTicket?.code??'',previousSeat:state.people?.[target]?.seatId??'none',ticketSnapshot:'none',committedAt:{'.sv':'timestamp'}};
   const body={commit:{revision,operationId:id},['operations/'+id]:op};
   if(kind==='register'){
     const p=options.profile??profile();body['profiles/'+target]={...p,revision};body['people/'+target]={active:true,seatId:'none',displayName:p.displayName,revision};
@@ -27,6 +28,7 @@ export function command(f,state,kind,target,options={}){
     body['tickets/'+target]=t;
   }
   function revoke(t){if(!t.credentialRef)return;body['credentials/'+t.credentialRef]={...state.credentials[t.credentialRef],active:false,revision};body['codes/'+t.code]={...state.codes[t.code],active:false,revision};}
+  if(body['tickets/'+target])op.ticketSnapshot=structuredClone(body['tickets/'+target]);
   return body;
 }
 export function applyModel(state,body){for(const[path,value]of Object.entries(body)){const parts=path.split('/'),last=parts.pop();let at=state;for(const key of parts)at=at[key]??=( {} );at[last]=structuredClone(value);}return state;}

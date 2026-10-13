@@ -31,6 +31,10 @@ const transitionBase = [
   `${v(op, 'sourceControlRevision')} === ${base}.child('control/revision').val()`,
   `${v(op, 'humanUid')} === ${base}.child('devices').child(auth.uid).child('humanUid').val()`,
   `${v(op, 'target')}.matches(/^[A-Za-z0-9_-]{1,64}$/)`,
+  `${v(op,'committedAt')} === now`,
+  `${v(op,'previousSeat')} === (${currentPerson}.exists() ? ${v(currentPerson,'seatId')} : 'none')`,
+  `${v(op,'previousCredential')} === (${before}.exists() ? ${v(before,'credentialRef')} : '')`,
+  `${v(op,'previousCode')} === (${before}.exists() ? ${v(before,'code')} : '')`,
   `(${registering} || ${closing} || ${returning}) ? ${v(nextPerson,'revision')} === ${v('newData','commit/revision')} : true`,
 ];
 const seat = `${currentPerson}.child('seatId').val()`;
@@ -52,6 +56,7 @@ const ticketChange = [
   `${v(after, 'everSent')} === (((${freshCycle}) ? false : ${v(before, 'everSent')} === true) || ${v(after, 'sent')} === true)`,
   `(${qr}) ? (${v(after, 'credentialRef')} === ${v(op, 'newCredential')} && ${v(after, 'code')} === ${v(op, 'newCode')} && ${v(after, 'credentialVersion')} === (${kind('qrReissue')} ? ${v(before, 'credentialVersion')}+1 : 1) && (${kind('qrCreate')} ? ((${freshCycle}) || ${v(before, 'credentialRef')} === '') : (!(${freshCycle}) && (${oldQr}) && ${base}.child('control/state').val() === 'stopped' && ${v(op, 'stopConfirmed')} === true && ${v(op, 'confirmedPrimary')} === true))) : (${v(after, 'credentialRef')} === ((${freshCycle}) ? '' : ${v(before, 'credentialRef')}) && ${v(after, 'code')} === ((${freshCycle}) ? '' : ${v(before, 'code')}) && ${v(after, 'credentialVersion')} === ((${freshCycle}) ? 0 : ${v(before, 'credentialVersion')}))`,
   `!(${qr}) || (${v(after, 'issued')} === ((${freshCycle}) ? false : ${v(before, 'issued')}) && ${v(after, 'sent')} === ((${freshCycle}) ? false : ${v(before, 'sent')}))`,
+  `${kind('ticketCheck')} ? (${v(after,'issued')} === ${v(op,'issued')} && ${v(after,'sent')} === ${v(op,'sent')}) : true`,
 ];
 const branches = [
   `(${registering} && !${currentPerson}.exists() && !${profile('data')}.exists() && ${v(nextPerson, 'active')} === true && ${v(nextPerson, 'seatId')} === 'none' && ${v(profile('newData'), 'paid')} === false && ${profile('newData')}.exists())`,
@@ -68,6 +73,12 @@ export function addLifecycle(rules) {
   const unissued=`${oldTicket}.child('everIssued').val() === false`;
   if(!event['.validate'].includes(unissued))throw new Error('legacy-protection-expression-changed');
   event['.validate'] = event['.validate'].replace(unissued,`(!${oldTicket}.exists() || ${oldTicket}.child('cycleClosed').val() === true || ${unissued})`);
+  for(const side of ['A','B']){
+    const id=v(op,'seat'+side),value=`(${id} === 'none' ? 'none' : data.child('seats').child(${id}).child('personId').val())`;
+    const sparse=`(${id} === 'none' || !data.child('seats').child(${id}).exists() ? 'none' : data.child('seats').child(${id}).child('personId').val())`;
+    if(!event['.validate'].includes(value))throw new Error('legacy-seat-expression-changed');
+    event['.validate']=event['.validate'].replaceAll(value,sparse);
+  }
   const legacy = event['.validate'];
   const protection = `(${v(op, 'kind')} !== 'unassign' || !data.child('tickets').child(${v(op, 'beforeA')}).exists() || data.child('tickets').child(${v(op, 'beforeA')}).child('cycleClosed').val() === true || data.child('tickets').child(${v(op, 'beforeA')}).child('credentialRef').val() === '')`;
   const lifeRoot = transitionBase.map(x => '(' + x + ')').join(' && ') + ' && (' + branches.join(' || ') + ')';
@@ -92,17 +103,26 @@ export function addLifecycle(rules) {
   const ticketFields = ['credentialRef','code','currentCycle','credentialVersion','cycleClosed','everIssued','everSent','issued','sent','issuedAt','sentAt','revision'];
   event.tickets.$person = {'.read': event.tickets.$person['.read'], '.write':`${commonWrite} && (${['qrCreate','qrReissue','ticketCheck','cancelAttendance'].map(k=>`${v(childOp,'kind')} === '${k}'`).join(' || ')})`,
     '.validate': ["newData.hasChildren("+JSON.stringify(ticketFields)+")", ...['credentialRef','code'].map(k=>`newData.child('${k}').isString()`), ...['currentCycle','credentialVersion','issuedAt','sentAt','revision'].map(k=>`newData.child('${k}').isNumber() && ${v('newData',k)} >= 0 && ${v('newData',k)} % 1 === 0`), ...['cycleClosed','everIssued','everSent','issued','sent'].map(k=>`newData.child('${k}').isBoolean()`), `${v('newData','revision')} === ${v(childRoot,'commit/revision')}`, ...['issued','sent'].map(k=>`${v('newData',k+'At')} === (${v('newData',k)} === false ? 0 : (${v('data',k)} === true && ${v('data','cycleClosed')} === false ? ${v('data',k+'At')} : now))`)].map(x=>'('+x+')').join(' && '), ...shape(ticketFields)};
-  const operationFields = ['kind','target','expectedRevision','resultRevision','sourceControlRevision','humanUid','confirmedPrimary','confirmedTicketWarning','stopConfirmed','paid','newCredential','newCode'];
+  const operationFields = ['kind','target','expectedRevision','resultRevision','sourceControlRevision','humanUid','confirmedPrimary','confirmedTicketWarning','stopConfirmed','paid','issued','sent','newCredential','newCode','previousCredential','previousCode','previousSeat','ticketSnapshot','committedAt'];
   const legacyOp = event.operations.$operation;
   const opRoot = 'newData.parent().parent()';
   const writeOp = `${editing} && !data.exists() && newData.exists() && $operation === ${v(opRoot,'commit/operationId')}`;
-  event.operations.$operation = {'.read':legacyOp['.read'], '.write':writeOp, '.validate':`(${isLife('newData')}) ? (newData.hasChildren(${JSON.stringify(operationFields)}) && ${['confirmedPrimary','confirmedTicketWarning','stopConfirmed','paid'].map(k=>`newData.child('${k}').isBoolean()`).join(' && ')} && newData.child('newCredential').isString() && newData.child('newCode').isString()) : newData.hasChildren(['kind','seatA','seatB','beforeA','beforeB','afterA','afterB','expectedRevision','resultRevision','humanUid'])`, ...shape([...operationFields,'seatA','seatB','beforeA','beforeB','afterA','afterB'])};
+  event.operations.$operation = {'.read':legacyOp['.read'], '.write':writeOp, '.validate':`(${isLife('newData')}) ? (newData.hasChildren(${JSON.stringify(operationFields)}) && ${['confirmedPrimary','confirmedTicketWarning','stopConfirmed','paid','issued','sent'].map(k=>`newData.child('${k}').isBoolean()`).join(' && ')} && newData.child('newCredential').isString() && newData.child('newCode').isString()) : newData.hasChildren(['kind','seatA','seatB','beforeA','beforeB','afterA','afterB','expectedRevision','resultRevision','humanUid'])`, ...shape([...operationFields,'seatA','seatB','beforeA','beforeB','afterA','afterB'])};
+  for(const field of ['seatA','seatB','beforeA','beforeB','afterA','afterB'])event.operations.$operation[field]={'.validate':`!(${isLife('newData.parent()')})`};
+  for(const field of operationFields.filter(k=>!['kind','expectedRevision','resultRevision','humanUid'].includes(k)))event.operations.$operation[field]={'.validate':`(${isLife('newData.parent()')})`};
+  event.operations.$operation.ticketSnapshot={'.validate':`newData.val() === 'none' || newData.hasChildren(${JSON.stringify(ticketFields)})`,...shape(ticketFields)};
+  for(const field of ['newCredential','previousCredential'])event.operations.$operation[field]={'.validate':`newData.isString() && newData.val().length <= 36 && (${isLife('newData.parent()')})`};
+  for(const field of ['newCode','previousCode'])event.operations.$operation[field]={'.validate':`newData.isString() && newData.val().length <= 8 && (${isLife('newData.parent()')})`};
+  const ticketOperation=`(${v(op,'kind')} === 'qrCreate' || ${v(op,'kind')} === 'qrReissue' || ${v(op,'kind')} === 'ticketCheck' || (${closing} && ${before}.exists()))`;
+  event['.validate']+=` && ((${isLife(op)}) ? (${ticketOperation} ? (${ticketFields.map(k=>`${v(after,k)} === ${v(op,'ticketSnapshot/'+k)}`).join(' && ')}) : ${v(op,'ticketSnapshot')} === 'none') : true)`;
   // 取消しが触れるのは対象者の旧席だけ。ほかの席・投影への便乗を拒否する。
   for (const collection of ['seats','view']) {
     const node = event[collection].$seat;
     node['.write'] = `(${node['.write']}) || (${editing} && newData.exists() && ${changed} && ${v(childOp,'kind')} === 'cancelAttendance' && $seat === ${oldRoot}.child('people').child(${v(childOp,'target')}).child('seatId').val())`;
   }
   addCredentialRules(event);
+  const initialize=`!data.exists() && ${base}.child('control/state').val() === 'preparing' && newData.child('commit/revision').val() === 1 && newData.child('commit/operationId').val() === 'initialize' && !newData.child('operations').exists()`;
+  event['.validate']=`(${initialize}) || (${event['.validate']})`;
   return rules;
 }
 
