@@ -1,10 +1,10 @@
 {
   "sourceHashes": {
     "model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
-    "business-rules.mjs": "0b5cc0164c856063dd61cf1077220dfbeed1b15d8c36b1510bb04461fc67cb2f",
+    "business-rules.mjs": "bf305afc097ca18fc3672e20494ef9a4eba169dd7e460e4f684c78d7f6283e4e",
     "delivery.mjs": "d6616ab4b85af9ea2f3f749c39effdf6e57cc4e1824aae8849b417f79d8b10f6",
     "generate.mjs": "1a3be7848a5aeefb0c5fe6557f41ae996a4e4b3a01ce3cb63e1c10d5edf55b8f",
-    "database.rules.json": "d4d02225a652a915e6083eed16e11fbf9c8b96c3612d59d5bea489eb0ecb3292",
+    "database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
     "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
@@ -13,10 +13,10 @@
   },
   "endSourceHashes": {
     "model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
-    "business-rules.mjs": "0b5cc0164c856063dd61cf1077220dfbeed1b15d8c36b1510bb04461fc67cb2f",
+    "business-rules.mjs": "bf305afc097ca18fc3672e20494ef9a4eba169dd7e460e4f684c78d7f6283e4e",
     "delivery.mjs": "d6616ab4b85af9ea2f3f749c39effdf6e57cc4e1824aae8849b417f79d8b10f6",
     "generate.mjs": "1a3be7848a5aeefb0c5fe6557f41ae996a4e4b3a01ce3cb63e1c10d5edf55b8f",
-    "database.rules.json": "d4d02225a652a915e6083eed16e11fbf9c8b96c3612d59d5bea489eb0ecb3292",
+    "database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
     "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
@@ -119,7 +119,7 @@
   ],
   "metrics": {
     "requests": 570,
-    "requestBodyBytes": 396284,
+    "requestBodyBytes": 402337,
     "responseBodyBytes": 188285,
     "ownerRequests": 109,
     "userRequests": 461
