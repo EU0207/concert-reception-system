@@ -1,23 +1,33 @@
 {
   "sourceHashes": {
     "auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
-    "generate.mjs": "bbf8add8a8ea23c2139a6042c9579165f062dd1ac4ad337aa4ab9d71515b5c0f",
-    "database.rules.json": "e5be03f23906a3beba338e3324c93b4677de51c74c1ebf388a867344ea6309db",
+    "generate.mjs": "8b33c24655a2fe088d19ac013cc9c8fed26c7be346e0fdbfc2a0fe17847b19dc",
+    "generation-rules.mjs": "5fa17358650c2528f5c10dcc62bb1d3416f171ddfe022d9193db3ece9bc7ca61",
+    "generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "capacity-tests.mjs": "b775f96770bfd643b4faddb2886f3a2b6692ea5d727e4acb00333dc12e4a4687",
+    "shared-rules.mjs": "11d7d6aea332c5ba6f2493fa569eed9b5ee8d85267f380aad7147f9ca13ad084",
+    "shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a",
+    "database.rules.json": "b993f8a0c442145b9a75eec3001b1571293e78f71f240c58f7996b168a8a224a",
     "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
     "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913",
-    "transport.mjs": "5a12d6ec5060304a1eb476798c44b1d9b0e94a75a8616eafe5ced91809fd9890",
+    "transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "authorization-tests.mjs": "f7084a77fa84f953f81ae7abb464a354432295e2aedd118e66f417d2c9c99544",
-    "local.mjs": "cb4d20b4dd6b1cacc0f0833fd945bde87e7f0579769bfb5b81b8f6a1510fb475"
+    "local.mjs": "2caae1910ae87ca3c36a82bdd8cf8ff4fb6a9ed6e92444dcc2110b3e9ae564c1"
   },
   "endSourceHashes": {
     "auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
-    "generate.mjs": "bbf8add8a8ea23c2139a6042c9579165f062dd1ac4ad337aa4ab9d71515b5c0f",
-    "database.rules.json": "e5be03f23906a3beba338e3324c93b4677de51c74c1ebf388a867344ea6309db",
+    "generate.mjs": "8b33c24655a2fe088d19ac013cc9c8fed26c7be346e0fdbfc2a0fe17847b19dc",
+    "generation-rules.mjs": "5fa17358650c2528f5c10dcc62bb1d3416f171ddfe022d9193db3ece9bc7ca61",
+    "generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "capacity-tests.mjs": "b775f96770bfd643b4faddb2886f3a2b6692ea5d727e4acb00333dc12e4a4687",
+    "shared-rules.mjs": "11d7d6aea332c5ba6f2493fa569eed9b5ee8d85267f380aad7147f9ca13ad084",
+    "shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a",
+    "database.rules.json": "b993f8a0c442145b9a75eec3001b1571293e78f71f240c58f7996b168a8a224a",
     "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
     "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913",
-    "transport.mjs": "5a12d6ec5060304a1eb476798c44b1d9b0e94a75a8616eafe5ced91809fd9890",
+    "transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "authorization-tests.mjs": "f7084a77fa84f953f81ae7abb464a354432295e2aedd118e66f417d2c9c99544",
-    "local.mjs": "cb4d20b4dd6b1cacc0f0833fd945bde87e7f0579769bfb5b81b8f6a1510fb475"
+    "local.mjs": "2caae1910ae87ca3c36a82bdd8cf8ff4fb6a9ed6e92444dcc2110b3e9ae564c1"
   },
   "reports": [
     {
@@ -102,14 +112,195 @@
       "id": "A-control",
       "receptionStopped": true,
       "closedEditingDenied": true
+    },
+    {
+      "id": "G-partial-and-duplicate",
+      "missingLocationsRejected": 6,
+      "duplicateIdsAndLabelsRejected": true
+    },
+    {
+      "id": "G-escaped-labels",
+      "distinctReservedForms": 8,
+      "duplicateSameLineRejected": true,
+      "otherLineAllowed": true
+    },
+    {
+      "id": "G-slot-and-schema-bounds",
+      "oversizedAndUnknownFieldsRejected": true,
+      "invalidKeyStatus": 400,
+      "controlInValueStatus": 401
+    },
+    {
+      "id": "G-roster-max-fields",
+      "maxName50AndTenFields200Accepted": true,
+      "partWidth4": true
+    },
+    {
+      "id": "G-publication-boundary",
+      "onlyReadyPublished": true,
+      "privateAndNoncurrentReadDenied": true,
+      "pastOperationRejected": true
+    },
+    {
+      "id": "G-pin-and-collection",
+      "currentAndReferencedProtected": true,
+      "republishDuringGCRejected": true,
+      "interruptedGCResumed": true,
+      "operationResultRetained": true
+    },
+    {
+      "id": "G-unpublished-collection",
+      "failedBuildingGenerationCollected": true
+    },
+    {
+      "id": "S-partial-and-isolation",
+      "partsRejected": 2,
+      "receptionHeadUnchanged": true,
+      "generalReadDenied": true
+    },
+    {
+      "id": "S-concurrent-and-resume",
+      "singleWinner": true,
+      "resultMatches": true,
+      "secondCommitNotSentDuringLookup": true,
+      "physicalPacketLoss": false
+    },
+    {
+      "id": "S-shared-retention",
+      "selectedDraftGenerationProtected": true
+    },
+    {
+      "id": "S-stale-base-and-old-id",
+      "staleBaseRejected": true,
+      "oldIdNotReused": true
+    },
+    {
+      "id": "C-600-2",
+      "people": 600,
+      "sections": 2,
+      "cells": 1200,
+      "layoutParts": 38,
+      "rosterParts": 150,
+      "maxLayoutPartBytes": 3745,
+      "maxRosterPartBytes": 25393,
+      "maxRequestBytes": 25904,
+      "headBytes": 95,
+      "storageBytes": 4064538,
+      "preparation": {
+        "requests": 195,
+        "requestBodyBytes": 4173706,
+        "responseBodyBytes": 4095701,
+        "ownerRequests": 0,
+        "userRequests": 195
+      },
+      "initialPlusTwoRestDownloadsForSixEnvironments": {
+        "requests": 726,
+        "requestBodyBytes": 0,
+        "responseBodyBytes": 2342280,
+        "ownerRequests": 0,
+        "userRequests": 726
+      },
+      "measuredBodiesOnly": true,
+      "sdkReconnectMeasured": false,
+      "fullBusinessBudgetVerified": false
+    },
+    {
+      "id": "C-600-16",
+      "people": 600,
+      "sections": 16,
+      "cells": 1200,
+      "layoutParts": 38,
+      "rosterParts": 150,
+      "maxLayoutPartBytes": 3821,
+      "maxRosterPartBytes": 25397,
+      "maxRequestBytes": 25918,
+      "headBytes": 96,
+      "storageBytes": 4074532,
+      "preparation": {
+        "requests": 209,
+        "requestBodyBytes": 4186310,
+        "responseBodyBytes": 4110663,
+        "ownerRequests": 0,
+        "userRequests": 209
+      },
+      "initialPlusTwoRestDownloadsForSixEnvironments": {
+        "requests": 726,
+        "requestBodyBytes": 0,
+        "responseBodyBytes": 2382816,
+        "ownerRequests": 0,
+        "userRequests": 726
+      },
+      "measuredBodiesOnly": true,
+      "sdkReconnectMeasured": false,
+      "fullBusinessBudgetVerified": false
+    },
+    {
+      "id": "C-1000-2",
+      "people": 1000,
+      "sections": 2,
+      "cells": 2000,
+      "layoutParts": 63,
+      "rosterParts": 250,
+      "maxLayoutPartBytes": 3809,
+      "maxRosterPartBytes": 25397,
+      "maxRequestBytes": 25918,
+      "headBytes": 96,
+      "storageBytes": 6784238,
+      "preparation": {
+        "requests": 320,
+        "requestBodyBytes": 6970809,
+        "responseBodyBytes": 6836503,
+        "ownerRequests": 0,
+        "userRequests": 320
+      },
+      "initialPlusTwoRestDownloadsForSixEnvironments": {
+        "requests": 1176,
+        "requestBodyBytes": 0,
+        "responseBodyBytes": 3969966,
+        "ownerRequests": 0,
+        "userRequests": 1176
+      },
+      "measuredBodiesOnly": true,
+      "sdkReconnectMeasured": false,
+      "fullBusinessBudgetVerified": false
+    },
+    {
+      "id": "C-1000-16",
+      "people": 1000,
+      "sections": 16,
+      "cells": 2000,
+      "layoutParts": 63,
+      "rosterParts": 250,
+      "maxLayoutPartBytes": 3885,
+      "maxRosterPartBytes": 25401,
+      "maxRequestBytes": 25932,
+      "headBytes": 97,
+      "storageBytes": 6797732,
+      "preparation": {
+        "requests": 334,
+        "requestBodyBytes": 6988913,
+        "responseBodyBytes": 6858468,
+        "ownerRequests": 0,
+        "userRequests": 334
+      },
+      "initialPlusTwoRestDownloadsForSixEnvironments": {
+        "requests": 1176,
+        "requestBodyBytes": 0,
+        "responseBodyBytes": 4037502,
+        "ownerRequests": 0,
+        "userRequests": 1176
+      },
+      "measuredBodiesOnly": true,
+      "sdkReconnectMeasured": false,
+      "fullBusinessBudgetVerified": false
     }
   ],
   "metrics": {
-    "requests": 113,
-    "requestBodyBytes": 69387,
-    "responseBodyBytes": 9456,
-    "ownerRequests": 43,
-    "userRequests": 70
+    "requests": 5130,
+    "requestBodyBytes": 22691237,
+    "responseBodyBytes": 56501578,
+    "ownerRequests": 104,
+    "userRequests": 5026
   },
   "cleanup": {
     "rulesClosed": true,
