@@ -1,0 +1,15 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+import {trial,request,owner,reports,metrics} from '../GD91-84/transport.mjs';
+import {authorizationTests} from '../GD91-84/authorization-tests.mjs';
+import {generationTests} from '../GD91-84/generation-tests.mjs';
+import {sharedTests} from '../GD91-84/shared-tests.mjs';
+import {capacityTests} from '../GD91-84/capacity-tests.mjs';
+const files=['generate.mjs','database.rules.json','deny.rules.json','firebase.json','local.mjs','business-rules.mjs','../GD91-84/auth-rules.mjs','../GD91-84/transport.mjs','../GD91-84/generation-rules.mjs','../GD91-84/generation-tests.mjs','../GD91-84/shared-rules.mjs','../GD91-84/shared-tests.mjs','../GD91-84/authorization-tests.mjs','../GD91-84/capacity-tests.mjs'];
+export const hashes=()=>Object.fromEntries(files.map(file=>[file,createHash('sha256').update(fs.readFileSync(new URL(file,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex')]));
+const before=hashes();let failure;const cleanup={rulesClosed:false,trialRootEmpty:false};
+async function rules(file){const r=await request('.settings/rules',{method:'PUT',token:'owner',body:JSON.parse(fs.readFileSync(new URL(file,import.meta.url),'utf8'))});assert.equal(r.status,200,JSON.stringify(r.body));}
+try{await rules('database.rules.json');const actors=await authorizationTests();await generationTests(actors);await sharedTests(actors);await capacityTests(actors);}
+catch(e){failure={code:e.code??'ASSERTION',message:e.message};console.error(e.stack);process.exitCode=1;}
+finally{await rules('deny.rules.json');cleanup.rulesClosed=JSON.stringify((await request('.settings/rules',{token:'owner'})).body)===JSON.stringify(JSON.parse(fs.readFileSync(new URL('deny.rules.json',import.meta.url),'utf8')));await owner(trial,'DELETE');cleanup.trialRootEmpty=(await owner(trial))===null;}
+const report={sourceHashes:before,endSourceHashes:hashes(),reports,metrics,cleanup,...(failure?{failure}:{}),externalFirebaseConnected:false,productionAuthorizationVerified:false,productionFreeTierVerified:false,tested3000:false};assert.deepEqual(report.sourceHashes,report.endSourceHashes);
+fs.writeFileSync(new URL('artifacts/local-summary.json',import.meta.url),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({groups:reports.length,failure:failure??null,cleanup}));process.exit(process.exitCode??0);
