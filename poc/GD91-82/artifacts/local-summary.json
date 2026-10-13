@@ -1,0 +1,480 @@
+{
+  "sourceHashes": {
+    "local.mjs": "910cc29227faf37ae6439de44647a15c3422373798fdae537b5a9828cf7ca108",
+    "test-cases.mjs": "22baeae5fa279b08f3105f7cda182e8359c4d2dc30cd87034b67c3da122a4361",
+    "database.rules.json": "eae027ddcbbedaa9cc9f878d18fbf39918492e5bb6cfdb7baff2b435b215ca66",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "generate.mjs": "15a655b863fdb58b3c2b002b2dcccd01a2751c0f7ce62901d44cffd6d23f6bc6",
+    "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913"
+  },
+  "endSourceHashes": {
+    "local.mjs": "910cc29227faf37ae6439de44647a15c3422373798fdae537b5a9828cf7ca108",
+    "test-cases.mjs": "22baeae5fa279b08f3105f7cda182e8359c4d2dc30cd87034b67c3da122a4361",
+    "database.rules.json": "eae027ddcbbedaa9cc9f878d18fbf39918492e5bb6cfdb7baff2b435b215ca66",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "generate.mjs": "15a655b863fdb58b3c2b002b2dcccd01a2751c0f7ce62901d44cffd6d23f6bc6",
+    "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913"
+  },
+  "reports": [
+    {
+      "kind": "role",
+      "before": [
+        {
+          "method": "collection",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "node",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "query",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "shallow",
+          "httpStatus": 200,
+          "records": 1
+        }
+      ],
+      "modifierBefore": [
+        {
+          "variant": 0,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 1,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 2,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 3,
+          "httpStatus": 200,
+          "records": 1
+        }
+      ],
+      "current": [
+        {
+          "method": "collection",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "node",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "query",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "shallow",
+          "httpStatus": 401,
+          "records": 0
+        }
+      ],
+      "modifiers": [
+        {
+          "variant": 0,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 1,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 2,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 3,
+          "httpStatus": 401,
+          "records": 0
+        }
+      ],
+      "selfRestoreStatus": 401,
+      "stoppedWithoutEvent": true,
+      "observationMs": 10000,
+      "sdkAfterStop": {
+        "records": 1,
+        "error": "PERMISSION_DENIED",
+        "notifications": 1
+      },
+      "restStreamAfterStop": {
+        "records": 1,
+        "error": "cancel",
+        "notifications": 1
+      },
+      "freshSdkError": "request-failed",
+      "otherActivePrincipal": {
+        "httpStatus": 200,
+        "records": 2
+      },
+      "otherPrincipalUsesDifferentPerformance": false,
+      "humanIdentityVerified": false,
+      "sessionIssuanceVerified": false
+    },
+    {
+      "kind": "device",
+      "before": [
+        {
+          "method": "collection",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "node",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "query",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "shallow",
+          "httpStatus": 200,
+          "records": 1
+        }
+      ],
+      "modifierBefore": [
+        {
+          "variant": 0,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 1,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 2,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 3,
+          "httpStatus": 200,
+          "records": 1
+        }
+      ],
+      "current": [
+        {
+          "method": "collection",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "node",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "query",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "shallow",
+          "httpStatus": 401,
+          "records": 0
+        }
+      ],
+      "modifiers": [
+        {
+          "variant": 0,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 1,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 2,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 3,
+          "httpStatus": 401,
+          "records": 0
+        }
+      ],
+      "selfRestoreStatus": 401,
+      "stoppedWithoutEvent": true,
+      "observationMs": 10000,
+      "sdkAfterStop": {
+        "records": 1,
+        "error": "PERMISSION_DENIED",
+        "notifications": 1
+      },
+      "restStreamAfterStop": {
+        "records": 1,
+        "error": "cancel",
+        "notifications": 1
+      },
+      "freshSdkError": "request-failed",
+      "otherActivePrincipal": {
+        "httpStatus": 200,
+        "records": 2
+      },
+      "otherPrincipalUsesDifferentPerformance": false,
+      "humanIdentityVerified": false,
+      "sessionIssuanceVerified": false
+    },
+    {
+      "kind": "session",
+      "before": [
+        {
+          "method": "collection",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "node",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "query",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "shallow",
+          "httpStatus": 200,
+          "records": 1
+        }
+      ],
+      "modifierBefore": [
+        {
+          "variant": 0,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 1,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 2,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 3,
+          "httpStatus": 200,
+          "records": 1
+        }
+      ],
+      "current": [
+        {
+          "method": "collection",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "node",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "query",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "shallow",
+          "httpStatus": 401,
+          "records": 0
+        }
+      ],
+      "modifiers": [
+        {
+          "variant": 0,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 1,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 2,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 3,
+          "httpStatus": 401,
+          "records": 0
+        }
+      ],
+      "selfRestoreStatus": 401,
+      "stoppedWithoutEvent": true,
+      "observationMs": 10000,
+      "sdkAfterStop": {
+        "records": 1,
+        "error": "PERMISSION_DENIED",
+        "notifications": 1
+      },
+      "restStreamAfterStop": {
+        "records": 1,
+        "error": "cancel",
+        "notifications": 1
+      },
+      "freshSdkError": "request-failed",
+      "otherActivePrincipal": {
+        "httpStatus": 200,
+        "records": 2
+      },
+      "otherPrincipalUsesDifferentPerformance": false,
+      "humanIdentityVerified": false,
+      "sessionIssuanceVerified": false
+    },
+    {
+      "kind": "control",
+      "before": [
+        {
+          "method": "collection",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "node",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "query",
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "method": "shallow",
+          "httpStatus": 200,
+          "records": 1
+        }
+      ],
+      "modifierBefore": [
+        {
+          "variant": 0,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 1,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 2,
+          "httpStatus": 200,
+          "records": 1
+        },
+        {
+          "variant": 3,
+          "httpStatus": 200,
+          "records": 1
+        }
+      ],
+      "current": [
+        {
+          "method": "collection",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "node",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "query",
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "method": "shallow",
+          "httpStatus": 401,
+          "records": 0
+        }
+      ],
+      "modifiers": [
+        {
+          "variant": 0,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 1,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 2,
+          "httpStatus": 401,
+          "records": 0
+        },
+        {
+          "variant": 3,
+          "httpStatus": 401,
+          "records": 0
+        }
+      ],
+      "selfRestoreStatus": 401,
+      "stoppedWithoutEvent": true,
+      "observationMs": 10000,
+      "sdkAfterStop": {
+        "records": 1,
+        "error": "PERMISSION_DENIED",
+        "notifications": 1
+      },
+      "restStreamAfterStop": {
+        "records": 1,
+        "error": "cancel",
+        "notifications": 1
+      },
+      "freshSdkError": "request-failed",
+      "otherActivePrincipal": {
+        "httpStatus": 200,
+        "records": 2
+      },
+      "otherPrincipalUsesDifferentPerformance": true,
+      "humanIdentityVerified": false,
+      "sessionIssuanceVerified": false
+    }
+  ],
+  "peakNodes": 27,
+  "sdkApplicationCalls": 12,
+  "historicalApiEquivalenceClaimed": false,
+  "fullApplicationAuthorizationVerified": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "rootsEmpty": true
+  },
+  "restRequests": 127,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
