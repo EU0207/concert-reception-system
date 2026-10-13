@@ -13,7 +13,7 @@ export async function owner(path,method='GET',body){assert(path===trial||path.st
 export const user=(path,actor,method='GET',body)=>request(trial+'/'+path,{method,body,token:actor.token});
 export const ok=r=>assert.equal(r.status,200,JSON.stringify(r.body));
 export const denied=r=>assert.equal(r.status,401,JSON.stringify(r.body));
-export async function check(id,fn){const result=await fn();reports.push({id,...result});console.log(JSON.stringify({case:id,passed:true}));}
+export async function check(id,fn){try{const result=await fn();reports.push({id,...result});console.log(JSON.stringify({case:id,passed:true}));}catch(e){e.message=id+': '+e.message;throw e;}}
 async function auth(path,body,ownerAuth=false){const r=await fetch('http://127.0.0.1:9191/identitytoolkit.googleapis.com/v1/'+path,{method:'POST',headers:{'content-type':'application/json',...(ownerAuth?{authorization:'Bearer owner'}:{})},body:JSON.stringify(body)});assert.equal(r.status,200);return r.json();}
 export async function actor(provider='anonymous',verified=true){
   let response;const fakeId=randomUUID(),email='fake-'+fakeId+'@example.com',password=randomUUID()+'A7!';
