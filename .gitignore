@@ -62,4 +62,7 @@ poc/POC-004/firebase-export/
 poc/POC-005/generated-assets/
 poc/POC-005/artifacts/raw/
 poc/POC-005/device-evidence/
+poc/GD91-80/.firebaserc
+poc/GD91-80/artifacts/raw/
+poc/GD91-80/profiles/
 *.netlog.json
