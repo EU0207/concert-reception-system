@@ -1,0 +1,75 @@
+{
+  "sourceHashes": {
+    "sdk.mjs": "422d09704c0cf117bdc36e37dd4ed34620d4818b73b6d106dea6510dc922f638",
+    "sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "sdk.mjs": "422d09704c0cf117bdc36e37dd4ed34620d4818b73b6d106dea6510dc922f638",
+    "sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "S01",
+      "normalSdkRegistration": true,
+      "replayWrites": 0,
+      "sameIdDifferentProfileRejected": true
+    },
+    {
+      "id": "S02",
+      "offlineWrites": 0,
+      "noAutomaticSend": true,
+      "sameIdDifferentPaymentBodyRejected": true
+    },
+    {
+      "id": "S03",
+      "qrUsesNormalSdk": true,
+      "sameIdChangedTicketBodyRejected": true
+    },
+    {
+      "id": "S04",
+      "serverTimestampResultMatches": true,
+      "changedCheckCommandRejected": true
+    },
+    {
+      "id": "S05",
+      "restResponseConnectionDroppedAfterCommit": true,
+      "sameIdLookupBeforeRetry": true,
+      "retryWrites": 0,
+      "sdkInternalNetworkLossInjected": false
+    },
+    {
+      "id": "S06",
+      "sameIdExtraWriteRejectedBeforeResend": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "realIndexedDbVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
