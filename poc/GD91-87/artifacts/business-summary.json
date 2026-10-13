@@ -1,0 +1,109 @@
+{
+  "sourceHashes": {
+    "business.mjs": "8d1c05eb8da4d05a04d80e0c9316a9516b26d62710455f04429f842f5bdbb7a4",
+    "receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "generate.mjs": "d49579ffa3cb11dec1bbc22b7c9bb44f25e9627b6e3e5e40ef235952411761ec",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/business-rules.mjs": "bf305afc097ca18fc3672e20494ef9a4eba169dd7e460e4f684c78d7f6283e4e",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-86/business.mjs": "e6fa02f2c647b3950cbe639c0835ac4205450b65d497f47cea276e9053dd7306",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "business.mjs": "8d1c05eb8da4d05a04d80e0c9316a9516b26d62710455f04429f842f5bdbb7a4",
+    "receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "generate.mjs": "d49579ffa3cb11dec1bbc22b7c9bb44f25e9627b6e3e5e40ef235952411761ec",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/business-rules.mjs": "bf305afc097ca18fc3672e20494ef9a4eba169dd7e460e4f684c78d7f6283e4e",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-86/business.mjs": "e6fa02f2c647b3950cbe639c0835ac4205450b65d497f47cea276e9053dd7306",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "B01",
+      "partialSubsetsRejected": 254,
+      "locations": 8
+    },
+    {
+      "id": "B02",
+      "swapCommitted": true,
+      "ticketsPreserved": true
+    },
+    {
+      "id": "B03",
+      "sameIdLookupMatches": true,
+      "doubleCommitRejected": true,
+      "changedPayloadSameIdRejected": true
+    },
+    {
+      "id": "B04",
+      "moveKeepsCredential": true
+    },
+    {
+      "id": "B05",
+      "unissuedAssignAndUnassign": true
+    },
+    {
+      "id": "B06",
+      "issuedSeatOnlyCancellationDenied": true
+    },
+    {
+      "id": "B07",
+      "tamperedPlansRejected": 8
+    },
+    {
+      "id": "B08",
+      "raceStatuses": [
+        200,
+        401
+      ],
+      "singleRevisionAdvance": true
+    },
+    {
+      "id": "B09",
+      "receptionGetsOnlyProjection": true,
+      "privatePathsDenied": 4
+    },
+    {
+      "id": "B10",
+      "revokedWriterDenied": true,
+      "otherContinues": true
+    },
+    {
+      "id": "B11",
+      "wholeEventPutDenied": true
+    },
+    {
+      "id": "B12",
+      "receptionCanReadMarker": true,
+      "mixedReadDetectedByRevision": true,
+      "reloadMatchesCommittedProjection": true
+    },
+    {
+      "id": "B13",
+      "forgedAuthorRejected": true
+    }
+  ],
+  "metrics": {
+    "requests": 865,
+    "requestBodyBytes": 495644,
+    "responseBodyBytes": 453033,
+    "ownerRequests": 567,
+    "userRequests": 298
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "fullBusinessRulesVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
