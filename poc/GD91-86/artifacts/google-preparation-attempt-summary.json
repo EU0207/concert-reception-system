@@ -60,5 +60,6 @@
   "externalFirebaseConnected": true,
   "productionAuthorizationVerified": false,
   "productionFreeTierVerified": false,
-  "tested3000": false
+  "tested3000": false,
+  "sourceRevision": "5b59dd49e7574c48b3be0a7721fae01d01705588"
 }

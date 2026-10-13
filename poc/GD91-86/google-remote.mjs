@@ -4,9 +4,12 @@ assert.equal(process.argv[2],'--continue-approved-google','explicit-approval-req
 const local=new URL('../GD91-80/firebase-client-config.local.json',import.meta.url);
 execFileSync('git',['check-ignore','-q',fileURLToPath(local)],{stdio:'pipe',windowsHide:true});assert.equal(execFileSync('git',['ls-files','--',fileURLToPath(local)],{encoding:'utf8',windowsHide:true}).trim(),'');
 const initialState=JSON.parse(fs.readFileSync(local,'utf8'));
-assert.equal(initialState.trial?.purpose,'GD91-86-google');assert.equal(initialState.trial.authorization,'TECH-DD91-085-A');
-assert.equal(initialState.trial.phase,'awaiting-google-configuration');assert.equal(initialState.trial.users.length,0);assert.equal(initialState.trial.applicationCalls,8);
-const priorCalls=initialState.trial.applicationCalls;
+assert(!initialState.trial,'unresolved-trial');assert(!fs.existsSync(new URL('artifacts/google-remote-summary.json',import.meta.url)),'trial-already-finished');
+const preparation=JSON.parse(fs.readFileSync(new URL('artifacts/google-preparation-attempt-summary.json',import.meta.url),'utf8'));
+assert.equal(preparation.applicationCalls,27);assert.equal(preparation.googleAccountUsed,false);assert.equal(preparation.anonymousDevices,0);
+for(const k of ['rulesClosed','rootsEmpty','authRestored','billingAccountUnlinked'])assert.equal(preparation.cleanup[k],true);assert.equal(preparation.cleanup.authUsersRemaining,0);
+const priorCalls=preparation.applicationCalls;
+initialState.trial={purpose:'GD91-86-google',authorization:'TECH-DD91-085-A',rtdbRoots:['checks/'+randomUUID()],users:[],applicationCalls:priorCalls,phase:'checking-google-configuration',previousGoogleEnabled:false,previousGoogleConfigExisted:false};
 // contextの所有者・無料状態と接続先の確認3件も、開始前に台帳へ確保する。
 initialState.trial.applicationCalls+=3;initialState.trial.phase='checking-google-configuration';fs.writeFileSync(local,JSON.stringify(initialState,null,2)+'\n');
 const {remoteContext}=await import('../GD91-82/remote-support.mjs');const c=await remoteContext(),s=c.state;
@@ -42,10 +45,13 @@ try{
   assert.deepEqual(await owner('.settings/rules'),deny);assert.equal(await owner(''),null);
   assert.equal(((await api('https://identitytoolkit.googleapis.com/v1/projects/'+s.projectId+'/accounts:batchGet?maxResults=10')).body.users??[]).length,0);
   const config=(await api(configUrl)).body,google=(await api(googleUrl)).body;
-  assert.equal(google.enabled,true,'google-provider-not-enabled');assert(config.authorizedDomains?.includes('localhost'),'localhost-not-authorized');
-  assert.deepEqual(config.authorizedDomains,s.trial.previousAuthorizedDomains);assert.equal(s.sdkConfig.authDomain,s.projectId+'.firebaseapp.com');
+  s.trial.previousAnonymous=config.signIn?.anonymous?.enabled??false;s.trial.previousAuthorizedDomains=config.authorizedDomains??[];save();
+  assert.equal(google.enabled??false,false,'google-effective-setting-changed');assert(config.authorizedDomains?.includes('localhost'),'localhost-not-authorized');
+  // REST用設定にないauthDomainを、所有権確認済みのプロジェクトと許可済みドメインから補う。
+  const loginConfig={...s.sdkConfig,authDomain:s.projectId+'.firebaseapp.com'};assert(config.authorizedDomains.includes(loginConfig.authDomain),'expected-auth-domain-not-authorized');
+  await api(googleUrl+'?updateMask=enabled',{method:'PATCH',body:{enabled:true}});
   s.trial.phase='awaiting-google-login';save();
-  bridge=await startGoogleLogin(s.sdkConfig,{onBegin:async()=>{reserve();sdkCalls++;s.trial.phase='google-login-started';save();},onToken:lookup});
+  bridge=await startGoogleLogin(loginConfig,{onBegin:async()=>{reserve();sdkCalls++;s.trial.phase='google-login-started';save();},onToken:lookup});
   console.log(JSON.stringify({phase:'awaiting-google-login',url:bridge.url,applicationCalls:total(),maxApplicationCalls:400}));
   const deadline=new Promise((_,reject)=>{loginTimer=setTimeout(()=>reject(new Error('login-deadline')),1200000);});
   const human=await Promise.race([bridge.result,deadline]);clearTimeout(loginTimer);await bridge.close();bridge=null;
@@ -66,7 +72,7 @@ finally{
   await clean('providers',async()=>{await api(configUrl+'?updateMask=signIn.anonymous.enabled',{method:'PATCH',body:{signIn:{anonymous:{enabled:s.trial.previousAnonymous}}}});await api(googleUrl+'?updateMask=enabled',{method:'PATCH',body:{enabled:s.trial.previousGoogleEnabled}});const restored=(await api(configUrl)).body,google=(await api(googleUrl)).body;assert.equal(restored.signIn?.anonymous?.enabled??false,s.trial.previousAnonymous);assert.deepEqual(restored.authorizedDomains??[],s.trial.previousAuthorizedDomains);assert.equal(google.enabled??false,s.trial.previousGoogleEnabled);cleanup.authRestored=true;cleanup.authorizedDomainsUnchanged=true;cleanup.newGoogleConfigMetadataRetainedDisabled=!s.trial.previousGoogleConfigExisted&&!google.enabled;});
   await clean('billing',async()=>{const billing=(await api('https://cloudbilling.googleapis.com/v1/projects/'+s.projectId+'/billingInfo')).body;assert(!billing.billingEnabled&&!billing.billingAccountName);cleanup.billingAccountUnlinked=true;});
 }
-const report={decisionId:'TECH-DD91-085',developerApproved:true,sourceHashes:before,endSourceHashes:hashes(),...result,googleAccountUsed:googleUsed,realGoogleHumans:googleUsed?1:0,anonymousDevices:subjects.length,googleTokenVerifiedByAuthService:googleUsed,applicationCalls:total(),priorPreflightCalls:priorCalls,ownerAndManagementCalls:c.requests()+priorCalls,normalCalls,sdkApplicationCalls:sdkCalls,sdkInternalWireRequestsMeasured:false,cleanup,...(failure?{failure}:{}),externalFirebaseConnected:true,productionAuthorizationVerified:false,productionFreeTierVerified:false,tested3000:false};
+const report={decisionId:'TECH-DD91-085',developerApproved:true,sourceHashes:before,endSourceHashes:hashes(),...result,googleAccountUsed:googleUsed,realGoogleHumans:googleUsed?1:0,anonymousDevices:subjects.length,googleTokenVerifiedByAuthService:googleUsed,applicationCalls:total(),priorPreparationCalls:priorCalls,ownerAndManagementCalls:c.requests()+priorCalls,normalCalls,sdkApplicationCalls:sdkCalls,sdkInternalWireRequestsMeasured:false,cleanup,...(failure?{failure}:{}),externalFirebaseConnected:true,productionAuthorizationVerified:false,productionFreeTierVerified:false,tested3000:false};
 assert.deepEqual(report.sourceHashes,report.endSourceHashes);assert(report.applicationCalls<=400);
 fs.writeFileSync(new URL('artifacts/google-remote-summary.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
 if(cleanup.rulesClosed&&cleanup.rootsEmpty&&cleanup.authUsersRemaining===0&&cleanup.authRestored&&cleanup.billingAccountUnlinked){delete s.trial;c.save();}
