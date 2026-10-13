@@ -1,0 +1,100 @@
+{
+  "sourceHashes": {
+    "budget.mjs": "4235e39f1641e4426f94d12a6c2371092a00c7ac9e626e89ee260c8c17bde87a",
+    "artifacts/capacity-summary.json": "ff9fa7eebd7e2f931f99d87e7737dbe0b2c5ad198b8499a264951e5d34d1db7b",
+    "artifacts/receipt-regression-summary.json": "fc2c89c966d3195440eac409fccf87f1d46457289b049cbd756b996dde9ad437",
+    "artifacts/regression-summary.json": "3beac7a36d8aa91928bce958799712692ce0ae0d846c5258a9eb40dc8db47f49"
+  },
+  "endSourceHashes": {
+    "budget.mjs": "4235e39f1641e4426f94d12a6c2371092a00c7ac9e626e89ee260c8c17bde87a",
+    "artifacts/capacity-summary.json": "ff9fa7eebd7e2f931f99d87e7737dbe0b2c5ad198b8499a264951e5d34d1db7b",
+    "artifacts/receipt-regression-summary.json": "fc2c89c966d3195440eac409fccf87f1d46457289b049cbd756b996dde9ad437",
+    "artifacts/regression-summary.json": "3beac7a36d8aa91928bce958799712692ce0ae0d846c5258a9eb40dc8db47f49"
+  },
+  "reports": [
+    {
+      "people": 600,
+      "assumptions": {
+        "managementEnvironments": 1,
+        "receptionEnvironments": 6,
+        "receptionFullDownloadsIncludingReconnect": 3,
+        "preparedGenerationsRetained": 3,
+        "managementFullStateCopies": 3,
+        "rereads": 300,
+        "maxReasonUtf16Length": 500,
+        "jsonBytesPerReasonUnit": 6,
+        "safetyFactor": 2
+      },
+      "normalPreparationRequestsExcludingLayoutAndAuth": 2401,
+      "layoutNormalRequests": 34,
+      "normalDayReceptionRequests": 600,
+      "measuredNormalResponseBodyBytes": 6466306,
+      "measuredCurrentEventStorageBytes": 5570706,
+      "measuredReceiptStorageBytes": 314952,
+      "measuredMaximumGenerationStorageBytes": 4074532,
+      "projectedOneViewLeafDownloadBytes": 45092,
+      "sixEnvironmentViewLeafBodies": 811656,
+      "modeledSixEnvironmentReceiptBodies": 1651092,
+      "knownBodyDownloadBytes": 50196757,
+      "additionalRereadBodyUpperEstimateBytes": 6225546,
+      "knownBodyPlusRereadsWithSafetyFactorBytes": 112844606,
+      "knownStorageBytes": 18109254,
+      "knownStorageWithSafetyFactorBytes": 36218508,
+      "completeBusinessDownloadBytes": null,
+      "completeBusinessStorageBytes": null,
+      "freeTierEstablished": false
+    },
+    {
+      "people": 1000,
+      "assumptions": {
+        "managementEnvironments": 1,
+        "receptionEnvironments": 6,
+        "receptionFullDownloadsIncludingReconnect": 3,
+        "preparedGenerationsRetained": 3,
+        "managementFullStateCopies": 3,
+        "rereads": 500,
+        "maxReasonUtf16Length": 500,
+        "jsonBytesPerReasonUnit": 6,
+        "safetyFactor": 2
+      },
+      "normalPreparationRequestsExcludingLayoutAndAuth": 4001,
+      "layoutNormalRequests": 66,
+      "normalDayReceptionRequests": 1000,
+      "measuredNormalResponseBodyBytes": 10783107,
+      "measuredCurrentEventStorageBytes": 9289102,
+      "measuredReceiptStorageBytes": 524955,
+      "measuredMaximumGenerationStorageBytes": 6797732,
+      "projectedOneViewLeafDownloadBytes": 75890,
+      "sixEnvironmentViewLeafBodies": 1366020,
+      "modeledSixEnvironmentReceiptBodies": 2752698,
+      "knownBodyDownloadBytes": 83737731,
+      "additionalRereadBodyUpperEstimateBytes": 10376352,
+      "knownBodyPlusRereadsWithSafetyFactorBytes": 188228166,
+      "knownStorageBytes": 30207253,
+      "knownStorageWithSafetyFactorBytes": 60414506,
+      "completeBusinessDownloadBytes": null,
+      "completeBusinessStorageBytes": null,
+      "freeTierEstablished": false
+    }
+  ],
+  "comparisonCombinesSeparateMeasurements": true,
+  "publicLeafBodiesModeledNotMeasured": true,
+  "managementFullStateCopiesAreUpperModelNotWholeBranchGetPermission": true,
+  "unknownComponents": [
+    "一括配置・緊急編集と受付資格の配布",
+    "受付訂正・取消しと停止後到着",
+    "全端末停止・未受領キューと保持参照",
+    "SDK・HTTPとTLS、拒否と障害再送",
+    "長期保持と月内の他公演・他サービス"
+  ],
+  "officialQuotaReference": "https://firebase.google.com/docs/database/usage/billing",
+  "connectionQuotaReference": "https://firebase.google.com/docs/database/usage/limits",
+  "quotaCheckedOn": "2026-10-14",
+  "sparkStorageGB": 1,
+  "sparkMonthlyDownloadGB": 10,
+  "sparkConcurrentConnections": 100,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "guaranteeAbove1000": false,
+  "tested3000": false
+}
