@@ -13,15 +13,19 @@ const configUrl='https://identitytoolkit.googleapis.com/admin/v2/projects/'+s.pr
 const originalRules=(await c.owner('.settings/rules')).body;assert.deepEqual(originalRules,JSON.parse(fs.readFileSync(new URL('deny.rules.json',import.meta.url),'utf8')));
 assert.equal((await c.owner('')).body,null,'database-not-empty');
 assert.equal(((await c.api('https://identitytoolkit.googleapis.com/v1/projects/'+s.projectId+'/accounts:batchGet?maxResults=10')).body.users??[]).length,0,'existing-auth-users');
-const beforeConfig=(await c.api(configUrl)).body;assert.equal(beforeConfig.signIn?.email?.enabled,true,'email-provider-required');
+const beforeConfig=(await c.api(configUrl)).body;
+const emailSettings=config=>({enabled:config.signIn?.email?.enabled??false,passwordRequired:config.signIn?.email?.passwordRequired??true});
+const previousEmail=emailSettings(beforeConfig);
 const previousAnonymous=beforeConfig.signIn?.anonymous?.enabled??false,root='checks/'+randomUUID();
-s.trial={purpose:scope.purpose,variant,rtdbRoots:[root],users:[],previousAnonymous};c.save();
+s.trial={purpose:scope.purpose,variant,rtdbRoots:[root],users:[],previousAnonymous,previousEmail};c.save();
 const files=['remote-expiry.mjs','revocation-cases.mjs','database.rules.json','deny.rules.json','generate.mjs','auth-rules.mjs','generation-rules.mjs','shared-rules.mjs','../GD91-82/remote-support.mjs','../GD91-80/remote-support.mjs'];
 const hash=x=>createHash('sha256').update(typeof x==='string'?x:JSON.stringify(x)).digest('hex');
 const hashes=()=>Object.fromEntries(files.map(file=>[file,hash(fs.readFileSync(new URL(file,import.meta.url),'utf8').replace(/\r\n/g,'\n'))]));
 const before=hashes(),apps=[],subjects=[],listeners=[],streams=[],cleanup={rulesClosed:false,rootsEmpty:false,usersDeleted:0,authRestored:false};
+// 最初の基準試行は認証方式の事前条件で停止した。変更前の7読取りも同じ上限へ算入する。
+const priorPreflightCalls=variant==='baseline'?7:0;
 let normalCalls=0,sdkCalls=0,result,error;
-const total=()=>c.requests()+normalCalls+sdkCalls,guard=()=>assert(total()<160,'reserve-40-cleanup-calls');
+const total=()=>priorPreflightCalls+c.requests()+normalCalls+sdkCalls,guard=()=>assert(total()<160,'reserve-40-cleanup-calls');
 async function normal(path,{method='GET',body,token,stream=false,signal}={}){
   guard();assert(path===root||path.startsWith(root+'/'));normalCalls++;
   const url=new URL(s.gd82DatabaseUrl+'/'+path+'.json');if(token)url.searchParams.set('auth',token);
@@ -53,7 +57,7 @@ const io={owner:async(p,method='GET',body)=>{guard();return(await c.owner(p?root
 const deployed=JSON.parse(fs.readFileSync(new URL('database.rules.json',import.meta.url),'utf8'));
 if(variant==='data-revision')deployed.rules.checks.$run.probes.general['.read']+=' && data.child(\'revision\').isNumber() && data.child(\'revision\').val() > 0';
 try{
-  await c.api(configUrl+'?updateMask=signIn.anonymous.enabled',{method:'PATCH',body:{signIn:{anonymous:{enabled:true}}}});
+  await c.api(configUrl+'?updateMask=signIn.email.enabled,signIn.email.passwordRequired,signIn.anonymous.enabled',{method:'PATCH',body:{signIn:{email:{enabled:true,passwordRequired:true},anonymous:{enabled:true}}}});
   await c.owner('.settings/rules','PUT',deployed);result=await runRevocations(io,{expiryWindowMs:scope.expiryWindowMs});assert.equal(result.subjectsCreated,s.trial.users.length);
 }catch(e){error={code:e.apiCode??e.code??'trial-failed',httpStatus:e.httpStatus??null};process.exitCode=1;}
 finally{
@@ -63,13 +67,13 @@ finally{
     await c.owner(root,'DELETE');assert.equal((await c.owner(root)).body,null);assert.equal((await c.owner('')).body,null);cleanup.rootsEmpty=true;
     for(const uid of s.trial.users){await c.api('https://identitytoolkit.googleapis.com/v1/projects/'+s.projectId+'/accounts:delete',{method:'POST',body:{localId:uid}});cleanup.usersDeleted++;}
     assert.equal(((await c.api('https://identitytoolkit.googleapis.com/v1/projects/'+s.projectId+'/accounts:batchGet?maxResults=10')).body.users??[]).length,0);cleanup.authUsersRemaining=0;
-    await c.api(configUrl+'?updateMask=signIn.anonymous.enabled',{method:'PATCH',body:{signIn:{anonymous:{enabled:previousAnonymous}}}});
-    const restored=(await c.api(configUrl)).body;assert.equal(restored.signIn?.anonymous?.enabled??false,previousAnonymous);assert.deepEqual(restored.signIn?.email,beforeConfig.signIn?.email);cleanup.authRestored=true;
+    await c.api(configUrl+'?updateMask=signIn.email.enabled,signIn.email.passwordRequired,signIn.anonymous.enabled',{method:'PATCH',body:{signIn:{email:previousEmail,anonymous:{enabled:previousAnonymous}}}});
+    const restored=(await c.api(configUrl)).body;assert.equal(restored.signIn?.anonymous?.enabled??false,previousAnonymous);assert.deepEqual(emailSettings(restored),previousEmail);cleanup.authRestored=true;
     const billing=(await c.api('https://cloudbilling.googleapis.com/v1/projects/'+s.projectId+'/billingInfo')).body;assert(!billing.billingEnabled&&!billing.billingAccountName);cleanup.billingAccountUnlinked=true;
     delete s.trial;c.save();
   }catch(e){cleanup.error={code:e.apiCode??e.code??'cleanup-failed',httpStatus:e.httpStatus??null};process.exitCode=1;}
 }
-const report={sourceHashes:before,endSourceHashes:hashes(),...result,ruleVariant:variant,deployedRulesHash:hash(deployed),applicationCalls:total(),ownerAndManagementCalls:c.requests(),normalCalls,sdkApplicationCalls:sdkCalls,
+const report={sourceHashes:before,endSourceHashes:hashes(),...result,ruleVariant:variant,deployedRulesHash:hash(deployed),applicationCalls:total(),priorPreflightCalls,ownerAndManagementCalls:c.requests()+priorPreflightCalls,normalCalls,sdkApplicationCalls:sdkCalls,
   sdkInternalWireRequestsMeasured:false,verificationMailFlowTested:false,cleanup,...(error?{error}:{}),externalFirebaseConnected:true,productionAuthorizationVerified:false,productionFreeTierVerified:false,tested3000:false};
 assert.deepEqual(report.sourceHashes,report.endSourceHashes);assert(report.applicationCalls<=200);fs.writeFileSync(new URL('artifacts/remote-expiry-'+variant+'-summary.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({variant,reports:report.reports?.length??0,applicationCalls:total(),cleanup,error:error??null}));process.exit(process.exitCode??0);
