@@ -1,0 +1,75 @@
+{
+  "sourceHashes": {
+    "remote-query.mjs": "3f25247959386d74c523752c5fe72df85f556e4e88b1fee3c70398ccf072064d",
+    "query-cases.mjs": "4e31cc4a0b3d6cf4d8ebea876f9befdc30283d927095836bd0cec0d097951330",
+    "receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "endSourceHashes": {
+    "remote-query.mjs": "3f25247959386d74c523752c5fe72df85f556e4e88b1fee3c70398ccf072064d",
+    "query-cases.mjs": "4e31cc4a0b3d6cf4d8ebea876f9befdc30283d927095836bd0cec0d097951330",
+    "receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "reports": [
+    {
+      "kind": "session-expiry",
+      "freshQueryRejected": true,
+      "validDeviceReceivesNewEvent": true,
+      "expiredChildNewEvents": 0,
+      "expiredValueNewEvents": 0,
+      "restStreamNewEvents": 0,
+      "restStreamCancelled": true,
+      "sdkChildCancellationObserved": false,
+      "sdkValueCancellationObserved": false,
+      "sameOperationLookupMatches": true,
+      "roleAndSessionExpiryCoincide": false,
+      "clockOnlyDisconnectClaimed": false
+    },
+    {
+      "kind": "role-and-session-expiry",
+      "freshQueryRejected": true,
+      "validDeviceReceivesNewEvent": true,
+      "expiredChildNewEvents": 0,
+      "expiredValueNewEvents": 0,
+      "restStreamNewEvents": 0,
+      "restStreamCancelled": true,
+      "sdkChildCancellationObserved": false,
+      "sdkValueCancellationObserved": false,
+      "sameOperationLookupMatches": true,
+      "roleAndSessionExpiryCoincide": true,
+      "clockOnlyDisconnectClaimed": false
+    }
+  ],
+  "maxJsonNodes": 95,
+  "expiryWindowMs": 10000,
+  "filteredQuery": true,
+  "decisionId": "TECH-DD91-086",
+  "applicationCalls": 65,
+  "ownerAndManagementCalls": 37,
+  "normalCalls": 20,
+  "sdkApplicationCalls": 8,
+  "authUsersCreated": 4,
+  "realPersonalProfileUsed": false,
+  "googleAccountUsed": false,
+  "sdkInternalWireRequestsMeasured": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "rootsEmpty": true,
+    "usersDeleted": 4,
+    "authRestored": true,
+    "authUsersRemaining": 0,
+    "billingAccountUnlinked": true
+  },
+  "externalFirebaseConnected": true,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

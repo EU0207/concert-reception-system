@@ -1,0 +1,81 @@
+{
+  "sourceHashes": {
+    "budget.mjs": "6e58871132f0124470f614c0ddc0210a2bfbc91b8fe52111eca128054e3ca7a4",
+    "artifacts/receipt-summary.json": "6e700f6c573afb6ef33e80598c9b9aaae3a1340be8c9fa54a1b1839c47b78e37",
+    "artifacts/regression-summary.json": "afa58de8906aede932bbe40227716b5e68d652fb5461062514e8b3bc2d48491f",
+    "../GD91-86/artifacts/capacity-summary.json": "59d1e202a986f8c3e6cac818413dcf8538e674bd08cf1cbec9b24e11ca50b479"
+  },
+  "endSourceHashes": {
+    "budget.mjs": "6e58871132f0124470f614c0ddc0210a2bfbc91b8fe52111eca128054e3ca7a4",
+    "artifacts/receipt-summary.json": "6e700f6c573afb6ef33e80598c9b9aaae3a1340be8c9fa54a1b1839c47b78e37",
+    "artifacts/regression-summary.json": "afa58de8906aede932bbe40227716b5e68d652fb5461062514e8b3bc2d48491f",
+    "../GD91-86/artifacts/capacity-summary.json": "59d1e202a986f8c3e6cac818413dcf8538e674bd08cf1cbec9b24e11ca50b479"
+  },
+  "reports": [
+    {
+      "people": 600,
+      "assumptions": {
+        "managementEnvironments": 1,
+        "receptionEnvironments": 6,
+        "receptionFullDownloadsIncludingReconnect": 3,
+        "preparedGenerationsRetained": 3,
+        "emergencyChanges": 60,
+        "rereads": 300,
+        "safetyFactor": 2
+      },
+      "measuredLayoutAndRosterStorageBytes": 4074532,
+      "measuredReceiptStorageBytes": 272057,
+      "measuredReceiptDeliveredEventBodiesBytes": 1388652,
+      "knownBodyDownloadBytes": 29036697,
+      "knownStorageBytes": 12807248,
+      "additionalRereadBodyUpperEstimateBytes": 4294326,
+      "knownBodyPlusRereadsWithSafetyFactorBytes": 66662046,
+      "knownStorageWithSafetyFactorBytes": 25614496,
+      "completeBusinessDownloadBytes": null,
+      "completeBusinessStorageBytes": null,
+      "freeTierEstablished": false
+    },
+    {
+      "people": 1000,
+      "assumptions": {
+        "managementEnvironments": 1,
+        "receptionEnvironments": 6,
+        "receptionFullDownloadsIncludingReconnect": 3,
+        "preparedGenerationsRetained": 3,
+        "emergencyChanges": 100,
+        "rereads": 500,
+        "safetyFactor": 2
+      },
+      "measuredLayoutAndRosterStorageBytes": 6797732,
+      "measuredReceiptStorageBytes": 453257,
+      "measuredReceiptDeliveredEventBodiesBytes": 2317452,
+      "knownBodyDownloadBytes": 48508470,
+      "knownStorageBytes": 21366858,
+      "additionalRereadBodyUpperEstimateBytes": 7158726,
+      "knownBodyPlusRereadsWithSafetyFactorBytes": 111334392,
+      "knownStorageWithSafetyFactorBytes": 42733716,
+      "completeBusinessDownloadBytes": null,
+      "completeBusinessStorageBytes": null,
+      "freeTierEstablished": false
+    }
+  ],
+  "officialQuotaReference": "https://firebase.google.com/docs/database/usage/billing",
+  "connectionQuotaReference": "https://firebase.google.com/docs/database/usage/limits",
+  "quotaCheckedOn": "2026-10-14",
+  "sparkStorageGB": 1,
+  "sparkMonthlyDownloadGB": 10,
+  "sparkConcurrentConnections": 100,
+  "configuredSdkDatabaseConnections": 6,
+  "measuredAppEventBodiesOnly": true,
+  "unknownComponents": [
+    "通常登録・発券と全席一括確定の一体化",
+    "受付訂正・取消しと停止後到着",
+    "SDK・HTTPとTLSの実通信、拒否と障害再送",
+    "全件受領・端末喪失の参照解決と長期保持",
+    "月内の他公演と他のFirebaseサービス"
+  ],
+  "productionFreeTierVerified": false,
+  "guaranteeAbove1000": false,
+  "externalFirebaseConnected": false,
+  "tested3000": false
+}
