@@ -1,0 +1,136 @@
+{
+  "sourceHashes": {
+    "model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "business-rules.mjs": "0b5cc0164c856063dd61cf1077220dfbeed1b15d8c36b1510bb04461fc67cb2f",
+    "delivery.mjs": "d6616ab4b85af9ea2f3f749c39effdf6e57cc4e1824aae8849b417f79d8b10f6",
+    "generate.mjs": "1a3be7848a5aeefb0c5fe6557f41ae996a4e4b3a01ce3cb63e1c10d5edf55b8f",
+    "database.rules.json": "d4d02225a652a915e6083eed16e11fbf9c8b96c3612d59d5bea489eb0ecb3292",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a",
+    "../GD91-84/revocation-cases.mjs": "137918af02b0de6ae7d79d870d26666921db4b0a9279002af29c111b1c2ba180"
+  },
+  "endSourceHashes": {
+    "model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "business-rules.mjs": "0b5cc0164c856063dd61cf1077220dfbeed1b15d8c36b1510bb04461fc67cb2f",
+    "delivery.mjs": "d6616ab4b85af9ea2f3f749c39effdf6e57cc4e1824aae8849b417f79d8b10f6",
+    "generate.mjs": "1a3be7848a5aeefb0c5fe6557f41ae996a4e4b3a01ce3cb63e1c10d5edf55b8f",
+    "database.rules.json": "d4d02225a652a915e6083eed16e11fbf9c8b96c3612d59d5bea489eb0ecb3292",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a",
+    "../GD91-84/revocation-cases.mjs": "137918af02b0de6ae7d79d870d26666921db4b0a9279002af29c111b1c2ba180"
+  },
+  "paths": [
+    "head",
+    "head/generation",
+    "control",
+    "control/revision",
+    "sharedHead",
+    "sharedHead/generation",
+    "references/base",
+    "references/base/active",
+    "generations/new/meta",
+    "generations/new/meta/cursor",
+    "generations/new/parts/p0",
+    "generations/new/parts/p0/slots/s00/label",
+    "generations/new/sections/sec0",
+    "generations/new/sections/sec0/name",
+    "generations/roster-new/parts/p0",
+    "generations/roster-new/parts/p0/slots/s00/name",
+    "operations/future",
+    "operations/future/resultRevision",
+    "sharedOperations/future",
+    "sharedOperations/future/resultRevision",
+    "event/commit",
+    "event/commit/revision",
+    "event/seats/cell-0",
+    "event/seats/cell-0/personId",
+    "event/people/a",
+    "event/people/a/seatId",
+    "event/view/cell-0",
+    "event/view/cell-0/personId",
+    "event/operations/future",
+    "event/operations/future/resultRevision"
+  ],
+  "reports": [
+    {
+      "kind": "role",
+      "paths": 30,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 30,
+      "sdkNewDataRejected": 30,
+      "restStreamNewDataRejected": 30,
+      "otherValidSubscriberContinues": 30,
+      "roleAndSessionExpiryCoincide": false,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "device",
+      "paths": 30,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 30,
+      "sdkNewDataRejected": 30,
+      "restStreamNewDataRejected": 30,
+      "otherValidSubscriberContinues": 30,
+      "roleAndSessionExpiryCoincide": false,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "session",
+      "paths": 30,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 30,
+      "sdkNewDataRejected": 30,
+      "restStreamNewDataRejected": 30,
+      "otherValidSubscriberContinues": 30,
+      "roleAndSessionExpiryCoincide": false,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "session-expiry",
+      "paths": 30,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 30,
+      "sdkNewDataRejected": 30,
+      "restStreamNewDataRejected": 30,
+      "otherValidSubscriberContinues": 30,
+      "roleAndSessionExpiryCoincide": false,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "role-expiry",
+      "paths": 30,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 30,
+      "sdkNewDataRejected": 30,
+      "restStreamNewDataRejected": 30,
+      "otherValidSubscriberContinues": 30,
+      "roleAndSessionExpiryCoincide": true,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "write-boundaries",
+      "revisionOmissionAndImmutableMutationRejected": 10,
+      "legacyEntrypointsDenied": 3
+    }
+  ],
+  "metrics": {
+    "requests": 570,
+    "requestBodyBytes": 396284,
+    "responseBodyBytes": 188285,
+    "ownerRequests": 109,
+    "userRequests": 461
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "wholeBusinessConnected": false,
+  "productionAuthorizationVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
