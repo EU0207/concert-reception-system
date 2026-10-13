@@ -1,0 +1,3 @@
+import assert from 'node:assert/strict';
+assert.equal(process.argv[2],'--plan','plan-only: external execution is not provided');
+console.log(JSON.stringify({decisionId:'TECH-DD91-085',externalRequestsExecuted:0,externalTrialCount:1,maxAuthUsers:3,realGoogleHumans:1,anonymousDevices:2,maxJsonNodes:500,maxApplicationCallsIncludingCleanup:400,cleanupCallReserve:50,conditions:['session-expiry','role-and-session-expiry'],logicalReadLocations:6,parentAndChildPaths:12,expiryWindowMs:10000,googleLoginByDeveloper:true,tokensKeptInMemory:true,accountProfileInGit:false,providerAndDomainEffectiveSettingsRestored:true,billingAccountRequired:false,productionAdoptionApproved:false,tested3000:false}));
