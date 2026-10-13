@@ -1,0 +1,170 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "722ebffd83b086e93dbcfe3ff25771a8ce826d7f17bedc46badd97ff2aeae512",
+    "model.mjs": "d151cb99f81242aaa93b3cb19900b8ac549e44d3701b6815bd2579d2d7bf261a",
+    "lifecycle-rules.mjs": "c1ee26473b9fd0cba4a48720532f3b2e24a8261f6339863e6cfa4f3c3d83e674",
+    "generate.mjs": "3e25d45fd6c73ded510c2ec9f9383ccd04989b662f262ff3d81d52eaf52cea5d",
+    "database.rules.json": "9effcf9487d49844728098bc266e6175c20d20315c4f422881a27b37b0965444",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-87/database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "722ebffd83b086e93dbcfe3ff25771a8ce826d7f17bedc46badd97ff2aeae512",
+    "model.mjs": "d151cb99f81242aaa93b3cb19900b8ac549e44d3701b6815bd2579d2d7bf261a",
+    "lifecycle-rules.mjs": "c1ee26473b9fd0cba4a48720532f3b2e24a8261f6339863e6cfa4f3c3d83e674",
+    "generate.mjs": "3e25d45fd6c73ded510c2ec9f9383ccd04989b662f262ff3d81d52eaf52cea5d",
+    "database.rules.json": "9effcf9487d49844728098bc266e6175c20d20315c4f422881a27b37b0965444",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-87/database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c"
+  },
+  "reports": [
+    {
+      "id": "L01",
+      "registrationLocations": 4,
+      "partialSubsetsRejected": 14,
+      "maxName50AndTenFields200": true,
+      "ticketNotCreated": true
+    },
+    {
+      "id": "L02",
+      "invalidRegistrationCases": 7
+    },
+    {
+      "id": "L03",
+      "paymentLocations": 3,
+      "partialSubsetsRejected": 6,
+      "seatAndTicketUnchanged": true
+    },
+    {
+      "id": "L04",
+      "unassignedAndAbsentQrDenied": true
+    },
+    {
+      "id": "L05",
+      "qrLocations": 5,
+      "partialSubsetsRejected": 30,
+      "unpaidAllowed": true,
+      "checksUnchanged": true
+    },
+    {
+      "id": "L06",
+      "generatedQrProtectsSeat": true,
+      "secondCreateRejected": true
+    },
+    {
+      "id": "L07",
+      "qrLessChecksSupported": true,
+      "uncheckingKeepsProtection": true
+    },
+    {
+      "id": "L08",
+      "moveAndSwapPreserveCredential": true
+    },
+    {
+      "id": "L09",
+      "reissueLocations": 7,
+      "partialSubsetsRejected": 126,
+      "versionAdvanced": true,
+      "oldCredentialRevoked": true,
+      "stopIsDeclarationNotDeviceProof": true
+    },
+    {
+      "id": "L10",
+      "missingReissueConfirmationAndStaleControlDenied": 3
+    },
+    {
+      "id": "L11",
+      "tamperedTicketTransitionsRejected": 5
+    },
+    {
+      "id": "L12",
+      "reservedCodeAndCredentialCollisionDenied": true
+    },
+    {
+      "id": "L13",
+      "cancellationLocations": 8,
+      "partialSubsetsRejected": 254,
+      "receptionPreserved": true,
+      "seatFreed": true
+    },
+    {
+      "id": "L14",
+      "qrLessCancellationLocations": 6,
+      "partialSubsetsRejected": 62,
+      "ticketHistoryRequiresWarning": true,
+      "stopNotRequiredWithoutQr": true
+    },
+    {
+      "id": "L15",
+      "unassignedNoTicketCancellationLocations": 3,
+      "partialSubsetsRejected": 6,
+      "noEmptyTicketCreated": true
+    },
+    {
+      "id": "L16",
+      "assignedNoTicketCancellationLocations": 5,
+      "partialSubsetsRejected": 30
+    },
+    {
+      "id": "L17",
+      "returnLocations": 3,
+      "partialSubsetsRejected": 6,
+      "returnDoesNotRestoreTicket": true,
+      "newCycleAfterReassignment": true
+    },
+    {
+      "id": "L18",
+      "raceStatuses": [
+        200,
+        401
+      ],
+      "oneCommitOnly": true
+    },
+    {
+      "id": "L19",
+      "sameOperationLookupMatches": true,
+      "replayDenied": true
+    },
+    {
+      "id": "L20",
+      "privatePathsDenied": 4,
+      "receptionCannotWrite": true,
+      "forgedAuthorDenied": true
+    },
+    {
+      "id": "L21",
+      "crossOperationPiggybackRejected": 2
+    },
+    {
+      "id": "L22",
+      "oldCredentialVersionDenied": true,
+      "currentAccepted": true
+    }
+  ],
+  "metrics": {
+    "requests": 2086,
+    "requestBodyBytes": 1136509,
+    "responseBodyBytes": 10810673,
+    "ownerRequests": 1424,
+    "userRequests": 662
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "fullBusinessRulesVerified": false,
+  "realStopAcknowledgementsVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
