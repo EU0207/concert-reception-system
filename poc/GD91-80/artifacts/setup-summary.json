@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "setupOnly": true,
+  "newDedicatedProject": true,
+  "externalVerificationExecuted": false,
+  "hostingDeployed": false,
+  "billingEnabledByThisRun": false,
+  "secretKeyIssued": false,
+  "cliInternalRequestsMeasured": false,
+  "setupState": "requires-attention",
+  "failedStage": "create-project",
+  "error": {
+    "code": "setup-failed",
+    "httpStatus": null,
+    "processStatus": 2
+  },
+  "projectCreationAcknowledged": false,
+  "managementRequests": 0,
+  "sourceHashes": {
+    "setup-project.mjs": "e3e90703a7fd0ac1c8d77fb3a5522a1df5976aabfc0b9808347df350c03a2c92"
+  }
+}
