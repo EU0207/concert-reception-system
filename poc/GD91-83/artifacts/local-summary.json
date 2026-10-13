@@ -1,0 +1,112 @@
+{
+  "sourceHashes": {
+    "generate.mjs": "ee79effef53c11f68433f239641e1ccf49e651653ddbbd30d5f0089ae98b11f1",
+    "database.rules.json": "87c120e2d02ff649eb7afd78f2887da0c26e37ae59aa445d761b7a18b1e9bf03",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913",
+    "local.mjs": "850ea2269687a1a4a31aad2fefd0dfcdb0ad32f48f76607cfdc499cc7f0be985"
+  },
+  "endSourceHashes": {
+    "generate.mjs": "ee79effef53c11f68433f239641e1ccf49e651653ddbbd30d5f0089ae98b11f1",
+    "database.rules.json": "87c120e2d02ff649eb7afd78f2887da0c26e37ae59aa445d761b7a18b1e9bf03",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913",
+    "local.mjs": "850ea2269687a1a4a31aad2fefd0dfcdb0ad32f48f76607cfdc499cc7f0be985"
+  },
+  "reports": [
+    {
+      "id": "P01",
+      "updateLocations": 8,
+      "partialSubsetsRejected": 254,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P02",
+      "crossFragmentSwapCommitted": true,
+      "revision": 2,
+      "credentialReferencesUnchanged": true
+    },
+    {
+      "id": "P03",
+      "resultFound": true,
+      "payloadMatches": true,
+      "secondCommitSent": false,
+      "physicalPacketLossSimulated": false
+    },
+    {
+      "id": "P04",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P05",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P06",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P07",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P08",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P09",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P10",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P11",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P12",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P13",
+      "statuses": [
+        200,
+        401
+      ],
+      "successfulCommits": 1
+    },
+    {
+      "id": "P14",
+      "status": 401,
+      "stateUnchanged": true
+    },
+    {
+      "id": "P15",
+      "otherAuthorizedSubjectContinues": true
+    },
+    {
+      "id": "P16",
+      "wholeEventPutDenied": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "restRequests": 559,
+  "externalFirebaseConnected": false,
+  "fullBusinessRulesVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
