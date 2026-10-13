@@ -1,0 +1,13 @@
+{
+  "rulesHash": "9effcf9487d49844728098bc266e6175c20d20315c4f422881a27b37b0965444",
+  "oldVersionOnlyRequestAccepted": true,
+  "oldAndNewCredentialVersionsEqual": true,
+  "currentCycleChanged": true,
+  "credentialIdChanged": true,
+  "productionAcceptanceClaimed": false,
+  "externalFirebaseConnected": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  }
+}
