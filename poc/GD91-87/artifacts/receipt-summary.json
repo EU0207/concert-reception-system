@@ -1,0 +1,161 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "4369425abe3c7a84765d83d0f5a738c2d75c2199d7cbd58c06f6e6a853ee2f9a",
+    "receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "generate.mjs": "d49579ffa3cb11dec1bbc22b7c9bb44f25e9627b6e3e5e40ef235952411761ec",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "4369425abe3c7a84765d83d0f5a738c2d75c2199d7cbd58c06f6e6a853ee2f9a",
+    "receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "generate.mjs": "d49579ffa3cb11dec1bbc22b7c9bb44f25e9627b6e3e5e40ef235952411761ec",
+    "database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "E01",
+      "partialSubsetsRejected": 14
+    },
+    {
+      "id": "E02",
+      "sameIdLookupMatches": true,
+      "replayAndIdReuseRejected": true
+    },
+    {
+      "id": "E03",
+      "invalidEventsRejected": 13
+    },
+    {
+      "id": "E04",
+      "otherDeviceStreamWriteDenied": true
+    },
+    {
+      "id": "E05",
+      "reasonedRereadAccepted": true,
+      "historyImmutable": true
+    },
+    {
+      "id": "E06",
+      "independentDevicesDoNotConflict": true,
+      "concurrentFirstReceiptsPreserved": true,
+      "seatRevisionUnchanged": true
+    },
+    {
+      "id": "E07",
+      "sameDeviceSequenceSingleWinner": true
+    },
+    {
+      "id": "E08",
+      "oldCredentialClosedCycleAndStoppedRejected": true
+    },
+    {
+      "id": "E09",
+      "seatSwapAndReceiptBothCommit": true
+    },
+    {
+      "id": "E10",
+      "journalFailureKeepsCursor": true,
+      "resubscribeRestoresMissingEvent": true,
+      "realIndexedDbTested": false
+    },
+    {
+      "id": "E11",
+      "expiredQueryReceivesNoNewEvent": true,
+      "otherValidQueryReceivesNewEvent": true,
+      "sdkCancellationCallbackObserved": false,
+      "clockOnlyDisconnectClaimed": false,
+      "observationAfterValidDeliveryMs": 1000
+    },
+    {
+      "id": "E-capacity-600",
+      "people": 600,
+      "normalWrites": 600,
+      "ownerWritesDuringReception": 0,
+      "sdkEnvironments": 6,
+      "sdkDatabaseConnections": 6,
+      "logicalStreamSubscriptions": 36,
+      "eventsPerEnvironment": [
+        600,
+        600,
+        600,
+        600,
+        600,
+        600
+      ],
+      "receivedEventBodiesBytes": [
+        231442,
+        231442,
+        231442,
+        231442,
+        231442,
+        231442
+      ],
+      "storageJsonBytes": 272057,
+      "maxRequestBytes": 595,
+      "elapsedMs": 22435,
+      "reconnectOldEvents": 0,
+      "measuredEventBodiesOnly": true,
+      "wholeBusinessBudgetVerified": false
+    },
+    {
+      "id": "E-capacity-1000",
+      "people": 1000,
+      "normalWrites": 1000,
+      "ownerWritesDuringReception": 0,
+      "sdkEnvironments": 6,
+      "sdkDatabaseConnections": 6,
+      "logicalStreamSubscriptions": 36,
+      "eventsPerEnvironment": [
+        1000,
+        1000,
+        1000,
+        1000,
+        1000,
+        1000
+      ],
+      "receivedEventBodiesBytes": [
+        386242,
+        386242,
+        386242,
+        386242,
+        386242,
+        386242
+      ],
+      "storageJsonBytes": 453257,
+      "maxRequestBytes": 595,
+      "elapsedMs": 38303,
+      "reconnectOldEvents": 0,
+      "measuredEventBodiesOnly": true,
+      "wholeBusinessBudgetVerified": false
+    }
+  ],
+  "metrics": {
+    "requests": 1789,
+    "requestBodyBytes": 1680820,
+    "responseBodyBytes": 2898859,
+    "ownerRequests": 126,
+    "userRequests": 1663
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "credentialsAndPeopleSeeded": true,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
