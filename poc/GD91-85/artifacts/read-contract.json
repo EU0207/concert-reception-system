@@ -1,0 +1,80 @@
+{
+  "protected": [
+    {
+      "path": "control",
+      "dependency": "data.child('revision').val() === null || (data.child('revision').isNumber() && data.child('revision').val() >= 1)",
+      "mutability": "versioned"
+    },
+    {
+      "path": "head",
+      "dependency": "data.child('revision').val() === null || (data.child('revision').isNumber() && data.child('revision').val() >= 1)",
+      "mutability": "versioned"
+    },
+    {
+      "path": "sharedHead",
+      "dependency": "data.child('revision').val() === null || (data.child('revision').isNumber() && data.child('revision').val() >= 1)",
+      "mutability": "versioned"
+    },
+    {
+      "path": "generations/$generation/meta",
+      "dependency": "data.child('revision').val() === null || (data.child('revision').isNumber() && data.child('revision').val() >= 1)",
+      "mutability": "versioned"
+    },
+    {
+      "path": "references/$ref",
+      "dependency": "data.child('active').val() === null || data.child('active').val() === true || data.child('active').val() === false",
+      "mutability": "one-way-release"
+    },
+    {
+      "path": "generations/$generation/parts/$part",
+      "dependency": "data.child('index').val() === null || (data.child('index').isNumber() && data.child('index').val() >= 0)",
+      "mutability": "immutable-part"
+    },
+    {
+      "path": "generations/$generation/sections/$section",
+      "dependency": "data.child('name').val() === null || (data.child('name').isString() && data.child('name').val().length >= 0)",
+      "mutability": "immutable-section"
+    },
+    {
+      "path": "operations/$op",
+      "dependency": "data.child('resultRevision').val() === null || (data.child('resultRevision').isNumber() && data.child('resultRevision').val() >= 1)",
+      "mutability": "immutable-result"
+    },
+    {
+      "path": "sharedOperations/$op",
+      "dependency": "data.child('resultRevision').val() === null || (data.child('resultRevision').isNumber() && data.child('resultRevision').val() >= 1)",
+      "mutability": "immutable-result"
+    },
+    {
+      "path": "probes/general",
+      "dependency": "data.val() === null || (data.isString() && data.val().length >= 0)",
+      "mutability": "diagnostic-scalar"
+    },
+    {
+      "path": "probes/management",
+      "dependency": "data.val() === null || (data.isString() && data.val().length >= 0)",
+      "mutability": "diagnostic-scalar"
+    },
+    {
+      "path": "probes/sensitive",
+      "dependency": "data.val() === null || (data.isString() && data.val().length >= 0)",
+      "mutability": "diagnostic-scalar"
+    },
+    {
+      "path": "probes/temporary",
+      "dependency": "data.val() === null || (data.isString() && data.val().length >= 0)",
+      "mutability": "diagnostic-scalar"
+    }
+  ],
+  "selfStatus": [
+    "roles/$human",
+    "devices/$uid",
+    "sessions/$uid"
+  ],
+  "disabled": [
+    "view",
+    "private",
+    "shared"
+  ],
+  "wholeBusinessConnected": false
+}
