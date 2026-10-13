@@ -1,0 +1,446 @@
+{
+  "sourceHashes": {
+    "probe.mjs": "c9ffcc62c599bddb4c1064007303bb68a4cbf4199cd892df925f7ca62b82e27a",
+    "candidates.rules": "e41ddd5b709521b49ae25e5c75ade9ab4ad583c3139e02b93897ba15e924600b",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1",
+    "../GD91-80/deny.rules": "ed1e7c11f025d9464e80e4c4584711c474a0c9b0e07802618de8d02dddadec87"
+  },
+  "endSourceHashes": {
+    "probe.mjs": "c9ffcc62c599bddb4c1064007303bb68a4cbf4199cd892df925f7ca62b82e27a",
+    "candidates.rules": "e41ddd5b709521b49ae25e5c75ade9ab4ad583c3139e02b93897ba15e924600b",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1",
+    "../GD91-80/deny.rules": "ed1e7c11f025d9464e80e4c4584711c474a0c9b0e07802618de8d02dddadec87"
+  },
+  "reports": [
+    {
+      "kind": "baseline",
+      "before": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 200,
+        "documents": 1
+      },
+      "otherActivePrincipal": {
+        "httpStatus": 200,
+        "documents": 2
+      },
+      "historicalAfterNew": {
+        "httpStatus": 200,
+        "documents": 1
+      },
+      "historicalReadBlocked": false
+    },
+    {
+      "kind": "after",
+      "before": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 200,
+        "documents": 1
+      },
+      "otherActivePrincipal": {
+        "httpStatus": 200,
+        "documents": 2
+      },
+      "historicalAfterNew": {
+        "httpStatus": 200,
+        "documents": 1
+      },
+      "historicalReadBlocked": false
+    },
+    {
+      "kind": "guard",
+      "before": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 200,
+        "documents": 1
+      },
+      "otherActivePrincipal": {
+        "httpStatus": 200,
+        "documents": 2
+      },
+      "historicalAfterNew": {
+        "httpStatus": 200,
+        "documents": 1
+      },
+      "historicalReadBlocked": false
+    },
+    {
+      "kind": "lease",
+      "before": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "historicalBefore": [
+        {
+          "method": "runQuery",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "get",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "list",
+          "httpStatus": 200,
+          "documents": 1
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 200,
+          "documents": 1
+        }
+      ],
+      "current": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0
+        }
+      ],
+      "historical": [
+        {
+          "method": "runQuery",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "get",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "list",
+          "httpStatus": 403,
+          "documents": 0
+        },
+        {
+          "method": "batchGet",
+          "httpStatus": 403,
+          "documents": 0
+        }
+      ],
+      "readOnlyTransaction": {
+        "httpStatus": 403,
+        "documents": 0
+      },
+      "otherActivePrincipal": {
+        "httpStatus": 200,
+        "documents": 2
+      },
+      "historicalAfterNew": {
+        "httpStatus": 403,
+        "documents": 0
+      },
+      "historicalReadBlocked": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "documentsDeleted": 16,
+    "usersDeleted": 2,
+    "authRestored": true
+  },
+  "managementAndOwnerRequests": 47,
+  "normalRequests": 84,
+  "sdkApplicationCalls": 2,
+  "applicationRequests": 133,
+  "sdkInternalWireRequestsMeasured": false,
+  "serverAuthorizationVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

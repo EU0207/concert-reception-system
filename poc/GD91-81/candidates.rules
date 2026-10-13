@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function grant(scope,kind) {
+      return get(/databases/$(database)/documents/diagnostic/$(scope)/access/$(kind + '-' + request.auth.uid)).data;
+    }
+    function grantAfter(scope,kind) {
+      return getAfter(/databases/$(database)/documents/diagnostic/$(scope)/access/$(kind + '-' + request.auth.uid)).data;
+    }
+    function current(scope,kind) { return request.auth != null && grant(scope,kind).active == true; }
+    match /diagnostic/{scope}/baseline/{id} { allow read: if current(scope,'baseline'); }
+    match /diagnostic/{scope}/after/{id} {
+      allow read: if request.auth != null && grantAfter(scope,'after').active == true;
+    }
+    match /diagnostic/{scope}/guard/{id} {
+      // 公開されているqueryプロパティによる検査の限界を比較する。getはqueryを持たない。
+      allow read: if current(scope,'guard') && (request.method == 'get'
+        || (request.query.get('readTime',null) == null
+          && request.query.get('transaction',null) == null
+          && request.query.get('newTransaction',null) == null));
+    }
+    match /diagnostic/{scope}/lease/{id} {
+      allow read: if current(scope,'lease') && request.time < grant(scope,'lease').expiresAt;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

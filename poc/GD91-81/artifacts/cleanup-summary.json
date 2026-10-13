@@ -1,0 +1,16 @@
+{
+  "readOnlyVerification": true,
+  "rulesClosed": true,
+  "emptyFixtureCollectionGroups": 5,
+  "authUsersRemaining": 0,
+  "authSettingsRestored": true,
+  "billingAccountUnlinked": true,
+  "requests": 11,
+  "combinedApplicationRequests": 144,
+  "sdkInternalWireRequestsMeasured": false,
+  "sourceHashes": {
+    "verify-cleanup.mjs": "7e5de2f400896b0e8f207499aa2552938ce2a230c1f6e2c373151e96271a2f0c",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1",
+    "../GD91-80/deny.rules": "ed1e7c11f025d9464e80e4c4584711c474a0c9b0e07802618de8d02dddadec87"
+  }
+}
