@@ -1,0 +1,19 @@
+{
+  "setupOnly": true,
+  "billingEnabled": false,
+  "billingAccountLinked": false,
+  "ownerVerified": true,
+  "hostingDeployed": false,
+  "secretKeyIssued": false,
+  "externalVerificationExecuted": false,
+  "databaseReady": true,
+  "location": "asia-northeast1",
+  "webConfigStoredOutsideGit": true,
+  "authReady": true,
+  "setupState": "ready-for-minimal-verification",
+  "managementRequests": 11,
+  "sourceHashes": {
+    "setup-services.mjs": "ae0ff3f53d5757972f28ee2a481ae0cb99cfc9f2f72dffc54bcb825f315ceccc",
+    "remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  }
+}

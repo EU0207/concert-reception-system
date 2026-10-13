@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "setupOnly": true,
+  "newDedicatedProject": true,
+  "externalVerificationExecuted": false,
+  "hostingDeployed": false,
+  "billingEnabledByThisRun": false,
+  "secretKeyIssued": false,
+  "cliInternalRequestsMeasured": false,
+  "ownerMatchesCurrentCliAccount": true,
+  "billingEnabled": false,
+  "billingAccountLinked": false,
+  "projectActive": true,
+  "setupState": "project-created-and-checked",
+  "managementRequests": 3,
+  "sourceHashes": {
+    "setup-project.mjs": "b1c0f9f13f78144ec373536f3fd91022fc1a9281dd94a12a3f95f9b8a6ca7ab7"
+  }
+}

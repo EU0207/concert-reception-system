@@ -1,0 +1,215 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "b970e4e1f8a23ae63fc06ff8e2ddcf5013e0e4949a76f5894360e36d99c37331",
+    "watch-client.mjs": "b28717a9a63a0b5afdb6814f6968d989da551cfe091dc10529f734daacc5eecf",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-77/receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "../GD91-77/node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "b970e4e1f8a23ae63fc06ff8e2ddcf5013e0e4949a76f5894360e36d99c37331",
+    "watch-client.mjs": "b28717a9a63a0b5afdb6814f6968d989da551cfe091dc10529f734daacc5eecf",
+    "../GD91-77/receipt-client.mjs": "4e392926215bcc9c8e218b2372d0fd66709c53b3d5a7f8fe9c48ed570c50386a",
+    "../GD91-77/receipt.rules": "57123674c29e14b5cb7cf8baa59c1d27e2b1efb4b14ba4c4d3807c9ccafdb5ea",
+    "../GD91-77/node_modules/.cache/firestore.rules": "f3c5bbc8280f258dfbbc40302f9d846eeb54e9cac76342a02975893f4fbe6011",
+    "../GD91-75/fixtures.mjs": "4810fbb2a0b622c954a7f964f9afc5d74f9302f1fa944da4dfbc9c106a3142f0",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-73/tests/support.mjs": "ed1b639fd377cd9463ed109ee8e15cd1027160f251b0cb0e55e27f3c8a12a551",
+    "../GD91-72/tests/support.mjs": "97fe25be3939ba8ef86d919e4ceae47e005b37aa5904621e6ee69370497bf59b",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2",
+    "../POC-001/node_modules/@firebase/firestore/dist/index.node.mjs": "05021e3aefdb843cdbbbeb885fe5502d04f09a31f3d732ccc58cb46bd5c3c4d0"
+  },
+  "reports": [
+    {
+      "id": "L-timestamp-precision",
+      "status": "passed",
+      "protobufCanonicalWidths": [
+        0,
+        3,
+        6,
+        9
+      ],
+      "nanosecondsPreserved": true
+    }
+  ],
+  "error": {
+    "message": "observation-timeout",
+    "code": "ERR_ASSERTION"
+  },
+  "clients": [
+    {
+      "state": {
+        "running": true,
+        "failure": null
+      },
+      "records": 588,
+      "stats": {
+        "starts": 4,
+        "stops": 3,
+        "serverSnapshots": 35,
+        "cacheSnapshots": 0,
+        "deliveredDocuments": 318,
+        "duplicates": 1777,
+        "windowExits": 2,
+        "saves": 34,
+        "rollovers": 3,
+        "applied": 39,
+        "maximumSnapshotSize": 100
+      },
+      "catchup": {
+        "queries": 9,
+        "documents": 572,
+        "emptyQueries": 1,
+        "duplicates": 302,
+        "savedPages": 8,
+        "watermarkSaves": 4
+      }
+    },
+    {
+      "state": {
+        "running": true,
+        "failure": null
+      },
+      "records": 591,
+      "stats": {
+        "starts": 4,
+        "stops": 3,
+        "serverSnapshots": 41,
+        "cacheSnapshots": 0,
+        "deliveredDocuments": 353,
+        "duplicates": 2022,
+        "windowExits": 0,
+        "saves": 40,
+        "rollovers": 3,
+        "applied": 45,
+        "maximumSnapshotSize": 100
+      },
+      "catchup": {
+        "queries": 8,
+        "documents": 538,
+        "emptyQueries": 1,
+        "duplicates": 300,
+        "savedPages": 7,
+        "watermarkSaves": 4
+      }
+    },
+    {
+      "state": {
+        "running": true,
+        "failure": null
+      },
+      "records": 590,
+      "stats": {
+        "starts": 5,
+        "stops": 4,
+        "serverSnapshots": 47,
+        "cacheSnapshots": 0,
+        "deliveredDocuments": 430,
+        "duplicates": 2730,
+        "windowExits": 2,
+        "saves": 46,
+        "rollovers": 4,
+        "applied": 52,
+        "maximumSnapshotSize": 100
+      },
+      "catchup": {
+        "queries": 9,
+        "documents": 562,
+        "emptyQueries": 1,
+        "duplicates": 402,
+        "savedPages": 8,
+        "watermarkSaves": 5
+      }
+    },
+    {
+      "state": {
+        "running": true,
+        "failure": null
+      },
+      "records": 596,
+      "stats": {
+        "starts": 5,
+        "stops": 4,
+        "serverSnapshots": 35,
+        "cacheSnapshots": 0,
+        "deliveredDocuments": 404,
+        "duplicates": 1816,
+        "windowExits": 2,
+        "saves": 34,
+        "rollovers": 4,
+        "applied": 40,
+        "maximumSnapshotSize": 100
+      },
+      "catchup": {
+        "queries": 9,
+        "documents": 594,
+        "emptyQueries": 1,
+        "duplicates": 402,
+        "savedPages": 8,
+        "watermarkSaves": 5
+      }
+    },
+    {
+      "state": {
+        "running": true,
+        "failure": null
+      },
+      "records": 594,
+      "stats": {
+        "starts": 4,
+        "stops": 3,
+        "serverSnapshots": 34,
+        "cacheSnapshots": 0,
+        "deliveredDocuments": 316,
+        "duplicates": 1701,
+        "windowExits": 0,
+        "saves": 33,
+        "rollovers": 3,
+        "applied": 38,
+        "maximumSnapshotSize": 100
+      },
+      "catchup": {
+        "queries": 9,
+        "documents": 578,
+        "emptyQueries": 1,
+        "duplicates": 300,
+        "savedPages": 8,
+        "watermarkSaves": 4
+      }
+    },
+    {
+      "state": {
+        "running": true,
+        "failure": null
+      },
+      "records": 591,
+      "stats": {
+        "starts": 4,
+        "stops": 3,
+        "serverSnapshots": 57,
+        "cacheSnapshots": 0,
+        "deliveredDocuments": 352,
+        "duplicates": 2959,
+        "windowExits": 2,
+        "saves": 56,
+        "rollovers": 3,
+        "applied": 61,
+        "maximumSnapshotSize": 100
+      },
+      "catchup": {
+        "queries": 7,
+        "documents": 541,
+        "emptyQueries": 1,
+        "duplicates": 302,
+        "savedPages": 6,
+        "watermarkSaves": 4
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "stoppedWithoutItemChange": false,
+  "observationMs": 10000,
+  "currentStatus": 403,
+  "historicalStatus": 200,
+  "historicalDocuments": 1,
+  "afterItemChange": {
+    "size": 1,
+    "error": "permission-denied"
+  },
+  "freshError": "permission-denied",
+  "permissionDependencies": 1,
+  "applicationSeatRulesUsed": false,
+  "productionReproduced": false,
+  "serverAuthorizationVerified": false,
+  "tested3000": false,
+  "sourceHashes": {
+    "minimal-authorization.mjs": "9c79ef129d9c96e76a0d3436f09c298c8868d08353715437f385d87f3c5cec76",
+    "minimal.rules": "33881467f03a91c2b3ad34582018aa4569ba349224d5d888d958515e91b17d5f",
+    "minimal.firebase.json": "1397b9ae597030cd986bd2612dcc58d1355e13257c3bb795e89888b257644b14",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2"
+  },
+  "endSourceHashes": {
+    "minimal-authorization.mjs": "9c79ef129d9c96e76a0d3436f09c298c8868d08353715437f385d87f3c5cec76",
+    "minimal.rules": "33881467f03a91c2b3ad34582018aa4569ba349224d5d888d958515e91b17d5f",
+    "minimal.firebase.json": "1397b9ae597030cd986bd2612dcc58d1355e13257c3bb795e89888b257644b14",
+    "../GD91-72/sdk-adapter.mjs": "3b34f4b34812ce06a570407687f847f161d14d8e46d5a917f6ab884b23890bfd",
+    "../GD91-60/tests/transport.mjs": "47c91e0ec05277982750c42cbd602b8dcb07e1dc400716c881a123fb1c8296d2"
+  }
+}

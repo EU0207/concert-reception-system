@@ -1,0 +1,60 @@
+{
+  "sourceHashes": {
+    "budget-estimate.mjs": "1ea8b367c7be55a024862de3e0916bd1d5bae9897ebcd74b8247644f2b47029d",
+    "artifacts/watch-summary.json": "766c2de241a305e64a2e1fcf23e9564ab0ff2ab80a2079e6ab9a432e4059b2ef"
+  },
+  "estimate": [
+    {
+      "people": 600,
+      "clients": 6,
+      "geometry": 156,
+      "writerRules": 3600,
+      "receiveDocuments": 3600,
+      "initialMinimumAndRules": 30,
+      "observedServerCallbacks": 80,
+      "callbackComparison": 15412,
+      "oneResultUpdatePerEvent": 43572,
+      "fullReconnectAdditional": 7248,
+      "oneResultUpdateWithOneFullReconnect": 50820,
+      "freeDailyReads": 50000,
+      "receiptWritesInModel": 600,
+      "scaleConvergencePassed": true,
+      "fullDayFreeTierVerified": false
+    },
+    {
+      "people": 1000,
+      "clients": 6,
+      "geometry": 156,
+      "writerRules": 6000,
+      "receiveDocuments": 6000,
+      "initialMinimumAndRules": 30,
+      "observedServerCallbacks": null,
+      "callbackComparison": null,
+      "oneResultUpdatePerEvent": 72372,
+      "fullReconnectAdditional": 12048,
+      "oneResultUpdateWithOneFullReconnect": 84420,
+      "freeDailyReads": 50000,
+      "receiptWritesInModel": 1000,
+      "scaleConvergencePassed": false,
+      "fullDayFreeTierVerified": false
+    }
+  ],
+  "assumptions": {
+    "geometryFromGD9177Model": true,
+    "writeRuleReferencesPerEvent": 6,
+    "readRuleReferencesPerUpdate": 4,
+    "safetyFactor": 2,
+    "oneExplicitRangeFieldInWatch": true,
+    "watchIndexEntriesExemptUnderPricingRule": true,
+    "callbackCountIsBillingMeasurement": false,
+    "billedRuleEvaluationGroupingVerified": false,
+    "preparationAndIrregularOperationsIncluded": false,
+    "retriesAndReentryIncluded": false,
+    "SDKWireBytesMeasured": false,
+    "fullReconnectChargedAsNewQuery": true
+  },
+  "productionBillingMeasured": false,
+  "productionFreeTierVerified": false,
+  "normalRegistrationVerified": false,
+  "tested3000": false
+}
