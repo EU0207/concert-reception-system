@@ -24,7 +24,7 @@ try{
   if(!state.createdByThisRun){
     // CLIの出力には環境識別子があるため、端末出力へ転記しない。
     execFileSync(process.execPath,['poc/POC-004/node_modules/firebase-tools/lib/bin/firebase.js','projects:create',state.projectId,
-      '--display-name','Concert authorization validation','--non-interactive','--json'],{
+      '--display-name','Concert auth validation','--non-interactive','--json'],{
       encoding:'utf8',windowsHide:true,stdio:['ignore','pipe','pipe'],timeout:180000,maxBuffer:1024*1024});
     state.createdByThisRun=true;save();
   }
@@ -51,6 +51,10 @@ try{
   // 生のCLI応答や認証情報はログ・公開結果へ出さない。
   summary.setupState='requires-attention';summary.failedStage=stage;
   summary.error={code:e.apiCode??e.code??'setup-failed',httpStatus:e.httpStatus??null,processStatus:e.status??null};
+  if(stage==='create-project'){
+    let message='';try{const parsed=JSON.parse(String(e.stdout??''));message=typeof parsed.error==='string'?parsed.error:parsed.error?.message??'';}catch{}
+    summary.error.sanitizedMessage=message.replaceAll(state.projectId,'[project]').replace(/[\w.+-]+@[\w.-]+\.[a-z]+/gi,'[account]').replace(/[A-Za-z0-9_\-]{40,}/g,'[redacted]').slice(0,250);
+  }
   summary.projectCreationAcknowledged=state.createdByThisRun;process.exitCode=1;
 }
 summary.managementRequests=managementRequests;

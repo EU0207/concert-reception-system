@@ -1,0 +1,23 @@
+{
+  "setupOnly": true,
+  "billingEnabled": false,
+  "billingAccountLinked": false,
+  "ownerVerified": true,
+  "hostingDeployed": false,
+  "secretKeyIssued": false,
+  "externalVerificationExecuted": false,
+  "databaseReady": true,
+  "location": "asia-northeast1",
+  "webConfigStoredOutsideGit": true,
+  "setupState": "requires-attention",
+  "failedStage": "configure-test-auth",
+  "error": {
+    "code": "FAILED_PRECONDITION",
+    "httpStatus": 400
+  },
+  "managementRequests": 18,
+  "sourceHashes": {
+    "setup-services.mjs": "75fc13392542570f34bb2ac7559effc6818816fe49f40eca11b04de1b32345e4",
+    "remote-support.mjs": "6f1bdc7258d2ab3aef8d94658747c8fa36249052685ea0ed2e3a55d8b8129146"
+  }
+}
