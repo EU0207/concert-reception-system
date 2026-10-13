@@ -9,15 +9,11 @@
   "databaseReady": true,
   "location": "asia-northeast1",
   "webConfigStoredOutsideGit": true,
-  "setupState": "requires-attention",
-  "failedStage": "configure-test-auth",
-  "error": {
-    "code": "FAILED_PRECONDITION",
-    "httpStatus": 400
-  },
-  "managementRequests": 18,
+  "authReady": true,
+  "setupState": "ready-for-minimal-verification",
+  "managementRequests": 11,
   "sourceHashes": {
-    "setup-services.mjs": "75fc13392542570f34bb2ac7559effc6818816fe49f40eca11b04de1b32345e4",
-    "remote-support.mjs": "6f1bdc7258d2ab3aef8d94658747c8fa36249052685ea0ed2e3a55d8b8129146"
+    "setup-services.mjs": "ae0ff3f53d5757972f28ee2a481ae0cb99cfc9f2f72dffc54bcb825f315ceccc",
+    "remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
   }
 }
