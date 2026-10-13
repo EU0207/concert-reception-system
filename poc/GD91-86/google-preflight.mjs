@@ -1,0 +1,16 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {randomUUID,createHash} from 'node:crypto';
+assert.equal(process.argv[2],'--prepare-approved-google','explicit-approval-required');
+const {remoteContext}=await import('../GD91-82/remote-support.mjs');
+const c=await remoteContext(),s=c.state;assert(!s.trial,'unresolved-trial');
+const files=['google-preflight.mjs','deny.rules.json','../GD91-82/remote-support.mjs','../GD91-80/remote-support.mjs'];
+const hashes=()=>Object.fromEntries(files.map(f=>[f,createHash('sha256').update(fs.readFileSync(new URL(f,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex')])),before=hashes();
+const deny=JSON.parse(fs.readFileSync(new URL('deny.rules.json',import.meta.url),'utf8'));assert.deepEqual((await c.owner('.settings/rules')).body,deny);assert.equal((await c.owner('')).body,null);
+assert.equal(((await c.api('https://identitytoolkit.googleapis.com/v1/projects/'+s.projectId+'/accounts:batchGet?maxResults=10')).body.users??[]).length,0);
+const config=(await c.api('https://identitytoolkit.googleapis.com/admin/v2/projects/'+s.projectId+'/config')).body;
+const google=await c.api('https://identitytoolkit.googleapis.com/admin/v2/projects/'+s.projectId+'/defaultSupportedIdpConfigs/google.com',{allowed:[200,404]});
+const googleReady=google.status===200&&google.body.enabled===true,localhostAllowed=(config.authorizedDomains??[]).includes('localhost');
+assert(c.requests()<=400);
+s.trial={purpose:'GD91-86-google',phase:googleReady?'awaiting-google-login':'awaiting-google-configuration',authorization:'TECH-DD91-085-A',rtdbRoots:['checks/'+randomUUID()],users:[],applicationCalls:c.requests(),previousAnonymous:config.signIn?.anonymous?.enabled??false,previousGoogleEnabled:googleReady,previousGoogleConfigExisted:google.status===200,previousAuthorizedDomains:config.authorizedDomains??[]};c.save();
+const report={sourceHashes:before,endSourceHashes:hashes(),decisionId:'TECH-DD91-085',developerApproved:true,applicationCalls:c.requests(),googleLoginReady:googleReady,localhostAllowed,authUsersBeforeTrial:0,rulesClosed:true,databaseEmpty:true,ownerVerified:true,billingAccountUnlinked:true,remoteConfigurationChanged:false,googleAccountUsed:false,externalFirebaseConnected:true,trialDataCreated:false,productionAdoptionApproved:false};assert.deepEqual(report.sourceHashes,report.endSourceHashes);
+fs.writeFileSync(new URL('artifacts/google-preflight-summary.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify({applicationCalls:c.requests(),googleLoginReady:googleReady,localhostAllowed,authUsers:0,rulesClosed:true,databaseEmpty:true,remoteConfigurationChanged:false,googleAccountUsed:false}));

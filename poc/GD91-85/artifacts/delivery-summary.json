@@ -1,0 +1,122 @@
+{
+  "sourceHashes": {
+    "delivery.mjs": "394279f062399bcb59b7d20076cd1227893ea69770459d75d0c98eccc8264cb2",
+    "generate.mjs": "6b0a330d193e630f88a77de735be94aa94e22273395450db087dcbf1f3c46dd6",
+    "database.rules.json": "77dc22b2649e246b22bf862f7fbb0fc8fdf4656ae078f500b5d1e17ff79a1649",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a",
+    "../GD91-84/revocation-cases.mjs": "137918af02b0de6ae7d79d870d26666921db4b0a9279002af29c111b1c2ba180"
+  },
+  "endSourceHashes": {
+    "delivery.mjs": "394279f062399bcb59b7d20076cd1227893ea69770459d75d0c98eccc8264cb2",
+    "generate.mjs": "6b0a330d193e630f88a77de735be94aa94e22273395450db087dcbf1f3c46dd6",
+    "database.rules.json": "77dc22b2649e246b22bf862f7fbb0fc8fdf4656ae078f500b5d1e17ff79a1649",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a",
+    "../GD91-84/revocation-cases.mjs": "137918af02b0de6ae7d79d870d26666921db4b0a9279002af29c111b1c2ba180"
+  },
+  "paths": [
+    "head",
+    "head/generation",
+    "control",
+    "control/revision",
+    "sharedHead",
+    "sharedHead/generation",
+    "references/base",
+    "references/base/active",
+    "generations/new/meta",
+    "generations/new/meta/cursor",
+    "generations/new/parts/p0",
+    "generations/new/parts/p0/slots/s00/label",
+    "generations/new/sections/sec0",
+    "generations/new/sections/sec0/name",
+    "generations/roster-new/parts/p0",
+    "generations/roster-new/parts/p0/slots/s00/name",
+    "operations/future",
+    "operations/future/resultRevision",
+    "sharedOperations/future",
+    "sharedOperations/future/resultRevision"
+  ],
+  "reports": [
+    {
+      "kind": "role",
+      "paths": 20,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 20,
+      "sdkNewDataRejected": 20,
+      "restStreamNewDataRejected": 20,
+      "otherValidSubscriberContinues": 20,
+      "roleAndSessionExpiryCoincide": false,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "device",
+      "paths": 20,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 20,
+      "sdkNewDataRejected": 20,
+      "restStreamNewDataRejected": 20,
+      "otherValidSubscriberContinues": 20,
+      "roleAndSessionExpiryCoincide": false,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "session",
+      "paths": 20,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 20,
+      "sdkNewDataRejected": 20,
+      "restStreamNewDataRejected": 20,
+      "otherValidSubscriberContinues": 20,
+      "roleAndSessionExpiryCoincide": false,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "session-expiry",
+      "paths": 20,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 20,
+      "sdkNewDataRejected": 20,
+      "restStreamNewDataRejected": 20,
+      "otherValidSubscriberContinues": 20,
+      "roleAndSessionExpiryCoincide": false,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "role-expiry",
+      "paths": 20,
+      "rootAndChildSubscriptions": true,
+      "newRestRejected": 20,
+      "sdkNewDataRejected": 20,
+      "restStreamNewDataRejected": 20,
+      "otherValidSubscriberContinues": 20,
+      "roleAndSessionExpiryCoincide": true,
+      "dataCreatedAfterExpiryIncluded": true
+    },
+    {
+      "kind": "write-boundaries",
+      "revisionOmissionAndImmutableMutationRejected": 10,
+      "legacyEntrypointsDenied": 3
+    }
+  ],
+  "metrics": {
+    "requests": 459,
+    "requestBodyBytes": 305165,
+    "responseBodyBytes": 153720,
+    "ownerRequests": 103,
+    "userRequests": 356
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "wholeBusinessConnected": false,
+  "productionAuthorizationVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

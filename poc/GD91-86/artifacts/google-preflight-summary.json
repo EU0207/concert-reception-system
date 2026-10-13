@@ -1,0 +1,29 @@
+{
+  "sourceHashes": {
+    "google-preflight.mjs": "ba7839e8a1457d0156516e4a24b09b023e63cb10ed05e453d4a0a8cf1705fb61",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "endSourceHashes": {
+    "google-preflight.mjs": "ba7839e8a1457d0156516e4a24b09b023e63cb10ed05e453d4a0a8cf1705fb61",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "decisionId": "TECH-DD91-085",
+  "developerApproved": true,
+  "applicationCalls": 8,
+  "googleLoginReady": false,
+  "localhostAllowed": true,
+  "authUsersBeforeTrial": 0,
+  "rulesClosed": true,
+  "databaseEmpty": true,
+  "ownerVerified": true,
+  "billingAccountUnlinked": true,
+  "remoteConfigurationChanged": false,
+  "googleAccountUsed": false,
+  "externalFirebaseConnected": true,
+  "trialDataCreated": false,
+  "productionAdoptionApproved": false
+}

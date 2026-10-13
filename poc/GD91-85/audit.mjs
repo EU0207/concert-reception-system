@@ -1,0 +1,13 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+let checked=0;const read=f=>JSON.parse(fs.readFileSync(new URL(f,import.meta.url),'utf8'));
+for(const file of ['artifacts/local-summary.json','artifacts/delivery-summary.json']){const r=read(file);assert.equal(r.failure,undefined);assert.deepEqual(r.sourceHashes,r.endSourceHashes);for(const[f,h]of Object.entries(r.sourceHashes)){assert.equal(createHash('sha256').update(fs.readFileSync(new URL(f,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex'),h);checked++;}assert.deepEqual(r.cleanup,{rulesClosed:true,trialRootEmpty:true});for(const k of ['externalFirebaseConnected','productionAuthorizationVerified','productionFreeTierVerified','tested3000'])assert.equal(r[k],false);
+  const walk=v=>{if(v&&typeof v==='object')for(const[k,x]of Object.entries(v)){assert(!/^(apiKey|projectId|uid|humanUid|deviceUid|idToken|token|password|email|authorization)$/i.test(k));walk(x);}if(typeof v==='string')assert(!/AIza[\w-]+|crs-authcheck-|eyJ[\w-]+\.[\w-]+\.[\w-]+|-----BEGIN|[\w.+-]+@[\w.-]+\.[a-z]+/i.test(v));};walk(r);
+}
+const local=read('artifacts/local-summary.json'),delivery=read('artifacts/delivery-summary.json');assert.equal(local.reports.length,32);assert.equal(delivery.paths.length,20);assert.equal(new Set(delivery.paths).size,20);assert.equal(delivery.reports.length,6);
+for(const r of delivery.reports.slice(0,5)){for(const k of ['newRestRejected','sdkNewDataRejected','restStreamNewDataRejected','otherValidSubscriberContinues'])assert.equal(r[k],20);assert.equal(r.rootAndChildSubscriptions,true);assert.equal(r.dataCreatedAfterExpiryIncluded,true);}
+assert.equal(delivery.reports[5].revisionOmissionAndImmutableMutationRejected,10);assert.equal(delivery.reports[5].legacyEntrypointsDenied,3);
+const rules=read('database.rules.json').rules.checks.$run,contract=read('artifacts/read-contract.json'),seen=[];
+function visit(node,path=''){for(const[k,v]of Object.entries(node)){if(k==='.read'&&v!==false)seen.push(path);else if(v&&typeof v==='object')visit(v,path?path+'/'+k:k);}}visit(rules);
+assert.deepEqual(seen.sort(),[...contract.protected.map(x=>x.path),...contract.selfStatus].sort());assert.equal(contract.protected.length,13);assert.equal(contract.wholeBusinessConnected,false);
+for(const entry of contract.protected){let node=rules;for(const k of entry.path.split('/'))node=node[k];assert(node['.read'].includes(entry.dependency));}
+console.log(JSON.stringify({regressionGroups:32,deliveryGroups:6,protectedReadLocations:13,pathsPerRevocation:20,sourceHashesVerified:checked,externalExecuted:false,issue167Complete:false}));

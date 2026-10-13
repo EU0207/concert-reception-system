@@ -1,0 +1,98 @@
+{
+  "sourceHashes": {
+    "recovery.mjs": "2c9da91d258c5d61ae2c2426d3c1954d82cf75f8cde65b384b8907b431ba3fbe",
+    "sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "business-rules.mjs": "bf305afc097ca18fc3672e20494ef9a4eba169dd7e460e4f684c78d7f6283e4e",
+    "generate.mjs": "1a3be7848a5aeefb0c5fe6557f41ae996a4e4b3a01ce3cb63e1c10d5edf55b8f",
+    "database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "browser.html": "f7c5d21b67b469f7eb7da30b0d62ab264c5aa4a461a53719f1beee76047c5574",
+    "vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-73/local-draft.mjs": "cdab67892338220049bcf05bf745b752e6d5bb6e49f3d72d7283cc4593d14fea",
+    "../POC-004/src/crypto.ts": "fe348f5a9a7716d9f13496d23ecd24767b2b10d75501878dcb8104d21a7ab6b5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a"
+  },
+  "endSourceHashes": {
+    "recovery.mjs": "2c9da91d258c5d61ae2c2426d3c1954d82cf75f8cde65b384b8907b431ba3fbe",
+    "sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "business-rules.mjs": "bf305afc097ca18fc3672e20494ef9a4eba169dd7e460e4f684c78d7f6283e4e",
+    "generate.mjs": "1a3be7848a5aeefb0c5fe6557f41ae996a4e4b3a01ce3cb63e1c10d5edf55b8f",
+    "database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "browser.html": "f7c5d21b67b469f7eb7da30b0d62ab264c5aa4a461a53719f1beee76047c5574",
+    "vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-73/local-draft.mjs": "cdab67892338220049bcf05bf745b752e6d5bb6e49f3d72d7283cc4593d14fea",
+    "../POC-004/src/crypto.ts": "fe348f5a9a7716d9f13496d23ecd24767b2b10d75501878dcb8104d21a7ab6b5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a"
+  },
+  "reports": [
+    {
+      "id": "R01",
+      "seats": 1000,
+      "encrypted": true,
+      "reloadAndBrowserProcessRestart": true,
+      "databaseRequestsFromBrowser": 0
+    },
+    {
+      "id": "R02",
+      "abortedSaveKeepsPrevious": true,
+      "crossUserAndPerformanceIsolated": true,
+      "revokedContextDenied": true,
+      "authorityContextPrecondition": true,
+      "physicalPowerLossNotTested": true
+    },
+    {
+      "id": "R03",
+      "proposalPersistedBeforeSend": true,
+      "noAutomaticSendOnReconnect": true,
+      "replacedOperationIdRejectedBeforeSend": true
+    },
+    {
+      "id": "R04",
+      "webSdkCommit": true,
+      "originalIdAndPayloadRecovered": true,
+      "noSecondWriteAfterRestart": true,
+      "discardedAcknowledgementSimulated": true
+    },
+    {
+      "id": "R05",
+      "sharedRecoveredWithoutRepublish": true,
+      "noSecondWrite": true
+    },
+    {
+      "id": "R06",
+      "restResponseConnectionDroppedAfterCommit": true,
+      "browserRestart": true,
+      "sameIdLookupBeforeRetry": true,
+      "noDoubleCommit": true,
+      "sdkNetworkLossNotInjected": true
+    },
+    {
+      "id": "R07",
+      "latestAuthorityRejectsBeforeSend": true,
+      "proposalRetained": true
+    }
+  ],
+  "metrics": {
+    "requests": 40,
+    "requestBodyBytes": 332571,
+    "responseBodyBytes": 6985,
+    "ownerRequests": 18,
+    "userRequests": 22
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "browser": "installed Microsoft Edge, headless, isolated persistent profile",
+  "externalFirebaseConnected": false,
+  "fullBusinessRulesVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
