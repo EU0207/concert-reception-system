@@ -7,16 +7,13 @@
   "billingEnabledByThisRun": false,
   "secretKeyIssued": false,
   "cliInternalRequestsMeasured": false,
-  "setupState": "requires-attention",
-  "failedStage": "create-project",
-  "error": {
-    "code": "setup-failed",
-    "httpStatus": null,
-    "processStatus": 2
-  },
-  "projectCreationAcknowledged": false,
-  "managementRequests": 0,
+  "ownerMatchesCurrentCliAccount": true,
+  "billingEnabled": false,
+  "billingAccountLinked": false,
+  "projectActive": true,
+  "setupState": "project-created-and-checked",
+  "managementRequests": 3,
   "sourceHashes": {
-    "setup-project.mjs": "e3e90703a7fd0ac1c8d77fb3a5522a1df5976aabfc0b9808347df350c03a2c92"
+    "setup-project.mjs": "b1c0f9f13f78144ec373536f3fd91022fc1a9281dd94a12a3f95f9b8a6ca7ab7"
   }
 }

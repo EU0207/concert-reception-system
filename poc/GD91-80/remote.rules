@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 認可依存1件だけの隔離再現。書込みはownerによる架空前提投入のみ。
+    match /diagnostic/{scope}/items/{id} {
+      allow read: if request.auth != null
+        && get(/databases/$(database)/documents/diagnostic/$(scope)/access/current).data.active == true
+        && get(/databases/$(database)/documents/diagnostic/$(scope)/access/current).data.subjectUid == request.auth.uid;
+    }
+function currentPreparation(d,s,r) { return d.preparedRoleRevision == r.revision && s.roleRevision == r.revision; }
+function generalPreparation(d,s,r) {
+      return r.role == 'temporary' && r.receptionBaselineRevision > 0
+        && d.preparedRoleRevision == r.receptionBaselineRevision && s.roleRevision == r.receptionBaselineRevision;
+    }
+function recentHumanAt(s,at) { return s.humanAuthTime <= at && at <= s.humanAuthTime + duration.value(15,'m'); }
+function recentHuman(s) { return recentHumanAt(s,request.time); }
+function identity(p,d,s,r) {
+      let managerRole = r.role in ['owner','deputy'];
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && d.schemaVersion == 2 && d.environmentId == 'FAKE-environment' && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+        // 形式と認証時刻の出所はissueSessionが検査し、更新権限もそこで閉じる。
+        && s.schemaVersion == 2 && s.environmentId == 'FAKE-environment' && s.performanceId == p && s.deviceUid == request.auth.uid && s.emailVerified == true && s.active == true
+        && s.humanUid == d.humanUid && s.expiresAt > request.time
+        && r.schemaVersion == 2 && r.environmentId == 'FAKE-environment' && r.performanceId == p && r.active == true && r.revision > 0 && r.startsAt <= request.time && request.time < r.endsAt
+        && (managerRole ? s.authProvider == 'google.com' : s.authProvider == 'password')
+;
+    }
+function authorizedLevel(p,level) {
+      let d = get(/databases/$(database)/documents/publicationShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/publicationShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/publicationShows/$(p)/roles/$(d.humanUid)).data;
+      let managerRole = r.role in ['owner','deputy'];
+      return identity(p,d,s,r)
+        && (level == 0 ? (managerRole || r.role in ['temporary','receptionist']) && (currentPreparation(d,s,r) || generalPreparation(d,s,r))
+          : currentPreparation(d,s,r) && (level == 3 ? r.role == 'temporary'
+            : managerRole && (level == 1 || recentHuman(s))));
+    }
+function authorized(p,edit) { return authorizedLevel(p,edit ? 1 : 0); }
+function active(p) { return request.auth != null && authorized(p,false); }
+function control(p) { return get(/databases/$(database)/documents/publicationShows/$(p)/control/current).data; }
+function deltaRead(p) {
+      // 稼働中の共通4参照。閉演・停止後の分岐はこの取得候補に含めない。
+      return active(p) && control(p).state == 'operating';
+    }
+match /publicationShows/{p}/receiptEvents/{id} {
+allow read: if deltaRead(p);
+allow write: if false;
+}
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}
