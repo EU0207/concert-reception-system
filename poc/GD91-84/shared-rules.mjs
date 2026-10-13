@@ -1,0 +1,10 @@
+import {base,editing,manager} from './auth-rules.mjs';
+export function sharedRules(){
+  const gen="newData.child('generation').val()",record="newData.parent().child('sharedOperations').child(newData.child('operationId').val())";
+  return {sharedHead:{'.read':manager,'.write':`${editing} && newData.exists()`,
+    '.validate':`newData.hasChildren(['generation','revision','operationId','baseLayoutRevision']) && newData.child('revision').val() === (data.exists() ? data.child('revision').val()+1 : 1) && newData.child('baseLayoutRevision').val() === ${base}.child('head/revision').val() && ${base}.child('generations').child(${gen}).child('meta/phase').val() === 'ready' && !${base}.child('sharedOperations').child(newData.child('operationId').val()).exists() && ${record}.child('generation').val() === ${gen} && ${record}.child('resultRevision').val() === newData.child('revision').val() && ${record}.child('baseLayoutRevision').val() === newData.child('baseLayoutRevision').val()`,
+    generation:{'.validate':'newData.isString()'},revision:{'.validate':'newData.isNumber()'},operationId:{'.validate':'newData.isString()'},baseLayoutRevision:{'.validate':'newData.isNumber()'},'$other':{'.validate':false}},
+    sharedOperations:{$op:{'.read':manager,'.write':`${editing} && !data.exists() && newData.exists() && $op === newData.parent().parent().child('sharedHead/operationId').val() && newData.parent().parent().child('sharedHead/revision').val() === (${base}.child('sharedHead').exists() ? ${base}.child('sharedHead/revision').val()+1 : 1)`,
+      '.validate':"newData.hasChildren(['generation','resultRevision','baseLayoutRevision']) && newData.child('generation').val() === newData.parent().parent().child('sharedHead/generation').val() && newData.child('resultRevision').val() === newData.parent().parent().child('sharedHead/revision').val() && newData.child('baseLayoutRevision').val() === newData.parent().parent().child('sharedHead/baseLayoutRevision').val()",
+      generation:{'.validate':'newData.isString()'},resultRevision:{'.validate':'newData.isNumber()'},baseLayoutRevision:{'.validate':'newData.isNumber()'},'$other':{'.validate':false}}}};
+}

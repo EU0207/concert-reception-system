@@ -1,0 +1,130 @@
+{
+  "sourceHashes": {
+    "stream-probe.mjs": "cb8b818e9da59be5aadb39d0fdd20a5e8e33310418ecefeedc4b32e73abb4e25",
+    "transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "generation-rules.mjs": "5fa17358650c2528f5c10dcc62bb1d3416f171ddfe022d9193db3ece9bc7ca61",
+    "shared-rules.mjs": "11d7d6aea332c5ba6f2493fa569eed9b5ee8d85267f380aad7147f9ca13ad084",
+    "generate.mjs": "8b33c24655a2fe088d19ac013cc9c8fed26c7be346e0fdbfc2a0fe17847b19dc",
+    "database.rules.json": "b993f8a0c442145b9a75eec3001b1571293e78f71f240c58f7996b168a8a224a",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913"
+  },
+  "endSourceHashes": {
+    "stream-probe.mjs": "cb8b818e9da59be5aadb39d0fdd20a5e8e33310418ecefeedc4b32e73abb4e25",
+    "transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "generation-rules.mjs": "5fa17358650c2528f5c10dcc62bb1d3416f171ddfe022d9193db3ece9bc7ca61",
+    "shared-rules.mjs": "11d7d6aea332c5ba6f2493fa569eed9b5ee8d85267f380aad7147f9ca13ad084",
+    "generate.mjs": "8b33c24655a2fe088d19ac013cc9c8fed26c7be346e0fdbfc2a0fe17847b19dc",
+    "database.rules.json": "b993f8a0c442145b9a75eec3001b1571293e78f71f240c58f7996b168a8a224a",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913"
+  },
+  "reports": [
+    {
+      "kind": "role",
+      "currentRestStatus": 401,
+      "cancelledBeforePayload": true,
+      "cancelledAfterPayload": true,
+      "postInvalidationDataReceived": false,
+      "retainedLastValue": "FAKE-before",
+      "restStreamCancelled": true,
+      "restStreamPostInvalidationDataReceived": false,
+      "otherContinues": true,
+      "elapsedMs": 91,
+      "roleAndSessionExpiryCoincide": false,
+      "serverRejectionVerified": true
+    },
+    {
+      "kind": "device",
+      "currentRestStatus": 401,
+      "cancelledBeforePayload": true,
+      "cancelledAfterPayload": true,
+      "postInvalidationDataReceived": false,
+      "retainedLastValue": "FAKE-before",
+      "restStreamCancelled": true,
+      "restStreamPostInvalidationDataReceived": false,
+      "otherContinues": true,
+      "elapsedMs": 27,
+      "roleAndSessionExpiryCoincide": false,
+      "serverRejectionVerified": true
+    },
+    {
+      "kind": "session",
+      "currentRestStatus": 401,
+      "cancelledBeforePayload": true,
+      "cancelledAfterPayload": true,
+      "postInvalidationDataReceived": false,
+      "retainedLastValue": "FAKE-before",
+      "restStreamCancelled": true,
+      "restStreamPostInvalidationDataReceived": false,
+      "otherContinues": true,
+      "elapsedMs": 95,
+      "roleAndSessionExpiryCoincide": false,
+      "serverRejectionVerified": true
+    },
+    {
+      "kind": "control",
+      "currentRestStatus": 401,
+      "cancelledBeforePayload": true,
+      "cancelledAfterPayload": true,
+      "postInvalidationDataReceived": false,
+      "retainedLastValue": "FAKE-before",
+      "restStreamCancelled": true,
+      "restStreamPostInvalidationDataReceived": false,
+      "otherContinues": null,
+      "elapsedMs": 32,
+      "roleAndSessionExpiryCoincide": false,
+      "serverRejectionVerified": true
+    },
+    {
+      "kind": "session-expiry",
+      "currentRestStatus": 401,
+      "cancelledBeforePayload": false,
+      "cancelledAfterPayload": false,
+      "postInvalidationDataReceived": true,
+      "retainedLastValue": "FAKE-after",
+      "restStreamCancelled": false,
+      "restStreamPostInvalidationDataReceived": true,
+      "otherContinues": true,
+      "elapsedMs": 4194,
+      "roleAndSessionExpiryCoincide": false,
+      "serverRejectionVerified": false,
+      "explicitRevocationStopsBoth": true
+    },
+    {
+      "kind": "role-expiry",
+      "currentRestStatus": 401,
+      "cancelledBeforePayload": false,
+      "cancelledAfterPayload": false,
+      "postInvalidationDataReceived": true,
+      "retainedLastValue": "FAKE-after",
+      "restStreamCancelled": false,
+      "restStreamPostInvalidationDataReceived": true,
+      "otherContinues": true,
+      "elapsedMs": 4190,
+      "roleAndSessionExpiryCoincide": true,
+      "serverRejectionVerified": false,
+      "explicitRevocationStopsBoth": true
+    }
+  ],
+  "metrics": {
+    "requests": 84,
+    "requestBodyBytes": 265902,
+    "responseBodyBytes": 11045,
+    "ownerRequests": 66,
+    "userRequests": 18
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "ruleVariant": "baseline",
+  "deployedRulesHash": "37d68e6a2e4bb4feeef9f8e9ecc900029c196a407935d4cc33f56fc6cadf76a4",
+  "allComparedRevocationsVerified": false,
+  "externalFirebaseConnected": false,
+  "productionAuthorizationVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

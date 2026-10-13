@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';import {randomUUID} from 'node:crypto';
+import {trial,owner,user,check,ok,denied} from './transport.mjs';
+import {build,layoutItem,publish} from './generation-tests.mjs';
+export function shared(id,revision,baseLayoutRevision,operationId=randomUUID()){return{sharedHead:{generation:id,revision,baseLayoutRevision,operationId},['sharedOperations/'+operationId]:{generation:id,resultRevision:revision,baseLayoutRevision}};}
+export async function sharedTests(actors){const f=actors.owner;
+  await build(f,'shared-a','layout',[layoutItem('share-a')]);await build(f,'shared-b','layout',[layoutItem('share-b')]);
+  const head=await owner(trial+'/head');
+  await check('S-partial-and-isolation',async()=>{const plan=shared('shared-a',1,head.revision);denied(await user('',f.device,'PATCH',{sharedHead:plan.sharedHead}));denied(await user('',f.device,'PATCH',Object.fromEntries(Object.entries(plan).filter(([k])=>k!=='sharedHead'))));ok(await user('',f.device,'PATCH',plan));assert.deepEqual(await owner(trial+'/head'),head);denied(await user('sharedHead',actors.receptionist.device));return{partsRejected:2,receptionHeadUnchanged:true,generalReadDenied:true};});
+  await check('S-concurrent-and-resume',async()=>{const a=shared('shared-b',2,head.revision),b=shared('shared-b',2,head.revision);const rs=await Promise.all([user('',f.device,'PATCH',a),user('',actors.deputy.device,'PATCH',b)]);assert.deepEqual(rs.map(r=>r.status).sort(),[200,401]);const winner=rs[0].status===200?a:b;const before=await owner(trial+'/sharedHead');const found=await user('sharedOperations/'+winner.sharedHead.operationId,f.device);ok(found);assert.deepEqual(found.body,winner['sharedOperations/'+winner.sharedHead.operationId]);assert.deepEqual(await owner(trial+'/sharedHead'),before);denied(await user('',f.device,'PATCH',winner));return{singleWinner:true,resultMatches:true,secondCommitNotSentDuringLookup:true,physicalPacketLoss:false};});
+  await check('S-shared-retention',async()=>{const m=(await user('generations/shared-b/meta',f.device)).body;denied(await user('generations/shared-b/meta',f.device,'PUT',{...m,phase:'deleting',revision:m.revision+1}));return{selectedDraftGenerationProtected:true};});
+  await check('S-stale-base-and-old-id',async()=>{const old=await owner(trial+'/sharedHead');denied(await user('',f.device,'PATCH',shared('shared-a',old.revision+1,head.revision-1)));denied(await user('',f.device,'PATCH',shared('shared-a',old.revision+1,head.revision,old.operationId)));return{staleBaseRejected:true,oldIdNotReused:true};});
+}
