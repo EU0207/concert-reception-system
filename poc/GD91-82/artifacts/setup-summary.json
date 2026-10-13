@@ -1,0 +1,17 @@
+{
+  "setupOnly": true,
+  "databaseReady": true,
+  "region": "asia-southeast1",
+  "rulesInitiallyClosed": true,
+  "databaseInitiallyEmpty": true,
+  "ownerVerified": true,
+  "billingAccountUnlinked": true,
+  "anonymousEnabledForTest": true,
+  "requests": 7,
+  "productionAdoptionApproved": false,
+  "sourceHashes": {
+    "setup-remote.mjs": "2ce464f96032755c9b9641f7320a09433ea6134b7d44f49c18089ff1986205f7",
+    "remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  }
+}

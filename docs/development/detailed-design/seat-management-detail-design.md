@@ -1271,7 +1271,7 @@ GD91-78の[SDK購読比較](../technical-validation/seat-capacity-validation.md#
 
 GD91-79の[切り分け](../technical-validation/seat-capacity-validation.md#gd91-79-購読の環境差と認可境界)でEdgeの600人・1,000人受信は収束した。Nodeの未達と区別し、本番共有時間と無料成立の合格へ流用しない。GD91-80の[外部確認](../technical-validation/seat-capacity-validation.md#外部認可比較の結果gd91-80)では認可変更だけで既存購読が停止したが、失効前の時点指定による直接取得は最小Rulesでも拒否できなかった。T73・#110・168の認可ゲートを維持し、クライアントの購読解除だけで解決済みとしない。
 
-GD91-81の[対策比較](../technical-validation/seat-capacity-validation.md#gd91-81-過去時点取得の対策比較)でも、getAfterと要求条件の検査は未達。有効期限後の拒否は確認したが、期限内の過去時点取得が残るため停止猶予を自動追加しない。物理保存先を変更するPoCの範囲はADR-007で開発者が判断し、決定前に新しいアダプターを実装しない。T73の未合格と#168の採用ゲートを維持する。
+GD91-81の[対策比較](../technical-validation/seat-capacity-validation.md#gd91-81-過去時点取得の対策比較)でも、getAfterと要求条件の検査は未達。有効期限後の拒否は確認したが、期限内の過去時点取得が残るため停止猶予を自動追加しない。開発者が承認したGD91-82の[最小PoC](../technical-validation/seat-capacity-validation.md#gd91-82-realtime-databaseの最小認可比較)では、Realtime Databaseで通常・改変取得と既存受信を拒否できた。ただし本人認証・セッション発行と業務書込みは未検証。本番の物理形式とアダプターは未変更で、T73の全業務合格と#168の採用を認める結果ではない。
 
 ### 人数増加に備える分割と拡張
 
