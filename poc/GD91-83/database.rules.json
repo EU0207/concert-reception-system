@@ -1,0 +1,87 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "checks": {
+      "$run": {
+        "event": {
+          ".read": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true",
+          ".validate": "newData.hasChildren(['commit','fragments','people','view','operations','tickets']) && newData.child('commit').hasChildren(['revision','operationId']) && newData.child('commit/revision').val() === data.child('commit/revision').val() + 1 && newData.child('commit/operationId').isString() && !data.child('operations').child(newData.child('commit/operationId').val()).exists() && newData.child('operations').child(newData.child('commit/operationId').val()).hasChildren(['kind','expectedRevision','resultRevision','beforeA','beforeB','afterA','afterB']) && newData.child('operations').child(newData.child('commit/operationId').val()).child('kind').val() === 'swap' && newData.child('operations').child(newData.child('commit/operationId').val()).child('expectedRevision').val() === data.child('commit/revision').val() && newData.child('operations').child(newData.child('commit/operationId').val()).child('resultRevision').val() === newData.child('commit/revision').val() && newData.child('operations').child(newData.child('commit/operationId').val()).child('beforeA').val() === data.child('fragments/f0001/seats/s001').val() && newData.child('operations').child(newData.child('commit/operationId').val()).child('beforeB').val() === data.child('fragments/f0002/seats/s002').val() && newData.child('operations').child(newData.child('commit/operationId').val()).child('afterA').val() === data.child('fragments/f0002/seats/s002').val() && newData.child('operations').child(newData.child('commit/operationId').val()).child('afterB').val() === data.child('fragments/f0001/seats/s001').val() && newData.child('fragments/f0001/seats/s001').val() === data.child('fragments/f0002/seats/s002').val() && newData.child('fragments/f0002/seats/s002').val() === data.child('fragments/f0001/seats/s001').val() && newData.child('people/a001').val() === (newData.child('fragments/f0001/seats/s001').val() === 'a001' ? 's001' : 's002') && newData.child('people/a002').val() === (newData.child('fragments/f0001/seats/s001').val() === 'a002' ? 's001' : 's002') && newData.child('view/s001').val() === newData.child('fragments/f0001/seats/s001').val() && newData.child('view/s002').val() === newData.child('fragments/f0002/seats/s002').val()",
+          "commit": {
+            ".write": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true && newData.exists()",
+            "revision": {
+              ".validate": "newData.isNumber()"
+            },
+            "operationId": {
+              ".validate": "newData.isString()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "fragments": {
+            "f0001": {
+              "seats": {
+                "s001": {
+                  ".write": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true && newData.isString()"
+                }
+              }
+            },
+            "f0002": {
+              "seats": {
+                "s002": {
+                  ".write": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true && newData.isString()"
+                }
+              }
+            }
+          },
+          "people": {
+            "a001": {
+              ".write": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true && newData.isString()"
+            },
+            "a002": {
+              ".write": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true && newData.isString()"
+            }
+          },
+          "view": {
+            "s001": {
+              ".write": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true && newData.isString()"
+            },
+            "s002": {
+              ".write": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true && newData.isString()"
+            }
+          },
+          "operations": {
+            "$operation": {
+              ".write": "auth != null && root.child('checks').child($run).child('access').child(auth.uid).val() === true && !data.exists() && newData.exists() && $operation === newData.parent().parent().child('commit/operationId').val()",
+              "kind": {
+                ".validate": "newData.val() === 'swap'"
+              },
+              "expectedRevision": {
+                ".validate": "newData.isNumber()"
+              },
+              "resultRevision": {
+                ".validate": "newData.isNumber()"
+              },
+              "beforeA": {
+                ".validate": "newData.val() === 'a001' || newData.val() === 'a002'"
+              },
+              "beforeB": {
+                ".validate": "newData.val() === 'a001' || newData.val() === 'a002'"
+              },
+              "afterA": {
+                ".validate": "newData.val() === 'a001' || newData.val() === 'a002'"
+              },
+              "afterB": {
+                ".validate": "newData.val() === 'a001' || newData.val() === 'a002'"
+              },
+              "$other": {
+                ".validate": false
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
