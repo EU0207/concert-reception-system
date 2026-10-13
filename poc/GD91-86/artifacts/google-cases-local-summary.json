@@ -1,0 +1,63 @@
+{
+  "sourceHashes": {
+    "google-cases-local.mjs": "b1c4672ea6abd6b7c1656136aa84bf8aa15d2188988ee3cbed93adf00579837b",
+    "google-cases.mjs": "9fa3adde5c793787baaa6de1ae3c35b290f44d84bb0e2bc6180a5cef0510d5b1",
+    "google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a"
+  },
+  "endSourceHashes": {
+    "google-cases-local.mjs": "b1c4672ea6abd6b7c1656136aa84bf8aa15d2188988ee3cbed93adf00579837b",
+    "google-cases.mjs": "9fa3adde5c793787baaa6de1ae3c35b290f44d84bb0e2bc6180a5cef0510d5b1",
+    "google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a"
+  },
+  "reports": [
+    {
+      "kind": "session-expiry",
+      "paths": 12,
+      "newRestRejected": 12,
+      "sdkNewDataRejected": 12,
+      "restStreamNewDataRejected": 12,
+      "otherValidDeviceContinues": 12,
+      "bothSameHumanDevicesRejected": 0,
+      "normalManagerChanges": true,
+      "ownerChangeInjection": false,
+      "missingOperationCreatedAfterExpiry": true,
+      "clockOnlyDisconnectClaimed": false
+    },
+    {
+      "kind": "role-and-session-expiry",
+      "paths": 12,
+      "newRestRejected": 12,
+      "sdkNewDataRejected": 12,
+      "restStreamNewDataRejected": 12,
+      "otherValidDeviceContinues": 0,
+      "bothSameHumanDevicesRejected": 12,
+      "normalManagerChanges": false,
+      "ownerChangeInjection": true,
+      "missingOperationCreatedAfterExpiry": true,
+      "clockOnlyDisconnectClaimed": false
+    }
+  ],
+  "maxJsonNodes": 296,
+  "logicalReadLocations": 6,
+  "parentAndChildPaths": 12,
+  "expiryWindowMs": 10000,
+  "wholeBusinessConnected": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "realGoogleLoginTested": false
+}
