@@ -1,0 +1,122 @@
+{
+  "sourceHashes": {
+    "auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "generate.mjs": "bbf8add8a8ea23c2139a6042c9579165f062dd1ac4ad337aa4ab9d71515b5c0f",
+    "database.rules.json": "e5be03f23906a3beba338e3324c93b4677de51c74c1ebf388a867344ea6309db",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913",
+    "transport.mjs": "5a12d6ec5060304a1eb476798c44b1d9b0e94a75a8616eafe5ced91809fd9890",
+    "authorization-tests.mjs": "f7084a77fa84f953f81ae7abb464a354432295e2aedd118e66f417d2c9c99544",
+    "local.mjs": "cb4d20b4dd6b1cacc0f0833fd945bde87e7f0579769bfb5b81b8f6a1510fb475"
+  },
+  "endSourceHashes": {
+    "auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "generate.mjs": "bbf8add8a8ea23c2139a6042c9579165f062dd1ac4ad337aa4ab9d71515b5c0f",
+    "database.rules.json": "e5be03f23906a3beba338e3324c93b4677de51c74c1ebf388a867344ea6309db",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "firebase.json": "ab0acbf290c1cb8ff2a7fa086c58d1054b8e166abef9226a5f1bbabd790be913",
+    "transport.mjs": "5a12d6ec5060304a1eb476798c44b1d9b0e94a75a8616eafe5ced91809fd9890",
+    "authorization-tests.mjs": "f7084a77fa84f953f81ae7abb464a354432295e2aedd118e66f417d2c9c99544",
+    "local.mjs": "cb4d20b4dd6b1cacc0f0833fd945bde87e7f0579769bfb5b81b8f6a1510fb475"
+  },
+  "reports": [
+    {
+      "id": "A-owner",
+      "generalRead": true,
+      "management": true,
+      "temporary": false
+    },
+    {
+      "id": "A-deputy",
+      "generalRead": true,
+      "management": true,
+      "temporary": false
+    },
+    {
+      "id": "A-temporary",
+      "generalRead": true,
+      "management": false,
+      "temporary": true
+    },
+    {
+      "id": "A-receptionist",
+      "generalRead": true,
+      "management": false,
+      "temporary": false
+    },
+    {
+      "id": "A-session-forgery",
+      "mutationsRejected": 8
+    },
+    {
+      "id": "A-cross-human",
+      "denied": true
+    },
+    {
+      "id": "A-unverified",
+      "denied": true
+    },
+    {
+      "id": "A-wrong-provider",
+      "denied": true
+    },
+    {
+      "id": "A-self-escalation",
+      "denied": true
+    },
+    {
+      "id": "A-malformed-role",
+      "invalidStatesRejected": 5,
+      "statesSeeded": true
+    },
+    {
+      "id": "A-device-revocation",
+      "stoppedDeviceDenied": true,
+      "otherContinues": true
+    },
+    {
+      "id": "A-session-revocation",
+      "revokeAndReissue": true
+    },
+    {
+      "id": "A-expiration",
+      "denied": true,
+      "expiredStateSeeded": true
+    },
+    {
+      "id": "A-recent-auth",
+      "highImpactDenied": true,
+      "oldTimeSeeded": true
+    },
+    {
+      "id": "A-promotion-preparation",
+      "baselineGeneralOnly": true,
+      "newPreparationRequired": true
+    },
+    {
+      "id": "A-demotion",
+      "oldPrivilegeDenied": true,
+      "newGeneralPreparationRequired": true
+    },
+    {
+      "id": "A-control",
+      "receptionStopped": true,
+      "closedEditingDenied": true
+    }
+  ],
+  "metrics": {
+    "requests": 113,
+    "requestBodyBytes": 69387,
+    "responseBodyBytes": 9456,
+    "ownerRequests": 43,
+    "userRequests": 70
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "productionAuthorizationVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
