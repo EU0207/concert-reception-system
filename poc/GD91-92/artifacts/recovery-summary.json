@@ -1,0 +1,98 @@
+{
+  "sourceHashes": {
+    "reference-rules.mjs": "4845976fe6b6a4b45c312afd1e86de7a200215f9b3571cc096f29c31482bbd3b",
+    "references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "recovery.mjs": "0289ce597da38c54389a4a76a86bab292056fa4a08ebc395fce07fccc50a3c88",
+    "model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-91/snapshot-rules.mjs": "6a7aee91be89e65f1ce992f7755a3793869852258df6f6a8f01de25342b267ac",
+    "generate.mjs": "f2b567b780eb191de057a4e7f2b63a4aaa68b9de509f98df750baaded7361d8f",
+    "database.rules.json": "9608209c2ce461606786f05fba38da8fc9dff0e69fa857f51c7568ba01827431",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-86/browser.html": "f7c5d21b67b469f7eb7da30b0d62ab264c5aa4a461a53719f1beee76047c5574",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-73/local-draft.mjs": "cdab67892338220049bcf05bf745b752e6d5bb6e49f3d72d7283cc4593d14fea",
+    "../POC-004/src/crypto.ts": "fe348f5a9a7716d9f13496d23ecd24767b2b10d75501878dcb8104d21a7ab6b5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737"
+  },
+  "endSourceHashes": {
+    "reference-rules.mjs": "4845976fe6b6a4b45c312afd1e86de7a200215f9b3571cc096f29c31482bbd3b",
+    "references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "recovery.mjs": "0289ce597da38c54389a4a76a86bab292056fa4a08ebc395fce07fccc50a3c88",
+    "model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-91/snapshot-rules.mjs": "6a7aee91be89e65f1ce992f7755a3793869852258df6f6a8f01de25342b267ac",
+    "generate.mjs": "f2b567b780eb191de057a4e7f2b63a4aaa68b9de509f98df750baaded7361d8f",
+    "database.rules.json": "9608209c2ce461606786f05fba38da8fc9dff0e69fa857f51c7568ba01827431",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-86/browser.html": "f7c5d21b67b469f7eb7da30b0d62ab264c5aa4a461a53719f1beee76047c5574",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-73/local-draft.mjs": "cdab67892338220049bcf05bf745b752e6d5bb6e49f3d72d7283cc4593d14fea",
+    "../POC-004/src/crypto.ts": "fe348f5a9a7716d9f13496d23ecd24767b2b10d75501878dcb8104d21a7ab6b5",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737"
+  },
+  "reports": [
+    {
+      "id": "I01-encrypted-fixed-operation-restarts",
+      "encrypted": true,
+      "seats": 1000,
+      "operationAndSnapshotPreserved": true,
+      "reloadAndBrowserProcessRestart": true,
+      "browserDatabaseRequests": 0
+    },
+    {
+      "id": "I02-abort-keeps-previous-and-scope",
+      "priorDraftKept": true,
+      "crossUserAndPerformanceIsolated": true,
+      "physicalPowerLossTested": false
+    },
+    {
+      "id": "I03-explicit-offline-does-not-enqueue",
+      "writes": 0,
+      "noAutoSendOnInjectedOnlineEvent": true,
+      "productionSyncLoopTested": false
+    },
+    {
+      "id": "I04-real-lost-response-and-later-qr-recovery",
+      "restResponseSocketDroppedAfterCommit": true,
+      "laterQrCreationAndReissueFromOtherDevice": true,
+      "browserRestart": true,
+      "sameIdLookupVerified": true,
+      "secondWrites": 0,
+      "sdkInternalNetworkLossInjected": false
+    },
+    {
+      "id": "I05-revoked-proposal-remains-encrypted",
+      "authorityDeniedBeforeWrite": true,
+      "proposalRetained": true,
+      "inactiveContextDenied": true,
+      "onlineAuthorityContextPrecondition": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "browser": "installed Microsoft Edge, headless, isolated persistent profile",
+  "externalFirebaseConnected": false,
+  "referencePinConnected": true,
+  "receptionQueuePinsConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

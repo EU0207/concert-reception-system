@@ -1,0 +1,172 @@
+{
+  "sourceHashes": {
+    "capacity.mjs": "ecf10eef2852abcccaab8541fa0fa000d98682d2ccff2a8e757099b11c503904",
+    "model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "bulk-rules.mjs": "b6fd471ebbeb7a5cd949c9957ad1cf94d32d3d0fa3f21afdeb469d3d684e7355",
+    "generate.mjs": "d75c707f5aac01bec612ea794b266e53c0e7e87faceb78ffbdf541f59741420c",
+    "database.rules.json": "cdf3e58c5b2af572a689364b273af2d70fa6fe0ef3dc79cbac0951ae96d436b4",
+    "../GD91-89/database.rules.json": "0e0f0776d2e04a0d995be8852d7b76a40d1f675e5701dfd2a1b4b6f1454e3b87",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/projection-rules.mjs": "233972d75e59882dc50f28421cb25e7738daa9339f2a057ee46b401ea582c6a5",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "capacity.mjs": "ecf10eef2852abcccaab8541fa0fa000d98682d2ccff2a8e757099b11c503904",
+    "model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "bulk-rules.mjs": "b6fd471ebbeb7a5cd949c9957ad1cf94d32d3d0fa3f21afdeb469d3d684e7355",
+    "generate.mjs": "d75c707f5aac01bec612ea794b266e53c0e7e87faceb78ffbdf541f59741420c",
+    "database.rules.json": "cdf3e58c5b2af572a689364b273af2d70fa6fe0ef3dc79cbac0951ae96d436b4",
+    "../GD91-89/database.rules.json": "0e0f0776d2e04a0d995be8852d7b76a40d1f675e5701dfd2a1b4b6f1454e3b87",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/projection-rules.mjs": "233972d75e59882dc50f28421cb25e7738daa9339f2a057ee46b401ea582c6a5",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "people": 600,
+      "sections": 2,
+      "nonSeatCells": 600,
+      "stages": {
+        "register": {
+          "requests": 600,
+          "requestBodyBytes": 4368506,
+          "responseBodyBytes": 4368506,
+          "ownerRequests": 0,
+          "userRequests": 600,
+          "elapsedMs": 60462
+        },
+        "bulkOutcome": {
+          "responseReceived": true,
+          "resultLookupRequired": false,
+          "elapsedMs": 30965
+        },
+        "bulkAssign": {
+          "requests": 1,
+          "requestBodyBytes": 293152,
+          "responseBodyBytes": 276390,
+          "ownerRequests": 0,
+          "userRequests": 1,
+          "elapsedMs": 30978
+        },
+        "qrCreate": {
+          "requests": 600,
+          "requestBodyBytes": 1012056,
+          "responseBodyBytes": 1014456,
+          "ownerRequests": 0,
+          "userRequests": 600,
+          "elapsedMs": 92223
+        },
+        "ticketCheck": {
+          "requests": 600,
+          "requestBodyBytes": 895140,
+          "responseBodyBytes": 878340,
+          "ownerRequests": 0,
+          "userRequests": 600,
+          "elapsedMs": 70655
+        }
+      },
+      "preparation": {
+        "requests": 1853,
+        "requestBodyBytes": 6801267,
+        "responseBodyBytes": 6721337,
+        "ownerRequests": 5,
+        "userRequests": 1848
+      },
+      "maxRequestBytes": 293152,
+      "layoutParts": 38,
+      "layoutMaxPartBytes": 2913,
+      "ownerPersonOrTicketWrites": 0,
+      "bulkAssignmentRequests": 1,
+      "individualAssignmentRequestsAvoided": 599,
+      "normalPreparationRequestsExcludingLayoutAuthAndDiagnostics": 1802,
+      "snapshotStats": [
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688
+        }
+      ],
+      "snapshotPassesPerEnvironment": 3,
+      "actualSdkEnvironments": 6,
+      "eventsPerEnvironment": [
+        600,
+        600,
+        600,
+        600,
+        600,
+        600
+      ],
+      "eventBodyBytes": [
+        275182,
+        275182,
+        275182,
+        275182,
+        275182,
+        275182
+      ],
+      "reconnectEvents": 0,
+      "receiptStats": {
+        "requests": 600,
+        "requestBodyBytes": 399766,
+        "responseBodyBytes": 396766,
+        "ownerRequests": 0,
+        "userRequests": 600
+      },
+      "elapsedMs": 27369,
+      "eventStorageBytes": 5680457,
+      "receiptStorageBytes": 314952,
+      "layoutStorageBytes": 175342,
+      "normalIssuanceToSixSdkConnected": true,
+      "proposalCopiesWholeEvent": false,
+      "ramJournalOnly": true,
+      "realIndexedDbVerified": false,
+      "completeBusinessBudgetVerified": false
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "runtime": {
+    "isolatedEmulatorPerPeople": true,
+    "javaHeapOption": "-Xmx8g"
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

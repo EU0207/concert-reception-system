@@ -1,0 +1,26 @@
+{
+  "sourceHashes": {
+    "capacity.mjs": "ed68b82b78a3458022189e14fe041c3640d38c1d10adb52a94738f72b66a770b",
+    "sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "projection-rules.mjs": "233972d75e59882dc50f28421cb25e7738daa9339f2a057ee46b401ea582c6a5",
+    "database.rules.json": "0e0f0776d2e04a0d995be8852d7b76a40d1f675e5701dfd2a1b4b6f1454e3b87"
+  },
+  "phase": "ticketCheck",
+  "failedPeople": 1000,
+  "completedPeopleObservedInProcessOutput": [
+    600
+  ],
+  "completeSuccessfulRunArtifactProduced": false,
+  "status": 500,
+  "error": "Java heap space",
+  "cleanup": {
+    "rulesClosed": true,
+    "databaseRootEmpty": true
+  },
+  "classification": "local-emulator-runtime-failure",
+  "productionLimitEstablished": false,
+  "externalFirebaseConnected": false,
+  "tested3000": false
+}

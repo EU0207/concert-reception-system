@@ -1,0 +1,89 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "d1e05e4bb1a41708cc2bdd4bdc047d97acff0093792a8df781024588cb627344",
+    "model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "snapshot-rules.mjs": "6a7aee91be89e65f1ce992f7755a3793869852258df6f6a8f01de25342b267ac",
+    "generate.mjs": "2eaa8a0720fa46764757661a84cb3128908ef6a336bb1036180cc1e7d2739336",
+    "database.rules.json": "ac2e72a9b1e35aaaee934fc7f2210b5f4498e69e2c955b17ac02e34fce3100d3",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-90/bulk-rules.mjs": "b6fd471ebbeb7a5cd949c9957ad1cf94d32d3d0fa3f21afdeb469d3d684e7355",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "d1e05e4bb1a41708cc2bdd4bdc047d97acff0093792a8df781024588cb627344",
+    "model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "snapshot-rules.mjs": "6a7aee91be89e65f1ce992f7755a3793869852258df6f6a8f01de25342b267ac",
+    "generate.mjs": "2eaa8a0720fa46764757661a84cb3128908ef6a336bb1036180cc1e7d2739336",
+    "database.rules.json": "ac2e72a9b1e35aaaee934fc7f2210b5f4498e69e2c955b17ac02e34fce3100d3",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-90/bulk-rules.mjs": "b6fd471ebbeb7a5cd949c9957ad1cf94d32d3d0fa3f21afdeb469d3d684e7355",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "S01-normal-sdk-registration-and-assignment",
+      "sdkCommitted": true,
+      "projectionIncluded": true
+    },
+    {
+      "id": "S02-old-assignment-lookup-after-new-qr",
+      "historicalProjectionUsed": true,
+      "currentTicketAlreadyChanged": true,
+      "secondWrites": 0
+    },
+    {
+      "id": "S03-modified-public-body-is-not-success",
+      "sameIdDifferentPublicRowRejected": true
+    },
+    {
+      "id": "S04-extra-body-is-not-success",
+      "piggybackRejected": true
+    },
+    {
+      "id": "S05-missing-or-forged-qr-snapshot-denied",
+      "invalidSnapshotsRejected": 3
+    },
+    {
+      "id": "S06-life-result-survives-cancel-and-return",
+      "oldCycleResultVerified": true,
+      "secondWrites": 0
+    },
+    {
+      "id": "S07-bulk-result-survives-later-issuance",
+      "bulkBodyReconstructed": true,
+      "secondWrites": 0
+    },
+    {
+      "id": "S08-no-network-write-while-offline-or-revoked",
+      "explicitOfflineRejected": true,
+      "revocationBeforeSend": true,
+      "secondWrites": 0
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "realIndexedDbVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
