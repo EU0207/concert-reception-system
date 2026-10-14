@@ -1,0 +1,42 @@
+{
+  "sourceHashes": {
+    "closed-baseline.mjs": "12e89677d67860f77131702b4c68ea76a6d405f2facf0a0bd2599be4a726fd10",
+    "../GD91-99/database.rules.json": "59bde2e92d3319a10d6262ba66b81be3fc0354cc232d8fc2824b2e69a1734500",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-98/minimal-cases.mjs": "2e2918597f4e87e142f77fde4522fb0956bfa328df31d1a2e2bd7b0322b68212",
+    "../GD91-98/quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089"
+  },
+  "endSourceHashes": {
+    "closed-baseline.mjs": "12e89677d67860f77131702b4c68ea76a6d405f2facf0a0bd2599be4a726fd10",
+    "../GD91-99/database.rules.json": "59bde2e92d3319a10d6262ba66b81be3fc0354cc232d8fc2824b2e69a1734500",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-98/minimal-cases.mjs": "2e2918597f4e87e142f77fde4522fb0956bfa328df31d1a2e2bd7b0322b68212",
+    "../GD91-98/quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089"
+  },
+  "baselineOnly": true,
+  "afterCloseAutomaticReceiveAllowed": true,
+  "automaticAdoptionAllowed": false,
+  "localQueueRemovedAfterReceipt": true,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "metrics": {
+    "requests": 61,
+    "requestBodyBytes": 825097,
+    "responseBodyBytes": 19860,
+    "ownerRequests": 21,
+    "userRequests": 40
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
