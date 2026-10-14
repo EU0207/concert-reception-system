@@ -1,0 +1,14 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const original=new URL('../GD91-92/validate.mjs',import.meta.url),result=new URL('artifacts/regression-summary.json',import.meta.url),rules=new URL('database.rules.json',import.meta.url),digest=s=>createHash('sha256').update(s.replace(/\r\n/g,'\n')).digest('hex');
+const wrapperBefore=digest(fs.readFileSync(new URL('regression.mjs',import.meta.url),'utf8')),rulesBefore=digest(fs.readFileSync(rules,'utf8'));
+let source=fs.readFileSync(original,'utf8');
+source=source.replace(/from '(\.\.?\/[^']+)'/g,(_,p)=>'from '+JSON.stringify(new URL(p,original).href));
+source=source.replace("new URL('database.rules.json',import.meta.url)",`new URL(${JSON.stringify(rules.href)})`);
+source=source.replace("new URL('artifacts/validate-summary.json',import.meta.url)",`new URL(${JSON.stringify(result.href)})`);
+source=source.replaceAll('import.meta.url',JSON.stringify(original.href)).replace('process.exit(0);','');
+await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const report=JSON.parse(fs.readFileSync(result,'utf8'));assert.equal(report.reports.length,12);assert.deepEqual(report.sourceHashes,report.endSourceHashes);
+const rebase=entries=>Object.fromEntries(Object.entries(entries).map(([f,h])=>['../GD91-92/'+f,h]));
+report.sourceHashes={...rebase(report.sourceHashes),'regression.mjs':wrapperBefore,'database.rules.json':rulesBefore};report.endSourceHashes={...rebase(report.endSourceHashes),'regression.mjs':digest(fs.readFileSync(new URL('regression.mjs',import.meta.url),'utf8')),'database.rules.json':digest(fs.readFileSync(rules,'utf8'))};
+assert.deepEqual(report.sourceHashes,report.endSourceHashes);report.executedRulesSource='database.rules.json';report.adaptedFrom='../GD91-92/validate.mjs';report.originalTestContentHash=digest(fs.readFileSync(original,'utf8'));report.sourceHashes['../GD91-92/validate.mjs']=report.originalTestContentHash;report.endSourceHashes['../GD91-92/validate.mjs']=report.originalTestContentHash;
+fs.writeFileSync(result,JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({existingReferenceGroups:12,actualRules:'GD91-94',externalFirebaseConnected:false}));process.exit(0);
