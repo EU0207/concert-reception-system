@@ -1,0 +1,190 @@
+{
+  "sourceHashes": {
+    "capacity.mjs": "57fe1da835b1094d4f112c24de5b66b659c8ab5a980e60526adc1aec91af6cfc",
+    "../GD91-96/capacity.mjs": "57363dd7662fa6d95882ea6875d93ba83e2b9a6ba49e774810956173e6eebb4e",
+    "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-99/queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "endSourceHashes": {
+    "capacity.mjs": "57fe1da835b1094d4f112c24de5b66b659c8ab5a980e60526adc1aec91af6cfc",
+    "../GD91-96/capacity.mjs": "57363dd7662fa6d95882ea6875d93ba83e2b9a6ba49e774810956173e6eebb4e",
+    "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-99/queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "reports": [
+    {
+      "people": 600,
+      "nonSeatCells": 600,
+      "sections": 2,
+      "actualSdkEnvironments": 6,
+      "snapshotPassesPerEnvironment": 3,
+      "normalRegistrationToIssuedQr": true,
+      "ownerPersonOrTicketWrites": 0,
+      "managerReservationRequestsIncluded": true,
+      "stages": {
+        "register": {
+          "requests": 1800,
+          "requestBodyBytes": 4730184,
+          "responseBodyBytes": 4730184,
+          "ownerRequests": 0,
+          "userRequests": 1800,
+          "elapsedMs": 83090
+        },
+        "bulkAssign": {
+          "requests": 3,
+          "requestBodyBytes": 337374,
+          "responseBodyBytes": 320612,
+          "ownerRequests": 0,
+          "userRequests": 3,
+          "elapsedMs": 32638
+        },
+        "qrCreate": {
+          "requests": 1800,
+          "requestBodyBytes": 1396748,
+          "responseBodyBytes": 1399148,
+          "ownerRequests": 0,
+          "userRequests": 1800,
+          "elapsedMs": 113915
+        },
+        "ticketCheck": {
+          "requests": 1800,
+          "requestBodyBytes": 1280230,
+          "responseBodyBytes": 1263430,
+          "ownerRequests": 0,
+          "userRequests": 1800,
+          "elapsedMs": 91934
+        }
+      },
+      "preparationRequestsIncludingLayoutAndDiagnostics": {
+        "requests": 5457,
+        "requestBodyBytes": 7977279,
+        "responseBodyBytes": 7897575,
+        "ownerRequests": 5,
+        "userRequests": 5452
+      },
+      "normalOperationRequests": 5403,
+      "maxRequestBytes": 336910,
+      "maxElapsedMs": 32562,
+      "resultLookups": 0,
+      "sameIdResendWrites": 0,
+      "snapshotStats": [
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688,
+          "geometrySdkGets": 47,
+          "geometryBodyBytes": 107643
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688,
+          "geometrySdkGets": 47,
+          "geometryBodyBytes": 107643
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688,
+          "geometrySdkGets": 47,
+          "geometryBodyBytes": 107643
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688,
+          "geometrySdkGets": 47,
+          "geometryBodyBytes": 107643
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688,
+          "geometrySdkGets": 47,
+          "geometryBodyBytes": 107643
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 437688,
+          "geometrySdkGets": 47,
+          "geometryBodyBytes": 107643
+        }
+      ],
+      "immutableGeometryDownloadedPerEnvironment": 1,
+      "receiptLeaseConnected": true,
+      "reception": {
+        "requests": 1200,
+        "requestBodyBytes": 790258,
+        "responseBodyBytes": 738058,
+        "ownerRequests": 0,
+        "userRequests": 1200,
+        "elapsedMs": 35021,
+        "eventsPerEnvironment": [
+          600,
+          600,
+          600,
+          600,
+          600,
+          600
+        ],
+        "responseBodyBytesPerEnvironment": [
+          345982,
+          345982,
+          345982,
+          345982,
+          345982,
+          345982
+        ]
+      },
+      "reconnectEvents": 0,
+      "rootJsonBytes": 6684137,
+      "realIndexedDbVerifiedHere": false,
+      "storageRecoveryVerifiedSeparately": true,
+      "controlAndDeviceBootstrapPrecondition": true,
+      "fullBusinessFreeTierVerified": false
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "adaptedFrom": "../GD91-96/capacity.mjs",
+  "executedRulesSource": "../GD91-100/database.rules.json",
+  "transportAdaptation": "GD91-99 common sequence with legacy ACK shape",
+  "runtime": {
+    "javaHeapOption": "-Xmx8g",
+    "isolatedEmulatorPerPeople": true
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
