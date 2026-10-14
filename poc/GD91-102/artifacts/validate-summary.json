@@ -1,6 +1,6 @@
 {
   "sourceHashes": {
-    "validate.mjs": "9d9d230671202c7f50ce5d4ee99f86214c77736e733338bda7f070aaafa03120",
+    "validate.mjs": "b783a23acf11fade50f445482067c666fce5cc31ca6b81bbeeb9ba74bee9d789",
     "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
     "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
     "generate.mjs": "af0e193ff0566e8ef8de21d1401998db8eb4a89402cce5a2075e669a7470ae44",
@@ -20,7 +20,7 @@
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "validate.mjs": "9d9d230671202c7f50ce5d4ee99f86214c77736e733338bda7f070aaafa03120",
+    "validate.mjs": "b783a23acf11fade50f445482067c666fce5cc31ca6b81bbeeb9ba74bee9d789",
     "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
     "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
     "generate.mjs": "af0e193ff0566e8ef8de21d1401998db8eb4a89402cce5a2075e669a7470ae44",
@@ -97,6 +97,25 @@
     {
       "id": "P06-current-proof-publishes-with-assignment-preserved",
       "protectedSeatUnchanged": true
+    },
+    {
+      "id": "P07-more-than-64-parts-can-be-published-and-read",
+      "publishedParts": 66,
+      "cells": 1050,
+      "readerPartBudget": 256,
+      "old64PartGuardRemoved": true,
+      "productCellLimitApproved": false
+    },
+    {
+      "id": "P08-cursor-jump-and-stale-slot-flags-refused",
+      "uncheckedClaimRejected": true,
+      "cursorJumpRejected": true,
+      "staleAndOmittedFlagsRejected": true
+    },
+    {
+      "id": "P09-event-change-cannot-be-bundled-with-publication",
+      "postUpdateEventFenceChecked": true,
+      "partialStateNotCommitted": true
     }
   ],
   "cleanup": {
@@ -104,11 +123,11 @@
     "trialRootEmpty": true
   },
   "metrics": {
-    "requests": 150,
-    "requestBodyBytes": 1340305,
-    "responseBodyBytes": 80245,
-    "ownerRequests": 14,
-    "userRequests": 136
+    "requests": 391,
+    "requestBodyBytes": 1998151,
+    "responseBodyBytes": 850520,
+    "ownerRequests": 16,
+    "userRequests": 375
   },
   "formalLayoutSchemaConnected": true,
   "publicationProtectionVerified": false,
