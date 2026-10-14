@@ -1,0 +1,130 @@
+{
+  "sourceHashes": {
+    "remote-leases.mjs": "adafb524a4b4234da9bc4d5d4027ae9b83cfdb819dea322df3d07d0a7ea3b3a5",
+    "common-cases.mjs": "cdf433a253d839ccd52dad66d62e5da491db292148606187ebd99b181a4f14d0",
+    "generate.mjs": "00a544ea630c9f4d684da38041104b76571d0939f270e47fe7f57c675b0fe766",
+    "database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-96/queue-rules.mjs": "2550f487b6e6db7af8fe2b867d7a19b2377f68c5eee4dea7bc720e3fb7f99a4c",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-96/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-86/google-login-server.mjs": "338fb391292a818a7574853027c034cf9305be6887f24dbeb3e84815ba5f4bf9",
+    "../GD91-86/google-login.mjs": "febf5f22f1824651f990611e8f1935ca2858eecb5b4383d7bf191fb049245861",
+    "../GD91-86/google-login.html": "5fb2c62d7a244f78a0c3ea324915e017a867dd0a65b46f71340829a794a48609",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "endSourceHashes": {
+    "remote-leases.mjs": "adafb524a4b4234da9bc4d5d4027ae9b83cfdb819dea322df3d07d0a7ea3b3a5",
+    "common-cases.mjs": "cdf433a253d839ccd52dad66d62e5da491db292148606187ebd99b181a4f14d0",
+    "generate.mjs": "00a544ea630c9f4d684da38041104b76571d0939f270e47fe7f57c675b0fe766",
+    "database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-96/queue-rules.mjs": "2550f487b6e6db7af8fe2b867d7a19b2377f68c5eee4dea7bc720e3fb7f99a4c",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-96/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-86/google-login-server.mjs": "338fb391292a818a7574853027c034cf9305be6887f24dbeb3e84815ba5f4bf9",
+    "../GD91-86/google-login.mjs": "febf5f22f1824651f990611e8f1935ca2858eecb5b4383d7bf191fb049245861",
+    "../GD91-86/google-login.html": "5fb2c62d7a244f78a0c3ea324915e017a867dd0a65b46f71340829a794a48609",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "reports": [
+    {
+      "id": "L01",
+      "normalRegistrationBulkAndQr": true,
+      "generalReceptionDevices": 2,
+      "currentMetadataAndPublicRowsViaSdk": true,
+      "privateProfileNotDistributed": true
+    },
+    {
+      "id": "L02",
+      "referenceTheftDenied": true,
+      "currentQrAcceptedBeforeIssueCheck": true,
+      "queueDrainedAfterAck": true,
+      "realIndexedDbVerifiedHere": false
+    },
+    {
+      "id": "L03",
+      "expiredMetadataRestAndSdkDenied": true,
+      "expiredSdkNewValues": [
+        0,
+        0
+      ],
+      "validSdkNewValues": [
+        1,
+        1
+      ],
+      "sdkCancellationObserved": [
+        false,
+        true
+      ],
+      "restStreamCancelled": true,
+      "restStreamNewData": 0,
+      "roleExpiryTested": false,
+      "clockOnlyDisconnectClaimed": false
+    },
+    {
+      "id": "L04",
+      "validReceptionDeviceStillWrites": true,
+      "expiredDeviceQueueAndLeaseRetained": true,
+      "automaticRebase": false
+    }
+  ],
+  "maxJsonNodes": 536,
+  "maxRootJsonBytes": 24023,
+  "normalRegistrationPeople": 2,
+  "actualGeneralReceptionDevices": 2,
+  "realIndexedDbVerifiedHere": false,
+  "fullBusinessFreeTierVerified": false,
+  "decisionId": "TECH-DD91-089",
+  "applicationCalls": 111,
+  "observedApplicationBodyBytes": 92465,
+  "sseAndSdkWireOverheadMeasured": false,
+  "ownerAndManagementCalls": 39,
+  "normalCalls": 43,
+  "sdkApplicationCalls": 29,
+  "authUsersCreated": 5,
+  "realPersonalProfileUsed": true,
+  "googleAccountUsed": true,
+  "sdkInternalWireRequestsMeasured": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "rootsEmpty": true,
+    "usersDeleted": 5,
+    "authRestored": true,
+    "authUsersRemaining": 0,
+    "billingAccountUnlinked": true
+  },
+  "externalFirebaseConnected": true,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
