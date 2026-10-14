@@ -1,11 +1,11 @@
 {
   "sourceHashes": {
-    "validate.mjs": "ea31b4e16b30d6a889636183a022318f4248e5afbc95eed394526b72b854da93",
+    "validate.mjs": "2179f8766be892e378718722651086d4e8f70af04c0d3b983291a7a500d8cd9b",
     "model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
-    "references.mjs": "871b3b75f63c0cca234c0422ca995c76d36271f5d39cfaf99e77d8baf4acfbca",
-    "reference-rules.mjs": "c66ca53f0ddb17b06891bff6a5764d993521266bd12415854b181b14e4f77dba",
+    "references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "reference-rules.mjs": "4845976fe6b6a4b45c312afd1e86de7a200215f9b3571cc096f29c31482bbd3b",
     "generate.mjs": "f2b567b780eb191de057a4e7f2b63a4aaa68b9de509f98df750baaded7361d8f",
-    "database.rules.json": "715241a104c5de3d5cd960740dd37abfbe58a1f6afa9778cb8b8762fe5d50d46",
+    "database.rules.json": "9608209c2ce461606786f05fba38da8fc9dff0e69fa857f51c7568ba01827431",
     "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
     "../GD91-91/snapshot-rules.mjs": "6a7aee91be89e65f1ce992f7755a3793869852258df6f6a8f01de25342b267ac",
@@ -22,12 +22,12 @@
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
   },
   "endSourceHashes": {
-    "validate.mjs": "ea31b4e16b30d6a889636183a022318f4248e5afbc95eed394526b72b854da93",
+    "validate.mjs": "2179f8766be892e378718722651086d4e8f70af04c0d3b983291a7a500d8cd9b",
     "model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
-    "references.mjs": "871b3b75f63c0cca234c0422ca995c76d36271f5d39cfaf99e77d8baf4acfbca",
-    "reference-rules.mjs": "c66ca53f0ddb17b06891bff6a5764d993521266bd12415854b181b14e4f77dba",
+    "references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "reference-rules.mjs": "4845976fe6b6a4b45c312afd1e86de7a200215f9b3571cc096f29c31482bbd3b",
     "generate.mjs": "f2b567b780eb191de057a4e7f2b63a4aaa68b9de509f98df750baaded7361d8f",
-    "database.rules.json": "715241a104c5de3d5cd960740dd37abfbe58a1f6afa9778cb8b8762fe5d50d46",
+    "database.rules.json": "9608209c2ce461606786f05fba38da8fc9dff0e69fa857f51c7568ba01827431",
     "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
     "../GD91-91/snapshot-rules.mjs": "6a7aee91be89e65f1ce992f7755a3793869852258df6f6a8f01de25342b267ac",
@@ -77,6 +77,13 @@
       "newerCommitVerified": true,
       "oldCommandCannotArriveLater": true,
       "localDraftNotDeletedByServer": true
+    },
+    {
+      "id": "F07b-control-only-change-fences-unsent-command",
+      "controlOnlyChangeResolvesBlockedReservation": true,
+      "oldCommandRemainsRejectedAfterInjectedRollback": true,
+      "eventVersionUnchanged": true,
+      "controlChangeInjected": true
     },
     {
       "id": "F08-retired-generation-with-draft-is-protected",
