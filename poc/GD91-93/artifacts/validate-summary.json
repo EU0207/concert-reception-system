@@ -1,0 +1,94 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "d2f8eec71148d2a06312750f1e175f3c3eaf998db5edef5303ded0475f21e194",
+    "shared.mjs": "f7c2f561ef62d56ea147d79c18862ef553ceeec874d7ed9ea5c1e4b27b541af6",
+    "shared-base-rules.mjs": "11b19ffcfaa48625cc8b5dbf4d88d4544db86b5fd7ef9f61d080503cce587d73",
+    "generate.mjs": "e8c9e671e6850e0b4b49b57133cc8e768c0f560b4cdb61d3e0a61febf47eaa80",
+    "database.rules.json": "6bbec93e5012f31fc8c0544bece367b8509ad8a64e42d0c1cc7600687cabea60",
+    "../GD91-92/database.rules.json": "9608209c2ce461606786f05fba38da8fc9dff0e69fa857f51c7568ba01827431",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "d2f8eec71148d2a06312750f1e175f3c3eaf998db5edef5303ded0475f21e194",
+    "shared.mjs": "f7c2f561ef62d56ea147d79c18862ef553ceeec874d7ed9ea5c1e4b27b541af6",
+    "shared-base-rules.mjs": "11b19ffcfaa48625cc8b5dbf4d88d4544db86b5fd7ef9f61d080503cce587d73",
+    "generate.mjs": "e8c9e671e6850e0b4b49b57133cc8e768c0f560b4cdb61d3e0a61febf47eaa80",
+    "database.rules.json": "6bbec93e5012f31fc8c0544bece367b8509ad8a64e42d0c1cc7600687cabea60",
+    "../GD91-92/database.rules.json": "9608209c2ce461606786f05fba38da8fc9dff0e69fa857f51c7568ba01827431",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/shared-tests.mjs": "65da46509b1003848bc6c4225dcdeccf87de74555b41e13e65cb7918c344350a",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "H00-previous-candidate-base-protection-gap",
+      "selectedDraftProtectedSeparately": true,
+      "previousBaseDeletionCouldStart": true,
+      "prototypeGapReproduced": true
+    },
+    {
+      "id": "H01-missing-mismatched-and-partial-base-denied",
+      "rejectedRequests": 5,
+      "confirmedHeadUnchanged": true
+    },
+    {
+      "id": "H02-share-keeps-reception-head-and-result",
+      "baseGenerationRecorded": true,
+      "receptionHeadUnchanged": true,
+      "generalReceptionReadDenied": true
+    },
+    {
+      "id": "H03-advanced-head-does-not-free-shared-base",
+      "sharedBaseAndSelectedCandidateProtected": true
+    },
+    {
+      "id": "H04-consumer-reference-survives-shared-replacement",
+      "legacyGenerationReferenceUsed": true,
+      "consumerStillProtected": true,
+      "replacedBaseMayBeCollected": true,
+      "localDraftRestoreConnected": false
+    },
+    {
+      "id": "H05-response-lookup-after-replacement-is-read-only",
+      "originalResultRetained": true,
+      "changedSameIdRejected": true,
+      "physicalPacketLoss": false
+    },
+    {
+      "id": "H06-only-consumer-can-release-before-bounded-collection",
+      "otherDeviceReleaseDenied": true,
+      "boundedCollectionResumed": true,
+      "resultKeptAfterGenerationCollection": true
+    },
+    {
+      "id": "H07-stale-base-and-publication-during-gc-denied",
+      "staleBaseRejected": true,
+      "deletedGenerationNotPublished": true,
+      "currentBaseProtected": true
+    },
+    {
+      "id": "H08-share-and-collection-race-has-one-winner",
+      "singleWinner": true,
+      "deletedCandidateNotSelected": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "sharedSelectedBaseProtected": true,
+  "receptionQueuePinsConnected": false,
+  "sharedPendingUploadPinsConnected": false,
+  "realIndexedDbVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

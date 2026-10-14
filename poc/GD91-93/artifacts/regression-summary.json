@@ -1,0 +1,127 @@
+{
+  "sourceHashes": {
+    "../GD91-92/validate.mjs": "2179f8766be892e378718722651086d4e8f70af04c0d3b983291a7a500d8cd9b",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-92/reference-rules.mjs": "4845976fe6b6a4b45c312afd1e86de7a200215f9b3571cc096f29c31482bbd3b",
+    "../GD91-92/generate.mjs": "f2b567b780eb191de057a4e7f2b63a4aaa68b9de509f98df750baaded7361d8f",
+    "../GD91-92/database.rules.json": "9608209c2ce461606786f05fba38da8fc9dff0e69fa857f51c7568ba01827431",
+    "../GD91-92/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-92/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-92/../GD91-91/snapshot-rules.mjs": "6a7aee91be89e65f1ce992f7755a3793869852258df6f6a8f01de25342b267ac",
+    "../GD91-92/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-92/../GD91-90/bulk-rules.mjs": "b6fd471ebbeb7a5cd949c9957ad1cf94d32d3d0fa3f21afdeb469d3d684e7355",
+    "../GD91-92/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-92/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-92/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-92/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-92/../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-92/../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-92/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-92/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-92/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "regression.mjs": "24413eee8eec5b78a8e2f6a280a463b289e11b99ea336d36b62c4cca36df81f9",
+    "database.rules.json": "6bbec93e5012f31fc8c0544bece367b8509ad8a64e42d0c1cc7600687cabea60"
+  },
+  "endSourceHashes": {
+    "../GD91-92/validate.mjs": "2179f8766be892e378718722651086d4e8f70af04c0d3b983291a7a500d8cd9b",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-92/reference-rules.mjs": "4845976fe6b6a4b45c312afd1e86de7a200215f9b3571cc096f29c31482bbd3b",
+    "../GD91-92/generate.mjs": "f2b567b780eb191de057a4e7f2b63a4aaa68b9de509f98df750baaded7361d8f",
+    "../GD91-92/database.rules.json": "9608209c2ce461606786f05fba38da8fc9dff0e69fa857f51c7568ba01827431",
+    "../GD91-92/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-92/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-92/../GD91-91/snapshot-rules.mjs": "6a7aee91be89e65f1ce992f7755a3793869852258df6f6a8f01de25342b267ac",
+    "../GD91-92/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-92/../GD91-90/bulk-rules.mjs": "b6fd471ebbeb7a5cd949c9957ad1cf94d32d3d0fa3f21afdeb469d3d684e7355",
+    "../GD91-92/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-92/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-92/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-92/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-92/../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-92/../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-92/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-92/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-92/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "regression.mjs": "24413eee8eec5b78a8e2f6a280a463b289e11b99ea336d36b62c4cca36df81f9",
+    "database.rules.json": "6bbec93e5012f31fc8c0544bece367b8509ad8a64e42d0c1cc7600687cabea60"
+  },
+  "reports": [
+    {
+      "id": "F01-base-acquired-before-operation",
+      "baseProtected": true,
+      "resultResolvedBeforeClear": true
+    },
+    {
+      "id": "F02-unreserved-and-missing-reference-denied",
+      "unreservedAndMissingDenied": true
+    },
+    {
+      "id": "F03-response-unknown-reserve-not-repeated",
+      "sameReservationRecovered": true,
+      "secondReservationWrite": false
+    },
+    {
+      "id": "F04-release-and-clear-before-resolution-denied",
+      "noTimeoutRelease": true,
+      "unresolvedReleaseRejected": true
+    },
+    {
+      "id": "F05-other-device-cannot-clear",
+      "crossDeviceClearAndReferenceTheftDenied": true
+    },
+    {
+      "id": "F06-committed-result-clears-pending-only",
+      "sameIdResultVerified": true,
+      "draftBaseStillPinned": true
+    },
+    {
+      "id": "F07-conflicting-operation-fences-unsent-command",
+      "newerCommitVerified": true,
+      "oldCommandCannotArriveLater": true,
+      "localDraftNotDeletedByServer": true
+    },
+    {
+      "id": "F07b-control-only-change-fences-unsent-command",
+      "controlOnlyChangeResolvesBlockedReservation": true,
+      "oldCommandRemainsRejectedAfterInjectedRollback": true,
+      "eventVersionUnchanged": true,
+      "controlChangeInjected": true
+    },
+    {
+      "id": "F08-retired-generation-with-draft-is-protected",
+      "currentGenerationChanged": true,
+      "oldDraftStillProtected": true
+    },
+    {
+      "id": "F09-partial-release-and-reactivation-denied",
+      "pinAndRecordReleaseAtomic": true,
+      "reactivationDenied": true
+    },
+    {
+      "id": "F10-lost-device-keeps-generation",
+      "revokedDeviceDoesNotAutoRelease": true,
+      "missingDeviceMustBeResolved": true,
+      "revocationInjected": true
+    },
+    {
+      "id": "F11-release-allows-bounded-collection-and-resume",
+      "collectedPartsBoundedTo32": true,
+      "interruptedCollectionResumed": true,
+      "operationResultRetained": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "receptionQueuePinsConnected": false,
+  "realIndexedDbVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "executedRulesSource": "database.rules.json",
+  "adaptedFrom": "../GD91-92/validate.mjs",
+  "originalTestContentHash": "2179f8766be892e378718722651086d4e8f70af04c0d3b983291a7a500d8cd9b"
+}
