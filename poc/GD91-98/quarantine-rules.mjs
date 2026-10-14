@@ -41,7 +41,7 @@ export function addQuarantine(rules){
  const write=`${registered} && newData.exists()`;
  run.quarantine={$device:{'.validate':transition.map(x=>`(${x})`).join(' && '),
   counter:{'.read':`(${registered}) || (${manager})`,'.write':write,...shape(counterFields)},
-  events:{'.read':`${manager} && query.orderByKey && query.startAt >= '1000000000' && query.limitToFirst <= 32`,
+  events:{'.read':`${manager} && query.orderByKey && query.startAt >= '1000000000' && query.limitToFirst > 0 && query.limitToFirst <= 32`,
    $key:{'.read':`(${registered}) || (${manager})`,'.write':`${write} && !data.exists() && $key === ${v(eventRoot,'counter/eventKey')}`,'.validate':checks.map(x=>`(${x})`).join(' && '),...shape(eventFields)}},
   ids:{$id:{'.read':`(${registered}) || (${manager})`,'.write':`${write} && !data.exists() && $id === newData.parent().parent().child('counter/eventId').val()`,'.validate':"newData.isString() && newData.val() === newData.parent().parent().child('counter/eventKey').val()"}},
   '$other':{'.validate':false}
