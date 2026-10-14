@@ -1,6 +1,6 @@
 {
   "sourceHashes": {
-    "validate.mjs": "95264eb497c73c88659ebccfb2825b80012b45b1f482fbd4cf6bfe12a8ea0d38",
+    "validate.mjs": "9d9d230671202c7f50ce5d4ee99f86214c77736e733338bda7f070aaafa03120",
     "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
     "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
     "generate.mjs": "af0e193ff0566e8ef8de21d1401998db8eb4a89402cce5a2075e669a7470ae44",
@@ -20,7 +20,7 @@
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "validate.mjs": "95264eb497c73c88659ebccfb2825b80012b45b1f482fbd4cf6bfe12a8ea0d38",
+    "validate.mjs": "9d9d230671202c7f50ce5d4ee99f86214c77736e733338bda7f070aaafa03120",
     "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
     "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
     "generate.mjs": "af0e193ff0566e8ef8de21d1401998db8eb4a89402cce5a2075e669a7470ae44",
@@ -71,22 +71,44 @@
     {
       "id": "F07-numbering-and-emergency-contracts-rejected-when-invalid",
       "invalidFieldGroups": 6
+    },
+    {
+      "id": "P01-assigned-seat-removal-refused-before-publication",
+      "missingAssignedSeatRejectedByServer": true
+    },
+    {
+      "id": "P02-assigned-seat-attribute-change-refused",
+      "assignedAttributeChangeRejectedByServer": true
+    },
+    {
+      "id": "P03-unchecked-and-incomplete-publication-refused",
+      "proofRequired": true,
+      "partialPublishRejected": true
+    },
+    {
+      "id": "P04-stale-proof-cannot-publish-after-event-update",
+      "eventRevisionFenced": true
+    },
+    {
+      "id": "P05-stale-proof-cannot-publish-after-control-update",
+      "controlRevisionFenced": true,
+      "controlFixtureRestored": true
+    },
+    {
+      "id": "P06-current-proof-publishes-with-assignment-preserved",
+      "protectedSeatUnchanged": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
   },
-  "failure": {
-    "stage": "normal-registration-and-assignment",
-    "code": "ERR_ASSERTION"
-  },
   "metrics": {
-    "requests": 83,
-    "requestBodyBytes": 1296223,
-    "responseBodyBytes": 38421,
-    "ownerRequests": 11,
-    "userRequests": 72
+    "requests": 150,
+    "requestBodyBytes": 1340305,
+    "responseBodyBytes": 80245,
+    "ownerRequests": 14,
+    "userRequests": 136
   },
   "formalLayoutSchemaConnected": true,
   "publicationProtectionVerified": false,

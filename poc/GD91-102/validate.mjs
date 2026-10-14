@@ -44,6 +44,7 @@ try {
   await check('F06-legacy-schema-bypass-rejected',async()=>{const legacy={kind:'layout',phase:'building',revision:1,cursor:0,expectedParts:1,lastPart:''};assert.equal((await user('generations/legacy-bypass/meta',manager.device,'PUT',legacy)).status,401);return{versionRequiredByControl:true};});
   await check('F07-numbering-and-emergency-contracts-rejected-when-invalid',async()=>{const f=await prepared('invalid-fields');for(const change of [{number:0},{prefix:'別の接頭部'},{emergencyChange:{kind:'add',reason:''}},{usable:'yes'},{cellId:'invalid'},{seatId:randomUUID()}]){const p=partPlan('invalid-fields',f.meta,[{...f.items[0],...change},...f.items.slice(1)]);assert.equal((await user('',manager.device,'PATCH',p)).status,401);}return{invalidFieldGroups:6};});
   stage='normal-registration-and-assignment';
+  await owner(trial+'/control','PUT',{state:'preparing',revision:2,layoutSchemaVersion:2});
   const head=await read('head'),refs=createReferences({user,inspect:async()=>{throw new Error('ack-only');}});await refs.acquire(manager,head);let reference=await read('references/'+manager.referenceId);
   async function commit(body){const p=prepare(manager,body);reference=await refs.reserveKnown(manager,p,reference);const ack=await user('event',manager.device,'PATCH',body);ok(ack);applyModel(state,body);reference=await refs.clearAcknowledged(manager,p,reference,ack);}
   await commit(command(manager,state,head,'register','person-0',{controlRevision:2}));
