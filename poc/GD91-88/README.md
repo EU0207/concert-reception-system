@@ -29,7 +29,7 @@
 | [SDK6群](artifacts/sdk-summary.json) | 同じIDの別内容・便乗を成功扱いしない。REST応答接続の実切断後、再書込み0件。SDK内部のパケット喪失・実機ではない |
 | [既存席操作13群](artifacts/business-summary.json)・[既存32群](artifacts/regression-summary.json) | 同じ最終候補で認可・分割・共有と回収を再実行。600人・1,000人×2・16区画も確認 |
 | [受付13群](artifacts/receipt-regression-summary.json) | 同じRulesの別fixtureを6 SDK環境へ配布し、差分再開を確認。通常発券からの多数環境合同試験とは区別 |
-| [共通手順7群](artifacts/common-local-summary.json) | 通常操作5群と期限2条件。Google役割はEmulator上の架空認証。最大451ノード。外部未実施 |
+| [共通手順7群](artifacts/common-local-summary.json) | 通常操作5群と期限2条件。ローカルのGoogle役割は架空認証。最大451ノード。外部7群の承認・後処理は後節へ記録 |
 
 ### 旧QR識別の修正
 

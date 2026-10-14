@@ -17,6 +17,7 @@
 ## 証拠と制約
 
 - [validate-summary.json](artifacts/validate-summary.json)：正常登録・発券、32件境界と途中競合、旧資格の切替など12群。部分送信と管理情報混入を拒否した。
+- [期限2条件](artifacts/expiry-summary.json)・[認可・回収など28群](artifacts/regression-summary.json)は再起動後に合格。人数別の失敗とは分けて記録する。後続[GD91-90](../GD91-90/README.md)で一括割当と人数別の合同確認を比較した。
 - [人数別試験の失敗](artifacts/capacity-failure-summary.json)：600人の完了はプロセス出力で観測したが、成功結果ファイルは未生成。1,000人は発行チェック中に`Java heap space`・HTTP 500で中断した。全拒否Rules・空DBを独立に再取得した。全体合格やFirebase本番の容量上限へ換算しない。
 - 次候補では一括割当と対象者だけの投影生成を比較する。大人数の各試行はEmulatorを再起動して分離し、累積した実行状態を区別する。Javaヒープの設定値と使用条件も記録する。
 - 保存試験のRAMを暗号化IndexedDB・実機の合格にしない。ownerの公演状態投入を全端末停止の証拠にしない。外部試行・課金と公開設定変更は含まない。

@@ -1,11 +1,16 @@
 import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
 import {cleanup,setup,trial,owner,user,request,ok,metrics} from '../GD91-89/support.mjs';
 import {client,wait} from '../GD91-89/sdk-client.mjs';import {plan} from '../GD91-88/receipt-client.mjs';
-import {bulk,command} from './model.mjs';
+import {bulk,command,applyModel} from './model.mjs';import {namespace} from '../GD91-84/transport.mjs';
 const files=['capacity.mjs','model.mjs','bulk-rules.mjs','generate.mjs','database.rules.json','../GD91-89/database.rules.json','../GD91-89/projection.mjs','../GD91-89/projection-rules.mjs','../GD91-89/sdk-client.mjs','../GD91-89/support.mjs','../GD91-88/model.mjs','../GD91-88/lifecycle-rules.mjs','../GD91-88/receipt-client.mjs','../GD91-87/receipt-client.mjs','../GD91-84/transport.mjs','../GD91-84/generation-tests.mjs','../GD91-84/auth-rules.mjs'];
 const hashes=()=>Object.fromEntries(files.map(f=>[f,createHash('sha256').update(fs.readFileSync(new URL(f,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex')])),before=hashes(),reports=[],clients=[],watchers=[];let clean,failure,phase='setup',activePeople;
 const selected=process.env.GD90_PEOPLE;if(selected)assert(['600','1000'].includes(selected));const cases=process.env.GD90_SMOKE==='1'?[[4,2]]:[[600,2],[1000,16]].filter(([n])=>!selected||String(n)===selected);
 const delta=(a,b)=>Object.fromEntries(Object.keys(a).map(k=>[k,b[k]-a[k]]));
+async function sendBulk(f,body){
+ const url=new URL('http://127.0.0.1:9000/'+trial+'/event.json');url.searchParams.set('ns',namespace);url.searchParams.set('auth',f.manager.device.token);const encoded=JSON.stringify(body);metrics.requests++;metrics.userRequests++;metrics.requestBodyBytes+=Buffer.byteLength(encoded);const started=Date.now();
+ try{const response=await fetch(url,{method:'PATCH',headers:{'content-type':'application/json'},body:encoded,signal:AbortSignal.timeout(60000)}),text=await response.text();metrics.responseBodyBytes+=Buffer.byteLength(text);assert.equal(response.status,200,'bulk-rejected');applyModel(f.state,body);return{responseReceived:true,resultLookupRequired:false,elapsedMs:Date.now()-started};}
+ catch(e){if(e.name!=='TimeoutError')throw e;const found=await user('event/operations/'+body.commit.operationId,f.manager.device);ok(found);assert.deepEqual(found.body,body['operations/'+body.commit.operationId],'bulk-result-unknown');applyModel(f.state,body);return{responseReceived:false,resultLookupRequired:true,elapsedMs:Date.now()-started,sameIdResendWrites:0};}
+}
 try{
  ok(await request('.settings/rules',{method:'PUT',token:'owner',body:JSON.parse(fs.readFileSync(new URL('database.rules.json',import.meta.url),'utf8'))}));
  for(const[people,sections]of cases){activePeople=people;
@@ -13,9 +18,9 @@ try{
   for(const kind of['register','bulkAssign','qrCreate','ticketCheck']){phase=kind;
    const start=structuredClone(metrics),started=Date.now();
    if(kind==='bulkAssign'){
-    const targets=Object.fromEntries(Array.from({length:people},(_,i)=>['person-'+i,'cell-'+i])),body=bulk(m,state,head,targets);maxRequestBytes=Math.max(maxRequestBytes,Buffer.byteLength(JSON.stringify(body)));await send(body);
+    const targets=Object.fromEntries(Array.from({length:people},(_,i)=>['person-'+i,'cell-'+i])),body=bulk(m,state,head,targets);maxRequestBytes=Math.max(maxRequestBytes,Buffer.byteLength(JSON.stringify(body)));const outcome=await sendBulk(f,body);stages.bulkOutcome=outcome;
    }else for(let i=0;i<people;i++){const body=command(m,state,head,kind,'person-'+i,{code:String(10000000+i)});maxRequestBytes=Math.max(maxRequestBytes,Buffer.byteLength(JSON.stringify(body)));await send(body);}
-   stages[kind]={...delta(start,metrics),elapsedMs:Date.now()-started};assert.equal(stages[kind].ownerRequests,0);assert.equal(stages[kind].userRequests,kind==='bulkAssign'?1:people);console.log(JSON.stringify({people,stage:kind,normalRequests:stages[kind].userRequests}));
+   stages[kind]={...delta(start,metrics),elapsedMs:Date.now()-started};assert.equal(stages[kind].ownerRequests,0);assert.equal(stages[kind].userRequests,kind==='bulkAssign'?(stages.bulkOutcome.resultLookupRequired?2:1):people);console.log(JSON.stringify({people,stage:kind,normalRequests:stages[kind].userRequests}));
   }
   phase='six-sdk-download';const preparation=delta(start,metrics);await f.control('operating',2);for(let i=0;i<6;i++)clients.push(await client(staff.human));const snapshots=[],snapshotStats=[];
   for(const c of clients){let snapshot;for(let pass=0;pass<3;pass++){snapshot=await c.snapshot();assert.equal(Object.keys(snapshot.rows).length,people);assert.equal(snapshot.revision,state.commit.revision);for(let i=0;i<people;i++){const row=snapshot.rows['i-person-'+i];assert(row.eligible);assert.equal(row.credentialRef,state.tickets['person-'+i].credentialRef);assert.equal(row.seatId,'cell-'+i);}}snapshots.push(snapshot);snapshotStats.push(c.stats());}
