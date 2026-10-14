@@ -1,13 +1,15 @@
 {
   "sourceHashes": {
-    "validate.mjs": "b783a23acf11fade50f445482067c666fce5cc31ca6b81bbeeb9ba74bee9d789",
-    "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
-    "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
-    "generate.mjs": "af0e193ff0566e8ef8de21d1401998db8eb4a89402cce5a2075e669a7470ae44",
+    "validate.mjs": "785ec6560492eb66ae2dc242935b4b525147ef742a6d8cd1ce2d2e06c11d1970",
+    "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "layout-rules.mjs": "8d67855521c508d7b03dcef8d5e0471012743ccb28d02d635e6976f8826e05f6",
+    "generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
     "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
-    "publication.mjs": "33d14a7aadedc52acdf3a8772fded84562513e6f4f2936da9eadd476da205f43",
-    "publication-rules.mjs": "45a36191af24ea9677414802980007679df73d8ba7d18b5948820ff1787980d3",
-    "database.rules.json": "ace3581fb6e7cb1fadfbaf8f1b06cc856403b73d489adcded11619732bfb35cc",
+    "publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "publication-rules.mjs": "0cd2f2d025822832a2b84a5f9ed00860b1eb3e5e33d236006188653c7e83c6f5",
+    "collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
+    "database.rules.json": "3e077b8a25b0c647d86854511d9cef75e47c9a3fa4571341c6fa7282ffc41392",
     "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -20,14 +22,16 @@
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "validate.mjs": "b783a23acf11fade50f445482067c666fce5cc31ca6b81bbeeb9ba74bee9d789",
-    "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
-    "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
-    "generate.mjs": "af0e193ff0566e8ef8de21d1401998db8eb4a89402cce5a2075e669a7470ae44",
+    "validate.mjs": "785ec6560492eb66ae2dc242935b4b525147ef742a6d8cd1ce2d2e06c11d1970",
+    "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "layout-rules.mjs": "8d67855521c508d7b03dcef8d5e0471012743ccb28d02d635e6976f8826e05f6",
+    "generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
     "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
-    "publication.mjs": "33d14a7aadedc52acdf3a8772fded84562513e6f4f2936da9eadd476da205f43",
-    "publication-rules.mjs": "45a36191af24ea9677414802980007679df73d8ba7d18b5948820ff1787980d3",
-    "database.rules.json": "ace3581fb6e7cb1fadfbaf8f1b06cc856403b73d489adcded11619732bfb35cc",
+    "publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "publication-rules.mjs": "0cd2f2d025822832a2b84a5f9ed00860b1eb3e5e33d236006188653c7e83c6f5",
+    "collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
+    "database.rules.json": "3e077b8a25b0c647d86854511d9cef75e47c9a3fa4571341c6fa7282ffc41392",
     "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -93,45 +97,28 @@
       "id": "P05-stale-proof-cannot-publish-after-control-update",
       "controlRevisionFenced": true,
       "controlFixtureRestored": true
-    },
-    {
-      "id": "P06-current-proof-publishes-with-assignment-preserved",
-      "protectedSeatUnchanged": true
-    },
-    {
-      "id": "P07-more-than-64-parts-can-be-published-and-read",
-      "publishedParts": 66,
-      "cells": 1050,
-      "readerPartBudget": 256,
-      "old64PartGuardRemoved": true,
-      "productCellLimitApproved": false
-    },
-    {
-      "id": "P08-cursor-jump-and-stale-slot-flags-refused",
-      "uncheckedClaimRejected": true,
-      "cursorJumpRejected": true,
-      "staleAndOmittedFlagsRejected": true
-    },
-    {
-      "id": "P09-event-change-cannot-be-bundled-with-publication",
-      "postUpdateEventFenceChecked": true,
-      "partialStateNotCommitted": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
   },
+  "failure": {
+    "stage": "P06-current-proof-publishes-with-assignment-preserved",
+    "code": "ERR_ASSERTION"
+  },
   "metrics": {
-    "requests": 391,
-    "requestBodyBytes": 1998151,
-    "responseBodyBytes": 850520,
-    "ownerRequests": 16,
-    "userRequests": 375
+    "requests": 157,
+    "requestBodyBytes": 1386790,
+    "responseBodyBytes": 85694,
+    "ownerRequests": 14,
+    "userRequests": 143
   },
   "formalLayoutSchemaConnected": true,
+  "assignedSeatPublicationProtectionVerified": false,
   "publicationProtectionVerified": false,
   "groupContractVerified": false,
+  "completeLayoutBusinessWorkflowVerified": false,
   "externalFirebaseConnected": false,
   "productionFreeTierVerified": false,
   "tested3000": false

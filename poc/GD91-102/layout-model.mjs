@@ -55,10 +55,10 @@ export function partPlan(generation, meta, items) {
   body['generations/' + generation + '/meta'].receivedCells = meta.receivedCells + items.length;
   for (const [i, item] of items.entries()) {
     const point = {part, slot: 's' + String(i).padStart(2, '0')};
-    body['generations/' + generation + '/cells/' + item.cellId] = point;
-    body['generations/' + generation + '/coordinates/' + item.sectionId + '/' + coordinateKey(item)] = point;
+    body['generations/' + generation + '/indexes/cells/' + item.cellId] = point;
+    body['generations/' + generation + '/indexes/coordinates/' + item.sectionId + '/' + coordinateKey(item)] = point;
     const number = consumed(item);
-    if (number !== undefined) body['generations/' + generation + '/numbers/' + item.sectionId + '/' + item.lineId + '/n' + number] = point;
+    if (number !== undefined) body['generations/' + generation + '/indexes/numbers/' + item.sectionId + '/' + item.lineId + '/n' + number] = point;
   }
   assert(Buffer.byteLength(JSON.stringify(body['generations/' + generation + '/parts/' + part])) <= 65536, 'layout-part-byte-limit');
   return body;

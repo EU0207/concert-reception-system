@@ -12,8 +12,9 @@ import {initialize} from '../GD91-89/projection.mjs';
 import {command, bulk, applyModel} from '../GD91-92/model.mjs';
 import {createReferences} from '../GD91-92/references.mjs';
 import {prepare} from '../GD91-91/sdk-adapter.mjs';
+import {collect,removePart} from './collection.mjs';
 
-const files = ['validate.mjs','layout-model.mjs','layout-rules.mjs','generate.mjs','snapshot.mjs','publication.mjs','publication-rules.mjs','database.rules.json','../GD91-100/database.rules.json','../GD91-07/planner.mjs','../GD91-84/transport.mjs','../GD91-84/generation-tests.mjs','../GD91-89/support.mjs','../GD91-96/snapshot.mjs','../GD91-89/projection.mjs','../GD91-92/model.mjs','../GD91-92/references.mjs','../GD91-91/sdk-adapter.mjs'];
+const files = ['validate.mjs','layout-model.mjs','layout-rules.mjs','generate.mjs','snapshot.mjs','publication.mjs','publication-rules.mjs','collection.mjs','collection-rules.mjs','database.rules.json','../GD91-100/database.rules.json','../GD91-07/planner.mjs','../GD91-84/transport.mjs','../GD91-84/generation-tests.mjs','../GD91-89/support.mjs','../GD91-96/snapshot.mjs','../GD91-89/projection.mjs','../GD91-92/model.mjs','../GD91-92/references.mjs','../GD91-91/sdk-adapter.mjs'];
 const hashes = () => Object.fromEntries(files.map(f=>[f, createHash('sha256').update(fs.readFileSync(new URL(f,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex')]));
 const before = hashes(), reports = []; let stage = 'setup', clean, failure;
 async function check(id, fn) {stage=id; reports.push({id,...await fn()}); console.log(JSON.stringify({id,passed:true}));}
@@ -49,6 +50,8 @@ try {
   async function commit(body){const p=prepare(manager,body);reference=await refs.reserveKnown(manager,p,reference);const ack=await user('event',manager.device,'PATCH',body);ok(ack);applyModel(state,body);reference=await refs.clearAcknowledged(manager,p,reference,ack);}
   await commit(command(manager,state,head,'register','person-0',{controlRevision:2}));
   await commit(bulk(manager,state,head,{'person-0':m.seats[0].seatId},{controlRevision:2}));
+  await commit(command(manager,state,head,'qrCreate','person-0',{controlRevision:2}));
+  const protectedTicket=structuredClone(state.tickets['person-0']);
   async function deniedPublication(id){let deniedStatus;await assert.rejects(()=>preparePublication(read,async(p,method,body)=>{const r=await user(p,manager.device,method,body);if(r.status!==200){deniedStatus=r.status;throw new Error('expected-check-refusal');}return r.body;},manager,id));assert.equal(deniedStatus,401);}
   await check('P01-assigned-seat-removal-refused-before-publication',async()=>{const after=structuredClone(m),s=after.seats.shift(),c=after.section.cells.find(c=>c.seatId===s.seatId);delete c.seatId;c.kind='unset';await build(send,'missing-assigned',[after]);await deniedPublication('missing-assigned');assert.equal((await read('head')).generation,'full-first');return{missingAssignedSeatRejectedByServer:true};});
   await check('P02-assigned-seat-attribute-change-refused',async()=>{const after=structuredClone(m);after.seats[0].category='reserved';await build(send,'changed-assigned',[after]);await deniedPublication('changed-assigned');return{assignedAttributeChangeRejectedByServer:true};});
@@ -56,7 +59,7 @@ try {
   await check('P03-unchecked-and-incomplete-publication-refused',async()=>{assert.equal((await user('',manager.device,'PATCH',publish('unchanged',2))).status,401);const checked=await preparePublication(read,send,manager,'unchanged'),body=checked.publish(2);const partial={...body};delete partial['operations/'+body.head.operationId];assert.equal((await user('',manager.device,'PATCH',partial)).status,401);return{proofRequired:true,partialPublishRejected:true};});
   await check('P04-stale-proof-cannot-publish-after-event-update',async()=>{const checked=await preparePublication(read,send,manager,'unchanged');await commit(command(manager,state,head,'register','person-1',{controlRevision:2}));assert.equal((await user('',manager.device,'PATCH',checked.publish(2))).status,401);return{eventRevisionFenced:true};});
   await check('P05-stale-proof-cannot-publish-after-control-update',async()=>{const checked=await preparePublication(read,send,manager,'unchanged');await owner(trial+'/control/revision','PUT',3);assert.equal((await user('',manager.device,'PATCH',checked.publish(2))).status,401);await owner(trial+'/control/revision','PUT',2);return{controlRevisionFenced:true,controlFixtureRestored:true};});
-  await check('P06-current-proof-publishes-with-assignment-preserved',async()=>{const checked=await preparePublication(read,send,manager,'unchanged');await send('','PATCH',checked.publish(2));assert.equal((await read('event/people/person-0')).seatId,m.seats[0].seatId);assert.equal((await read('head')).generation,'unchanged');return{protectedSeatUnchanged:true};});
+  await check('P06-current-proof-publishes-with-assignment-preserved',async()=>{const checked=await preparePublication(read,send,manager,'unchanged');await send('','PATCH',checked.publish(2));assert.equal((await read('event/people/person-0')).seatId,m.seats[0].seatId);assert.deepEqual(await read('event/tickets/person-0'),protectedTicket);assert.equal((await read('head')).generation,'unchanged');assert.equal((await user('',manager.device,'PATCH',checked.cancel())).status,401);await send('','PATCH',checked.complete());assert.equal(await read('generations/unchanged/refs/publication-'+checked.id),null);return{protectedSeatUnchanged:true,qrUnchanged:true,publishedProofCannotBeCancelled:true,pinReleasedAfterAcknowledgement:true};});
   await check('P07-more-than-64-parts-can-be-published-and-read',async()=>{
     const margin=createSection({name:'追加の余白',rows:1,columns:1040,axis:'horizontal',seatOrder:'forward',stagePosition:'left',lines:[{name:'余白',prefix:'Z-',startNumber:1}]},context);
     const built=await build(send,'expanded-parts',[m,margin]);assert.equal(built.meta.expectedParts,66);
@@ -68,9 +71,9 @@ try {
     return{publishedParts:66,cells:1050,readerPartBudget:256,old64PartGuardRemoved:true,productCellLimitApproved:false};
   });
   await check('P08-cursor-jump-and-stale-slot-flags-refused',async()=>{
-    const nowHead=await read('head'),id=randomUUID(),record={candidateGeneration:'unchanged',sourceGeneration:nowHead.generation,sourceHeadRevision:nowHead.revision,sourceEventRevision:state.commit.revision,sourceControlRevision:2,deviceUid:manager.device.uid,cursor:0,phase:'checking'};
+    const nowHead=await read('head'),id=randomUUID(),record={candidateGeneration:'unchanged',sourceGeneration:nowHead.generation,sourceHeadRevision:nowHead.revision,sourceEventRevision:state.commit.revision,sourceControlRevision:2,deviceUid:manager.device.uid,publicationOperationId:randomUUID(),cursor:0,phase:'checking'};
     assert.equal((await user('publicationChecks/'+randomUUID(),manager.device,'PUT',{...record,phase:'checked'})).status,401);
-    await send('publicationChecks/'+id,'PUT',record);
+    await send('','PATCH',{['publicationChecks/'+id]:record,['generations/unchanged/refs/publication-'+id]:true});
     const flags=cursor=>Object.fromEntries(Array.from({length:16},(_,i)=>['s'+String(i).padStart(2,'0'),cursor]));
     assert.equal((await user('publicationChecks/'+id,manager.device,'PUT',{...record,cursor:66,slots:flags(66)})).status,401);
     await send('publicationChecks/'+id,'PUT',{...record,cursor:1,slots:flags(1)});
@@ -90,8 +93,23 @@ try {
     assert.equal((await user('',manager.device,'PATCH',checked.publish(4))).status,401);
     return{postUpdateEventFenceChecked:true,partialStateNotCommitted:true};
   });
+  await check('R01-publication-candidate-pin-prevents-collection',async()=>{
+    await build(send,'collectible',[m]);const checked=await preparePublication(read,send,manager,'collectible'),meta=await read('generations/collectible/meta');
+    assert.equal((await user('generations/collectible/meta',manager.device,'PUT',{...meta,phase:'deleting',revision:meta.revision+1})).status,401);
+    assert.equal((await user('generations/collectible/refs/publication-'+checked.id,manager.device,'DELETE')).status,401);
+    assert.equal((await user('',manager.device,'PATCH',checked.complete())).status,401);
+    await send('','PATCH',checked.cancel());assert.equal(await read('generations/collectible/refs/publication-'+checked.id),null);
+    return{candidatePinned:true,unacknowledgedCompletionRejected:true,explicitCancellationReleasesPin:true};
+  });
+  await check('R02-retired-layout-indexes-and-parts-collected-in-order',async()=>{
+    const meta=await read('generations/collectible/meta');await send('generations/collectible/meta','PUT',{...meta,phase:'deleting',revision:meta.revision+1});
+    const part=await read('generations/collectible/parts/p0');assert.equal((await user('',manager.device,'PATCH',removePart('collectible',0,part))).status,401);
+    await collect(read,send,'collectible');const result=await owner(trial+'/generations/collectible');assert.equal(result.meta.phase,'deleted');for(const key of['parts','ids','labels','indexes','sectionOrder','sections','refs'])assert(!result[key]);
+    assert.equal((await read('event/people/person-0')).seatId,m.seats[0].seatId);return{indexesClearedBeforeParts:true,allGenerationPayloadCollected:true,operationAndAssignmentRetained:true};
+  });
+  await check('R03-current-layout-indexes-cannot-be-cleared',async()=>{assert.equal((await user('generations/expanded-parts/indexes',manager.device,'DELETE')).status,401);assert.equal((await read('head')).generation,'expanded-parts');return{currentGenerationProtected:true};});
 } catch(e) {failure={stage,code:e.code??'trial-failed'};console.error(e.stack);process.exitCode=1;}
 finally {clean=await cleanup();}
 assert.deepEqual(before,hashes());
-fs.writeFileSync(new URL('artifacts/validate-summary.json',import.meta.url),JSON.stringify({sourceHashes:before,endSourceHashes:hashes(),reports,cleanup:clean,...(failure?{failure}:{}),metrics,formalLayoutSchemaConnected:true,publicationProtectionVerified:false,groupContractVerified:false,externalFirebaseConnected:false,productionFreeTierVerified:false,tested3000:false},null,2)+'\n');
+fs.writeFileSync(new URL('artifacts/validate-summary.json',import.meta.url),JSON.stringify({sourceHashes:before,endSourceHashes:hashes(),reports,cleanup:clean,...(failure?{failure}:{}),metrics,formalLayoutSchemaConnected:true,assignedSeatPublicationProtectionVerified:!failure,publicationProtectionVerified:false,groupContractVerified:false,completeLayoutBusinessWorkflowVerified:false,externalFirebaseConnected:false,productionFreeTierVerified:false,tested3000:false},null,2)+'\n');
 console.log(JSON.stringify({groups:reports.length,cleanup:clean,failure:failure??null}));process.exit(process.exitCode??0);
