@@ -16,6 +16,13 @@ assert(find('R07').realSocketCutAfterCommit&&find('R08').nonExtractableKey);asse
 const common=read('artifacts/common-local-summary.json');assert.equal(common.maxJsonNodes,318);assert.equal(common.maxRootJsonBytes,8619);assert(common.googleIdentityMocked);for(const k of['realIndexedDbVerifiedHere','physicalSocketDropTestedHere','exceptionCloseVerified','wholeBrowserApplicationTested','fullBusinessFreeTierVerified'])assert.equal(common[k],false);
 const plan=JSON.parse(execFileSync(process.execPath,[fileURLToPath(new URL('remote-review.mjs',import.meta.url)),'--plan'],{encoding:'utf8',windowsHide:true}));
 assert.equal(plan.externalRequestsExecuted,0);assert.equal(plan.decisionId,'TECH-DD91-091');assert.equal(plan.maxAuthUsers,5);assert.equal(plan.realGoogleLoginRequired,true);assert.equal(plan.maxApplicationCallsIncludingCleanup,200);assert.equal(plan.cleanupCallReserve,60);
-assert(!fs.existsSync(new URL('artifacts/remote-review-summary.json',import.meta.url)),'external-result-not-expected-before-approval');
+let external=false;
+if(fs.existsSync(new URL('artifacts/remote-review-summary.json',import.meta.url))){
+ const remote=read('artifacts/remote-review-summary.json');assert(!remote.failure);assert.equal(remote.decisionId,plan.decisionId);assert.deepEqual(remote.reports,common.reports);assert.deepEqual(remote.sourceHashes,remote.endSourceHashes);
+ for(const[f,h]of Object.entries(remote.sourceHashes)){assert.equal(hash(fs.readFileSync(new URL(f,import.meta.url),'utf8')),h,f);checks++;}
+ assert.equal(remote.authUsersCreated,5);assert(remote.realPersonalProfileUsed&&remote.googleAccountUsed&&remote.externalFirebaseConnected);assert.equal(remote.applicationCalls,remote.ownerAndManagementCalls+remote.normalCalls+remote.sdkApplicationCalls);assert(remote.applicationCalls<=plan.maxApplicationCallsIncludingCleanup);assert(remote.maxJsonNodes<=plan.maxJsonNodes);assert(remote.maxRootJsonBytes<=plan.maxRootJsonBytes);assert(remote.observedApplicationBodyBytes<=plan.maxObservedApplicationBodyBytes);assert(remote.applicationRequestAndResponseBodiesCounted);
+ for(const k of['rulesClosed','rootsEmpty','authRestored','billingAccountUnlinked'])assert.equal(remote.cleanup[k],true);assert.equal(remote.cleanup.usersDeleted,5);assert.equal(remote.cleanup.authUsersRemaining,0);
+ for(const k of['realIndexedDbVerifiedHere','physicalSocketDropTestedHere','exceptionCloseVerified','wholeBrowserApplicationTested','fullBusinessFreeTierVerified','productionFreeTierVerified','tested3000','sseAndSdkWireOverheadMeasured','sdkInternalWireRequestsMeasured'])assert.equal(remote[k],false);assert(!secret.test(JSON.stringify(remote)));external=true;
+}
 assert.equal(Buffer.byteLength(JSON.stringify(read('database.rules.json'))),810164);
-console.log(JSON.stringify({sourceHashChecks:checks,clockGroups:7,reviewGroups:16,regressionGroups:55,commonGroups:6,initialFailuresPreserved:2,external091Executed:false,issue167Complete:false}));
+console.log(JSON.stringify({sourceHashChecks:checks,clockGroups:7,reviewGroups:16,regressionGroups:55,commonGroups:6,initialFailuresPreserved:2,external091Executed:external,issue167Complete:false}));
