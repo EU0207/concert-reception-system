@@ -1,6 +1,6 @@
 {
   "sourceHashes": {
-    "validate.mjs": "785ec6560492eb66ae2dc242935b4b525147ef742a6d8cd1ce2d2e06c11d1970",
+    "validate.mjs": "bf7deb2ef1b556f9b10617be9524fd75002a66b30d9b371701a455db8b912aaf",
     "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
     "layout-rules.mjs": "8d67855521c508d7b03dcef8d5e0471012743ccb28d02d635e6976f8826e05f6",
     "generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
@@ -22,7 +22,7 @@
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "validate.mjs": "785ec6560492eb66ae2dc242935b4b525147ef742a6d8cd1ce2d2e06c11d1970",
+    "validate.mjs": "bf7deb2ef1b556f9b10617be9524fd75002a66b30d9b371701a455db8b912aaf",
     "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
     "layout-rules.mjs": "8d67855521c508d7b03dcef8d5e0471012743ccb28d02d635e6976f8826e05f6",
     "generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
@@ -97,25 +97,63 @@
       "id": "P05-stale-proof-cannot-publish-after-control-update",
       "controlRevisionFenced": true,
       "controlFixtureRestored": true
+    },
+    {
+      "id": "P06-current-proof-publishes-with-assignment-preserved",
+      "protectedSeatUnchanged": true,
+      "qrUnchanged": true,
+      "publishedProofCannotBeCancelled": true,
+      "pinReleasedAfterAcknowledgement": true
+    },
+    {
+      "id": "P07-more-than-64-parts-can-be-published-and-read",
+      "publishedParts": 66,
+      "cells": 1050,
+      "readerPartBudget": 256,
+      "old64PartGuardRemoved": true,
+      "productCellLimitApproved": false
+    },
+    {
+      "id": "P08-cursor-jump-and-stale-slot-flags-refused",
+      "uncheckedClaimRejected": true,
+      "cursorJumpRejected": true,
+      "staleAndOmittedFlagsRejected": true
+    },
+    {
+      "id": "P09-event-change-cannot-be-bundled-with-publication",
+      "postUpdateEventFenceChecked": true,
+      "partialStateNotCommitted": true
+    },
+    {
+      "id": "R01-publication-candidate-pin-prevents-collection",
+      "candidatePinned": true,
+      "unacknowledgedCompletionRejected": true,
+      "explicitCancellationReleasesPin": true
+    },
+    {
+      "id": "R02-retired-layout-indexes-and-parts-collected-in-order",
+      "indexesClearedBeforeParts": true,
+      "allGenerationPayloadCollected": true,
+      "operationAndAssignmentRetained": true
+    },
+    {
+      "id": "R03-current-layout-indexes-cannot-be-cleared",
+      "currentGenerationProtected": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
   },
-  "failure": {
-    "stage": "P06-current-proof-publishes-with-assignment-preserved",
-    "code": "ERR_ASSERTION"
-  },
   "metrics": {
-    "requests": 157,
-    "requestBodyBytes": 1386790,
-    "responseBodyBytes": 85694,
-    "ownerRequests": 14,
-    "userRequests": 143
+    "requests": 497,
+    "requestBodyBytes": 2110930,
+    "responseBodyBytes": 912390,
+    "ownerRequests": 19,
+    "userRequests": 478
   },
   "formalLayoutSchemaConnected": true,
-  "assignedSeatPublicationProtectionVerified": false,
+  "assignedSeatPublicationProtectionVerified": true,
   "publicationProtectionVerified": false,
   "groupContractVerified": false,
   "completeLayoutBusinessWorkflowVerified": false,
