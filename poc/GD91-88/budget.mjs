@@ -1,0 +1,20 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const files=['budget.mjs','artifacts/capacity-summary.json','artifacts/receipt-regression-summary.json','artifacts/regression-summary.json'];
+const hashes=()=>Object.fromEntries(files.map(f=>[f,createHash('sha256').update(fs.readFileSync(new URL(f,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex')]));
+const read=name=>JSON.parse(fs.readFileSync(new URL('artifacts/'+name+'-summary.json',import.meta.url),'utf8'));
+const before=hashes(),capacity=read('capacity'),receipt=read('receipt-regression'),regression=read('regression');assert(!capacity.failure&&!receipt.failure&&!regression.failure);
+const reports=[];
+for(const people of [600,1000]){
+  const c=capacity.reports.find(r=>r.people===people),g=regression.reports.find(r=>r.people===people&&r.sections===16),r=receipt.reports.find(r=>r.people===people);assert(c&&g&&r);
+  const stages=c.normalStages,normalResponseBodyBytes=['initialize','register','assign','qrCreate','ticketCheck','reception'].reduce((sum,k)=>sum+stages[k].responseBodyBytes,0);
+  const assumptions={managementEnvironments:1,receptionEnvironments:6,receptionFullDownloadsIncludingReconnect:3,preparedGenerationsRetained:3,managementFullStateCopies:3,rereads:Math.ceil(people*0.5),maxReasonUtf16Length:500,jsonBytesPerReasonUnit:6,safetyFactor:2};
+  // 公開投影は席ごとの取得として組立てる。親枝をGETできるという意味ではない。
+  const projectedOneViewLeafDownloadBytes=Array.from({length:people},(_,i)=>Buffer.byteLength(JSON.stringify({personId:'person-'+i,revision:people+i+2,displayName:'架空来場者名'}))).reduce((a,b)=>a+b,0);
+  const sixEnvironmentViewLeafBodies=projectedOneViewLeafDownloadBytes*6*3;
+  const knownBodyDownloadBytes=g.preparation.responseBodyBytes*3+g.storageBytes*3+normalResponseBodyBytes+c.eventJsonBytes*3+sixEnvironmentViewLeafBodies+c.eventBodyBytes*6;
+  const additionalRereadBodyUpperEstimateBytes=Math.ceil(c.eventBodyBytes*0.5)*6+assumptions.rereads*500*6*6;
+  const knownStorageBytes=g.storageBytes*3+c.eventJsonBytes+c.receiptJsonBytes;
+  assert.equal(c.preparationNormalRequestsExcludingLayoutAndAuth,4*people+1);assert.equal(c.dayNormalRequests,people);assert.deepEqual(r.eventsPerEnvironment,Array(6).fill(people));
+  reports.push({people,assumptions,normalPreparationRequestsExcludingLayoutAndAuth:4*people+1,layoutNormalRequests:stages.layout.userRequests,normalDayReceptionRequests:people,measuredNormalResponseBodyBytes:normalResponseBodyBytes,measuredCurrentEventStorageBytes:c.eventJsonBytes,measuredReceiptStorageBytes:c.receiptJsonBytes,measuredMaximumGenerationStorageBytes:g.storageBytes,projectedOneViewLeafDownloadBytes,sixEnvironmentViewLeafBodies,modeledSixEnvironmentReceiptBodies:c.eventBodyBytes*6,knownBodyDownloadBytes,additionalRereadBodyUpperEstimateBytes,knownBodyPlusRereadsWithSafetyFactorBytes:(knownBodyDownloadBytes+additionalRereadBodyUpperEstimateBytes)*2,knownStorageBytes,knownStorageWithSafetyFactorBytes:knownStorageBytes*2,completeBusinessDownloadBytes:null,completeBusinessStorageBytes:null,freeTierEstablished:false});
+}
+const result={sourceHashes:before,endSourceHashes:hashes(),reports,comparisonCombinesSeparateMeasurements:true,publicLeafBodiesModeledNotMeasured:true,managementFullStateCopiesAreUpperModelNotWholeBranchGetPermission:true,unknownComponents:['一括配置・緊急編集と受付資格の配布','受付訂正・取消しと停止後到着','全端末停止・未受領キューと保持参照','SDK・HTTPとTLS、拒否と障害再送','長期保持と月内の他公演・他サービス'],officialQuotaReference:'https://firebase.google.com/docs/database/usage/billing',connectionQuotaReference:'https://firebase.google.com/docs/database/usage/limits',quotaCheckedOn:'2026-10-14',sparkStorageGB:1,sparkMonthlyDownloadGB:10,sparkConcurrentConnections:100,externalFirebaseConnected:false,productionFreeTierVerified:false,guaranteeAbove1000:false,tested3000:false};assert.deepEqual(result.sourceHashes,result.endSourceHashes);fs.writeFileSync(new URL('artifacts/budget-summary.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({people:reports.map(r=>r.people),knownPartsOnly:true,fullBusinessFreeTierVerified:false}));

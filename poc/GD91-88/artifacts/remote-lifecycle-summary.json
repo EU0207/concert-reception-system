@@ -1,0 +1,195 @@
+{
+  "sourceHashes": {
+    "remote-lifecycle.mjs": "1a4132905d1c2f6b01606248dd410121ef1231e57d08e9475e6a327d4c1b82e9",
+    "binding-cases.mjs": "519609caff78059eccc6080fc47a41cebcc544ec9abc886e1fe85ec46482ec0f",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-86/google-login-server.mjs": "338fb391292a818a7574853027c034cf9305be6887f24dbeb3e84815ba5f4bf9",
+    "../GD91-86/google-login.mjs": "febf5f22f1824651f990611e8f1935ca2858eecb5b4383d7bf191fb049245861",
+    "../GD91-86/google-login.html": "5fb2c62d7a244f78a0c3ea324915e017a867dd0a65b46f71340829a794a48609",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-87/receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "query-cases.mjs": "84d780f0e769b09372729e0c224fac603b8611ddfd67ed2e678547d1fe23620d",
+    "receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "endSourceHashes": {
+    "remote-lifecycle.mjs": "1a4132905d1c2f6b01606248dd410121ef1231e57d08e9475e6a327d4c1b82e9",
+    "binding-cases.mjs": "519609caff78059eccc6080fc47a41cebcc544ec9abc886e1fe85ec46482ec0f",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-86/google-login-server.mjs": "338fb391292a818a7574853027c034cf9305be6887f24dbeb3e84815ba5f4bf9",
+    "../GD91-86/google-login.mjs": "febf5f22f1824651f990611e8f1935ca2858eecb5b4383d7bf191fb049245861",
+    "../GD91-86/google-login.html": "5fb2c62d7a244f78a0c3ea324915e017a867dd0a65b46f71340829a794a48609",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-87/receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "query-cases.mjs": "84d780f0e769b09372729e0c224fac603b8611ddfd67ed2e678547d1fe23620d",
+    "receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "binding": {
+    "reports": [
+      {
+        "id": "C01",
+        "normalRegistrationAssignmentAndQr": true,
+        "uncheckedQrAccepted": true,
+        "ownerPersonOrTicketWrites": 0
+      },
+      {
+        "id": "C02",
+        "generatedQrProtectsSeat": true
+      },
+      {
+        "id": "C03",
+        "oldReissueCredentialDenied": true,
+        "newCredentialAccepted": true
+      },
+      {
+        "id": "C04",
+        "absenceFreesSeat": true,
+        "priorReceiptPreserved": true
+      },
+      {
+        "id": "C05",
+        "equalVersionOldCycleDenied": true,
+        "mixedCycleAndCredentialDenied": 2,
+        "currentAccepted": true,
+        "returnDoesNotRestoreOldQr": true
+      }
+    ],
+    "maxJsonNodes": 451,
+    "acceptedReceipts": 3,
+    "ownerControlAndAuthBootstrap": true,
+    "stopIsDeclarationNotDeviceProof": true,
+    "realStopAcknowledgementsVerified": false
+  },
+  "queries": {
+    "reports": [
+      {
+        "kind": "session-expiry",
+        "freshQueryRejected": true,
+        "validDeviceReceivesNewEvent": true,
+        "expiredChildNewEvents": 0,
+        "expiredValueNewEvents": 0,
+        "restStreamNewEvents": 0,
+        "restStreamCancelled": true,
+        "sdkChildCancellationObserved": false,
+        "sdkValueCancellationObserved": false,
+        "sameOperationLookupMatches": true,
+        "roleAndSessionExpiryCoincide": false,
+        "clockOnlyDisconnectClaimed": false
+      },
+      {
+        "kind": "role-and-session-expiry",
+        "freshQueryRejected": true,
+        "validDeviceReceivesNewEvent": true,
+        "expiredChildNewEvents": 0,
+        "expiredValueNewEvents": 0,
+        "restStreamNewEvents": 0,
+        "restStreamCancelled": true,
+        "sdkChildCancellationObserved": false,
+        "sdkValueCancellationObserved": false,
+        "sameOperationLookupMatches": true,
+        "roleAndSessionExpiryCoincide": true,
+        "clockOnlyDisconnectClaimed": false
+      }
+    ],
+    "maxJsonNodes": 98,
+    "expiryWindowMs": 10000,
+    "filteredQuery": true
+  },
+  "reports": [
+    {
+      "id": "C01",
+      "normalRegistrationAssignmentAndQr": true,
+      "uncheckedQrAccepted": true,
+      "ownerPersonOrTicketWrites": 0
+    },
+    {
+      "id": "C02",
+      "generatedQrProtectsSeat": true
+    },
+    {
+      "id": "C03",
+      "oldReissueCredentialDenied": true,
+      "newCredentialAccepted": true
+    },
+    {
+      "id": "C04",
+      "absenceFreesSeat": true,
+      "priorReceiptPreserved": true
+    },
+    {
+      "id": "C05",
+      "equalVersionOldCycleDenied": true,
+      "mixedCycleAndCredentialDenied": 2,
+      "currentAccepted": true,
+      "returnDoesNotRestoreOldQr": true
+    },
+    {
+      "kind": "session-expiry",
+      "freshQueryRejected": true,
+      "validDeviceReceivesNewEvent": true,
+      "expiredChildNewEvents": 0,
+      "expiredValueNewEvents": 0,
+      "restStreamNewEvents": 0,
+      "restStreamCancelled": true,
+      "sdkChildCancellationObserved": false,
+      "sdkValueCancellationObserved": false,
+      "sameOperationLookupMatches": true,
+      "roleAndSessionExpiryCoincide": false,
+      "clockOnlyDisconnectClaimed": false
+    },
+    {
+      "kind": "role-and-session-expiry",
+      "freshQueryRejected": true,
+      "validDeviceReceivesNewEvent": true,
+      "expiredChildNewEvents": 0,
+      "expiredValueNewEvents": 0,
+      "restStreamNewEvents": 0,
+      "restStreamCancelled": true,
+      "sdkChildCancellationObserved": false,
+      "sdkValueCancellationObserved": false,
+      "sameOperationLookupMatches": true,
+      "roleAndSessionExpiryCoincide": true,
+      "clockOnlyDisconnectClaimed": false
+    }
+  ],
+  "maxJsonNodes": 451,
+  "decisionId": "TECH-DD91-087",
+  "applicationCalls": 129,
+  "ownerAndManagementCalls": 74,
+  "normalCalls": 46,
+  "sdkApplicationCalls": 9,
+  "authUsersCreated": 4,
+  "realPersonalProfileUsed": true,
+  "googleAccountUsed": true,
+  "sdkInternalWireRequestsMeasured": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "rootsEmpty": true,
+    "usersDeleted": 4,
+    "authRestored": true,
+    "authUsersRemaining": 0,
+    "billingAccountUnlinked": true
+  },
+  "externalFirebaseConnected": true,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

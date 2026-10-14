@@ -1,0 +1,200 @@
+{
+  "sourceHashes": {
+    "capacity.mjs": "400e0742359e2e518df9cb7691cd279a065f899ffff9b3e5996e1823b43f5d5f",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-87/receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "capacity.mjs": "400e0742359e2e518df9cb7691cd279a065f899ffff9b3e5996e1823b43f5d5f",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-87/receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "people": 600,
+      "sections": 2,
+      "nonSeatCells": 300,
+      "layoutParts": 29,
+      "layoutMaxPartBytes": 2913,
+      "layoutMaxRequestBytes": 7787,
+      "normalStages": {
+        "layout": {
+          "requests": 35,
+          "requestBodyBytes": 193987,
+          "responseBodyBytes": 142881,
+          "ownerRequests": 1,
+          "userRequests": 34
+        },
+        "initialize": {
+          "requests": 1,
+          "requestBodyBytes": 41,
+          "responseBodyBytes": 41,
+          "ownerRequests": 0,
+          "userRequests": 1
+        },
+        "register": {
+          "requests": 600,
+          "requestBodyBytes": 4193738,
+          "responseBodyBytes": 4197338,
+          "ownerRequests": 0,
+          "userRequests": 600
+        },
+        "assign": {
+          "requests": 600,
+          "requestBodyBytes": 357931,
+          "responseBodyBytes": 367531,
+          "ownerRequests": 0,
+          "userRequests": 600
+        },
+        "qrCreate": {
+          "requests": 600,
+          "requestBodyBytes": 816160,
+          "responseBodyBytes": 822160,
+          "ownerRequests": 0,
+          "userRequests": 600
+        },
+        "ticketCheck": {
+          "requests": 600,
+          "requestBodyBytes": 695670,
+          "responseBodyBytes": 682470,
+          "ownerRequests": 0,
+          "userRequests": 600
+        },
+        "reception": {
+          "requests": 600,
+          "requestBodyBytes": 399766,
+          "responseBodyBytes": 396766,
+          "ownerRequests": 0,
+          "userRequests": 600
+        }
+      },
+      "maxRequestBytes": 6991,
+      "maxProfileBytes": 6314,
+      "maxReceiptRequestBytes": 667,
+      "eventBodyBytes": 275182,
+      "modeledSixEnvironmentEventBytes": 1651092,
+      "actualSixSdkEnvironmentsMeasuredHere": false,
+      "eventJsonBytes": 5570706,
+      "receiptJsonBytes": 314952,
+      "registered": 600,
+      "assigned": 600,
+      "qrCreated": 600,
+      "checksMarked": 600,
+      "receiptsAccepted": 600,
+      "sparseUnassignedRows": true,
+      "ownerPersonOrTicketWrites": 0,
+      "preparationNormalRequestsExcludingLayoutAndAuth": 2401,
+      "dayNormalRequests": 600,
+      "controlAndDeviceBootstrapByOwner": true,
+      "fullBusinessBudgetVerified": false
+    },
+    {
+      "people": 1000,
+      "sections": 16,
+      "nonSeatCells": 500,
+      "layoutParts": 47,
+      "layoutMaxPartBytes": 2925,
+      "layoutMaxRequestBytes": 7877,
+      "normalStages": {
+        "layout": {
+          "requests": 67,
+          "requestBodyBytes": 332026,
+          "responseBodyBytes": 252559,
+          "ownerRequests": 1,
+          "userRequests": 66
+        },
+        "initialize": {
+          "requests": 1,
+          "requestBodyBytes": 41,
+          "responseBodyBytes": 41,
+          "ownerRequests": 0,
+          "userRequests": 1
+        },
+        "register": {
+          "requests": 1000,
+          "requestBodyBytes": 6990147,
+          "responseBodyBytes": 6996147,
+          "ownerRequests": 0,
+          "userRequests": 1000
+        },
+        "assign": {
+          "requests": 1000,
+          "requestBodyBytes": 601120,
+          "responseBodyBytes": 617120,
+          "ownerRequests": 0,
+          "userRequests": 1000
+        },
+        "qrCreate": {
+          "requests": 1000,
+          "requestBodyBytes": 1360560,
+          "responseBodyBytes": 1370560,
+          "ownerRequests": 0,
+          "userRequests": 1000
+        },
+        "ticketCheck": {
+          "requests": 1000,
+          "requestBodyBytes": 1159670,
+          "responseBodyBytes": 1137670,
+          "ownerRequests": 0,
+          "userRequests": 1000
+        },
+        "reception": {
+          "requests": 1000,
+          "requestBodyBytes": 666569,
+          "responseBodyBytes": 661569,
+          "ownerRequests": 0,
+          "userRequests": 1000
+        }
+      },
+      "maxRequestBytes": 6996,
+      "maxProfileBytes": 6315,
+      "maxReceiptRequestBytes": 670,
+      "eventBodyBytes": 458783,
+      "modeledSixEnvironmentEventBytes": 2752698,
+      "actualSixSdkEnvironmentsMeasuredHere": false,
+      "eventJsonBytes": 9289102,
+      "receiptJsonBytes": 524955,
+      "registered": 1000,
+      "assigned": 1000,
+      "qrCreated": 1000,
+      "checksMarked": 1000,
+      "receiptsAccepted": 1000,
+      "sparseUnassignedRows": true,
+      "ownerPersonOrTicketWrites": 0,
+      "preparationNormalRequestsExcludingLayoutAndAuth": 4001,
+      "dayNormalRequests": 1000,
+      "controlAndDeviceBootstrapByOwner": true,
+      "fullBusinessBudgetVerified": false
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "fullBusinessRulesVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
