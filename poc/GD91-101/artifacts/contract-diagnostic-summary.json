@@ -1,0 +1,89 @@
+{
+  "sourceHashes": {
+    "contract-diagnostic.mjs": "34fe7c75334498b1cb5d06077a789aaa3041ab2ceb5406bfa82ac0be3ce6cab5",
+    "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+  },
+  "endSourceHashes": {
+    "contract-diagnostic.mjs": "34fe7c75334498b1cb5d06077a789aaa3041ab2ceb5406bfa82ac0be3ce6cab5",
+    "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+  },
+  "reports": [
+    {
+      "id": "D01-required-layout-cell-fields-not-represented",
+      "unsupportedPayloadGroups": 4,
+      "missingDomainFieldsNotSilentlyDropped": true
+    },
+    {
+      "id": "D02-required-section-and-line-fields-not-represented",
+      "sectionGeometryStageAndNumberCursorUnsupported": true
+    },
+    {
+      "id": "D03-required-group-contract-not-represented",
+      "membershipAndFixedStateUnsupported": true
+    },
+    {
+      "id": "D04-after-start-swap-lacks-reason-contract",
+      "baselineOnly": true,
+      "afterFirstReceptionSwapWithoutReasonAccepted": true,
+      "reasonRequirementNotConnected": true
+    },
+    {
+      "id": "D05-ready-publication-can-omit-assigned-seat",
+      "baselineOnly": true,
+      "publishedWithoutAssignedSeat": true,
+      "consumerRejectsInvalidProjection": true,
+      "readCalls": 5
+    },
+    {
+      "id": "D06-fragment-guard-is-not-a-product-cell-limit",
+      "seats": 1000,
+      "nonSeatCells": 1049,
+      "partsAcceptedByProducer": 65,
+      "partsAllowedByConsumer": 64,
+      "readCallsBeforeReject": 2,
+      "productLimitNotApproved": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "metrics": {
+    "requests": 131,
+    "requestBodyBytes": 1384518,
+    "responseBodyBytes": 375291,
+    "ownerRequests": 12,
+    "userRequests": 119
+  },
+  "baselineDiagnosticOnly": true,
+  "fullSeatDomainVerified": false,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
