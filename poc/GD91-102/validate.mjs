@@ -57,6 +57,39 @@ try {
   await check('P04-stale-proof-cannot-publish-after-event-update',async()=>{const checked=await preparePublication(read,send,manager,'unchanged');await commit(command(manager,state,head,'register','person-1',{controlRevision:2}));assert.equal((await user('',manager.device,'PATCH',checked.publish(2))).status,401);return{eventRevisionFenced:true};});
   await check('P05-stale-proof-cannot-publish-after-control-update',async()=>{const checked=await preparePublication(read,send,manager,'unchanged');await owner(trial+'/control/revision','PUT',3);assert.equal((await user('',manager.device,'PATCH',checked.publish(2))).status,401);await owner(trial+'/control/revision','PUT',2);return{controlRevisionFenced:true,controlFixtureRestored:true};});
   await check('P06-current-proof-publishes-with-assignment-preserved',async()=>{const checked=await preparePublication(read,send,manager,'unchanged');await send('','PATCH',checked.publish(2));assert.equal((await read('event/people/person-0')).seatId,m.seats[0].seatId);assert.equal((await read('head')).generation,'unchanged');return{protectedSeatUnchanged:true};});
+  await check('P07-more-than-64-parts-can-be-published-and-read',async()=>{
+    const margin=createSection({name:'追加の余白',rows:1,columns:1040,axis:'horizontal',seatOrder:'forward',stagePosition:'left',lines:[{name:'余白',prefix:'Z-',startNumber:1}]},context);
+    const built=await build(send,'expanded-parts',[m,margin]);assert.equal(built.meta.expectedParts,66);
+    const checked=await preparePublication(read,send,manager,'expanded-parts');await send('','PATCH',checked.publish(3));
+    await owner(trial+'/control/state','PUT','operating');
+    const staffRead=async p=>{const r=await user(p,staff.device);ok(r);return r.body;};
+    const result=await snapshot(staffRead,async()=>({rows:{}}));assert.equal(Object.keys(result.cellsById).length,1050);assert.equal(Object.keys(result.seatsById).length,3);
+    await owner(trial+'/control/state','PUT','preparing');
+    return{publishedParts:66,cells:1050,readerPartBudget:256,old64PartGuardRemoved:true,productCellLimitApproved:false};
+  });
+  await check('P08-cursor-jump-and-stale-slot-flags-refused',async()=>{
+    const nowHead=await read('head'),id=randomUUID(),record={candidateGeneration:'unchanged',sourceGeneration:nowHead.generation,sourceHeadRevision:nowHead.revision,sourceEventRevision:state.commit.revision,sourceControlRevision:2,deviceUid:manager.device.uid,cursor:0,phase:'checking'};
+    assert.equal((await user('publicationChecks/'+randomUUID(),manager.device,'PUT',{...record,phase:'checked'})).status,401);
+    await send('publicationChecks/'+id,'PUT',record);
+    const flags=cursor=>Object.fromEntries(Array.from({length:16},(_,i)=>['s'+String(i).padStart(2,'0'),cursor]));
+    assert.equal((await user('publicationChecks/'+id,manager.device,'PUT',{...record,cursor:66,slots:flags(66)})).status,401);
+    await send('publicationChecks/'+id,'PUT',{...record,cursor:1,slots:flags(1)});
+    assert.equal((await user('publicationChecks/'+id,manager.device,'PUT',{...record,cursor:2,slots:flags(1)})).status,401);
+    const partial=flags(2);delete partial.s00;assert.equal((await user('publicationChecks/'+id,manager.device,'PUT',{...record,cursor:2,slots:partial})).status,401);
+    assert.equal((await user('publicationChecks/'+id,manager.device,'PUT',{...record,cursor:1,phase:'checked',slots:flags(1)})).status,401);
+    return{uncheckedClaimRejected:true,cursorJumpRejected:true,staleAndOmittedFlagsRejected:true};
+  });
+  await check('P09-event-change-cannot-be-bundled-with-publication',async()=>{
+    const nowHead=await read('head');await refs.acquire(manager,nowHead);reference=await read('references/'+manager.referenceId);
+    const checked=await preparePublication(read,send,manager,'unchanged'),body=command(manager,state,nowHead,'register','person-2',{controlRevision:2}),p=prepare(manager,body);
+    reference=await refs.reserveKnown(manager,p,reference);
+    const combined={...checked.publish(4),...Object.fromEntries(Object.entries(body).map(([k,v])=>['event/'+k,v]))};
+    assert.equal((await user('',manager.device,'PATCH',combined)).status,401);
+    assert.equal((await read('head')).revision,3);assert.equal((await read('event/commit')).revision,state.commit.revision);
+    const ack=await user('event',manager.device,'PATCH',body);ok(ack);applyModel(state,body);reference=await refs.clearAcknowledged(manager,p,reference,ack);
+    assert.equal((await user('',manager.device,'PATCH',checked.publish(4))).status,401);
+    return{postUpdateEventFenceChecked:true,partialStateNotCommitted:true};
+  });
 } catch(e) {failure={stage,code:e.code??'trial-failed'};console.error(e.stack);process.exitCode=1;}
 finally {clean=await cleanup();}
 assert.deepEqual(before,hashes());
