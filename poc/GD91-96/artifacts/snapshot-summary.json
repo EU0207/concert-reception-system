@@ -1,0 +1,41 @@
+{
+  "sourceHashes": {
+    "snapshot-tests.mjs": "0d50abd20079e0ea994ebe02d2dbd06eaa5552138c5c472c27077844f5f5d0b5",
+    "snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+  },
+  "endSourceHashes": {
+    "snapshot-tests.mjs": "0d50abd20079e0ea994ebe02d2dbd06eaa5552138c5c472c27077844f5f5d0b5",
+    "snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+  },
+  "reports": [
+    {
+      "id": "B01-immutable-geometry-reused-current-reception-reloaded",
+      "geometryReadsOnRepeat": 0,
+      "currentReceptionReloaded": true,
+      "immutableGeometry": true
+    },
+    {
+      "id": "B02-layout-changed-mid-snapshot-rejected",
+      "mixedGenerationRejected": true
+    },
+    {
+      "id": "B03-missing-part-not-treated-as-empty",
+      "missingGeometryRejected": true
+    },
+    {
+      "id": "B04-assigned-seat-missing-rejected",
+      "invalidAssignmentNotDisplayed": true
+    },
+    {
+      "id": "B05-cached-geometry-does-not-bypass-read-denial",
+      "cacheDoesNotBypassCurrentAuthorization": true
+    },
+    {
+      "id": "B06-unbounded-manifest-read-rejected",
+      "partLimitCheckedBeforePartReads": true
+    }
+  ],
+  "mockTransport": true,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false
+}
