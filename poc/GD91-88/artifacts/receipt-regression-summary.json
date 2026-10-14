@@ -1,0 +1,171 @@
+{
+  "sourceHashes": {
+    "receipt-regression.mjs": "a59d48ffe0fc7e61075f9ff1129c77e508ebe16223eb172dfef85ee920835da4",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-87/validate.mjs": "4369425abe3c7a84765d83d0f5a738c2d75c2199d7cbd58c06f6e6a853ee2f9a",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-87/receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "receipt-regression.mjs": "a59d48ffe0fc7e61075f9ff1129c77e508ebe16223eb172dfef85ee920835da4",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-87/validate.mjs": "4369425abe3c7a84765d83d0f5a738c2d75c2199d7cbd58c06f6e6a853ee2f9a",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-87/receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a",
+    "receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-86/database.rules.json": "6498eb21a8a1f83d58998621a750466e509bff91747585de4d51ce09e63ae4e1",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "E01",
+      "partialSubsetsRejected": 14
+    },
+    {
+      "id": "E02",
+      "sameIdLookupMatches": true,
+      "replayAndIdReuseRejected": true
+    },
+    {
+      "id": "E03",
+      "invalidEventsRejected": 16
+    },
+    {
+      "id": "E04",
+      "otherDeviceStreamWriteDenied": true
+    },
+    {
+      "id": "E05",
+      "reasonedRereadAccepted": true,
+      "historyImmutable": true
+    },
+    {
+      "id": "E06",
+      "independentDevicesDoNotConflict": true,
+      "concurrentFirstReceiptsPreserved": true,
+      "seatRevisionUnchanged": true
+    },
+    {
+      "id": "E07",
+      "sameDeviceSequenceSingleWinner": true
+    },
+    {
+      "id": "E08",
+      "oldCredentialClosedCycleAndStoppedRejected": true
+    },
+    {
+      "id": "E09",
+      "seatSwapAndReceiptBothCommit": true
+    },
+    {
+      "id": "E10",
+      "journalFailureKeepsCursor": true,
+      "resubscribeRestoresMissingEvent": true,
+      "realIndexedDbTested": false
+    },
+    {
+      "id": "E11",
+      "expiredQueryReceivesNoNewEvent": true,
+      "otherValidQueryReceivesNewEvent": true,
+      "sdkCancellationCallbackObserved": false,
+      "clockOnlyDisconnectClaimed": false,
+      "observationAfterValidDeliveryMs": 1000
+    },
+    {
+      "id": "E-capacity-600",
+      "people": 600,
+      "normalWrites": 600,
+      "ownerWritesDuringReception": 0,
+      "sdkEnvironments": 6,
+      "sdkDatabaseConnections": 6,
+      "logicalStreamSubscriptions": 36,
+      "eventsPerEnvironment": [
+        600,
+        600,
+        600,
+        600,
+        600,
+        600
+      ],
+      "receivedEventBodiesBytes": [
+        264332,
+        264332,
+        264332,
+        264332,
+        264332,
+        264332
+      ],
+      "storageJsonBytes": 304947,
+      "maxRequestBytes": 650,
+      "elapsedMs": 22246,
+      "reconnectOldEvents": 0,
+      "measuredEventBodiesOnly": true,
+      "wholeBusinessBudgetVerified": false
+    },
+    {
+      "id": "E-capacity-1000",
+      "people": 1000,
+      "normalWrites": 1000,
+      "ownerWritesDuringReception": 0,
+      "sdkEnvironments": 6,
+      "sdkDatabaseConnections": 6,
+      "logicalStreamSubscriptions": 36,
+      "eventsPerEnvironment": [
+        1000,
+        1000,
+        1000,
+        1000,
+        1000,
+        1000
+      ],
+      "receivedEventBodiesBytes": [
+        441132,
+        441132,
+        441132,
+        441132,
+        441132,
+        441132
+      ],
+      "storageJsonBytes": 508147,
+      "maxRequestBytes": 650,
+      "elapsedMs": 38209,
+      "reconnectOldEvents": 0,
+      "measuredEventBodiesOnly": true,
+      "wholeBusinessBudgetVerified": false
+    }
+  ],
+  "metrics": {
+    "requests": 1798,
+    "requestBodyBytes": 1921602,
+    "responseBodyBytes": 3187523,
+    "ownerRequests": 132,
+    "userRequests": 1666
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "credentialsAndPeopleSeeded": true,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

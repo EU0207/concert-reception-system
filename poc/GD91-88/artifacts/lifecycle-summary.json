@@ -1,0 +1,201 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "f7fda6ec9547857882e9a6befe150ee7e9c6bf3fad14d8fbe3832faa40e394b1",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-87/database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-87/receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "f7fda6ec9547857882e9a6befe150ee7e9c6bf3fad14d8fbe3832faa40e394b1",
+    "model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "lifecycle-rules.mjs": "cd68180856494f79012cde164baa88a5857a327753052a283671a462603ce18c",
+    "receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "receipt-rules.mjs": "03683dfcc1cad546e2b81c5ee51a7eaf096dbc0bfd41d0fa24bfc931b20b96a0",
+    "generate.mjs": "b5d6bc984aff051ae951fdf752be7228f80c650c1c8c023b9428d8226c4e4248",
+    "database.rules.json": "f86e8fe448fb6959858c72d41350074bd7c9e06c9788f13324195d6cf41c07bd",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-87/database.rules.json": "b0d44aa259e26758df2f12835675d2200fe7864f034b1452931ae413fd058dcc",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-87/receipt-rules.mjs": "57a5e33bc89a0a8b331cadef3447a1958b82ad7bc3c4fe45735123b07290493a"
+  },
+  "reports": [
+    {
+      "id": "L01",
+      "registrationLocations": 4,
+      "partialSubsetsRejected": 14,
+      "maxName50AndTenFields200": true,
+      "ticketNotCreated": true
+    },
+    {
+      "id": "L02",
+      "invalidRegistrationCases": 7
+    },
+    {
+      "id": "L03",
+      "paymentLocations": 3,
+      "partialSubsetsRejected": 6,
+      "seatAndTicketUnchanged": true
+    },
+    {
+      "id": "L04",
+      "unassignedAndAbsentQrDenied": true
+    },
+    {
+      "id": "L05",
+      "qrLocations": 5,
+      "partialSubsetsRejected": 30,
+      "unpaidAllowed": true,
+      "checksUnchanged": true
+    },
+    {
+      "id": "L06",
+      "generatedQrProtectsSeat": true,
+      "secondCreateRejected": true
+    },
+    {
+      "id": "L07",
+      "qrLessChecksSupported": true,
+      "uncheckingKeepsProtection": true
+    },
+    {
+      "id": "L08",
+      "moveAndSwapPreserveCredential": true
+    },
+    {
+      "id": "L09",
+      "reissueLocations": 7,
+      "partialSubsetsRejected": 126,
+      "versionAdvanced": true,
+      "oldCredentialRevoked": true,
+      "stopIsDeclarationNotDeviceProof": true
+    },
+    {
+      "id": "L10",
+      "missingReissueConfirmationAndStaleControlDenied": 3
+    },
+    {
+      "id": "L11",
+      "tamperedTicketTransitionsRejected": 5
+    },
+    {
+      "id": "L12",
+      "reservedCodeAndCredentialCollisionDenied": true
+    },
+    {
+      "id": "L13",
+      "cancellationLocations": 8,
+      "partialSubsetsRejected": 254,
+      "receptionPreserved": true,
+      "seatFreed": true
+    },
+    {
+      "id": "L14",
+      "qrLessCancellationLocations": 6,
+      "partialSubsetsRejected": 62,
+      "ticketHistoryRequiresWarning": true,
+      "stopNotRequiredWithoutQr": true
+    },
+    {
+      "id": "L15",
+      "unassignedNoTicketCancellationLocations": 3,
+      "partialSubsetsRejected": 6,
+      "noEmptyTicketCreated": true
+    },
+    {
+      "id": "L16",
+      "assignedNoTicketCancellationLocations": 5,
+      "partialSubsetsRejected": 30
+    },
+    {
+      "id": "L17",
+      "returnLocations": 3,
+      "partialSubsetsRejected": 6,
+      "returnDoesNotRestoreTicket": true,
+      "newCycleAfterReassignment": true
+    },
+    {
+      "id": "L18",
+      "raceStatuses": [
+        200,
+        401
+      ],
+      "oneCommitOnly": true
+    },
+    {
+      "id": "L19",
+      "sameOperationLookupMatches": true,
+      "replayDenied": true
+    },
+    {
+      "id": "L20",
+      "privatePathsDenied": 4,
+      "receptionCannotWrite": true,
+      "forgedAuthorDenied": true
+    },
+    {
+      "id": "L21",
+      "crossOperationPiggybackRejected": 2
+    },
+    {
+      "id": "L22",
+      "oldCredentialVersionDenied": true,
+      "currentAccepted": true
+    },
+    {
+      "id": "L23",
+      "equalVersionOldCycleDenied": true,
+      "mixedCredentialAndCycleDenied": 2,
+      "currentCycleAccepted": true,
+      "uncheckedIssuedDoesNotInvalidateQr": true
+    },
+    {
+      "id": "L24",
+      "noTicketCanUnassign": true,
+      "closedTicketDoesNotProtectNewUnissuedAssignment": true
+    },
+    {
+      "id": "L25",
+      "normalSparseInitialization": true,
+      "missingAndRepeatedInitializationDenied": true,
+      "receptionInitializationDenied": true,
+      "firstAssignmentMaterializesOneSeat": true
+    },
+    {
+      "id": "L26",
+      "mismatchedTicketSnapshotDenied": true,
+      "forgedServerTimeDenied": true,
+      "mixedOperationSchemaDenied": true
+    }
+  ],
+  "metrics": {
+    "requests": 2189,
+    "requestBodyBytes": 1336446,
+    "responseBodyBytes": 12158428,
+    "ownerRequests": 1495,
+    "userRequests": 694
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "fullBusinessRulesVerified": false,
+  "realStopAcknowledgementsVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
