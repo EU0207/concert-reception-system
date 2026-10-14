@@ -1,0 +1,10 @@
+{
+  "slotsPerPart": 16,
+  "conservativePartJsonBytes": 58767,
+  "limitBytes": 65536,
+  "optionalFieldsSimultaneouslyCounted": true,
+  "jsonEscapesCounted": true,
+  "source": "layout-rules.mjs field bounds; legacy label bound 64",
+  "productCellLimitApproved": false,
+  "fullBusinessFreeTierVerified": false
+}
