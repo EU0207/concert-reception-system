@@ -31,10 +31,10 @@ export function addPublicationChecks(rules) {
   const done=`data.exists() && (${immutable}) && ${v('newData','cursor')} === ${v('data','cursor')} && ((${v('newData','phase')} === 'cancelled' && !${persistedOperation}.exists() && (${v('data','phase')} === 'checking' || ${v('data','phase')} === 'checked')) || (${v('newData','phase')} === 'published' && ${v('data','phase')} === 'checked' && ${v(persistedOperation,'publicationCheckId')} === $check && ${v(persistedOperation,'generation')} === ${v('newData','candidateGeneration')} && ${v(persistedOperation,'resultRevision')} === ${v('newData','sourceHeadRevision')}+1))`;
   const pin=`newData.parent().parent().child('generations').child(${v('newData','candidateGeneration')}).child('refs').child('publication-'+$check)`;
   run.publicationChecks={$check:{'.read':manager,
-    '.write':`${recentManager} && newData.exists() && ${base}.child('control/layoutSchemaVersion').val() === 2 && ${v('newData','deviceUid')} === auth.uid && ${candidate}.child('meta/schemaVersion').val() === 2 && ${candidate}.child('meta/phase').val() === 'ready' && (((${sourceFence('newData')}) && ((${initial}) || (${advance}))) || (${done}))`,
+    '.write':`${recentManager} && newData.exists() && ${base}.child('control/layoutSchemaVersion').val() === 2 && ${v('newData','deviceUid')} === auth.uid && ${candidate}.child('meta/schemaVersion').val() === 2 && ${candidate}.child('meta/kind').val() === 'layout' && ${candidate}.child('meta/phase').val() === 'ready' && (((${sourceFence('newData')}) && ((${initial}) || (${advance}))) || (${done}))`,
     '.validate':`newData.hasChildren(${JSON.stringify(fields)}) && ((${v('newData','phase')} === 'checking' || ${v('newData','phase')} === 'checked') ? ${pin}.val() === true : !${pin}.exists())`,
     ...Object.fromEntries(fields.map(f=>[f,{'.validate':true}])),
-    publicationOperationId:{'.validate':'newData.isString()'},
+    publicationOperationId:{'.validate':'newData.isString() && newData.val().matches(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)'},
     slots:{$slot:{'.validate':`$slot.matches(/^s(0[0-9]|1[0-5])$/) && newData.val() === ${v(record,'cursor')} && (${v(record,'phase')} !== 'checking' || ${v(old,'kind')} !== 'seat' || !${person}.exists() || ${person}.val() === 'none' || (${same}))`}},
     '$other':{'.validate':false}}};
   const ref=run.generations.$generation.refs.$ref, path="newData.parent().parent().parent().parent()", proof=`${path}.child('publicationChecks').child($ref.replace('publication-',''))`;

@@ -1,15 +1,15 @@
 {
   "sourceHashes": {
-    "validate.mjs": "bb41780328261510674ec1c19584f01130f0b7f64ff94395f014cf1360e4c642",
+    "validate.mjs": "00891c523e633d607cbd6867accecef58e15ccc880de48ad150ba565f15b1446",
     "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
-    "layout-rules.mjs": "8d67855521c508d7b03dcef8d5e0471012743ccb28d02d635e6976f8826e05f6",
+    "layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
     "generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
     "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
     "publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
-    "publication-rules.mjs": "37fb6ec28ea7b59ad2948bef1686c82ed1a76a63058e6341561c88dd32e27185",
+    "publication-rules.mjs": "529785df44341d7d48936d87482abe4266ba34dc1245895bb3b58fc10124ea4b",
     "collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
     "collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
-    "database.rules.json": "dcdf381d36c5fef6d8614d400e8e00f6c3811d95af90bc16ab54f2ea647303e8",
+    "database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
     "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -22,16 +22,16 @@
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "validate.mjs": "bb41780328261510674ec1c19584f01130f0b7f64ff94395f014cf1360e4c642",
+    "validate.mjs": "00891c523e633d607cbd6867accecef58e15ccc880de48ad150ba565f15b1446",
     "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
-    "layout-rules.mjs": "8d67855521c508d7b03dcef8d5e0471012743ccb28d02d635e6976f8826e05f6",
+    "layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
     "generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
     "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
     "publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
-    "publication-rules.mjs": "37fb6ec28ea7b59ad2948bef1686c82ed1a76a63058e6341561c88dd32e27185",
+    "publication-rules.mjs": "529785df44341d7d48936d87482abe4266ba34dc1245895bb3b58fc10124ea4b",
     "collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
     "collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
-    "database.rules.json": "dcdf381d36c5fef6d8614d400e8e00f6c3811d95af90bc16ab54f2ea647303e8",
+    "database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
     "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -75,6 +75,11 @@
     {
       "id": "F07-numbering-and-emergency-contracts-rejected-when-invalid",
       "invalidFieldGroups": 6
+    },
+    {
+      "id": "F08-type-and-identity-bypasses-rejected",
+      "rosterCannotMasqueradeAsLayout": true,
+      "cellAndSeatIdentityMustDiffer": true
     },
     {
       "id": "P01-assigned-seat-removal-refused-before-publication",
@@ -152,11 +157,11 @@
     "trialRootEmpty": true
   },
   "metrics": {
-    "requests": 580,
-    "requestBodyBytes": 2152931,
-    "responseBodyBytes": 953406,
+    "requests": 584,
+    "requestBodyBytes": 2163829,
+    "responseBodyBytes": 954956,
     "ownerRequests": 19,
-    "userRequests": 561
+    "userRequests": 565
   },
   "formalLayoutSchemaConnected": true,
   "assignedSeatPublicationProtectionVerified": true,
