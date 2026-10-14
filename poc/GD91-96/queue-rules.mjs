@@ -1,4 +1,4 @@
-import {base,authorized} from '../GD91-84/auth-rules.mjs';
+import {base,authorized,activeRead,manager} from '../GD91-84/auth-rules.mjs';
 export function addQueueLeases(rules){
  const run=rules.rules.checks.$run,reference=run.references.$ref,v=(n,k)=>`${n}.child('${k}').val()`,fields=['schemaVersion','generation','baseLayoutRevision','sourceControlRevision','deviceUid','active','revision'];
  const same=fields.filter(k=>!['active','revision'].includes(k)).map(k=>`${v('newData',k)} === ${v('data',k)}`).join(' && '),gen=`${base}.child('generations').child(${v('newData','generation')})`;
@@ -14,5 +14,7 @@ export function addQueueLeases(rules){
  const receipt=run.receipts.$device.events.$key,ref=`${base}.child('references').child(${v('newData','layoutReferenceId')})`;
  if(!receipt['.validate'].includes("newData.child('schemaVersion').val() === 2"))throw new Error('receipt-format-changed');
  receipt['.validate']=receipt['.validate'].replace("newData.child('schemaVersion').val() === 2","newData.child('schemaVersion').val() === 3")+` && ${v(ref,'schemaVersion')} === 5 && ${v(ref,'active')} === true && ${v(ref,'deviceUid')} === auth.uid && ${v(ref,'generation')} === ${v('newData','sourceLayoutGeneration')} && ${v(ref,'baseLayoutRevision')} === ${v('newData','sourceLayoutRevision')} && ${v(ref,'sourceControlRevision')} === ${v('newData','sourceControlRevision')}`;
- for(const k of['layoutReferenceId','sourceLayoutGeneration','sourceLayoutRevision'])receipt[k]={'.validate':true};return rules;
+ for(const k of['layoutReferenceId','sourceLayoutGeneration','sourceLayoutRevision'])receipt[k]={'.validate':true};
+ run.generations.$generation.meta['.read']=`${manager} || (${activeRead} && ${base}.child('head/generation').val() === $generation && data.child('kind').val() === 'layout' && data.child('phase').val() === 'ready')`;
+ return rules;
 }
