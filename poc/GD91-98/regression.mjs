@@ -21,3 +21,4 @@ for(const[folder,name,count,label]of[['GD91-94','validate.mjs',14,'sharing'],['G
  fs.writeFileSync(result,JSON.stringify(r,null,2)+'\n');
 }
 console.log(JSON.stringify({sharedGroups:14,managerGroups:12,queueGroups:12,generalGroups:4,actualRules:'GD91-98',externalFirebaseConnected:false}));
+process.exit(0);
