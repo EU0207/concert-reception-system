@@ -1,0 +1,83 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "9550d6ed4b655b6df69e43686917e5cbaa4d686d83735e39192861c5b5ceb366",
+    "quarantine.mjs": "6e0a512387273ffb06b9f684f985d3a5c895aadfce9b51f5ce795bbcee846ed0",
+    "quarantine-rules.mjs": "68c20a93c236f6732abde7f2e02ea444031753fee531174c9f4634dcda3212c7",
+    "generate.mjs": "1bb8e4f8742d5ad63f063c0f087fdfe9c89e7a99a7539f8caaaa32d486aca30c",
+    "database.rules.json": "0bbbaa12319ea46817aedc228c169e662d8f99243aaa32fcccd024cff7a22302",
+    "../GD91-96/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "9550d6ed4b655b6df69e43686917e5cbaa4d686d83735e39192861c5b5ceb366",
+    "quarantine.mjs": "6e0a512387273ffb06b9f684f985d3a5c895aadfce9b51f5ce795bbcee846ed0",
+    "quarantine-rules.mjs": "68c20a93c236f6732abde7f2e02ea444031753fee531174c9f4634dcda3212c7",
+    "generate.mjs": "1bb8e4f8742d5ad63f063c0f087fdfe9c89e7a99a7539f8caaaa32d486aca30c",
+    "database.rules.json": "0bbbaa12319ea46817aedc228c169e662d8f99243aaa32fcccd024cff7a22302",
+    "../GD91-96/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "H01-live-records-use-normal-route",
+      "activeQuarantineDenied": true,
+      "normalReceiptCommitted": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "failure": {
+    "code": "ERR_ASSERTION",
+    "case": "H02-stopped-records-keep-exact-source"
+  },
+  "metrics": {
+    "requests": 68,
+    "requestBodyBytes": 713824,
+    "responseBodyBytes": 41986,
+    "ownerRequests": 20,
+    "userRequests": 48
+  },
+  "realIndexedDbVerified": true,
+  "nonExtractableKey": true,
+  "quarantineReceiptOnly": true,
+  "manualAdoptionVerified": false,
+  "lostDeviceForceReleaseAllowed": false,
+  "wholeBrowserApplicationTested": false,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

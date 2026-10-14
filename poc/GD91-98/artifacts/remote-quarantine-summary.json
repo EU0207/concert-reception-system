@@ -1,0 +1,94 @@
+{
+  "sourceHashes": {
+    "remote-quarantine.mjs": "98377e8dabf164850374c0aed5ec1fca7855b87dbc0fd34edafc99c1d93bc3e4",
+    "minimal-cases.mjs": "2e2918597f4e87e142f77fde4522fb0956bfa328df31d1a2e2bd7b0322b68212",
+    "quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
+    "quarantine-rules.mjs": "d7c3b92b6dc18c63d3b5e0991255b1d30d0b87c079a1648a160d6e8bd59aeb8a",
+    "generate.mjs": "1bb8e4f8742d5ad63f063c0f087fdfe9c89e7a99a7539f8caaaa32d486aca30c",
+    "database.rules.json": "359c898a07afd16acfa390a309d632c12c8022c33330db694435ad0a349713d7",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "endSourceHashes": {
+    "remote-quarantine.mjs": "98377e8dabf164850374c0aed5ec1fca7855b87dbc0fd34edafc99c1d93bc3e4",
+    "minimal-cases.mjs": "2e2918597f4e87e142f77fde4522fb0956bfa328df31d1a2e2bd7b0322b68212",
+    "quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
+    "quarantine-rules.mjs": "d7c3b92b6dc18c63d3b5e0991255b1d30d0b87c079a1648a160d6e8bd59aeb8a",
+    "generate.mjs": "1bb8e4f8742d5ad63f063c0f087fdfe9c89e7a99a7539f8caaaa32d486aca30c",
+    "database.rules.json": "359c898a07afd16acfa390a309d632c12c8022c33330db694435ad0a349713d7",
+    "deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-82/remote-support.mjs": "4f14fc4582a73603f24de5b280be7e0d841ed4d6a07866ecba235207563be406",
+    "../GD91-80/remote-support.mjs": "d24675811e8f2ebcf6c6dd10024ac80e8b031580dc3ddbf56487ca70ad2b0df1"
+  },
+  "reports": [
+    {
+      "id": "M01",
+      "liveQuarantineDenied": true,
+      "normalReceiptAccepted": true,
+      "businessRegistrationAndPublicationPreloaded": true
+    },
+    {
+      "id": "M02",
+      "stoppedNormalRouteDenied": true,
+      "otherDeviceAndReferenceDenied": true
+    },
+    {
+      "id": "M03",
+      "normalResultReused": true,
+      "quarantineCommittedBeforeIgnoredResponse": true,
+      "physicalSocketDropTestedHere": false
+    },
+    {
+      "id": "M04",
+      "sameIdAndContentLookup": true,
+      "secondQuarantineWrites": 0,
+      "otherDeviceResultDenied": true
+    },
+    {
+      "id": "M05",
+      "partialRequestsDenied": 3,
+      "deleteAndReplayDenied": true
+    },
+    {
+      "id": "M06",
+      "publicReceptionUnchanged": true,
+      "referenceAndLocalArchiveHeld": true,
+      "recoveredDevicePrematureReleaseDenied": true,
+      "manualAdoptionVerified": false
+    }
+  ],
+  "maxJsonNodes": 183,
+  "maxRootJsonBytes": 4448,
+  "realIndexedDbVerifiedHere": false,
+  "managerLoginAndReviewTestedHere": false,
+  "fullBusinessFreeTierVerified": false,
+  "decisionId": "TECH-DD91-090",
+  "applicationCalls": 68,
+  "ownerAndManagementCalls": 33,
+  "normalCalls": 35,
+  "authUsersCreated": 3,
+  "observedApplicationBodyBytes": 715025,
+  "realPersonalProfileUsed": false,
+  "googleAccountUsed": false,
+  "sseAndSdkWireOverheadMeasured": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "rootsEmpty": true,
+    "usersDeleted": 3,
+    "authRestored": true,
+    "billingAccountUnlinked": true,
+    "authUsersRemaining": 0
+  },
+  "externalFirebaseConnected": true,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
