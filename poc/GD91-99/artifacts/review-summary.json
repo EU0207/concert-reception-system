@@ -1,10 +1,10 @@
 {
   "sourceHashes": {
-    "review-local.mjs": "97e53c15553cd9b5d700a6eb42f17254bf005b0f0cf5bbc0eb51ea4e0a00b387",
+    "review-local.mjs": "8aa684703ce081261b31fe862e768a330c86cd9daa62d10c03951373035986d4",
     "review-rules.mjs": "ce28dcae3d738c1743cb8a842914350f166fe7938dbc28ce8569cf5dfb8bf0ca",
     "release-rules.mjs": "5d57abeee48634d3e77bc0ecd7de3cdf230a03c5d322e263ffce4ffc0469b05f",
     "review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
-    "submission.mjs": "00490911693d55a7d67e9da47b8de0ceb8efd01496c75040bf3dcbb63b886515",
+    "submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
     "clock-rules.mjs": "7db0aded18c4bfd9593b0545c3606d8bd879556a9619923d73038e1c2e7e6e7a",
     "clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
     "support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
@@ -25,11 +25,11 @@
     "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47"
   },
   "endSourceHashes": {
-    "review-local.mjs": "97e53c15553cd9b5d700a6eb42f17254bf005b0f0cf5bbc0eb51ea4e0a00b387",
+    "review-local.mjs": "8aa684703ce081261b31fe862e768a330c86cd9daa62d10c03951373035986d4",
     "review-rules.mjs": "ce28dcae3d738c1743cb8a842914350f166fe7938dbc28ce8569cf5dfb8bf0ca",
     "release-rules.mjs": "5d57abeee48634d3e77bc0ecd7de3cdf230a03c5d322e263ffce4ffc0469b05f",
     "review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
-    "submission.mjs": "00490911693d55a7d67e9da47b8de0ceb8efd01496c75040bf3dcbb63b886515",
+    "submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
     "clock-rules.mjs": "7db0aded18c4bfd9593b0545c3606d8bd879556a9619923d73038e1c2e7e6e7a",
     "clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
     "support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
@@ -120,7 +120,8 @@
     {
       "id": "R13-historical-results-do-not-overwrite-later-state",
       "laterStateUnchanged": true,
-      "privateReasonNotDistributed": true
+      "privateReasonNotDistributed": true,
+      "localResultCopiesNotDuplicated": true
     },
     {
       "id": "R14-lost-device-has-no-fabricated-final-confirmation",

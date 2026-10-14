@@ -3,7 +3,7 @@ import {runMinimalCases} from '../GD91-98/minimal-cases.mjs';
 import {actor,trial,owner,session,ok,metrics} from '../GD91-84/transport.mjs';
 import {user,request} from './support.mjs';import {cleanup} from '../GD91-89/support.mjs';
 import {lease,queuedEvent} from '../GD91-96/queue.mjs';import {createQueue} from './queue.mjs';
-const files=['clock-local.mjs','clock-rules.mjs','clock-transport.mjs','support.mjs','queue.mjs','generate.mjs','database.rules.json','../GD91-98/minimal-cases.mjs','../GD91-98/quarantine.mjs','../GD91-96/queue.mjs','../GD91-88/receipt-client.mjs','../GD91-87/receipt-client.mjs','../GD91-84/transport.mjs'];
+const files=['clock-local.mjs','clock-rules.mjs','review-rules.mjs','release-rules.mjs','clock-transport.mjs','support.mjs','queue.mjs','generate.mjs','database.rules.json','../GD91-98/minimal-cases.mjs','../GD91-98/quarantine.mjs','../GD91-96/queue.mjs','../GD91-88/receipt-client.mjs','../GD91-87/receipt-client.mjs','../GD91-84/transport.mjs'];
 const hashes=()=>Object.fromEntries(files.map(f=>[f,createHash('sha256').update(fs.readFileSync(new URL(f,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex')])),before=hashes(),reports=[];let clean,failure,stage='setup';
 const check=async(id,fn)=>{stage=id;reports.push({id,...await fn()});console.log(JSON.stringify({id,passed:true}));};
 try{

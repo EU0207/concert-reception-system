@@ -1,12 +1,14 @@
 {
   "sourceHashes": {
-    "clock-local.mjs": "c8d18b4081c065d7ca17fa277760ba154da2d161a74e50f6b8954fc631eda758",
+    "clock-local.mjs": "3a3e3da1daf11fb35dc43610f129935b93bd3b6e70e5cdecc470a35913896991",
     "clock-rules.mjs": "7db0aded18c4bfd9593b0545c3606d8bd879556a9619923d73038e1c2e7e6e7a",
-    "clock-transport.mjs": "1bc95112eae6ad098e50aa7aaa21804afe525067cc0a07f2ddd0e98938ad0819",
-    "support.mjs": "b7f2e2bf74cd2eb24e6ee9c1f69403f5249301310e841563715c32328337f1d5",
+    "review-rules.mjs": "ce28dcae3d738c1743cb8a842914350f166fe7938dbc28ce8569cf5dfb8bf0ca",
+    "release-rules.mjs": "5d57abeee48634d3e77bc0ecd7de3cdf230a03c5d322e263ffce4ffc0469b05f",
+    "clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
     "queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
-    "generate.mjs": "23e8bb6001652063a2f519a5d7ef0fb647dc890892489cbf2099951250e5bce8",
-    "database.rules.json": "d8a8e5f66d1734ea1e3e2993d6424734c2837dce8891fd481ed92de6dbf8ba7d",
+    "generate.mjs": "9ba818ea372f1129201338778496902124814d16e1db23e170d107081d1d2b89",
+    "database.rules.json": "59bde2e92d3319a10d6262ba66b81be3fc0354cc232d8fc2824b2e69a1734500",
     "../GD91-98/minimal-cases.mjs": "2e2918597f4e87e142f77fde4522fb0956bfa328df31d1a2e2bd7b0322b68212",
     "../GD91-98/quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
     "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
@@ -15,13 +17,15 @@
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
   },
   "endSourceHashes": {
-    "clock-local.mjs": "c8d18b4081c065d7ca17fa277760ba154da2d161a74e50f6b8954fc631eda758",
+    "clock-local.mjs": "3a3e3da1daf11fb35dc43610f129935b93bd3b6e70e5cdecc470a35913896991",
     "clock-rules.mjs": "7db0aded18c4bfd9593b0545c3606d8bd879556a9619923d73038e1c2e7e6e7a",
-    "clock-transport.mjs": "1bc95112eae6ad098e50aa7aaa21804afe525067cc0a07f2ddd0e98938ad0819",
-    "support.mjs": "b7f2e2bf74cd2eb24e6ee9c1f69403f5249301310e841563715c32328337f1d5",
+    "review-rules.mjs": "ce28dcae3d738c1743cb8a842914350f166fe7938dbc28ce8569cf5dfb8bf0ca",
+    "release-rules.mjs": "5d57abeee48634d3e77bc0ecd7de3cdf230a03c5d322e263ffce4ffc0469b05f",
+    "clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
     "queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
-    "generate.mjs": "23e8bb6001652063a2f519a5d7ef0fb647dc890892489cbf2099951250e5bce8",
-    "database.rules.json": "d8a8e5f66d1734ea1e3e2993d6424734c2837dce8891fd481ed92de6dbf8ba7d",
+    "generate.mjs": "9ba818ea372f1129201338778496902124814d16e1db23e170d107081d1d2b89",
+    "database.rules.json": "59bde2e92d3319a10d6262ba66b81be3fc0354cc232d8fc2824b2e69a1734500",
     "../GD91-98/minimal-cases.mjs": "2e2918597f4e87e142f77fde4522fb0956bfa328df31d1a2e2bd7b0322b68212",
     "../GD91-98/quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
     "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
@@ -74,11 +78,11 @@
     "trialRootEmpty": true
   },
   "metrics": {
-    "requests": 74,
-    "requestBodyBytes": 722381,
-    "responseBodyBytes": 22045,
+    "requests": 78,
+    "requestBodyBytes": 830469,
+    "responseBodyBytes": 22529,
     "ownerRequests": 28,
-    "userRequests": 46
+    "userRequests": 50
   },
   "externalFirebaseConnected": false,
   "productionFreeTierVerified": false,
