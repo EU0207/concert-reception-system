@@ -1,31 +1,43 @@
 {
   "sourceHashes": {
-    "validate.mjs": "7ffc600076a6758a45339ca27cdc5ffd17eb549bdc2aa0990cfea92e945effe3",
+    "validate.mjs": "4b816b1f5e7fd5ed6cfd773f49497937d30a5ade01cc36b7faec04db255fe1fa",
     "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
     "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
-    "generate.mjs": "7baa6bd994ca7842c015b4a183a6e93654d2edcb1284f0add47d6c8520875acb",
+    "generate.mjs": "af0e193ff0566e8ef8de21d1401998db8eb4a89402cce5a2075e669a7470ae44",
     "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
-    "database.rules.json": "51e6848552d1dfbfef1bab3809cce6455d285687dbfe37f70358c9e49e4babb1",
+    "publication.mjs": "33d14a7aadedc52acdf3a8772fded84562513e6f4f2936da9eadd476da205f43",
+    "publication-rules.mjs": "45a36191af24ea9677414802980007679df73d8ba7d18b5948820ff1787980d3",
+    "database.rules.json": "ace3581fb6e7cb1fadfbaf8f1b06cc856403b73d489adcded11619732bfb35cc",
     "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
-    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "validate.mjs": "7ffc600076a6758a45339ca27cdc5ffd17eb549bdc2aa0990cfea92e945effe3",
+    "validate.mjs": "4b816b1f5e7fd5ed6cfd773f49497937d30a5ade01cc36b7faec04db255fe1fa",
     "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
     "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
-    "generate.mjs": "7baa6bd994ca7842c015b4a183a6e93654d2edcb1284f0add47d6c8520875acb",
+    "generate.mjs": "af0e193ff0566e8ef8de21d1401998db8eb4a89402cce5a2075e669a7470ae44",
     "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
-    "database.rules.json": "51e6848552d1dfbfef1bab3809cce6455d285687dbfe37f70358c9e49e4babb1",
+    "publication.mjs": "33d14a7aadedc52acdf3a8772fded84562513e6f4f2936da9eadd476da205f43",
+    "publication-rules.mjs": "45a36191af24ea9677414802980007679df73d8ba7d18b5948820ff1787980d3",
+    "database.rules.json": "ace3581fb6e7cb1fadfbaf8f1b06cc856403b73d489adcded11619732bfb35cc",
     "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
-    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "reports": [
     {
@@ -65,12 +77,16 @@
     "rulesClosed": true,
     "trialRootEmpty": true
   },
+  "failure": {
+    "stage": "F07-numbering-and-emergency-contracts-rejected-when-invalid",
+    "code": "ERR_ASSERTION"
+  },
   "metrics": {
-    "requests": 69,
-    "requestBodyBytes": 1242733,
-    "responseBodyBytes": 28624,
+    "requests": 75,
+    "requestBodyBytes": 1286662,
+    "responseBodyBytes": 29503,
     "ownerRequests": 11,
-    "userRequests": 58
+    "userRequests": 64
   },
   "formalLayoutSchemaConnected": true,
   "publicationProtectionVerified": false,
