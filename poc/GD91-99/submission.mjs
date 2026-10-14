@@ -8,7 +8,8 @@ export function createSubmission({user,loadState,saveState}){
   const old=await user(subject,proposal.path);assert.equal(old.status,200,'review-result-lookup-denied');let result=old.body;
   if(!result){trace.writes++;const r=await(write?write(proposal):user(subject,'','PATCH',proposal.body));assert.equal(r.status,200,'review-request-denied');result=r.body[proposal.path]??proposal.path.split('/').reduce((n,k)=>n?.[k],r.body);}
   assert(result&&stable(result)===stable(proposal.decision),'review-result-content-conflict');
-  await saveState({pending:null,results:[...state.results,result]});return result;
+  const archived=state.results.find(r=>r.operationId===result.operationId);if(archived)assert.deepEqual(archived,result,'archived-review-result-conflict');
+  await saveState({pending:null,results:archived?state.results:[...state.results,result]});return result;
  }
  return{submit};
 }
