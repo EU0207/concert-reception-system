@@ -1,0 +1,76 @@
+{
+  "sourceHashes": {
+    "minimal-local.mjs": "8fd7f298848a3929775aad7a5f2eeeceec8b81170985d2c2ef8c0bce467de8b9",
+    "minimal-cases.mjs": "11120fbce7e61fc55cbd960472e90da90d5754a57632e715fa2e622dab79f714",
+    "database.rules.json": "1b9601b83e774e2c06a550c559238d0f3a13ba2ff5d625e480f77e459d545770",
+    "quarantine.mjs": "6e0a512387273ffb06b9f684f985d3a5c895aadfce9b51f5ce795bbcee846ed0",
+    "quarantine-rules.mjs": "1a8f3dc45c34412f151982ed4a96bfd3e5edab265eaaee7cbebda227e8faf9a6",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089"
+  },
+  "endSourceHashes": {
+    "minimal-local.mjs": "8fd7f298848a3929775aad7a5f2eeeceec8b81170985d2c2ef8c0bce467de8b9",
+    "minimal-cases.mjs": "11120fbce7e61fc55cbd960472e90da90d5754a57632e715fa2e622dab79f714",
+    "database.rules.json": "1b9601b83e774e2c06a550c559238d0f3a13ba2ff5d625e480f77e459d545770",
+    "quarantine.mjs": "6e0a512387273ffb06b9f684f985d3a5c895aadfce9b51f5ce795bbcee846ed0",
+    "quarantine-rules.mjs": "1a8f3dc45c34412f151982ed4a96bfd3e5edab265eaaee7cbebda227e8faf9a6",
+    "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089"
+  },
+  "reports": [
+    {
+      "id": "M01",
+      "liveQuarantineDenied": true,
+      "normalReceiptAccepted": true,
+      "businessRegistrationAndPublicationPreloaded": true
+    },
+    {
+      "id": "M02",
+      "stoppedNormalRouteDenied": true,
+      "otherDeviceAndReferenceDenied": true
+    },
+    {
+      "id": "M03",
+      "normalResultReused": true,
+      "quarantineCommittedBeforeIgnoredResponse": true,
+      "physicalSocketDropTestedHere": false
+    },
+    {
+      "id": "M04",
+      "sameIdAndContentLookup": true,
+      "secondQuarantineWrites": 0,
+      "otherDeviceResultDenied": true
+    },
+    {
+      "id": "M05",
+      "partialRequestsDenied": 3,
+      "deleteAndReplayDenied": true
+    },
+    {
+      "id": "M06",
+      "publicReceptionUnchanged": true,
+      "referenceAndLocalArchiveHeld": true,
+      "manualAdoptionVerified": false
+    }
+  ],
+  "maxJsonNodes": 181,
+  "maxRootJsonBytes": 4390,
+  "realIndexedDbVerifiedHere": false,
+  "managerLoginAndReviewTestedHere": false,
+  "fullBusinessFreeTierVerified": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
