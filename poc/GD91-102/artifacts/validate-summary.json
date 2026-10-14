@@ -1,0 +1,81 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "7ffc600076a6758a45339ca27cdc5ffd17eb549bdc2aa0990cfea92e945effe3",
+    "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
+    "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
+    "generate.mjs": "7baa6bd994ca7842c015b4a183a6e93654d2edcb1284f0add47d6c8520875acb",
+    "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "database.rules.json": "51e6848552d1dfbfef1bab3809cce6455d285687dbfe37f70358c9e49e4babb1",
+    "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "7ffc600076a6758a45339ca27cdc5ffd17eb549bdc2aa0990cfea92e945effe3",
+    "layout-model.mjs": "c94039ea5c59f6b54b5e20b7cf8b7fa04a9be3fd0bd3603fa529f7d90ef90b4a",
+    "layout-rules.mjs": "494bf9601b07ac0a7696cde59a67789e088b3c9ebabcde3f124939dbe9b0d32c",
+    "generate.mjs": "7baa6bd994ca7842c015b4a183a6e93654d2edcb1284f0add47d6c8520875acb",
+    "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "database.rules.json": "51e6848552d1dfbfef1bab3809cce6455d285687dbfe37f70358c9e49e4babb1",
+    "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+  },
+  "reports": [
+    {
+      "id": "F01-full-layout-normal-save-and-roundtrip",
+      "cells": 10,
+      "distinctCellAndSeatIds": true,
+      "allSeatFieldsRoundtripped": true
+    },
+    {
+      "id": "F02-reception-reads-full-model-without-private-person-data",
+      "geometryReused": true,
+      "secondReadCalls": 2,
+      "privateProfilesDenied": true
+    },
+    {
+      "id": "F03-partial-index-and-coordinate-writes-rejected",
+      "omittedIndexesRejected": 24
+    },
+    {
+      "id": "F04-out-of-range-and-conflicting-coordinate-rejected",
+      "rangeAndDuplicateCoordinatesRejected": true
+    },
+    {
+      "id": "F05-missing-cell-cannot-be-sealed",
+      "incompleteGridRejected": true
+    },
+    {
+      "id": "F06-legacy-schema-bypass-rejected",
+      "versionRequiredByControl": true
+    },
+    {
+      "id": "F07-numbering-and-emergency-contracts-rejected-when-invalid",
+      "invalidFieldGroups": 6
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "metrics": {
+    "requests": 69,
+    "requestBodyBytes": 1242733,
+    "responseBodyBytes": 28624,
+    "ownerRequests": 11,
+    "userRequests": 58
+  },
+  "formalLayoutSchemaConnected": true,
+  "publicationProtectionVerified": false,
+  "groupContractVerified": false,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
