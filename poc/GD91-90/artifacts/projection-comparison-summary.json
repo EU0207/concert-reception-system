@@ -1,0 +1,44 @@
+{
+  "sourceHashes": {
+    "projection-comparison.mjs": "0226345e07647af8276ffd1dc227d4eb7394be1c97775ebce211db49f70abf4e",
+    "model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889"
+  },
+  "endSourceHashes": {
+    "projection-comparison.mjs": "0226345e07647af8276ffd1dc227d4eb7394be1c97775ebce211db49f70abf4e",
+    "model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889"
+  },
+  "reports": [
+    {
+      "people": 600,
+      "outputsEqual": true,
+      "inputUnchanged": true,
+      "previousCloneCalls": 3,
+      "previousJsonBytesPassedToClone": 3788054,
+      "candidateCloneCalls": 0,
+      "candidateJsonBytesPassedToClone": 0,
+      "sourceProfileBytes": 3787945,
+      "timingGuarantee": false
+    },
+    {
+      "people": 1000,
+      "outputsEqual": true,
+      "inputUnchanged": true,
+      "previousCloneCalls": 3,
+      "previousJsonBytesPassedToClone": 6313254,
+      "candidateCloneCalls": 0,
+      "candidateJsonBytesPassedToClone": 0,
+      "sourceProfileBytes": 6313145,
+      "timingGuarantee": false
+    }
+  ],
+  "allocationProxyIsSerializedInputBytes": true,
+  "actualHeapPeakMeasured": false,
+  "externalFirebaseConnected": false,
+  "tested3000": false
+}
