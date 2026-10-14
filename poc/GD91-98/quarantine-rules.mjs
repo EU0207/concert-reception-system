@@ -30,13 +30,14 @@ export function addQuarantine(rules){
  ];
  const counterFields=['sequence','eventKey','eventId','lastSourceSequence'];
  const transition=[
-  `newData.hasChildren(['counter','events','ids'])`,`${current}.hasChildren(${JSON.stringify(counterFields)})`,
+  `newData.hasChildren(['counter','events','ids','leaseHolds'])`,`${current}.hasChildren(${JSON.stringify(counterFields)})`,
   `${sequence} === (data.child('counter/sequence').exists() ? data.child('counter/sequence').val()+1 : 1)`,`${sequence} <= 10000`,
   `${eventKey} === (1000000000+${sequence})+''`,
   `${v(current,'lastSourceSequence')} > (data.child('counter/lastSourceSequence').exists() ? data.child('counter/lastSourceSequence').val() : 0)`,
   `newData.child('events').child(${eventKey}).child('eventId').val() === ${eventId}`,
   `newData.child('ids').child(${eventId}).val() === ${eventKey}`,
   `!data.child('events').child(${eventKey}).exists()`,`!data.child('ids').child(${eventId}).exists()`,
+  `newData.child('leaseHolds').child(newData.child('events').child(${eventKey}).child('layoutReferenceId').val()).val() === true`,
  ];
  const write=`${registered} && newData.exists()`;
  run.quarantine={$device:{'.validate':transition.map(x=>`(${x})`).join(' && '),
@@ -44,10 +45,13 @@ export function addQuarantine(rules){
   events:{'.read':`${manager} && query.orderByKey && query.startAt >= '1000000000' && query.limitToFirst > 0 && query.limitToFirst <= 32`,
    $key:{'.read':`(${registered}) || (${manager})`,'.write':`${write} && !data.exists() && $key === ${v(eventRoot,'counter/eventKey')}`,'.validate':checks.map(x=>`(${x})`).join(' && '),...shape(eventFields)}},
   ids:{$id:{'.read':`(${registered}) || (${manager})`,'.write':`${write} && !data.exists() && $id === newData.parent().parent().child('counter/eventId').val()`,'.validate':"newData.isString() && newData.val() === newData.parent().parent().child('counter/eventKey').val()"}},
+  leaseHolds:{$ref:{'.write':`${registered} && newData.val() === true && newData.parent().parent().child('events').child(newData.parent().parent().child('counter/eventKey').val()).child('layoutReferenceId').val() === $ref`,'.validate':'newData.val() === true'}},
   '$other':{'.validate':false}
  }};
  // 停止端末には自身の受領結果だけを照会させ、受付用の公開行は再公開しない。
  run.receipts.$device.ids.$id['.read']+=` || (${registered})`;
  run.receipts.$device.events.$key['.read']+=` || (${registered})`;
+ const reference=run.references.$ref,hold=`${base}.child('quarantine').child(data.child('deviceUid').val()).child('leaseHolds').child($ref)`;
+ reference['.write']=`(${reference['.write']}) && !(data.child('schemaVersion').val() === 5 && newData.child('active').val() === false && ${hold}.exists())`;
  return rules;
 }

@@ -1,10 +1,10 @@
 {
   "sourceHashes": {
-    "validate.mjs": "28c2967f38ee2e9460ddff5e7f51ad0afbb11e435550a80cc072e9fea94d11d3",
-    "quarantine.mjs": "6e0a512387273ffb06b9f684f985d3a5c895aadfce9b51f5ce795bbcee846ed0",
-    "quarantine-rules.mjs": "1a8f3dc45c34412f151982ed4a96bfd3e5edab265eaaee7cbebda227e8faf9a6",
+    "validate.mjs": "8a0261e6f0e0ebe8651fd1992fcb3da98806ec561b646d92ef0170914ecf6e17",
+    "quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
+    "quarantine-rules.mjs": "d7c3b92b6dc18c63d3b5e0991255b1d30d0b87c079a1648a160d6e8bd59aeb8a",
     "generate.mjs": "1bb8e4f8742d5ad63f063c0f087fdfe9c89e7a99a7539f8caaaa32d486aca30c",
-    "database.rules.json": "1b9601b83e774e2c06a550c559238d0f3a13ba2ff5d625e480f77e459d545770",
+    "database.rules.json": "359c898a07afd16acfa390a309d632c12c8022c33330db694435ad0a349713d7",
     "../GD91-96/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
     "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
     "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
@@ -25,11 +25,11 @@
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
   },
   "endSourceHashes": {
-    "validate.mjs": "28c2967f38ee2e9460ddff5e7f51ad0afbb11e435550a80cc072e9fea94d11d3",
-    "quarantine.mjs": "6e0a512387273ffb06b9f684f985d3a5c895aadfce9b51f5ce795bbcee846ed0",
-    "quarantine-rules.mjs": "1a8f3dc45c34412f151982ed4a96bfd3e5edab265eaaee7cbebda227e8faf9a6",
+    "validate.mjs": "8a0261e6f0e0ebe8651fd1992fcb3da98806ec561b646d92ef0170914ecf6e17",
+    "quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
+    "quarantine-rules.mjs": "d7c3b92b6dc18c63d3b5e0991255b1d30d0b87c079a1648a160d6e8bd59aeb8a",
     "generate.mjs": "1bb8e4f8742d5ad63f063c0f087fdfe9c89e7a99a7539f8caaaa32d486aca30c",
-    "database.rules.json": "1b9601b83e774e2c06a550c559238d0f3a13ba2ff5d625e480f77e459d545770",
+    "database.rules.json": "359c898a07afd16acfa390a309d632c12c8022c33330db694435ad0a349713d7",
     "../GD91-96/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
     "../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
     "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
@@ -64,7 +64,7 @@
     {
       "id": "H03-other-device-and-partial-transfer-denied",
       "otherDeviceDenied": true,
-      "partialRequests": 3,
+      "partialRequests": 4,
       "atomicReceipt": true
     },
     {
@@ -117,6 +117,17 @@
       "archiveAndKeyNotDeleted": true,
       "browserDatabaseRequests": 0,
       "nodeTransportAndAuthority": true
+    },
+    {
+      "id": "H12-recovered-empty-queue-cannot-release-unreviewed-reference",
+      "emptyQueueNotReviewApproval": true,
+      "recoveredDeviceReleaseDenied": true,
+      "managerHoldDeletionDenied": true
+    },
+    {
+      "id": "H13-unrelated-empty-lease-can-release",
+      "holdScopedToSourceLease": true,
+      "unrelatedReleaseStillAllowed": true
     }
   ],
   "cleanup": {
@@ -124,11 +135,11 @@
     "trialRootEmpty": true
   },
   "metrics": {
-    "requests": 117,
-    "requestBodyBytes": 721390,
-    "responseBodyBytes": 49397,
-    "ownerRequests": 29,
-    "userRequests": 88
+    "requests": 130,
+    "requestBodyBytes": 725250,
+    "responseBodyBytes": 50576,
+    "ownerRequests": 34,
+    "userRequests": 96
   },
   "realIndexedDbVerified": true,
   "nonExtractableKey": true,
