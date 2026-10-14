@@ -22,7 +22,7 @@ export async function runMinimalCases(io,a,b){
  const queues=stores.map(s=>createQueue({user:transport,...s})),leases=[lease(a,head,2),lease(b,head,2)];
  for(let i=0;i<2;i++)await queues[i].acquire([a,b][i],leases[i]);
  const events=[0,1].map(i=>queuedEvent(io.performanceId,a,i+1,'person-'+i,rows['i-person-'+i],leases[0]));for(const p of events)await queues[0].append(a,p);
- const make=(p,sequence=1)=>({counter:{sequence,eventKey:String(1000000000+sequence),eventId:p.event.eventId,lastSourceSequence:p.event.sequence},['events/'+String(1000000000+sequence)]:structuredClone(p.event),['ids/'+p.event.eventId]:String(1000000000+sequence)});
+ const make=(p,sequence=1)=>({counter:{sequence,eventKey:String(1000000000+sequence),eventId:p.event.eventId,lastSourceSequence:p.event.sequence},['events/'+String(1000000000+sequence)]:structuredClone(p.event),['ids/'+p.event.eventId]:String(1000000000+sequence),['leaseHolds/'+p.event.layoutReferenceId]:true});
  const path='quarantine/'+a.device.uid,receiver=createQuarantine({user:transport,...stores[0]});
  assert.equal((await io.normal(a,path,'PATCH',make(events[1]))).status,401);assert.equal((await io.normal(a,'receipts/'+a.device.uid,'PATCH',events[0].body)).status,200);
  reports.push({id:'M01',liveQuarantineDenied:true,normalReceiptAccepted:true,businessRegistrationAndPublicationPreloaded:true});
@@ -38,11 +38,13 @@ export async function runMinimalCases(io,a,b){
  assert.equal((await io.owner(path+'/counter')).sequence,1);assert.equal((await io.normal(b,path+'/ids/'+events[1].event.eventId)).status,401);
  reports.push({id:'M04',sameIdAndContentLookup:true,secondQuarantineWrites:0,otherDeviceResultDenied:true});
  const future=structuredClone(events[1]);future.event.eventId=randomUUID();future.event.sequence=3;const body=make(future,2);
- for(const omitted of Object.keys(body)){const partial={...body};delete partial[omitted];assert.equal((await io.normal(a,path,'PATCH',partial)).status,401);}
+ for(const omitted of Object.keys(body).filter(k=>!k.startsWith('leaseHolds/'))){const partial={...body};delete partial[omitted];assert.equal((await io.normal(a,path,'PATCH',partial)).status,401);}
  assert.equal((await io.normal(a,path+'/events/1000000001','DELETE')).status,401);assert.equal((await io.normal(a,path,'PATCH',make(events[1],2))).status,401);
  reports.push({id:'M05',partialRequestsDenied:3,deleteAndReplayDenied:true});
  assert.deepEqual(await io.owner('event/reception'),rows);assert.equal(await io.owner('generations/layout/refs/'+leases[0].id),true);await assert.rejects(()=>queues[0].release(a));
+ await io.owner('devices/'+a.device.uid+'/active','PUT',true);await io.issue(a);await assert.rejects(()=>queues[0].release(a));
+ assert.equal(await io.owner(path+'/leaseHolds/'+leases[0].id),true);assert.equal(await io.owner('generations/layout/refs/'+leases[0].id),true);
  assert.equal(states[0].received.length,2);await measure();
- reports.push({id:'M06',publicReceptionUnchanged:true,referenceAndLocalArchiveHeld:true,manualAdoptionVerified:false});
+ reports.push({id:'M06',publicReceptionUnchanged:true,referenceAndLocalArchiveHeld:true,recoveredDevicePrematureReleaseDenied:true,manualAdoptionVerified:false});
  return{reports,maxJsonNodes,maxRootJsonBytes,realIndexedDbVerifiedHere:false,managerLoginAndReviewTestedHere:false,fullBusinessFreeTierVerified:false};
 }

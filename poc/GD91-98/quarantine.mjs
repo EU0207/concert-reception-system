@@ -20,7 +20,7 @@ export function createQuarantine({user,loadState,saveState}){
    let receipt=await existing(subject,normal,e),destination='normal';
    if(!receipt){destination='quarantine';receipt=await existing(subject,quarantine,e);
     if(!receipt){const counter=await user(subject,quarantine+'/counter');ok(counter);const sequence=(counter.body?.sequence??0)+1,entry=key(sequence);
-     const body={counter:{sequence,eventKey:entry,eventId:e.eventId,lastSourceSequence:e.sequence},['events/'+entry]:e,['ids/'+e.eventId]:entry};
+     const body={counter:{sequence,eventKey:entry,eventId:e.eventId,lastSourceSequence:e.sequence},['events/'+entry]:e,['ids/'+e.eventId]:entry,['leaseHolds/'+e.layoutReferenceId]:true};
      trace.writes++;const response=await(write?write({path:quarantine,body}):user(subject,quarantine,'PATCH',body));ok(response);
      receipt=response.body['events/'+entry]??response.body.events?.[entry];assert(receipt&&sameEvent(receipt,e),'quarantine-ack-conflict');
     }

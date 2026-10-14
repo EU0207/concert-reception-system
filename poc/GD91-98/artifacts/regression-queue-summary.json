@@ -22,7 +22,7 @@
     "../GD91-96/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-96/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "regression.mjs": "9c8534637357e52485f0a8a7f518b11cc46d28ee88ec4b26fe9ecd46b78f0715",
-    "database.rules.json": "1b9601b83e774e2c06a550c559238d0f3a13ba2ff5d625e480f77e459d545770"
+    "database.rules.json": "359c898a07afd16acfa390a309d632c12c8022c33330db694435ad0a349713d7"
   },
   "endSourceHashes": {
     "../GD91-96/validate.mjs": "1a08d19dd943e619c405140db9621f99dd6b8b6a1782118d4ce640ed3cd04f26",
@@ -47,7 +47,7 @@
     "../GD91-96/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-96/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "regression.mjs": "9c8534637357e52485f0a8a7f518b11cc46d28ee88ec4b26fe9ecd46b78f0715",
-    "database.rules.json": "1b9601b83e774e2c06a550c559238d0f3a13ba2ff5d625e480f77e459d545770"
+    "database.rules.json": "359c898a07afd16acfa390a309d632c12c8022c33330db694435ad0a349713d7"
   },
   "reports": [
     {
