@@ -1,15 +1,15 @@
 {
   "sourceHashes": {
-    "validate.mjs": "bf7deb2ef1b556f9b10617be9524fd75002a66b30d9b371701a455db8b912aaf",
+    "validate.mjs": "bb41780328261510674ec1c19584f01130f0b7f64ff94395f014cf1360e4c642",
     "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
     "layout-rules.mjs": "8d67855521c508d7b03dcef8d5e0471012743ccb28d02d635e6976f8826e05f6",
     "generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
     "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
     "publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
-    "publication-rules.mjs": "0cd2f2d025822832a2b84a5f9ed00860b1eb3e5e33d236006188653c7e83c6f5",
+    "publication-rules.mjs": "37fb6ec28ea7b59ad2948bef1686c82ed1a76a63058e6341561c88dd32e27185",
     "collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
     "collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
-    "database.rules.json": "3e077b8a25b0c647d86854511d9cef75e47c9a3fa4571341c6fa7282ffc41392",
+    "database.rules.json": "dcdf381d36c5fef6d8614d400e8e00f6c3811d95af90bc16ab54f2ea647303e8",
     "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -22,16 +22,16 @@
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "validate.mjs": "bf7deb2ef1b556f9b10617be9524fd75002a66b30d9b371701a455db8b912aaf",
+    "validate.mjs": "bb41780328261510674ec1c19584f01130f0b7f64ff94395f014cf1360e4c642",
     "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
     "layout-rules.mjs": "8d67855521c508d7b03dcef8d5e0471012743ccb28d02d635e6976f8826e05f6",
     "generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
     "snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
     "publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
-    "publication-rules.mjs": "0cd2f2d025822832a2b84a5f9ed00860b1eb3e5e33d236006188653c7e83c6f5",
+    "publication-rules.mjs": "37fb6ec28ea7b59ad2948bef1686c82ed1a76a63058e6341561c88dd32e27185",
     "collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
     "collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
-    "database.rules.json": "3e077b8a25b0c647d86854511d9cef75e47c9a3fa4571341c6fa7282ffc41392",
+    "database.rules.json": "dcdf381d36c5fef6d8614d400e8e00f6c3811d95af90bc16ab54f2ea647303e8",
     "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -125,6 +125,12 @@
       "partialStateNotCommitted": true
     },
     {
+      "id": "P10-stale-proof-can-be-cancelled-after-new-assignment",
+      "newAssignmentRetained": true,
+      "staleCandidateNotPublished": true,
+      "explicitCancellationNotBlockedByNewAssignment": true
+    },
+    {
       "id": "R01-publication-candidate-pin-prevents-collection",
       "candidatePinned": true,
       "unacknowledgedCompletionRejected": true,
@@ -146,11 +152,11 @@
     "trialRootEmpty": true
   },
   "metrics": {
-    "requests": 497,
-    "requestBodyBytes": 2110930,
-    "responseBodyBytes": 912390,
+    "requests": 580,
+    "requestBodyBytes": 2152931,
+    "responseBodyBytes": 953406,
     "ownerRequests": 19,
-    "userRequests": 478
+    "userRequests": 561
   },
   "formalLayoutSchemaConnected": true,
   "assignedSeatPublicationProtectionVerified": true,

@@ -93,6 +93,14 @@ try {
     assert.equal((await user('',manager.device,'PATCH',checked.publish(4))).status,401);
     return{postUpdateEventFenceChecked:true,partialStateNotCommitted:true};
   });
+  await check('P10-stale-proof-can-be-cancelled-after-new-assignment',async()=>{
+    const after=structuredClone(m),removed=after.seats.splice(1,1)[0],cell=after.section.cells.find(c=>c.seatId===removed.seatId);cell.kind='unset';delete cell.seatId;
+    await build(send,'stale-cancel',[after]);const checked=await preparePublication(read,send,manager,'stale-cancel');
+    await commit(bulk(manager,state,await read('head'),{'person-1':removed.seatId},{controlRevision:2}));
+    assert.equal((await user('',manager.device,'PATCH',checked.publish(4))).status,401);
+    await send('','PATCH',checked.cancel());assert.equal((await read('publicationChecks/'+checked.id)).phase,'cancelled');
+    return{newAssignmentRetained:true,staleCandidateNotPublished:true,explicitCancellationNotBlockedByNewAssignment:true};
+  });
   await check('R01-publication-candidate-pin-prevents-collection',async()=>{
     await build(send,'collectible',[m]);const checked=await preparePublication(read,send,manager,'collectible'),meta=await read('generations/collectible/meta');
     assert.equal((await user('generations/collectible/meta',manager.device,'PUT',{...meta,phase:'deleting',revision:meta.revision+1})).status,401);
