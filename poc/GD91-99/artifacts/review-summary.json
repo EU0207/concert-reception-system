@@ -1,6 +1,6 @@
 {
   "sourceHashes": {
-    "review-local.mjs": "93ff053573b1977702e810574bf3cb50c548446f7057f8da7043e12a761373f3",
+    "review-local.mjs": "97e53c15553cd9b5d700a6eb42f17254bf005b0f0cf5bbc0eb51ea4e0a00b387",
     "review-rules.mjs": "ce28dcae3d738c1743cb8a842914350f166fe7938dbc28ce8569cf5dfb8bf0ca",
     "release-rules.mjs": "5d57abeee48634d3e77bc0ecd7de3cdf230a03c5d322e263ffce4ffc0469b05f",
     "review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
@@ -25,7 +25,7 @@
     "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47"
   },
   "endSourceHashes": {
-    "review-local.mjs": "93ff053573b1977702e810574bf3cb50c548446f7057f8da7043e12a761373f3",
+    "review-local.mjs": "97e53c15553cd9b5d700a6eb42f17254bf005b0f0cf5bbc0eb51ea4e0a00b387",
     "review-rules.mjs": "ce28dcae3d738c1743cb8a842914350f166fe7938dbc28ce8569cf5dfb8bf0ca",
     "release-rules.mjs": "5d57abeee48634d3e77bc0ecd7de3cdf230a03c5d322e263ffce4ffc0469b05f",
     "review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
@@ -133,6 +133,13 @@
       "previousFinalConfirmationRetained": true,
       "browserDatabaseRequests": 0,
       "wholeBrowserResumeVerified": false
+    },
+    {
+      "id": "R16-authority-change-after-preparation-keeps-pending-plan",
+      "roleChangeInjected": true,
+      "recentReauthenticationRequired": true,
+      "pendingPlanNotDiscarded": true,
+      "wholeBrowserPermissionGateTested": false
     }
   ],
   "cleanup": {
@@ -140,11 +147,11 @@
     "trialRootEmpty": true
   },
   "metrics": {
-    "requests": 185,
-    "requestBodyBytes": 856831,
-    "responseBodyBytes": 47539,
-    "ownerRequests": 78,
-    "userRequests": 107
+    "requests": 206,
+    "requestBodyBytes": 860075,
+    "responseBodyBytes": 51775,
+    "ownerRequests": 91,
+    "userRequests": 115
   },
   "realIndexedDbVerified": true,
   "managerAdoptionVerified": true,
