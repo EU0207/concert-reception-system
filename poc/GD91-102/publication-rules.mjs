@@ -35,7 +35,7 @@ export function addPublicationChecks(rules) {
     '.validate':`newData.hasChildren(${JSON.stringify(fields)}) && ((${v('newData','phase')} === 'checking' || ${v('newData','phase')} === 'checked') ? ${pin}.val() === true : !${pin}.exists())`,
     ...Object.fromEntries(fields.map(f=>[f,{'.validate':true}])),
     publicationOperationId:{'.validate':'newData.isString()'},
-    slots:{$slot:{'.validate':`$slot.matches(/^s(0[0-9]|1[0-5])$/) && newData.val() === ${v(record,'cursor')} && (${v(old,'kind')} !== 'seat' || !${person}.exists() || ${person}.val() === 'none' || (${same}))`}},
+    slots:{$slot:{'.validate':`$slot.matches(/^s(0[0-9]|1[0-5])$/) && newData.val() === ${v(record,'cursor')} && (${v(record,'phase')} !== 'checking' || ${v(old,'kind')} !== 'seat' || !${person}.exists() || ${person}.val() === 'none' || (${same}))`}},
     '$other':{'.validate':false}}};
   const ref=run.generations.$generation.refs.$ref, path="newData.parent().parent().parent().parent()", proof=`${path}.child('publicationChecks').child($ref.replace('publication-',''))`;
   const ownProof=`$ref.matches(/^publication-[a-f0-9-]{36}$/) && ${v(proof,'candidateGeneration')} === $generation && ${v(proof,'deviceUid')} === auth.uid`;
