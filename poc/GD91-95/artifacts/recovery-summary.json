@@ -1,0 +1,90 @@
+{
+  "sourceHashes": {
+    "recovery.mjs": "767c7996cbf84a7f47a0a30d63d44257e26cfd7a0e94f860eacf592537280b79",
+    "../GD91-94/pending.mjs": "5bf9bc6d0873a1b63c9ac3f383884ab223a54bf738cadb64fd707f33283294a0",
+    "../GD91-94/pending-rules.mjs": "256b8b95e44a2a44a3305624f89dc1eeb83078e2f4c3d6cee09685ffdb31327f",
+    "../GD91-94/database.rules.json": "edee38d5e940c4de00f29f7ca8455f04ece17a387ecffa9fd432048e09cecde9",
+    "../GD91-93/shared.mjs": "f7c2f561ef62d56ea147d79c18862ef553ceeec874d7ed9ea5c1e4b27b541af6",
+    "../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "endSourceHashes": {
+    "recovery.mjs": "767c7996cbf84a7f47a0a30d63d44257e26cfd7a0e94f860eacf592537280b79",
+    "../GD91-94/pending.mjs": "5bf9bc6d0873a1b63c9ac3f383884ab223a54bf738cadb64fd707f33283294a0",
+    "../GD91-94/pending-rules.mjs": "256b8b95e44a2a44a3305624f89dc1eeb83078e2f4c3d6cee09685ffdb31327f",
+    "../GD91-94/database.rules.json": "edee38d5e940c4de00f29f7ca8455f04ece17a387ecffa9fd432048e09cecde9",
+    "../GD91-93/shared.mjs": "f7c2f561ef62d56ea147d79c18862ef553ceeec874d7ed9ea5c1e4b27b541af6",
+    "../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "reports": [
+    {
+      "id": "S01-aborted-fixed-save-keeps-prior-and-sends-nothing",
+      "indexedDbAbort": true,
+      "priorDraftKept": true,
+      "serverReservationRequests": 0,
+      "physicalCapacityExhaustion": false
+    },
+    {
+      "id": "S02-encrypted-proposal-and-reservation-restart",
+      "nonExtractableKeyPersisted": true,
+      "additionalPassphrase": false,
+      "browserProcessRestart": true,
+      "proposalAndCandidateRestored": true,
+      "reservationWriteNotRepeated": true
+    },
+    {
+      "id": "S03-scopes-and-local-version-conflict",
+      "crossUserPerformanceDeviceIsolated": true,
+      "staleLocalWriteRejected": true
+    },
+    {
+      "id": "S04-real-shared-response-socket-drop",
+      "serverCommittedBeforeResponseSocketDrop": true,
+      "sharedReservationRetained": true
+    },
+    {
+      "id": "S05-later-share-and-restart-use-read-only-result",
+      "laterShareFromOtherDevice": true,
+      "browserRestart": true,
+      "sameIdLookupWrites": 0,
+      "noSharedHeadRollback": true,
+      "releaseResponseRecovery": true
+    },
+    {
+      "id": "S06-revoked-device-retains-encrypted-fixed-share",
+      "authorityCheckedBeforeDecrypt": true,
+      "ciphertextAndReservationRetained": true,
+      "revocationInjected": true,
+      "browserAuthPersistenceTested": false
+    },
+    {
+      "id": "S07-browser-storage-sends-no-database-traffic",
+      "browserDatabaseRequests": 0,
+      "nodeAuthAndRulesTransport": true,
+      "wholeBrowserApplicationTested": false
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "browser": "installed Microsoft Edge, headless, isolated persistent profile",
+  "externalFirebaseConnected": false,
+  "sharedReservationConnected": true,
+  "nonExtractableKey": true,
+  "realIndexedDbVerified": true,
+  "receptionQueuePinsConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
