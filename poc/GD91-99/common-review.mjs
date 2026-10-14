@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import {runMinimalCases} from '../GD91-98/minimal-cases.mjs';
+import {lease,queuedEvent} from '../GD91-96/queue.mjs';
+import {createQueue} from './queue.mjs';import {createQuarantine} from '../GD91-98/quarantine.mjs';
+import {reviewRequest,sealRequest,releaseRequest} from './review.mjs';import {createSubmission} from './submission.mjs';
+export async function runReviewCases(io,m,a,b){
+ const reports=[],nodes=v=>v===null||typeof v!=='object'?1:1+Object.values(v).reduce((n,x)=>n+nodes(x),0);let maxJsonNodes=0,maxRootJsonBytes=0;
+ const measure=async()=>{const v=await io.owner('');maxJsonNodes=Math.max(maxJsonNodes,nodes(v));maxRootJsonBytes=Math.max(maxRootJsonBytes,Buffer.byteLength(JSON.stringify(v)));assert(maxJsonNodes<=2000);assert(maxRootJsonBytes<=1048576);};
+ const base=await runMinimalCases(io,a,b);assert.equal(base.reports.length,6);
+ await io.owner('roles/'+m.human.uid,'PUT',{active:true,role:'owner',revision:1,receptionBaselineRevision:0,startsAt:0,endsAt:Date.now()+86400000});
+ await io.owner('devices/'+m.device.uid,'PUT',{schemaVersion:2,performanceId:io.performanceId,deviceUid:m.device.uid,humanUid:m.human.uid,active:true,preparedRoleRevision:1});await io.issue(m);
+ reports.push({id:'M01',existingIntakeGroups:6,managerProvider:'google.com',businessRegistrationAndPublicationPreloaded:true});
+ const record=(await io.normal(m,'quarantine/'+a.device.uid+'/events/1000000001')).body,reference={id:record.layoutReferenceId,record:(await io.normal(m,'references/'+record.layoutReferenceId)).body};
+ const state=async()=>(await io.normal(m,'quarantineReviewState/'+reference.id)).body;
+ let sourceState=null,managerState=null;
+ const sourceSubmit=createSubmission({user:io.normal,loadState:async()=>structuredClone(sourceState),saveState:async value=>{sourceState=structuredClone(value);}}),managerSubmit=createSubmission({user:io.normal,loadState:async()=>structuredClone(managerState),saveState:async value=>{managerState=structuredClone(value);}});
+ const seal=sealRequest(a,reference,2,(await state()).receivedCount,3),sealPath='referenceClosures/'+reference.id;
+ assert.equal((await io.normal(b,sealPath,'PUT',seal)).status,401);assert.equal((await io.normal(a,sealPath,'PUT',{...seal,finalSequence:1})).status,401);
+ const closure=await sourceSubmit.submit(a,{path:sealPath,decision:seal,body:{[sealPath]:seal}});
+ const early=releaseRequest(m,reference,closure,await state(),3);assert.equal((await io.normal(m,'','PATCH',early.body)).status,401);
+ reports.push({id:'M02',sourceFinalSequenceBound:true,reviewIncompleteReleaseDenied:true});
+ const proposal=reviewRequest(m,a.device.uid,'1000000001',record,await state(),{outcome:'adopt',reason:'紙記録と照合',controlRevision:3});
+ assert.equal((await io.normal(a,'','PATCH',proposal.body)).status,401);
+ await assert.rejects(()=>managerSubmit.submit(m,proposal,{write:async p=>{assert.equal((await io.normal(m,'','PATCH',p.body)).status,200);throw new Error('injected-response-ignore');}}),/injected-response-ignore/);
+ const trace={writes:0};await managerSubmit.submit(m,proposal,{trace});assert.equal(trace.writes,0);assert.equal(managerState.results.length,1);assert.equal((await state()).reviewedCount,1);
+ assert.equal((await io.owner('managedReceipts/'+proposal.decision.operationId)).sourceEventId,record.eventId);
+ reports.push({id:'M03',realManagerAdoptionRoute:true,receptionistReviewDenied:true,decisionAndAdoptionAtomic:true,responseIgnoredNotPhysicallyCut:true,secondAdoptionWrites:0});
+ const release=releaseRequest(m,reference,closure,await state(),3);
+ for(const omitted of Object.keys(release.body)){const partial={...release.body};delete partial[omitted];assert.equal((await io.normal(m,'','PATCH',partial)).status,401);}
+ reports.push({id:'M04',partialReleaseRequestsDenied:5,referenceHeldUntilAudit:true});
+ await assert.rejects(()=>managerSubmit.submit(m,release,{write:async p=>{assert.equal((await io.normal(m,'','PATCH',p.body)).status,200);throw new Error('injected-response-ignore');}}),/injected-response-ignore/);
+ await managerSubmit.submit(m,release,{trace});assert.equal(trace.writes,0);assert.equal((await io.owner('references/'+reference.id)).active,false);assert.equal(await io.owner('generations/layout/refs/'+reference.id),null);assert.equal(await io.owner('quarantine/'+a.device.uid+'/leaseHolds/'+reference.id),null);assert(await io.owner('quarantine/'+a.device.uid+'/events/1000000001'));
+ reports.push({id:'M05',reviewedReleaseRetryReadOnly:true,sourceEvidenceRetained:true});
+ await io.owner('control','PUT',{state:'operating',revision:4});await io.owner('event/tickets/person-1/currentCycle','PUT',2);
+ let queueState=null;const next=lease(a,{generation:'layout',revision:1},4),queue=createQueue({user:io.normal,loadState:async()=>structuredClone(queueState),saveState:async value=>{queueState=structuredClone(value);}});
+ await queue.acquire(a,next);assert.equal(queueState.nextSequence,3);await queue.append(a,queuedEvent(io.performanceId,a,3,'person-0',{credentialRef:'credential-0',credentialVersion:1,currentCycle:1},next));await queue.flush(a);
+ await managerSubmit.submit(m,proposal,{trace});await managerSubmit.submit(m,release,{trace});assert.equal(trace.writes,0);assert.equal(managerState.results.length,2);assert.equal((await io.owner('receiptClocks/'+a.device.uid)).sequence,3);assert.equal((await io.owner('event/tickets/person-1')).currentCycle,2);
+ assert.equal((await io.normal(b,proposal.path)).status,401);const published=(await io.normal(b,'managedReceipts/'+proposal.decision.operationId)).body;assert(published&&!('reason'in published)&&!('humanUid'in published));
+ reports.push({id:'M06',normalSequenceContinued:true,localResultsNotDuplicated:true,laterCycleUnchanged:true,privateReviewReasonNotDistributed:true});await measure();
+ return{reports,maxJsonNodes,maxRootJsonBytes,realIndexedDbVerifiedHere:false,physicalSocketDropTestedHere:false,exceptionCloseVerified:false,wholeBrowserApplicationTested:false,fullBusinessFreeTierVerified:false};
+}
