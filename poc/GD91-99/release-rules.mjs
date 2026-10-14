@@ -1,0 +1,24 @@
+import {base,recentManager,manager} from '../GD91-84/auth-rules.mjs';
+const v=(n,k)=>`${n}.child('${k}').val()`,shape=fields=>Object.fromEntries([...fields.map(k=>[k,{'.validate':true}]),['$other',{'.validate':false}]]);
+export function addReviewedRelease(rules){
+ const run=rules.rules.checks.$run,releaseRoot="newData.parent().parent()",ref=`${base}.child('references').child($ref)`,uid=v(ref,'deviceUid');
+ const closure=`${base}.child('referenceClosures').child($ref)`,state=`${base}.child('quarantineReviewState').child($ref)`;
+ const nextRef=`${releaseRoot}.child('references').child($ref)`,quarantine=`${releaseRoot}.child('quarantine').child(${uid})`;
+ const fields=['operationId','referenceId','deviceUid','finalSequence','reviewedCount','humanUid','managerDeviceUid','controlRevision','releasedAt'];
+ const fixed=['schemaVersion','generation','baseLayoutRevision','sourceControlRevision','deviceUid'].map(k=>v(nextRef,k)+' === '+v(ref,k)).join(' && ');
+ run.reviewReleases={$ref:{'.read':`(${manager}) || (auth != null && ${uid} === auth.uid)`,'.write':`${recentManager} && !data.exists() && newData.exists()`,
+  '.validate':`newData.hasChildren(${JSON.stringify(fields)}) && ${v(ref,'schemaVersion')} === 5 && ${v(ref,'active')} === true && ${closure}.exists() && ${v('newData','referenceId')} === $ref && ${v('newData','deviceUid')} === ${uid} && ${v('newData','finalSequence')} === ${v(closure,'finalSequence')} && ${v(state,'receivedCount')} === ${v(state,'reviewedCount')} && ${v('newData','reviewedCount')} === ${v(state,'reviewedCount')} && ${v('newData','humanUid')} === ${base}.child('devices').child(auth.uid).child('humanUid').val() && ${v('newData','managerDeviceUid')} === auth.uid && ${v('newData','controlRevision')} === ${v(base,'control/revision')} && ${v('newData','controlRevision')} > ${v(ref,'sourceControlRevision')} && ${v('newData','operationId')}.matches(/^[a-f0-9-]{36}$/) && ${v('newData','releasedAt')} === now && !${quarantine}.child('leaseHolds').child($ref).exists() && ${v(quarantine,'lastReviewRelease/referenceId')} === $ref && ${v(quarantine,'lastReviewRelease/operationId')} === ${v('newData','operationId')} && ${v(nextRef,'active')} === false && ${v(nextRef,'revision')} === ${v(ref,'revision')}+1 && (${fixed}) && !${releaseRoot}.child('generations').child(${v(ref,'generation')}).child('refs').child($ref).exists()`,...shape(fields)}};
+ const q=run.quarantine.$device;
+ const newRelease="newData.parent().parent().parent().parent().child('reviewReleases').child($ref)";
+ q.leaseHolds.$ref['.write']+=` || (${recentManager} && data.val() === true && !newData.exists() && ${v(newRelease,'deviceUid')} === $device && !${base}.child('reviewReleases').child($ref).exists())`;
+ const cursorRelease="newData.parent().parent().parent().child('reviewReleases').child(newData.child('referenceId').val())";
+ q.lastReviewRelease={'.write':`${recentManager} && newData.exists()`,'.validate':`newData.hasChildren(['referenceId','operationId']) && ${v(cursorRelease,'deviceUid')} === $device && ${v(cursorRelease,'operationId')} === ${v('newData','operationId')} && !${base}.child('reviewReleases').child(newData.child('referenceId').val()).exists()`,...shape(['referenceId','operationId'])};
+ const sameCounter=['sequence','eventKey','eventId','lastSourceSequence'].map(k=>v('newData','counter/'+k)+' === '+v('data','counter/'+k)).join(' && ');
+ q['.validate']=`(${q['.validate']}) || (${recentManager} && newData.hasChildren(['counter','events','ids','lastReviewRelease']) && (${sameCounter}) && !${base}.child('reviewReleases').child(newData.child('lastReviewRelease/referenceId').val()).exists() && newData.parent().parent().child('reviewReleases').child(newData.child('lastReviewRelease/referenceId').val()).child('operationId').val() === newData.child('lastReviewRelease/operationId').val())`;
+ const refNode=run.references.$ref,newRefRelease="newData.parent().parent().child('reviewReleases').child($ref)";
+ const stable=['schemaVersion','generation','baseLayoutRevision','sourceControlRevision','deviceUid'].map(k=>v('newData',k)+' === '+v('data',k)).join(' && ');
+ refNode['.write']+=` || (${recentManager} && ${v('data','schemaVersion')} === 5 && ${v('data','active')} === true && ${v('newData','active')} === false && ${v('newData','revision')} === ${v('data','revision')}+1 && (${stable}) && ${v(newRefRelease,'deviceUid')} === ${v('data','deviceUid')} && !${base}.child('reviewReleases').child($ref).exists())`;
+ const inverse=run.generations.$generation.refs.$ref,invRoot="newData.parent().parent().parent().parent()",invRelease=`${invRoot}.child('reviewReleases').child($ref)`;
+ inverse['.write']+=` || (${recentManager} && data.val() === true && !newData.exists() && ${v(invRelease,'referenceId')} === $ref && ${invRoot}.child('references').child($ref).child('generation').val() === $generation && !${base}.child('reviewReleases').child($ref).exists())`;
+ return rules;
+}
