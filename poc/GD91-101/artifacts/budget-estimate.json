@@ -1,0 +1,86 @@
+{
+  "sourceHashes": {
+    "budget-estimate.mjs": "bddb5469e3e8c42279e41da35f31e3563f87028854bb8c75c64caafec937a230",
+    "artifacts/capacity-600-summary.json": "0f9e00df453c40cefe1adcd424316ebcd7d0d03d1aeeeaeef32b2333855b15ac",
+    "artifacts/capacity-1000-summary.json": "fc91e517d5e26a992dbbdcc7fc6aea2d4d45fe8286e61443c51323cc598e73f4"
+  },
+  "endSourceHashes": {
+    "budget-estimate.mjs": "bddb5469e3e8c42279e41da35f31e3563f87028854bb8c75c64caafec937a230",
+    "artifacts/capacity-600-summary.json": "0f9e00df453c40cefe1adcd424316ebcd7d0d03d1aeeeaeef32b2333855b15ac",
+    "artifacts/capacity-1000-summary.json": "fc91e517d5e26a992dbbdcc7fc6aea2d4d45fe8286e61443c51323cc598e73f4"
+  },
+  "reports": [
+    {
+      "people": 600,
+      "normalOperationRequests": 5403,
+      "preparationResponseBodyBytes": 7897575,
+      "snapshotBodyBytes": 3271986,
+      "receptionAckBodyBytes": 738058,
+      "receptionNotificationBodyBytes": 2075892,
+      "measuredBodyBytes": 13983511,
+      "authSdkInternalWireCounted": false,
+      "ownerDiagnosticRequestsExcludedFromTlsAllowance": true,
+      "userApplicationDiagnosticsIncluded": true,
+      "countedApplicationOperations": 7330,
+      "freshTlsAllowanceBytes": 26270720,
+      "notificationAllowanceBytes": 921600,
+      "safetyFactor": 2,
+      "illustrativeBytesPerPerformance": 82351662,
+      "measuredRootJsonBytes": 6684137,
+      "illustrativePerformancesPerMonthWithinHalfOfSparkDownload": 60,
+      "illustrativeStoredPerformancesWithinHalfOfSparkStorage": 74,
+      "linearPeoplePerMonthAtSameMeasuredMix": 36000,
+      "moreThan1000FreeTierGuaranteed": false,
+      "quotaUpperBoundProven": false
+    },
+    {
+      "people": 1000,
+      "normalOperationRequests": 9003,
+      "preparationResponseBodyBytes": 13190053,
+      "snapshotBodyBytes": 5488380,
+      "receptionAckBodyBytes": 1230462,
+      "receptionNotificationBodyBytes": 3460698,
+      "measuredBodyBytes": 23369593,
+      "authSdkInternalWireCounted": false,
+      "ownerDiagnosticRequestsExcludedFromTlsAllowance": true,
+      "userApplicationDiagnosticsIncluded": true,
+      "countedApplicationOperations": 12237,
+      "freshTlsAllowanceBytes": 43857408,
+      "notificationAllowanceBytes": 1536000,
+      "safetyFactor": 2,
+      "illustrativeBytesPerPerformance": 137526002,
+      "measuredRootJsonBytes": 11150228,
+      "illustrativePerformancesPerMonthWithinHalfOfSparkDownload": 36,
+      "illustrativeStoredPerformancesWithinHalfOfSparkStorage": 44,
+      "linearPeoplePerMonthAtSameMeasuredMix": 36000,
+      "moreThan1000FreeTierGuaranteed": false,
+      "quotaUpperBoundProven": false
+    }
+  ],
+  "officialCheckedDate": "2026-10-15",
+  "officialSources": [
+    "https://firebase.google.com/docs/database/usage/billing",
+    "https://firebase.google.com/docs/database/usage/limits",
+    "https://firebase.google.com/pricing"
+  ],
+  "sparkStorageBytesConservativeDecimal": 1000000000,
+  "sparkMonthlyDownloadBytesConservativeDecimal": 10000000000,
+  "sparkSimultaneousConnections": 100,
+  "assumptions": {
+    "newTlsConnectionForEveryCountedApplicationOperation": 3584,
+    "unmeasuredNotificationOverheadPerEvent": 256,
+    "multiplier": 2,
+    "halfQuotaReservedForUnmodelledUsage": true
+  },
+  "notIncluded": [
+    "actualAuthAndSdkProtocolBytes",
+    "combinedEmergencyGroupAndPhysicalLayoutOperations",
+    "multiplePerformanceLongTermRetentionAndManualReconciliation"
+  ],
+  "observedWireBillingUsage": false,
+  "basis": "GD91-100 frozen Rules with GD91-99 common sequence; minimal seat domain only",
+  "unsupportedBusinessOperationsAssumedZero": false,
+  "fullBusinessFreeTierVerified": false,
+  "productionAdoptionApproved": false,
+  "tested3000": false
+}
