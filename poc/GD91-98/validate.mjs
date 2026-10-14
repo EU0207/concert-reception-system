@@ -39,7 +39,7 @@ try{
  for(const p of events)await qa.append(a,p);
  await ql.append(lost,queuedEvent(trial.split('/')[1],lost,1,'person-2',f.state.reception['i-person-2'],ll));
  const receiver=createQuarantine({user:transport,...sa});
- const make=(p,sequence=1)=>({counter:{sequence,eventKey:String(1000000000+sequence),eventId:p.event.eventId,lastSourceSequence:p.event.sequence},['events/'+String(1000000000+sequence)]:p.event,['ids/'+p.event.eventId]:String(1000000000+sequence)});
+ const make=(p,sequence=1)=>({counter:{sequence,eventKey:String(1000000000+sequence),eventId:p.event.eventId,lastSourceSequence:p.event.sequence},['events/'+String(1000000000+sequence)]:structuredClone(p.event),['ids/'+p.event.eventId]:String(1000000000+sequence)});
  await check('H01-live-records-use-normal-route',async()=>{const r=await user('quarantine/'+a.device.uid,a.device,'PATCH',make(events[0]));assert.equal(r.status,401);assert.equal(await owner(trial+'/quarantine/'+a.device.uid),null);ok(await user('receipts/'+a.device.uid,a.device,'PATCH',events[0].body));return{activeQuarantineDenied:true,normalReceiptCommitted:true};});
  await f.control('stopped',3);await owner(trial+'/devices/'+a.device.uid+'/active','PUT',false);await owner(trial+'/devices/'+lost.device.uid+'/active','PUT',false);
  const publicBefore=await owner(trial+'/event/reception');
