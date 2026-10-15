@@ -286,5 +286,7 @@
   "productionFreeTierVerified": false,
   "tested3000": false,
   "layoutSchemaVersion": 2,
-  "businessSchemaVersion": 3
+  "businessSchemaVersion": 3,
+  "executedHarnessRevision": "539dbbbfa174f6c0b9a2711accda3b9193e9211f",
+  "reauthenticationThresholdMs": 0
 }
