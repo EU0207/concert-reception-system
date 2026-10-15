@@ -3,9 +3,9 @@
     "diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
     "validate.mjs": "6a337b71b767a583cf358959b5008dd680762db0bd0b89777f670d6a65fc6a06",
     "model.mjs": "ea59fe83469144039d02ad3387f57ee83adccfd0b3652cdb03ed84d6986dc7b5",
-    "group-rules.mjs": "6e1c5749093eadb966d066a8bc220d403da10c7fe5f01257c62e7d9779e52c5d",
+    "group-rules.mjs": "ec8ffe0a038528ef9745b0f9c126344d1d11966ff9a3a600feb7f2bd50843a6a",
     "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
-    "database.rules.json": "e050c5a1c16a64044fc796fcbd5ecf472b44eb3fb958559c2978913afd6f922f",
+    "database.rules.json": "ca773973ae149df4e310132aeb5b6f534c0b979644bc541995aadad3b2216559",
     "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
     "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
     "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
@@ -25,9 +25,9 @@
     "diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
     "validate.mjs": "6a337b71b767a583cf358959b5008dd680762db0bd0b89777f670d6a65fc6a06",
     "model.mjs": "ea59fe83469144039d02ad3387f57ee83adccfd0b3652cdb03ed84d6986dc7b5",
-    "group-rules.mjs": "6e1c5749093eadb966d066a8bc220d403da10c7fe5f01257c62e7d9779e52c5d",
+    "group-rules.mjs": "ec8ffe0a038528ef9745b0f9c126344d1d11966ff9a3a600feb7f2bd50843a6a",
     "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
-    "database.rules.json": "e050c5a1c16a64044fc796fcbd5ecf472b44eb3fb958559c2978913afd6f922f",
+    "database.rules.json": "ca773973ae149df4e310132aeb5b6f534c0b979644bc541995aadad3b2216559",
     "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
     "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
     "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
@@ -43,13 +43,33 @@
     "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
     "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889"
   },
-  "reports": [],
+  "reports": [
+    {
+      "id": "G01-roster-and-membership-normal-atomic-registration",
+      "registered": 4,
+      "groupMembers": 3
+    },
+    {
+      "id": "G02-omitted-roster-or-membership-and-bypass-rejected",
+      "partialWritesRejected": 5,
+      "directMutationRejected": true
+    },
+    {
+      "id": "G03-automatic-group-assignment-and-completeness",
+      "allMembersAssigned": true,
+      "missingMemberRefused": true
+    },
+    {
+      "id": "G04-nonconsecutive-and-unusable-group-targets-rejected",
+      "unusableTargetRefused": true
+    }
+  ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
   },
   "failure": {
-    "stage": "G01-roster-and-membership-normal-atomic-registration",
+    "stage": "G05-manual-split-reason-fixed-and-atomicity",
     "code": "ERR_ASSERTION"
   },
   "externalFirebaseConnected": false,
