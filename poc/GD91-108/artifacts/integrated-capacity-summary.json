@@ -1,0 +1,240 @@
+{
+  "reports": [
+    {
+      "people": 4,
+      "nonSeatCells": 4,
+      "sections": 2,
+      "normalOperationRequests": 52,
+      "normalGetRetries": 0,
+      "reauthentication": {
+        "refreshes": 13,
+        "emulatorAuthRequests": 13,
+        "sessionRequests": 13
+      },
+      "preparationIncludingLayout": {
+        "requests": 78,
+        "requestBodyBytes": 71874,
+        "responseBodyBytes": 70495,
+        "ownerRequests": 5,
+        "userRequests": 73
+      },
+      "maxRequestBytes": 7513,
+      "rootJsonBytes": 59664,
+      "oldRootJsonBytes": 53014,
+      "rootByteIncrease": 6650,
+      "snapshotStats": [
+        {
+          "sdkGetOperations": 9,
+          "responseBodyBytes": 3507,
+          "geometrySdkGets": 28,
+          "geometryBodyBytes": 6325
+        },
+        {
+          "sdkGetOperations": 9,
+          "responseBodyBytes": 3507,
+          "geometrySdkGets": 28,
+          "geometryBodyBytes": 6325
+        },
+        {
+          "sdkGetOperations": 9,
+          "responseBodyBytes": 3507,
+          "geometrySdkGets": 28,
+          "geometryBodyBytes": 6325
+        },
+        {
+          "sdkGetOperations": 9,
+          "responseBodyBytes": 3507,
+          "geometrySdkGets": 28,
+          "geometryBodyBytes": 6325
+        },
+        {
+          "sdkGetOperations": 9,
+          "responseBodyBytes": 3507,
+          "geometrySdkGets": 28,
+          "geometryBodyBytes": 6325
+        },
+        {
+          "sdkGetOperations": 9,
+          "responseBodyBytes": 3507,
+          "geometrySdkGets": 28,
+          "geometryBodyBytes": 6325
+        }
+      ],
+      "reception": {
+        "requests": 8,
+        "requestBodyBytes": 5232,
+        "responseBodyBytes": 4884,
+        "ownerRequests": 0,
+        "userRequests": 8,
+        "elapsedMs": 333,
+        "eventsPerEnvironment": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "responseBodyBytesPerEnvironment": [
+          2292,
+          2292,
+          2292,
+          2292,
+          2292,
+          2292
+        ]
+      },
+      "resultLookups": 0,
+      "maxElapsedMs": 580,
+      "executedHarnessRevision": "539dbbbfa174f6c0b9a2711accda3b9193e9211f"
+    },
+    {
+      "people": 600,
+      "nonSeatCells": 600,
+      "sections": 2,
+      "normalOperationRequests": 5403,
+      "normalGetRetries": 0,
+      "reauthentication": null,
+      "preparationIncludingLayout": {
+        "requests": 5503,
+        "requestBodyBytes": 8976082,
+        "responseBodyBytes": 8662673,
+        "ownerRequests": 5,
+        "userRequests": 5498
+      },
+      "maxRequestBytes": 442350,
+      "rootJsonBytes": 7333816,
+      "oldRootJsonBytes": 6684137,
+      "rootByteIncrease": 649679,
+      "snapshotStats": [
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 490032,
+          "geometrySdkGets": 102,
+          "geometryBodyBytes": 401339
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 490032,
+          "geometrySdkGets": 102,
+          "geometryBodyBytes": 401339
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 490032,
+          "geometrySdkGets": 102,
+          "geometryBodyBytes": 401339
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 490032,
+          "geometrySdkGets": 102,
+          "geometryBodyBytes": 401339
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 490032,
+          "geometrySdkGets": 102,
+          "geometryBodyBytes": 401339
+        },
+        {
+          "sdkGetOperations": 66,
+          "responseBodyBytes": 490032,
+          "geometrySdkGets": 102,
+          "geometryBodyBytes": 401339
+        }
+      ],
+      "reception": {
+        "requests": 1200,
+        "requestBodyBytes": 790258,
+        "responseBodyBytes": 738058,
+        "ownerRequests": 0,
+        "userRequests": 1200,
+        "elapsedMs": 33217,
+        "eventsPerEnvironment": [
+          600,
+          600,
+          600,
+          600,
+          600,
+          600
+        ],
+        "responseBodyBytesPerEnvironment": [
+          345982,
+          345982,
+          345982,
+          345982,
+          345982,
+          345982
+        ]
+      },
+      "resultLookups": 0,
+      "maxElapsedMs": 80098,
+      "executedHarnessRevision": "463af6d44f947119da1c3776408d746021fc2c48"
+    },
+    {
+      "people": 1000,
+      "status": "blocked-local-emulator-heap",
+      "completedStages": [
+        {
+          "kind": "register",
+          "normalRequests": 3000
+        },
+        {
+          "kind": "bulkAssign",
+          "normalRequests": 6
+        },
+        {
+          "kind": "qrCreate",
+          "normalRequests": 3001
+        }
+      ],
+      "failurePhase": "ticketCheck",
+      "javaHeapBytes": 8589934592,
+      "fullTotalsAvailable": false,
+      "cleanup": {
+        "rulesClosed": true,
+        "trialRootEmpty": true
+      },
+      "executedHarnessRevision": "571a6f6a8082597979baef9424910dbccde9efc0"
+    }
+  ],
+  "verifiedPeople": [
+    4,
+    600
+  ],
+  "blockedPeople": [
+    1000
+  ],
+  "sourceHashComparisons": 197,
+  "historicalHarnessComparisons": 2,
+  "allRecordedSourcesMatch": true,
+  "postRunFrozenReaderAudit": {
+    "baseline": "388800fe97d43f880b2d02c47a6e586f7cc4dc8f",
+    "readerHashes": {
+      "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+      "../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+      "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+      "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+      "../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+      "../GD91-104/slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+      "../GD91-104/snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
+      "../GD91-105/snapshot.mjs": "b4b38ed1d5740fe7ab83cfcd08bfc7cb79ceee127b2faf8b3cd7c9f3e5762f5e",
+      "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+      "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+      "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+      "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd"
+    },
+    "allMatchMergedMain": true,
+    "beforeAndAfterMeasurement": false
+  },
+  "latestFullLayoutContractVerifiedPeople": [
+    4,
+    600
+  ],
+  "productMaximumInputVerified": false,
+  "allBusinessAndFailureResendVerified": false,
+  "productionFreeTierVerified": false,
+  "externalFirebaseConnected": false,
+  "tested3000": false
+}
