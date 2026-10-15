@@ -25,3 +25,4 @@ for(const spec of [{name:'baseline-unlimited',cache:false,minimal:true,enforce:f
 }
 assert(runs[2].budget.calls<240);assert(runs[0].budget.calls>240);assert.equal(runs[0].progress.length,runs[2].progress.length);assert.deepEqual(before,hashes());
 fs.writeFileSync(new URL('artifacts/validate-summary.json',import.meta.url),JSON.stringify({sourceHashes:before,endSourceHashes:hashes(),runs,realSdkReadAndWriteUsed:true,googleIdentityMocked:true,externalStartupCallsModelled:18,externalCleanupReserveModelled:60,localSetupAndCleanupNotIncludedInModel:true,externalFirebaseConnected:false,externalRetryExecuted:false,productionFreeTierVerified:false,tested3000:false},null,2)+'\n');
+process.exit(0);
