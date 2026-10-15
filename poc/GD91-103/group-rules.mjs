@@ -1,7 +1,7 @@
 import {base,editing,manager} from '../GD91-84/auth-rules.mjs';
 const v=(n,k)=>`${n}.child('${k}').val()`,and=xs=>xs.map(x=>'('+x+')').join(' && '),shape=ks=>Object.fromEntries([...ks.map(k=>[k,{'.validate':true}]),['$other',{'.validate':false}]]);
 const old=`${base}.child('event')`,opAt=n=>`${n}.child('operations').child(${v(n,'commit/operationId')})`,enabled=`${v(base,'control/businessSchemaVersion')} === 3`;
-const nonblank=n=>`${n}.isString() && ${n}.val().length <= 200 && ${n}.val().matches(/.*[^\\s　].*/)`;
+const nonblank=n=>`${n}.isString() && ${n}.val().length <= 200 && ${n}.val().matches(/.*[^ \\t\\r\\n　].*/)`;
 const currentSeat=(event,id)=>`${base}.child('generations').child(${v(base,'head/generation')}).child('parts').child(${base}.child('generations').child(${v(base,'head/generation')}).child('ids').child(${id}).child('part').val()).child('slots').child(${base}.child('generations').child(${v(base,'head/generation')}).child('ids').child(${id}).child('slot').val())`;
 const stateFields=['fixed','manualReason','revision','lastOperationId'];
 export function addGroups(rules){

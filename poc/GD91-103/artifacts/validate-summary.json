@@ -1,0 +1,59 @@
+{
+  "sourceHashes": {
+    "validate.mjs": "3cec8d155a5b14118477321ab89dd055d39747c5e8fa49165126a2d08068f4f5",
+    "model.mjs": "ea59fe83469144039d02ad3387f57ee83adccfd0b3652cdb03ed84d6986dc7b5",
+    "group-rules.mjs": "6e1c5749093eadb966d066a8bc220d403da10c7fe5f01257c62e7d9779e52c5d",
+    "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
+    "database.rules.json": "e050c5a1c16a64044fc796fcbd5ecf472b44eb3fb958559c2978913afd6f922f",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889"
+  },
+  "endSourceHashes": {
+    "validate.mjs": "3cec8d155a5b14118477321ab89dd055d39747c5e8fa49165126a2d08068f4f5",
+    "model.mjs": "ea59fe83469144039d02ad3387f57ee83adccfd0b3652cdb03ed84d6986dc7b5",
+    "group-rules.mjs": "6e1c5749093eadb966d066a8bc220d403da10c7fe5f01257c62e7d9779e52c5d",
+    "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
+    "database.rules.json": "e050c5a1c16a64044fc796fcbd5ecf472b44eb3fb958559c2978913afd6f922f",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889"
+  },
+  "reports": [],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "failure": {
+    "stage": "setup",
+    "code": "ERR_ASSERTION"
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "completeAutomaticAllocationVerified": false,
+  "realIndexedDbVerifiedHere": false,
+  "controlAndDevicesPreloaded": true
+}
