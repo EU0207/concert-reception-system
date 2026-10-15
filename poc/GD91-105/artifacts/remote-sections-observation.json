@@ -1,0 +1,20 @@
+{
+  "decisionId": "TECH-DD91-097-A",
+  "approvedOn": "2026-10-15",
+  "trialFinished": true,
+  "externalTrialCount": 1,
+  "externalSuitePassed": false,
+  "consolePassedGroups": [
+    "S01",
+    "S02",
+    "S03"
+  ],
+  "completedSuiteReportsAvailable": false,
+  "interruptedGroup": "S04",
+  "preCleanupApplicationCalls": 240,
+  "cleanupApplicationCalls": 15,
+  "finalApplicationCalls": 255,
+  "diagnosis": "The reserve guard stops new calls at 240 to retain 60 cleanup calls. Final 255 calls comprise that boundary plus 15 cleanup calls. The error report retains only ERR_ASSERTION, so no more specific failed assertion is claimed.",
+  "sourceHashComparisons": 669,
+  "additionalTrialExecuted": false
+}

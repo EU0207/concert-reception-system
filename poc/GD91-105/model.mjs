@@ -1,0 +1,9 @@
+import {randomUUID} from 'node:crypto';import assert from 'node:assert/strict';import {createSection} from '../GD91-07/planner.mjs';import {intent} from '../GD91-104/edit.mjs';
+export {prepareEdit} from '../GD91-104/edit.mjs';
+export function create(models,spec){const model=createSection(spec,{maxCells:100000});model.initialNumbered=true;return{models:[...structuredClone(models),model],intent:intent('sectionCreate',model.section.sectionId,{reason:'',value:spec.name})};}
+export function display(actor,state,head,model,presentation,action,value,{controlRevision=1,id=randomUUID()}={}){
+ assert(['rename','stage'].includes(action));const beforeName=presentation?.name??model.section.name,beforeStage=presentation?.stagePosition??model.section.stagePosition,afterName=action==='rename'?value:beforeName,afterStage=action==='stage'?value:beforeStage;
+ assert(typeof afterName==='string'&&afterName.trim()&&afterName.length<=100);assert(['left','top'].includes(afterStage));
+ const revision=state.commit.revision+1,sectionId=model.section.sectionId,operation={kind:'sectionDisplay',action,sectionId,beforeName,beforeStage,afterName,afterStage,expectedDisplayRevision:presentation?.revision??0,sourceHeadViewRevision:head.viewRevision,sourceLayoutGeneration:head.generation,sourceLayoutRevision:head.revision,sourceControlRevision:controlRevision,expectedRevision:state.commit.revision,resultRevision:revision,humanUid:actor.human.uid,referenceId:actor.referenceId,committedAt:{'.sv':'timestamp'},qrSnapshot:'none'};
+ return{head:{...head,viewRevision:head.viewRevision+1},['sectionPresentation/'+sectionId]:{name:afterName,stagePosition:afterStage,revision:(presentation?.revision??0)+1,operationId:id},'event/commit':{revision,operationId:id},['event/operations/'+id]:operation,'event/reception/0000000000':revision};
+}
