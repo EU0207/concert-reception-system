@@ -5,7 +5,7 @@ import {command,applyModel} from '../GD91-103/model.mjs';import {bulk} from '../
 import {createReferences} from '../GD91-92/references.mjs';import {prepare} from '../GD91-91/sdk-adapter.mjs';
 
 const mode=process.argv[2],people=Number(process.env.GD108_DIAGNOSTIC_PEOPLE??1000),writes=people===4?2:100;
-assert(['full-history','compact-history','rules-control','identical-rules-reset'].includes(mode));assert([4,1000].includes(people));assert(namespace.startsWith('demo-'));
+assert(['full-history','compact-history','rules-control','identical-rules-reset','deny-restore'].includes(mode));assert([4,1000].includes(people));assert(namespace.startsWith('demo-'));
 const hashes=()=>sourceHashes(new URL('./',import.meta.url),['memory.mjs','memory-run.mjs','../GD91-107/database.rules.json','../GD91-107/deny.rules.json']),before=hashes();
 const samples=[],completed=[];let failure,clean,phase='rules',fixtureBytes,fixtureOperations,controlRulesHash,identicalRulesReset,lastBody;
 const normalize=(v,t)=>v&&typeof v==='object'?(Object.keys(v).length===1&&v['.sv']==='timestamp'?t:Object.fromEntries(Object.entries(v).map(([k,x])=>[k,normalize(x,t)]))):v;
@@ -42,17 +42,18 @@ try{
  }
  const normalRequests=metrics.userRequests-start.userRequests;assert.equal(normalRequests,writes*3);assert.equal(metrics.ownerRequests,start.ownerRequests);
  sample('final');completed.push({normalRequests});
- if(mode==='identical-rules-reset'){
+ if(['identical-rules-reset','deny-restore'].includes(mode)){
   phase='identical-rules-reset';const dataHash=async()=>createHash('sha256').update(JSON.stringify(await owner(trial))).digest('hex');
   const priorHash=await dataHash(),rules=JSON.parse(fs.readFileSync(new URL('../GD91-107/database.rules.json',import.meta.url)));
   assert.deepEqual((await request('.settings/rules',{token:'owner'})).body,rules);const priorUsed=samples.at(-1).usedAfterForcedGc;
+  if(mode==='deny-restore'){ok(await request('.settings/rules',{token:'owner',method:'PUT',body:JSON.parse(fs.readFileSync(new URL('../GD91-107/deny.rules.json',import.meta.url)))}));sample('temporary-deny');}
   ok(await request('.settings/rules',{token:'owner',method:'PUT',body:rules}));assert.deepEqual((await request('.settings/rules',{token:'owner'})).body,rules);assert.equal(await dataHash(),priorHash);
   sample('identical-rules-reloaded');const afterUsed=samples.at(-1).usedAfterForcedGc;
   assert.equal((await user('event',m.device,'PATCH',lastBody)).status,401);assert.equal(await dataHash(),priorHash);
   const body=command(m,f.state,head,'ticketCheck','person-'+writes,{issued:true}),p=prepare(m,body);reference=await refs.reserveKnown(m,p,reference);const reservedHash=await dataHash();
   assert.equal((await user('event',f.staff.device,'PATCH',body)).status,401);assert.equal(await dataHash(),reservedHash);
   const ack=await user('event',m.device,'PATCH',body);ok(ack);reference=await refs.clearAcknowledged(m,p,reference,ack);assert.equal((await user('event/commit',m.device)).body.operationId,p.operationId);sample('continued-after-reset');
-  identicalRulesReset={applicationDataHashUnchanged:true,rulesHash:createHash('sha256').update(JSON.stringify(rules)).digest('hex'),beforeUsedBytes:priorUsed,afterUsedBytes:afterUsed,releasedBytes:priorUsed-afterUsed,replayDenied:true,otherActorDenied:true,continuedNormalOperation:true};
+  identicalRulesReset={applicationDataHashUnchanged:true,temporaryDenyUsed:mode==='deny-restore',rulesHash:createHash('sha256').update(JSON.stringify(rules)).digest('hex'),beforeUsedBytes:priorUsed,afterUsedBytes:afterUsed,releasedBytes:priorUsed-afterUsed,replayDenied:true,otherActorDenied:true,continuedNormalOperation:true};
  }
 }catch(e){failure={phase,code:e.code??e.name,message:e.message.slice(0,500)};process.exitCode=1;}
 finally{try{clean=await cleanup();}catch(e){clean={rulesClosed:false,trialRootEmpty:false,error:e.code??e.name};process.exitCode=1;}}

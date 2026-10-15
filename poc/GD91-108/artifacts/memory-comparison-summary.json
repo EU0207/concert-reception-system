@@ -1,0 +1,51 @@
+{
+  "cases": {
+    "full-history": {
+      "fixtureBytes": 9285374,
+      "fixtureOperations": 2001,
+      "usedAtFixture": 1602568192,
+      "usedAfter100": 1806913536,
+      "reset": null
+    },
+    "compact-history": {
+      "fixtureBytes": 7472931,
+      "fixtureOperations": 1,
+      "usedAtFixture": 1596264448,
+      "usedAfter100": 1799749632,
+      "reset": null
+    },
+    "rules-control": {
+      "fixtureBytes": 9285374,
+      "fixtureOperations": 2001,
+      "usedAtFixture": 46455808,
+      "usedAfter100": 47023104,
+      "reset": null
+    },
+    "deny-restore": {
+      "fixtureBytes": 9285374,
+      "fixtureOperations": 2001,
+      "usedAtFixture": 1603760128,
+      "usedAfter100": 1808159744,
+      "reset": {
+        "applicationDataHashUnchanged": true,
+        "temporaryDenyUsed": true,
+        "rulesHash": "12585c4f9d9136343c9e39a972443571df17fa3fbf71ab9f3d8329d301738add",
+        "beforeUsedBytes": 1808158720,
+        "afterUsedBytes": 144204800,
+        "releasedBytes": 1663953920,
+        "replayDenied": true,
+        "otherActorDenied": true,
+        "continuedNormalOperation": true
+      }
+    }
+  },
+  "diagnosticCases": 9,
+  "sourceHashComparisons": 261,
+  "historicalSourceComparisons": 14,
+  "allRecordedSourcesMatch": true,
+  "javaHeapBytes": 8589934592,
+  "productionCauseVerified": false,
+  "coverageImplementationCauseProven": false,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false
+}
