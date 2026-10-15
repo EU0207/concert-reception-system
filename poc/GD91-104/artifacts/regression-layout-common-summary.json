@@ -1,0 +1,128 @@
+{
+  "sourceHashes": {
+    "../GD91-102/common-local.mjs": "65a30c8ae846aea4766710f21bc889cf4a27b510fc003bc82cda7dc84c8d3ef0",
+    "../GD91-102/common-layout.mjs": "94923e304630b1452ec9ef9a37ecfb4cc74f682e12f34bc602c481c7ba53fb15",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-102/layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
+    "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-102/publication-rules.mjs": "529785df44341d7d48936d87482abe4266ba34dc1245895bb3b58fc10124ea4b",
+    "../GD91-102/collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "../GD91-102/collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
+    "../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "../GD91-102/../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-102/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-102/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-102/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-102/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-102/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-102/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-102/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-102/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-102/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "regression.mjs": "26c1ddeb53f02373dd1860500cba92f06aed2f84cb611d1ab6cf1f6f647dc3dd",
+    "database.rules.json": "25e62c065339a11ff42414318481e64ae9e370b7167d232fc3beb345498cf6a2",
+    "edit-rules.mjs": "6d9e516008ad2ab4c19fc64c2f677e974f06692c9457c8e5fcafa48d2ff3eda3",
+    "geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "generate.mjs": "e57352fe8478df7ac9b41ade84b664a82ea2c8447dec7fc58cf7c44efe597bae",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/compat.mjs": "2b5d55180890bc23c237d41e310328e9844a34d757575a546a9edc984c94cfe4"
+  },
+  "endSourceHashes": {
+    "../GD91-102/common-local.mjs": "65a30c8ae846aea4766710f21bc889cf4a27b510fc003bc82cda7dc84c8d3ef0",
+    "../GD91-102/common-layout.mjs": "94923e304630b1452ec9ef9a37ecfb4cc74f682e12f34bc602c481c7ba53fb15",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-102/layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
+    "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-102/publication-rules.mjs": "529785df44341d7d48936d87482abe4266ba34dc1245895bb3b58fc10124ea4b",
+    "../GD91-102/collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "../GD91-102/collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
+    "../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "../GD91-102/../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-102/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-102/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-102/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-102/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-102/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-102/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-102/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-102/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-102/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "regression.mjs": "26c1ddeb53f02373dd1860500cba92f06aed2f84cb611d1ab6cf1f6f647dc3dd",
+    "database.rules.json": "25e62c065339a11ff42414318481e64ae9e370b7167d232fc3beb345498cf6a2",
+    "edit-rules.mjs": "6d9e516008ad2ab4c19fc64c2f677e974f06692c9457c8e5fcafa48d2ff3eda3",
+    "geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "generate.mjs": "e57352fe8478df7ac9b41ade84b664a82ea2c8447dec7fc58cf7c44efe597bae",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/compat.mjs": "2b5d55180890bc23c237d41e310328e9844a34d757575a546a9edc984c94cfe4"
+  },
+  "reports": [
+    {
+      "id": "S01",
+      "typedLayoutNormallySaved": true,
+      "normalPeopleRegistered": 2,
+      "cellAndSeatIdsDistinct": true
+    },
+    {
+      "id": "S02",
+      "sdkTypedProjectionRead": true,
+      "privateProfilesDenied": true
+    },
+    {
+      "id": "S03",
+      "assignedSeatOmissionRefusedBeforePublish": true
+    },
+    {
+      "id": "S04",
+      "uncheckedPublishRefused": true,
+      "candidateReferenceProtectsFromCollection": true,
+      "unacknowledgedCompletionDenied": true
+    },
+    {
+      "id": "S05",
+      "rawPinReleaseDenied": true,
+      "explicitCancellationRecorded": true
+    },
+    {
+      "id": "S06",
+      "eventRevisionFenced": true,
+      "staleProofExplicitlyCancelled": true
+    },
+    {
+      "id": "S07",
+      "qrAndAssignmentPreserved": true,
+      "completeRecordedAfterPublish": true,
+      "publishedProofNotCancelled": true
+    },
+    {
+      "id": "S08",
+      "unreferencedTypedLayoutCollected": true,
+      "currentGenerationProtected": true
+    }
+  ],
+  "maxJsonNodes": 1385,
+  "maxRootJsonBytes": 48609,
+  "fullLayoutBusinessWorkflowVerified": false,
+  "groupContractVerified": false,
+  "realIndexedDbVerifiedHere": false,
+  "physicalSocketDropTestedHere": false,
+  "wholeBrowserApplicationTested": false,
+  "fullBusinessFreeTierVerified": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "googleIdentityMocked": true,
+  "realSdkReadUsed": true,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "executedRulesSource": "database.rules.json",
+  "adaptedFrom": "../GD91-102/common-local.mjs",
+  "transportAdaptation": "common clock, global ID index and review-progress coupling; legacy ACK shape"
+}

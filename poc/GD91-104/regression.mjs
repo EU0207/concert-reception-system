@@ -6,7 +6,7 @@ const rules=new URL('database.rules.json',import.meta.url),support=new URL('../G
 for(const[folder,name,count,label]of[['GD91-103','validate.mjs',19,'groups'],['GD91-103','common-local.mjs',8,'groups-common'],['GD91-102','validate.mjs',21,'layout'],['GD91-102','common-local.mjs',8,'layout-common'],['GD91-100','validate.mjs',20,'closed'],['GD91-100','common-local.mjs',12,'closed-common'],['GD91-98','validate.mjs',13,'quarantine'],['GD91-94','validate.mjs',14,'sharing'],['GD91-92','validate.mjs',12,'manager'],['GD91-96','validate.mjs',12,'queue'],['GD91-97','common-local.mjs',4,'general'],['GD91-99','clock-local.mjs',7,'clock'],['GD91-99','review-local.mjs',16,'review'],['GD91-99','common-local.mjs',6,'common']]){
  const original=new URL('../'+folder+'/'+name,import.meta.url),result=new URL('artifacts/regression-'+label+'-summary.json',import.meta.url);
  let source=fs.readFileSync(original,'utf8');
- source=source.replace(/from '(\.\.?\/[^']+)'/g,(_,p)=>{const u=new URL(p,original);return'from '+JSON.stringify(u.href.endsWith('/GD91-89/support.mjs')?support.href:u.href.endsWith('/GD91-84/transport.mjs')?compat.href:u.href);})
+ source=source.replace(/from (['"])(\.\.?\/[^'"]+)\1/g,(_,quote,p)=>{const u=new URL(p,original);return'from '+JSON.stringify(u.href.endsWith('/GD91-89/support.mjs')?support.href:u.href.endsWith('/GD91-84/transport.mjs')?compat.href:u.href);})
   .replace("new URL('database.rules.json',import.meta.url)",`new URL(${JSON.stringify(rules.href)})`)
   .replace(/new URL\('artifacts\/(?:validate|common-local|clock|review)-summary.json',import.meta.url\)/,`new URL(${JSON.stringify(result.href)})`)
   .replaceAll('import.meta.url',JSON.stringify(original.href)).replace(/process\.exit\((?:0|process\.exitCode\?\?0)\);/g,'');
