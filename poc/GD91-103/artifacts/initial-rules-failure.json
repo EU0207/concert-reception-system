@@ -1,0 +1,10 @@
+{
+  "sourceHashes": {
+    "group-rules.mjs": "698d8250b3141e1d805fd909d2f2021595d32b34b1882756c4674b4d70bec438",
+    "database.rules.json": "aaf6f745854c061b20ccf39aa2c0fdebed113f58af2007657f9494a3deefa291"
+  },
+  "stage": "emulator-rules-load",
+  "error": "Illegal regular expression, whitespacechar not found",
+  "businessGroupsExecuted": 0,
+  "externalFirebaseConnected": false
+}

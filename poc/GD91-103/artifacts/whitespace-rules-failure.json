@@ -1,0 +1,10 @@
+{
+  "sourceHashes": {
+    "group-rules.mjs": "a6086b080489fa529582a8bb434efcd846543945a894cf92df18787af7f244ab",
+    "database.rules.json": "11efc8f34b48bea189dbcf0dd9c0bd308d713c9d4093074016575dc8950b9b04"
+  },
+  "stage": "emulator-rules-load",
+  "error": "unterminated string literal",
+  "businessGroupsExecuted": 0,
+  "externalFirebaseConnected": false
+}
