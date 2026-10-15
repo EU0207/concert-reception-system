@@ -1,10 +1,17 @@
-import fs from 'node:fs';import assert from 'node:assert/strict';import {sourceHashes} from '../GD91-105/source-audit.mjs';
+import fs from 'node:fs';import assert from 'node:assert/strict';import {sourceHashes} from '../GD91-105/source-audit.mjs';import {createReauthentication} from './reauth.mjs';
 const original=new URL('../GD91-101/capacity.mjs',import.meta.url),result=new URL('artifacts/capacity-'+(process.env.GD101_PEOPLE??'600')+'-summary.json',import.meta.url);
-const hashes=()=>sourceHashes(new URL('./',import.meta.url),['capacity.mjs','setup.mjs','run.mjs','../GD91-101/capacity.mjs','../GD91-107/database.rules.json','../GD91-107/check-generation.mjs']);const before=hashes();
+const hashes=()=>sourceHashes(new URL('./',import.meta.url),['capacity.mjs','setup.mjs','run.mjs','../GD91-101/capacity.mjs','../GD91-107/database.rules.json','../GD91-107/check-generation.mjs','../GD91-105/snapshot.mjs']);const before=hashes();
+const reauthentication=createReauthentication({afterMs:Number(process.env.GD108_REAUTH_AFTER_MS??600000)});
+globalThis.__gd108Reauthentication=reauthentication;
 let source=fs.readFileSync(original,'utf8');
 source=source.replace('import {setup,cleanup,trial,owner,ok,metrics}', 'import {cleanup,trial,owner,ok,metrics}');
 source=source.replace("import {bulk,command,applyModel} from '../GD91-92/model.mjs';", "import {bulk} from '../GD91-92/model.mjs';import {command,applyModel} from '../GD91-103/model.mjs';");
 source=source.replace('console.error(e.stack);',"console.error(JSON.stringify({phase,code:e.code??e.name,message:e.message}));");
+source=source.replace('async function commit(body){','async function commit(body){await globalThis.__gd108Reauthentication.ensure(m);');
+source=source.replace('let clean,failure,phase=', 'let clean,failure,phase=');
+source=source.replace("import {user,request} from '../GD91-99/support.mjs';", "import {user as ordinaryUser,request} from '../GD91-99/support.mjs';let normalGetRetries=0;async function user(p,d,method='GET',body){for(let attempt=0;;attempt++){try{return await ordinaryUser(p,d,method,body);}catch(e){if(method!=='GET'||e.name!=='TimeoutError'||attempt>=3)throw e;normalGetRetries++;}}}");
+source=source.replace('clean=await cleanup();',"for(let attempt=0;;attempt++){try{clean=await cleanup();break;}catch(e){if(e.name!=='TimeoutError'||attempt>=3){clean={rulesClosed:false,trialRootEmpty:false,cleanupFailure:{code:e.code??e.name}};break;}}}");
+source=source.replace('reports.push({people,','reports.push({normalGetRetries,reauthentication:{...globalThis.__gd108Reauthentication.stats},people,');
 source='import {setup} from '+JSON.stringify(new URL('setup.mjs',import.meta.url).href)+';\nimport {clockFetch as fetch} from '+JSON.stringify(new URL('../GD91-99/clock-transport.mjs',import.meta.url).href)+';\n'+source;
 source=source.replace(/from (['"])(\.\.?\/[^'"]+)\1/g,(_,q,p)=>'from '+JSON.stringify(new URL(p,original).href))
  .replace("from '../GD91-96/snapshot.mjs'",'from '+JSON.stringify(new URL('../GD91-105/snapshot.mjs',import.meta.url).href));
