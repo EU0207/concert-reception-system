@@ -49,13 +49,18 @@
       "snapshotResponseBodyBytes": 2667465
     }
   ],
-  "retentionGroups": 7,
-  "sourceComparisons": 98,
+  "retentionGroups": 8,
+  "draftGroups": 5,
+  "lateEditGroups": 6,
+  "shapeLinesInOneSection": 256,
+  "readWriteBoundaryMismatchReproduced": true,
+  "sourceComparisons": 210,
   "allCurrentSourcesMatch": true,
   "first600FailurePreservedAtRevision": "306a8b4",
-  "first4FailureArchivedButNotIncludedInVerifiedSourceCount": true,
+  "ramRetentionPreservedAtRevision": "5f608be",
+  "otherFailureArchivesExcludedFromVerifiedSourceCount": true,
   "normalClosingVerified": false,
-  "realIndexedDbVerifiedHere": false,
+  "realIndexedDbVerifiedHere": true,
   "productLimitsApproved": false,
   "fullBusinessFreeTierVerified": false
 }

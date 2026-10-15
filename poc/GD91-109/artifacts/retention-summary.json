@@ -12,13 +12,17 @@
     "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
     "../GD91-107/database.rules.json": "8477b085ace91a8c372f899b15f42474d07d118892790501b199791ae9714a8c",
     "../GD91-108/setup.mjs": "24222762ab6b6f9ef5a8721f8c30c40f2c9e0157a177e746c111338e559ec28c",
-    "retention-local.mjs": "e783b474cbd2856e1863a5c6bc5ebaacc1f857bc3b6959c3ed78bd0223537eef",
+    "browser-store.mjs": "e3f7a3eb84da75d0de6a32cb7985bf43b614d37a84b3479df0263c20451a84c2",
+    "retention-local.mjs": "0064b547c0625f8950d752ea1805c6975ff5068efad4ceacc00ad6afce003a1a",
     "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
     "../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
     "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
     "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
     "../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
     "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
@@ -43,13 +47,17 @@
     "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
     "../GD91-107/database.rules.json": "8477b085ace91a8c372f899b15f42474d07d118892790501b199791ae9714a8c",
     "../GD91-108/setup.mjs": "24222762ab6b6f9ef5a8721f8c30c40f2c9e0157a177e746c111338e559ec28c",
-    "retention-local.mjs": "e783b474cbd2856e1863a5c6bc5ebaacc1f857bc3b6959c3ed78bd0223537eef",
+    "browser-store.mjs": "e3f7a3eb84da75d0de6a32cb7985bf43b614d37a84b3479df0263c20451a84c2",
+    "retention-local.mjs": "0064b547c0625f8950d752ea1805c6975ff5068efad4ceacc00ad6afce003a1a",
     "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
     "../GD91-71/tests/model.mjs": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
     "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
     "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
     "../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
     "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
@@ -65,15 +73,17 @@
     {
       "id": "R01",
       "sourceAndCandidatePinnedBeforeSend": true,
-      "unresolvedDataNotCollected": true
+      "unresolvedDataNotCollected": true,
+      "localSaveAbortSendsNoReservation": true
     },
     {
       "id": "R02",
       "sameOperationIdRestored": true,
       "committedResultRequeried": true,
       "writeResendCount": 0,
-      "localStore": "RAM serialization",
-      "physicalSocketDrop": false
+      "localStore": "encrypted IndexedDB",
+      "physicalSocketDrop": true,
+      "browserProcessRestart": true
     },
     {
       "id": "R03",
@@ -84,7 +94,9 @@
       "id": "R04",
       "publicationResultRetained": true,
       "oldActiveDeviceReferenceProtectsBase": true,
-      "typedEditProofRequired": true
+      "typedEditProofRequired": true,
+      "realResponseSocketDropAndIndexedDbRestart": true,
+      "writeResendCount": 0
     },
     {
       "id": "R05",
@@ -99,14 +111,26 @@
     {
       "id": "R07",
       "explicitlyCancelledCandidateCollected": true
+    },
+    {
+      "id": "R08",
+      "currentPermissionCheckedBeforeDecrypt": true,
+      "revokedAndExpiredRoleCannotResume": true,
+      "ciphertextRetainedForControlledRecovery": true,
+      "unresolvedShareStillAbsentAndReferencesHeld": true,
+      "revocationAndExpiryInjectedAsPreconditions": true
     }
   ],
+  "storageStats": {
+    "dbRequests": 0,
+    "externalRequests": 0
+  },
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
   },
-  "localStore": "RAM serialization",
-  "realIndexedDbVerifiedHere": false,
+  "localStore": "encrypted IndexedDB",
+  "realIndexedDbVerifiedHere": true,
   "normalClosingVerified": false,
   "externalFirebaseConnected": false,
   "fullBusinessFreeTierVerified": false
