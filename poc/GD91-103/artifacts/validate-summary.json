@@ -1,7 +1,7 @@
 {
   "sourceHashes": {
     "diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
-    "validate.mjs": "738e6c34cad0cfa2a8371a3cf1511ff83c5c218011fa44f909ea9f42c9ed749a",
+    "validate.mjs": "b4f4befecf2923ab7e651eb8fd9e5ad3b3015f04fd6c61cfd7e65bf74aada7a3",
     "model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
     "group-rules.mjs": "b9471386046758d1be8c4ee00b59ce183ac02c4ffaef98656c4a2ad817642cef",
     "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
@@ -23,7 +23,7 @@
   },
   "endSourceHashes": {
     "diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
-    "validate.mjs": "738e6c34cad0cfa2a8371a3cf1511ff83c5c218011fa44f909ea9f42c9ed749a",
+    "validate.mjs": "b4f4befecf2923ab7e651eb8fd9e5ad3b3015f04fd6c61cfd7e65bf74aada7a3",
     "model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
     "group-rules.mjs": "b9471386046758d1be8c4ee00b59ce183ac02c4ffaef98656c4a2ad817642cef",
     "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
@@ -93,6 +93,19 @@
       "id": "G11-over-ten-registration-allowed-auto-refused",
       "rosterMembers": 11,
       "autoRefused": true
+    },
+    {
+      "id": "G17-exact-ten-member-boundary",
+      "members": 10,
+      "lastMemberRequired": true
+    },
+    {
+      "id": "G18-other-group-occupied-seat-cannot-be-stolen",
+      "unrelatedAssignmentPreserved": true
+    },
+    {
+      "id": "G19-unicode-whitespace-only-reasons-rejected",
+      "whitespaceFormsRejected": 13
     },
     {
       "id": "G12-qr-protects-whole-group-and-normal-move-reason",
