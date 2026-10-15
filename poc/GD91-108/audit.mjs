@@ -1,0 +1,15 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {sourceHashes} from '../GD91-105/source-audit.mjs';
+const rows=[];let comparisons=0;
+for(const people of[4,600,1000]){
+ const r=JSON.parse(fs.readFileSync(new URL('artifacts/capacity-'+people+'-summary.json',import.meta.url)));
+ assert(!r.failure);assert.equal(r.reports.length,1);assert(r.cleanup.rulesClosed&&r.cleanup.trialRootEmpty);assert.equal(r.layoutSchemaVersion,2);assert.equal(r.businessSchemaVersion,3);assert.equal(r.executedRulesSource,'../GD91-107/database.rules.json');assert.deepEqual(r.sourceHashes,r.endSourceHashes);
+ for(const[file,hash]of Object.entries(r.sourceHashes)){assert.equal(createHash('sha256').update(fs.readFileSync(new URL(file,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex'),hash,file);comparisons++;}
+ const p=r.reports[0];assert.equal(p.people,people);assert.equal(p.nonSeatCells,people);assert.equal(p.actualSdkEnvironments,6);assert.equal(p.normalOperationRequests,people*9+3+p.resultLookups);assert.equal(p.ownerPersonOrTicketWrites,0);assert.equal(p.reconnectEvents,0);assert.deepEqual(p.reception.eventsPerEnvironment,Array(6).fill(people));assert.equal(p.fullBusinessFreeTierVerified,false);assert.equal(r.externalFirebaseConnected,false);assert.equal(r.tested3000,false);
+ const old=JSON.parse(fs.readFileSync(new URL('../GD91-101/artifacts/capacity-'+people+'-summary.json',import.meta.url))).reports[0];
+ rows.push({people,nonSeatCells:p.nonSeatCells,sections:p.sections,normalOperationRequests:p.normalOperationRequests,preparationIncludingLayout:p.preparationRequestsIncludingLayoutAndDiagnostics,maxRequestBytes:p.maxRequestBytes,rootJsonBytes:p.rootJsonBytes,oldRootJsonBytes:old.rootJsonBytes,rootByteIncrease:p.rootJsonBytes-old.rootJsonBytes,snapshotStats:p.snapshotStats,reception:p.reception,resultLookups:p.resultLookups,maxElapsedMs:p.maxElapsedMs});
+}
+// 動的に選択した取得側は試験前後のハッシュ一覧に含まれないため、統合済みの凍結ソースと事後照合する。
+const baseline=execFileSync('git',['rev-parse','main'],{encoding:'utf8'}).trim(),readerHashes=sourceHashes(new URL('./',import.meta.url),['../GD91-105/snapshot.mjs']);
+for(const[file,hash]of Object.entries(readerHashes)){const path='poc/'+new URL(file,import.meta.url).pathname.split('/poc/')[1];const saved=execFileSync('git',['show',baseline+':'+path],{encoding:'utf8'});assert.equal(createHash('sha256').update(saved.replace(/\r\n/g,'\n')).digest('hex'),hash,file);}
+const report={reports:rows,sourceHashComparisons:comparisons,allSourcesMatch:true,postRunFrozenReaderAudit:{baseline,readerHashes,allMatchMergedMain:true,beforeAndAfterMeasurement:false},latestFullLayoutContractVerified:true,productMaximumInputVerified:false,allBusinessAndFailureResendVerified:false,productionFreeTierVerified:false,externalFirebaseConnected:false,tested3000:false};
+fs.writeFileSync(new URL('artifacts/integrated-capacity-summary.json',import.meta.url),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({people:rows.map(x=>x.people),sourceHashComparisons:comparisons,allSourcesMatch:true,productionFreeTierVerified:false}));
