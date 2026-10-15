@@ -1,0 +1,126 @@
+{
+  "sourceHashes": {
+    "../GD91-103/common-local.mjs": "a9511a9d778786707965208081c583028b9bc387893b2def5e2ef084baac7067",
+    "../GD91-103/common-groups.mjs": "2506688f33b84555249aa25b040fc89265c4c8b28aa3598918ee2fb1211a17e4",
+    "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-103/group-rules.mjs": "b9471386046758d1be8c4ee00b59ce183ac02c4ffaef98656c4a2ad817642cef",
+    "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-103/../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-103/../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-103/../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-103/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-103/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-103/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-103/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-103/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-103/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-103/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-103/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-103/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-103/../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "regression.mjs": "c1a7fe8dc4016a843aead4066ae3ca881a870ab50c052a46823be7cfa485e4a8",
+    "database.rules.json": "a28ff8dbd1d189c753ca93bf28132a3e17faf4e41dc325430773e1dd2e72bf64",
+    "edit-rules.mjs": "10eeb2080122eaa8d25a4ad1e2ff5c30dd0fced3cc1f6e263e4f733288d329a2",
+    "presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "generate.mjs": "e66eeb32978abc5ee57764013c060dd17bfd7db5156a563f70dc5235a38bf5a1",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/compat.mjs": "2b5d55180890bc23c237d41e310328e9844a34d757575a546a9edc984c94cfe4"
+  },
+  "endSourceHashes": {
+    "../GD91-103/common-local.mjs": "a9511a9d778786707965208081c583028b9bc387893b2def5e2ef084baac7067",
+    "../GD91-103/common-groups.mjs": "2506688f33b84555249aa25b040fc89265c4c8b28aa3598918ee2fb1211a17e4",
+    "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-103/group-rules.mjs": "b9471386046758d1be8c4ee00b59ce183ac02c4ffaef98656c4a2ad817642cef",
+    "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-103/../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-103/../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-103/../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-103/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-103/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-103/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-103/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-103/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-103/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-103/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-103/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-103/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-103/../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "regression.mjs": "c1a7fe8dc4016a843aead4066ae3ca881a870ab50c052a46823be7cfa485e4a8",
+    "database.rules.json": "a28ff8dbd1d189c753ca93bf28132a3e17faf4e41dc325430773e1dd2e72bf64",
+    "edit-rules.mjs": "10eeb2080122eaa8d25a4ad1e2ff5c30dd0fced3cc1f6e263e4f733288d329a2",
+    "presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "generate.mjs": "e66eeb32978abc5ee57764013c060dd17bfd7db5156a563f70dc5235a38bf5a1",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/compat.mjs": "2b5d55180890bc23c237d41e310328e9844a34d757575a546a9edc984c94cfe4"
+  },
+  "reports": [
+    {
+      "id": "K01",
+      "normalRosterAndMembership": true,
+      "normalPeopleRegistered": 4
+    },
+    {
+      "id": "K02",
+      "allMembersRequired": true,
+      "contiguousGroupAssigned": true
+    },
+    {
+      "id": "K03",
+      "whitespaceReasonRefused": true,
+      "groupFixed": true
+    },
+    {
+      "id": "K04",
+      "storedHistoryBound": true,
+      "undoRestoresSeatsAndFixed": true
+    },
+    {
+      "id": "K05",
+      "issuedMemberProtectsWholeGroup": true
+    },
+    {
+      "id": "K06",
+      "issuedMoveReasonRequired": true,
+      "qrPreserved": true
+    },
+    {
+      "id": "K07",
+      "beforeStartNoReasonAllowed": true,
+      "afterStartStoppedReasonRequired": true
+    },
+    {
+      "id": "K08",
+      "managerSdkReadsGroupState": true,
+      "generalCannotReadManagementHistory": true,
+      "directMembershipDeletionDenied": true
+    }
+  ],
+  "maxJsonNodes": 1122,
+  "maxRootJsonBytes": 49312,
+  "fullLayoutBusinessWorkflowVerified": false,
+  "completeAutomaticAllocationVerified": false,
+  "realIndexedDbVerifiedHere": false,
+  "physicalSocketDropTestedHere": false,
+  "wholeBrowserApplicationTested": false,
+  "fullBusinessFreeTierVerified": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "googleIdentityMocked": true,
+  "realSdkReadUsed": true,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "executedRulesSource": "database.rules.json",
+  "adaptedFrom": "../GD91-103/common-local.mjs",
+  "transportAdaptation": "common clock, global ID index and review-progress coupling; legacy ACK shape"
+}
