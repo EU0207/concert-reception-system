@@ -11,7 +11,7 @@ export function command(f,state,head,kind,target,options={}){
  }
  return body;
 }
-export function proposal(f,state,head,kind,seatA,seatB='none',person='none',options={}){const body=oldProposal(f,state,head,kind,seatA,seatB,person,options);if(options.reason!==undefined)body['operations/'+body.commit.operationId].reason=options.reason;return body;}
+export function proposal(f,state,head,kind,seatA,seatB='none',person='none',options={}){const input=structuredClone(state);input.seats??={};for(const id of[seatA,seatB])if(id!=='none'&&!input.seats[id])input.seats[id]={personId:'none',revision:state.commit.revision};const body=oldProposal(f,input,head,kind,seatA,seatB,person,options);if(options.reason!==undefined)body['operations/'+body.commit.operationId].reason=options.reason;return body;}
 export function groupChange(f,state,head,groupId,action,targets={},options={}){
  const id=options.id??randomUUID(),revision=state.commit.revision+1,info=state.groupInfo[groupId],members={},old=state.groupStates[groupId];
  const previous=state.operations?.[options.sourceOperationId];
