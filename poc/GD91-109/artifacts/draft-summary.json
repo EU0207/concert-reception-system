@@ -1,0 +1,61 @@
+{
+  "sourceHashes": {
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "draft-local.mjs": "def1db228f57862ba4d44beab627b46ad1defb8c5cab4651a7c732953caa46cf",
+    "../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47"
+  },
+  "endSourceHashes": {
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "draft-local.mjs": "def1db228f57862ba4d44beab627b46ad1defb8c5cab4651a7c732953caa46cf",
+    "../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47"
+  },
+  "reports": [
+    {
+      "id": "D01",
+      "cells": 4096,
+      "seats": 1000,
+      "baseAndEditedCopiesStored": true,
+      "canonicalModelsWithoutServerIndexes": true,
+      "plainJsonBytes": 3656697,
+      "ciphertextBytes": 3656821,
+      "firestoreOrRtdbRequests": 0
+    },
+    {
+      "id": "D02",
+      "transactionAbortKeepsPriorDraft": true,
+      "physicalQuotaExhaustionTested": false
+    },
+    {
+      "id": "D03",
+      "realIndexedDbAndBrowserProcessRestart": true,
+      "sameFixedOperationRestored": true,
+      "nonExtractableKey": true,
+      "plaintextMetadata": false
+    },
+    {
+      "id": "D04",
+      "userPerformanceAndDeviceScopesSeparated": true
+    },
+    {
+      "id": "D05",
+      "staleAndOver8MiBRequestsRefused": true,
+      "priorDraftRetained": true
+    }
+  ],
+  "plainJsonBytes": 3656697,
+  "dbRequests": 0,
+  "externalRequests": 0,
+  "browser": "installed Microsoft Edge, isolated persistent profile, headless",
+  "realIndexedDbVerified": true,
+  "physicalQuotaExhaustionVerified": false,
+  "browserAndViteStopped": true,
+  "sharedNetworkResponseDropVerifiedHere": false,
+  "externalFirebaseConnected": false,
+  "fullBusinessFreeTierVerified": false
+}

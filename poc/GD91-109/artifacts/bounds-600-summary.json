@@ -12,7 +12,7 @@
     "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
     "../GD91-107/database.rules.json": "8477b085ace91a8c372f899b15f42474d07d118892790501b199791ae9714a8c",
     "../GD91-108/emulator-maintenance.mjs": "079dce62b502e4150a26dc9d40e250263f8f51c1688a53826a4290b17bda5137",
-    "bounds-local.mjs": "0658ee5ce1e7f3850880e7ee22403800f9b1ce4ebb72314f8a46486ee111f542",
+    "bounds-local.mjs": "3c1d9fd531de212472ebd408d5d63dc284afb6a880abe936bc581435435c5820",
     "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -37,7 +37,7 @@
     "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
     "../GD91-107/database.rules.json": "8477b085ace91a8c372f899b15f42474d07d118892790501b199791ae9714a8c",
     "../GD91-108/emulator-maintenance.mjs": "079dce62b502e4150a26dc9d40e250263f8f51c1688a53826a4290b17bda5137",
-    "bounds-local.mjs": "0658ee5ce1e7f3850880e7ee22403800f9b1ce4ebb72314f8a46486ee111f542",
+    "bounds-local.mjs": "3c1d9fd531de212472ebd408d5d63dc284afb6a880abe936bc581435435c5820",
     "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -74,14 +74,85 @@
       "cachedGenerationReads": 0
     }
   ],
-  "negative": [],
+  "negative": [
+    {
+      "field": "name",
+      "rejected": true,
+      "existingHeadUnchanged": true
+    },
+    {
+      "field": "lineName",
+      "rejected": true,
+      "existingHeadUnchanged": true
+    },
+    {
+      "field": "prefix",
+      "rejected": true,
+      "existingHeadUnchanged": true
+    },
+    {
+      "field": "label",
+      "rejected": true,
+      "existingHeadUnchanged": true
+    },
+    {
+      "field": "reservedLabel",
+      "rejected": true,
+      "existingHeadUnchanged": true
+    },
+    {
+      "field": "reason",
+      "rejected": true,
+      "existingHeadUnchanged": true
+    },
+    {
+      "field": "257thPart",
+      "readerRejectedBeforePartRead": true,
+      "serverLimitVerified": false
+    }
+  ],
+  "measurement": {
+    "maxWriteJsonBytes": 39473,
+    "rootJsonBytes": 3022211,
+    "generationJsonBytes": 3014995,
+    "snapshotRequests": 309,
+    "snapshotResponseBodyBytes": 2096262,
+    "normalRequestsIncludingNegativeTests": 676,
+    "maintenance": {
+      "enabled": true,
+      "boundaries": [
+        {
+          "stage": "register",
+          "applicationDataHashUnchanged": true,
+          "exactRulesRestored": true,
+          "usedBeforeGc": 4094221312,
+          "usedAfterGc": 129710080,
+          "elapsedMs": 2402
+        },
+        {
+          "stage": "before-sdk",
+          "applicationDataHashUnchanged": true,
+          "exactRulesRestored": true,
+          "usedBeforeGc": 180746240,
+          "usedAfterGc": 129870848,
+          "elapsedMs": 2026
+        }
+      ],
+      "observations": [],
+      "metrics": {
+        "requests": 12,
+        "ownerRequests": 12,
+        "userRequests": 0,
+        "requestBodyBytes": 4605820,
+        "responseBodyBytes": 21287830
+      },
+      "measuredMaxHeapBytes": 8589934592,
+      "rulesHash": "12585c4f9d9136343c9e39a972443571df17fa3fbf71ab9f3d8329d301738add"
+    }
+  },
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "code": "ERR_ASSERTION",
-    "message": "{\"error\":\"Permission denied\"}\n\n401 !== 200\n"
   },
   "productLimitsApproved": false,
   "realSdkUsed": false,
