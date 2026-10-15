@@ -1,0 +1,145 @@
+{
+  "sourceHashes": {
+    "../GD91-94/validate.mjs": "312167ba6df620e75705ee242ff92f9c0601dd7cdd6f85f40152f1bd9bfab541",
+    "../GD91-94/pending.mjs": "5bf9bc6d0873a1b63c9ac3f383884ab223a54bf738cadb64fd707f33283294a0",
+    "../GD91-94/pending-rules.mjs": "256b8b95e44a2a44a3305624f89dc1eeb83078e2f4c3d6cee09685ffdb31327f",
+    "../GD91-94/generate.mjs": "8cd2ca8004928cb535397b855e77f56c0eafbca284f05208bc4f6486a5c754e1",
+    "../GD91-94/database.rules.json": "edee38d5e940c4de00f29f7ca8455f04ece17a387ecffa9fd432048e09cecde9",
+    "../GD91-94/../GD91-93/shared.mjs": "f7c2f561ef62d56ea147d79c18862ef553ceeec874d7ed9ea5c1e4b27b541af6",
+    "../GD91-94/../GD91-93/database.rules.json": "6bbec93e5012f31fc8c0544bece367b8509ad8a64e42d0c1cc7600687cabea60",
+    "../GD91-94/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-94/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-94/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-94/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-94/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-105/presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "database.rules.json": "8477b085ace91a8c372f899b15f42474d07d118892790501b199791ae9714a8c",
+    "edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
+    "generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
+    "numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
+    "regression.mjs": "3585cade1e6e7bb5b774c3251aeb8af2018a8a32dfb50a09cd94106b24be2122",
+    "run-regression.mjs": "2c44536d0e351f9fad3d372d0998d074a59eeef880e72bdcca12a5d6495c7082",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "../GD91-94/validate.mjs": "312167ba6df620e75705ee242ff92f9c0601dd7cdd6f85f40152f1bd9bfab541",
+    "../GD91-94/pending.mjs": "5bf9bc6d0873a1b63c9ac3f383884ab223a54bf738cadb64fd707f33283294a0",
+    "../GD91-94/pending-rules.mjs": "256b8b95e44a2a44a3305624f89dc1eeb83078e2f4c3d6cee09685ffdb31327f",
+    "../GD91-94/generate.mjs": "8cd2ca8004928cb535397b855e77f56c0eafbca284f05208bc4f6486a5c754e1",
+    "../GD91-94/database.rules.json": "edee38d5e940c4de00f29f7ca8455f04ece17a387ecffa9fd432048e09cecde9",
+    "../GD91-94/../GD91-93/shared.mjs": "f7c2f561ef62d56ea147d79c18862ef553ceeec874d7ed9ea5c1e4b27b541af6",
+    "../GD91-94/../GD91-93/database.rules.json": "6bbec93e5012f31fc8c0544bece367b8509ad8a64e42d0c1cc7600687cabea60",
+    "../GD91-94/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-94/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-94/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-94/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-94/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-105/presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "database.rules.json": "8477b085ace91a8c372f899b15f42474d07d118892790501b199791ae9714a8c",
+    "edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
+    "generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
+    "numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
+    "regression.mjs": "3585cade1e6e7bb5b774c3251aeb8af2018a8a32dfb50a09cd94106b24be2122",
+    "run-regression.mjs": "2c44536d0e351f9fad3d372d0998d074a59eeef880e72bdcca12a5d6495c7082",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "P01-local-fixed-save-failure-does-not-reserve",
+      "saveBeforeRequests": true,
+      "noServerRequestOnSaveFailure": true,
+      "realIndexedDb": false
+    },
+    {
+      "id": "P02-unreserved-and-partial-pins-rejected",
+      "unreservedAndHalfReservedDenied": true
+    },
+    {
+      "id": "P03-reserve-before-upload-and-recover-same-id",
+      "buildingCandidateAndBasePinned": true,
+      "sameReservationRecovered": true
+    },
+    {
+      "id": "P04-unresolved-and-other-device-release-denied",
+      "unresolvedAndOtherDeviceReleaseDenied": true,
+      "noTimeBasedRelease": true
+    },
+    {
+      "id": "P05-upload-completes-without-dropping-reservation",
+      "normalPartUploadAndSeal": true,
+      "reservationRetained": true
+    },
+    {
+      "id": "P06-sharing-cannot-steal-or-rewrite-reservation",
+      "otherDeviceAndRetargetedCandidateDenied": true,
+      "reservationImmutable": true,
+      "corruptedEnvelopeRejectedBeforeRead": true
+    },
+    {
+      "id": "P07-commit-ack-ignored-result-retained-after-replacement",
+      "acknowledgementIgnored": true,
+      "replacedCandidateKeptUntilLookup": true,
+      "lookupWrites": 0,
+      "physicalPacketLoss": false
+    },
+    {
+      "id": "P08-release-ack-ignored-is-idempotent",
+      "releaseLookupReadOnly": true,
+      "inactiveReservationCannotSendAgain": true
+    },
+    {
+      "id": "P09-head-advance-fences-unsent-share",
+      "oldRequestCannotArriveAfterRelease": true,
+      "baseKeptUntilExplicitResolution": true
+    },
+    {
+      "id": "P10-control-only-change-fences-and-does-not-retarget",
+      "controlOnlyFence": true,
+      "oldProposalNotRetargeted": true
+    },
+    {
+      "id": "P11-revoked-device-keeps-candidate",
+      "revocationInjected": true,
+      "noAutomaticExpiryRelease": true,
+      "lostDeviceRecoveryUnresolved": true
+    },
+    {
+      "id": "P12-share-version-change-fences-other-pending-share",
+      "conflictingShareVersionResolvesUnsentProposal": true,
+      "lateOldRequestDenied": true
+    },
+    {
+      "id": "P13-reservation-alone-protects-retired-base",
+      "retiredBaseNotSelectedBySharedHead": true,
+      "reservationAloneBlockedBaseCollection": true,
+      "explicitFenceReleaseAllowsCollection": true
+    },
+    {
+      "id": "P14-reservation-and-collection-race-has-one-winner",
+      "singleWinner": true,
+      "deletingCandidateCannotBeReserved": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "fixedSaveHookCalls": 8,
+  "externalFirebaseConnected": false,
+  "sharedPendingUploadPinsConnected": true,
+  "receptionQueuePinsConnected": false,
+  "realIndexedDbVerified": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "executedRulesSource": "database.rules.json",
+  "adaptedFrom": "../GD91-94/validate.mjs",
+  "transportAdaptation": "common clock, global ID index and review-progress coupling; legacy ACK shape"
+}
