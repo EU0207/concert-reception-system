@@ -1,15 +1,18 @@
 {
   "sourceHashes": {
-    "structural-local.mjs": "6f3ab73d5203aa2d34d581aa139aa8f1eb1538e33c0322626d447318db61f826",
+    "structural-local.mjs": "535b0b970bd2ea4cc7ba67b1c0f450787d249655b150ee54056d0aeae0fcf69a",
+    "collection.mjs": "be39296d4bcd224baca59c2671f5444e169086ab992d5b41a04c2002d4414cc6",
+    "../GD91-102/collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "../GD91-103/diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
     "edit.mjs": "5c550f1386712b506aeef29b09d91cd9b90db333952990eb6448eafc5bbbf26b",
-    "edit-rules.mjs": "9c82a4639b4873348841e90d580e53a36908e60370f6dcda79a897d116b1c443",
+    "edit-rules.mjs": "6d9e516008ad2ab4c19fc64c2f677e974f06692c9457c8e5fcafa48d2ff3eda3",
     "geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
-    "geometry-rules.mjs": "141ac72d1d4d7cc66a24f86bbca45d723b81428c94745f95d2be82525dfda65e",
+    "geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
     "slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
     "slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
     "snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
     "generate.mjs": "e57352fe8478df7ac9b41ade84b664a82ea2c8447dec7fc58cf7c44efe597bae",
-    "database.rules.json": "01f6c34ea378a246a8dc722fc16dabb9d13664f2acaae160f54901d017095e15",
+    "database.rules.json": "25e62c065339a11ff42414318481e64ae9e370b7167d232fc3beb345498cf6a2",
     "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
     "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
@@ -27,16 +30,19 @@
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "structural-local.mjs": "6f3ab73d5203aa2d34d581aa139aa8f1eb1538e33c0322626d447318db61f826",
+    "structural-local.mjs": "535b0b970bd2ea4cc7ba67b1c0f450787d249655b150ee54056d0aeae0fcf69a",
+    "collection.mjs": "be39296d4bcd224baca59c2671f5444e169086ab992d5b41a04c2002d4414cc6",
+    "../GD91-102/collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "../GD91-103/diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
     "edit.mjs": "5c550f1386712b506aeef29b09d91cd9b90db333952990eb6448eafc5bbbf26b",
-    "edit-rules.mjs": "9c82a4639b4873348841e90d580e53a36908e60370f6dcda79a897d116b1c443",
+    "edit-rules.mjs": "6d9e516008ad2ab4c19fc64c2f677e974f06692c9457c8e5fcafa48d2ff3eda3",
     "geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
-    "geometry-rules.mjs": "141ac72d1d4d7cc66a24f86bbca45d723b81428c94745f95d2be82525dfda65e",
+    "geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
     "slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
     "slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
     "snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
     "generate.mjs": "e57352fe8478df7ac9b41ade84b664a82ea2c8447dec7fc58cf7c44efe597bae",
-    "database.rules.json": "01f6c34ea378a246a8dc722fc16dabb9d13664f2acaae160f54901d017095e15",
+    "database.rules.json": "25e62c065339a11ff42414318481e64ae9e370b7167d232fc3beb345498cf6a2",
     "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
     "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
@@ -81,15 +87,25 @@
       "id": "E06-stale-view-proof-and-pin-release-without-result-denied",
       "staleViewRejected": true,
       "sourceAndCandidatePinnedUntilResolution": true
+    },
+    {
+      "id": "E07-slide-then-edit-bakes-offset-once",
+      "newGenerationZeroOffset": true,
+      "logicalPositionPreserved": true
+    },
+    {
+      "id": "E08-hidden-seat-in-added-strip-denied",
+      "candidateOnlyCellScanRejectsHiddenSeat": true
+    },
+    {
+      "id": "E09-collection-removes-geometry-and-views-only-after-release",
+      "oldGeometryAndViewsRemoved": true,
+      "currentGenerationPreserved": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "stage": "E07-slide-then-edit-bakes-offset-once",
-    "code": "ERR_ASSERTION"
   },
   "externalFirebaseConnected": false,
   "productionFreeTierVerified": false,
