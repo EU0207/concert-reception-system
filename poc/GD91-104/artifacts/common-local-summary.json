@@ -1,7 +1,7 @@
 {
   "sourceHashes": {
     "common-local.mjs": "b92ed1f2a5ddffc32d39c72c535e64d2027784121cec9afbccf830f143f9ce90",
-    "common-cases.mjs": "c00e8440ea14926b51ede4a399a7dd1a5353aa5b09fb01d2a830444c1235a3b8",
+    "common-cases.mjs": "b956161a3b2e876788e112e168087c33e4e71e76205a3bb160064852b600677a",
     "edit.mjs": "5c550f1386712b506aeef29b09d91cd9b90db333952990eb6448eafc5bbbf26b",
     "edit-rules.mjs": "6d9e516008ad2ab4c19fc64c2f677e974f06692c9457c8e5fcafa48d2ff3eda3",
     "geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
@@ -29,7 +29,7 @@
   },
   "endSourceHashes": {
     "common-local.mjs": "b92ed1f2a5ddffc32d39c72c535e64d2027784121cec9afbccf830f143f9ce90",
-    "common-cases.mjs": "c00e8440ea14926b51ede4a399a7dd1a5353aa5b09fb01d2a830444c1235a3b8",
+    "common-cases.mjs": "b956161a3b2e876788e112e168087c33e4e71e76205a3bb160064852b600677a",
     "edit.mjs": "5c550f1386712b506aeef29b09d91cd9b90db333952990eb6448eafc5bbbf26b",
     "edit-rules.mjs": "6d9e516008ad2ab4c19fc64c2f677e974f06692c9457c8e5fcafa48d2ff3eda3",
     "geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
@@ -55,12 +55,32 @@
     "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
+  "reports": [
+    {
+      "id": "C01-sdk-build-and-publish",
+      "typedGeometrySaved": true
+    },
+    {
+      "id": "C02-sdk-slide-and-general-cache",
+      "logicalWrites": 5,
+      "offsetAppliedOnce": true
+    },
+    {
+      "id": "C03-sdk-extension-bakes-slide-and-preserves-seat",
+      "partialPublishRejected": true
+    },
+    {
+      "id": "C04-sdk-general-write-and-direct-counter-denied",
+      "managementHistoryProtected": true
+    }
+  ],
+  "maxJsonNodes": 898,
+  "maxRootJsonBytes": 20454,
+  "realIndexedDbVerifiedHere": false,
+  "fullBusinessFreeTierVerified": false,
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "code": "PERMISSION_DENIED"
   },
   "googleIdentityMocked": true,
   "realSdkReadAndWriteUsed": true,
