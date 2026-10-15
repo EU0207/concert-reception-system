@@ -595,5 +595,6 @@
   "javaHeapBytes": 8589934592,
   "externalFirebaseConnected": false,
   "productionFreeTierVerified": false,
-  "tested3000": false
+  "tested3000": false,
+  "executedHarnessRevision": "2af140a09269d6da2e1e084ca0c48a6578d24c97"
 }

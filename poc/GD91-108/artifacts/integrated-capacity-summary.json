@@ -4,24 +4,24 @@
       "people": 4,
       "nonSeatCells": 4,
       "sections": 2,
-      "normalOperationRequests": 52,
+      "normalOperationRequests": 39,
       "normalGetRetries": 0,
       "reauthentication": {
-        "refreshes": 13,
-        "emulatorAuthRequests": 13,
-        "sessionRequests": 13
+        "refreshes": 0,
+        "emulatorAuthRequests": 0,
+        "sessionRequests": 0
       },
       "preparationIncludingLayout": {
-        "requests": 78,
-        "requestBodyBytes": 71874,
-        "responseBodyBytes": 70495,
-        "ownerRequests": 5,
-        "userRequests": 73
+        "requests": 89,
+        "requestBodyBytes": 9279102,
+        "responseBodyBytes": 18761753,
+        "ownerRequests": 29,
+        "userRequests": 60
       },
       "maxRequestBytes": 7513,
-      "rootJsonBytes": 59664,
+      "rootJsonBytes": 59663,
       "oldRootJsonBytes": 53014,
-      "rootByteIncrease": 6650,
+      "rootByteIncrease": 6649,
       "snapshotStats": [
         {
           "sdkGetOperations": 9,
@@ -66,7 +66,7 @@
         "responseBodyBytes": 4884,
         "ownerRequests": 0,
         "userRequests": 8,
-        "elapsedMs": 333,
+        "elapsedMs": 362,
         "eventsPerEnvironment": [
           4,
           4,
@@ -85,8 +85,69 @@
         ]
       },
       "resultLookups": 0,
-      "maxElapsedMs": 580,
-      "executedHarnessRevision": "539dbbbfa174f6c0b9a2711accda3b9193e9211f"
+      "maxElapsedMs": 531,
+      "executedHarnessRevision": null,
+      "emulatorMaintenance": {
+        "enabled": true,
+        "boundaries": [
+          {
+            "stage": "register",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 473943040,
+            "usedAfterGc": 125325312,
+            "elapsedMs": 1976
+          },
+          {
+            "stage": "bulkAssign",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 243840000,
+            "usedAfterGc": 124901376,
+            "elapsedMs": 1864
+          },
+          {
+            "stage": "qrCreate",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 200398848,
+            "usedAfterGc": 124957696,
+            "elapsedMs": 1808
+          },
+          {
+            "stage": "ticketCheck",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 271837184,
+            "usedAfterGc": 125017088,
+            "elapsedMs": 1922
+          },
+          {
+            "stage": "before-sdk",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 244659200,
+            "usedAfterGc": 125527040,
+            "elapsedMs": 1821
+          }
+        ],
+        "observations": [
+          {
+            "stage": "after-reception",
+            "usedBytes": 222431232,
+            "committedBytes": 532676608
+          }
+        ],
+        "metrics": {
+          "requests": 30,
+          "ownerRequests": 30,
+          "userRequests": 0,
+          "requestBodyBytes": 11514550,
+          "responseBodyBytes": 23403430
+        },
+        "measuredMaxHeapBytes": 8589934592,
+        "rulesHash": "12585c4f9d9136343c9e39a972443571df17fa3fbf71ab9f3d8329d301738add"
+      }
     },
     {
       "people": 600,
@@ -170,44 +231,183 @@
       },
       "resultLookups": 0,
       "maxElapsedMs": 80098,
-      "executedHarnessRevision": "463af6d44f947119da1c3776408d746021fc2c48"
+      "executedHarnessRevision": "463af6d44f947119da1c3776408d746021fc2c48",
+      "emulatorMaintenance": null
     },
     {
       "people": 1000,
-      "status": "blocked-local-emulator-heap",
-      "completedStages": [
+      "nonSeatCells": 1000,
+      "sections": 16,
+      "normalOperationRequests": 9006,
+      "normalGetRetries": 1,
+      "reauthentication": {
+        "refreshes": 1,
+        "emulatorAuthRequests": 1,
+        "sessionRequests": 1
+      },
+      "preparationIncludingLayout": {
+        "requests": 9208,
+        "requestBodyBytes": 24202526,
+        "responseBodyBytes": 89908087,
+        "ownerRequests": 29,
+        "userRequests": 9179
+      },
+      "maxRequestBytes": 741554,
+      "rootJsonBytes": 12235662,
+      "oldRootJsonBytes": 11150228,
+      "rootByteIncrease": 1085434,
+      "snapshotStats": [
         {
-          "kind": "register",
-          "normalRequests": 3000
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 250,
+          "geometryBodyBytes": 674197
         },
         {
-          "kind": "bulkAssign",
-          "normalRequests": 6
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 250,
+          "geometryBodyBytes": 674197
         },
         {
-          "kind": "qrCreate",
-          "normalRequests": 3001
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 250,
+          "geometryBodyBytes": 674197
+        },
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 250,
+          "geometryBodyBytes": 674197
+        },
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 250,
+          "geometryBodyBytes": 674197
+        },
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 250,
+          "geometryBodyBytes": 674197
         }
       ],
-      "failurePhase": "ticketCheck",
-      "javaHeapBytes": 8589934592,
-      "fullTotalsAvailable": false,
-      "cleanup": {
-        "rulesClosed": true,
-        "trialRootEmpty": true
+      "reception": {
+        "requests": 2000,
+        "requestBodyBytes": 1317462,
+        "responseBodyBytes": 1230462,
+        "ownerRequests": 0,
+        "userRequests": 2000,
+        "elapsedMs": 53002,
+        "eventsPerEnvironment": [
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000
+        ],
+        "responseBodyBytesPerEnvironment": [
+          576783,
+          576783,
+          576783,
+          576783,
+          576783,
+          576783
+        ]
       },
-      "executedHarnessRevision": "571a6f6a8082597979baef9424910dbccde9efc0"
+      "resultLookups": 1,
+      "maxElapsedMs": 124202,
+      "executedHarnessRevision": null,
+      "emulatorMaintenance": {
+        "enabled": true,
+        "boundaries": [
+          {
+            "stage": "register",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 2106090496,
+            "usedAfterGc": 131303424,
+            "elapsedMs": 2226
+          },
+          {
+            "stage": "bulkAssign",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 2527406080,
+            "usedAfterGc": 144175104,
+            "elapsedMs": 2199
+          },
+          {
+            "stage": "qrCreate",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 1249312768,
+            "usedAfterGc": 145865728,
+            "elapsedMs": 2646
+          },
+          {
+            "stage": "ticketCheck",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 3895019520,
+            "usedAfterGc": 152794112,
+            "elapsedMs": 2403
+          },
+          {
+            "stage": "before-sdk",
+            "applicationDataHashUnchanged": true,
+            "exactRulesRestored": true,
+            "usedBeforeGc": 2762610688,
+            "usedAfterGc": 156436480,
+            "elapsedMs": 2378
+          }
+        ],
+        "observations": [
+          {
+            "stage": "after-reception",
+            "usedBytes": 2262971392,
+            "committedBytes": 2847932416
+          }
+        ],
+        "metrics": {
+          "requests": 30,
+          "ownerRequests": 30,
+          "userRequests": 0,
+          "requestBodyBytes": 11514550,
+          "responseBodyBytes": 103491714
+        },
+        "measuredMaxHeapBytes": 8589934592,
+        "rulesHash": "12585c4f9d9136343c9e39a972443571df17fa3fbf71ab9f3d8329d301738add"
+      }
     }
   ],
   "verifiedPeople": [
     4,
-    600
-  ],
-  "blockedPeople": [
+    600,
     1000
   ],
-  "sourceHashComparisons": 197,
-  "historicalHarnessComparisons": 2,
+  "blockedPeople": [],
+  "archives": [
+    {
+      "name": "reauth-capacity-4-summary.json",
+      "failure": null,
+      "executedHarnessRevision": "539dbbbfa174f6c0b9a2711accda3b9193e9211f"
+    },
+    {
+      "name": "heap-failed-capacity-1000-summary.json",
+      "failure": {
+        "phase": "ticketCheck",
+        "people": 1000,
+        "code": "ERR_ASSERTION"
+      },
+      "executedHarnessRevision": "571a6f6a8082597979baef9424910dbccde9efc0"
+    }
+  ],
+  "sourceHashComparisons": 333,
+  "historicalHarnessComparisons": 3,
   "allRecordedSourcesMatch": true,
   "postRunFrozenReaderAudit": {
     "baseline": "388800fe97d43f880b2d02c47a6e586f7cc4dc8f",
@@ -230,7 +430,8 @@
   },
   "latestFullLayoutContractVerifiedPeople": [
     4,
-    600
+    600,
+    1000
   ],
   "productMaximumInputVerified": false,
   "allBusinessAndFailureResendVerified": false,

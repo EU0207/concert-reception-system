@@ -40,7 +40,8 @@
     "../GD91-107/edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
     "../GD91-107/generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
     "../GD91-107/numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
-    "capacity.mjs": "3ca6748566f77570b28ad0579ef16debadfd3a464d96a5d9d821560c9c97d034",
+    "capacity.mjs": "1cb4b8b36a19770b388a359bf8ad6c3ef7a2671720ec233a012c0baee636756b",
+    "emulator-maintenance.mjs": "079dce62b502e4150a26dc9d40e250263f8f51c1688a53826a4290b17bda5137",
     "reauth.mjs": "cda4d3a9d41e3d92bd671391a3b76a9bff2c0312a163c840b4acbfea9911f2e6",
     "run.mjs": "93bc4dfed5e2eba49eafb37a0c1824542ad0c325dcdffe29eb71f6c20ef17214",
     "setup.mjs": "24222762ab6b6f9ef5a8721f8c30c40f2c9e0157a177e746c111338e559ec28c",
@@ -109,7 +110,8 @@
     "../GD91-107/edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
     "../GD91-107/generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
     "../GD91-107/numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
-    "capacity.mjs": "3ca6748566f77570b28ad0579ef16debadfd3a464d96a5d9d821560c9c97d034",
+    "capacity.mjs": "1cb4b8b36a19770b388a359bf8ad6c3ef7a2671720ec233a012c0baee636756b",
+    "emulator-maintenance.mjs": "079dce62b502e4150a26dc9d40e250263f8f51c1688a53826a4290b17bda5137",
     "reauth.mjs": "cda4d3a9d41e3d92bd671391a3b76a9bff2c0312a163c840b4acbfea9911f2e6",
     "run.mjs": "93bc4dfed5e2eba49eafb37a0c1824542ad0c325dcdffe29eb71f6c20ef17214",
     "setup.mjs": "24222762ab6b6f9ef5a8721f8c30c40f2c9e0157a177e746c111338e559ec28c",
@@ -141,9 +143,9 @@
     {
       "normalGetRetries": 0,
       "reauthentication": {
-        "refreshes": 13,
-        "emulatorAuthRequests": 13,
-        "sessionRequests": 13
+        "refreshes": 0,
+        "emulatorAuthRequests": 0,
+        "sessionRequests": 0
       },
       "people": 4,
       "nonSeatCells": 4,
@@ -155,48 +157,48 @@
       "managerReservationRequestsIncluded": true,
       "stages": {
         "register": {
-          "requests": 16,
-          "requestBodyBytes": 33232,
-          "responseBodyBytes": 33212,
+          "requests": 12,
+          "requestBodyBytes": 31876,
+          "responseBodyBytes": 31880,
           "ownerRequests": 0,
-          "userRequests": 16,
-          "elapsedMs": 1405
+          "userRequests": 12,
+          "elapsedMs": 1166
         },
         "bulkAssign": {
-          "requests": 4,
-          "requestBodyBytes": 4075,
-          "responseBodyBytes": 3995,
+          "requests": 3,
+          "requestBodyBytes": 3736,
+          "responseBodyBytes": 3662,
           "ownerRequests": 0,
-          "userRequests": 4,
-          "elapsedMs": 652
+          "userRequests": 3,
+          "elapsedMs": 559
         },
         "qrCreate": {
-          "requests": 16,
-          "requestBodyBytes": 10749,
-          "responseBodyBytes": 10741,
+          "requests": 12,
+          "requestBodyBytes": 9392,
+          "responseBodyBytes": 9408,
           "ownerRequests": 0,
-          "userRequests": 16,
-          "elapsedMs": 1362
+          "userRequests": 12,
+          "elapsedMs": 1093
         },
         "ticketCheck": {
-          "requests": 16,
-          "requestBodyBytes": 10004,
-          "responseBodyBytes": 9868,
+          "requests": 12,
+          "requestBodyBytes": 8644,
+          "responseBodyBytes": 8532,
           "ownerRequests": 0,
-          "userRequests": 16,
-          "elapsedMs": 1030
+          "userRequests": 12,
+          "elapsedMs": 865
         }
       },
       "preparationRequestsIncludingLayoutAndDiagnostics": {
-        "requests": 78,
-        "requestBodyBytes": 71874,
-        "responseBodyBytes": 70495,
-        "ownerRequests": 5,
-        "userRequests": 73
+        "requests": 89,
+        "requestBodyBytes": 9279102,
+        "responseBodyBytes": 18761753,
+        "ownerRequests": 29,
+        "userRequests": 60
       },
-      "normalOperationRequests": 52,
+      "normalOperationRequests": 39,
       "maxRequestBytes": 7513,
-      "maxElapsedMs": 580,
+      "maxElapsedMs": 531,
       "resultLookups": 0,
       "sameIdResendWrites": 0,
       "snapshotStats": [
@@ -245,7 +247,7 @@
         "responseBodyBytes": 4884,
         "ownerRequests": 0,
         "userRequests": 8,
-        "elapsedMs": 333,
+        "elapsedMs": 362,
         "eventsPerEnvironment": [
           4,
           4,
@@ -264,7 +266,7 @@
         ]
       },
       "reconnectEvents": 0,
-      "rootJsonBytes": 59664,
+      "rootJsonBytes": 59663,
       "realIndexedDbVerifiedHere": false,
       "storageRecoveryVerifiedSeparately": true,
       "controlAndDeviceBootstrapPrecondition": true,
@@ -287,6 +289,65 @@
   "tested3000": false,
   "layoutSchemaVersion": 2,
   "businessSchemaVersion": 3,
-  "executedHarnessRevision": "539dbbbfa174f6c0b9a2711accda3b9193e9211f",
-  "reauthenticationThresholdMs": 0
+  "emulatorMaintenance": {
+    "enabled": true,
+    "boundaries": [
+      {
+        "stage": "register",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 473943040,
+        "usedAfterGc": 125325312,
+        "elapsedMs": 1976
+      },
+      {
+        "stage": "bulkAssign",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 243840000,
+        "usedAfterGc": 124901376,
+        "elapsedMs": 1864
+      },
+      {
+        "stage": "qrCreate",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 200398848,
+        "usedAfterGc": 124957696,
+        "elapsedMs": 1808
+      },
+      {
+        "stage": "ticketCheck",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 271837184,
+        "usedAfterGc": 125017088,
+        "elapsedMs": 1922
+      },
+      {
+        "stage": "before-sdk",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 244659200,
+        "usedAfterGc": 125527040,
+        "elapsedMs": 1821
+      }
+    ],
+    "observations": [
+      {
+        "stage": "after-reception",
+        "usedBytes": 222431232,
+        "committedBytes": 532676608
+      }
+    ],
+    "metrics": {
+      "requests": 30,
+      "ownerRequests": 30,
+      "userRequests": 0,
+      "requestBodyBytes": 11514550,
+      "responseBodyBytes": 23403430
+    },
+    "measuredMaxHeapBytes": 8589934592,
+    "rulesHash": "12585c4f9d9136343c9e39a972443571df17fa3fbf71ab9f3d8329d301738add"
+  }
 }
