@@ -1,0 +1,423 @@
+{
+  "sourceHashes": {
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-104/slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-107/database.rules.json": "8477b085ace91a8c372f899b15f42474d07d118892790501b199791ae9714a8c",
+    "../GD91-107/deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "memory-run.mjs": "f5ea8e539a9d42822ae9f7cd58943d92869df94386716ee21634bb0c7f975ab3",
+    "memory.mjs": "2a1bc19d3125bc62d5ca94ddb438f748920b5c07cb212ee7e15e9a72f5a3edcd",
+    "setup.mjs": "24222762ab6b6f9ef5a8721f8c30c40f2c9e0157a177e746c111338e559ec28c",
+    "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
+  },
+  "endSourceHashes": {
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-104/slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-107/database.rules.json": "8477b085ace91a8c372f899b15f42474d07d118892790501b199791ae9714a8c",
+    "../GD91-107/deny.rules.json": "baafba819b7e9cd03209b6e9968d641a58e91e20dfc2d9290a21d92d350cd3a5",
+    "memory-run.mjs": "f5ea8e539a9d42822ae9f7cd58943d92869df94386716ee21634bb0c7f975ab3",
+    "memory.mjs": "2a1bc19d3125bc62d5ca94ddb438f748920b5c07cb212ee7e15e9a72f5a3edcd",
+    "setup.mjs": "24222762ab6b6f9ef5a8721f8c30c40f2c9e0157a177e746c111338e559ec28c",
+    "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
+  },
+  "mode": "full-history",
+  "people": 4,
+  "writes": 2,
+  "fixtureBytes": 37420,
+  "fixtureOperations": 9,
+  "samples": [
+    {
+      "stage": "rules-loaded",
+      "usedBeforeForcedGc": 332635136,
+      "usedAfterForcedGc": 116175872,
+      "committedBytes": 478150656,
+      "topClasses": [
+        {
+          "instances": 602023,
+          "bytes": 19264736,
+          "className": "scala.collection.immutable.HashMap$HashMap1"
+        },
+        {
+          "instances": 2389,
+          "bytes": 15146488,
+          "className": "[I (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 602469,
+          "bytes": 14459256,
+          "className": "scala.Tuple2"
+        },
+        {
+          "instances": 601664,
+          "bytes": 14439936,
+          "className": "com.firebase.core.namespace.rules.util.Span"
+        },
+        {
+          "instances": 42287,
+          "bytes": 13845280,
+          "className": "[B (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 192778,
+          "bytes": 6527056,
+          "className": "[Lscala.collection.immutable.HashMap;"
+        },
+        {
+          "instances": 225455,
+          "bytes": 5410920,
+          "className": "com.firebase.core.namespace.rules.ast.StringLiteral"
+        },
+        {
+          "instances": 192778,
+          "bytes": 4626672,
+          "className": "scala.collection.immutable.HashMap$HashTrieMap"
+        },
+        {
+          "instances": 151035,
+          "bytes": 3624840,
+          "className": "com.firebase.core.namespace.rules.ast.PropertyGet"
+        },
+        {
+          "instances": 143599,
+          "bytes": 3446376,
+          "className": "com.firebase.core.namespace.rules.ast.FunctionCall"
+        },
+        {
+          "instances": 110551,
+          "bytes": 2653224,
+          "className": "scala.collection.immutable.$colon$colon"
+        },
+        {
+          "instances": 54882,
+          "bytes": 1317168,
+          "className": "com.firebase.core.namespace.rules.ast.Identifier"
+        },
+        {
+          "instances": 2775,
+          "bytes": 1070536,
+          "className": "[Ljdk.internal.vm.FillerElement; (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 41578,
+          "bytes": 997872,
+          "className": "java.lang.String (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 6721,
+          "bytes": 793808,
+          "className": "java.lang.Class (java.base@21.0.12.1)"
+        }
+      ]
+    },
+    {
+      "stage": "fixture-stored",
+      "usedBeforeForcedGc": 299664384,
+      "usedAfterForcedGc": 126464000,
+      "committedBytes": 478150656,
+      "topClasses": [
+        {
+          "instances": 654023,
+          "bytes": 20928736,
+          "className": "scala.collection.immutable.HashMap$HashMap1"
+        },
+        {
+          "instances": 127898,
+          "bytes": 16830608,
+          "className": "[B (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 637527,
+          "bytes": 15300648,
+          "className": "scala.Tuple2"
+        },
+        {
+          "instances": 2436,
+          "bytes": 15153576,
+          "className": "[I (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 601664,
+          "bytes": 14439936,
+          "className": "com.firebase.core.namespace.rules.util.Span"
+        },
+        {
+          "instances": 207961,
+          "bytes": 7042984,
+          "className": "[Lscala.collection.immutable.HashMap;"
+        },
+        {
+          "instances": 225455,
+          "bytes": 5410920,
+          "className": "com.firebase.core.namespace.rules.ast.StringLiteral"
+        },
+        {
+          "instances": 207961,
+          "bytes": 4991064,
+          "className": "scala.collection.immutable.HashMap$HashTrieMap"
+        },
+        {
+          "instances": 151035,
+          "bytes": 3624840,
+          "className": "com.firebase.core.namespace.rules.ast.PropertyGet"
+        },
+        {
+          "instances": 143599,
+          "bytes": 3446376,
+          "className": "com.firebase.core.namespace.rules.ast.FunctionCall"
+        },
+        {
+          "instances": 126774,
+          "bytes": 3042576,
+          "className": "java.lang.String (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 110605,
+          "bytes": 2654520,
+          "className": "scala.collection.immutable.$colon$colon"
+        },
+        {
+          "instances": 54882,
+          "bytes": 1317168,
+          "className": "com.firebase.core.namespace.rules.ast.Identifier"
+        },
+        {
+          "instances": 3160,
+          "bytes": 1207384,
+          "className": "[Ljdk.internal.vm.FillerElement; (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 7633,
+          "bytes": 898456,
+          "className": "java.lang.Class (java.base@21.0.12.1)"
+        }
+      ]
+    },
+    {
+      "stage": "ticket-check-2",
+      "usedBeforeForcedGc": 189375488,
+      "usedAfterForcedGc": 130007040,
+      "committedBytes": 478150656,
+      "topClasses": [
+        {
+          "instances": 677944,
+          "bytes": 21694208,
+          "className": "scala.collection.immutable.HashMap$HashMap1"
+        },
+        {
+          "instances": 160248,
+          "bytes": 17875520,
+          "className": "[B (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 649218,
+          "bytes": 15581232,
+          "className": "scala.Tuple2"
+        },
+        {
+          "instances": 2436,
+          "bytes": 15153576,
+          "className": "[I (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 601664,
+          "bytes": 14439936,
+          "className": "com.firebase.core.namespace.rules.util.Span"
+        },
+        {
+          "instances": 213431,
+          "bytes": 7245736,
+          "className": "[Lscala.collection.immutable.HashMap;"
+        },
+        {
+          "instances": 225455,
+          "bytes": 5410920,
+          "className": "com.firebase.core.namespace.rules.ast.StringLiteral"
+        },
+        {
+          "instances": 213431,
+          "bytes": 5122344,
+          "className": "scala.collection.immutable.HashMap$HashTrieMap"
+        },
+        {
+          "instances": 159106,
+          "bytes": 3818544,
+          "className": "java.lang.String (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 151035,
+          "bytes": 3624840,
+          "className": "com.firebase.core.namespace.rules.ast.PropertyGet"
+        },
+        {
+          "instances": 143599,
+          "bytes": 3446376,
+          "className": "com.firebase.core.namespace.rules.ast.FunctionCall"
+        },
+        {
+          "instances": 110605,
+          "bytes": 2654520,
+          "className": "scala.collection.immutable.$colon$colon"
+        },
+        {
+          "instances": 54882,
+          "bytes": 1317168,
+          "className": "com.firebase.core.namespace.rules.ast.Identifier"
+        },
+        {
+          "instances": 42862,
+          "bytes": 1028688,
+          "className": "scala.collection.immutable.Map$Map1"
+        },
+        {
+          "instances": 2372,
+          "bytes": 960464,
+          "className": "[Ljdk.internal.vm.FillerElement; (java.base@21.0.12.1)"
+        }
+      ]
+    },
+    {
+      "stage": "final",
+      "usedBeforeForcedGc": 130007040,
+      "usedAfterForcedGc": 129710080,
+      "committedBytes": 478150656,
+      "topClasses": [
+        {
+          "instances": 677944,
+          "bytes": 21694208,
+          "className": "scala.collection.immutable.HashMap$HashMap1"
+        },
+        {
+          "instances": 160248,
+          "bytes": 17875520,
+          "className": "[B (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 649218,
+          "bytes": 15581232,
+          "className": "scala.Tuple2"
+        },
+        {
+          "instances": 2436,
+          "bytes": 15153576,
+          "className": "[I (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 601664,
+          "bytes": 14439936,
+          "className": "com.firebase.core.namespace.rules.util.Span"
+        },
+        {
+          "instances": 213431,
+          "bytes": 7245736,
+          "className": "[Lscala.collection.immutable.HashMap;"
+        },
+        {
+          "instances": 225455,
+          "bytes": 5410920,
+          "className": "com.firebase.core.namespace.rules.ast.StringLiteral"
+        },
+        {
+          "instances": 213431,
+          "bytes": 5122344,
+          "className": "scala.collection.immutable.HashMap$HashTrieMap"
+        },
+        {
+          "instances": 159106,
+          "bytes": 3818544,
+          "className": "java.lang.String (java.base@21.0.12.1)"
+        },
+        {
+          "instances": 151035,
+          "bytes": 3624840,
+          "className": "com.firebase.core.namespace.rules.ast.PropertyGet"
+        },
+        {
+          "instances": 143599,
+          "bytes": 3446376,
+          "className": "com.firebase.core.namespace.rules.ast.FunctionCall"
+        },
+        {
+          "instances": 110605,
+          "bytes": 2654520,
+          "className": "scala.collection.immutable.$colon$colon"
+        },
+        {
+          "instances": 54882,
+          "bytes": 1317168,
+          "className": "com.firebase.core.namespace.rules.ast.Identifier"
+        },
+        {
+          "instances": 42862,
+          "bytes": 1028688,
+          "className": "scala.collection.immutable.Map$Map1"
+        },
+        {
+          "instances": 2380,
+          "bytes": 963448,
+          "className": "[Ljdk.internal.vm.FillerElement; (java.base@21.0.12.1)"
+        }
+      ]
+    }
+  ],
+  "completed": [
+    0,
+    1,
+    {
+      "normalRequests": 6
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "seededStateUsesOwner": true,
+  "diagnosticOnly": true,
+  "forcedGcAtBoundaries": true,
+  "objectContentsRecorded": false,
+  "realHeapDumpCreated": false,
+  "javaHeapBytes": 8589934592,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}
