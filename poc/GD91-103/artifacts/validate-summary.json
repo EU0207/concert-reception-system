@@ -2,7 +2,7 @@
   "sourceHashes": {
     "diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
     "validate.mjs": "738e6c34cad0cfa2a8371a3cf1511ff83c5c218011fa44f909ea9f42c9ed749a",
-    "model.mjs": "ea59fe83469144039d02ad3387f57ee83adccfd0b3652cdb03ed84d6986dc7b5",
+    "model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
     "group-rules.mjs": "b9471386046758d1be8c4ee00b59ce183ac02c4ffaef98656c4a2ad817642cef",
     "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
     "database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
@@ -24,7 +24,7 @@
   "endSourceHashes": {
     "diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
     "validate.mjs": "738e6c34cad0cfa2a8371a3cf1511ff83c5c218011fa44f909ea9f42c9ed749a",
-    "model.mjs": "ea59fe83469144039d02ad3387f57ee83adccfd0b3652cdb03ed84d6986dc7b5",
+    "model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
     "group-rules.mjs": "b9471386046758d1be8c4ee00b59ce183ac02c4ffaef98656c4a2ad817642cef",
     "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
     "database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
@@ -93,15 +93,33 @@
       "id": "G11-over-ten-registration-allowed-auto-refused",
       "rosterMembers": 11,
       "autoRefused": true
+    },
+    {
+      "id": "G12-qr-protects-whole-group-and-normal-move-reason",
+      "issuedGroupRefused": true,
+      "moveRequiresReason": true,
+      "qrPreserved": true
+    },
+    {
+      "id": "G13-swap-before-first-reception-does-not-require-reason",
+      "issuedSwapWithoutReasonAllowed": true
+    },
+    {
+      "id": "G14-swap-after-first-reception-and-stopped-requires-reason",
+      "stoppedStillRequiresReason": true
+    },
+    {
+      "id": "G15-latest-control-and-same-id-payload-protection",
+      "staleControlAndRepeatedCommitRefused": true
+    },
+    {
+      "id": "G16-general-device-cannot-read-or-write-group-history",
+      "managerOnly": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "stage": "G12-qr-protects-whole-group-and-normal-move-reason",
-    "code": "trial-failed"
   },
   "externalFirebaseConnected": false,
   "productionFreeTierVerified": false,
