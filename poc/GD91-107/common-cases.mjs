@@ -1,0 +1,14 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const original=new URL('cases.mjs',import.meta.url);let source=fs.readFileSync(original,'utf8');
+source=source.replace(/from (['"])(\.\.?\/[^'"]+)\1/g,(_,quote,path)=>'from '+JSON.stringify(new URL(path,original).href));
+function replace(a,b){assert.equal(source.split(a).length,2,'common-adaptation-target');source=source.replace(a,b);}
+replace(' const report=async(id,facts={})=>{reports.push({id,...facts});', " let maxJsonNodes=0,maxRootJsonBytes=0;const nodes=value=>value===null||typeof value!=='object'?1:1+Object.values(value).reduce((sum,item)=>sum+nodes(item),0);const report=async(id,facts={})=>{const root=await io.owner('');maxJsonNodes=Math.max(maxJsonNodes,nodes(root));maxRootJsonBytes=Math.max(maxRootJsonBytes,Buffer.byteLength(JSON.stringify(root)));assert(maxJsonNodes<=4000);assert(maxRootJsonBytes<=1048576);reports.push({id,...facts});");
+replace('return{reports,profiles,realIndexedDbVerifiedHere:', 'return{reports,profiles,maxJsonNodes,maxRootJsonBytes,realIndexedDbVerifiedHere:');
+replace("for(const axis of['horizontal','vertical'])for(const seatOrder of['forward','reverse'])for(const dimension of['rows','columns'])for(const stagePosition of['left','top'])", "for(const axis of['horizontal'])for(const seatOrder of['reverse'])for(const dimension of['columns'])for(const stagePosition of['top'])");
+replace('const f=await fixture({axis,seatOrder,stagePosition}),p=proposal(f.model,dimension),s=await stage(p),after=await publish(f,s);',`const f=await fixture({axis,seatOrder,stagePosition});await io.owner('control','PUT',{...f.control,state:'operating',revision:2,firstReceptionStartedAt:Date.now()});const p=proposal(f.model,dimension,{reason:'架空：当日補助席の用途'}),s=await stage(p);
+  const proofs=await read('numberProofs/'+s.proof.id),[line,steps]=Object.entries(proofs)[0],[step,body]=Object.entries(steps)[0];await denied(()=>send('numberProofs/'+s.proof.id+'/'+line+'/'+step,'PUT',{...body,nextNumber:body.nextNumber+1}));await denied(()=>send('numberProofs/'+s.proof.id,'DELETE'));await report('C01-number-proof-tamper-and-early-delete-denied');
+  await denied(()=>collect(read,send,f.head.generation));await denied(()=>collect(read,send,s.generation));await report('C02-both-generations-held-before-publication');
+  const after=await publish(f,s),staff=await snapshot(p=>io.sdkRead(a,p),async()=>({rows:{}}));assert.deepEqual(staff.models,[after]);assert(after.seats.filter(seat=>!f.model.seats.some(old=>old.seatId===seat.seatId)).every(seat=>seat.emergencyChange?.reason===p.edit.reason));await report('C03-day-of-reason-and-staff-read');`);
+replace("await report('N01-terminal-numbering-profiles'", "await report('C04-terminal-numbering-and-old-qr-preserved'");
+const adapted=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+export const runCases=(io,m,a)=>adapted.runCases(io,m,a,{minimal:true});
