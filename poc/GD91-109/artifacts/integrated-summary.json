@@ -1,0 +1,61 @@
+{
+  "capacity": [
+    {
+      "people": 4,
+      "id": "M01",
+      "cells": 64,
+      "seats": 4,
+      "sections": 16,
+      "parts": 4,
+      "bothAxes": true,
+      "bothOrders": true,
+      "longestAutomaticLabel": 64,
+      "allCellFieldsPreserved": true,
+      "cachedGenerationReads": 0,
+      "maxWriteJsonBytes": 17402,
+      "generationJsonBytes": 74070,
+      "snapshotResponseBodyBytes": 57581
+    },
+    {
+      "people": 600,
+      "id": "M01",
+      "cells": 4096,
+      "seats": 600,
+      "sections": 16,
+      "parts": 256,
+      "bothAxes": true,
+      "bothOrders": true,
+      "longestAutomaticLabel": 64,
+      "allCellFieldsPreserved": true,
+      "cachedGenerationReads": 0,
+      "maxWriteJsonBytes": 39473,
+      "generationJsonBytes": 3014995,
+      "snapshotResponseBodyBytes": 2096262
+    },
+    {
+      "people": 1000,
+      "id": "M01",
+      "cells": 4096,
+      "seats": 1000,
+      "sections": 16,
+      "parts": 256,
+      "bothAxes": true,
+      "bothOrders": true,
+      "longestAutomaticLabel": 64,
+      "allCellFieldsPreserved": true,
+      "cachedGenerationReads": 0,
+      "maxWriteJsonBytes": 39473,
+      "generationJsonBytes": 3677542,
+      "snapshotResponseBodyBytes": 2667465
+    }
+  ],
+  "retentionGroups": 7,
+  "sourceComparisons": 98,
+  "allCurrentSourcesMatch": true,
+  "first600FailurePreservedAtRevision": "306a8b4",
+  "first4FailureArchivedButNotIncludedInVerifiedSourceCount": true,
+  "normalClosingVerified": false,
+  "realIndexedDbVerifiedHere": false,
+  "productLimitsApproved": false,
+  "fullBusinessFreeTierVerified": false
+}
