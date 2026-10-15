@@ -1,13 +1,13 @@
 {
   "sourceHashes": {
-    "validate.mjs": "7e7bcba8dd36abfd2d05e779258993ffff0160833b02d7874fbbb9827735c085",
+    "validate.mjs": "1ee9025daab890e48b0d92613971f3dd0c679ca5de5cf5f04ae247406264813d",
     "geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
     "geometry-rules.mjs": "141ac72d1d4d7cc66a24f86bbca45d723b81428c94745f95d2be82525dfda65e",
     "slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
-    "slide-rules.mjs": "575b4b0d3f5dcfb8a72def185d1bc5e2f9a4d0c5943a3f4ba25831c45ed8d892",
+    "slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
     "snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
     "generate.mjs": "e1fcef49cfcaf347cca71a7bf1f502a2c1ce772801ecdf9e3d57cefab2f03920",
-    "database.rules.json": "d066f02f0a37fc2909caf5e3a16bc842486d022d76a926631f6da55e11c4f271",
+    "database.rules.json": "3ad0fbab4240e085ac9b9ac12dedef67c33a4a456430308151b5ea62d95e8fe5",
     "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
     "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
@@ -24,14 +24,14 @@
     "../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614"
   },
   "endSourceHashes": {
-    "validate.mjs": "7e7bcba8dd36abfd2d05e779258993ffff0160833b02d7874fbbb9827735c085",
+    "validate.mjs": "1ee9025daab890e48b0d92613971f3dd0c679ca5de5cf5f04ae247406264813d",
     "geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
     "geometry-rules.mjs": "141ac72d1d4d7cc66a24f86bbca45d723b81428c94745f95d2be82525dfda65e",
     "slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
-    "slide-rules.mjs": "575b4b0d3f5dcfb8a72def185d1bc5e2f9a4d0c5943a3f4ba25831c45ed8d892",
+    "slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
     "snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
     "generate.mjs": "e1fcef49cfcaf347cca71a7bf1f502a2c1ce772801ecdf9e3d57cefab2f03920",
-    "database.rules.json": "d066f02f0a37fc2909caf5e3a16bc842486d022d76a926631f6da55e11c4f271",
+    "database.rules.json": "3ad0fbab4240e085ac9b9ac12dedef67c33a4a456430308151b5ea62d95e8fe5",
     "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
     "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
     "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
@@ -50,7 +50,7 @@
   "reports": [
     {
       "id": "B01-geometry-proven-by-normal-save",
-      "parts": 2,
+      "parts": 5,
       "boundsVerified": true
     },
     {
@@ -61,6 +61,10 @@
       "id": "B03-fake-extreme-witness-and-skipped-geometry-rejected",
       "cursorJumpDenied": 1,
       "immutableBounds": true
+    },
+    {
+      "id": "S05-axis-order-direction-profiles",
+      "axisOrderDirections": 16
     },
     {
       "id": "S01-slide-retains-assignments-and-qr-without-cell-writes",
@@ -77,15 +81,20 @@
       "id": "S03-projection-cache-applies-offset-exactly-once",
       "sourceGeometryCached": true,
       "offsetNotDoubled": true
+    },
+    {
+      "id": "S04-occupied-boundary-and-all-unset-no-change",
+      "allUnsetNoWrites": true,
+      "spaceAndAisleBlockBoundary": true
+    },
+    {
+      "id": "S06-direct-view-and-counter-mutation-denied",
+      "rawViewAndCounterRefused": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "stage": "S04-occupied-boundary-and-all-unset-no-change",
-    "code": "trial-failed"
   },
   "externalFirebaseConnected": false,
   "productionFreeTierVerified": false,
