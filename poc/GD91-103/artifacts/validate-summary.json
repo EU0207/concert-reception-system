@@ -1,6 +1,7 @@
 {
   "sourceHashes": {
-    "validate.mjs": "3cec8d155a5b14118477321ab89dd055d39747c5e8fa49165126a2d08068f4f5",
+    "diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
+    "validate.mjs": "6a337b71b767a583cf358959b5008dd680762db0bd0b89777f670d6a65fc6a06",
     "model.mjs": "ea59fe83469144039d02ad3387f57ee83adccfd0b3652cdb03ed84d6986dc7b5",
     "group-rules.mjs": "6e1c5749093eadb966d066a8bc220d403da10c7fe5f01257c62e7d9779e52c5d",
     "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
@@ -21,7 +22,8 @@
     "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889"
   },
   "endSourceHashes": {
-    "validate.mjs": "3cec8d155a5b14118477321ab89dd055d39747c5e8fa49165126a2d08068f4f5",
+    "diagnostic.mjs": "2705b848127cf76ad242f3f6fe060da27d1212f8e817eb4fa7ed3d6735006879",
+    "validate.mjs": "6a337b71b767a583cf358959b5008dd680762db0bd0b89777f670d6a65fc6a06",
     "model.mjs": "ea59fe83469144039d02ad3387f57ee83adccfd0b3652cdb03ed84d6986dc7b5",
     "group-rules.mjs": "6e1c5749093eadb966d066a8bc220d403da10c7fe5f01257c62e7d9779e52c5d",
     "generate.mjs": "df488dac934bd712f47f954da87934af7faa0d2f72b75e99810cd1269843ff30",
@@ -47,7 +49,7 @@
     "trialRootEmpty": true
   },
   "failure": {
-    "stage": "setup",
+    "stage": "G01-roster-and-membership-normal-atomic-registration",
     "code": "ERR_ASSERTION"
   },
   "externalFirebaseConnected": false,
