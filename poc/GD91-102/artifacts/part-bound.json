@@ -1,0 +1,16 @@
+{
+  "sourceHashes": {
+    "bounds.mjs": "341f4c504eff497e6e4a4d3644af6564f70fb09d4c2662c8b16bb3fad79747e5",
+    "layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
+    "../GD91-84/generation-rules.mjs": "5fa17358650c2528f5c10dcc62bb1d3416f171ddfe022d9193db3ece9bc7ca61"
+  },
+  "slotsPerPart": 16,
+  "conservativePartJsonBytes": 58767,
+  "limitBytes": 65536,
+  "optionalFieldsSimultaneouslyCounted": true,
+  "jsonEscapesCounted": true,
+  "source": "layout-rules.mjs field bounds; legacy label bound 64",
+  "productCellLimitApproved": false,
+  "fullBusinessFreeTierVerified": false
+}
