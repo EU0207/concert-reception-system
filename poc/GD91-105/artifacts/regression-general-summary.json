@@ -1,0 +1,133 @@
+{
+  "sourceHashes": {
+    "../GD91-97/common-local.mjs": "067947aeca8ed03dddb0a8cb5fb24429e19e76255bed534e894420a67b1ecb6a",
+    "../GD91-97/common-cases.mjs": "cdf433a253d839ccd52dad66d62e5da491db292148606187ebd99b181a4f14d0",
+    "../GD91-97/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "../GD91-97/generate.mjs": "00a544ea630c9f4d684da38041104b76571d0939f270e47fe7f57c675b0fe766",
+    "../GD91-97/../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-97/../GD91-96/queue-rules.mjs": "2550f487b6e6db7af8fe2b867d7a19b2377f68c5eee4dea7bc720e3fb7f99a4c",
+    "../GD91-97/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-97/../GD91-96/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "../GD91-97/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-97/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-97/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-97/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-97/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-97/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-97/../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-97/../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-97/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-97/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-97/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-97/../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-97/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-97/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-97/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "regression.mjs": "c1a7fe8dc4016a843aead4066ae3ca881a870ab50c052a46823be7cfa485e4a8",
+    "database.rules.json": "a28ff8dbd1d189c753ca93bf28132a3e17faf4e41dc325430773e1dd2e72bf64",
+    "edit-rules.mjs": "10eeb2080122eaa8d25a4ad1e2ff5c30dd0fced3cc1f6e263e4f733288d329a2",
+    "presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "generate.mjs": "e66eeb32978abc5ee57764013c060dd17bfd7db5156a563f70dc5235a38bf5a1",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/compat.mjs": "2b5d55180890bc23c237d41e310328e9844a34d757575a546a9edc984c94cfe4"
+  },
+  "endSourceHashes": {
+    "../GD91-97/common-local.mjs": "067947aeca8ed03dddb0a8cb5fb24429e19e76255bed534e894420a67b1ecb6a",
+    "../GD91-97/common-cases.mjs": "cdf433a253d839ccd52dad66d62e5da491db292148606187ebd99b181a4f14d0",
+    "../GD91-97/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "../GD91-97/generate.mjs": "00a544ea630c9f4d684da38041104b76571d0939f270e47fe7f57c675b0fe766",
+    "../GD91-97/../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-97/../GD91-96/queue-rules.mjs": "2550f487b6e6db7af8fe2b867d7a19b2377f68c5eee4dea7bc720e3fb7f99a4c",
+    "../GD91-97/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-97/../GD91-96/database.rules.json": "684a9d2dd11ab101689759bebbefa79ac7d1de9fd9d076c489f8573d6807998f",
+    "../GD91-97/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-97/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-97/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-97/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-97/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-97/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-97/../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-97/../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-97/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-97/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-97/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-97/../GD91-86/google-observers.mjs": "47486be934229386fe854e4ac1abad3fc35d0386d605e5a861b0f69946f8c907",
+    "../GD91-97/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-97/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-97/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "regression.mjs": "c1a7fe8dc4016a843aead4066ae3ca881a870ab50c052a46823be7cfa485e4a8",
+    "database.rules.json": "a28ff8dbd1d189c753ca93bf28132a3e17faf4e41dc325430773e1dd2e72bf64",
+    "edit-rules.mjs": "10eeb2080122eaa8d25a4ad1e2ff5c30dd0fced3cc1f6e263e4f733288d329a2",
+    "presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "generate.mjs": "e66eeb32978abc5ee57764013c060dd17bfd7db5156a563f70dc5235a38bf5a1",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/compat.mjs": "2b5d55180890bc23c237d41e310328e9844a34d757575a546a9edc984c94cfe4"
+  },
+  "reports": [
+    {
+      "id": "L01",
+      "normalRegistrationBulkAndQr": true,
+      "generalReceptionDevices": 2,
+      "currentMetadataAndPublicRowsViaSdk": true,
+      "privateProfileNotDistributed": true
+    },
+    {
+      "id": "L02",
+      "referenceTheftDenied": true,
+      "currentQrAcceptedBeforeIssueCheck": true,
+      "queueDrainedAfterAck": true,
+      "realIndexedDbVerifiedHere": false
+    },
+    {
+      "id": "L03",
+      "expiredMetadataRestAndSdkDenied": true,
+      "expiredSdkNewValues": [
+        0,
+        0
+      ],
+      "validSdkNewValues": [
+        1,
+        1
+      ],
+      "sdkCancellationObserved": [
+        false,
+        true
+      ],
+      "restStreamCancelled": true,
+      "restStreamNewData": 0,
+      "roleExpiryTested": false,
+      "clockOnlyDisconnectClaimed": false
+    },
+    {
+      "id": "L04",
+      "validReceptionDeviceStillWrites": true,
+      "expiredDeviceQueueAndLeaseRetained": true,
+      "automaticRebase": false
+    }
+  ],
+  "maxJsonNodes": 561,
+  "maxRootJsonBytes": 24764,
+  "normalRegistrationPeople": 2,
+  "actualGeneralReceptionDevices": 2,
+  "realIndexedDbVerifiedHere": false,
+  "fullBusinessFreeTierVerified": false,
+  "applicationCallsExcludingBootstrapAndCleanup": 77,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "executedRulesSource": "database.rules.json",
+  "adaptedFrom": "../GD91-97/common-local.mjs",
+  "transportAdaptation": "common clock, global ID index and review-progress coupling; legacy ACK shape"
+}

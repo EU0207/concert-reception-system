@@ -1,0 +1,126 @@
+{
+  "sourceHashes": {
+    "../GD91-104/validate.mjs": "32dca33d07ee58a7c62cb66f353f549b47535e5a9e0e0f02231f93524e6fdf17",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-104/snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
+    "../GD91-104/generate.mjs": "e57352fe8478df7ac9b41ade84b664a82ea2c8447dec7fc58cf7c44efe597bae",
+    "../GD91-104/database.rules.json": "25e62c065339a11ff42414318481e64ae9e370b7167d232fc3beb345498cf6a2",
+    "../GD91-104/../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-104/../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-104/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-104/../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../GD91-104/../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../GD91-104/../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-104/../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-104/../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "../GD91-104/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-104/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-104/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-104/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-104/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-104/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "regression.mjs": "c1a7fe8dc4016a843aead4066ae3ca881a870ab50c052a46823be7cfa485e4a8",
+    "database.rules.json": "a28ff8dbd1d189c753ca93bf28132a3e17faf4e41dc325430773e1dd2e72bf64",
+    "edit-rules.mjs": "10eeb2080122eaa8d25a4ad1e2ff5c30dd0fced3cc1f6e263e4f733288d329a2",
+    "presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "generate.mjs": "e66eeb32978abc5ee57764013c060dd17bfd7db5156a563f70dc5235a38bf5a1",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/compat.mjs": "2b5d55180890bc23c237d41e310328e9844a34d757575a546a9edc984c94cfe4"
+  },
+  "endSourceHashes": {
+    "../GD91-104/validate.mjs": "32dca33d07ee58a7c62cb66f353f549b47535e5a9e0e0f02231f93524e6fdf17",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-104/snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
+    "../GD91-104/generate.mjs": "e57352fe8478df7ac9b41ade84b664a82ea2c8447dec7fc58cf7c44efe597bae",
+    "../GD91-104/database.rules.json": "25e62c065339a11ff42414318481e64ae9e370b7167d232fc3beb345498cf6a2",
+    "../GD91-104/../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-104/../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-104/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-104/../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../GD91-104/../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../GD91-104/../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-104/../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-104/../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "../GD91-104/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-104/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-104/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-104/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-104/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-104/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "regression.mjs": "c1a7fe8dc4016a843aead4066ae3ca881a870ab50c052a46823be7cfa485e4a8",
+    "database.rules.json": "a28ff8dbd1d189c753ca93bf28132a3e17faf4e41dc325430773e1dd2e72bf64",
+    "edit-rules.mjs": "10eeb2080122eaa8d25a4ad1e2ff5c30dd0fced3cc1f6e263e4f733288d329a2",
+    "presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "generate.mjs": "e66eeb32978abc5ee57764013c060dd17bfd7db5156a563f70dc5235a38bf5a1",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-99/compat.mjs": "2b5d55180890bc23c237d41e310328e9844a34d757575a546a9edc984c94cfe4"
+  },
+  "reports": [
+    {
+      "id": "B01-geometry-proven-by-normal-save",
+      "parts": 5,
+      "boundsVerified": true
+    },
+    {
+      "id": "B02-narrow-or-empty-bounds-rejected-at-cell-save",
+      "selfReportedBoundsNotTrusted": true
+    },
+    {
+      "id": "B03-fake-extreme-witness-and-skipped-geometry-rejected",
+      "cursorJumpDenied": 1,
+      "immutableBounds": true
+    },
+    {
+      "id": "S05-axis-order-direction-profiles",
+      "axisOrderDirections": 16
+    },
+    {
+      "id": "S01-slide-retains-assignments-and-qr-without-cell-writes",
+      "logicalWrites": 5,
+      "cellWrites": 0,
+      "qrAndAssignmentPreserved": true
+    },
+    {
+      "id": "S02-invalid-direction-and-reason-injection-rejected",
+      "invalidVariantsRejected": 5,
+      "reasonNotStored": true
+    },
+    {
+      "id": "S03-projection-cache-applies-offset-exactly-once",
+      "sourceGeometryCached": true,
+      "offsetNotDoubled": true
+    },
+    {
+      "id": "S04-occupied-boundary-and-all-unset-no-change",
+      "allUnsetNoWrites": true,
+      "spaceAndAisleBlockBoundary": true
+    },
+    {
+      "id": "S06-direct-view-and-counter-mutation-denied",
+      "rawViewAndCounterRefused": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "structuralEditingComplete": false,
+  "realIndexedDbVerifiedHere": false,
+  "controlAndDevicesPreloaded": true,
+  "executedRulesSource": "database.rules.json",
+  "adaptedFrom": "../GD91-104/validate.mjs",
+  "transportAdaptation": "common clock, global ID index and review-progress coupling; legacy ACK shape"
+}
