@@ -1,0 +1,2 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {addGeometry} from './geometry-rules.mjs';import {addSlides} from './slide-rules.mjs';import {addEdits} from './edit-rules.mjs';
+assert.deepEqual(JSON.parse(fs.readFileSync(new URL('database.rules.json',import.meta.url))),addEdits(addSlides(addGeometry(JSON.parse(fs.readFileSync(new URL('../GD91-103/database.rules.json',import.meta.url)))))));console.log(JSON.stringify({generatedRulesMatchSource:true}));
