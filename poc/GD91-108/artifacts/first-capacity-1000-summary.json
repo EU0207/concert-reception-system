@@ -1,0 +1,27 @@
+{
+  "evidenceKind": "captured-runner-output",
+  "executedHarnessRevision": "463af6d44f947119da1c3776408d746021fc2c48",
+  "people": 1000,
+  "completedStages": [
+    {
+      "kind": "register",
+      "normalRequests": 3000
+    }
+  ],
+  "failure": {
+    "phase": "bulkAssign",
+    "code": 23,
+    "writeResponseTimeoutMs": 90000,
+    "resultLookupTimeoutMs": 20000,
+    "resultKnown": false
+  },
+  "cleanup": {
+    "rulesClosed": false,
+    "trialRootEmpty": false,
+    "confirmationUnavailable": true,
+    "emulatorAndOwnedListenersStopped": true
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false
+}

@@ -272,5 +272,6 @@
   "productionFreeTierVerified": false,
   "tested3000": false,
   "layoutSchemaVersion": 2,
-  "businessSchemaVersion": 3
+  "businessSchemaVersion": 3,
+  "executedHarnessRevision": "463af6d44f947119da1c3776408d746021fc2c48"
 }
