@@ -1,0 +1,20 @@
+{
+  "observationCases": 28,
+  "commonGroups": 10,
+  "closedCommonGroups": 12,
+  "receptionRegressionGroups": 102,
+  "completedOtherRegressionGroups": 31,
+  "existingGroups": 133,
+  "externalPlanLocalGroups": 8,
+  "structuralSuiteInterruptedAndNotPassed": true,
+  "changedRulePaths": [
+    "/rules/checks/$run/quarantine/$device/events/$key/.validate",
+    "/rules/checks/$run/receipts/$device/events/$key/.validate"
+  ],
+  "sourceComparisons": 639,
+  "allCurrentSourcesMatch": true,
+  "externalFirebaseConnected": false,
+  "externalFailureCauseConfirmed": false,
+  "productionImplementation": false,
+  "fullBusinessFreeTierVerified": false
+}

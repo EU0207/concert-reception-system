@@ -1,0 +1,16 @@
+{
+  "reason": "Limit regression to reception, authorization and recovery after verifying only two observation validators changed",
+  "completedScopes": [
+    "section",
+    "section-common",
+    "geometry-slide"
+  ],
+  "completedGroups": 31,
+  "interruptedScope": "structural",
+  "interruptedScopePassed": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false
+}
