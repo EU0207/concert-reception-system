@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {estimate} from './estimate.mjs';
 const input={baseResponseBytes:20000000,restRequests:10000,sdkGets:2000,sdkEvents:6000};
 const once=estimate(input),twice=estimate({...input,monthlyPerformances:2});assert.equal(twice.monthlyBytes,once.monthlyBytes*2);
-assert.equal(estimate({...input,retrievalCopies:2}).monthlyBytes,once.monthlyBytes*2);
+assert.equal(estimate({...input,extraRetrievalCopies:1,sdkReplayBodyBytes:100,sdkReplayMessages:2}).monthlyBytes,once.monthlyBytes+2*(100+2*8192));
 assert.equal(estimate({...input,otherMonthlyBytes:123}).monthlyBytes,once.monthlyBytes+123);
 const remaining=once.remainingBytes;assert(estimate({...input,otherMonthlyBytes:remaining}).withinIllustrativeLimit);
 assert(!estimate({...input,otherMonthlyBytes:remaining+1}).withinIllustrativeLimit);
