@@ -19,10 +19,11 @@
     "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
     "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
     "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
-    "closing-local.mjs": "5cba83d591db22ed270085335d2e203fa50cd481f8660dd03635a024ad7e6ba3",
-    "closing-rules.mjs": "6308b1efd03e61d981fbd414bff6b7f183836918244dbb21dc55ce16a7887b5c",
+    "closing-local.mjs": "f042e158244842cfde9fd8ea5db447dd585bee979cc9cae311e62f5268ae2dcd",
+    "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "d4fbdf8f9ef7e39623f82fb21655b2e9794d9af333f453f838f55c0c9ca00f3b",
-    "database.rules.json": "9a7e008c740a3cdc8ac0fb68ece80e1139dcfb1e7fbbebd602d056e4e3aa6c3b",
+    "database.rules.json": "1cfd0130e657019452f692026f9e895d567ccd383b8ef372740dbdd04623dae1",
+    "diagnose.mjs": "3141a3b556194577e24ef774777f9020d1f07e44505325c803cdb5d1c4d56c88",
     "generate.mjs": "38c1860ca6f82f1207498a752a1835da38c620ec4f9d707bc14e4620bb779cc2",
     "registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
@@ -68,10 +69,11 @@
     "../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
     "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
     "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
-    "closing-local.mjs": "5cba83d591db22ed270085335d2e203fa50cd481f8660dd03635a024ad7e6ba3",
-    "closing-rules.mjs": "6308b1efd03e61d981fbd414bff6b7f183836918244dbb21dc55ce16a7887b5c",
+    "closing-local.mjs": "f042e158244842cfde9fd8ea5db447dd585bee979cc9cae311e62f5268ae2dcd",
+    "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "d4fbdf8f9ef7e39623f82fb21655b2e9794d9af333f453f838f55c0c9ca00f3b",
-    "database.rules.json": "9a7e008c740a3cdc8ac0fb68ece80e1139dcfb1e7fbbebd602d056e4e3aa6c3b",
+    "database.rules.json": "1cfd0130e657019452f692026f9e895d567ccd383b8ef372740dbdd04623dae1",
+    "diagnose.mjs": "3141a3b556194577e24ef774777f9020d1f07e44505325c803cdb5d1c4d56c88",
     "generate.mjs": "38c1860ca6f82f1207498a752a1835da38c620ec4f9d707bc14e4620bb779cc2",
     "registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
@@ -97,15 +99,53 @@
     "../GD91-99/review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
     "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
   },
-  "reports": [],
+  "reports": [
+    {
+      "id": "F01",
+      "normalStartManagerOnly": true,
+      "sourceFrozen": true,
+      "bootstrapAndStopPreloaded": true
+    },
+    {
+      "id": "F02",
+      "omissionAndProxyAndPendingAndWrongSequenceDenied": true
+    },
+    {
+      "id": "F03",
+      "sourceSkipPartialAndForgedArrivalDenied": true
+    },
+    {
+      "id": "F04",
+      "partialSnapshotAndWrongNameArrivalCyclePartitionDenied": true
+    },
+    {
+      "id": "F05",
+      "normalCloseAndFullNamesAndVenueCreatedNormally": true,
+      "allRegisteredDevicesCovered": true,
+      "allRosterPeopleCovered": true,
+      "duplicateRereadNotDoubleCounted": true,
+      "oneCloseOnly": true
+    },
+    {
+      "id": "F06",
+      "stoppedDeviceCannotBeOmittedFromNormalClose": true
+    },
+    {
+      "id": "F07",
+      "exceptionalCloseNormallySaved": true,
+      "unknownNotZero": true,
+      "lossAndDeletionUncertaintyRetained": true,
+      "deviceStopInjectedAsPrecondition": true
+    },
+    {
+      "id": "F08",
+      "realRestResponseCutAndEncryptedIndexedDbRestart": true,
+      "resultLookedUpWithoutResend": true
+    }
+  ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "stage": "setup",
-    "code": "ERR_ASSERTION",
-    "message": "{\"error\":\"Permission denied\"}\n\n401 !== 200\n"
   },
   "bootstrapRosterAndStoppedControlSeededByOwner": true,
   "closedControlAndActualsNotSeeded": true,
