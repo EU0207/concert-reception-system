@@ -1,0 +1,221 @@
+{
+  "sourceHashes": {
+    "../GD91-100/validate.mjs": "5a9951d17d4c9b30557efe1c7c979543d20769c16e7bb2fa70475f63b836cdfc",
+    "../GD91-100/model.mjs": "2d0d29d41ec16716dee2ae1446bcc660c9c00fd5471eca2c9277ff7cd4b7cc1c",
+    "../GD91-100/recovery-rules.mjs": "a5711280a6f2372aee1a051c8db81072b397142c2f9965d98490ba085117fb6d",
+    "../GD91-100/correction-rules.mjs": "c42e627439f79dda5439ca7d31ecad83a3408dda2dd4fe591c9b11c5bff063c8",
+    "../GD91-100/generate.mjs": "0c82bd937cbca9147c88d20f47bdd61d35537364869b22947ec8216dfcd473ae",
+    "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-100/../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-100/../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-100/../GD91-99/submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
+    "../GD91-100/../GD91-99/review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
+    "../GD91-100/../GD91-98/minimal-cases.mjs": "2e2918597f4e87e142f77fde4522fb0956bfa328df31d1a2e2bd7b0322b68212",
+    "../GD91-100/../GD91-98/quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
+    "../GD91-100/../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-100/../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-100/../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-100/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-100/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-100/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-100/../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "../GD91-100/../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-100/../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-105/presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-107/edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
+    "../GD91-107/generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
+    "../GD91-107/numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
+    "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
+    "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
+    "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
+    "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
+    "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
+    "evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
+    "generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
+    "registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
+    "regression.mjs": "5c2a88b797448a476f58ba8234bf4d3241b9edcb8e321f06321227c1cfec74db",
+    "run-regression.mjs": "9a004726e47b506a692b94354d277bb6b6cd2f3ee6136fa058e8e50c8c9b2d36",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "endSourceHashes": {
+    "../GD91-100/validate.mjs": "5a9951d17d4c9b30557efe1c7c979543d20769c16e7bb2fa70475f63b836cdfc",
+    "../GD91-100/model.mjs": "2d0d29d41ec16716dee2ae1446bcc660c9c00fd5471eca2c9277ff7cd4b7cc1c",
+    "../GD91-100/recovery-rules.mjs": "a5711280a6f2372aee1a051c8db81072b397142c2f9965d98490ba085117fb6d",
+    "../GD91-100/correction-rules.mjs": "c42e627439f79dda5439ca7d31ecad83a3408dda2dd4fe591c9b11c5bff063c8",
+    "../GD91-100/generate.mjs": "0c82bd937cbca9147c88d20f47bdd61d35537364869b22947ec8216dfcd473ae",
+    "../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-100/../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-100/../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-100/../GD91-99/submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
+    "../GD91-100/../GD91-99/review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
+    "../GD91-100/../GD91-98/minimal-cases.mjs": "2e2918597f4e87e142f77fde4522fb0956bfa328df31d1a2e2bd7b0322b68212",
+    "../GD91-100/../GD91-98/quarantine.mjs": "2057967ff003218df6503967db73fc38b49e88d35376188ff63ddc587ab6df0c",
+    "../GD91-100/../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-100/../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-100/../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-100/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-100/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-100/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-100/../GD91-76/cache-store.mjs": "2f3700958dd34e929d31cf7010f053b3207624ead2f46e7f59e91539475e0c24",
+    "../GD91-100/../GD91-76/browser.html": "84fce84f871ed794bc9395b2bb3e9a22b243840e1eb0c611358329015d21cdd7",
+    "../GD91-100/../GD91-86/vite.config.mjs": "406b1d4069e127048dae537ff13eea92de6c39d01ca4ddc562b64d242cb57f47",
+    "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-105/presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-107/edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
+    "../GD91-107/generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
+    "../GD91-107/numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
+    "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
+    "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
+    "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
+    "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
+    "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
+    "evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
+    "generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
+    "registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
+    "regression.mjs": "5c2a88b797448a476f58ba8234bf4d3241b9edcb8e321f06321227c1cfec74db",
+    "run-regression.mjs": "9a004726e47b506a692b94354d277bb6b6cd2f3ee6136fa058e8e50c8c9b2d36",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
+  },
+  "reports": [
+    {
+      "id": "L01-no-automatic-intake-after-close",
+      "serverRejectsAutomaticIntake": true,
+      "encryptedQueueRetained": true
+    },
+    {
+      "id": "L02-closed-state-does-not-reopen-normal-use",
+      "normalReadAndWriteDenied": true,
+      "closedActualsUnchanged": true
+    },
+    {
+      "id": "L03-loss-is-not-zero-or-deleted",
+      "unknownCountAndDeletionUnconfirmedKept": true,
+      "lossRecordImmutable": true,
+      "referenceHeld": true
+    },
+    {
+      "id": "L04-explicit-manager-permit-is-atomic-and-bounded",
+      "partialRequestsDenied": 2,
+      "reasonAndPaperRequired": true,
+      "receptionAndTemporaryDenied": true,
+      "rangeAndControlBound": true
+    },
+    {
+      "id": "L05-permit-plan-abort-does-not-send",
+      "indexedDbAbort": true,
+      "serverWrites": 0
+    },
+    {
+      "id": "L06-permit-response-cut-and-restart",
+      "realResponseCut": true,
+      "edgeRestart": true,
+      "nonExtractableKey": true,
+      "secondPermitWrites": 0
+    },
+    {
+      "id": "L07-expired-or-out-of-range-permit-retains-queue",
+      "expiredTimestampAndRangeInjected": true,
+      "queueRetained": true
+    },
+    {
+      "id": "L08-other-device-cannot-borrow-permit",
+      "deviceBindingEnforced": true,
+      "permitNotPublic": true
+    },
+    {
+      "id": "L09-intake-response-cut-preserves-source",
+      "realIntakeResponseCut": true,
+      "sourceStillDurable": true
+    },
+    {
+      "id": "L10-restart-completes-only-unreceived-record",
+      "existingReceiptReused": true,
+      "onlyOneNewIntakeWrite": true,
+      "noAutomaticAdoption": true
+    },
+    {
+      "id": "L11-source-final-sequence-still-required",
+      "managerCannotInventFinalSequence": true,
+      "durableSourceSeal": true
+    },
+    {
+      "id": "L12-post-close-adoption-requires-fact-and-total",
+      "partialRequestsDenied": 7,
+      "noFactWithoutAggregate": true,
+      "noPlainAdoptionAfterClose": true
+    },
+    {
+      "id": "L13-correction-cut-keeps-closed-cycle-authority",
+      "realCorrectionResponseCut": true,
+      "secondCorrectionWrites": 0,
+      "frozenCycleNotCurrentTicket": true,
+      "closeNotCancelled": true
+    },
+    {
+      "id": "L14-two-managers-cannot-double-count",
+      "oneDecisionWins": true,
+      "alreadyArrivedIncrement": 0
+    },
+    {
+      "id": "L15-duplicate-stays-history-without-correction",
+      "duplicateNotAddedToActuals": true,
+      "originalRecordsKept": true
+    },
+    {
+      "id": "L16-reviewed-release-keeps-loss-history",
+      "partialReleaseRequestsDenied": 5,
+      "originalLossDeclarationNotRewritten": true,
+      "sourceEvidenceRetained": true
+    },
+    {
+      "id": "L17-old-permit-does-not-authorize-future-data",
+      "rangeAndSealedReferenceRemainClosed": true
+    },
+    {
+      "id": "L18-lost-peer-is-not-released-by-another-recovery",
+      "unrecoveredPeerPinned": true,
+      "noFabricatedAllReceived": true
+    },
+    {
+      "id": "L19-stale-authority-keeps-prepared-permit",
+      "reauthTimeInjected": true,
+      "staleAuthorityRejected": true,
+      "pendingPlanRetained": true
+    },
+    {
+      "id": "L20-other-performance-and-private-records-isolated",
+      "performanceAndRoleBoundaries": true,
+      "privateReasonNotDistributed": true,
+      "browserDatabaseRequests": 0
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "metrics": {
+    "requests": 3735,
+    "requestBodyBytes": 29365338,
+    "responseBodyBytes": 35995915,
+    "ownerRequests": 582,
+    "userRequests": 3153
+  },
+  "realIndexedDbVerified": true,
+  "performanceCloseAndActualSnapshotPreloaded": true,
+  "completeCloseWorkflowVerified": false,
+  "fullMinimalActualsModelVerified": false,
+  "wholeBrowserApplicationTested": false,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "executedRulesSource": "database.rules.json",
+  "adaptedFrom": "../GD91-100/validate.mjs",
+  "transportAdaptation": "common clock, global ID index and review-progress coupling; legacy ACK shape"
+}

@@ -1,0 +1,39 @@
+{
+  "registryGroups": 8,
+  "closingGroups": 17,
+  "existingGroups": 216,
+  "numberingGroups": 14,
+  "readBudgetComparisons": 4,
+  "commonClosingGroups": 4,
+  "commonExistingCapacityGroups": 6,
+  "commonModelIncludingSetupAndCleanup": 367,
+  "capacities": [
+    {
+      "people": 4,
+      "cells": 8,
+      "registeredDevices": 8,
+      "partitions": 1
+    },
+    {
+      "people": 600,
+      "cells": 4096,
+      "registeredDevices": 8,
+      "partitions": 10
+    },
+    {
+      "people": 1000,
+      "cells": 4096,
+      "registeredDevices": 8,
+      "partitions": 16
+    }
+  ],
+  "sourceComparisons": 1301,
+  "allCurrentSourcesMatch": true,
+  "generatedRulesMatchSource": true,
+  "normalClosingAndInitialActualsVerified": true,
+  "encryptedExecutionRecoveryVerified": true,
+  "bootstrapAndStoppedControlPreconditionsRemain": true,
+  "externalFirebaseConnected": false,
+  "fullBusinessFreeTierVerified": false,
+  "productionImplementation": false
+}
