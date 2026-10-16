@@ -1,0 +1,15 @@
+{
+  "decisionId": "TECH-DD91-103-A",
+  "externalTrials": 1,
+  "testedSourceCommit": "a304d3ec872ec348e1f1348f65a9c1a1600e8a86",
+  "sourceComparisons": 68,
+  "completedGroups": 6,
+  "plannedGroups": 10,
+  "closingGroupsNotCompleted": 4,
+  "applicationCalls": 169,
+  "observedApplicationBodyBytes": 2695341,
+  "cleanupVerified": true,
+  "failureLocationRecorded": false,
+  "allPathsPassed": false,
+  "fullBusinessFreeTierVerified": false
+}
