@@ -1,0 +1,20 @@
+{
+  "sourceHashes": {
+    "../GD91-86/google-login-retry.mjs": "2c20c1633711e22ab1f8963765bc23e44d6422acea4e2a99527bbe058d50d63c",
+    "../GD91-86/google-login-retry.html": "f6988177860159c5212b46b63042b065de010e6cbf6cacc43c9b6c41aced1d1e"
+  },
+  "registeredAuthBeforeRecovery": 0,
+  "additionalAuthAttemptAllowance": 1,
+  "trialContinued": true,
+  "endSourceHashes": {
+    "../GD91-86/google-login-retry.mjs": "2c20c1633711e22ab1f8963765bc23e44d6422acea4e2a99527bbe058d50d63c",
+    "../GD91-86/google-login-retry.html": "f6988177860159c5212b46b63042b065de010e6cbf6cacc43c9b6c41aced1d1e"
+  },
+  "decisionId": "TECH-DD91-102-A",
+  "beginRejectedStatus": 409,
+  "beginRejectedCode": "already-started",
+  "manualLoginCompleted": true,
+  "credentialDataStoredInGit": false,
+  "serverTokenReceiptRemainsSingleUse": true,
+  "externalTrialRestarted": false
+}

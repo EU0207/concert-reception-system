@@ -1,0 +1,12 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const root=new URL('./',import.meta.url),read=n=>JSON.parse(fs.readFileSync(new URL('artifacts/'+n+'.json',root))),hash=s=>createHash('sha256').update(s.replace(/\r\n/g,'\n')).digest('hex');
+let sourceComparisons=0;
+function sources(r){assert.deepEqual(r.sourceHashes,r.endSourceHashes);for(const[p,h]of Object.entries(r.sourceHashes)){assert.equal(hash(fs.readFileSync(new URL(p,root),'utf8')),h,p);sourceComparisons++;}}
+const remote=read('remote-capacity-summary');sources(remote);assert(!remote.failure);assert.equal(remote.decisionId,'TECH-DD91-102');assert.equal(remote.reports.length,6);assert.equal(remote.authUsersCreated,4);assert.equal(remote.googleAccountUsed,true);assert.equal(remote.externalFirebaseConnected,true);
+assert(remote.maxJsonNodes<=4000);assert(remote.maxRootJsonBytes<=1048576);assert(remote.observedApplicationBodyBytes<=20971520);assert.equal(remote.actualStoredCellsPerGenerationAtMost,5);
+for(const key of ['rulesClosed','rootsEmpty','authRestored','billingAccountUnlinked'])assert.equal(remote.cleanup[key],true);assert.equal(remote.cleanup.usersDeleted,4);assert.equal(remote.cleanup.authUsersRemaining,0);
+const recovery=read('login-recovery-summary');sources(recovery);assert.equal(recovery.registeredAuthBeforeRecovery,0);assert.equal(recovery.additionalAuthAttemptAllowance,1);assert.equal(recovery.trialContinued,true);assert.equal(recovery.manualLoginCompleted,true);
+const conservativeApplicationCalls=remote.applicationCalls+recovery.additionalAuthAttemptAllowance;assert(conservativeApplicationCalls<=300);
+assert.equal(remote.productionFreeTierVerified,false);assert.equal(remote.normalClosingVerified,false);assert.equal(remote.sdkInternalWireRequestsMeasured,false);
+const result={decisionId:'TECH-DD91-102-A',externalTrials:1,groups:6,sourceComparisons,allCurrentSourcesMatch:true,applicationCallsCounter:remote.applicationCalls,additionalLoginAttemptAllowance:1,conservativeApplicationCalls,maxJsonNodes:remote.maxJsonNodes,maxRootJsonBytes:remote.maxRootJsonBytes,authUsersCreated:4,authUsersRemaining:0,cleanupVerified:true,manualLoginCompleted:true,fullBusinessFreeTierVerified:false,normalClosingVerified:false,sdkInternalWireRequestsMeasured:false};
+fs.writeFileSync(new URL('artifacts/remote-audit-summary.json',root),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));
