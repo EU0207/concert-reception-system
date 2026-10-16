@@ -26,7 +26,7 @@
     "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
     "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
-    "common-cases.mjs": "a1870c487e0c155c10bd9c1ef95ab5ee6cedb2055d848e4344ceb78e2345d600",
+    "common-cases.mjs": "c820e659a0d9dbafea8f7a0a24e1bf8be97e2e5e10807ec4cd88df1110df3f44",
     "common-local.mjs": "ef35a82c074357857dfb0f0fe58b0aeddb351e146bef4e823b46964626a29c77",
     "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
     "evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
@@ -90,7 +90,7 @@
     "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
     "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
-    "common-cases.mjs": "a1870c487e0c155c10bd9c1ef95ab5ee6cedb2055d848e4344ceb78e2345d600",
+    "common-cases.mjs": "c820e659a0d9dbafea8f7a0a24e1bf8be97e2e5e10807ec4cd88df1110df3f44",
     "common-local.mjs": "ef35a82c074357857dfb0f0fe58b0aeddb351e146bef4e823b46964626a29c77",
     "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
     "evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
@@ -127,17 +127,51 @@
     "../GD91-99/submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
     "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
   },
-  "commonIoCallModel": 97,
+  "reports": [
+    {
+      "id": "K01",
+      "existingCapacityGroups": 6,
+      "normalRuntimeDeviceRegistration": true,
+      "normalBusinessRegistrationAndQr": true,
+      "sourceIndexedQuarantineReviewed": true
+    },
+    {
+      "id": "K02",
+      "normalCloseAllRegisteredDevices": true,
+      "initialActualsCreatedNormally": true,
+      "closedAndActualsNotSeeded": true,
+      "sourceEvents": 2
+    },
+    {
+      "id": "K03",
+      "proxyAcknowledgementAndSkippedStagesDenied": true,
+      "cancellationAudited": true,
+      "oldOperationIdReuseDenied": true,
+      "newOperationIdAccepted": true
+    },
+    {
+      "id": "K04",
+      "exceptionalCloseRequiresLossEvidence": true,
+      "receivedEventsRetained": true,
+      "unknownNotZero": true,
+      "localDeletionNotClaimed": true
+    }
+  ],
+  "maxJsonNodes": 1259,
+  "maxRootJsonBytes": 29585,
+  "existingCapacityGroups": 6,
+  "bootstrapAndStoppedControlSeeded": true,
+  "closedAndActualsNotSeeded": true,
+  "localStore": "RAM",
+  "realIndexedDbVerifiedHere": false,
+  "productionFreeTierVerified": false,
+  "commonIoCallModel": 263,
   "externalSetupAllowance": 24,
   "cleanupReserve": 80,
-  "modelTotalIncludingAllowances": 201,
+  "modelTotalIncludingAllowances": 367,
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "code": "ERR_ASSERTION",
-    "message": "Expected values to be strictly equal:\n\n401 !== 200\n"
   },
   "externalFirebaseConnected": false
 }
