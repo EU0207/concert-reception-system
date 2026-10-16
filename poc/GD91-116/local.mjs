@@ -7,7 +7,7 @@ import {collect} from '../GD91-104/collection.mjs';import {initialMeta} from '..
 import {createPendingShare,prepareShared} from '../GD91-94/pending.mjs';
 import {generated} from './generate.mjs';import {build,snapshot} from './layout.mjs';
 const files=['local.mjs','generate.mjs','layout.mjs','policy.mjs','../GD91-113/database.rules.json','../GD91-110/layout.mjs','../GD91-104/slide.mjs','../GD91-104/collection.mjs'];
-const hashes=()=>sourceHashes(new URL('./',import.meta.url),files),before=hashes(),reports=[];let clean,failure,stage='setup';
+const hashes=()=>sourceHashes(new URL('./',import.meta.url),files),before=hashes(),reports=[];let clean,failure,stage='setup',lastRequest=null;
 const oldRules=JSON.parse(fs.readFileSync(new URL('../GD91-113/database.rules.json',import.meta.url)));
 const apply=rules=>request('.settings/rules',{token:'owner',method:'PUT',body:rules}).then(ok);
 function models(count,lines=1,axis='horizontal'){
@@ -19,10 +19,11 @@ function models(count,lines=1,axis='horizontal'){
 }
 try{
  await apply(generated());const f=await setup(4,1),m=f.manager;
- const send=async(p,method,body)=>{const r=await user(p,m.device,method,body);ok(r);return r.body;},read=p=>send(p,'GET');
- async function publish(generation){const h=await read('head'),checked=await preparePublication(read,send,m,generation);const body=checked.publish(h.revision+1);await send('','PATCH',body);await send('','PATCH',checked.complete());return body;}
+ const send=async(p,method,body)=>{lastRequest={path:p,method,patchPaths:p===''?Object.keys(body??{}):[]};const r=await user(p,m.device,method,body);ok(r);return r.body;},read=p=>send(p,'GET');
+ const baseline=await owner(trial),headless=structuredClone(baseline);delete headless.head;delete headless.operations;delete headless.publicationChecks;
+ async function publish(generation){const h=await read('head'),checked=await preparePublication(read,send,m,generation);const body=checked.publish((h?.revision??0)+1);await send('','PATCH',body);await send('','PATCH',checked.complete());return body;}
  for(const [id,ms] of [['B01',models(16)],['B02',models(1,256)],['B03',models(1,256,'vertical')]]){
-  stage=id;await build(send,id,ms);await publish(id);const view=await snapshot(read,async()=>({rows:{}}));
+  stage=id;await owner(trial,'PUT',headless);await build(send,id,ms);await publish(id);const view=await snapshot(read,async()=>({rows:{}}));
   assert.equal(view.models.length,ms.length);assert.equal(Object.keys(view.cells).length,ms.reduce((n,x)=>n+x.section.cells.length,0));
   reports.push({id,normalSavePublishAndRead:true,sections:ms.length,numberingLines:ms[0].section.lineSettings.length});
  }
@@ -37,8 +38,8 @@ try{
   reports.push({id,direct257LineCreationRejected:true,failedCandidateCollected:true,headPreserved:true});
  }
  for(const [id,ms] of [['B07',models(17)],['B08',models(1,257)]]){
-  stage=id;await apply(oldRules);await oldBuild(send,id,ms);const unreferenced=await owner(trial),h=await read('head');
-  const checked=await preparePublication(read,send,m,id),body=checked.publish(h.revision+1),prepared=await owner(trial);
+  stage=id;await apply(oldRules);await owner(trial,'PUT',headless);await oldBuild(send,id,ms);const unreferenced=await owner(trial),h=await read('head');
+  const checked=await preparePublication(read,send,m,id),body=checked.publish((h?.revision??0)+1),prepared=await owner(trial);
   await send('','PATCH',body);assert.equal((await read('head')).generation,id);
   await owner(trial,'PUT',prepared);await apply(generated());
   assert.equal((await user('',m.device,'PATCH',body)).status,401);assert.deepEqual(await read('head'),h);
@@ -48,7 +49,7 @@ try{
   reports.push({id,oldRulesAcceptedSamePublication:true,newRulesRejectedSamePublication:true,unresolvedPinRetained:true,unreferencedLegacyCandidateCollected:true,ownerFixtureResetNotBusinessRelease:true});
  }
  for(const [id,ms] of [['B09',models(17)],['B10',models(1,257)]]){
-  stage=id;await apply(oldRules);await oldBuild(send,id,ms);const unreferenced=await owner(trial),h=await read('head');
+  stage=id;await apply(oldRules);await owner(trial,'PUT',baseline);await oldBuild(send,id,ms);const unreferenced=await owner(trial),h=await read('head');
   const pending=createPendingShare({user:(s,p,method='GET',body)=>user(p,s.device,method,body),saveFixed:async()=>{}});
   const oldShared=await read('sharedHead'),p=prepareShared(m,id,oldShared?.revision??0,h,1);await pending.reserve(m,p);const prepared=await owner(trial);
   await send('','PATCH',p.body);assert.equal((await read('sharedHead')).generation,id);
@@ -58,7 +59,7 @@ try{
   await owner(trial,'PUT',unreferenced);await collect(read,send,id);assert.equal((await read('generations/'+id+'/meta')).phase,'deleted');
   reports.push({id,oldRulesAcceptedSameSharedSave:true,newRulesRejectedSameSharedSave:true,unresolvedPinRetained:true,unreferencedLegacyCandidateCollected:true,ownerFixtureResetNotBusinessRelease:true});
  }
-}catch(e){failure={stage,code:e.code??e.name,message:e.message};process.exitCode=1;console.error(JSON.stringify(failure));}
+}catch(e){failure={stage,lastRequest,code:e.code??e.name,message:e.message};process.exitCode=1;console.error(JSON.stringify(failure));}
 finally{clean=await cleanup();}
 assert.deepEqual(before,hashes());
 fs.mkdirSync(new URL('artifacts/',import.meta.url),{recursive:true});
