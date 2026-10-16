@@ -1,0 +1,32 @@
+{
+  "sourceHashes": {
+    "input-review.mjs": "b7c15549d5c545339ed97603b6eb35d186dd21099f2dc43ffc3cab2b6de8a917",
+    "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
+    "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
+    "../GD91-102/layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
+    "../GD91-109/artifacts/shape-summary.json": "90064ac7dabe4661602f80208e6442e860a43507c9b660bd42df248e24b26f8c"
+  },
+  "endSourceHashes": {
+    "input-review.mjs": "b7c15549d5c545339ed97603b6eb35d186dd21099f2dc43ffc3cab2b6de8a917",
+    "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
+    "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
+    "../GD91-102/layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
+    "../GD91-109/artifacts/shape-summary.json": "90064ac7dabe4661602f80208e6442e860a43507c9b660bd42df248e24b26f8c"
+  },
+  "sharedCellLimit": 4096,
+  "currentReadAndDeclaredSectionBudget": 4096,
+  "measuredSectionCandidate": 16,
+  "measuredLinesInOneSectionCandidate": 256,
+  "plannerAllows17Sections": true,
+  "plannerAllows257LinesShape": true,
+  "interpretation": "Planner and declared Rules budget inspection only; not a normal server acceptance test.",
+  "proposedInitialProductLimits": {
+    "sections": 16,
+    "numberingLinesPerSection": 256
+  },
+  "proposalApproved": false,
+  "limitsApplied": false,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "tested3000": false
+}
