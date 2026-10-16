@@ -1,0 +1,19 @@
+{
+  "decisionId": "TECH-DD91-102-A",
+  "externalTrials": 1,
+  "groups": 6,
+  "sourceComparisons": 46,
+  "allCurrentSourcesMatch": true,
+  "applicationCallsCounter": 108,
+  "additionalLoginAttemptAllowance": 1,
+  "conservativeApplicationCalls": 109,
+  "maxJsonNodes": 587,
+  "maxRootJsonBytes": 12857,
+  "authUsersCreated": 4,
+  "authUsersRemaining": 0,
+  "cleanupVerified": true,
+  "manualLoginCompleted": true,
+  "fullBusinessFreeTierVerified": false,
+  "normalClosingVerified": false,
+  "sdkInternalWireRequestsMeasured": false
+}
