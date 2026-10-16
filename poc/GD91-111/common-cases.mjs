@@ -32,8 +32,8 @@ export async function runCases(io,m,a){
   const p={operationId:body.commit.operationId,body};await refs.reserve(m,p);const r=await normal(m,'event','PATCH',body);assert.equal(r.status,200);applyModel(state,body);await refs.clear(m,p);
  };
  for(let i=0;i<2;i++)await commit(command(m,state,head,'register','person-'+i,{profile:{name:'架空氏名'+i,displayName:'架空'+i,paid:false,extra:Object.fromEntries(Array.from({length:10},(_,j)=>['f'+j,'']))}}));
- const seats=Object.entries(await read('event/seats')??{});assert.equal(seats.length,0);
- const generation=await read('generations/'+head.generation),seatIds=Object.values(generation.parts).flatMap(p=>Object.values(p.slots).filter(s=>s.kind==='seat').map(s=>s.id));assert.equal(seatIds.length,2);
+ assert.equal((await read('event/commit')).revision,state.commit.revision);
+ const generationMeta=await read('generations/'+head.generation+'/meta'),seatIds=[];for(let n=0;n<generationMeta.expectedParts;n++){const part=await read('generations/'+head.generation+'/parts/p'+n);seatIds.push(...Object.values(part.slots).filter(s=>s.kind==='seat').map(s=>s.id));}assert.equal(seatIds.length,2);
  await commit(bulk(m,state,head,{'person-0':seatIds[0],'person-1':seatIds[1]}));
  for(const id of ['person-0','person-1']){await commit(command(m,state,head,'qrCreate',id));await commit(command(m,state,head,'ticketCheck',id));}
  await io.owner('control','PUT',{...control,state:'operating',revision:2});
