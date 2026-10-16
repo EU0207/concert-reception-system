@@ -12,6 +12,7 @@ const report={sourceHashes,endSourceHashes:sourceHashes,sharedCellLimit:capacity
  measuredSectionCandidate:16,measuredLinesInOneSectionCandidate:256,plannerAllows17Sections:true,plannerAllows257LinesShape:true,
  interpretation:'Planner and declared Rules budget inspection only; not a normal server acceptance test.',
  proposedInitialProductLimits:{sections:16,numberingLinesPerSection:256},proposalApproved:false,limitsApplied:false,
+ collectionRequestModel:{formula:'6 + 2 * expectedParts + 4 * expectedSections',fullyPopulatedParts:256,at16Sections:582,atCurrent4096SectionBudget:16902,actualBillingMeasurement:false},
  externalFirebaseConnected:false,productionImplementation:false,tested3000:false};
 fs.writeFileSync(new URL('artifacts/input-review-summary.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({currentSectionBudget:maxSections,measuredSectionCandidate:16,measuredLinesCandidate:256,productLimitsDecisionRequired:true,limitsApplied:false}));

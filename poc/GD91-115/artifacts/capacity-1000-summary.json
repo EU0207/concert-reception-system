@@ -1,0 +1,1056 @@
+{
+  "sourceHashes": {
+    "../GD91-101/capacity.mjs": "57fe1da835b1094d4f112c24de5b66b659c8ab5a980e60526adc1aec91af6cfc",
+    "../GD91-101/../GD91-96/capacity.mjs": "57363dd7662fa6d95882ea6875d93ba83e2b9a6ba49e774810956173e6eebb4e",
+    "../GD91-101/../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-101/../GD91-99/queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
+    "../GD91-101/../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-101/../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-101/../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-101/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-101/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-101/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-101/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-101/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-101/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-101/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-101/../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-101/../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-101/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-101/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-101/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-101/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-101/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-111/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-111/../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../GD91-111/../GD91-101/capacity.mjs": "57fe1da835b1094d4f112c24de5b66b659c8ab5a980e60526adc1aec91af6cfc",
+    "../GD91-111/../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-111/../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-111/../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "../GD91-111/../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-111/../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-111/../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-111/../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-111/../GD91-104/slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+    "../GD91-111/../GD91-104/snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
+    "../GD91-111/../GD91-105/presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-111/../GD91-105/snapshot.mjs": "b4b38ed1d5740fe7ab83cfcd08bfc7cb79ceee127b2faf8b3cd7c9f3e5762f5e",
+    "../GD91-111/../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-111/../GD91-107/edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
+    "../GD91-111/../GD91-107/generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
+    "../GD91-111/../GD91-107/numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
+    "../GD91-111/../GD91-108/reauth.mjs": "cda4d3a9d41e3d92bd671391a3b76a9bff2c0312a163c840b4acbfea9911f2e6",
+    "../GD91-111/../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../GD91-111/../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
+    "../GD91-111/../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
+    "../GD91-111/../GD91-110/layout.mjs": "c420d283f41aaa98b4f5ce6adaa485b1efdfda93869a9b8e6ed819af66f7210b",
+    "../GD91-111/cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
+    "../GD91-111/capacity.mjs": "3bafc82e939dc6b0d45128e7d054463487ca7dad13b840ad3dd9aeb1ff8056eb",
+    "../GD91-111/closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
+    "../GD91-111/closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
+    "../GD91-111/database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
+    "../GD91-111/emulator-maintenance.mjs": "ece10c525451f98a9e5aadeb372d8fe750f4a477b6d89112978e0f3caaa3e651",
+    "../GD91-111/evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
+    "../GD91-111/execute.mjs": "97f3103a1470d8aedc1658d57040c18feb4fd88f0e80c063e03c58572b3035e1",
+    "../GD91-111/generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
+    "../GD91-111/registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
+    "../GD91-111/run-capacity.mjs": "b37d0b0a289fc86378a3cdf786fc6b927ffa17e4941696fcfeff47fb30835873",
+    "../GD91-111/sdk-client.mjs": "b7573d88ca132d184bc7be12de3cde7111fddd9d1ece8c6b510e4fea19e2bd12",
+    "../GD91-111/setup.mjs": "07432255771b3fdb92b6ddd0ddbbb774182f656505ed4b1784de274dab4daf3f",
+    "../GD91-111/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-111/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-111/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-111/../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-111/../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-111/../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-111/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-111/../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-111/../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-111/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-111/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-111/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-111/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-111/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-111/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-111/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-111/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-111/../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-111/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-111/../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-111/../GD91-99/queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
+    "../GD91-111/../GD91-99/submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
+    "../GD91-111/../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-108/reauth.mjs": "cda4d3a9d41e3d92bd671391a3b76a9bff2c0312a163c840b4acbfea9911f2e6",
+    "../GD91-113/database.rules.json": "7c7d984e269822472ec9b547cf7dc3f69a47369cd6e4e5797162d10a5dcef480",
+    "capacity.mjs": "db202c37ad2f23aef9a47383a970fe008902bef8a97d7e04fbc40cae7c11398d",
+    "emulator-maintenance.mjs": "139218fb5169af1cbbe0b9a20dfe8ec7b7e69f1c59081c5e4ee8ce788fb1fe34",
+    "generate.mjs": "b71855f9643e27846417654b0692708bca32e9c44348854ddc664ba43718af59",
+    "meter.mjs": "83a8ce74f86142cf81fc7236573bb29a970967ec680edb4e4d24fbc95ba804a4",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
+  },
+  "endSourceHashes": {
+    "../GD91-101/capacity.mjs": "57fe1da835b1094d4f112c24de5b66b659c8ab5a980e60526adc1aec91af6cfc",
+    "../GD91-101/../GD91-96/capacity.mjs": "57363dd7662fa6d95882ea6875d93ba83e2b9a6ba49e774810956173e6eebb4e",
+    "../GD91-101/../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-101/../GD91-99/queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
+    "../GD91-101/../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-101/../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-101/../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-101/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-101/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-101/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-101/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-101/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-101/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-101/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-101/../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-101/../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-101/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-101/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-101/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-101/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-101/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-111/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-111/../GD91-08/slide.mjs": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "../GD91-111/../GD91-101/capacity.mjs": "57fe1da835b1094d4f112c24de5b66b659c8ab5a980e60526adc1aec91af6cfc",
+    "../GD91-111/../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-111/../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-111/../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "../GD91-111/../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-111/../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-111/../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-111/../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-111/../GD91-104/slide.mjs": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+    "../GD91-111/../GD91-104/snapshot.mjs": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
+    "../GD91-111/../GD91-105/presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-111/../GD91-105/snapshot.mjs": "b4b38ed1d5740fe7ab83cfcd08bfc7cb79ceee127b2faf8b3cd7c9f3e5762f5e",
+    "../GD91-111/../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-111/../GD91-107/edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
+    "../GD91-111/../GD91-107/generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
+    "../GD91-111/../GD91-107/numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
+    "../GD91-111/../GD91-108/reauth.mjs": "cda4d3a9d41e3d92bd671391a3b76a9bff2c0312a163c840b4acbfea9911f2e6",
+    "../GD91-111/../GD91-10/projection.mjs": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "../GD91-111/../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
+    "../GD91-111/../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
+    "../GD91-111/../GD91-110/layout.mjs": "c420d283f41aaa98b4f5ce6adaa485b1efdfda93869a9b8e6ed819af66f7210b",
+    "../GD91-111/cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
+    "../GD91-111/capacity.mjs": "3bafc82e939dc6b0d45128e7d054463487ca7dad13b840ad3dd9aeb1ff8056eb",
+    "../GD91-111/closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
+    "../GD91-111/closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
+    "../GD91-111/database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
+    "../GD91-111/emulator-maintenance.mjs": "ece10c525451f98a9e5aadeb372d8fe750f4a477b6d89112978e0f3caaa3e651",
+    "../GD91-111/evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
+    "../GD91-111/execute.mjs": "97f3103a1470d8aedc1658d57040c18feb4fd88f0e80c063e03c58572b3035e1",
+    "../GD91-111/generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
+    "../GD91-111/registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
+    "../GD91-111/run-capacity.mjs": "b37d0b0a289fc86378a3cdf786fc6b927ffa17e4941696fcfeff47fb30835873",
+    "../GD91-111/sdk-client.mjs": "b7573d88ca132d184bc7be12de3cde7111fddd9d1ece8c6b510e4fea19e2bd12",
+    "../GD91-111/setup.mjs": "07432255771b3fdb92b6ddd0ddbbb774182f656505ed4b1784de274dab4daf3f",
+    "../GD91-111/../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-111/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-111/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-111/../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-111/../GD91-86/sdk-adapter.mjs": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "../GD91-111/../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-111/../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-111/../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-111/../GD91-88/sdk-adapter.mjs": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "../GD91-111/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-111/../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-111/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-111/../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-111/../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-111/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-111/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-111/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-111/../GD91-96/queue.mjs": "698fd6ed8ca95c3b71189fb96c1fcffdfa958027ea760cf0148f92ab31faa847",
+    "../GD91-111/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-111/../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-111/../GD91-99/queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
+    "../GD91-111/../GD91-99/submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
+    "../GD91-111/../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c",
+    "../GD91-103/model.mjs": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-108/reauth.mjs": "cda4d3a9d41e3d92bd671391a3b76a9bff2c0312a163c840b4acbfea9911f2e6",
+    "../GD91-113/database.rules.json": "7c7d984e269822472ec9b547cf7dc3f69a47369cd6e4e5797162d10a5dcef480",
+    "capacity.mjs": "db202c37ad2f23aef9a47383a970fe008902bef8a97d7e04fbc40cae7c11398d",
+    "emulator-maintenance.mjs": "139218fb5169af1cbbe0b9a20dfe8ec7b7e69f1c59081c5e4ee8ce788fb1fe34",
+    "generate.mjs": "b71855f9643e27846417654b0692708bca32e9c44348854ddc664ba43718af59",
+    "meter.mjs": "83a8ce74f86142cf81fc7236573bb29a970967ec680edb4e4d24fbc95ba804a4",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-86/model.mjs": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "../GD91-88/receipt-client.mjs": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-89/sdk-client.mjs": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-90/model.mjs": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "../GD91-91/model.mjs": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
+    "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
+  },
+  "reports": [
+    {
+      "closing": {
+        "people": 1000,
+        "registeredDevices": 8,
+        "normalRuntimeDeviceRegistration": true,
+        "bootstrapDevicesAndEndedControlSeeded": true,
+        "closedAndActualsNotSeeded": true,
+        "sourceEvents": 1000,
+        "geometryCells": 4096,
+        "sections": 16,
+        "partitions": 16,
+        "allNamesAndArrivalsPreserved": true,
+        "normalSdkReferencesReleased": true,
+        "result": {
+          "activeUnarrived": 0,
+          "arrived": 1000,
+          "closedAt": 1792173524180,
+          "confirmedAbsences": true,
+          "confirmedConflicts": true,
+          "confirmedDevices": true,
+          "confirmedPaper": true,
+          "controlRevision": 4,
+          "deviceCount": 8,
+          "humanUid": "KJhcqkvsj72dh5KHDH8hBqej7vpq",
+          "lossCount": 0,
+          "managerDeviceUid": "qbGm0UwUHObZFW80VjpskeQoeXSG",
+          "mode": "normal",
+          "operationId": "84828622-9b3a-441a-9557-c7f2a9bf1e75",
+          "peopleCount": 1000,
+          "performanceName": "架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架",
+          "seatCount": 1000,
+          "unreceivedPossible": false,
+          "venueAddress": "所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所所",
+          "venueName": "会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会会"
+        },
+        "trace": {
+          "progressWrites": 2267,
+          "progressLookups": 0,
+          "finalWrites": 1
+        },
+        "requests": {
+          "requests": 13732,
+          "requestBodyBytes": 67779734,
+          "responseBodyBytes": 907446616,
+          "ownerRequests": 1154,
+          "userRequests": 12578
+        },
+        "localStore": "RAM",
+        "fullBusinessFreeTierVerified": false
+      },
+      "normalGetRetries": 5,
+      "reauthentication": {
+        "refreshes": 3,
+        "emulatorAuthRequests": 3,
+        "sessionRequests": 3
+      },
+      "people": 1000,
+      "nonSeatCells": 3096,
+      "sections": 16,
+      "actualSdkEnvironments": 6,
+      "snapshotPassesPerEnvironment": 3,
+      "normalRegistrationToIssuedQr": true,
+      "ownerPersonOrTicketWrites": 0,
+      "managerReservationRequestsIncluded": true,
+      "stages": {
+        "register": {
+          "requests": 3001,
+          "requestBodyBytes": 8008300,
+          "responseBodyBytes": 8009294,
+          "ownerRequests": 0,
+          "userRequests": 3001,
+          "elapsedMs": 528788,
+          "emulatorDiagnostics": {
+            "requests": 60,
+            "ownerRequests": 60,
+            "userRequests": 0,
+            "requestBodyBytes": 25269960,
+            "responseBodyBytes": 204677176
+          }
+        },
+        "bulkAssign": {
+          "requests": 9,
+          "requestBodyBytes": 742019,
+          "responseBodyBytes": 125519,
+          "ownerRequests": 0,
+          "userRequests": 9,
+          "elapsedMs": 209325,
+          "emulatorDiagnostics": {
+            "requests": 0,
+            "ownerRequests": 0,
+            "userRequests": 0,
+            "requestBodyBytes": 0,
+            "responseBodyBytes": 0
+          }
+        },
+        "qrCreate": {
+          "requests": 3001,
+          "requestBodyBytes": 2391679,
+          "responseBodyBytes": 2395673,
+          "ownerRequests": 0,
+          "userRequests": 3001,
+          "elapsedMs": 438413,
+          "emulatorDiagnostics": {
+            "requests": 60,
+            "ownerRequests": 60,
+            "userRequests": 0,
+            "requestBodyBytes": 25269960,
+            "responseBodyBytes": 295563668
+          }
+        },
+        "ticketCheck": {
+          "requests": 3000,
+          "requestBodyBytes": 2190450,
+          "responseBodyBytes": 2162450,
+          "ownerRequests": 0,
+          "userRequests": 3000,
+          "elapsedMs": 293996,
+          "emulatorDiagnostics": {
+            "requests": 60,
+            "ownerRequests": 60,
+            "userRequests": 0,
+            "requestBodyBytes": 25269960,
+            "responseBodyBytes": 320866124
+          }
+        }
+      },
+      "preparationRequestsIncludingLayoutAndDiagnostics": {
+        "requests": 9525,
+        "requestBodyBytes": 103826503,
+        "responseBodyBytes": 935920263,
+        "ownerRequests": 210,
+        "userRequests": 9315
+      },
+      "normalOperationRequests": 9011,
+      "maxRequestBytes": 741554,
+      "maxElapsedMs": 209188,
+      "resultLookups": 1,
+      "sameIdResendWrites": 0,
+      "snapshotStats": [
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 381,
+          "geometryBodyBytes": 2653109
+        },
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 381,
+          "geometryBodyBytes": 2653109
+        },
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 381,
+          "geometryBodyBytes": 2653109
+        },
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 381,
+          "geometryBodyBytes": 2653109
+        },
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 381,
+          "geometryBodyBytes": 2653109
+        },
+        {
+          "sdkGetOperations": 105,
+          "responseBodyBytes": 817185,
+          "geometrySdkGets": 381,
+          "geometryBodyBytes": 2653109
+        }
+      ],
+      "immutableGeometryDownloadedPerEnvironment": 1,
+      "receiptLeaseConnected": true,
+      "reception": {
+        "requests": 2000,
+        "requestBodyBytes": 1317462,
+        "responseBodyBytes": 1230462,
+        "ownerRequests": 0,
+        "userRequests": 2000,
+        "elapsedMs": 61646,
+        "eventsPerEnvironment": [
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000
+        ],
+        "responseBodyBytesPerEnvironment": [
+          576783,
+          576783,
+          576783,
+          576783,
+          576783,
+          576783
+        ]
+      },
+      "reconnectEvents": 0,
+      "rootJsonBytes": 14793375,
+      "realIndexedDbVerifiedHere": false,
+      "storageRecoveryVerifiedSeparately": true,
+      "controlAndDeviceBootstrapPrecondition": true,
+      "fullBusinessFreeTierVerified": false
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "adaptedFrom": "../GD91-101/capacity.mjs",
+  "executedRulesSource": "../GD91-113/database.rules.json",
+  "transportAdaptation": "GD91-99 common sequence with legacy ACK shape",
+  "runtime": {
+    "javaHeapOption": "-Xmx8g",
+    "isolatedEmulatorPerPeople": true
+  },
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "layoutSchemaVersion": 2,
+  "businessSchemaVersion": 3,
+  "emulatorMaintenance": {
+    "enabled": true,
+    "boundaries": [
+      {
+        "stage": "register",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 3722001408,
+        "usedAfterGc": 147673088,
+        "elapsedMs": 8207
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 596777984,
+        "usedAfterGc": 148919296,
+        "elapsedMs": 4608
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 710142976,
+        "usedAfterGc": 150259712,
+        "elapsedMs": 5287
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 384769024,
+        "usedAfterGc": 151924736,
+        "elapsedMs": 4107
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 389437440,
+        "usedAfterGc": 152813568,
+        "elapsedMs": 4368
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 393021440,
+        "usedAfterGc": 154895360,
+        "elapsedMs": 4169
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 389195776,
+        "usedAfterGc": 155627520,
+        "elapsedMs": 4094
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 495805440,
+        "usedAfterGc": 156972032,
+        "elapsedMs": 4076
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 902463488,
+        "usedAfterGc": 158114816,
+        "elapsedMs": 4087
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 404087808,
+        "usedAfterGc": 159374336,
+        "elapsedMs": 4410
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 764664832,
+        "usedAfterGc": 160742400,
+        "elapsedMs": 4221
+      },
+      {
+        "stage": "bulkAssign",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 186304512,
+        "usedAfterGc": 161190912,
+        "elapsedMs": 4120
+      },
+      {
+        "stage": "qrCreate",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 1624957952,
+        "usedAfterGc": 162446336,
+        "elapsedMs": 4640
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 523628544,
+        "usedAfterGc": 163356672,
+        "elapsedMs": 3972
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 703052800,
+        "usedAfterGc": 164176896,
+        "elapsedMs": 4466
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 477472768,
+        "usedAfterGc": 164913152,
+        "elapsedMs": 4455
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 780027904,
+        "usedAfterGc": 165009408,
+        "elapsedMs": 4246
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 624396288,
+        "usedAfterGc": 165834752,
+        "elapsedMs": 3453
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 482101248,
+        "usedAfterGc": 166910976,
+        "elapsedMs": 2426
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 570812416,
+        "usedAfterGc": 167685120,
+        "elapsedMs": 2651
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 501596160,
+        "usedAfterGc": 167826432,
+        "elapsedMs": 2611
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 685872128,
+        "usedAfterGc": 168477696,
+        "elapsedMs": 2373
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 493000704,
+        "usedAfterGc": 169338880,
+        "elapsedMs": 2597
+      },
+      {
+        "stage": "ticketCheck",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 207172608,
+        "usedAfterGc": 169217024,
+        "elapsedMs": 2395
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 631021568,
+        "usedAfterGc": 169756672,
+        "elapsedMs": 2505
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 519115776,
+        "usedAfterGc": 169921536,
+        "elapsedMs": 2447
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 692350976,
+        "usedAfterGc": 170514432,
+        "elapsedMs": 2439
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 655040512,
+        "usedAfterGc": 170800128,
+        "elapsedMs": 2515
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 436173824,
+        "usedAfterGc": 170891264,
+        "elapsedMs": 2599
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 575254528,
+        "usedAfterGc": 171641856,
+        "elapsedMs": 3167
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 436545536,
+        "usedAfterGc": 171826176,
+        "elapsedMs": 2767
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 522193920,
+        "usedAfterGc": 172674048,
+        "elapsedMs": 2730
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 437031936,
+        "usedAfterGc": 172764160,
+        "elapsedMs": 2491
+      },
+      {
+        "stage": "preparation-batch",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 445085696,
+        "usedAfterGc": 173165568,
+        "elapsedMs": 2488
+      },
+      {
+        "stage": "before-sdk",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 211540992,
+        "usedAfterGc": 173285376,
+        "elapsedMs": 2523
+      },
+      {
+        "stage": "closing-prepare",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 2347547648,
+        "usedAfterGc": 177955840,
+        "elapsedMs": 2630
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 459285504,
+        "usedAfterGc": 178708480,
+        "elapsedMs": 2561
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 458163200,
+        "usedAfterGc": 178756608,
+        "elapsedMs": 2632
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 484675584,
+        "usedAfterGc": 178609152,
+        "elapsedMs": 2533
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 461190144,
+        "usedAfterGc": 178667520,
+        "elapsedMs": 2492
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 493949952,
+        "usedAfterGc": 178570240,
+        "elapsedMs": 2722
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 456111104,
+        "usedAfterGc": 179756032,
+        "elapsedMs": 2522
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 469501952,
+        "usedAfterGc": 178862080,
+        "elapsedMs": 2471
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 464413696,
+        "usedAfterGc": 179127296,
+        "elapsedMs": 2538
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 424323072,
+        "usedAfterGc": 178909184,
+        "elapsedMs": 2553
+      },
+      {
+        "stage": "closing-sources",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 489046016,
+        "usedAfterGc": 178930688,
+        "elapsedMs": 2608
+      },
+      {
+        "stage": "closing-geometry",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 214581248,
+        "usedAfterGc": 178845696,
+        "elapsedMs": 2561
+      },
+      {
+        "stage": "closing-geometry",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 234746880,
+        "usedAfterGc": 178991104,
+        "elapsedMs": 2408
+      },
+      {
+        "stage": "closing-geometry",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 233709568,
+        "usedAfterGc": 179110912,
+        "elapsedMs": 2531
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 224929792,
+        "usedAfterGc": 178685952,
+        "elapsedMs": 2572
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 301747200,
+        "usedAfterGc": 179085312,
+        "elapsedMs": 2626
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 302171136,
+        "usedAfterGc": 179195904,
+        "elapsedMs": 2682
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 301528064,
+        "usedAfterGc": 179458048,
+        "elapsedMs": 2669
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 302497792,
+        "usedAfterGc": 179296256,
+        "elapsedMs": 2483
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 302169088,
+        "usedAfterGc": 179696640,
+        "elapsedMs": 2534
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 302311424,
+        "usedAfterGc": 179505152,
+        "elapsedMs": 2515
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 300689408,
+        "usedAfterGc": 180158464,
+        "elapsedMs": 2662
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 303100928,
+        "usedAfterGc": 179892224,
+        "elapsedMs": 2474
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 303684608,
+        "usedAfterGc": 180045824,
+        "elapsedMs": 2543
+      },
+      {
+        "stage": "closing-facts",
+        "applicationDataHashUnchanged": true,
+        "exactRulesRestored": true,
+        "usedBeforeGc": 623571968,
+        "usedAfterGc": 180206592,
+        "elapsedMs": 2739
+      }
+    ],
+    "observations": [],
+    "metrics": {
+      "requests": 360,
+      "ownerRequests": 360,
+      "userRequests": 0,
+      "requestBodyBytes": 151619760,
+      "responseBodyBytes": 1829040192
+    },
+    "measuredMaxHeapBytes": 8589934592,
+    "rulesHash": "59cd93a42c06cd0243c8f87f75c5eeec70ee2086d6b580b3a67f8749ad515a13"
+  },
+  "restMeter": {
+    "preparation:diagnostic": {
+      "requests": 7,
+      "requestBodyBytes": 2527970,
+      "responseBodyBytes": 1029,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "preparation:normal": {
+      "requests": 304,
+      "requestBodyBytes": 4575177,
+      "responseBodyBytes": 3841179,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "register:diagnostic": {
+      "requests": 66,
+      "requestBodyBytes": 27796956,
+      "responseBodyBytes": 217048422,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "register:normal": {
+      "requests": 3001,
+      "requestBodyBytes": 8008300,
+      "responseBodyBytes": 8009294,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "bulkAssign:diagnostic": {
+      "requests": 6,
+      "requestBodyBytes": 2526996,
+      "responseBodyBytes": 27094440,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "bulkAssign:normal": {
+      "requests": 9,
+      "requestBodyBytes": 742019,
+      "responseBodyBytes": 125519,
+      "failedResponses": 0,
+      "transportErrors": 6
+    },
+    "qrCreate:diagnostic": {
+      "requests": 66,
+      "requestBodyBytes": 27796956,
+      "responseBodyBytes": 323434310,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "qrCreate:normal": {
+      "requests": 3001,
+      "requestBodyBytes": 2391679,
+      "responseBodyBytes": 2395673,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "ticketCheck:diagnostic": {
+      "requests": 67,
+      "requestBodyBytes": 27797110,
+      "responseBodyBytes": 351808116,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "ticketCheck:normal": {
+      "requests": 3000,
+      "requestBodyBytes": 2190450,
+      "responseBodyBytes": 2162450,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "sdk-setup:diagnostic": {
+      "requests": 6,
+      "requestBodyBytes": 2526996,
+      "responseBodyBytes": 33027398,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "sdk-setup:normal": {
+      "requests": 36,
+      "requestBodyBytes": 6336,
+      "responseBodyBytes": 7014,
+      "failedResponses": 6,
+      "transportErrors": 0
+    },
+    "reception:normal": {
+      "requests": 2000,
+      "requestBodyBytes": 1317462,
+      "responseBodyBytes": 1230462,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "reception:diagnostic": {
+      "requests": 1,
+      "requestBodyBytes": 0,
+      "responseBodyBytes": 14793375,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "closing:diagnostic": {
+      "requests": 1158,
+      "requestBodyBytes": 63176331,
+      "responseBodyBytes": 892475459,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "closing:normal": {
+      "requests": 12579,
+      "requestBodyBytes": 4604834,
+      "responseBodyBytes": 14974654,
+      "failedResponses": 0,
+      "transportErrors": 0
+    },
+    "cleanup:diagnostic": {
+      "requests": 4,
+      "requestBodyBytes": 40,
+      "responseBodyBytes": 63,
+      "failedResponses": 0,
+      "transportErrors": 0
+    }
+  },
+  "postClosingRootJsonBytes": 15397187
+}

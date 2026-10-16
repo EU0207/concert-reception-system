@@ -1,0 +1,32 @@
+{
+  "sourceHashes": {
+    "collection-budget.mjs": "5b2cfbca25d1072f12720f158a401630c3c2655cec61ecbb76e2ce6337fdec95",
+    "../GD91-104/collection.mjs": "be39296d4bcd224baca59c2671f5444e169086ab992d5b41a04c2002d4414cc6",
+    "../GD91-102/collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604"
+  },
+  "endSourceHashes": {
+    "collection-budget.mjs": "5b2cfbca25d1072f12720f158a401630c3c2655cec61ecbb76e2ce6337fdec95",
+    "../GD91-104/collection.mjs": "be39296d4bcd224baca59c2671f5444e169086ab992d5b41a04c2002d4414cc6",
+    "../GD91-102/collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604"
+  },
+  "reports": [
+    {
+      "sections": 16,
+      "parts": 256,
+      "requests": 582,
+      "operationResultsNotTargeted": true,
+      "normalPermissionOrRulesVerified": false
+    },
+    {
+      "sections": 4096,
+      "parts": 256,
+      "requests": 16902,
+      "operationResultsNotTargeted": true,
+      "normalPermissionOrRulesVerified": false
+    }
+  ],
+  "method": "Real collector called with RAM read/send counters; not server acceptance or billable traffic.",
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "tested3000": false
+}
