@@ -53,7 +53,7 @@
     "execute.mjs": "97f3103a1470d8aedc1658d57040c18feb4fd88f0e80c063e03c58572b3035e1",
     "generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
     "registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
-    "run-capacity.mjs": "569855b83f41b2d3de6890c31d57ee48ce866845d164dafadec00ad18ea501bd",
+    "run-capacity.mjs": "b37d0b0a289fc86378a3cdf786fc6b927ffa17e4941696fcfeff47fb30835873",
     "sdk-client.mjs": "b7573d88ca132d184bc7be12de3cde7111fddd9d1ece8c6b510e4fea19e2bd12",
     "setup.mjs": "07432255771b3fdb92b6ddd0ddbbb774182f656505ed4b1784de274dab4daf3f",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
@@ -134,7 +134,7 @@
     "execute.mjs": "97f3103a1470d8aedc1658d57040c18feb4fd88f0e80c063e03c58572b3035e1",
     "generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
     "registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
-    "run-capacity.mjs": "569855b83f41b2d3de6890c31d57ee48ce866845d164dafadec00ad18ea501bd",
+    "run-capacity.mjs": "b37d0b0a289fc86378a3cdf786fc6b927ffa17e4941696fcfeff47fb30835873",
     "sdk-client.mjs": "b7573d88ca132d184bc7be12de3cde7111fddd9d1ece8c6b510e4fea19e2bd12",
     "setup.mjs": "07432255771b3fdb92b6ddd0ddbbb774182f656505ed4b1784de274dab4daf3f",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
@@ -178,18 +178,18 @@
         "result": {
           "activeUnarrived": 0,
           "arrived": 4,
-          "closedAt": 1792142403527,
+          "closedAt": 1792145916595,
           "confirmedAbsences": true,
           "confirmedConflicts": true,
           "confirmedDevices": true,
           "confirmedPaper": true,
           "controlRevision": 4,
           "deviceCount": 8,
-          "humanUid": "sH5mX08rmDkcmKCEmJUL5z3S0hQO",
+          "humanUid": "zDSFY8ocGuToO7xL4NrXDTRACRly",
           "lossCount": 0,
-          "managerDeviceUid": "7a3248i8NTXSYvUdnOhmnsD6J6iN",
+          "managerDeviceUid": "TmcC7VDz8nOoukfNFLCoTGtuuv5n",
           "mode": "normal",
-          "operationId": "2430910e-e3ed-415d-91bb-a6d61dfadd84",
+          "operationId": "487f2a3d-efce-4622-97d8-1c6a22860c1c",
           "peopleCount": 4,
           "performanceName": "架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架",
           "seatCount": 4,
@@ -233,7 +233,7 @@
           "responseBodyBytes": 31880,
           "ownerRequests": 0,
           "userRequests": 12,
-          "elapsedMs": 1216,
+          "elapsedMs": 2002,
           "emulatorDiagnostics": {
             "requests": 0,
             "ownerRequests": 0,
@@ -248,7 +248,7 @@
           "responseBodyBytes": 3662,
           "ownerRequests": 0,
           "userRequests": 3,
-          "elapsedMs": 587,
+          "elapsedMs": 955,
           "emulatorDiagnostics": {
             "requests": 0,
             "ownerRequests": 0,
@@ -263,7 +263,7 @@
           "responseBodyBytes": 9408,
           "ownerRequests": 0,
           "userRequests": 12,
-          "elapsedMs": 1280,
+          "elapsedMs": 1952,
           "emulatorDiagnostics": {
             "requests": 0,
             "ownerRequests": 0,
@@ -278,7 +278,7 @@
           "responseBodyBytes": 8532,
           "ownerRequests": 0,
           "userRequests": 12,
-          "elapsedMs": 1072,
+          "elapsedMs": 1366,
           "emulatorDiagnostics": {
             "requests": 0,
             "ownerRequests": 0,
@@ -297,7 +297,7 @@
       },
       "normalOperationRequests": 39,
       "maxRequestBytes": 7513,
-      "maxElapsedMs": 547,
+      "maxElapsedMs": 910,
       "resultLookups": 0,
       "sameIdResendWrites": 0,
       "snapshotStats": [
@@ -346,7 +346,7 @@
         "responseBodyBytes": 4884,
         "ownerRequests": 0,
         "userRequests": 8,
-        "elapsedMs": 396,
+        "elapsedMs": 689,
         "eventsPerEnvironment": [
           4,
           4,
@@ -395,65 +395,65 @@
         "stage": "register",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 399366144,
-        "usedAfterGc": 133114880,
-        "elapsedMs": 2075
+        "usedBeforeGc": 609500160,
+        "usedAfterGc": 133199872,
+        "elapsedMs": 3819
       },
       {
         "stage": "bulkAssign",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 258381824,
-        "usedAfterGc": 133053440,
-        "elapsedMs": 2013
+        "usedBeforeGc": 255130624,
+        "usedAfterGc": 133498880,
+        "elapsedMs": 3688
       },
       {
         "stage": "qrCreate",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 212822016,
-        "usedAfterGc": 133164032,
-        "elapsedMs": 2023
+        "usedBeforeGc": 209236992,
+        "usedAfterGc": 133148672,
+        "elapsedMs": 3819
       },
       {
         "stage": "ticketCheck",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 286254080,
-        "usedAfterGc": 133537792,
-        "elapsedMs": 2178
+        "usedBeforeGc": 284143616,
+        "usedAfterGc": 133352448,
+        "elapsedMs": 3791
       },
       {
         "stage": "before-sdk",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 257302528,
-        "usedAfterGc": 134046720,
-        "elapsedMs": 2108
+        "usedBeforeGc": 254004224,
+        "usedAfterGc": 133473280,
+        "elapsedMs": 3602
       },
       {
         "stage": "closing-prepare",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 296778752,
-        "usedAfterGc": 134928384,
-        "elapsedMs": 2097
+        "usedBeforeGc": 309350400,
+        "usedAfterGc": 135058432,
+        "elapsedMs": 3778
       },
       {
         "stage": "closing-geometry",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 212767744,
-        "usedAfterGc": 135052288,
-        "elapsedMs": 2006
+        "usedBeforeGc": 210619392,
+        "usedAfterGc": 134944768,
+        "elapsedMs": 3808
       },
       {
         "stage": "closing-facts",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 141705216,
-        "usedAfterGc": 135621632,
-        "elapsedMs": 2030
+        "usedBeforeGc": 143635456,
+        "usedAfterGc": 135008256,
+        "elapsedMs": 3753
       }
     ],
     "observations": [],
