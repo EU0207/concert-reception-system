@@ -1,6 +1,6 @@
 # GD91-110 保存・取得の共通容量予算
 
-状態：Draft。読者：開発者・設計担当者・テスト担当者。#167の残条件を対象とする。PR #211は承認・main統合済み。TECH-DD91-101のAに従い、本番コードではなく隔離PoCへ共通上限を適用する。
+状態：In Review。読者：開発者・設計担当者・テスト担当者。#167の残条件を対象とする。PR #211は承認・main統合済み。TECH-DD91-101のAに従い、隔離PoCへ共通上限を適用した。本番コードは未実装。
 
 ## 処理とデータ
 
@@ -14,11 +14,35 @@
 
 区画数の取得予算は、各区画が最低1セルを持つことから総セル数を上界にする。これは4,096区画の性能保証ではない。製品の区画数と列設定数の案は既存の評価範囲と区別して扱う。将来の増設も同じ保存形式と席IDを維持し、設定と資源予算を再検証する。
 
-## 中間結果と残条件
+## 結果と残条件
 
-5境界が合格。複数区画の合計超過を拒否し、ちょうど4,096セルを保存・公開・取得できた。既定取得を越える予算指定を通信前に拒否し、古い過大候補を通常権限で回収できた。
+同じ生成Rulesで以下を確認した。Google本人はローカルの架空認証であり、外部Firebaseへ接続していない。
 
-同じRulesで既存業務の回帰試験を継続する。共有・確定の端末再開と、外部代表経路のローカルモデルもまとめて確認する。締め・全登録端末の回収と全業務無料成立は未完了。#167はOpen。
+| 確認 | 結果・原データ |
+|---|---|
+| 境界5群 | [validate-summary.json](artifacts/validate-summary.json)。複数区画の合計超過を拒否。ちょうど4,096セルを保存・公開・取得。取得予算の迂回を拒否し、旧過大候補を通常権限で回収 |
+| 既存216群・読込み比較4条件 | `artifacts/regression-*-summary.json`。区画・席編集から受付・隔離・採否・締め後訂正を回帰確認。比較は予算停止を含む期待結果を再現 |
+| 採番14群 | [numbering-regression-summary.json](artifacts/numbering-regression-summary.json)。既存番号・割当を維持し、競合と部分更新を拒否 |
+| 代表6経路 | [common-local-summary.json](artifacts/common-local-summary.json)。小構成の保存・超過拒否、共有・確定と一般受付の取得を接続。開始18・後処理60の予約込み呼出しモデル153。外部実測ではない |
+| 復元8群 | [retention-summary.json](artifacts/retention-summary.json)。実REST応答切断と暗号化IndexedDB・Edge再起動。同じ操作IDを照会し、権限停止・期限切れは復号前に拒否 |
+
+[audit.mjs](audit.mjs)で全結果の前後ハッシュ965件を現在ソースと照合し、生成Rulesの一致も検査した。[統合結果](artifacts/integrated-summary.json)へ件数を記録する。全拒否Rulesと試行根の消去を確認済み。Emulatorの試験補助は8GiBを維持し、業務データ不変と同一Rulesへの復帰を照合した。
+
+5境界の端末保存順と代表6経路の固定送信内容はRAMの試験用保存。実IndexedDBでの再開は別の復元8群で確認した。古い過大候補はownerによる前提投入だが、公開拒否と回収は通常権限で試験した。締め後訂正の回帰合格は、通常の締め・実績生成の完成を意味しない。
+
+#167の条件3はPR #211で承認済み。条件1・2・4は残る。製品の区画数・文字長などの上限全体、締め・全登録端末の回収と全業務無料成立は未完了。実機受入も未実施で、#167はOpenを維持する。
+
+## 再現
+
+既存のPoC依存を使用し、新しい依存は追加しない。リポジトリ直下で順に実行する。9000・9191・4181を使用し、demo以外へ接続しない。
+
+```text
+node poc/GD91-110/check-generation.mjs
+node poc/GD91-110/run-local.mjs validate.mjs
+node poc/GD91-110/run-regression.mjs regression.mjs
+node poc/GD91-110/run-local.mjs common-local.mjs retention-local.mjs numbering-regression.mjs
+node poc/GD91-110/audit.mjs
+```
 
 ## 外部確認の準備（TECH-DD91-102）
 
