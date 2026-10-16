@@ -1,0 +1,124 @@
+{
+  "sourceHashes": {
+    "budget.mjs": "746b168eb15d54654c0185fc1a67e4d627a974e28852d925bc298f4a71e3c1ab",
+    "../GD91-111/capacity.mjs": "3bafc82e939dc6b0d45128e7d054463487ca7dad13b840ad3dd9aeb1ff8056eb",
+    "../GD91-101/capacity.mjs": "57fe1da835b1094d4f112c24de5b66b659c8ab5a980e60526adc1aec91af6cfc",
+    "../GD91-111/emulator-maintenance.mjs": "ece10c525451f98a9e5aadeb372d8fe750f4a477b6d89112978e0f3caaa3e651",
+    "../GD91-111/sdk-client.mjs": "b7573d88ca132d184bc7be12de3cde7111fddd9d1ece8c6b510e4fea19e2bd12",
+    "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
+    "../GD91-111/artifacts/capacity-600-summary.json": "a1ddd07ac6990465d52192eee3220a6cca06d1c219853da5780eb62ac43d828a",
+    "../GD91-111/artifacts/capacity-1000-summary.json": "740767da3c5d61addb68ad1437c9da6aac1fac1bdbea190678e19a02160799db"
+  },
+  "endSourceHashes": {
+    "budget.mjs": "746b168eb15d54654c0185fc1a67e4d627a974e28852d925bc298f4a71e3c1ab",
+    "../GD91-111/capacity.mjs": "3bafc82e939dc6b0d45128e7d054463487ca7dad13b840ad3dd9aeb1ff8056eb",
+    "../GD91-101/capacity.mjs": "57fe1da835b1094d4f112c24de5b66b659c8ab5a980e60526adc1aec91af6cfc",
+    "../GD91-111/emulator-maintenance.mjs": "ece10c525451f98a9e5aadeb372d8fe750f4a477b6d89112978e0f3caaa3e651",
+    "../GD91-111/sdk-client.mjs": "b7573d88ca132d184bc7be12de3cde7111fddd9d1ece8c6b510e4fea19e2bd12",
+    "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
+    "../GD91-111/artifacts/capacity-600-summary.json": "a1ddd07ac6990465d52192eee3220a6cca06d1c219853da5780eb62ac43d828a",
+    "../GD91-111/artifacts/capacity-1000-summary.json": "740767da3c5d61addb68ad1437c9da6aac1fac1bdbea190678e19a02160799db"
+  },
+  "officialCheckedOn": "2026-10-17",
+  "quota": {
+    "plan": "Spark",
+    "storageBytesConservativeDecimal": 1000000000,
+    "downloadBytesPerMonthConservativeDecimal": 10000000000,
+    "simultaneousConnections": 100,
+    "dailyFirestoreWriteQuotaApplicable": false
+  },
+  "officialSources": [
+    "https://firebase.google.com/pricing",
+    "https://firebase.google.com/docs/database/usage/billing",
+    "https://firebase.google.com/docs/database/usage/limits"
+  ],
+  "results": [
+    {
+      "people": 600,
+      "classifiedPreparation": {
+        "requests": 5406,
+        "requestBodyBytes": 7991317,
+        "responseBodyBytes": 7610213
+      },
+      "snapshots": {
+        "sdkGets": 396,
+        "geometrySdkGets": 2286,
+        "responseBodyBytes": 15460428
+      },
+      "reception": {
+        "restRequests": 1200,
+        "restResponseBodyBytes": 738058,
+        "listenerResponseBodyBytes": 2075892
+      },
+      "classifiedResponseBodySubtotal": 25884591,
+      "closing": {
+        "normalRequests": 7778,
+        "ownerRequests": 705,
+        "mixedResponseBodyBytes": 429232138,
+        "normalResponseBodyBytes": null
+      },
+      "preClosingRootJsonBytes": 9681830,
+      "postClosingStorageBytes": null,
+      "emulatorDiagnostics": {
+        "requests": 240,
+        "ownerRequests": 240,
+        "userRequests": 0,
+        "requestBodyBytes": 101073360,
+        "responseBodyBytes": 879652974
+      },
+      "invalidGlobalDiagnosticSubtraction": -2815113,
+      "fullPreparationAndClosingBytesKnown": false,
+      "wireOverheadMeasured": false,
+      "fullBusinessFreeTierVerified": false
+    },
+    {
+      "people": 1000,
+      "classifiedPreparation": {
+        "requests": 9008,
+        "requestBodyBytes": 13332448,
+        "responseBodyBytes": 12692936
+      },
+      "snapshots": {
+        "sdkGets": 630,
+        "geometrySdkGets": 2286,
+        "responseBodyBytes": 20821764
+      },
+      "reception": {
+        "restRequests": 2000,
+        "restResponseBodyBytes": 1230462,
+        "listenerResponseBodyBytes": 3460698
+      },
+      "classifiedResponseBodySubtotal": 38205860,
+      "closing": {
+        "normalRequests": 12577,
+        "ownerRequests": 1153,
+        "mixedResponseBodyBytes": 892040996,
+        "normalResponseBodyBytes": null
+      },
+      "preClosingRootJsonBytes": 14793375,
+      "postClosingStorageBytes": null,
+      "emulatorDiagnostics": {
+        "requests": 360,
+        "ownerRequests": 360,
+        "userRequests": 0,
+        "requestBodyBytes": 151610040,
+        "responseBodyBytes": 1829020752
+      },
+      "invalidGlobalDiagnosticSubtraction": -1070509,
+      "fullPreparationAndClosingBytesKnown": false,
+      "wireOverheadMeasured": false,
+      "fullBusinessFreeTierVerified": false
+    }
+  ],
+  "excludedFromEstimate": [
+    "Firestore historical daily operation counts",
+    "Emulator diagnostic traffic",
+    "unmeasured SDK protocol and TLS overhead"
+  ],
+  "noWholeBusinessTotalCalculated": true,
+  "monthlyResetNotDaily": true,
+  "safetyFactorForFutureDayOfBudget": 2,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "tested3000": false
+}
