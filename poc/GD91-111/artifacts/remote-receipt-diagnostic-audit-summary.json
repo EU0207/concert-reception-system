@@ -1,0 +1,14 @@
+{
+  "decisionId": "TECH-DD91-105-A",
+  "externalTrials": 1,
+  "diagnosticConditions": 3,
+  "sourceComparisons": 32,
+  "currentSourcesMatch": true,
+  "applicationCalls": 48,
+  "maxJsonNodes": 115,
+  "maxRootJsonBytes": 2713,
+  "cleanupVerified": true,
+  "googleLoginUsed": false,
+  "externalFailureCauseConfirmed": false,
+  "fullBusinessFreeTierVerified": false
+}
