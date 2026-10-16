@@ -1,0 +1,18 @@
+{
+  "boundaryGroups": 5,
+  "existingGroups": 216,
+  "readBudgetComparisons": 4,
+  "numberingGroups": 14,
+  "commonGroups": 6,
+  "retentionGroups": 8,
+  "sourceComparisons": 965,
+  "allCurrentSourcesMatch": true,
+  "generatedRulesMatchSource": true,
+  "commonModelIncludingSetupAndCleanup": 153,
+  "realIndexedDbVerifiedHere": true,
+  "normalClosingVerified": false,
+  "externalFirebaseConnected": false,
+  "externalTrialExecuted": false,
+  "fullBusinessFreeTierVerified": false,
+  "productionImplementation": false
+}
