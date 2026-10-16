@@ -1,9 +1,11 @@
 {
-  "reason": "arrival source/person and first-count invariants require additional Rules validation",
+  "reason": "Review concern about source/person and first-count invariants; existing Rules already enforce them and adversarial F17 passed",
   "interrupted600And1000NotPassed": true,
   "interrupted600Phase": "qrCreate",
   "childTerminationReportedAsZeroByEmulatorCli": true,
   "orphanDemoEmulatorStopped": true,
   "externalFirebaseConnected": false,
-  "productionImplementation": false
+  "productionImplementation": false,
+  "rulesChangeRequired": false,
+  "interruptedResultsNotPassed": true
 }
