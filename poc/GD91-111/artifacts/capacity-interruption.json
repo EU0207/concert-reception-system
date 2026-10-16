@@ -1,0 +1,9 @@
+{
+  "reason": "arrival source/person and first-count invariants require additional Rules validation",
+  "interrupted600And1000NotPassed": true,
+  "interrupted600Phase": "qrCreate",
+  "childTerminationReportedAsZeroByEmulatorCli": true,
+  "orphanDemoEmulatorStopped": true,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false
+}
