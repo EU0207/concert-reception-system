@@ -44,7 +44,7 @@
     "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
     "../GD91-110/layout.mjs": "c420d283f41aaa98b4f5ce6adaa485b1efdfda93869a9b8e6ed819af66f7210b",
     "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
-    "capacity.mjs": "effae8689f2fd0b07d25ce7836aca5fb4b1962fdd307ca3480c8f431c208486f",
+    "capacity.mjs": "3bafc82e939dc6b0d45128e7d054463487ca7dad13b840ad3dd9aeb1ff8056eb",
     "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
     "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
@@ -125,7 +125,7 @@
     "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
     "../GD91-110/layout.mjs": "c420d283f41aaa98b4f5ce6adaa485b1efdfda93869a9b8e6ed819af66f7210b",
     "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
-    "capacity.mjs": "effae8689f2fd0b07d25ce7836aca5fb4b1962fdd307ca3480c8f431c208486f",
+    "capacity.mjs": "3bafc82e939dc6b0d45128e7d054463487ca7dad13b840ad3dd9aeb1ff8056eb",
     "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
     "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
@@ -178,18 +178,18 @@
         "result": {
           "activeUnarrived": 0,
           "arrived": 4,
-          "closedAt": 1792131538792,
+          "closedAt": 1792142403527,
           "confirmedAbsences": true,
           "confirmedConflicts": true,
           "confirmedDevices": true,
           "confirmedPaper": true,
           "controlRevision": 4,
           "deviceCount": 8,
-          "humanUid": "FkQCxPM4lY5zNrecePkZnmcIHb1t",
+          "humanUid": "sH5mX08rmDkcmKCEmJUL5z3S0hQO",
           "lossCount": 0,
-          "managerDeviceUid": "wNaohYeXZ8QMJvzftPRLjG9Z8qs0",
+          "managerDeviceUid": "7a3248i8NTXSYvUdnOhmnsD6J6iN",
           "mode": "normal",
-          "operationId": "4e220d3d-0118-4e56-86e8-5aba012846b3",
+          "operationId": "2430910e-e3ed-415d-91bb-a6d61dfadd84",
           "peopleCount": 4,
           "performanceName": "架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架架",
           "seatCount": 4,
@@ -233,7 +233,14 @@
           "responseBodyBytes": 31880,
           "ownerRequests": 0,
           "userRequests": 12,
-          "elapsedMs": 1203
+          "elapsedMs": 1216,
+          "emulatorDiagnostics": {
+            "requests": 0,
+            "ownerRequests": 0,
+            "userRequests": 0,
+            "requestBodyBytes": 0,
+            "responseBodyBytes": 0
+          }
         },
         "bulkAssign": {
           "requests": 3,
@@ -241,7 +248,14 @@
           "responseBodyBytes": 3662,
           "ownerRequests": 0,
           "userRequests": 3,
-          "elapsedMs": 625
+          "elapsedMs": 587,
+          "emulatorDiagnostics": {
+            "requests": 0,
+            "ownerRequests": 0,
+            "userRequests": 0,
+            "requestBodyBytes": 0,
+            "responseBodyBytes": 0
+          }
         },
         "qrCreate": {
           "requests": 12,
@@ -249,7 +263,14 @@
           "responseBodyBytes": 9408,
           "ownerRequests": 0,
           "userRequests": 12,
-          "elapsedMs": 1244
+          "elapsedMs": 1280,
+          "emulatorDiagnostics": {
+            "requests": 0,
+            "ownerRequests": 0,
+            "userRequests": 0,
+            "requestBodyBytes": 0,
+            "responseBodyBytes": 0
+          }
         },
         "ticketCheck": {
           "requests": 12,
@@ -257,7 +278,14 @@
           "responseBodyBytes": 8532,
           "ownerRequests": 0,
           "userRequests": 12,
-          "elapsedMs": 883
+          "elapsedMs": 1072,
+          "emulatorDiagnostics": {
+            "requests": 0,
+            "ownerRequests": 0,
+            "userRequests": 0,
+            "requestBodyBytes": 0,
+            "responseBodyBytes": 0
+          }
         }
       },
       "preparationRequestsIncludingLayoutAndDiagnostics": {
@@ -269,7 +297,7 @@
       },
       "normalOperationRequests": 39,
       "maxRequestBytes": 7513,
-      "maxElapsedMs": 592,
+      "maxElapsedMs": 547,
       "resultLookups": 0,
       "sameIdResendWrites": 0,
       "snapshotStats": [
@@ -318,7 +346,7 @@
         "responseBodyBytes": 4884,
         "ownerRequests": 0,
         "userRequests": 8,
-        "elapsedMs": 366,
+        "elapsedMs": 396,
         "eventsPerEnvironment": [
           4,
           4,
@@ -367,65 +395,65 @@
         "stage": "register",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 323208192,
-        "usedAfterGc": 133072896,
-        "elapsedMs": 2144
+        "usedBeforeGc": 399366144,
+        "usedAfterGc": 133114880,
+        "elapsedMs": 2075
       },
       {
         "stage": "bulkAssign",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 254704640,
-        "usedAfterGc": 132994048,
-        "elapsedMs": 2021
+        "usedBeforeGc": 258381824,
+        "usedAfterGc": 133053440,
+        "elapsedMs": 2013
       },
       {
         "stage": "qrCreate",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 208638976,
-        "usedAfterGc": 133385216,
-        "elapsedMs": 2181
+        "usedBeforeGc": 212822016,
+        "usedAfterGc": 133164032,
+        "elapsedMs": 2023
       },
       {
         "stage": "ticketCheck",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 284782592,
-        "usedAfterGc": 133421056,
-        "elapsedMs": 2193
+        "usedBeforeGc": 286254080,
+        "usedAfterGc": 133537792,
+        "elapsedMs": 2178
       },
       {
         "stage": "before-sdk",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 253171712,
-        "usedAfterGc": 133376000,
-        "elapsedMs": 1960
+        "usedBeforeGc": 257302528,
+        "usedAfterGc": 134046720,
+        "elapsedMs": 2108
       },
       {
         "stage": "closing-prepare",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 293655552,
-        "usedAfterGc": 135300096,
-        "elapsedMs": 2012
+        "usedBeforeGc": 296778752,
+        "usedAfterGc": 134928384,
+        "elapsedMs": 2097
       },
       {
         "stage": "closing-geometry",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 210895872,
-        "usedAfterGc": 135169024,
-        "elapsedMs": 1984
+        "usedBeforeGc": 212767744,
+        "usedAfterGc": 135052288,
+        "elapsedMs": 2006
       },
       {
         "stage": "closing-facts",
         "applicationDataHashUnchanged": true,
         "exactRulesRestored": true,
-        "usedBeforeGc": 143652864,
-        "usedAfterGc": 135887872,
-        "elapsedMs": 1976
+        "usedBeforeGc": 141705216,
+        "usedAfterGc": 135621632,
+        "elapsedMs": 2030
       }
     ],
     "observations": [],

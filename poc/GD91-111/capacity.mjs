@@ -22,6 +22,8 @@ source=source.replace("import {client,wait} from '../GD91-89/sdk-client.mjs';","
 source=source.replace("const people=Number(selected),sections=people===1000?16:2","const people=Number(selected),sections=people===4?2:16");
 source=source.replace("phase='leased-sdk-snapshot';", "const client=human=>registeredClient(human,async record=>{await globalThis.__gd108Reauthentication.ensure(m);const h=(await user('deviceRoster/meta',m.device)).body;ok(await user('',m.device,'PATCH',appendDevice(h,record)));});phase='leased-sdk-snapshot';");
 source=source.replaceAll('people*2','f.cells.length').replace('nonSeatCells:people','nonSeatCells:f.cells.length-people');
+source=source.replace('const begin=structuredClone(metrics),time=Date.now();','const begin=structuredClone(metrics),diagnosticsBegin=structuredClone(globalThis.__gd108Maintenance.stats.metrics),time=Date.now();');
+source=source.replace('assert.equal(stages[kind].ownerRequests,0);',"const diagnostics=delta(diagnosticsBegin,globalThis.__gd108Maintenance.stats.metrics);for(const metric of Object.keys(diagnostics))stages[kind][metric]-=diagnostics[metric];stages[kind].emulatorDiagnostics=diagnostics;assert.equal(stages[kind].ownerRequests,0);");
 source=source.replace('record=await refs.clearAcknowledged(m,p,record,ack);',"record=await refs.clearAcknowledged(m,p,record,ack);globalThis.__gd111PreparationCount=(globalThis.__gd111PreparationCount??0)+1;if(globalThis.__gd111PreparationCount%100===0)await globalThis.__gd108Maintenance.boundary('preparation-batch',{activeClients:clients.length});");
 const closeCode=`
  phase='normal-closing';const closingSubjects=[m,f.staff,...clients],localQueues=new Map(clients.map((c,i)=>[c.device.uid,stores[i]]));for(const c of clients)await c.close();clients.length=0;

@@ -22,12 +22,13 @@
     "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
     "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
     "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
-    "closing-local.mjs": "3319280a84d4e35f4291dc1dced39ff960d4473e01eea36657772f4c31cc7451",
+    "closing-local.mjs": "ea01e8a7699370a02d19a35f6c761d9e17842b0fd17dfebbffab42c21c51e2b3",
     "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
     "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
     "diagnose.mjs": "3141a3b556194577e24ef774777f9020d1f07e44505325c803cdb5d1c4d56c88",
     "evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
+    "execute.mjs": "97f3103a1470d8aedc1658d57040c18feb4fd88f0e80c063e03c58572b3035e1",
     "generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
     "registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
@@ -51,6 +52,7 @@
     "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
     "../GD91-99/queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
     "../GD91-99/review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
+    "../GD91-99/submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
     "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
   },
   "endSourceHashes": {
@@ -76,12 +78,13 @@
     "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
     "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
     "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
-    "closing-local.mjs": "3319280a84d4e35f4291dc1dced39ff960d4473e01eea36657772f4c31cc7451",
+    "closing-local.mjs": "ea01e8a7699370a02d19a35f6c761d9e17842b0fd17dfebbffab42c21c51e2b3",
     "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
     "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
     "diagnose.mjs": "3141a3b556194577e24ef774777f9020d1f07e44505325c803cdb5d1c4d56c88",
     "evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
+    "execute.mjs": "97f3103a1470d8aedc1658d57040c18feb4fd88f0e80c063e03c58572b3035e1",
     "generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
     "registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
@@ -105,98 +108,25 @@
     "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
     "../GD91-99/queue.mjs": "2e69b1bda974e6931452468bbc2bc2bd4190577e127748b8452163a1cd784732",
     "../GD91-99/review.mjs": "cfb4e14140299d792b1ce6973f13b092069cc53ebb556134cf931103010d66fd",
+    "../GD91-99/submission.mjs": "3e803a7f6d5078758b43a631ea2e075c3bc2deab26818c1f7c9968c472c04b83",
     "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
   },
   "reports": [
     {
-      "id": "F01",
-      "normalStartManagerOnly": true,
-      "sourceFrozen": true,
-      "bootstrapAndStopPreloaded": true
-    },
-    {
-      "id": "F02",
-      "omissionAndProxyAndPendingAndWrongSequenceDenied": true
-    },
-    {
-      "id": "F03",
-      "sourceSkipPartialAndForgedArrivalDenied": true
-    },
-    {
-      "id": "F04",
-      "partialSnapshotAndWrongNameArrivalCyclePartitionDenied": true
-    },
-    {
-      "id": "F05",
-      "normalCloseAndFullNamesAndVenueCreatedNormally": true,
-      "allRegisteredDevicesCovered": true,
-      "allRosterPeopleCovered": true,
-      "duplicateRereadNotDoubleCounted": true,
-      "oneCloseOnly": true
-    },
-    {
-      "id": "F06",
-      "stoppedDeviceCannotBeOmittedFromNormalClose": true
-    },
-    {
-      "id": "F07",
-      "exceptionalCloseNormallySaved": true,
-      "unknownNotZero": true,
-      "lossAndDeletionUncertaintyRetained": true,
-      "deviceStopInjectedAsPrecondition": true
-    },
-    {
-      "id": "F08",
-      "realRestResponseCutAndEncryptedIndexedDbRestart": true,
-      "resultLookedUpWithoutResend": true
-    },
-    {
-      "id": "F09",
-      "cancelAtomic": true,
-      "blankCancellationDenied": true,
-      "abortedIdCannotBeReused": true,
-      "incompleteFactsReplacedByNewClosingId": true,
-      "noDoubleCountAfterRestart": true
-    },
-    {
-      "id": "F10",
-      "normalReauthenticationStillAllowed": true,
-      "revokedAndExpiredRoleCannotContinue": true,
-      "pendingEncryptedInputRetained": true,
-      "revocationInjectedAsPrecondition": true
-    },
-    {
-      "id": "F11",
-      "pendingQuarantineNotSilentlyDiscarded": true,
-      "cancellationReturnsToNormalReview": true,
-      "originalQueueEvidenceRetained": true
-    },
-    {
-      "id": "F12",
-      "multipleFirstReceiptsRequireExplicitManagerReview": true,
-      "wrongCountAndBlankReasonDenied": true,
-      "arrivedStillCountedOnce": true
-    },
-    {
-      "id": "F13",
-      "staleOrOmittedCatalogAndWrongGenerationDenied": true,
-      "concurrentClosingHasOneWinner": true,
-      "legacyBusinessFormatRejected": true
-    },
-    {
-      "id": "F14",
-      "newlyGeneratedActualsCompatibleWithExistingPostCloseCorrection": true,
-      "automaticLateReceiveDenied": true,
-      "permissionRequiredForLateRecovery": true,
-      "correctionAndTotalsAtomic": true,
-      "reviewedReferenceReleasedNormally": true,
-      "closedContextRetained": true,
-      "deviceStopInjectedAsPrecondition": true
+      "id": "F17",
+      "wrongPersonAndExtraArrivalDenied": true,
+      "firstCountCannotBeSuppressedOrInflated": true,
+      "rereadDoesNotIncreaseFirstCount": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
+  },
+  "failure": {
+    "stage": "F01",
+    "code": "ERR_ASSERTION",
+    "message": "{\"error\":\"Permission denied\"}\n\n401 !== 200\n"
   },
   "bootstrapRosterAndStoppedControlSeededByOwner": true,
   "closedControlAndActualsNotSeeded": true,
