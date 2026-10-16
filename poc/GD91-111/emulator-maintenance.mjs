@@ -16,7 +16,7 @@ export function createEmulatorMaintenance(enabled){
  const heap=()=>{const m=/heap\s+total\s+(\d+)K,\s+used\s+(\d+)K/.exec(jcmd('GC.heap_info'));assert(m);return{usedBytes:Number(m[2])*1024,committedBytes:Number(m[1])*1024};};
  const hash=v=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
  async function boundary(stage,{activeClients}){
-  assert(['register','bulkAssign','qrCreate','ticketCheck','before-sdk','closing-prepare','closing-sources','closing-geometry','closing-facts'].includes(stage));assert.equal(activeClients,0,'live-sdk-maintenance-forbidden');
+  assert(['register','bulkAssign','qrCreate','ticketCheck','before-sdk','preparation-batch','closing-prepare','closing-sources','closing-geometry','closing-facts'].includes(stage));assert.equal(activeClients,0,'live-sdk-maintenance-forbidden');
   const start={...metrics},began=Date.now(),data=await owner(trial);
   for(const ref of Object.values(data.references??{}))if('pendingOperationId'in ref)assert.equal(ref.pendingOperationId,'','unresolved-operation-maintenance-forbidden');
   const beforeHash=hash(data),prior=heap();assert.deepEqual((await request('.settings/rules',{token:'owner'})).body,rules);

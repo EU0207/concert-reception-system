@@ -14,8 +14,8 @@ export async function setup(people,sections){
  const models=[];let remaining=people;
  for(let i=0;i<sections;i++){
   const count=Math.ceil(remaining/(sections-i));remaining-=count;
-  const axis=i%2?'vertical':'horizontal',rows=people===4?1:8,columns=people===4?count*2:32,lines=Array.from({length:axis==='horizontal'?rows:columns},()=>({name:'界'.repeat(64),prefix:'界'.repeat(48),startNumber:9007199254740000}));
-  const base=createSection({name:'区'.repeat(100),rows,columns,axis,seatOrder:i%4<2?'forward':'reverse',stagePosition:i%2?'left':'top',lines},{maxCells:4096});
+  const axis=i%2?'vertical':'horizontal',rows=people===4?1:8,columns=people===4?count*2:32,lines=Array.from({length:axis==='horizontal'?rows:columns},(_,j)=>({name:'界'.repeat(61)+String(j).padStart(3,'0'),prefix:'界'.repeat(45)+String(j).padStart(3,'0'),startNumber:9007199254740000}));
+  const base=createSection({name:'区'.repeat(97)+String(i).padStart(3,'0'),rows,columns,axis,seatOrder:i%4<2?'forward':'reverse',stagePosition:i%2?'left':'top',lines},{maxCells:4096});
   const selections=Object.fromEntries(base.section.cells.map((c,j)=>[c.row+','+c.column,j<count?'seat':['unset','space','aisle','gap'][j%4]]));
   const model=numberInitial(base,selections,{maxCells:4096});for(const s of model.seats){s.reservedLabel='用'.repeat(100);s.emergencyChange={kind:'add',reason:'架'.repeat(200)};}models.push(model);
  }

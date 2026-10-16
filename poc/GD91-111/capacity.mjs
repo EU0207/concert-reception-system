@@ -22,6 +22,7 @@ source=source.replace("import {client,wait} from '../GD91-89/sdk-client.mjs';","
 source=source.replace("const people=Number(selected),sections=people===1000?16:2","const people=Number(selected),sections=people===4?2:16");
 source=source.replace("phase='leased-sdk-snapshot';", "const client=human=>registeredClient(human,async record=>{await globalThis.__gd108Reauthentication.ensure(m);const h=(await user('deviceRoster/meta',m.device)).body;ok(await user('',m.device,'PATCH',appendDevice(h,record)));});phase='leased-sdk-snapshot';");
 source=source.replaceAll('people*2','f.cells.length').replace('nonSeatCells:people','nonSeatCells:f.cells.length-people');
+source=source.replace('record=await refs.clearAcknowledged(m,p,record,ack);',"record=await refs.clearAcknowledged(m,p,record,ack);globalThis.__gd111PreparationCount=(globalThis.__gd111PreparationCount??0)+1;if(globalThis.__gd111PreparationCount%100===0)await globalThis.__gd108Maintenance.boundary('preparation-batch',{activeClients:clients.length});");
 const closeCode=`
  phase='normal-closing';const closingSubjects=[m,f.staff,...clients],localQueues=new Map(clients.map((c,i)=>[c.device.uid,stores[i]]));for(const c of clients)await c.close();clients.length=0;
  const registered=await owner(trial+'/devices');assert.equal(Object.keys(registered).length,closingSubjects.length);assert.equal((await owner(trial+'/deviceRoster/meta')).count,closingSubjects.length);
