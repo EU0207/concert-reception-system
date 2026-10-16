@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {checkCapacity} from './policy.mjs';import {saveBeforeRemote,snapshot} from './layout.mjs';
+const s=(rows,columns,axis='horizontal')=>({rows,columns,axis});
+assert.equal(checkCapacity(Array.from({length:16},()=>s(8,32))).cells,4096);
+assert.throws(()=>checkCapacity(Array.from({length:17},()=>s(1,1))),/layout-section-limit/);
+assert.equal(checkCapacity([s(256,16)]).cells,4096);assert.equal(checkCapacity([s(16,256,'vertical')]).cells,4096);
+assert.throws(()=>checkCapacity([s(257,1)]),/layout-numbering-line-limit/);
+assert.throws(()=>checkCapacity([s(1,257,'vertical')]),/layout-numbering-line-limit/);
+assert.equal(checkCapacity([s(257,1,'vertical')]).cells,257);
+assert.throws(()=>checkCapacity([s(256,17)]),/layout-total-cell-limit/);
+let saved=false,remote=0;await assert.rejects(()=>saveBeforeRemote(Array.from({length:17},()=>s(1,1)),{saveLocal:async()=>{saved=true;},sendRemote:async()=>{remote++;}}),/layout-section-limit/);
+assert(saved);assert.equal(remote,0);let reads=0;
+await assert.rejects(()=>snapshot(async()=>{reads++;},async()=>({}),{maxSections:17}),/layout-section-read-budget-override/);assert.equal(reads,0);
+console.log(JSON.stringify({policyCases:10,localDraftPreserved:true,overBudgetNetworkRequests:0,externalFirebaseConnected:false}));
