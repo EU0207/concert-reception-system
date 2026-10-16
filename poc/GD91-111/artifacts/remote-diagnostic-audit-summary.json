@@ -1,0 +1,37 @@
+{
+  "decisionId": "TECH-DD91-104-A",
+  "externalTrials": 1,
+  "testedSourceCommit": "a9737a977c134d227361bd5c2982271f4220ab7e",
+  "sourceComparisons": 69,
+  "completedGroups": 6,
+  "plannedGroups": 10,
+  "closingGroupsNotCompleted": 4,
+  "applicationCalls": 169,
+  "observedApplicationBodyBytes": 2695341,
+  "cleanupVerified": true,
+  "failureLocationRecorded": true,
+  "sourceLocations": [
+    {
+      "file": "GD91-96/queue.mjs",
+      "line": 5,
+      "column": 21
+    },
+    {
+      "file": "GD91-96/queue.mjs",
+      "line": 9,
+      "column": 590
+    },
+    {
+      "file": "GD91-111/common-cases.mjs",
+      "line": 41,
+      "column": 102
+    },
+    {
+      "file": "GD91-111/remote-closing.mjs",
+      "line": 43,
+      "column": 1362
+    }
+  ],
+  "allPathsPassed": false,
+  "fullBusinessFreeTierVerified": false
+}
