@@ -22,7 +22,7 @@
     "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
     "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
     "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
-    "closing-local.mjs": "ea01e8a7699370a02d19a35f6c761d9e17842b0fd17dfebbffab42c21c51e2b3",
+    "closing-local.mjs": "03e73db98013744566809aeb4c2ed21a9d1adff15aafd8e7af7368266eb80d72",
     "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
     "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
@@ -78,7 +78,7 @@
     "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
     "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
     "cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
-    "closing-local.mjs": "ea01e8a7699370a02d19a35f6c761d9e17842b0fd17dfebbffab42c21c51e2b3",
+    "closing-local.mjs": "03e73db98013744566809aeb4c2ed21a9d1adff15aafd8e7af7368266eb80d72",
     "closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
     "closing.mjs": "06ce74ddd96cf0bf2e3a8cd4812ae6cb780dc14e99c5d046042df9ef8d3a5065",
     "database.rules.json": "003c9483e2566ae64b390cc2d1bb51ce70e96e0253db7b4b8d71c8f7d02f309a",
@@ -117,16 +117,118 @@
       "wrongPersonAndExtraArrivalDenied": true,
       "firstCountCannotBeSuppressedOrInflated": true,
       "rereadDoesNotIncreaseFirstCount": true
+    },
+    {
+      "id": "F01",
+      "normalStartManagerOnly": true,
+      "sourceFrozen": true,
+      "bootstrapAndStopPreloaded": true
+    },
+    {
+      "id": "F02",
+      "omissionAndProxyAndPendingAndWrongSequenceDenied": true
+    },
+    {
+      "id": "F03",
+      "sourceSkipPartialAndForgedArrivalDenied": true
+    },
+    {
+      "id": "F04",
+      "partialSnapshotAndWrongNameArrivalCyclePartitionDenied": true
+    },
+    {
+      "id": "F05",
+      "normalCloseAndFullNamesAndVenueCreatedNormally": true,
+      "allRegisteredDevicesCovered": true,
+      "allRosterPeopleCovered": true,
+      "duplicateRereadNotDoubleCounted": true,
+      "oneCloseOnly": true
+    },
+    {
+      "id": "F06",
+      "stoppedDeviceCannotBeOmittedFromNormalClose": true
+    },
+    {
+      "id": "F07",
+      "exceptionalCloseNormallySaved": true,
+      "unknownNotZero": true,
+      "lossAndDeletionUncertaintyRetained": true,
+      "deviceStopInjectedAsPrecondition": true
+    },
+    {
+      "id": "F08",
+      "realRestResponseCutAndEncryptedIndexedDbRestart": true,
+      "resultLookedUpWithoutResend": true
+    },
+    {
+      "id": "F09",
+      "cancelAtomic": true,
+      "blankCancellationDenied": true,
+      "abortedIdCannotBeReused": true,
+      "incompleteFactsReplacedByNewClosingId": true,
+      "noDoubleCountAfterRestart": true
+    },
+    {
+      "id": "F10",
+      "normalReauthenticationStillAllowed": true,
+      "revokedAndExpiredRoleCannotContinue": true,
+      "pendingEncryptedInputRetained": true,
+      "revocationInjectedAsPrecondition": true
+    },
+    {
+      "id": "F11",
+      "pendingQuarantineNotSilentlyDiscarded": true,
+      "cancellationReturnsToNormalReview": true,
+      "originalQueueEvidenceRetained": true
+    },
+    {
+      "id": "F12",
+      "multipleFirstReceiptsRequireExplicitManagerReview": true,
+      "wrongCountAndBlankReasonDenied": true,
+      "arrivedStillCountedOnce": true
+    },
+    {
+      "id": "F13",
+      "staleOrOmittedCatalogAndWrongGenerationDenied": true,
+      "concurrentClosingHasOneWinner": true,
+      "legacyBusinessFormatRejected": true
+    },
+    {
+      "id": "F14",
+      "newlyGeneratedActualsCompatibleWithExistingPostCloseCorrection": true,
+      "automaticLateReceiveDenied": true,
+      "permissionRequiredForLateRecovery": true,
+      "correctionAndTotalsAtomic": true,
+      "reviewedReferenceReleasedNormally": true,
+      "closedContextRetained": true,
+      "deviceStopInjectedAsPrecondition": true
+    },
+    {
+      "id": "F15",
+      "cutPhase": "facts",
+      "realResponseSocketDrop": true,
+      "encryptedExecutionJournalRestart": true,
+      "committedStepNotResent": true,
+      "totalsNotDuplicated": true,
+      "finalWrites": 1,
+      "sourceLookup": 1,
+      "localStoreOnly": true
+    },
+    {
+      "id": "F16",
+      "cutPhase": "closed",
+      "realResponseSocketDrop": true,
+      "encryptedExecutionJournalRestart": true,
+      "committedStepNotResent": true,
+      "totalsNotDuplicated": true,
+      "finalWrites": 1,
+      "sourceLookup": 0,
+      "localStoreOnly": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "stage": "F01",
-    "code": "ERR_ASSERTION",
-    "message": "{\"error\":\"Permission denied\"}\n\n401 !== 200\n"
   },
   "bootstrapRosterAndStoppedControlSeededByOwner": true,
   "closedControlAndActualsNotSeeded": true,
