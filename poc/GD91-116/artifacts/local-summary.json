@@ -32,7 +32,7 @@
     "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
     "generate.mjs": "aead3164c6ba2a61d5c4794d785c831e97848e52f925bce1d01ebaf241d39644",
     "layout.mjs": "7b94e57cbfbdf170107e9d65b36cbba9c0af54dc6398c5262e96a2bdd807eb04",
-    "local.mjs": "88f28a901ceb4bec12b28b0497fc10a309f39624bbe9b639b295ec5de1fda312",
+    "local.mjs": "69c7ee1c7d5a418ead0ea9ec88dc2c8b2992c84818b934804b3918fe1d7e7ca2",
     "policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
@@ -80,7 +80,7 @@
     "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
     "generate.mjs": "aead3164c6ba2a61d5c4794d785c831e97848e52f925bce1d01ebaf241d39644",
     "layout.mjs": "7b94e57cbfbdf170107e9d65b36cbba9c0af54dc6398c5262e96a2bdd807eb04",
-    "local.mjs": "88f28a901ceb4bec12b28b0497fc10a309f39624bbe9b639b295ec5de1fda312",
+    "local.mjs": "69c7ee1c7d5a418ead0ea9ec88dc2c8b2992c84818b934804b3918fe1d7e7ca2",
     "policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
@@ -95,15 +95,78 @@
     "../GD91-99/clock-transport.mjs": "4a3793bb4abc86c19c150af4b51ff7db079cf0b2eddcfd86907ac4d51bb81b24",
     "../GD91-99/support.mjs": "92bc257acc41a71604f9a500df724669de4d8ef5647d0fdafe4a51010efcc62c"
   },
-  "reports": [],
+  "reports": [
+    {
+      "id": "B01",
+      "normalSavePublishAndRead": true,
+      "sections": 16,
+      "numberingLines": 1
+    },
+    {
+      "id": "B02",
+      "normalSavePublishAndRead": true,
+      "sections": 1,
+      "numberingLines": 256
+    },
+    {
+      "id": "B03",
+      "normalSavePublishAndRead": true,
+      "sections": 1,
+      "numberingLines": 256
+    },
+    {
+      "id": "B04",
+      "direct17SectionDeclarationRejected": true,
+      "headPreserved": true
+    },
+    {
+      "id": "B05",
+      "direct257LineCreationRejected": true,
+      "failedCandidateCollected": true,
+      "headPreserved": true
+    },
+    {
+      "id": "B06",
+      "direct257LineCreationRejected": true,
+      "failedCandidateCollected": true,
+      "headPreserved": true
+    },
+    {
+      "id": "B07",
+      "oldRulesAcceptedSamePublication": true,
+      "newRulesRejectedSamePublication": true,
+      "unresolvedPinRetained": true,
+      "unreferencedLegacyCandidateCollected": true,
+      "ownerFixtureResetNotBusinessRelease": true
+    },
+    {
+      "id": "B08",
+      "oldRulesAcceptedSamePublication": true,
+      "newRulesRejectedSamePublication": true,
+      "unresolvedPinRetained": true,
+      "unreferencedLegacyCandidateCollected": true,
+      "ownerFixtureResetNotBusinessRelease": true
+    },
+    {
+      "id": "B09",
+      "oldRulesAcceptedSameSharedSave": true,
+      "newRulesRejectedSameSharedSave": true,
+      "unresolvedPinRetained": true,
+      "unreferencedLegacyCandidateCollected": true,
+      "ownerFixtureResetNotBusinessRelease": true
+    },
+    {
+      "id": "B10",
+      "oldRulesAcceptedSameSharedSave": true,
+      "newRulesRejectedSameSharedSave": true,
+      "unresolvedPinRetained": true,
+      "unreferencedLegacyCandidateCollected": true,
+      "ownerFixtureResetNotBusinessRelease": true
+    }
+  ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "stage": "B01",
-    "code": "ERR_ASSERTION",
-    "message": "{\"error\":\"Permission denied\"}\n\n401 !== 200\n"
   },
   "policyApproval": "TECH-DD91-108-A, developer, 2026-10-17",
   "externalFirebaseConnected": false,
