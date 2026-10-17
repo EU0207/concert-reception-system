@@ -1,0 +1,46 @@
+{
+  "sourceHashes": {
+    "serialization.mjs": "c9d44361b7620f2dc2d472a47c89e07fb522e799e11d4df2dd52168cf43484bc",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-110/layout.mjs": "c420d283f41aaa98b4f5ce6adaa485b1efdfda93869a9b8e6ed819af66f7210b",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70"
+  },
+  "endSourceHashes": {
+    "serialization.mjs": "c9d44361b7620f2dc2d472a47c89e07fb522e799e11d4df2dd52168cf43484bc",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-110/layout.mjs": "c420d283f41aaa98b4f5ce6adaa485b1efdfda93869a9b8e6ed819af66f7210b",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70"
+  },
+  "reports": [
+    {
+      "name": "three-byte",
+      "cells": 4096,
+      "seats": 1000,
+      "sections": 1,
+      "numberingLines": 256,
+      "requestBodies": 260,
+      "maxBodyBytes": 148201,
+      "maxBodyKind": "atomic-patch",
+      "totalRequestBodyBytes": 4585815,
+      "serverAcceptanceVerified": false
+    },
+    {
+      "name": "escaped-control",
+      "cells": 4096,
+      "seats": 1000,
+      "sections": 1,
+      "numberingLines": 256,
+      "requestBodies": 260,
+      "maxBodyBytes": 234517,
+      "maxBodyKind": "atomic-patch",
+      "totalRequestBodyBytes": 6004275,
+      "serverAcceptanceVerified": false
+    }
+  ],
+  "method": "Actual layout write plans serialized in memory. Escaped control is a byte-size stress input, not an approved display format.",
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "tested3000": false
+}

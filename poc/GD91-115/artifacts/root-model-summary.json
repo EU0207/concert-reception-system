@@ -1,0 +1,46 @@
+{
+  "sourceHashes": {
+    "root-model.mjs": "871e8a8e9a7a911bc5488d06b804663f305c9e74f9f81f1fa2529a7f76d4001c",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-110/layout.mjs": "c420d283f41aaa98b4f5ce6adaa485b1efdfda93869a9b8e6ed819af66f7210b",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70"
+  },
+  "endSourceHashes": {
+    "root-model.mjs": "871e8a8e9a7a911bc5488d06b804663f305c9e74f9f81f1fa2529a7f76d4001c",
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-110/layout.mjs": "c420d283f41aaa98b4f5ce6adaa485b1efdfda93869a9b8e6ed819af66f7210b",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70"
+  },
+  "reports": [
+    {
+      "name": "three-byte",
+      "sections": 16,
+      "cells": 4096,
+      "seatRecords": 4096,
+      "attendeeRecords": 0,
+      "numberingLines": 4096,
+      "requests": 290,
+      "maxRequestBytes": 148201,
+      "generationJsonBytes": 11290517,
+      "serverAcceptanceVerified": false
+    },
+    {
+      "name": "escaped-control",
+      "sections": 16,
+      "cells": 4096,
+      "seatRecords": 4096,
+      "attendeeRecords": 0,
+      "numberingLines": 4096,
+      "requests": 290,
+      "maxRequestBytes": 234517,
+      "generationJsonBytes": 18127445,
+      "serverAcceptanceVerified": false
+    }
+  ],
+  "method": "Combined layout size model only, no attendee or load test. Control-character case is conservative serialization stress, not an approved format.",
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "tested3000People": false
+}
