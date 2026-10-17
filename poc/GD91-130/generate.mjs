@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const root=new URL('./',import.meta.url),out=new URL('node_modules/.cache/',root);fs.mkdirSync(out,{recursive:true});
+let source=fs.readFileSync(new URL('../GD91-129/browser.mjs',root),'utf8');
+const replace=(a,b)=>{assert.equal(source.split(a).length,2);source=source.replace(a,b);};
+replace('const oldScope=','let oldScope=');
+replace('export async function seed(){','export async function seed(input){oldScope=input.oldScope;newScope=input.newScope;');
+replace("draft={format:1,baseVersions:{commit:8,layout:2},content:{label:'架空の未送信案'},operationId:crypto.randomUUID()}",'draft=input.draft');
+replace('targetBaseRevision:8','targetBaseRevision:options.targetBaseRevision');
+fs.writeFileSync(new URL('storage.mjs',out),source);
+for(const name of ['firestore.rules','deny.rules.json'])fs.copyFileSync(new URL('../GD91-128/node_modules/.cache/'+name,root),new URL(name,out));
