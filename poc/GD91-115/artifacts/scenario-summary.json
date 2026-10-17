@@ -1,0 +1,193 @@
+{
+  "sourceHashes": {
+    "scenarios.mjs": "40e3b6f78c4da05e2459193d493b4fbfc3e0e0b8074319aead9d78ad8a7c7b62",
+    "estimate.mjs": "8b739e4c43204f63071a3e9f90ec9dfb7fa6b1706534a46e7301e083b02e134d",
+    "artifacts/audit-summary.json": "b5a8bff48165de7bba466064a9e86b5fbc82dcf8a1da644a7694cbbca5ffc40b",
+    "artifacts/root-model-summary.json": "07af79eff397b628d710600724b771b52994919b3515b535da94e50813462d34"
+  },
+  "endSourceHashes": {
+    "scenarios.mjs": "40e3b6f78c4da05e2459193d493b4fbfc3e0e0b8074319aead9d78ad8a7c7b62",
+    "estimate.mjs": "8b739e4c43204f63071a3e9f90ec9dfb7fa6b1706534a46e7301e083b02e134d",
+    "artifacts/audit-summary.json": "b5a8bff48165de7bba466064a9e86b5fbc82dcf8a1da644a7694cbbca5ffc40b",
+    "artifacts/root-model-summary.json": "07af79eff397b628d710600724b771b52994919b3515b535da94e50813462d34"
+  },
+  "reports": [
+    {
+      "people": 600,
+      "name": "one-performance",
+      "input": {
+        "baseResponseBytes": 39526592,
+        "restRequests": 14725,
+        "sdkGets": 2682,
+        "sdkEvents": 3600,
+        "sdkReplayBodyBytes": 17536320,
+        "sdkReplayMessages": 6282
+      },
+      "perPerformanceBytes": 423231872,
+      "monthlyBytes": 423231872,
+      "monthlyLimitBytes": 10000000000,
+      "remainingBytes": 9576768128,
+      "withinIllustrativeLimit": true,
+      "wireOverheadAssumptionVerified": false,
+      "fullBusinessFreeTierVerified": false
+    },
+    {
+      "people": 600,
+      "name": "one-reacquisition",
+      "input": {
+        "baseResponseBytes": 39526592,
+        "restRequests": 14725,
+        "sdkGets": 2682,
+        "sdkEvents": 3600,
+        "sdkReplayBodyBytes": 17536320,
+        "sdkReplayMessages": 6282,
+        "extraRetrievalCopies": 1
+      },
+      "perPerformanceBytes": 561228800,
+      "monthlyBytes": 561228800,
+      "monthlyLimitBytes": 10000000000,
+      "remainingBytes": 9438771200,
+      "withinIllustrativeLimit": true,
+      "wireOverheadAssumptionVerified": false,
+      "fullBusinessFreeTierVerified": false
+    },
+    {
+      "people": 600,
+      "name": "four-performances-one-reacquisition-each",
+      "input": {
+        "baseResponseBytes": 39526592,
+        "restRequests": 14725,
+        "sdkGets": 2682,
+        "sdkEvents": 3600,
+        "sdkReplayBodyBytes": 17536320,
+        "sdkReplayMessages": 6282,
+        "extraRetrievalCopies": 1,
+        "monthlyPerformances": 4
+      },
+      "perPerformanceBytes": 561228800,
+      "monthlyBytes": 2244915200,
+      "monthlyLimitBytes": 10000000000,
+      "remainingBytes": 7755084800,
+      "withinIllustrativeLimit": true,
+      "wireOverheadAssumptionVerified": false,
+      "fullBusinessFreeTierVerified": false
+    },
+    {
+      "people": 1000,
+      "name": "one-performance",
+      "input": {
+        "baseResponseBytes": 61478031,
+        "restRequests": 23930,
+        "sdkGets": 2916,
+        "sdkEvents": 6000,
+        "sdkReplayBodyBytes": 24282462,
+        "sdkReplayMessages": 8916
+      },
+      "perPerformanceBytes": 661104926,
+      "monthlyBytes": 661104926,
+      "monthlyLimitBytes": 10000000000,
+      "remainingBytes": 9338895074,
+      "withinIllustrativeLimit": true,
+      "wireOverheadAssumptionVerified": false,
+      "fullBusinessFreeTierVerified": false
+    },
+    {
+      "people": 1000,
+      "name": "one-reacquisition",
+      "input": {
+        "baseResponseBytes": 61478031,
+        "restRequests": 23930,
+        "sdkGets": 2916,
+        "sdkEvents": 6000,
+        "sdkReplayBodyBytes": 24282462,
+        "sdkReplayMessages": 8916,
+        "extraRetrievalCopies": 1
+      },
+      "perPerformanceBytes": 855749594,
+      "monthlyBytes": 855749594,
+      "monthlyLimitBytes": 10000000000,
+      "remainingBytes": 9144250406,
+      "withinIllustrativeLimit": true,
+      "wireOverheadAssumptionVerified": false,
+      "fullBusinessFreeTierVerified": false
+    },
+    {
+      "people": 1000,
+      "name": "four-performances-one-reacquisition-each",
+      "input": {
+        "baseResponseBytes": 61478031,
+        "restRequests": 23930,
+        "sdkGets": 2916,
+        "sdkEvents": 6000,
+        "sdkReplayBodyBytes": 24282462,
+        "sdkReplayMessages": 8916,
+        "extraRetrievalCopies": 1,
+        "monthlyPerformances": 4
+      },
+      "perPerformanceBytes": 855749594,
+      "monthlyBytes": 3422998376,
+      "monthlyLimitBytes": 10000000000,
+      "remainingBytes": 6577001624,
+      "withinIllustrativeLimit": true,
+      "wireOverheadAssumptionVerified": false,
+      "fullBusinessFreeTierVerified": false
+    }
+  ],
+  "storage": [
+    {
+      "people": 600,
+      "layoutSerialization": "three-byte",
+      "extraRetainedLayoutGenerations": 2,
+      "perPerformanceJsonBytes": 32627317,
+      "fourPerformancesWithSafetyFactorTwoBytes": 261018536,
+      "storageLimitComparisonBytes": 1000000000,
+      "physicalStorageMeasured": false,
+      "unresolvedGenerationsMayExceedModel": true
+    },
+    {
+      "people": 600,
+      "layoutSerialization": "escaped-control",
+      "extraRetainedLayoutGenerations": 2,
+      "perPerformanceJsonBytes": 46301173,
+      "fourPerformancesWithSafetyFactorTwoBytes": 370409384,
+      "storageLimitComparisonBytes": 1000000000,
+      "physicalStorageMeasured": false,
+      "unresolvedGenerationsMayExceedModel": true
+    },
+    {
+      "people": 1000,
+      "layoutSerialization": "three-byte",
+      "extraRetainedLayoutGenerations": 2,
+      "perPerformanceJsonBytes": 37978221,
+      "fourPerformancesWithSafetyFactorTwoBytes": 303825768,
+      "storageLimitComparisonBytes": 1000000000,
+      "physicalStorageMeasured": false,
+      "unresolvedGenerationsMayExceedModel": true
+    },
+    {
+      "people": 1000,
+      "layoutSerialization": "escaped-control",
+      "extraRetainedLayoutGenerations": 2,
+      "perPerformanceJsonBytes": 51652077,
+      "fourPerformancesWithSafetyFactorTwoBytes": 413216616,
+      "storageLimitComparisonBytes": 1000000000,
+      "physicalStorageMeasured": false,
+      "unresolvedGenerationsMayExceedModel": true
+    }
+  ],
+  "assumptions": {
+    "overheadBytesPerLogicalMessage": 8192,
+    "safetyFactor": 2,
+    "reacquisition": "SDK initial snapshot and observed listener bodies replayed; REST preparation and closing are not replayed"
+  },
+  "omitted": [
+    "HTTP/TLS/WebSocket actual wire overhead",
+    "additional seat and attendee changes",
+    "initialization and final cleanup business paths",
+    "backup and other projects usage",
+    "unbounded retention of unresolved references"
+  ],
+  "externalFirebaseConnected": false,
+  "operationalLimitsApproved": false,
+  "fullBusinessFreeTierVerified": false
+}

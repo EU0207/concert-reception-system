@@ -1,0 +1,24 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+const root=new URL('./',import.meta.url);
+let source=fs.readFileSync(new URL('../GD91-111/capacity.mjs',root),'utf8');
+function replace(old,next){assert(source.includes(old),old);source=source.replace(old,next);}
+replace("from './emulator-maintenance.mjs'","from './emulator-maintenance.mjs'");
+replace("const before=hashes();","const before=hashes();");
+replace("const hashes=()=>sourceHashes(new URL('./',import.meta.url)","const inheritedHashes=()=>sourceHashes(new URL('../GD91-111/',import.meta.url)");
+replace('const before=hashes();',"const hashes=()=>Object.fromEntries(Object.entries(inheritedHashes()).map(([p,h])=>['../GD91-111/'+p,h]));const before=hashes();");
+for(const file of ['sdk-client.mjs','registry.mjs','execute.mjs','setup.mjs'])replace("new URL('"+file+"',import.meta.url)","new URL('../GD91-111/"+file+"',import.meta.url)");
+replace("new URL('./database.rules.json',import.meta.url)","new URL('../GD91-113/database.rules.json',import.meta.url)");
+replace("source=source.replace('assert.equal(stages[kind].ownerRequests,0);'", "source=source.replace('phase=kind;', 'phase=kind;globalThis.__gd115Meter.phase(kind);');\nsource=source.replace('assert.equal(stages[kind].ownerRequests,0);'");
+replace("phase='normal-closing';const closingSubjects", "phase='normal-closing';globalThis.__gd115Meter.phase('closing');const closingSubjects");
+replace("source='import {setup}","source=source.replace(\"phase='leased-sdk-snapshot';\",\"phase='leased-sdk-snapshot';globalThis.__gd115Meter.phase('sdk-setup');\").replace(\"phase='queued-reception';\",\"phase='queued-reception';globalThis.__gd115Meter.phase('reception');\").replace('clean=await cleanup();',\"globalThis.__gd115Meter.phase('cleanup');clean=await cleanup();\");\nsource='import {setup}");
+replace("r.executedRulesSource='database.rules.json';","r.executedRulesSource='../GD91-113/database.rules.json';");
+replace("fs.writeFileSync(result,JSON.stringify(r,null,2)+'\\n');", "r.restMeter=globalThis.__gd115Meter.snapshot();r.postClosingRootJsonBytes=globalThis.__gd115PostClosingRootBytes;r.sourceHashes={...r.sourceHashes,...ownHashes};r.endSourceHashes={...r.endSourceHashes,...ownHashes};fs.writeFileSync(result,JSON.stringify(r,null,2)+'\\n');");
+replace("for(let i=0;i<queues.length;i++)await queues[i].release(closingSubjects[i+2]);", "for(let i=0;i<queues.length;i++)await queues[i].release(closingSubjects[i+2]);globalThis.__gd115PostClosingRootBytes=Buffer.byteLength(JSON.stringify(await owner(trial))); ");
+source="import {installMeter} from './meter.mjs';\nconst meter=installMeter();globalThis.__gd115Meter=meter;\n"+source;
+source=source.replace('const reauthentication=',"const ownHashes=sourceHashes(new URL('./',import.meta.url),['capacity.mjs','meter.mjs','generate.mjs','emulator-maintenance.mjs','../GD91-113/database.rules.json']);\nconst reauthentication=");
+fs.writeFileSync(new URL('capacity.mjs',root),source);
+let maintenance=fs.readFileSync(new URL('../GD91-111/emulator-maintenance.mjs',root),'utf8');
+maintenance=maintenance.replace("new URL('./database.rules.json',import.meta.url)","new URL('../GD91-113/database.rules.json',import.meta.url)").replace("new URL('./deny.rules.json',import.meta.url)","new URL('../GD91-111/deny.rules.json',import.meta.url)");
+fs.writeFileSync(new URL('emulator-maintenance.mjs',root),maintenance);
+fs.mkdirSync(new URL('artifacts/',root),{recursive:true});
+console.log(JSON.stringify({adaptedFrom:'GD91-111',rules:'GD91-113',businessRulesChanged:false,externalFirebaseConnected:false}));

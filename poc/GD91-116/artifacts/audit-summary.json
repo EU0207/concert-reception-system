@@ -1,0 +1,27 @@
+{
+  "sourceHashes": {
+    "audit.mjs": "b7432947971a9633b0487414f332ebe94e865110ea575412ebcde8665306fe13",
+    "policy-test.mjs": "5fce504bb422a8bd3e6ef416f11643703ed71c8811dee32242b1a6652eab5a8b"
+  },
+  "endSourceHashes": {
+    "audit.mjs": "b7432947971a9633b0487414f332ebe94e865110ea575412ebcde8665306fe13",
+    "policy-test.mjs": "5fce504bb422a8bd3e6ef416f11643703ed71c8811dee32242b1a6652eab5a8b"
+  },
+  "localSourceComparisons": 46,
+  "localGroups": 10,
+  "policyCases": 10,
+  "changedRulesPaths": [
+    "/rules/checks/$run/.validate",
+    "/rules/checks/$run/generations/$generation/.validate",
+    "/rules/checks/$run/generations/$generation/sections/$section/.validate"
+  ],
+  "authorizationRulesOtherwiseUnchanged": true,
+  "policyApproval": "TECH-DD91-108-A, developer, 2026-10-17",
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "fullBusinessFreeTierVerified": false,
+  "productionImplementation": false
+}

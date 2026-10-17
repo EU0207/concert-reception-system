@@ -1,0 +1,40 @@
+{
+  "sourceHashes": {
+    "meter-test.mjs": "b72a59b7663a11e605de752591738860dd04f36ff214fb44928e568b45c980cf",
+    "meter.mjs": "83a8ce74f86142cf81fc7236573bb29a970967ec680edb4e4d24fbc95ba804a4"
+  },
+  "endSourceHashes": {
+    "meter-test.mjs": "b72a59b7663a11e605de752591738860dd04f36ff214fb44928e568b45c980cf",
+    "meter.mjs": "83a8ce74f86142cf81fc7236573bb29a970967ec680edb4e4d24fbc95ba804a4"
+  },
+  "reports": [
+    {
+      "id": "M01",
+      "utf8BytesCounted": true,
+      "callerCanStillConsumeResponse": true
+    },
+    {
+      "id": "M02",
+      "ownerDiagnosticsSeparated": true
+    },
+    {
+      "id": "M03",
+      "deniedResponseIsNotFreeOrInvisible": true
+    },
+    {
+      "id": "M04",
+      "transportFailureCounted": true
+    },
+    {
+      "id": "M05",
+      "phasePinnedWhenRequestStarts": true
+    },
+    {
+      "id": "M06",
+      "otherServicesExcluded": true,
+      "credentialsAndUrlsNotRecorded": true
+    }
+  ],
+  "externalFirebaseConnected": false,
+  "productionImplementation": false
+}
