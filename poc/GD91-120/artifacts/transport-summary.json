@@ -2,13 +2,13 @@
   "sourceHashes": {
     "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
     "tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4",
-    "tls-proxy.mjs": "eca2d5e8bf2489443d03f9c113fa0b0ee4bdd096ebc14613493b3de1a668fe1e",
+    "tls-proxy.mjs": "f867396699ea27a51f7b73f35a400fc4a1096e4f1235dcbdaf6454baa87b7ea6",
     "transport-test.mjs": "c75123c317e0b8299a1be3ecaa1fa1bdcfdfbd1c691d91c4138ad132f6f0e779"
   },
   "endSourceHashes": {
     "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
     "tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4",
-    "tls-proxy.mjs": "eca2d5e8bf2489443d03f9c113fa0b0ee4bdd096ebc14613493b3de1a668fe1e",
+    "tls-proxy.mjs": "f867396699ea27a51f7b73f35a400fc4a1096e4f1235dcbdaf6454baa87b7ea6",
     "transport-test.mjs": "c75123c317e0b8299a1be3ecaa1fa1bdcfdfbd1c691d91c4138ad132f6f0e779"
   },
   "reports": [

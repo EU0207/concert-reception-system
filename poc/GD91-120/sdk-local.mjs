@@ -24,7 +24,7 @@ try{
  stage='six-listeners';for(const c of clients)stops.push(onChildAdded(query(ref(c.db,trial+'/wireEvents'),orderByKey(),startAfter('0000000000')),snap=>{c.count++;c.eventBytes+=Buffer.byteLength(JSON.stringify(snap.val()));},e=>{c.error=e.code;}));
  // listener登録完了を値の往復で待ち、最初のイベントを取りこぼさない。
  for(const c of clients)await get(ref(c.db,trial+'/wireEvents'));
- const subject={device:{uid:'fictional-writer'}},l=lease(subject,{generation:'layout',revision:1},2);
+ const subject={human:{uid:'fictional-human'},device:{uid:'fictional-writer'}},l=lease(subject,{generation:'layout',revision:1},2);
  for(let n=1;n<=people;n++){
   const event=queuedEvent(trial.split('/')[1],subject,n,'fiction-'+(n-1),{credentialRef:'fictional-credential',currentCycle:1,credentialVersion:1},l).event;
   await owner(trial+'/wireEvents/'+String(1000000000+n),'PUT',event);
@@ -39,3 +39,4 @@ finally{
 assert.deepEqual(before,hashes());fs.mkdirSync(new URL('artifacts/',import.meta.url),{recursive:true});fs.writeFileSync(new URL('artifacts/sdk-'+people+'-summary.json',import.meta.url),JSON.stringify({sourceHashes:before,endSourceHashes:hashes(),people,reports,cleanup:clean,...(failure?{failure}:{}),transportFixtureOnly:true,
  businessAuthorizationVerifiedHere:false,registrationAndTicketsSeeded:true,externalFirebaseConnected:false,productionImplementation:false,fullBusinessFreeTierVerified:false},null,2)+'\n');
 console.log(JSON.stringify({people,sdkGroups:reports.length,failure:failure??null,cleanup:clean}));
+process.exit(process.exitCode??0);

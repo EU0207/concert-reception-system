@@ -16,7 +16,7 @@
     "../GD91-116/layout.mjs": "7b94e57cbfbdf170107e9d65b36cbba9c0af54dc6398c5262e96a2bdd807eb04",
     "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
     "../GD91-117/models.mjs": "9a6bc57ebeeaf1359fc45036a43028c84948d33a09e61534f8cd9281f71226f4",
-    "sdk-local.mjs": "ed1ff6d50be595828b5b6dd7c8a08dd9f05c7df39e8ca7ce2c63482655faa3f4",
+    "sdk-local.mjs": "b9b035faeda7f3fdf1ff6be39025939933ae5191e8dbadc738aeb50dd2f4888d",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
@@ -42,7 +42,7 @@
     "../GD91-116/layout.mjs": "7b94e57cbfbdf170107e9d65b36cbba9c0af54dc6398c5262e96a2bdd807eb04",
     "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
     "../GD91-117/models.mjs": "9a6bc57ebeeaf1359fc45036a43028c84948d33a09e61534f8cd9281f71226f4",
-    "sdk-local.mjs": "ed1ff6d50be595828b5b6dd7c8a08dd9f05c7df39e8ca7ce2c63482655faa3f4",
+    "sdk-local.mjs": "b9b035faeda7f3fdf1ff6be39025939933ae5191e8dbadc738aeb50dd2f4888d",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
@@ -58,16 +58,23 @@
       "sdkEnvironments": 6,
       "dataBytes": 25291,
       "logicalResponseBodyBytes": 151746
+    },
+    {
+      "id": "six-listeners",
+      "eventsPerEnvironment": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "logicalResponseBodyBytes": 12792
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "stage": "six-listeners",
-    "code": "TypeError",
-    "message": "Cannot read properties of undefined (reading 'uid')"
   },
   "transportFixtureOnly": true,
   "businessAuthorizationVerifiedHere": false,
@@ -83,13 +90,13 @@
       "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
       "run-sdk.mjs": "7fa1ee1dbb909dddb98890a33fddc1c477cad3546d1efcbe582d4e6667ad4d04",
       "tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4",
-      "tls-proxy.mjs": "eca2d5e8bf2489443d03f9c113fa0b0ee4bdd096ebc14613493b3de1a668fe1e"
+      "tls-proxy.mjs": "f867396699ea27a51f7b73f35a400fc4a1096e4f1235dcbdaf6454baa87b7ea6"
     },
     "endSourceHashes": {
       "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
       "run-sdk.mjs": "7fa1ee1dbb909dddb98890a33fddc1c477cad3546d1efcbe582d4e6667ad4d04",
       "tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4",
-      "tls-proxy.mjs": "eca2d5e8bf2489443d03f9c113fa0b0ee4bdd096ebc14613493b3de1a668fe1e"
+      "tls-proxy.mjs": "f867396699ea27a51f7b73f35a400fc4a1096e4f1235dcbdaf6454baa87b7ea6"
     },
     "localCertificateOnly": true,
     "tcpIpHeadersAndRetransmissionExcluded": true,
