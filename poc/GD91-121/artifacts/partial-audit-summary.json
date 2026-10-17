@@ -9,6 +9,22 @@
       "normalRestRequests": 220,
       "completedRestResponseBodyBytes": 171961,
       "normalRestTransportErrors": 0,
+      "stageTotals": {
+        "previousDay": {
+          "requests": 60,
+          "requestBodyBytes": 75419,
+          "responseBodyBytes": 74266,
+          "transportErrors": 0
+        },
+        "eventDay": {
+          "requests": 160,
+          "requestBodyBytes": 54546,
+          "responseBodyBytes": 97695,
+          "transportErrors": 0
+        }
+      },
+      "restReadWriteMethodsNotSeparatelyCounted": true,
+      "tlsNotSplitByDay": true,
       "tlsDownloadBytes": 414553,
       "tlsUploadBytes": 373568,
       "connections": 8,
@@ -22,6 +38,22 @@
       "normalRestRequests": 14722,
       "completedRestResponseBodyBytes": 21455775,
       "normalRestTransportErrors": 0,
+      "stageTotals": {
+        "previousDay": {
+          "requests": 5708,
+          "requestBodyBytes": 11838011,
+          "responseBodyBytes": 11130989,
+          "transportErrors": 0
+        },
+        "eventDay": {
+          "requests": 9014,
+          "requestBodyBytes": 3736023,
+          "responseBodyBytes": 10324786,
+          "transportErrors": 0
+        }
+      },
+      "restReadWriteMethodsNotSeparatelyCounted": true,
+      "tlsNotSplitByDay": true,
       "tlsDownloadBytes": 44615291,
       "tlsUploadBytes": 28333326,
       "connections": 13,

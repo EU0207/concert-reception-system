@@ -14,7 +14,11 @@ for(const people of counts){
  assert.equal(x.closing.registeredDevices,8);assert.deepEqual(x.reception.eventsPerEnvironment,Array(6).fill(people));assert.equal(x.reconnectEvents,0);
  const normal=Object.entries(r.restMeter).filter(([key])=>key.endsWith(':normal')),sum=key=>normal.reduce((n,[,b])=>n+b[key],0);
  assert.equal(r.httpsRouting.normalRouted,sum('requests'));assert(r.tlsProxy.connections>=6);assert(r.tlsProxy.tlsDownloadBytes>sum('responseBodyBytes'));
+ const stageTotals=Object.fromEntries(Object.entries({previousDay:['preparation','register','bulkAssign','qrCreate','ticketCheck'],eventDay:['sdk-setup','reception','closing']}).map(([day,stages])=>[day,
+  Object.fromEntries(['requests','requestBodyBytes','responseBodyBytes','transportErrors'].map(key=>[key,stages.reduce((n,s)=>n+r.restMeter[s+':normal'][key],0)]))]));
+ assert.equal(stageTotals.previousDay.requests+stageTotals.eventDay.requests,sum('requests'));
  reports.push({people,normalRestRequests:sum('requests'),completedRestResponseBodyBytes:sum('responseBodyBytes'),normalRestTransportErrors:sum('transportErrors'),
+  stageTotals,restReadWriteMethodsNotSeparatelyCounted:true,tlsNotSplitByDay:true,
   tlsDownloadBytes:r.tlsProxy.tlsDownloadBytes,tlsUploadBytes:r.tlsProxy.tlsUploadBytes,connections:r.tlsProxy.connections,
   rootJsonBytes:r.postClosingRootJsonBytes,ownerPreconditionsExcluded:true,providerBillingMeasured:false,fullBusinessFreeTierVerified:false});
 }
