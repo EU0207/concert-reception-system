@@ -1,0 +1,10 @@
+{
+  "sourceComparisons": 117,
+  "httpContractAndMockCases": 10,
+  "failedTrialGroups": 0,
+  "failedTrialCleanupVerified": true,
+  "localMigrationModelGroups": 7,
+  "realDatabaseMigrationVerified": false,
+  "proposedTrialExternalRequestsExecuted": 0,
+  "actualAppCheckEnforcementVerified": false
+}
