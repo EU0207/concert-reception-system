@@ -1,0 +1,60 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "browser.mjs": "1c54e4d19a2d52aad7d9ca4fc7cd617b3fe0461df1a7157db502473ac3aee46c",
+    "run-local.mjs": "9905a9499d38e2eb89a9e7b9bd03960a72eb238d1406d80b7d595f89bbe66c01"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "browser.mjs": "1c54e4d19a2d52aad7d9ca4fc7cd617b3fe0461df1a7157db502473ac3aee46c",
+    "run-local.mjs": "9905a9499d38e2eb89a9e7b9bd03960a72eb238d1406d80b7d595f89bbe66c01"
+  },
+  "reports": [
+    {
+      "id": "I01-persistent-encrypted-source",
+      "browserRestartPreserved": true,
+      "keyNonextractable": true,
+      "originalBaseVersionPreserved": true
+    },
+    {
+      "id": "I02-rejected-inputs",
+      "cases": 8,
+      "noChanges": true,
+      "notFoundDoesNotResolveUnknown": true
+    },
+    {
+      "id": "I03-transaction-abort",
+      "configDraftKeyAndPendingRolledBack": true,
+      "browserRestartCompared": true
+    },
+    {
+      "id": "I04-conversion-failure",
+      "originalUnchanged": true,
+      "corruptedCiphertextRejected": true
+    },
+    {
+      "id": "I05-atomic-switch",
+      "originalPreserved": true,
+      "newDraftNeedsReview": true,
+      "separateNewIdentityKey": true,
+      "noAutomaticSend": true,
+      "restartAndRepeatedSwitchChecked": true
+    },
+    {
+      "id": "I06-rollback-after-new-fact",
+      "stoppedSelectionPersisted": true,
+      "oldDraftNewDraftAndNewFactPreserved": true,
+      "legacyNotAutomaticallyResumed": true,
+      "newFactPreconditionSeeded": true
+    }
+  ],
+  "realBrowserIndexedDb": true,
+  "browser": "installed headless Microsoft Edge",
+  "externalRequests": 0,
+  "dbRequests": 0,
+  "isolatedProfileRemoved": true,
+  "actualSdkAdapterSwitchVerified": false,
+  "formalBackupFormatVerified": false,
+  "productionImplementation": false,
+  "credentialValuesPersisted": false
+}
