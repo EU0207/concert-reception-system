@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 // 利用条件の感度比較。未測定の項目は明示的な予約量として受け取り、0扱いで合格にしない。
 export function budget(input){
- const fields=['normalTlsBytes','extraSdkCopyBytes','restRequests','generationJsonBytes','closingRootJsonBytes','fullLayoutSaveRestRequests','fullLayoutSnapshotBodyBytes',
+ const fields=['normalTlsBytes','extraSdkCopyBytes','restRequests','generationJsonBytes','closingRootJsonBytes','fullLayoutSaveRestRequests','fullLayoutSnapshotBodyBytes','backupRequestAllowance',
   'extraFullLayoutSaves','extraSnapshotCopies','backupCopies','retainedExtraGenerations','retainedPerformances',
   'monthlyPerformances','unmeasuredRequestAllowanceBytes','extraBusinessOperations','extraBusinessBytesPerOperation','bootstrapAndEndReserveBytes','otherMonthlyBytes','otherStoredBytes'];
  for(const name of fields)assert(Number.isSafeInteger(input[name])&&input[name]>=0,'invalid-or-missing:'+name);
@@ -10,7 +10,7 @@ export function budget(input){
  const extras={
   repeatedSnapshots:input.extraSnapshotCopies*input.extraSdkCopyBytes,
   fullLayoutSaves:input.extraFullLayoutSaves*(2*input.generationJsonBytes+input.fullLayoutSnapshotBodyBytes+input.extraSdkCopyBytes+input.fullLayoutSaveRestRequests*input.unmeasuredRequestAllowanceBytes),
-  backups:input.backupCopies*input.closingRootJsonBytes,
+  backups:input.backupCopies*(input.closingRootJsonBytes+input.backupRequestAllowance*input.unmeasuredRequestAllowanceBytes),
   requestAllowance:input.restRequests*input.unmeasuredRequestAllowanceBytes,
   extraBusiness:input.extraBusinessOperations*input.extraBusinessBytesPerOperation,
   bootstrapAndEnd:input.bootstrapAndEndReserveBytes
