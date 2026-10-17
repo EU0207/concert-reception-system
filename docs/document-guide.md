@@ -76,7 +76,7 @@
 | 座席保存の技術検証記録 | [seat-save-validation.md](development/technical-validation/seat-save-validation.md) | #101の索引と検証分担を追跡。V1完了、V2の合同結果は別記録。容量・採否はV3・V4。方式未採用 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残作業・承認変更時 | In Review |
 | 座席構成の完成検証記録 | [seat-completion-validation.md](development/technical-validation/seat-completion-validation.md) | #165の全体検査・完成候補の証拠。GD91-54～59とV1の4条件は承認・統合済み | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | Approved |
 | 席・券・権限の合同検証記録 | [seat-business-integration-validation.md](development/technical-validation/seat-business-integration-validation.md) | #166の4条件と225件をPR #187で承認済み。V2完了、容量・回収は#167、採否は#168 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | Approved（機能合同検証） |
-| 座席保存の容量・回収検証記録 | [seat-capacity-validation.md](development/technical-validation/seat-capacity-validation.md) | PR #219まで承認済み。#167の設計検証4／4完了。方式採否は#168、完成アプリの無料受入は#220 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 測定・判断変更時 | Approved（設計検証） |
+| 座席保存の容量・回収検証記録 | [seat-capacity-validation.md](development/technical-validation/seat-capacity-validation.md) | #167の設計検証4／4完了。GD91-122で#101の全条件と証拠を照合。#168は認可境界等の残条件待ち、完成アプリの受入は#220 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 測定・判断変更時 | Approved（V3）／In Review（V4） |
 | 技術実現可能性調査報告書 | [technical-feasibility-research.md](development/technical-validation/technical-feasibility-research.md) | 技術調査の根拠、候補比較、制約、PoC前の判断事項を記録する | 開発者、設計担当者、テスト担当者 | 技術調査時 | 調査結果、候補、承認状態の変更時 | In Review |
 | RES-005自動座席配置机上レビュー記録 | [res-005-seat-allocation-desk-review.md](development/technical-validation/res-005-seat-allocation-desk-review.md) | 自動座席配置の架空例と期待結果を確認し、将来テストへ引き継ぐ | 開発者、設計担当者、テスト担当者 | RES-005実施時 | 机上レビュー結果または要件変更時 | Approved |
 | POC-001開始承認依頼書 | [poc-001-approval-request.md](development/technical-validation/poc-001-approval-request.md) | PoC開始前に依存関係、外部資源、データ、削除、費用と承認範囲を確認する | 依頼者、開発担当者、確認担当者 | POC-001承認前 | 候補条件または承認状態の変更時 | Approved |
@@ -156,7 +156,7 @@
 | ADR-004 詳細履歴の削除案内と例外締め | [ADR-004-retention-and-exceptional-close.md](development/decisions/ADR-004-retention-and-exceptional-close.md) | C-02・C-04の候補、採用理由、未検証事項を記録する | 依頼者、開発者、設計担当者、運用担当者 | 基本設計の是正時 | 再レビューと方式判断時 | Accepted |
 | ADR-005 端末別認証主体と本人認証の結合 | [ADR-005-device-principal-authorization.md](development/decisions/ADR-005-device-principal-authorization.md) | C-01の認可方式と検証条件を記録する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 認可方式または残存リスクの変更時 | Accepted |
 | ADR-006 会場画像のFirestore保存方式 | [ADR-006-firestore-image-storage.md](development/decisions/ADR-006-firestore-image-storage.md) | C-03の旧5MB分割案と採用した1MB単一文書案を比較する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 実画像の画質・容量上限の変更時 | Accepted |
-| ADR-007 席編集の確定境界 | [ADR-007-seat-edit-commit-boundary.md](development/decisions/ADR-007-seat-edit-commit-boundary.md) | 単一トランザクションと版切替の候補、技術検証条件を比較する | 開発者、設計担当者、テスト担当者 | 詳細設計 | 成立性検証・採否決定時 | In Review（Proposed） |
+| ADR-007 席編集の確定境界 | [ADR-007-seat-edit-commit-boundary.md](development/decisions/ADR-007-seat-edit-commit-boundary.md) | 保存候補と採否条件を比較。TECH-DD91-112で画像との認可境界を技術判断する | 開発者、設計担当者、テスト担当者 | 詳細設計 | 成立性検証・採否決定時 | In Review（Proposed） |
 
 ## テンプレート
 
