@@ -1,5 +1,6 @@
 import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
 import {sourceHashes} from '../GD91-105/source-audit.mjs';import {generated} from '../GD91-116/generate.mjs';
+import {build} from '../GD91-116/layout.mjs';import {preparePublication} from '../GD91-104/slide.mjs';import {modelsFor} from './models.mjs';
 const root=new URL('./',import.meta.url),hash=p=>createHash('sha256').update(fs.readFileSync(new URL(p,root),'utf8').replace(/\r\n/g,'\n')).digest('hex');
 const ruleHash=createHash('sha256').update(JSON.stringify(generated())).digest('hex');let comparisons=0;const reports=[];
 for(const people of [600,1000]){
@@ -10,7 +11,12 @@ for(const people of [600,1000]){
  assert(x.allCellFieldsPreserved&&x.uniqueLabels&&x.bothAxes&&x.bothOrders);assert.equal(x.cachedGenerationReads,0);assert(x.maxWriteJsonBytes<1048576);
  assert.equal(x.maintenance.rulesHash,ruleHash);assert(x.maintenance.boundaries.every(b=>b.applicationDataHashUnchanged&&b.exactRulesRestored));assert.equal(x.maintenance.measuredMaxHeapBytes,8589934592);
  assert(r.cleanup.rulesClosed&&r.cleanup.trialRootEmpty);assert(!r.externalFirebaseConnected&&!r.productionImplementation);
- reports.push({people,cells:x.cells,sections:x.sections,numberingLinesPerSection:x.numberingLinesPerSection,maxWriteJsonBytes:x.maxWriteJsonBytes,generationJsonBytes:x.generationJsonBytes,snapshotRequests:x.snapshotRequests,normalRequests:x.normalRequests,serverAccepted:true,realSdkUsed:false});
+ let plannedWrites=0,plannedReads=0;
+ const send=async()=>{plannedWrites++;},read=async p=>{plannedReads++;return p==='control'?{revision:1}:null;};
+ await build(send,'model',modelsFor(people));const proof=await preparePublication(read,send,{device:{uid:'fictional-model-only'}},'model');await send('', 'PATCH',proof.publish(1));await send('', 'PATCH',proof.complete());
+ assert.equal(plannedWrites,294);assert.equal(plannedReads,4);const inferredReads=x.normalRequests-plannedWrites;assert.equal(inferredReads,349);assert(inferredReads>=x.snapshotRequests+plannedReads);
+ reports.push({people,cells:x.cells,sections:x.sections,numberingLinesPerSection:x.numberingLinesPerSection,maxWriteJsonBytes:x.maxWriteJsonBytes,generationJsonBytes:x.generationJsonBytes,snapshotRequests:x.snapshotRequests,normalRequests:x.normalRequests,
+  plannedWrites,inferredReads,methodCountsDerivedFromExecutedPlanNotSeparateWireMeasurement:true,serverAccepted:true,realSdkUsed:false});
 }
 const addition=JSON.parse(fs.readFileSync(new URL('artifacts/addition-summary.json',root)));assert(!addition.failure);assert.deepEqual(addition.sourceHashes,addition.endSourceHashes);
 for(const [p,h] of Object.entries(addition.sourceHashes)){assert.equal(hash(p),h,p);comparisons++;}
