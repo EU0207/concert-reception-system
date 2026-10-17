@@ -1,0 +1,57 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4",
+    "tls-proxy.mjs": "eca2d5e8bf2489443d03f9c113fa0b0ee4bdd096ebc14613493b3de1a668fe1e",
+    "transport-test.mjs": "c75123c317e0b8299a1be3ecaa1fa1bdcfdfbd1c691d91c4138ad132f6f0e779"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4",
+    "tls-proxy.mjs": "eca2d5e8bf2489443d03f9c113fa0b0ee4bdd096ebc14613493b3de1a668fe1e",
+    "transport-test.mjs": "c75123c317e0b8299a1be3ecaa1fa1bdcfdfbd1c691d91c4138ad132f6f0e779"
+  },
+  "reports": [
+    {
+      "id": "body-0",
+      "bodyBytes": 0,
+      "tlsDownloadBytes": 3197,
+      "newConnections": 1
+    },
+    {
+      "id": "body-30000",
+      "bodyBytes": 30000,
+      "tlsDownloadBytes": 30202,
+      "newConnections": 0
+    },
+    {
+      "id": "body-1048576",
+      "bodyBytes": 1048576,
+      "tlsDownloadBytes": 1050166,
+      "newConnections": 0
+    },
+    {
+      "id": "keepalive",
+      "requests": 3,
+      "connections": 1
+    },
+    {
+      "id": "denied",
+      "bodyBytes": 18,
+      "tlsDownloadBytes": 205
+    },
+    {
+      "id": "reconnect",
+      "connections": 2
+    },
+    {
+      "id": "certificate-verification-not-disabled",
+      "untrustedCertificateRejected": true
+    }
+  ],
+  "temporaryCertificateRemoved": true,
+  "measurement": "Raw server TCP socket counters include TLS and application protocol bytes, excluding TCP/IP headers and retransmissions. Local certificate only; not Firebase billing.",
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "fullBusinessFreeTierVerified": false
+}

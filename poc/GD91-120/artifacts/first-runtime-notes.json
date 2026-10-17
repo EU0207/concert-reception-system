@@ -1,0 +1,11 @@
+{
+  "fixture": "four-person-local-TLS-only",
+  "sdkSnapshotsCompleted": 6,
+  "streamEventsCompleted": 0,
+  "missingFictionalHumanFixture": true,
+  "sdkBackgroundTimersRequiredExplicitExit": true,
+  "ambiguousChildProcessMatchStoppedCliBeforeSdkChild": true,
+  "ownedRemainingSdkAndEmulatorSubsequentlyStopped": true,
+  "temporaryCertificatesRemoved": true,
+  "externalFirebaseConnected": false
+}
