@@ -12,7 +12,7 @@ const rules=generated();let expressions=0,childReferences=0,maxExpressionBytes=0
 function visit(node){for(const [key,v] of Object.entries(node))if(typeof v==='object'&&v)visit(v);else if(['.read','.write','.validate'].includes(key)&&typeof v==='string'){
  expressions++;childReferences+=(v.match(/\.child\(/g)||[]).length;maxExpressionBytes=Math.max(maxExpressionBytes,Buffer.byteLength(v));
 }}
-visit(rules);const own=sourceHashes(root,['audit.mjs','remote.mjs','generate.mjs']);
+visit(rules);const own={...sourceHashes(root,['audit.mjs','remote.mjs']),'generate.mjs':createHash('sha256').update(fs.readFileSync(new URL('generate.mjs',root),'utf8').replace(/\r\n/g,'\n')).digest('hex')};
 fs.writeFileSync(new URL('artifacts/audit-summary.json',root),JSON.stringify({sourceHashes:own,endSourceHashes:own,sourceComparisons:comparisons,
  localGroups:14,commonIoCallModel:r.commonIoCallModel,protocolExtraCallModel:r.protocolExtraCallModel,modelTotalIncludingAllowances:r.modelTotalIncludingAllowances,
  maxJsonNodes:r.maxJsonNodes,maxRootJsonBytes:r.maxRootJsonBytes,plan,
