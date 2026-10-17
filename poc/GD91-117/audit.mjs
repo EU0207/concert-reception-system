@@ -12,7 +12,12 @@ for(const people of [600,1000]){
  assert(r.cleanup.rulesClosed&&r.cleanup.trialRootEmpty);assert(!r.externalFirebaseConnected&&!r.productionImplementation);
  reports.push({people,cells:x.cells,sections:x.sections,numberingLinesPerSection:x.numberingLinesPerSection,maxWriteJsonBytes:x.maxWriteJsonBytes,generationJsonBytes:x.generationJsonBytes,snapshotRequests:x.snapshotRequests,normalRequests:x.normalRequests,serverAccepted:true,realSdkUsed:false});
 }
+const addition=JSON.parse(fs.readFileSync(new URL('artifacts/addition-summary.json',root)));assert(!addition.failure);assert.deepEqual(addition.sourceHashes,addition.endSourceHashes);
+for(const [p,h] of Object.entries(addition.sourceHashes)){assert.equal(hash(p),h,p);comparisons++;}
+assert.deepEqual(addition.reports.map(x=>x.people),[600,1000]);assert.deepEqual(addition.reports.map(x=>x.initialParts),[38,63]);assert.deepEqual(addition.reports.map(x=>x.finalParts),[39,64]);
+assert(addition.reports.every(x=>x.partialPublicationRefused&&x.oldSeatIdsAndFieldsPreserved&&x.seatIdsAndNumbersUnique&&x.attendeeRecords===0));
+assert(addition.cleanup.rulesClosed&&addition.cleanup.trialRootEmpty);
 const own=sourceHashes(root,['audit.mjs']);
 fs.writeFileSync(new URL('artifacts/audit-summary.json',root),JSON.stringify({sourceHashes:own,endSourceHashes:own,sourceComparisons:comparisons,reports,
- executedRulesHash:ruleHash,externalFirebaseConnected:false,fullBusinessFreeTierVerified:false,productionImplementation:false,tested3000People:false},null,2)+'\n');
+ additionGroups:addition.reports,executedRulesHash:ruleHash,externalFirebaseConnected:false,fullBusinessFreeTierVerified:false,productionImplementation:false,tested3000People:false},null,2)+'\n');
 console.log(JSON.stringify({sourceComparisons:comparisons,reports,fullBusinessFreeTierVerified:false}));

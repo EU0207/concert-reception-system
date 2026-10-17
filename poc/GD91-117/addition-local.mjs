@@ -15,13 +15,14 @@ try{
   const model=numberInitial(s,Object.fromEntries(s.section.cells.map((c,i)=>['0,'+c.column,i<people?'seat':'unset'])),{maxCells:4096});
   stage='initial-'+people;const initial=await build(send,'initial',[model]),first=await preparePublication(read,send,m,'initial');await send('','PATCH',first.publish(1));await send('','PATCH',first.complete());
   const state=initialize();await send('event','PATCH',{commit:state.commit,'reception/0000000000':1});
+  const beforeView=await snapshot(read,async()=>({rows:{}}));
   const proposal=numberedExtension([model],model.section.sectionId,{dimension:'columns',count:2,selections:{['0,'+columns]:'seat',['0,'+(columns+1)]:'unset'}});
   stage='addition-'+people;const added=await build(send,'added',proposal.models);assert.equal(added.meta.expectedParts,initial.meta.expectedParts+1);
   const proof=await prepareNumbered(read,send,m,'added',proposal.edit),oldHead=await read('head');
   const partial=proof.publish();delete partial['operations/'+proof.record.publicationOperationId];assert.equal((await user('',m.device,'PATCH',partial)).status,401);assert.deepEqual(await read('head'),oldHead);
   await send('','PATCH',proof.publish());await send('','PATCH',proof.complete());await send('numberProofs/'+proof.id,'DELETE');
   const view=await snapshot(read,async()=>({rows:{}})),actual=view.models[0];assert.equal(Object.keys(view.cells).length,columns+2);assert.equal(actual.seats.length,people+1);
-  for(const old of model.seats)assert.deepEqual(actual.seats.find(x=>x.seatId===old.seatId),old);
+  for(const old of beforeView.models[0].seats)assert.deepEqual(actual.seats.find(x=>x.seatId===old.seatId),old);
   assert.equal(new Set(actual.seats.map(x=>x.seatId)).size,people+1);assert.equal(new Set(actual.seats.map(x=>x.prefix+x.number)).size,people+1);
   reports.push({people,initialCells:columns,addedCells:2,finalCells:columns+2,initialParts:initial.meta.expectedParts,finalParts:added.meta.expectedParts,
    partialPublicationRefused:true,oldSeatIdsAndFieldsPreserved:true,seatIdsAndNumbersUnique:true,attendeeRecords:0,realRegistrationAndQrNotTestedHere:true});
