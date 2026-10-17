@@ -1,0 +1,10 @@
+{
+  "runtime": "v24.19.0",
+  "stage": "direct-meter-native-https",
+  "confirmedExitCode": -1073741819,
+  "artifactWrittenByCrashedProcess": false,
+  "globalTlsConnectReplacementRejected": true,
+  "temporaryFixtureDirectoriesRecovered": 2,
+  "externalFirebaseConnected": false,
+  "fullBusinessFreeTierVerified": false
+}

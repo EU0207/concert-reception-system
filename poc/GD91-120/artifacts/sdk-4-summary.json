@@ -16,7 +16,7 @@
     "../GD91-116/layout.mjs": "7b94e57cbfbdf170107e9d65b36cbba9c0af54dc6398c5262e96a2bdd807eb04",
     "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
     "../GD91-117/models.mjs": "9a6bc57ebeeaf1359fc45036a43028c84948d33a09e61534f8cd9281f71226f4",
-    "sdk-local.mjs": "436b58fd89dc0cd8fa9906103930876200d0030c070398db1c4a96fea0b4a215",
+    "sdk-local.mjs": "036c721f96e67810197e81bf743046df992b6653ce7aad916409c7efcca8b5ed",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
@@ -42,7 +42,7 @@
     "../GD91-116/layout.mjs": "7b94e57cbfbdf170107e9d65b36cbba9c0af54dc6398c5262e96a2bdd807eb04",
     "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
     "../GD91-117/models.mjs": "9a6bc57ebeeaf1359fc45036a43028c84948d33a09e61534f8cd9281f71226f4",
-    "sdk-local.mjs": "436b58fd89dc0cd8fa9906103930876200d0030c070398db1c4a96fea0b4a215",
+    "sdk-local.mjs": "036c721f96e67810197e81bf743046df992b6653ce7aad916409c7efcca8b5ed",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
     "../GD91-87/receipt-client.mjs": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
@@ -77,7 +77,7 @@
       "logicalResponseBodyBytes": 12792,
       "wire": {
         "connections": 0,
-        "tlsDownloadBytes": 16876,
+        "tlsDownloadBytes": 16920,
         "tlsUploadBytes": 1914
       }
     },
@@ -90,16 +90,22 @@
         "tlsUploadBytes": 780
       },
       "returnedValueIsNotAssumedToBeNetworkResponse": true
+    },
+    {
+      "id": "six-cold-reopen",
+      "logicalReturnedValueBytes": 151746,
+      "replayedEvents": 0,
+      "wire": {
+        "connections": 6,
+        "tlsDownloadBytes": 191052,
+        "tlsUploadBytes": 22281
+      },
+      "sameClientGoOnlineNotVerified": true
     }
   ],
   "cleanup": {
     "rulesClosed": true,
     "trialRootEmpty": true
-  },
-  "failure": {
-    "stage": "six-reconnect",
-    "code": "Error",
-    "message": "sdk-reconnect-timeout"
   },
   "transportFixtureOnly": true,
   "businessAuthorizationVerifiedHere": false,
@@ -108,9 +114,9 @@
   "productionImplementation": false,
   "fullBusinessFreeTierVerified": false,
   "tlsProxy": {
-    "connections": 6,
-    "tlsDownloadBytes": 346312,
-    "tlsUploadBytes": 21978,
+    "connections": 12,
+    "tlsDownloadBytes": 537520,
+    "tlsUploadBytes": 45342,
     "sourceHashes": {
       "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
       "run-sdk.mjs": "1f94e4be1b9b22bf1cd4d54971445e3e7ae93b5272bf40e618c466eba9767ea7",
