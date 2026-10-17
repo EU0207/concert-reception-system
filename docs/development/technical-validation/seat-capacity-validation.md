@@ -929,11 +929,35 @@ node poc/GD91-124/test.mjs
 
 [HTTP形式と復元10条件](../../../poc/GD91-125/artifacts/app-check-plan-test-summary.json)がローカル合格。管理要求へAPIキーを付けないことと、交換要求へ管理OAuthを付けないことを検査した。交換401の後も試行分だけを回収する。実サービスのApp Check強制・画像13経路は未実施。
 
-[117件の監査](../../../poc/GD91-125/artifacts/audit-summary.json)で元の外部失敗・後処理、移行RAMモデルと修正候補のソースを照合した。元のGD91-123の147件も別途一致した。新しい[TECH-DD91-114](../decisions/ADR-007-seat-edit-commit-boundary.md#app-check交換要求の修正後の一括検証案tech-dd91-114)は開発者判断待ち。承認前に追加実行せず、113-Aを再利用しない。
+[117件の監査](../../../poc/GD91-125/artifacts/audit-summary.json)で元の外部失敗・後処理、移行RAMモデルと修正候補のソースを照合した。元のGD91-123の147件も別途一致した。新しい[TECH-DD91-114-A](../decisions/ADR-007-seat-edit-commit-boundary.md#app-check交換要求の修正後の一括検証案tech-dd91-114)は2026-10-17に開発者が会話で承認した。113-Aを再利用せず、指定範囲の1試行を開始した。トークン交換は通過し、手動Googleログイン待ち。終了結果が得られるまで合格へ数えない。
 
 ```text
 node poc/GD91-125/generate.mjs
 node poc/GD91-125/app-check-test.mjs
 node poc/GD91-125/audit.mjs
 node poc/GD91-125/remote.mjs --plan
+```
+
+## GD91-126 QR資格・確認コードの形式整合
+
+状態：In Review。移行元との照合で、現候補の2制約が承認済み[BD-07-04](../basic-design/file-output-report-design.md#bd-07-04-qrと確認コード)に合わないことを確認した。[静的な反例](../../../poc/GD91-126/artifacts/compatibility-summary.json)は旧GD91-64の128ビット乱数・Base64url資格と英数字8文字コードを使う。GD91-123のRulesはUUID形資格と数字8桁だけを許し、両方を拒否する。旧225件やRTDBの数字コードによる合格を、この形式の成立証拠へ流用しない。
+
+[修正候補](../../../poc/GD91-126/contract-rules.mjs)は資格キーとコードキーの検証2式だけを交換する。資格は16バイト乱数の正規Base64url 22文字、コードは旧方式と同じ紛らわしい文字を除いた英数字8文字とする。操作IDと席IDのUUIDは変更しない。アプリの乱数生成とRulesの構文検査を分け、Rulesだけで乱数の強さを保証したとは扱わない。旧QRを新しいIDへ振り直さない。
+
+[ローカル7群](../../../poc/GD91-126/artifacts/local-summary.json)が合格。現行の構成・参照予約とQR投影へ接続し、通常作成→席移動→再発行→不参加→再参加・次cycleの順に確認した。席移動は理由を保存し、資格・コードとcycleを維持する。再発行と不参加は旧資格を不可逆に失効させる。
+
+| 範囲 | 確認したこと |
+|---|---|
+| Q01～03 | 128ビット乱数と英字を含む確認コードの通常保存。席替えで資格を維持し、一般受付の資格・コード正本の直接取得を拒否 |
+| Q04～05 | UUID形・短すぎる資格と不正な末尾、紛らわしいコードの5入力を拒否。参照予約済みの有効提案を基に不正要求を組み立て、認可不足だけの拒否へ依存しない。旧資格だけ失効しない部分更新と二重確定も拒否 |
+| Q06～07 | 不参加・再参加でcycleを2へ進め、過去2資格を失効のまま保持。他の座席・画像と認可Rulesが変わらないことを照合 |
+
+試験側の接続修正前は3回停止した。旧モデルの送信契約不足、確定応答の入れ子形式の扱い、発券後の席移動理由の未指定を修正した。途中の0／0／1群を最終7群へ加算しない。各[失敗記録1](../../../poc/GD91-126/artifacts/first-local-failure.json)・[2](../../../poc/GD91-126/artifacts/second-local-failure.json)・[3](../../../poc/GD91-126/artifacts/third-local-failure.json)を保持し、いずれも全拒否・空試行根を確認した。
+
+外部実行中のGD91-125と共有する既存ソースは変更していない。実サービスの画像・App Checkの結果を126のQR合格へ数えず、全業務回帰とDB間移行は未完了とする。資格値は結果へ保存しない。通常初期化のowner前提は既存setupのままで、本番初期化の合格ではない。
+
+```text
+node poc/GD91-126/compatibility.mjs
+node poc/GD91-126/run-local.mjs
+node poc/GD91-126/audit.mjs
 ```
