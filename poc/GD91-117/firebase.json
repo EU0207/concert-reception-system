@@ -1,0 +1,1 @@
+{"database":{"rules":"deny.rules.json"},"emulators":{"auth":{"port":9191},"database":{"port":9000},"ui":{"enabled":false},"singleProjectMode":true}}
