@@ -10,5 +10,5 @@ export async function proxy({key,cert,targetPort}){
  server.on('connection',socket=>raw.push(socket));server.on('tlsClientError',()=>{});
  await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
  const stats=()=>({connections:raw.length,tlsDownloadBytes:raw.reduce((n,s)=>n+s.bytesWritten,0),tlsUploadBytes:raw.reduce((n,s)=>n+s.bytesRead,0)});
- return{port:server.address().port,stats,close:async()=>{if(closed)return;closed=true;for(const socket of secure)socket.destroy();for(const socket of upstream)socket.destroy();for(const socket of raw)socket.destroy();await new Promise(resolve=>server.close(resolve));}};
+ return{port:server.address().port,stats,close:async()=>{if(closed)return;closed=true;for(const socket of secure)socket.destroy();for(const socket of upstream)socket.destroy();await new Promise(resolve=>server.close(resolve));}};
 }
