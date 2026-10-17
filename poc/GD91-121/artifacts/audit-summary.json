@@ -1,0 +1,97 @@
+{
+  "sourceComparisons": 489,
+  "allCurrentSourcesMatch": true,
+  "allPeopleMeasured": true,
+  "rulesHash": "6fa765ee5ec0c9d221c5605db5c803ba2c91ea36149855524f8669488d435e96",
+  "reports": [
+    {
+      "people": 4,
+      "normalRestRequests": 220,
+      "completedRestResponseBodyBytes": 171961,
+      "normalRestTransportErrors": 0,
+      "stageTotals": {
+        "previousDay": {
+          "requests": 60,
+          "requestBodyBytes": 75419,
+          "responseBodyBytes": 74266,
+          "transportErrors": 0
+        },
+        "eventDay": {
+          "requests": 160,
+          "requestBodyBytes": 54546,
+          "responseBodyBytes": 97695,
+          "transportErrors": 0
+        }
+      },
+      "restReadWriteMethodsNotSeparatelyCounted": true,
+      "tlsNotSplitByDay": true,
+      "tlsDownloadBytes": 414553,
+      "tlsUploadBytes": 373568,
+      "connections": 8,
+      "rootJsonBytes": 77925,
+      "ownerPreconditionsExcluded": true,
+      "providerBillingMeasured": false,
+      "fullBusinessFreeTierVerified": false
+    },
+    {
+      "people": 600,
+      "normalRestRequests": 14722,
+      "completedRestResponseBodyBytes": 21455775,
+      "normalRestTransportErrors": 0,
+      "stageTotals": {
+        "previousDay": {
+          "requests": 5708,
+          "requestBodyBytes": 11838011,
+          "responseBodyBytes": 11130989,
+          "transportErrors": 0
+        },
+        "eventDay": {
+          "requests": 9014,
+          "requestBodyBytes": 3736023,
+          "responseBodyBytes": 10324786,
+          "transportErrors": 0
+        }
+      },
+      "restReadWriteMethodsNotSeparatelyCounted": true,
+      "tlsNotSplitByDay": true,
+      "tlsDownloadBytes": 44615291,
+      "tlsUploadBytes": 28333326,
+      "connections": 13,
+      "rootJsonBytes": 10046283,
+      "ownerPreconditionsExcluded": true,
+      "providerBillingMeasured": false,
+      "fullBusinessFreeTierVerified": false
+    },
+    {
+      "people": 1000,
+      "normalRestRequests": 23927,
+      "completedRestResponseBodyBytes": 32746245,
+      "normalRestTransportErrors": 3,
+      "stageTotals": {
+        "previousDay": {
+          "requests": 9312,
+          "requestBodyBytes": 17907625,
+          "responseBodyBytes": 16534115,
+          "transportErrors": 3
+        },
+        "eventDay": {
+          "requests": 14615,
+          "requestBodyBytes": 5928632,
+          "responseBodyBytes": 16212130,
+          "transportErrors": 0
+        }
+      },
+      "restReadWriteMethodsNotSeparatelyCounted": true,
+      "tlsNotSplitByDay": true,
+      "tlsDownloadBytes": 66094231,
+      "tlsUploadBytes": 44349038,
+      "connections": 23,
+      "rootJsonBytes": 15397187,
+      "ownerPreconditionsExcluded": true,
+      "providerBillingMeasured": false,
+      "fullBusinessFreeTierVerified": false
+    }
+  ],
+  "externalFirebaseConnected": false,
+  "fullBusinessFreeTierVerified": false
+}

@@ -1,0 +1,46 @@
+{
+  "sourceComparisons": 95,
+  "transportCases": 10,
+  "reports": [
+    {
+      "people": 4,
+      "phaseBytes": {
+        "six-snapshots": 176826,
+        "six-listeners": 16920,
+        "six-repeat-snapshots": 152322,
+        "six-cold-reopen": 191052
+      },
+      "totalTlsDownloadBytes": 537475,
+      "phaseBoundaryRemainderBytes": 355,
+      "sameClientGoOnlineVerified": false
+    },
+    {
+      "people": 600,
+      "phaseBytes": {
+        "six-snapshots": 53928826,
+        "six-listeners": 2429442,
+        "six-repeat-snapshots": 53902408,
+        "six-cold-reopen": 55913512
+      },
+      "totalTlsDownloadBytes": 166174856,
+      "phaseBoundaryRemainderBytes": 668,
+      "sameClientGoOnlineVerified": false
+    },
+    {
+      "people": 1000,
+      "phaseBytes": {
+        "six-snapshots": 73174912,
+        "six-listeners": 4049514,
+        "six-repeat-snapshots": 73148670,
+        "six-cold-reopen": 76484142
+      },
+      "totalTlsDownloadBytes": 226857928,
+      "phaseBoundaryRemainderBytes": 690,
+      "sameClientGoOnlineVerified": false
+    }
+  ],
+  "allCurrentSourcesMatch": true,
+  "readOnlyRemoteCases": 3,
+  "externalFirebaseConnected": true,
+  "fullBusinessFreeTierVerified": false
+}
