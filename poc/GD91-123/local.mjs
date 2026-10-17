@@ -9,6 +9,7 @@ import {cleanup} from '../GD91-89/support.mjs';
 import {setup} from '../GD91-108/setup.mjs';
 import {generated} from './image-rules.mjs';
 import {prepare,decode,publish,remove,digest} from './model.mjs';
+import {withTlsReaders} from './tls-reads.mjs';
 
 const root=new URL('./',import.meta.url),files=['local.mjs','image-rules.mjs','model.mjs','run-local.mjs'];
 const hashes=()=>sourceHashes(root,files),before=hashes(),reports=[];
@@ -80,15 +81,17 @@ try{
     return{completePublications:5,headOnlyRejected:true,resultOnlyRejected:true,missingPayloadRejected:true};
   });
   await record('I04-six-authorized-readers',async()=>{
-    let bodyBytes=0;
-    for(const s of staff)for(let i=0;i<5;i++){
-      const h=await get('images/'+i+'/head',s);ok(h);assert(h.body.active);
-      const r=await get(bank(i,h.body.bank),s);ok(r);bodyBytes+=Buffer.byteLength(JSON.stringify(r.body));
-      assert.equal(digest(decode(r.body)),digest(maximum));
-    }
+    const measured=await withTlsReaders(staff,async read=>{
+      let bodyBytes=0;
+      for(let reader=0;reader<staff.length;reader++)for(let i=0;i<5;i++){
+        const h=await read('images/'+i+'/head',reader);ok(h);assert(h.body.active);
+        const r=await read(bank(i,h.body.bank),reader);ok(r);bodyBytes+=Buffer.byteLength(JSON.stringify(r.body));
+        assert.equal(digest(decode(r.body)),digest(maximum));
+      }
+      return{independentDeviceAuths:6,imagesPerDevice:5,payloadGets:30,jsonResponseBodyBytes:bodyBytes};
+    });
     denied(await get('images',staff[0]));denied(await get('event/profiles',staff[0]));
-    return{independentDeviceAuths:6,imagesPerDevice:5,payloadGets:30,jsonResponseBodyBytes:bodyBytes,
-      tlsAndProviderBillingMeasured:false,managerBranchesNotDistributed:true};
+    return{...measured,managerBranchesNotDistributed:true,realSdkUsed:false};
   });
   await record('I05-direct-boundaries-and-forged-lengths',async()=>{
     const over=paddedPng(smallPng,1000001),p={...prepare(jpeg,'image/jpeg',1),rawBytes:1000001,base64:over.toString('base64'),sha256:digest(over)};
@@ -178,7 +181,7 @@ assert.equal(externalBrowserRequests,0);assert.deepEqual(before,hashes());
 fs.mkdirSync(new URL('artifacts/',root),{recursive:true});
 const output={sourceHashes:before,endSourceHashes:hashes(),reports,cleanup:clean,
   ...(failure?{failure}:{}),decision:'TECH-DD91-112-A, developer, 2026-10-17',
-  normalMeter:{...metrics},externalBrowserRequests,externalFirebaseConnected:false,
+  restHelperMeterExcludingTlsReads:{...metrics},externalBrowserRequests,externalFirebaseConnected:false,
   existingSeatRulesUnchanged:true,realImagesDecodedInIsolatedEdge:true,
   realDeviceAcceptance:false,providerBillingMeasured:false,fullBusinessFreeTierVerified:false,productionImplementation:false};
 fs.writeFileSync(new URL('artifacts/local-summary.json',root),JSON.stringify(output,null,2)+'\n');

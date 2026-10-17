@@ -25,10 +25,13 @@
     "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
     "../GD91-116/generate.mjs": "aead3164c6ba2a61d5c4794d785c831e97848e52f925bce1d01ebaf241d39644",
     "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
+    "../GD91-120/tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4",
+    "../GD91-120/tls-proxy.mjs": "eca2d5e8bf2489443d03f9c113fa0b0ee4bdd096ebc14613493b3de1a668fe1e",
     "image-rules.mjs": "c00aa4d6a4ed4ef77be8a68e1a37af43f61096bcc4e12eedd81efd06f6e1b6de",
-    "local.mjs": "82f22598a94c8f9b25176a8d19c0c5f3b0e409d6493fadf8b299c16fa41f342e",
+    "local.mjs": "c509b9c222a1a426529c127e12f878d4f79701eb8eb099e0de06efb2997d379d",
     "model.mjs": "a9bff2c4640b6e8e32018a87b069ffe994d85e4a5333acbc65b3b83bdff771b7",
     "run-local.mjs": "0043c30ece88d8545f4693159b8086fbf943ceaae8fc0366760a9ec19fc660b2",
+    "tls-reads.mjs": "4a9ca5edf496f758909d4ad086b4be739a99b053baf530cd6e3af28447d4ce5b",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -65,10 +68,13 @@
     "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
     "../GD91-116/generate.mjs": "aead3164c6ba2a61d5c4794d785c831e97848e52f925bce1d01ebaf241d39644",
     "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
+    "../GD91-120/tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4",
+    "../GD91-120/tls-proxy.mjs": "eca2d5e8bf2489443d03f9c113fa0b0ee4bdd096ebc14613493b3de1a668fe1e",
     "image-rules.mjs": "c00aa4d6a4ed4ef77be8a68e1a37af43f61096bcc4e12eedd81efd06f6e1b6de",
-    "local.mjs": "82f22598a94c8f9b25176a8d19c0c5f3b0e409d6493fadf8b299c16fa41f342e",
+    "local.mjs": "c509b9c222a1a426529c127e12f878d4f79701eb8eb099e0de06efb2997d379d",
     "model.mjs": "a9bff2c4640b6e8e32018a87b069ffe994d85e4a5333acbc65b3b83bdff771b7",
     "run-local.mjs": "0043c30ece88d8545f4693159b8086fbf943ceaae8fc0366760a9ec19fc660b2",
+    "tls-reads.mjs": "4a9ca5edf496f758909d4ad086b4be739a99b053baf530cd6e3af28447d4ce5b",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
     "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
     "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
@@ -111,8 +117,18 @@
       "imagesPerDevice": 5,
       "payloadGets": 30,
       "jsonResponseBodyBytes": 40007040,
-      "tlsAndProviderBillingMeasured": false,
-      "managerBranchesNotDistributed": true
+      "tls": {
+        "connections": 6,
+        "tlsDownloadBytes": 40103646,
+        "tlsUploadBytes": 49806,
+        "requests": 60,
+        "responseBodyBytes": 40012620,
+        "localCertificateOnly": true,
+        "ownerAndAuthTrafficExcluded": true,
+        "providerBillingMeasured": false
+      },
+      "managerBranchesNotDistributed": true,
+      "realSdkUsed": false
     },
     {
       "id": "I05-direct-boundaries-and-forged-lengths",
@@ -179,12 +195,12 @@
     "trialRootEmpty": true
   },
   "decision": "TECH-DD91-112-A, developer, 2026-10-17",
-  "normalMeter": {
-    "requests": 194,
+  "restHelperMeterExcludingTlsReads": {
+    "requests": 134,
     "requestBodyBytes": 11984841,
-    "responseBodyBytes": 48043350,
+    "responseBodyBytes": 8030730,
     "ownerRequests": 40,
-    "userRequests": 154
+    "userRequests": 94
   },
   "externalBrowserRequests": 0,
   "externalFirebaseConnected": false,

@@ -1,0 +1,8 @@
+{
+  "stage": "source-hash-collection-after-mock-tests",
+  "result": "The import scanner interpreted a replacement string in the generator as a real import of cases.mjs",
+  "finalVerificationArtifactWritten": false,
+  "actualAppCheckEnforcementVerified": false,
+  "externalRequestsExecuted": 0,
+  "resolution": "Split the replacement target string; do not change shared audit behavior or add a dummy module"
+}
