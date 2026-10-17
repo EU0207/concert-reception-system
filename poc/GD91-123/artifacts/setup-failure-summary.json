@@ -1,0 +1,8 @@
+{
+  "stage": "emulator-startup",
+  "command": "node poc/GD91-123/run-local.mjs",
+  "result": "Port 4400 on 127.0.0.1 did not become active in the restricted execution",
+  "businessScenariosReached": 0,
+  "countedAsPassed": false,
+  "externalFirebaseConnected": false
+}
