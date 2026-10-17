@@ -1,0 +1,7 @@
+{
+  "stage": "source-audit-before-business",
+  "code": "ENOENT",
+  "cause": "Import scanner treated a replacement string inside the generator as a real relative import.",
+  "businessGroupsExecuted": 0,
+  "externalFirebaseConnected": false
+}

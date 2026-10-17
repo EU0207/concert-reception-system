@@ -17,7 +17,7 @@
     "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
     "../GD91-116/generate.mjs": "aead3164c6ba2a61d5c4794d785c831e97848e52f925bce1d01ebaf241d39644",
     "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
-    "audit.mjs": "2e4326627cc9a6e97b29c18b4b355657817fcf78aee293e56c2742ed617b9d81",
+    "audit.mjs": "e0974fa9d17cc6bbf09557d6465f334f21f6a480becff711fb271b0e5ac147fc",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
   },
   "endSourceHashes": {
@@ -38,10 +38,10 @@
     "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
     "../GD91-116/generate.mjs": "aead3164c6ba2a61d5c4794d785c831e97848e52f925bce1d01ebaf241d39644",
     "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
-    "audit.mjs": "2e4326627cc9a6e97b29c18b4b355657817fcf78aee293e56c2742ed617b9d81",
+    "audit.mjs": "e0974fa9d17cc6bbf09557d6465f334f21f6a480becff711fb271b0e5ac147fc",
     "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4"
   },
-  "sourceComparisons": 86,
+  "sourceComparisons": 129,
   "reports": [
     {
       "people": 600,
@@ -66,6 +66,34 @@
       "normalRequests": 643,
       "serverAccepted": true,
       "realSdkUsed": false
+    }
+  ],
+  "additionGroups": [
+    {
+      "people": 600,
+      "initialCells": 607,
+      "addedCells": 2,
+      "finalCells": 609,
+      "initialParts": 38,
+      "finalParts": 39,
+      "partialPublicationRefused": true,
+      "oldSeatIdsAndFieldsPreserved": true,
+      "seatIdsAndNumbersUnique": true,
+      "attendeeRecords": 0,
+      "realRegistrationAndQrNotTestedHere": true
+    },
+    {
+      "people": 1000,
+      "initialCells": 1007,
+      "addedCells": 2,
+      "finalCells": 1009,
+      "initialParts": 63,
+      "finalParts": 64,
+      "partialPublicationRefused": true,
+      "oldSeatIdsAndFieldsPreserved": true,
+      "seatIdsAndNumbersUnique": true,
+      "attendeeRecords": 0,
+      "realRegistrationAndQrNotTestedHere": true
     }
   ],
   "executedRulesHash": "6fa765ee5ec0c9d221c5605db5c803ba2c91ea36149855524f8669488d435e96",
