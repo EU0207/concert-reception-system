@@ -1,0 +1,8 @@
+{
+  "sourceComparisons": 3,
+  "groups": 6,
+  "realIndexedDbVerified": true,
+  "externalRequests": 0,
+  "dbRequests": 0,
+  "actualSdkAdapterSwitchVerified": false
+}
