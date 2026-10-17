@@ -1,0 +1,41 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "direct-meter.mjs": "c44cbf70b8089f9314302df740612c6a743d58b186c104ce309890dcabc1a1f2",
+    "direct-test.mjs": "b0355f4b1f59237bb4accfd5205098e0525f67f142af46bb7bb54e91da94b3fc",
+    "tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "direct-meter.mjs": "c44cbf70b8089f9314302df740612c6a743d58b186c104ce309890dcabc1a1f2",
+    "direct-test.mjs": "b0355f4b1f59237bb4accfd5205098e0525f67f142af46bb7bb54e91da94b3fc",
+    "tls-fixture.mjs": "e4014610d4372b8e95be75eca24e9bf7859cfb9b474b1f3b60c9582bc42532c4"
+  },
+  "reports": [
+    {
+      "id": "empty",
+      "bodyBytes": 0,
+      "status": 200,
+      "tlsDownloadBytes": 3165,
+      "connections": 1
+    },
+    {
+      "id": "payload",
+      "bodyBytes": 65536,
+      "status": 200,
+      "tlsDownloadBytes": 65772,
+      "connections": 1
+    },
+    {
+      "id": "denied",
+      "bodyBytes": 32,
+      "status": 401,
+      "tlsDownloadBytes": 187,
+      "connections": 1
+    }
+  ],
+  "temporaryCertificateRemoved": true,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "fullBusinessFreeTierVerified": false
+}
