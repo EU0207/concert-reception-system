@@ -1,0 +1,14 @@
+{
+  "sourceComparisons": 56,
+  "externalGroups": 13,
+  "applicationCalls": 161,
+  "observedApplicationBodyBytes": 2816810,
+  "authUsersCreated": 4,
+  "authUsersRemaining": 0,
+  "appCheckEnforcementVerified": true,
+  "debugProviderOnly": true,
+  "productionAttestationVerified": false,
+  "cleanupVerified": true,
+  "fullBusinessFreeTierVerified": false,
+  "realDatabaseMigrationVerified": false
+}

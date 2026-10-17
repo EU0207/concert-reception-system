@@ -927,9 +927,17 @@ node poc/GD91-124/test.mjs
 
 状態：In Review。GD91-123の失敗ソースと結果を保持し、[生成器](../../../poc/GD91-125/generate.mjs)で交換要求を分離した。管理操作はOAuth、交換はアプリAPIキーと`debug_token`を使う。実サービス401の原因を修正だけで確定したとは扱わない。
 
-[HTTP形式と復元10条件](../../../poc/GD91-125/artifacts/app-check-plan-test-summary.json)がローカル合格。管理要求へAPIキーを付けないことと、交換要求へ管理OAuthを付けないことを検査した。交換401の後も試行分だけを回収する。実サービスのApp Check強制・画像13経路は未実施。
+[HTTP形式と復元10条件](../../../poc/GD91-125/artifacts/app-check-plan-test-summary.json)がローカル合格。管理要求へAPIキーを付けないことと、交換要求へ管理OAuthを付けないことを検査した。交換401の後も試行分だけを回収する。
 
-[117件の監査](../../../poc/GD91-125/artifacts/audit-summary.json)で元の外部失敗・後処理、移行RAMモデルと修正候補のソースを照合した。元のGD91-123の147件も別途一致した。新しい[TECH-DD91-114-A](../decisions/ADR-007-seat-edit-commit-boundary.md#app-check交換要求の修正後の一括検証案tech-dd91-114)は2026-10-17に開発者が会話で承認した。113-Aを再利用せず、指定範囲の1試行を開始した。トークン交換は通過し、手動Googleログイン待ち。終了結果が得られるまで合格へ数えない。
+[117件の監査](../../../poc/GD91-125/artifacts/audit-summary.json)で元の外部失敗・後処理、移行RAMモデルと修正候補のソースを照合した。元のGD91-123の147件も別途一致した。新しい[TECH-DD91-114-A](../decisions/ADR-007-seat-edit-commit-boundary.md#app-check交換要求の修正後の一括検証案tech-dd91-114)は2026-10-17に開発者が会話で承認した。113-Aを再利用せず、指定範囲の1試行を実行した。
+
+### 実サービスの結果
+
+[外部13群](../../../poc/GD91-125/artifacts/remote-summary.json)が合格。共通6群と画像4群に加え、有効なApp Checkを受理し、欠損・無効を拒否した。強制反映は最初の確認で観測した。有効なApp Checkでも無効Authを拒否し、強制後に新規公開した画像を一般SDKで取得・ハッシュ照合した。キャッシュだけの成功へ依存しない。
+
+後処理込み161／600呼出し、観測本文2,816,810 B。Googleログインは開発者が1回手動で行い、試行Auth 4件を作成・削除した。App Check API無効とRTDBの元設定OFFを復元し、試行デバッグトークンを削除した。全拒否Rules・空DB、Auth 0件と課金未紐付けを再取得確認した。未完了試行の台帳も解消済み。[外部ソース監査](../../../poc/GD91-125/artifacts/remote-audit-summary.json)は実行前後と現在ソースを照合する。
+
+114-Aは終了済みで追加試行へ再利用しない。デバッグ方式の接続・拒否の結果であり、本番reCAPTCHAの証明と対象実機の合格は#110・220へ残す。GD91-126のQR2式修正は外部実行ソースへ含めず、別のローカル証拠として扱う。完成アプリ無料受入とDB移行は未完了。
 
 ```text
 node poc/GD91-125/generate.mjs
