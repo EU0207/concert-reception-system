@@ -1,0 +1,22 @@
+{
+  "sourceHashes": {
+    "audit-remote.mjs": "a8936d0651fb6c80196dc258ea93ff260d524c24f2e07c577e370f6626019757"
+  },
+  "endSourceHashes": {
+    "audit-remote.mjs": "a8936d0651fb6c80196dc258ea93ff260d524c24f2e07c577e370f6626019757"
+  },
+  "decisionId": "TECH-DD91-109-A",
+  "externalTrials": 1,
+  "groups": 14,
+  "sourceComparisons": 73,
+  "executedRulesHash": "6fa765ee5ec0c9d221c5605db5c803ba2c91ea36149855524f8669488d435e96",
+  "applicationCalls": 510,
+  "maxJsonNodes": 6899,
+  "maxRootJsonBytes": 167049,
+  "observedApplicationBodyBytes": 4738183,
+  "authUsersCreated": 5,
+  "authUsersRemaining": 0,
+  "cleanupVerified": true,
+  "fullBusinessFreeTierVerified": false,
+  "productionImplementation": false
+}
