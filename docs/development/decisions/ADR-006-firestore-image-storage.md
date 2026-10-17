@@ -13,7 +13,7 @@
 
 ## 背景と候補
 
-#168のRTDB候補との認可結合は未確定。[ADR-007のTECH-DD91-112](ADR-007-seat-edit-commit-boundary.md#v4の採用判断前の制約tech-dd91-112)で画像も保存先を揃える候補と、Firestoreを維持する候補を比較する。本ADRはAcceptedのままであり、画像のRTDB移行・本番実装を承認したものではない。1MB/枚・最大5枚の業務条件も維持する。
+#168のRTDB候補との認可結合は未確定。[ADR-007のTECH-DD91-112-A](ADR-007-seat-edit-commit-boundary.md#v4の採用判断前の制約tech-dd91-112)で、開発者が画像もRTDBへ揃える候補の隔離検証を選択した。ローカル画像・認可と追加予算は検証済みだが、App Checkの外部準備は401で停止し、採用は未決定。本ADRはAcceptedのままであり、画像のRTDB移行・本番実装を承認したものではない。1MB/枚・最大5枚の業務条件も維持する。
 
 従来の会場画像は1枚5,000,000バイト、最大5枚だった。`CONF-051`でスマートフォン拡大時の可読性を業務条件とし、`CONF-052`で一度200,000バイトを上限に変更した。最新の`CONF-053`で1枚1,000,000バイト、最大5枚、合計5,000,000バイトへ変更した。カード登録なしの条件では[Cloud Storage for Firebase](https://firebase.google.com/docs/storage/web/start)のBlaze要件と合わない。公開Hostingは権限付きの登録・配布に合わず、手動端末配布は版管理と削除が難しい。
 
