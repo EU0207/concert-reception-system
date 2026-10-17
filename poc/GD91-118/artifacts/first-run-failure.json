@@ -1,0 +1,9 @@
+{
+  "stage": "artifact-write",
+  "people": 600,
+  "code": "ENOENT",
+  "cause": "Artifact directory was not created before the inherited test wrote its result.",
+  "resultPersisted": false,
+  "passedBusinessGroupsClaimed": 0,
+  "externalFirebaseConnected": false
+}
