@@ -886,7 +886,11 @@ node poc/GD91-122/audit.mjs
 
 [監査147件](../../../poc/GD91-123/artifacts/audit-summary.json)が現在ソースへ一致した。既存の座席Rulesが変わらないことと、ローカル試験終了後の全拒否・空試行根を確認した。共通呼出しのモデル101回、既存準備予約24回と後処理80回の計205回へ、App CheckのAPI操作・反映待ちを追加する。外部の停止上限は600回で、内部SDK通信の全件数保証とは区別する。
 
-実サービス1試行は[TECH-DD91-113](../decisions/ADR-007-seat-edit-commit-boundary.md#画像とapp-checkの外部一括検証案tech-dd91-113)で新規承認を求める。終了済み試行とTECH-DD91-112-Aを再利用しない。外部Firebaseにはまだ接続していない。
+実サービス1試行は[TECH-DD91-113-A](../decisions/ADR-007-seat-edit-commit-boundary.md#画像とapp-checkの外部一括検証案tech-dd91-113)として2026-10-17に新規承認を受け、実行した。[外部結果](../../../poc/GD91-123/artifacts/remote-summary.json)はApp Checkトークン交換の準備で`UNAUTHENTICATED`・401。業務試験到達0群・不成立であり、ローカル合格を実サービスの合格へ流用しない。呼出し32／600回、観測本文64,245 B。Googleログインと試行Auth作成は0件だった。
+
+後処理ではApp Check API無効とRTDBの元設定`OFF`へ復元し、試行のデバッグトークンを削除した。全拒否Rules・空DB、Auth 0件と課金未紐付けも再取得確認した。設定台帳の未完了試行は解消済み。TECH-DD91-113-Aは終了し、追加実行に再利用しない。
+
+停止行は`app-check.mjs`のトークン交換。管理APIと同じOAuthだけで交換していたが、[公式SDKの交換要求](https://github.com/firebase/firebase-js-sdk/blob/main/packages/app-check/src/client.ts)はアプリのAPIキーを付け、管理操作とは異なる要求を組み立てている。要求形式の差は確認したが、これだけで外部401の全原因が確定したとは扱わない。ローカルのモックがHTTP要求形式を検査していなかった点を修正後の確認へ追加する。
 
 制限内の初回起動はEmulatorのローカル待受で停止し、業務試験到達0件。[起動失敗記録](../../../poc/GD91-123/artifacts/setup-failure-summary.json)を保持する。ローカル待受を許可した試験は既存依存・8GiBを使い、終了後の全拒否Rulesと空試行根を確認した。外部Firebaseへは接続していない。
 
