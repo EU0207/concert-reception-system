@@ -1,0 +1,302 @@
+{
+  "sourceHashes": {
+    "audit.mjs": "f1e704b521a2a6d70fa16c9f9083db5bd5bebd88d0a86364d061d49572b41075"
+  },
+  "endSourceHashes": {
+    "audit.mjs": "f1e704b521a2a6d70fa16c9f9083db5bd5bebd88d0a86364d061d49572b41075"
+  },
+  "sourceComparisons": 1885,
+  "evidence": [
+    {
+      "path": "../GD91-111/artifacts/regression-section-summary.json",
+      "groups": 18,
+      "artifactHash": "5540a4120dcd7babe680dc066fb674f01645a4b1d7a642ed08e3348a24814569",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-section-common-summary.json",
+      "groups": 4,
+      "artifactHash": "08c777e9c37f07ebeac75e44c3949bf4e3800d6b6f18db2a050221ec1030fda4",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-geometry-slide-summary.json",
+      "groups": 9,
+      "artifactHash": "30bde2279618a6a80899afa38ba1bbc5bdb5c34cd5ddfb7d8ee281349cffef47",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-structural-summary.json",
+      "groups": 9,
+      "artifactHash": "3d42d98ffb45951008c9836ca03ba49a8ba71093a669f405de3e6497954b5236",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-display-common-summary.json",
+      "groups": 4,
+      "artifactHash": "ea28e03ef86f21a8993b1db78134d9cb34497b58b1e7a10085c993f7aefca161",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-groups-summary.json",
+      "groups": 19,
+      "artifactHash": "65c8b2f823437909a61088501fc65f6356b7310c363c052ef1097214c83bb8dc",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-groups-common-summary.json",
+      "groups": 8,
+      "artifactHash": "a2f0a51312ad96c7caa5a37b7d3dfc52541fe7a2e23b99681d50956661854afb",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-layout-summary.json",
+      "groups": 21,
+      "artifactHash": "87ab23c4caef52d8b6e83a104e64c77ae49dd6e80f263dcf121d99271f63b2eb",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-layout-common-summary.json",
+      "groups": 8,
+      "artifactHash": "2fccfe9d9850c87b99765a700a48c87f63a02480be7afeab001d23564054e995",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-closed-summary.json",
+      "groups": 20,
+      "artifactHash": "617d3849800b691930cba3bf3699375f196018c4b029c15004778fdfca2e7e93",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-closed-common-summary.json",
+      "groups": 12,
+      "artifactHash": "38f0206fc20cbbdb24c6e125637e2827220ee318d9e95af0e0607f366bae4495",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-quarantine-summary.json",
+      "groups": 13,
+      "artifactHash": "d2c11d7a1cb4df452c6e9a16ec2f10f6fa66463bccf53a27ec4f954182a0aa9d",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-sharing-summary.json",
+      "groups": 14,
+      "artifactHash": "c142703bdde01000274b121399dcd84bddd5c99d1b055e090701015cfbf7b5f7",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-manager-summary.json",
+      "groups": 12,
+      "artifactHash": "e62131bef4836321ff36c01379082dc03ef6bc76bac315343c560a855990e00f",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-queue-summary.json",
+      "groups": 12,
+      "artifactHash": "fb3556db6498b8a7b148a4fd6e373ea50352b9d0daf84edbe1bc20d5736b6d98",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-general-summary.json",
+      "groups": 4,
+      "artifactHash": "38b3814a29f5d1f07ee0d8909b5fd3aa72a93be3476b5e68f689664cd69efc3e",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-clock-summary.json",
+      "groups": 7,
+      "artifactHash": "944badb67ac3557b0b3c36ba6ecfb8802984762c03fbd5dbd83a2784bbbda5f1",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-review-summary.json",
+      "groups": 16,
+      "artifactHash": "2dadd575592a7ab0cddeccecd0e8bb188ab0ab60bd61eec6f1ddc2afe6452db0",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-common-summary.json",
+      "groups": 6,
+      "artifactHash": "506280b9093b8aa69c6b7c128373c387a3866b3827e77b1d5f6d23750ed41fbe",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/regression-read-budget-summary.json",
+      "groups": 4,
+      "artifactHash": "0fc14e1fd6b2517508efe47cd868a18d0df05866787a83fe90998160d443e683",
+      "rulesSource": "database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-111/artifacts/numbering-regression-summary.json",
+      "groups": 14,
+      "artifactHash": "1dc715eaf90f133c2ddc0d93e4d68edb09fd6168b268b37d5c2c7f71ae3b7fa9",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-84/artifacts/local-summary.json",
+      "groups": 32,
+      "artifactHash": "b81af9024822b9a5f2ec9f50cdd2d36a6c042e82c847ffb64a037986eb2c47cd",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-88/artifacts/lifecycle-summary.json",
+      "groups": 26,
+      "artifactHash": "d7336bb85f24928f9e07b47ada88c71a8a64299a4aca74e99d4352d074ec1e1c",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-88/artifacts/business-summary.json",
+      "groups": 13,
+      "artifactHash": "0429dc6c2b326d64c4039f5a0646fc11d68f4b462ed0675fbc94a788ab8a64a2",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-88/artifacts/regression-summary.json",
+      "groups": 32,
+      "artifactHash": "88cf736d3ee5eb3eb169e0319668dc25710c659dadbb947f5aa2d6972336f6a9",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-88/artifacts/receipt-regression-summary.json",
+      "groups": 13,
+      "artifactHash": "8f2561cb1c19035b3a2d0967252db150237de50a45381f4020ff7b6725766f10",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-113/artifacts/local-summary.json",
+      "groups": 28,
+      "artifactHash": "2bbfd3d7ec2ff85ee3979edc45bdc88c31a41e77735ae30157074a5a0b16eddf",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-113/artifacts/external-local-summary.json",
+      "groups": 8,
+      "artifactHash": "85542434c61d2b9ae89b4ce8817e34095cf00aa35a4f88b0bb3a91df87f5fce6",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-114/artifacts/retention-summary.json",
+      "groups": 8,
+      "artifactHash": "fbce249e3a49a40802da72e811129130da5456166c804392d8cc0ca99d99521c",
+      "rulesSource": "../GD91-113/database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-114/artifacts/registry-summary.json",
+      "groups": 8,
+      "artifactHash": "ab502b0f79a1980bee54a8003fd67b7957ccc7ca899ba5cbbc27f4cb504f3984",
+      "rulesSource": "../GD91-113/database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-114/artifacts/closing-summary.json",
+      "groups": 17,
+      "artifactHash": "b964edea42bc5c406df92ded64983e7333f3b71963a4f8f9438dbbfed53649e2",
+      "rulesSource": "../GD91-113/database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-114/artifacts/collection-summary.json",
+      "groups": 4,
+      "artifactHash": "1fb1e5b35150ecb7dba5da448658f8d92afd0a9ade8e039f5c9d6f0deaae14c4",
+      "rulesSource": "../GD91-113/database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-116/artifacts/local-summary.json",
+      "groups": 10,
+      "artifactHash": "4dbb1a921d8678ae28093ef2c2fb2f45527060b0b8621fcc3649c224f7957554",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-117/artifacts/addition-summary.json",
+      "groups": 2,
+      "artifactHash": "7e8df948945e923194c015b0c7d432239f14cb41491e5d70b66305914b9fa41a",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-119/artifacts/local-summary.json",
+      "groups": 14,
+      "artifactHash": "d0ee546a8c9270ab88219e85eba6d79ce309a0193509b6ee19780d9846cc68e1",
+      "rulesSource": "see-sourceHashes",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-121/artifacts/capacity-4-summary.json",
+      "groups": 1,
+      "artifactHash": "fe62d08476f3a5f68de7386a72701f4fdd2794175f0a8728bbf2dfe59fa68663",
+      "rulesSource": "./database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-121/artifacts/capacity-600-summary.json",
+      "groups": 1,
+      "artifactHash": "b5953791b5af2d6e8c8aacb3f5b2ee7a470f45d77d700ef29d2f81be8227d91a",
+      "rulesSource": "./database.rules.json",
+      "historicalExecutionNotRerun": true
+    },
+    {
+      "path": "../GD91-121/artifacts/capacity-1000-summary.json",
+      "groups": 1,
+      "artifactHash": "d71389a039cac5f76622d89278a471a062d060b09f53036edc338c0383f45974",
+      "rulesSource": "./database.rules.json",
+      "historicalExecutionNotRerun": true
+    }
+  ],
+  "currentRulesHash": "6fa765ee5ec0c9d221c5605db5c803ba2c91ea36149855524f8669488d435e96",
+  "observationChanges": [
+    "/rules/checks/$run/quarantine/$device/events/$key/.validate",
+    "/rules/checks/$run/receipts/$device/events/$key/.validate"
+  ],
+  "limitChanges": [
+    "/rules/checks/$run/.validate",
+    "/rules/checks/$run/generations/$generation/.validate",
+    "/rules/checks/$run/generations/$generation/sections/$section/.validate"
+  ],
+  "evidenceAuditOnly": true,
+  "businessScenariosExecuted": 0,
+  "externalRequestsExecuted": 0,
+  "legacyFirestore225AddedToRtdbPassCount": false,
+  "interruptedGd113StructuralSuiteCountedAsPassed": false,
+  "allScopesExecutedOnCurrentRulesClaimed": false,
+  "unresolvedAdoptionConditions": [
+    "TECH-DD91-112: shared authorization boundary with ADR-006 Firestore images",
+    "pre-adoption migration/rollback evidence and App Check evidence not located"
+  ],
+  "methodDecisionApproved": false,
+  "issue101Complete": false,
+  "productionImplementation": false,
+  "fullBusinessFreeTierVerified": false,
+  "tested3000": false
+}

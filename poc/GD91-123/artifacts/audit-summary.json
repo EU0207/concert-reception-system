@@ -1,0 +1,21 @@
+{
+  "sourceComparisons": 147,
+  "imageGroups": 12,
+  "decodedRawPngBytes": 1000000,
+  "jpegDecoded": true,
+  "independentReaderAuths": 6,
+  "tlsMeasured": true,
+  "existingSeatRulesUnchanged": true,
+  "commonSeatAndImageGroups": 10,
+  "appCheckMockAndGuardCases": 9,
+  "actualAppCheckEnforcementVerified": false,
+  "budgetComparisons": 12,
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "externalFirebaseConnected": false,
+  "realDeviceAcceptance": false,
+  "providerBillingMeasured": false,
+  "methodAdoptionApproved": false
+}
