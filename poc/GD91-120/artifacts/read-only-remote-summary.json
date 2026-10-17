@@ -1,0 +1,52 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "direct-meter.mjs": "c44cbf70b8089f9314302df740612c6a743d58b186c104ce309890dcabc1a1f2",
+    "read-only-remote.mjs": "6d8989a3892fd1a611efc1cee3812276d16220111fa73fcc498e379cc42c9536"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "direct-meter.mjs": "c44cbf70b8089f9314302df740612c6a743d58b186c104ce309890dcabc1a1f2",
+    "read-only-remote.mjs": "6d8989a3892fd1a611efc1cee3812276d16220111fa73fcc498e379cc42c9536"
+  },
+  "scope": {
+    "requests": 3,
+    "method": "GET",
+    "authenticated": false,
+    "authCreated": 0,
+    "dataWrites": 0,
+    "settingsChanges": 0,
+    "bodyStopBytes": 65536,
+    "googleLoginRequired": false
+  },
+  "reports": [
+    {
+      "id": 1,
+      "status": 401,
+      "bodyBytes": 36,
+      "tlsDownloadBytes": 5320,
+      "tlsUploadBytes": 1944,
+      "newConnections": 1
+    },
+    {
+      "id": 2,
+      "status": 401,
+      "bodyBytes": 36,
+      "tlsDownloadBytes": 360,
+      "tlsUploadBytes": 210,
+      "newConnections": 0
+    },
+    {
+      "id": 3,
+      "status": 401,
+      "bodyBytes": 36,
+      "tlsDownloadBytes": 360,
+      "tlsUploadBytes": 210,
+      "newConnections": 0
+    }
+  ],
+  "externalFirebaseConnected": true,
+  "targetAndCredentialsRecorded": false,
+  "providerBillingMeasured": false,
+  "fullBusinessFreeTierVerified": false
+}

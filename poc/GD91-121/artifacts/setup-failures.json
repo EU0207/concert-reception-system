@@ -1,0 +1,10 @@
+{
+  "phase": "test-adaptation",
+  "failures": [
+    {"code": "ENOENT", "target": "GD91-121/meter.mjs", "cause": "source-audit interpreted a quoted generator replacement as an import", "fix": "split the replacement source literal"},
+    {"code": "ENOENT", "target": "GD91-116/database.rules.json", "cause": "Rules are provided by a generator, not a checked-in JSON file", "fix": "generate a private trial copy from GD91-116/generated"}
+  ],
+  "businessCasesPassed": 0,
+  "externalFirebaseConnected": false,
+  "credentialsPersisted": false
+}

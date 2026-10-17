@@ -1,5 +1,5 @@
 {
-  "sourceComparisons": 92,
+  "sourceComparisons": 95,
   "transportCases": 10,
   "reports": [
     {
@@ -40,6 +40,7 @@
     }
   ],
   "allCurrentSourcesMatch": true,
-  "externalFirebaseConnected": false,
+  "readOnlyRemoteCases": 3,
+  "externalFirebaseConnected": true,
   "fullBusinessFreeTierVerified": false
 }
