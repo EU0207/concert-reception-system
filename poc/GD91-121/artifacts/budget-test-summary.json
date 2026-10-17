@@ -1,0 +1,25 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "budget-model.mjs": "5113ba5815bd14cfa5fcb02f84cceac90c5a870fbd21cfd6a49c2cb434dcb436",
+    "budget-test.mjs": "fa9111a1a5fcd2747d8ea49e720de36628b3885c10ac6bd5316f376345ecc293"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "budget-model.mjs": "5113ba5815bd14cfa5fcb02f84cceac90c5a870fbd21cfd6a49c2cb434dcb436",
+    "budget-test.mjs": "fa9111a1a5fcd2747d8ea49e720de36628b3885c10ac6bd5316f376345ecc293"
+  },
+  "reports": [
+    "no-double-count-of-normal-sdk",
+    "repetition-is-explicit",
+    "storage-keeps-protected-generations",
+    "download-excess-visible",
+    "storage-excess-visible",
+    "missing-reserve-rejected",
+    "zero-reserve-rejected",
+    "overflow-rejected",
+    "negative-input-rejected",
+    "model-never-claims-free-tier-proof"
+  ],
+  "externalFirebaseConnected": false
+}
