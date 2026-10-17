@@ -4,8 +4,12 @@ import {profile} from '../GD91-88/model.mjs';import {modelsFor} from '../GD91-11
 import {lease,queuedEvent} from '../GD91-96/queue.mjs';
 const people=Number(process.env.GD120_PEOPLE),url=new URL(process.env.GD120_DATABASE_URL);assert([4,600,1000].includes(people));assert.equal(url.hostname,'localhost');assert.equal(url.protocol,'https:');assert.equal(url.searchParams.get('ns'),namespace);assert(project.startsWith('demo-'));
 const hashes=()=>sourceHashes(new URL('./',import.meta.url),['sdk-local.mjs']),before=hashes();
-const require=createRequire(new URL('../POC-004/package.json',import.meta.url)),{initializeApp,deleteApp}=require('firebase/app'),{initializeAuth,inMemoryPersistence,connectAuthEmulator,signInAnonymously}=require('firebase/auth'),{getDatabase,ref,get,onChildAdded,query,orderByKey,startAfter,goOffline}=require('firebase/database');
+// CLIのHTTP接続先を子プロセスだけで外し、検証済みlocalhost HTTPS URLを使う。
+assert(['127.0.0.1:9000','localhost:9000'].includes(process.env.FIREBASE_DATABASE_EMULATOR_HOST));delete process.env.FIREBASE_DATABASE_EMULATOR_HOST;
+const require=createRequire(new URL('../POC-004/package.json',import.meta.url)),{initializeApp,deleteApp}=require('firebase/app'),{initializeAuth,inMemoryPersistence,connectAuthEmulator,signInAnonymously}=require('firebase/auth'),{getDatabase,ref,get,onChildAdded,onValue,query,orderByKey,startAfter,goOffline,goOnline}=require('firebase/database');
 const apps=[],clients=[],stops=[],reports=[];let failure,clean,stage='setup';
+const statsUrl=new URL(process.env.GD120_STATS_URL);assert.equal(statsUrl.protocol,'http:');assert.equal(statsUrl.hostname,'127.0.0.1');
+const wire=async()=>{const r=await fetch(statsUrl);assert.equal(r.status,200);return r.json();},delta=(a,b)=>Object.fromEntries(Object.keys(b).map(k=>[k,b[k]-a[k]]));
 const wait=async(test)=>{const end=Date.now()+60000;while(!test()&&Date.now()<end)await new Promise(r=>setTimeout(r,20));assert(test(),'sdk-observation-timeout');};
 try{
  ok(await request('.settings/rules',{token:'owner',method:'PUT',body:{rules:{checks:{$run:{'.read':'auth != null','.write':false}}}}}));
@@ -15,12 +19,13 @@ try{
  },'layout',modelsFor(people));
  const dataset={layout:layout.generations?.layout??{fixture:'small'},profiles:Object.fromEntries(Array.from({length:people},(_,i)=>['fiction-'+i,profile(i)]))};
  const dataBytes=Buffer.byteLength(JSON.stringify(dataset));await owner(trial,'PUT',{wireData:dataset});
- stage='six-sdk-snapshots';for(let n=0;n<6;n++){
+ stage='six-sdk-snapshots';let began=await wire();for(let n=0;n<6;n++){
   const app=initializeApp({projectId:project,apiKey:'demo-api-key',databaseURL:url.href},randomUUID());apps.push(app);
   const auth=initializeAuth(app,{persistence:inMemoryPersistence});connectAuthEmulator(auth,'http://127.0.0.1:9191',{disableWarnings:true});await signInAnonymously(auth);
   const db=getDatabase(app,url.href);clients.push({db,count:0,eventBytes:0,error:null});const value=(await get(ref(db,trial+'/wireData'))).val();assert.deepEqual(value,dataset);
  }
- reports.push({id:'six-snapshots',sdkEnvironments:6,dataBytes,logicalResponseBodyBytes:6*dataBytes});
+ reports.push({id:'six-snapshots',sdkEnvironments:6,dataBytes,logicalResponseBodyBytes:6*dataBytes,wire:delta(began,await wire())});
+ began=await wire();
  stage='six-listeners';for(const c of clients)stops.push(onChildAdded(query(ref(c.db,trial+'/wireEvents'),orderByKey(),startAfter('0000000000')),snap=>{c.count++;c.eventBytes+=Buffer.byteLength(JSON.stringify(snap.val()));},e=>{c.error=e.code;}));
  // listener登録完了を値の往復で待ち、最初のイベントを取りこぼさない。
  for(const c of clients)await get(ref(c.db,trial+'/wireEvents'));
@@ -30,7 +35,13 @@ try{
   await owner(trial+'/wireEvents/'+String(1000000000+n),'PUT',event);
  }
  await wait(()=>clients.every(c=>c.count===people&&!c.error));
- reports.push({id:'six-listeners',eventsPerEnvironment:clients.map(c=>c.count),logicalResponseBodyBytes:clients.reduce((n,c)=>n+c.eventBytes,0)});
+ reports.push({id:'six-listeners',eventsPerEnvironment:clients.map(c=>c.count),logicalResponseBodyBytes:clients.reduce((n,c)=>n+c.eventBytes,0),wire:delta(began,await wire())});
+ stage='six-repeat-snapshots';began=await wire();for(const c of clients)assert.deepEqual((await get(ref(c.db,trial+'/wireData'))).val(),dataset);
+ reports.push({id:'six-repeat-snapshots',logicalReturnedValueBytes:6*dataBytes,wire:delta(began,await wire()),returnedValueIsNotAssumedToBeNetworkResponse:true});
+ stage='six-reconnect';began=await wire();for(const c of clients)goOffline(c.db);
+ for(const c of clients){goOnline(c.db);await new Promise((resolve,reject)=>{let stop=()=>{};const timer=setTimeout(()=>{stop();reject(new Error('sdk-reconnect-timeout'));},20000);stop=onValue(ref(c.db,'.info/connected'),snap=>{if(snap.val()===true){stop();clearTimeout(timer);resolve();}});});}
+ for(const c of clients)assert.equal(Object.keys((await get(ref(c.db,trial+'/wireEvents'))).val()).length,people);
+ assert(clients.every(c=>c.count===people&&!c.error));reports.push({id:'six-reconnect',eventsPerEnvironment:clients.map(c=>c.count),duplicateCallbacks:0,wire:delta(began,await wire())});
 }catch(e){failure={stage,code:e.code??e.name,message:e.message};process.exitCode=1;}
 finally{
  for(const stop of stops)stop();for(const c of clients)goOffline(c.db);for(const app of apps)await deleteApp(app);
