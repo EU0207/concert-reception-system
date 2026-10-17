@@ -51,7 +51,7 @@ Aは採用決定ではなく、次に確認する技術候補の選択である�
 
 ## 画像とApp Checkの外部一括検証案（TECH-DD91-113）
 
-状態：In Review・開発者判断待ち。[GD91-123の結果と予算](../technical-validation/seat-capacity-validation.md#gd91-123-rtdb画像候補と共通認可の隔離検証)では画像12群と座席・画像の共通10群がローカル合格。認可正本を一つにする案Aの検証を続ける。ただし、Emulatorには実サービスのApp Check強制を証明する根拠がない。
+状態：In Review。2026-10-17、開発者が会話でTECH-DD91-113-Aの下記1試行を承認した。[GD91-123の結果と予算](../technical-validation/seat-capacity-validation.md#gd91-123-rtdb画像候補と共通認可の隔離検証)では画像12群と座席・画像の共通10群がローカル合格。認可正本を一つにする案Aの検証を続ける。ただし、Emulatorには実サービスのApp Check強制を証明する根拠がない。
 
 | 案 | 利点・採用理由 | 欠点・影響 |
 |---|---|---|
@@ -73,11 +73,7 @@ Aは採用決定ではなく、次に確認する技術候補の選択である�
 
 これはデバッグ用のApp Check接続試験である。本番ブラウザーのreCAPTCHA等の証明、実機・完全オフラインと完成アプリ受入は#110・220に残す。[強制反映は最大15分](https://firebase.google.com/docs/app-check/enable-enforcement)を考慮する。[デバッグトークン](https://firebase.google.com/docs/app-check/web/debug-provider)を本番の保護として採用しない。RESTの`ac`は[公式SDKの実装](https://github.com/firebase/firebase-js-sdk/blob/main/packages/database/src/core/ReadonlyRestClient.ts)へ対応付ける。
 
-**決めてください**
-
-判断主体：開発者。
-
-- TECH-DD91-113：Aの上記1試行を推奨する。Bは保留。TECH-DD91-112-Aは候補選択であり、この新しい外部設定変更と試行の承認へ再利用しない。採用・本番実装とPR全体の統合承認も含まない。
+判断記録：TECH-DD91-113-A、判断主体は開発者、2026-10-17の会話で「A：上記1試行を承認」と回答。Bは選択しない。TECH-DD91-112-Aは再利用していない。この承認は方式採用・本番実装とPR全体の統合を含まず、終了後の追加試行へ再利用しない。
 
 **依頼者に確認してください**
 
