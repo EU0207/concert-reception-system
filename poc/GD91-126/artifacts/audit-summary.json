@@ -1,0 +1,10 @@
+{
+  "sourceComparisons": 81,
+  "oldContractCounterexamples": 2,
+  "correctedLocalGroups": 7,
+  "changedRulesFormulas": 2,
+  "earlierPartialRunsExcluded": true,
+  "externalFirebaseConnected": false,
+  "allBusinessRegressionVerified": false,
+  "realDatabaseMigrationVerified": false
+}

@@ -1,0 +1,90 @@
+{
+  "sourceHashes": {
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "migration.mjs": "c061290a3a378ff596b2289d4fd8a1bcce5a33d29eee6e2f841cb790c47594a0",
+    "test.mjs": "25ed06497bb2f62b39c729c3b63e0a171793defaf0aade3cea3f514c2ff66085",
+    "../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "endSourceHashes": {
+    "../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-104/geometry.mjs": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "migration.mjs": "c061290a3a378ff596b2289d4fd8a1bcce5a33d29eee6e2f841cb790c47594a0",
+    "test.mjs": "25ed06497bb2f62b39c729c3b63e0a171793defaf0aade3cea3f514c2ff66085",
+    "../GD91-48/comparison.mjs": "2adef0d0fd99916ee7e8bc3bfa2c9659bebf9fd09603b81af66519534e669613",
+    "../GD91-49/codec.mjs": "635ec8791c9aff4f772ad9d163bbc9e1a9e45f23288c8d7b911e7c4943e1fae7",
+    "../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6"
+  },
+  "reports": [
+    {
+      "id": "M01-old-codec-to-current-layout",
+      "oldFormatVersion": 2,
+      "newLayoutSchemaVersion": 2,
+      "sections": 2,
+      "cells": 12,
+      "seats": 8,
+      "horizontalAndVertical": true,
+      "idsNumbersAndAttributesPreserved": true,
+      "originalUnchanged": true,
+      "databaseTransferVerified": false
+    },
+    {
+      "id": "M02-invalid-inputs",
+      "rejected": 5,
+      "unsupportedMixedAndMissing": true,
+      "sourcePreserved": true
+    },
+    {
+      "id": "M03-encrypted-source-and-draft",
+      "aesGcmRoundTrip": true,
+      "nonextractableKey": true,
+      "tamperAndWrongKeyRejected": true,
+      "keyPersisted": false,
+      "indexedDbVerified": false,
+      "formalBackupFormatVerified": false
+    },
+    {
+      "id": "M04-unknown-outcome",
+      "notFoundDoesNotResend": true,
+      "mismatchBlocks": true,
+      "cutoverBlocked": true,
+      "pendingAndDraftPreserved": true
+    },
+    {
+      "id": "M05-single-writer-model",
+      "verificationAndReprepareRequired": true,
+      "automaticDraftCommit": false,
+      "dualWrite": false,
+      "authUidCopied": false,
+      "deviceKeyCopied": false,
+      "actualDeviceSwitchVerified": false
+    },
+    {
+      "id": "M06-rollback-before-resume",
+      "originalPreserved": true,
+      "unsafeFirestoreNotResumed": true,
+      "paperFallback": true
+    },
+    {
+      "id": "M07-rollback-after-new-fact",
+      "bothWritersStopped": true,
+      "newFactPreserved": true,
+      "noOldStateOverwrite": true,
+      "operatorDecisionRequired": true
+    }
+  ],
+  "scope": "in-memory format and safety model only",
+  "externalRequestsExecuted": 0,
+  "realDatabaseMigrationVerified": false,
+  "allBusinessMappingVerified": false,
+  "migrationConditionV402Complete": false,
+  "productionImplementation": false
+}

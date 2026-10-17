@@ -1,0 +1,248 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-121/artifacts/scenario-summary.json": "362e2988be9ef6e06b9fe0d2c6ad7af16b9a386dd06f8128dacd1a4ccdbce34f",
+    "artifacts/local-summary.json": "3afe1ba976b1aaf305b9d2b0fa83b6e4577d42660f874b2662623337940eef48",
+    "budget.mjs": "808309804421d15b72d46066035306ffe6a9b1307bc95f034a722cfea8aecc7b"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-121/artifacts/scenario-summary.json": "362e2988be9ef6e06b9fe0d2c6ad7af16b9a386dd06f8128dacd1a4ccdbce34f",
+    "artifacts/local-summary.json": "3afe1ba976b1aaf305b9d2b0fa83b6e4577d42660f874b2662623337940eef48",
+    "budget.mjs": "808309804421d15b72d46066035306ffe6a9b1307bc95f034a722cfea8aecc7b"
+  },
+  "reservation": {
+    "bankSetsWritten": 2,
+    "imagesPerSet": 5,
+    "additionalFullDownloadSets": 2,
+    "backupCopies": 2,
+    "banksRetainedPerSlot": 2,
+    "writeRelatedRequestsPerImage": 6,
+    "bootstrapAndEndReserveCopies": 4,
+    "safetyFactor": 2
+  },
+  "reports": [
+    {
+      "people": 600,
+      "id": "one-performance",
+      "baselineMonthlyBytes": 4100942454,
+      "baselineStorageBytes": 140817058,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 4586165246,
+      "retainedJsonComparisonBytes": 167488418,
+      "fitsIllustrativeDownloadBudget": true,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 600,
+      "id": "four-performances",
+      "baselineMonthlyBytes": 13403769816,
+      "baselineStorageBytes": 263268232,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 15344660984,
+      "retainedJsonComparisonBytes": 369953672,
+      "fitsIllustrativeDownloadBudget": false,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 600,
+      "id": "twice-the-layout-saves",
+      "baselineMonthlyBytes": 5576594414,
+      "baselineStorageBytes": 140817058,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 6061817206,
+      "retainedJsonComparisonBytes": 167488418,
+      "fitsIllustrativeDownloadBudget": true,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 600,
+      "id": "request-allowance-times-eight",
+      "baselineMonthlyBytes": 9903696502,
+      "baselineStorageBytes": 140817058,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 17039360
+      },
+      "extraPerPerformanceBytes": 515041672,
+      "monthlyBytes": 10418738174,
+      "retainedJsonComparisonBytes": 167488418,
+      "fitsIllustrativeDownloadBudget": false,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 600,
+      "id": "twenty-protected-generations",
+      "baselineMonthlyBytes": 4100942454,
+      "baselineStorageBytes": 327337486,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 4586165246,
+      "retainedJsonComparisonBytes": 354008846,
+      "fitsIllustrativeDownloadBudget": true,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 600,
+      "id": "four-performances-twenty-protected-each",
+      "baselineMonthlyBytes": 13403769816,
+      "baselineStorageBytes": 1009349944,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 15344660984,
+      "retainedJsonComparisonBytes": 1116035384,
+      "fitsIllustrativeDownloadBudget": false,
+      "fitsIllustrativeStorageBudget": false
+    },
+    {
+      "people": 1000,
+      "id": "one-performance",
+      "baselineMonthlyBytes": 5192805330,
+      "baselineStorageBytes": 154226910,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 5678028122,
+      "retainedJsonComparisonBytes": 180898270,
+      "fitsIllustrativeDownloadBudget": true,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 1000,
+      "id": "four-performances",
+      "baselineMonthlyBytes": 17771221320,
+      "baselineStorageBytes": 316907640,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 19712112488,
+      "retainedJsonComparisonBytes": 423593080,
+      "fitsIllustrativeDownloadBudget": false,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 1000,
+      "id": "twice-the-layout-saves",
+      "baselineMonthlyBytes": 7091691510,
+      "baselineStorageBytes": 154226910,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 7576914302,
+      "retainedJsonComparisonBytes": 180898270,
+      "fitsIllustrativeDownloadBudget": true,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 1000,
+      "id": "request-allowance-times-eight",
+      "baselineMonthlyBytes": 14162668498,
+      "baselineStorageBytes": 154226910,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 17039360
+      },
+      "extraPerPerformanceBytes": 515041672,
+      "monthlyBytes": 14677710170,
+      "retainedJsonComparisonBytes": 180898270,
+      "fitsIllustrativeDownloadBudget": false,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 1000,
+      "id": "twenty-protected-generations",
+      "baselineMonthlyBytes": 5192805330,
+      "baselineStorageBytes": 365119734,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 5678028122,
+      "retainedJsonComparisonBytes": 391791094,
+      "fitsIllustrativeDownloadBudget": true,
+      "fitsIllustrativeStorageBudget": true
+    },
+    {
+      "people": 1000,
+      "id": "four-performances-twenty-protected-each",
+      "baselineMonthlyBytes": 17771221320,
+      "baselineStorageBytes": 1160478936,
+      "extras": {
+        "initialAndRepeatedReceives": 120460356,
+        "imageWritesAndVerification": 40007040,
+        "backups": 26671360,
+        "bootstrapAndEnd": 53342720,
+        "requestAllowance": 2129920
+      },
+      "extraPerPerformanceBytes": 485222792,
+      "monthlyBytes": 19712112488,
+      "retainedJsonComparisonBytes": 1267164376,
+      "fitsIllustrativeDownloadBudget": false,
+      "fitsIllustrativeStorageBudget": false
+    }
+  ],
+  "measuredOnly": "TLS reads of 5 maximal images by 6 separate Auth clients",
+  "imageWriteBackupAndBootstrapReservationsVerified": false,
+  "providerBillingMeasured": false,
+  "operationalLimitsApproved": false,
+  "fullBusinessFreeTierVerified": false,
+  "externalFirebaseConnected": false
+}
