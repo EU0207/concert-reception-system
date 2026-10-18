@@ -1,0 +1,31 @@
+{
+  "sourceComparisons": 10,
+  "groups": 30,
+  "profiles": [
+    4,
+    600,
+    1000
+  ],
+  "realSdkContextsPerProfile": 6,
+  "normalRegistrationVerified": true,
+  "referenceBudget": {
+    "registration": {
+      "operation": 8,
+      "head": 2,
+      "person": 3,
+      "label": 3,
+      "total": 16
+    },
+    "staffReads": {
+      "head": 6,
+      "label": 7,
+      "accessGate": 4
+    },
+    "sessionIssue": 2,
+    "cacheDiscountAssumed": false
+  },
+  "rawSdkExpiryEnforcementVerified": false,
+  "accessGateCandidateVerified": true,
+  "fullBusinessFreeTierVerified": false,
+  "externalFirebaseConnected": false
+}
