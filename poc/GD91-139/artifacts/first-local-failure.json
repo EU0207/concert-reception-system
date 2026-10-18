@@ -1,0 +1,130 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-138/business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "auth.rules": "ee53560c8438783d235f25ac305bde6a01ec4e8cc712cba63242d1a253721e33",
+    "client.mjs": "10cc8760ae0d300213028450b406540498882efb45492666890ff9c50d37ef53",
+    "firebase.json": "df5b1fd6622953a218a4b8c21262746e50a344a8524043e4c5e5a986087bcb3c",
+    "generate.mjs": "b8d7110be2fc2be3d16f473a5922b1c163222dda2e98949ec5cbf0132c0be777",
+    "local.mjs": "fa489341b8bbae08aa86b16219ddb3336e7fabd3fd21975c44492fefdbf90e84",
+    "registration.rules": "ff29835cebbc565ffe11856321e150c204db46d7ecaec1bb6cf59a2985922a20",
+    "run-local.mjs": "a60bc1064d743312b887c4c148161ff86e7a87dd759b1b19c04f5a21541de0a4",
+    "sdk.mjs": "0e9322ca1e2262ec2753dfbf7bce5910d04f83e5bb0b5ce9397deb35f11eab83"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-138/business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "auth.rules": "ee53560c8438783d235f25ac305bde6a01ec4e8cc712cba63242d1a253721e33",
+    "client.mjs": "10cc8760ae0d300213028450b406540498882efb45492666890ff9c50d37ef53",
+    "firebase.json": "df5b1fd6622953a218a4b8c21262746e50a344a8524043e4c5e5a986087bcb3c",
+    "generate.mjs": "b8d7110be2fc2be3d16f473a5922b1c163222dda2e98949ec5cbf0132c0be777",
+    "local.mjs": "fa489341b8bbae08aa86b16219ddb3336e7fabd3fd21975c44492fefdbf90e84",
+    "registration.rules": "ff29835cebbc565ffe11856321e150c204db46d7ecaec1bb6cf59a2985922a20",
+    "run-local.mjs": "a60bc1064d743312b887c4c148161ff86e7a87dd759b1b19c04f5a21541de0a4",
+    "sdk.mjs": "0e9322ca1e2262ec2753dfbf7bce5910d04f83e5bb0b5ce9397deb35f11eab83"
+  },
+  "rulesHash": "7685a1fc88fa97b27cacc4aecf0e6eb59bca817daa079490c62400c91233b4a5",
+  "reports": [
+    {
+      "people": 4,
+      "id": "F01-empty-roster",
+      "registeredDevices": 8,
+      "actualSdkContexts": 6,
+      "allSessionsNormallyIssued": true,
+      "headGeometryAndRoleRegistrationOwnerPreconditions": true,
+      "peopleOwnerSeeds": 0
+    },
+    {
+      "people": 4,
+      "id": "R01-registration-partials",
+      "rejectedCombinations": 14,
+      "headUnchanged": true
+    },
+    {
+      "people": 4,
+      "id": "R02-private-data-and-input-guards",
+      "invalidInputs": 7,
+      "receptionistBusinessWriteDenied": true,
+      "displayWhitespaceSixCharacterRule": true
+    },
+    {
+      "people": 3,
+      "id": "R03-normal-registration",
+      "elapsedMs": 343,
+      "normalWrites": 12,
+      "normalCommits": 3,
+      "restObservedRequestBytes": 7624,
+      "restObservedResponseBytes": 711450,
+      "ownerPersonOrLabelWrites": 0
+    },
+    {
+      "people": 4,
+      "id": "S01-six-sdk-public-labels",
+      "receivedPerClient": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "privateBuyerFieldsExcluded": true,
+      "mixedRevisionRejectedByComparison": true,
+      "sdkApplicationJsonBytes": [
+        334156,
+        334156,
+        334156,
+        334156,
+        334156,
+        334156
+      ],
+      "sdkWireBytesMeasured": false
+    },
+    {
+      "people": 4,
+      "id": "S02-management-data-denied",
+      "peopleAndOperationServerReadsDenied": true,
+      "roleListDenied": true
+    },
+    {
+      "people": 4,
+      "id": "R04-late-addition-and-optional-seat",
+      "finalPeople": 4,
+      "assignedPeople": 3,
+      "unassignedLabelHidden": true,
+      "oldOperationReplayRejected": true,
+      "newIdResultMatched": true
+    }
+  ],
+  "profiles": [],
+  "meter": {
+    "requests": 107,
+    "upBytes": 1008278,
+    "downBytes": 1458706,
+    "normalCommits": 14,
+    "normalWrites": 26,
+    "maxRequestJsonBytes": 2576
+  },
+  "cleanup": {
+    "sdkClientsClosed": true,
+    "rulesClosed": true,
+    "trialDocumentsEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "failure": {
+    "phase": "4/revocation",
+    "name": "AssertionError",
+    "message": "Missing expected rejection."
+  },
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "actualSdkContextsUsed": true,
+  "allBusinessRegressionVerified": false,
+  "fullBusinessFreeTierVerified": false,
+  "normalInitializationAndStartVerified": false,
+  "deviceAndRoleRegistrationOwnerPreconditions": true,
+  "temporaryBaselineRoleTransitionVerified": false,
+  "sharedBuyerAndTicketLifecycleVerified": false,
+  "providerBillingMeasured": false,
+  "sdkWireBytesMeasured": false
+}
