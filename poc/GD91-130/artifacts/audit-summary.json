@@ -1,0 +1,11 @@
+{
+  "sourceComparisons": 75,
+  "groups": 6,
+  "sameBrowserSdkAndIndexedDbVerified": true,
+  "oldSdkResultLookupMatched": true,
+  "newIdentityAndKeyScopesUsed": true,
+  "earlierPartialRunExcluded": true,
+  "externalRequests": 0,
+  "formalBackupFormatVerified": false,
+  "allBusinessMigrationVerified": false
+}

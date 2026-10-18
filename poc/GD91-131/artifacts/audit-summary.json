@@ -1,0 +1,17 @@
+{
+  "sourceComparisons": 1077,
+  "loadedFileModulesCompared": 108,
+  "historicalHookComparisons": 15,
+  "historicalHookSnapshot": "artifacts/runtime-hook-v1.mjs",
+  "groups": 220,
+  "previousGroups": 183,
+  "resumedGroups": 37,
+  "legacyBusinessGroups": 216,
+  "readBudgetComparisons": 4,
+  "positiveCodeFixturesAdapted": 2,
+  "rulesExactlyMatch126": true,
+  "earlierFailedScopeExcluded": true,
+  "currentSourceEvidenceChecked": true,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false
+}

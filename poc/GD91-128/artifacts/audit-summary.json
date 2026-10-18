@@ -1,0 +1,10 @@
+{
+  "sourceComparisons": 105,
+  "localDatabaseGroups": 8,
+  "conversionPositiveCases": 1,
+  "rejectedConversionInputs": 19,
+  "earlierPartialRunsExcluded": true,
+  "externalFirebaseConnected": false,
+  "allBusinessMigrationVerified": false,
+  "formalBackupFormatVerified": false
+}

@@ -18,7 +18,7 @@
 
 ## 決定
 
-#168でRTDB候補を評価中であり、本ADRのFirestore採用を変更済みとは扱わない。画像を含む認可の保存境界は[ADR-007のTECH-DD91-112](ADR-007-seat-edit-commit-boundary.md#v4の採用判断前の制約tech-dd91-112)で技術判断する。方式採用時に変更範囲と残るサービスを同じ承認で確定する。
+#168では[TECH-DD91-116](ADR-007-seat-edit-commit-boundary.md#3方式の共通条件による比較tech-dd91-116)に従い、Firestore中心・公演状態で分担・RTDB統一を同じ要件・無料条件で比較する。Hostingによる配信は全案共通。115のA・Bは回答保留であり、本ADRのFirestore採用や移行ゲートを変更済みとは扱わない。AuthenticationとPWA、環境分離を維持し、本番実装・配備は開始しない。
 
 次の構成を採用する。
 
