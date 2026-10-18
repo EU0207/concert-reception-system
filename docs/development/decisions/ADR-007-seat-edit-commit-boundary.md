@@ -279,6 +279,14 @@ Aを推奨する理由は、既存の主担当の操作と本人・端末の認�
 
 Firebaseの[Admin Database SDK](https://firebase.google.com/docs/database/admin/start#authenticate_with_admin_privileges)は管理権限ではSecurity Rulesにかかわらず読書きできる。145のEmulator ownerはその機能実装でも、実環境の管理資格取得の検証でもない。[Admin SDK設定](https://firebase.google.com/docs/admin/setup)を参照し、資格をコード・公開文書とログへ保存しない。
 
+### Aの追加設計の境界
+
+[取込契約案](../detailed-design/seat-management-detail-design.md#移行専用rulesとブラウザー取込の候補)は、現在認可を持つ主担当の期限付き取込と、一度だけの公開を分ける。未公開保存の片を変更不能とし、通常の保存先への配置は末端の値とコピー済み索引を同じ更新で検査する。親ルートの広い書込み許可は追加しない。
+
+この形を試す理由は、通常利用の物理パスを維持し、再取得後の実績・画像を既存Rulesへ戻せるためである。一方、末端へ分けることで要求数とコピー済み索引が増える。通常データとは別の複製を残し続けないよう、公開後の明示回収も必要になる。生成Rulesの大きさと評価量を含めて比較し、Emulatorの受理だけを実サービスの保証にしない。
+
+[Rules APIの`val()`](https://firebase.google.com/docs/reference/security/database#val)は、親オブジェクトではJSON全体を返さない。オブジェクト全体の`val()`一致を完全性の根拠へ使わず、Rulesでは末端値を照合する。全領域のハッシュはクライアントで再計算する。持込履歴の出所と意味上の検査は別条件であり、自己申告ハッシュだけで過去の本人認証や業務再計算の証明を作らない。
+
 ### 維持するゲート
 
 この判断は移行の取込権限の設計・隔離検証だけを対象とする。通常業務の認可仲介API、方式全体の採用、115のA・Bへの回答を含まない。全形式移行を採用前から将来へ移さない。全領域の意味上の変換、暗号化共有案の再暗号化と実績再計算を引き続き確認する。

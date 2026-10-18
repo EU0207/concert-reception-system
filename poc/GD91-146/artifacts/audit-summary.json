@@ -1,0 +1,26 @@
+{
+  "sourceComparisons": 188,
+  "groups": 6,
+  "people": 4,
+  "areas": 17,
+  "images": 5,
+  "cleanup": {
+    "targetDenyAll": true,
+    "targetEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "browserTraffic": {
+    "requests": 1468,
+    "requestBodyBytes": 13862819,
+    "responseBodyBytes": 8336930,
+    "statuses": {
+      "200": 1197,
+      "204": 253,
+      "401": 18
+    }
+  },
+  "payloadImportUsedAdmin": false,
+  "externalFirebaseConnected": false,
+  "allBusinessMigrationVerified": false,
+  "earlierFailuresExcludedFromCurrentSourceAudit": true
+}
