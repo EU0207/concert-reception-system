@@ -1,0 +1,323 @@
+{
+  "people": 1000,
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-138/business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "../GD91-139/auth.rules": "ee53560c8438783d235f25ac305bde6a01ec4e8cc712cba63242d1a253721e33",
+    "../GD91-139/generate.mjs": "b8d7110be2fc2be3d16f473a5922b1c163222dda2e98949ec5cbf0132c0be777",
+    "../GD91-139/registration.rules": "6d8b7f6347847467f0d1a6699d1911dd880ccc9bc5eeabc5900410b597994194",
+    "browser-fixture.mjs": "cff0db44dba6ece2e1d336f611b292ab6de446aa81559eea8b2b54a762bf9e2f",
+    "browser.html": "77601c2cb6609e8940f24a41d71dd8fa3d5f599eb291d59a2cb43852e5f451ed",
+    "browser.mjs": "7ec05795c41cac5c8155c3f575a2b6efc5b75a9d7a5340d2c237cfac502530ac",
+    "client.mjs": "0d232960d09271f87f4fa4397424fd25ec2ce2780b0e1334283be8662716a3e9",
+    "firebase.json": "86fe95b905765c51bb0e05526e2fcef6d5ba64e22d44973430efe286ee32a8fd",
+    "local.mjs": "b57144d38feda7f9f2ca2c8993f4c6d4b15f749115792354e54031374f1bf779",
+    "receiver.mjs": "6a6c20f38fb85793db977dbb0184b6f81d20353c74067d44eec28ebead9539df",
+    "run-local.mjs": "911156f9881732d30de50e5ecefa9c30ca121d3980c176bfdedf3da1d71f7648"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-138/business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "../GD91-139/auth.rules": "ee53560c8438783d235f25ac305bde6a01ec4e8cc712cba63242d1a253721e33",
+    "../GD91-139/generate.mjs": "b8d7110be2fc2be3d16f473a5922b1c163222dda2e98949ec5cbf0132c0be777",
+    "../GD91-139/registration.rules": "6d8b7f6347847467f0d1a6699d1911dd880ccc9bc5eeabc5900410b597994194",
+    "browser-fixture.mjs": "cff0db44dba6ece2e1d336f611b292ab6de446aa81559eea8b2b54a762bf9e2f",
+    "browser.html": "77601c2cb6609e8940f24a41d71dd8fa3d5f599eb291d59a2cb43852e5f451ed",
+    "browser.mjs": "7ec05795c41cac5c8155c3f575a2b6efc5b75a9d7a5340d2c237cfac502530ac",
+    "client.mjs": "0d232960d09271f87f4fa4397424fd25ec2ce2780b0e1334283be8662716a3e9",
+    "firebase.json": "86fe95b905765c51bb0e05526e2fcef6d5ba64e22d44973430efe286ee32a8fd",
+    "local.mjs": "b57144d38feda7f9f2ca2c8993f4c6d4b15f749115792354e54031374f1bf779",
+    "receiver.mjs": "6a6c20f38fb85793db977dbb0184b6f81d20353c74067d44eec28ebead9539df",
+    "run-local.mjs": "911156f9881732d30de50e5ecefa9c30ca121d3980c176bfdedf3da1d71f7648"
+  },
+  "rulesHash": "badeacb71379600cb40658b7ce1db0a260638c4c7f1f9b7835b1960bcb1b2d5d",
+  "reports": [
+    {
+      "id": "F01-read-fixture",
+      "people": 1000,
+      "registeredDevices": 8,
+      "browserAuthContexts": 6,
+      "normalSessionIssue": true,
+      "businessDocumentsOwnerSeeded": true,
+      "businessWriteRegressionVerified": false
+    },
+    {
+      "id": "R01-initial-six-browser-rest",
+      "labelsPerClient": 1000,
+      "requestsPerClient": [
+        35,
+        35,
+        35,
+        35,
+        35,
+        35
+      ],
+      "metadataExcluded": true,
+      "batchMaximum": 32
+    },
+    {
+      "id": "R02-unchanged-masked-head",
+      "oneRequestPerClient": true,
+      "responseBytesPerClient": [
+        452,
+        452,
+        452,
+        452,
+        452,
+        452
+      ]
+    },
+    {
+      "id": "R03-one-label-change",
+      "metadataDocumentsPerClient": 1000,
+      "bodyDocumentsPerClient": 1,
+      "requestsPerClient": [
+        36,
+        36,
+        36,
+        36,
+        36,
+        36
+      ],
+      "labelAndHeadMutationOwnerPrecondition": true
+    },
+    {
+      "id": "R04-assignment-only-change",
+      "metadataDocumentsPerClient": 1000,
+      "bodyDocumentsPerClient": 0,
+      "assignmentOwnerPrecondition": true
+    },
+    {
+      "id": "R05-concurrent-revision",
+      "injectedAfterFirstBatch": true,
+      "oldCacheUnchanged": true,
+      "recoveryVerified": true
+    },
+    {
+      "id": "R06-private-get-mask-and-mixed-batch",
+      "privateMaskedGetDenied": true,
+      "bothMixedOrdersRejected": true,
+      "noPrivateDocumentReturned": true
+    },
+    {
+      "id": "R07-real-missing-label",
+      "missingResponseRejected": true,
+      "cacheUnchanged": true,
+      "fixtureRestored": true
+    },
+    {
+      "id": "A01-normal-device-stop",
+      "maskedFullAndBatchDenied": true,
+      "otherDeviceContinues": true,
+      "restoreOwnerPrecondition": true
+    },
+    {
+      "id": "A02-normal-role-revocation",
+      "maskedAndBatchDenied": true,
+      "otherHumanContinues": true,
+      "restoreOwnerPrecondition": true
+    },
+    {
+      "id": "A03-natural-expiry-during-receive",
+      "expirySettingOwnerPrecondition": true,
+      "duringReceiveDenied": true,
+      "cacheUnchanged": true,
+      "freshMaskedAndBatchDenied": true
+    },
+    {
+      "id": "P01-no-scope-escalation",
+      "otherPerformanceDenied": true,
+      "labelAndRoleListsDenied": true
+    },
+    {
+      "id": "P02-response-completeness",
+      "reorderedAccepted": true,
+      "missingDuplicateAndErrorRejected": true,
+      "parserFaultInjectionOnly": true
+    }
+  ],
+  "metrics": {
+    "initial": [
+      {
+        "requests": 35,
+        "requestBytes": 163480,
+        "responseBytes": 1584780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 163480,
+        "responseBytes": 1584780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 163480,
+        "responseBytes": 1584780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 163480,
+        "responseBytes": 1584780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 163480,
+        "responseBytes": 1584684
+      },
+      {
+        "requests": 35,
+        "requestBytes": 163480,
+        "responseBytes": 1584780
+      }
+    ],
+    "unchanged": [
+      {
+        "requests": 1,
+        "requestBytes": 0,
+        "responseBytes": 452
+      },
+      {
+        "requests": 1,
+        "requestBytes": 0,
+        "responseBytes": 452
+      },
+      {
+        "requests": 1,
+        "requestBytes": 0,
+        "responseBytes": 452
+      },
+      {
+        "requests": 1,
+        "requestBytes": 0,
+        "responseBytes": 452
+      },
+      {
+        "requests": 1,
+        "requestBytes": 0,
+        "responseBytes": 452
+      },
+      {
+        "requests": 1,
+        "requestBytes": 0,
+        "responseBytes": 452
+      }
+    ],
+    "rename": [
+      {
+        "requests": 36,
+        "requestBytes": 165066,
+        "responseBytes": 1330546
+      },
+      {
+        "requests": 36,
+        "requestBytes": 165066,
+        "responseBytes": 1330546
+      },
+      {
+        "requests": 36,
+        "requestBytes": 165066,
+        "responseBytes": 1330546
+      },
+      {
+        "requests": 36,
+        "requestBytes": 165066,
+        "responseBytes": 1330546
+      },
+      {
+        "requests": 36,
+        "requestBytes": 165066,
+        "responseBytes": 1330546
+      },
+      {
+        "requests": 36,
+        "requestBytes": 165066,
+        "responseBytes": 1330546
+      }
+    ],
+    "assignment": [
+      {
+        "requests": 35,
+        "requestBytes": 164888,
+        "responseBytes": 1329780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 164888,
+        "responseBytes": 1329780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 164888,
+        "responseBytes": 1329780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 164888,
+        "responseBytes": 1329780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 164888,
+        "responseBytes": 1329780
+      },
+      {
+        "requests": 35,
+        "requestBytes": 164888,
+        "responseBytes": 1329780
+      }
+    ]
+  },
+  "browserMeters": [
+    {
+      "requests": 198,
+      "requestBytes": 840461,
+      "responseBytes": 7772750
+    },
+    {
+      "requests": 147,
+      "requestBytes": 663597,
+      "responseBytes": 6413451
+    },
+    {
+      "requests": 107,
+      "requestBytes": 493434,
+      "responseBytes": 4245558
+    },
+    {
+      "requests": 107,
+      "requestBytes": 493434,
+      "responseBytes": 4245558
+    },
+    {
+      "requests": 107,
+      "requestBytes": 493434,
+      "responseBytes": 4245462
+    },
+    {
+      "requests": 107,
+      "requestBytes": 493434,
+      "responseBytes": 4245558
+    }
+  ],
+  "fixtureRestMeter": {
+    "requests": 87,
+    "upBytes": 4932709,
+    "downBytes": 138638,
+    "normalCommits": 10,
+    "normalWrites": 10,
+    "maxRequestJsonBytes": 769
+  },
+  "cleanup": {
+    "browserAndServerClosed": true,
+    "rulesClosed": true,
+    "trialDocumentsEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "externalFirebaseConnected": false,
+  "browserAuthSdkWithRestData": true,
+  "firestoreSdkDataTransport": false,
+  "businessDocumentsOwnerSeeded": true,
+  "businessWriteRegressionVerified": false,
+  "rawSdkExpiryEnforcementVerified": false,
+  "fullBusinessFreeTierVerified": false,
+  "wireBytesMeasured": false
+}

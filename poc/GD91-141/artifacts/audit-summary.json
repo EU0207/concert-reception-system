@@ -1,0 +1,17 @@
+{
+  "groups": 26,
+  "profiles": [
+    600,
+    1000
+  ],
+  "sourceComparisonsPerProfile": 13,
+  "rulesUnchangedFromGd139": true,
+  "browserAuthContextsPerProfile": 6,
+  "readOnlyPathVerified": true,
+  "page32StaticReferenceGuarantee": false,
+  "fullRefreshReadAmplificationBlocker": true,
+  "rawSdkExpiryEnforcementVerified": false,
+  "fullBusinessFreeTierVerified": false,
+  "cleanupVerified": true,
+  "externalFirebaseConnected": false
+}
