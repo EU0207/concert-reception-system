@@ -1,0 +1,105 @@
+{
+  "evidenceFiles": 13,
+  "evidence": [
+    {
+      "path": "../GD91-80/artifacts/remote-summary.json",
+      "sha256": "5a78a0dd0b2436c85b65785e45bc8720c7192df546f0bdbb0797147355d96162"
+    },
+    {
+      "path": "../GD91-81/artifacts/remote-summary.json",
+      "sha256": "f71014f3da13362f1bd444dcaf9ad8c5885a387524fa76be11f651be59395a8f"
+    },
+    {
+      "path": "../GD91-82/artifacts/remote-summary.json",
+      "sha256": "56589607efabb1458af4afed884aa1e50d0981a38594fc8569aba848a6581476"
+    },
+    {
+      "path": "../GD91-122/artifacts/evidence-summary.json",
+      "sha256": "fdd6f413d98c8379c98bd74fadebb55f0c81d1d4abf12f37cf0c77d050ee093e"
+    },
+    {
+      "path": "../GD91-127/artifacts/audit-summary.json",
+      "sha256": "6e7c1ee06a73d927f9a0c55bb5fe4dd8af0753bfe89510acc1d9317241df23e3"
+    },
+    {
+      "path": "../GD91-131/artifacts/audit-summary.json",
+      "sha256": "dcf3527d2b66dde6e68eda28c592cdb0ef3c4fc6441cbd66bf102cba81a2b36b"
+    },
+    {
+      "path": "../GD91-134/artifacts/budget-summary.json",
+      "sha256": "edad983b646640ea7b4706f8d27c5c8276d64cde4b35c347e37c9b988a0550bf"
+    },
+    {
+      "path": "../GD91-135/artifacts/audit-summary.json",
+      "sha256": "5f53041ac52b81f20336421d6eba0c897b11b296f2af6bec3500f9c56d6eecd0"
+    },
+    {
+      "path": "../GD91-136/artifacts/local-summary.json",
+      "sha256": "90a2861484cd8ba83afbb3a8bf42cadb52e374824366c2ae7b23f10fd052a104"
+    },
+    {
+      "path": "../GD91-137/artifacts/budget-summary.json",
+      "sha256": "ba03d3b7aa4a18978ba947bd57ffb07acc80e1d5b2589d6d59cdb270b236bb62"
+    },
+    {
+      "path": "../GD91-140/artifacts/audit-summary.json",
+      "sha256": "1c6032af1d8ad343c4307842e2e7f71a92c67087d8f42a04a3bc5aca7d846556"
+    },
+    {
+      "path": "../GD91-141/artifacts/audit-summary.json",
+      "sha256": "9b38f31418607efbe7c72dd7022c3e4b8eeb0d4e3826b53921fd053fb6904c08"
+    },
+    {
+      "path": "artifacts/audit-summary.json",
+      "sha256": "89907cfe205cb0378549175249b883d061d278fc5983657de0df0e9a93c9e419"
+    }
+  ],
+  "historicalBusinessScenariosRerun": 0,
+  "externalRequestsExecuted": 0,
+  "candidateGates": {
+    "firestoreCenter": {
+      "currentCandidateAdoptable": false,
+      "reason": "historical-read-revocation",
+      "fullBusinessCostMeasured": false
+    },
+    "performanceSplit": {
+      "currentCandidateAdoptable": false,
+      "reason": "historical-read-revocation-and-cross-db-boundary",
+      "fullMigrationVerified": false
+    },
+    "rtdbUnified": {
+      "adoptionApproved": false,
+      "designBudgetEvidenceAvailable": true,
+      "allFormatMigrationVerified": false
+    }
+  },
+  "issue168Criteria": [
+    {
+      "id": 1,
+      "state": "incomplete",
+      "reason": "candidate-selection-and-conditions"
+    },
+    {
+      "id": 2,
+      "state": "evidence-mapped-with-open-gates"
+    },
+    {
+      "id": 3,
+      "state": "incomplete",
+      "reason": "adr-and-physical-contract-not-approved"
+    },
+    {
+      "id": 4,
+      "state": "handoff-recorded-not-implemented"
+    },
+    {
+      "id": 5,
+      "state": "incomplete",
+      "reason": "developer-decision-and-all-gates-required"
+    }
+  ],
+  "nextScopeDecision": "TECH-DD91-117",
+  "storageAdoptionApproved": false,
+  "migrationGateChanged": false,
+  "techDd91115Answer": null
+}
