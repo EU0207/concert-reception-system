@@ -1,0 +1,10 @@
+{
+  "sourceComparisons": 26,
+  "groups": 11,
+  "localDeviceStopAndRoleRevokeVerified": true,
+  "normalSessionIssuance": true,
+  "crossDatabaseRevocationVerified": false,
+  "crossDatabaseSourceHashVerified": false,
+  "allHistoryDeletionVerified": false,
+  "externalFirebaseConnected": false
+}
