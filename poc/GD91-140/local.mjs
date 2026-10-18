@@ -1,0 +1,41 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {randomUUID,createHash} from 'node:crypto';import {createRequire} from 'node:module';
+import {sourceHashes} from '../GD91-105/source-audit.mjs';import {client} from './sdk.mjs';
+import {client as browserClient} from './browser.mjs';
+import {project,base,auth,users,stamp,request,write,commit,ok,seed} from './client.mjs';
+assert.equal(process.env.GCLOUD_PROJECT,project);assert.equal(process.env.FIRESTORE_EMULATOR_HOST,'127.0.0.1:8384');assert.equal(process.env.FIREBASE_AUTH_EMULATOR_HOST,'127.0.0.1:9494');
+const mode=process.argv.includes('--browser')?'browser':'node';
+const root=new URL('./',import.meta.url),entries=['local.mjs','sdk.mjs','client.mjs','firestore.rules','firebase.json','run-local.mjs','browser.mjs','browser.html','browser-fixture.mjs'],before=sourceHashes(root,entries),reports=[],clients=[];
+const require=createRequire(new URL('../POC-004/package.json',import.meta.url));
+const versions={node:process.version,firebase:require('firebase/package.json').version,firebaseTools:require('firebase-tools/package.json').version};
+let failure,phase='setup',cleanup={},counter=0;
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function sdkResult(sdk,path){try{const value=await sdk.read(path);assert.equal(value.counter,counter);return{allowed:true,currentCounterVerified:true};}catch(e){if(e.code!=='permission-denied')throw e;return{allowed:false,code:e.code};}}
+async function restResult(path,token,batch=false){const r=await request(batch?base+':batchGet':base+'/'+path,token,batch?'POST':'GET',batch?{documents:[`projects/${project}/databases/(default)/documents/`+path]}:undefined);assert([200,401,403].includes(r.status));return{allowed:r.status===200,status:r.status};}
+const add=(id,value)=>{reports.push({id,...value});console.log(JSON.stringify({case:id,recorded:true}));};
+try{
+ const sdk=await(mode==='browser'?browserClient():client());clients.push(sdk);const run=randomUUID(),p='timeProbes/'+run,gp=p+'/gates/current',a=p+'/rows/a',b=p+'/rows/b';
+ let gate={uid:sdk.actor.uid,active:true,notBefore:stamp(Date.now()-60000),expiresAt:stamp(Date.now()+3600000),roleEndsAt:stamp(Date.now()+3600000)};
+ const putGate=async patch=>{gate={...gate,...patch};await seed(gp,gate);};
+ const putRows=async()=>{counter++;await seed(a,{counter});await seed(b,{counter});};
+ const compare=async(path=a)=>{await putRows();return{sdk:await sdkResult(sdk,path),restGet:await restResult(path,sdk.actor.token),restBatchGet:await restResult(path,sdk.actor.token,true)};};
+ phase='baseline';await putGate({});const baseline=await compare();assert(baseline.sdk.allowed&&baseline.restGet.allowed&&baseline.restBatchGet.allowed);add('T01-baseline',baseline);
+ phase='active-flag';await putGate({active:false});const stopped=await compare();assert(!stopped.sdk.allowed&&!stopped.restGet.allowed&&!stopped.restBatchGet.allowed);await putGate({active:true});assert((await compare()).sdk.allowed);add('T02-current-active-flag',stopped);
+ phase='lower-time-bound';await sleep(1500);await putGate({notBefore:stamp(Date.now()-500)});const recentStart=await compare();assert(recentStart.restGet.allowed&&recentStart.restBatchGet.allowed);await sdk.resetConnection();const recentFresh=await sdkResult(sdk,a);assert(recentFresh.allowed);add('T03-not-before-after-stream-open',{existingConnection:recentStart,newConnection:recentFresh});
+ phase='upper-time-bound';await sleep(1500);await putGate({expiresAt:stamp(Date.now()-500)});const expired=await compare(),different=await sdkResult(sdk,b);assert(!expired.restGet.allowed&&!expired.restBatchGet.allowed);await sdk.resetConnection();const expiredFresh=await sdkResult(sdk,a);assert(!expiredFresh.allowed);add('T04-expiry-updated-after-stream-open',{existingConnection:expired,differentDocument:different,newConnection:expiredFresh});
+ phase='natural-session-expiry';await putGate({notBefore:stamp(Date.now()-60000),expiresAt:stamp(Date.now()+3500)});await sdk.resetConnection();const naturalStart=await compare();assert(naturalStart.sdk.allowed&&naturalStart.restGet.allowed);await sleep(Math.max(0,Date.parse(gate.expiresAt.$timestamp)-Date.now()+500));const naturalEnd=await compare();assert(!naturalEnd.restGet.allowed&&!naturalEnd.restBatchGet.allowed);await sdk.resetConnection();const naturalFresh=await sdkResult(sdk,a);assert(!naturalFresh.allowed);add('T05-natural-session-expiry',{beforeDeadline:naturalStart,afterDeadline:naturalEnd,newConnection:naturalFresh});
+ phase='natural-role-expiry';await putGate({expiresAt:stamp(Date.now()+3600000),roleEndsAt:stamp(Date.now()+3500)});await sdk.resetConnection();const roleStart=await compare();assert(roleStart.sdk.allowed);await sleep(Math.max(0,Date.parse(gate.roleEndsAt.$timestamp)-Date.now()+500));const roleEnd=await compare();assert(!roleEnd.restGet.allowed&&!roleEnd.restBatchGet.allowed);await sdk.resetConnection();const roleFresh=await sdkResult(sdk,a);assert(!roleFresh.allowed);add('T06-natural-role-expiry',{beforeDeadline:roleStart,afterDeadline:roleEnd,newConnection:roleFresh});
+ phase='direct-document-time';await putGate({roleEndsAt:stamp(Date.now()+3600000)});await sdk.resetConnection();assert((await compare()).sdk.allowed);await sleep(1500);counter++;const direct='directProbes/'+run+'/rows/a';await seed(direct,{...gate,expiresAt:stamp(Date.now()-500),counter});const directSdk=await sdkResult(sdk,direct),directRest=await restResult(direct,sdk.actor.token),directBatch=await restResult(direct,sdk.actor.token,true);assert(!directRest.allowed&&!directBatch.allowed);await sdk.resetConnection();const directFresh=await sdkResult(sdk,direct);assert(!directFresh.allowed);add('T07-resource-time-without-dependent-get',{existingConnection:directSdk,restGet:directRest,restBatchGet:directBatch,newConnection:directFresh});
+ phase='buffer-post-check';await putGate({expiresAt:stamp(Date.now()+3600000)});await sdk.resetConnection();await putRows();let returned=false,buffered=false,postDenied=false;
+ const guarded=async()=>{assert((await restResult(a,sdk.actor.token)).allowed);const value=await sdk.read(a);assert.equal(value.counter,counter);buffered=true;await putGate({active:false});if(!(await restResult(a,sdk.actor.token)).allowed){postDenied=true;return;}returned=true;return value;};
+ await guarded();assert(buffered&&postDenied&&!returned);add('T08-revoke-between-data-and-post-check',{sdkDataBuffered:buffered,postCheckDenied:postDenied,dataReturnedToCaller:returned,syntheticMinimalRulesOnly:true});
+}catch(e){failure={phase,name:e.name,message:e.message};process.exitCode=1;console.error(JSON.stringify({failure}));}
+finally{
+ try{for(const sdk of clients)await sdk.close();cleanup.sdkClientsClosed=true;
+ const deny="rules_version = '2'; service cloud.firestore { match /databases/{database}/documents { match /{document=**} { allow read, write: if false; } } }";
+ ok(await request(`http://127.0.0.1:8384/emulator/v1/projects/${project}:securityRules`,undefined,'PUT',{ignore_errors:false,rules:{files:[{name:'security.rules',content:deny}]}}));cleanup.rulesClosed=true;
+ ok(await request(`http://127.0.0.1:8384/emulator/v1/projects/${project}/databases/(default)/documents`,undefined,'DELETE'));
+ for(const collection of ['timeProbes','directProbes'])assert.equal((await request(base+'/'+collection,'owner')).body.documents?.length??0,0);cleanup.trialDocumentsEmpty=true;
+ for(const user of users)ok(await request(auth+'/accounts:delete?key=demo-api-key',undefined,'POST',{idToken:user.token}));const remaining=ok(await request(auth+`/projects/${project}/accounts:query`,'owner','POST',{})).body;cleanup.authUsersRemaining=(remaining.userInfo??[]).length;assert.equal(cleanup.authUsersRemaining,0);
+ }catch(e){cleanup.error=e.message;process.exitCode=1;}
+ fs.mkdirSync(new URL('artifacts/',root),{recursive:true});fs.writeFileSync(new URL('artifacts/'+mode+'-summary.json',root),JSON.stringify({mode,sourceHashes:before,endSourceHashes:sourceHashes(root,entries),rulesHash:createHash('sha256').update(fs.readFileSync(new URL('firestore.rules',root),'utf8').replace(/\r\n/g,'\n')).digest('hex'),versions,reports,cleanup,failure,externalFirebaseConnected:false,minimalDiagnosticOnly:true,businessRulesVerified:false,productionBehaviorVerified:false,underlyingCauseConfirmed:false},null,2)+'\n');
+}

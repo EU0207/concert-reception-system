@@ -1,0 +1,45 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {randomUUID,createHash} from 'node:crypto';
+import {sourceHashes} from '../GD91-105/source-audit.mjs';import {rules} from './rules.mjs';
+import {project,base,auth,users,body,stamp,request,write,commit,get,ok,denied,seed,actor,name,meter} from './client.mjs';
+const mode=process.argv.find(x=>x.startsWith('--mode='))?.split('=')[1];assert(['center','archive'].includes(mode));assert.equal(process.env.GCLOUD_PROJECT,project);assert.equal(process.env.FIRESTORE_EMULATOR_HOST,'127.0.0.1:8386');assert.equal(process.env.FIREBASE_AUTH_EMULATOR_HOST,'127.0.0.1:9496');
+const root=new URL('./',import.meta.url),entries=['local.mjs','client.mjs','rules.mjs','run-local.mjs','firebase.json','../GD91-139/auth.rules','../GD91-139/registration.rules','../GD91-138/business.rules','../GD91-136/firestore.rules'],before=sourceHashes(root,entries),reports=[];let phase='setup',failure,cleanup={};
+const delta=(p,value)=>({...write(p,value),updateMask:{fieldPaths:Object.keys(value)}}),report=(id,data)=>{reports.push({id,...data});console.log(JSON.stringify({mode,case:id,recorded:true}));};
+async function passwordHuman(){const email='fake-'+randomUUID()+'@example.com',password=randomUUID()+'Aa7!';let r=ok(await request(auth+'/accounts:signUp?key=demo-api-key',null,'POST',{email,password,returnSecureToken:true}));ok(await request(auth+`/projects/${project}/accounts:update`,'owner','POST',{localId:r.body.localId,emailVerified:true}));r=ok(await request(auth+'/accounts:signInWithPassword?key=demo-api-key',null,'POST',{email,password,returnSecureToken:true}));const a={uid:r.body.localId,token:r.body.idToken};users.push(a);return a;}
+async function setup(show,human,device,admin){
+ const p=(mode==='center'?'centerShows/':'archiveShows/')+show,rolePath=p+'/roles/'+human.uid,devicePath=mode==='center'?p+'/devices/'+device.uid:'archiveDevices/'+device.uid,sessionPath=p+'/sessions/'+device.uid;
+ const r={performanceId:show,active:true,role:mode==='center'?'receptionist':'owner',revision:1,startsAt:stamp(Date.now()-60000),endsAt:stamp(Date.now()+3600000)};
+ await seed(rolePath,r);if(mode==='center')await seed(p+'/roles/'+admin.uid,{...r,role:'owner'});
+ const d={deviceUid:device.uid,humanUid:human.uid,active:true,revision:1,preparedRoleRevision:1,...(mode==='center'?{performanceId:show}:{})};await seed(devicePath,d);
+ const t=JSON.parse(Buffer.from(human.token.split('.')[1],'base64url')),s={performanceId:show,deviceUid:device.uid,humanUid:human.uid,active:true,roleRevision:1,authProvider:t.firebase.sign_in_provider,emailVerified:true,expiresAt:stamp(Date.now()+1800000),humanAuthTime:stamp(t.auth_time*1000),...(mode==='center'?{revision:1}:{})};
+ ok(await commit(human.token,[write(sessionPath,s,'issuedAt')]));const originalSession=body(ok(await get(sessionPath,'owner')).body);
+ const id=randomUUID(),seat=randomUUID(),record=mode==='center'?{performanceId:show,personId:id,displayName:'架空0001',revision:1,lastOp:randomUUID()}:{index:0,personId:id,name:'架空0001',arrived:true,revision:1,lastOp:''};
+ const controlPath=mode==='center'?p+'/head/current':p+'/state/current',control=mode==='center'?{performanceId:show,phase:'operating',revision:1,operationId:randomUUID(),assignments:{[seat]:id}}:{phase:'archived',nextIndex:1,total:1,sourceRevision:1,sourceHash:'a'.repeat(64),lastId:id};
+ await seed(controlPath,control);const dataPath=p+(mode==='center'?'/labels/':'/records/')+id;await seed(dataPath,record);
+ return{p,rolePath,devicePath,sessionPath,controlPath,dataPath,r,d,s:originalSession,control,record};
+}
+function classify(r,path){const values=Array.isArray(r.body)?r.body:r.status===200?[{found:r.body}]:[];const found=values.filter(x=>x.found?.name===name(path));return{status:r.status,documents:found.length,expectedDataMatched:found.length===1&&body(found[0].found)[mode==='center'?'displayName':'name']==='架空0001',...(r.status!==200&&r.status!==403?{error:r.body?.error?.message}:{} )};}
+async function reads(token,path,readTime){const q=readTime?'?readTime='+encodeURIComponent(readTime):'',field=mode==='center'?'displayName':'name';
+ return{get:classify(await request(base+'/'+path+q,token),path),maskedGet:classify(await request(base+'/'+path+q+(q?'&':'?')+'mask.fieldPaths='+field,token),path),batchGet:classify(await request(base+':batchGet',token,'POST',{documents:[name(path)],...(readTime?{readTime}:{})}),path)};
+}
+async function historicalTransaction(token,path,readTime){const r=await request(base+':beginTransaction',token,'POST',{options:{readOnly:{readTime}}});if(r.status!==200)return{status:r.status,documents:0,beginDenied:true};const transaction=r.body.transaction;assert.equal(typeof transaction,'string');try{return classify(await request(base+':batchGet',token,'POST',{documents:[name(path)],transaction}),path);}finally{ok(await request(base+':rollback',token,'POST',{transaction}));}}
+try{
+ const admin=await actor(true),human=mode==='center'?await passwordHuman():admin,otherHuman=mode==='center'?await passwordHuman():await actor(true),a=await actor(),b=await actor(),x=await setup(randomUUID(),human,a,admin),other=await setup(randomUUID(),otherHuman,b,admin);
+ const current=await reads(a.token,x.dataPath);assert(Object.values(current).every(v=>v.status===200&&v.expectedDataMatched));report('F01-normal-issued-session',{normalSessionIssue:true,ownerRoleDeviceAndDataPreconditions:true,currentReads:current});
+ const cases=[['device',x.devicePath,{active:false,revision:2},x.d],['role',x.rolePath,{active:false,revision:2},x.r],['session',x.sessionPath,{active:false},x.s],['state',x.controlPath,{phase:mode==='center'?'stopped':'deleting'},x.control]];
+ for(const[kind,path,change,original]of cases){
+  phase=kind;await seed(x.dataPath,x.record);const baseline=ok(await get(x.dataPath,a.token)),readTime=baseline.body.updateTime;assert.equal(typeof readTime,'string');const prior=await reads(a.token,x.dataPath,readTime);assert(prior.batchGet.status===200&&prior.batchGet.expectedDataMatched);assert([prior.get,prior.maskedGet].every(v=>v.status===200||v.status===400&&v.error==='Only timestamps past epoch are supported.'));
+  if(kind==='device'||kind==='role')ok(await commit((mode==='center'?admin:human).token,[delta(path,change)]));else await seed(path,{...original,...change});
+  const now=await reads(a.token,x.dataPath);assert(Object.values(now).every(v=>v.status===403&&v.documents===0));
+  const past=await reads(a.token,x.dataPath,readTime),transaction=await historicalTransaction(a.token,x.dataPath,readTime);assert([200,403].includes(past.batchGet.status));assert([past.get,past.maskedGet].every(v=>[200,403].includes(v.status)||v.status===400&&v.error==='Only timestamps past epoch are supported.'));assert([200,403].includes(transaction.status));
+  ok(await get(other.dataPath,b.token));await seed(path,original);ok(await get(x.dataPath,a.token));
+  report('H-'+kind,{revocationNormalRequest:kind==='device'||kind==='role',revocationOwnerPrecondition:kind==='session'||kind==='state',historicalBaseline:prior,current:now,historical:past,historicalReadOnlyTransaction:transaction,historicalGet400NotAnAuthorizationResult:prior.get.status===400,otherPerformanceContinues:true,originalRestoredOwnerPrecondition:true});
+ }
+ phase='scope';denied(await get(x.dataPath));const unknown=await actor();denied(await get(x.dataPath,unknown.token));report('S01-ungranted-and-unauthenticated',{bothDenied:true});
+}catch(e){failure={phase,name:e.name,message:e.message};console.error(JSON.stringify({failure}));process.exitCode=1;}
+finally{
+ try{const deny="rules_version = '2'; service cloud.firestore { match /databases/{database}/documents { match /{document=**} { allow read, write: if false; } } }";ok(await request(`http://127.0.0.1:8386/emulator/v1/projects/${project}:securityRules`,undefined,'PUT',{ignore_errors:false,rules:{files:[{name:'security.rules',content:deny}]}}));cleanup.rulesClosed=true;
+ ok(await request(`http://127.0.0.1:8386/emulator/v1/projects/${project}/databases/(default)/documents`,undefined,'DELETE'));for(const c of ['centerShows','archiveShows','archiveDevices'])assert.equal((await request(base+'/'+c,'owner')).body.documents?.length??0,0);cleanup.trialDocumentsEmpty=true;
+ for(const u of users)ok(await request(auth+'/accounts:delete?key=demo-api-key',undefined,'POST',{idToken:u.token}));cleanup.authUsersRemaining=(ok(await request(auth+`/projects/${project}/accounts:query`,'owner','POST',{})).body.userInfo??[]).length;assert.equal(cleanup.authUsersRemaining,0);
+ }catch(e){cleanup.error=e.message;process.exitCode=1;}
+ fs.mkdirSync(new URL('artifacts/',root),{recursive:true});fs.writeFileSync(new URL('artifacts/'+mode+'-summary.json',root),JSON.stringify({mode,sourceHashes:before,endSourceHashes:sourceHashes(root,entries),rulesHash:createHash('sha256').update(rules(mode)).digest('hex'),reports,meter,cleanup,failure,externalFirebaseConnected:false,productionBehaviorOfCurrentRulesVerified:false,allReadPathsRevocationVerified:false,businessWriteRegressionVerified:false},null,2)+'\n');
+}

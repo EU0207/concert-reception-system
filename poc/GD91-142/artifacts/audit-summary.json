@@ -1,0 +1,17 @@
+{
+  "groups": 12,
+  "sourceComparisonsPerCandidate": 11,
+  "candidates": [
+    "center",
+    "archive"
+  ],
+  "revocationConditionsPerCandidate": 4,
+  "currentGetMaskedGetBatchGetDenied": 24,
+  "historicalBatchGetAccepted": 8,
+  "historicalReadOnlyTransactionAccepted": 8,
+  "historicalGetUnsupportedBeforeRevocationNotCountedAsAuthorization": true,
+  "currentCandidateProductionTrialExecuted": false,
+  "cleanupVerified": true,
+  "externalFirebaseConnected": false,
+  "allReadPathsRevocationVerified": false
+}
