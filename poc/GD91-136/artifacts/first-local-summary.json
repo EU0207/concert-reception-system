@@ -1,0 +1,99 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "database.rules.json": "92a6903ac6ba7a85ea7a99a80ef3be90c990a11061a7d03d2d712223f0127b7f",
+    "firebase.json": "4af0e5864b5a5217f33c58ae5fb8dcdc2f34289f2ea59fa5e81461ade10a6d78",
+    "firestore.indexes.json": "0c0b690b3282243c60558c4aafd676988879d0cbc8a46ebd13e5a293130f2f22",
+    "firestore.rules": "e3839e4565225abe183a0132fc996d2d1957d662becae284e32a105f66fbda8b",
+    "local.mjs": "e24c37abfffb317de48e149c92757dad7347f63141cd58867b96cd7dd5edb085",
+    "run-local.mjs": "c2b0d0ba63331dea55b46c6abcfdb9e6dd8c6cc5342c63b15f21343cc0abe2a7"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "database.rules.json": "92a6903ac6ba7a85ea7a99a80ef3be90c990a11061a7d03d2d712223f0127b7f",
+    "firebase.json": "4af0e5864b5a5217f33c58ae5fb8dcdc2f34289f2ea59fa5e81461ade10a6d78",
+    "firestore.indexes.json": "0c0b690b3282243c60558c4aafd676988879d0cbc8a46ebd13e5a293130f2f22",
+    "firestore.rules": "e3839e4565225abe183a0132fc996d2d1957d662becae284e32a105f66fbda8b",
+    "local.mjs": "e24c37abfffb317de48e149c92757dad7347f63141cd58867b96cd7dd5edb085",
+    "run-local.mjs": "c2b0d0ba63331dea55b46c6abcfdb9e6dd8c6cc5342c63b15f21343cc0abe2a7"
+  },
+  "reports": [
+    {
+      "id": "A01-human-issued-device-sessions",
+      "normalSessionIssuance": true,
+      "deviceAndRoleRegistrationOwnerPreconditions": true
+    },
+    {
+      "id": "T01-partial-copy-hidden",
+      "partialWriteRejected": true,
+      "prematurePublicationRejected": true
+    },
+    {
+      "id": "T02-resume-and-source-version-fence",
+      "sameIdDuplicateRejected": true,
+      "sourceRevisionCheckedByAdapter": true,
+      "sourcePreserved": true
+    },
+    {
+      "id": "T03-publish-once-after-readback",
+      "readbackOwnerPrecondition": true,
+      "crossDatabaseAtomicCommit": false,
+      "sourceHashNotServerVerified": true
+    },
+    {
+      "id": "A02-direct-api-binding",
+      "unpreparedHumanAndForgedDeviceRejected": true,
+      "otherPerformanceAndRoleListDenied": true
+    },
+    {
+      "id": "A03-device-stop",
+      "stoppedDeviceDenied": true,
+      "otherDeviceContinues": true,
+      "selfRecoveryRejected": true
+    },
+    {
+      "id": "A04-session-and-role-revocation",
+      "inactiveExpiredAndStaleSessionsRejected": true,
+      "normalHumanRoleRevocation": true,
+      "restorationOwnerPrecondition": true
+    },
+    {
+      "id": "C01-append-correction",
+      "recordAndNewEventAtomic": true,
+      "partialAndOverwriteRejected": true,
+      "originalSourceNotOverwritten": true,
+      "aggregateRecalculationNotVerified": true
+    },
+    {
+      "id": "D01-explicit-delete-and-no-resurrection",
+      "factAndTombstoneAtomic": true,
+      "otherPersonPreserved": true,
+      "noTtlOrAgeDeletion": true,
+      "allLinkedHistoryAndBackupPurgeNotVerified": true
+    },
+    {
+      "id": "X01-rtdb-only-revoke-counterexample",
+      "expectedArchiveStillReadable": true,
+      "automaticCrossDatabaseRevocation": false,
+      "adoptionGateUnresolved": true
+    },
+    {
+      "id": "X02-other-performance-publication-denied",
+      "crossDatabaseSourceVerificationStillUnresolved": true
+    }
+  ],
+  "cleanup": {
+    "error": "{\"phase\":\"retention-delete\",\"status\":501,\"error\":\"limit is not implemented.\"}\n\n501 !== 200\n"
+  },
+  "requests": 75,
+  "requestBodyBytes": 20606,
+  "responseBodyBytes": 22287,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "sourceClosedActualsOwnerSeeded": true,
+  "normalArchiveReadbackAndSourceRemovalVerified": false,
+  "fullArchiveBusinessSchemaVerified": false,
+  "crossDatabaseRevocationVerified": false,
+  "allHistoryDeletionVerified": false,
+  "providerBillingMeasured": false
+}

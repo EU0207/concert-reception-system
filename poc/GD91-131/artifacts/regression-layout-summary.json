@@ -1,0 +1,235 @@
+{
+  "sourceHashes": {
+    "../GD91-102/validate.mjs": "00891c523e633d607cbd6867accecef58e15ccc880de48ad150ba565f15b1446",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-102/layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
+    "../GD91-102/generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
+    "../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-102/publication-rules.mjs": "529785df44341d7d48936d87482abe4266ba34dc1245895bb3b58fc10124ea4b",
+    "../GD91-102/collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "../GD91-102/collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-102/../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-102/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-102/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-102/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-102/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-102/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-102/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-102/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-102/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-102/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-105/presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-107/edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
+    "../GD91-107/generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
+    "../GD91-107/numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
+    "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
+    "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
+    "../GD91-111/cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
+    "../GD91-111/closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
+    "../GD91-111/evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
+    "../GD91-111/generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
+    "../GD91-111/registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
+    "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
+    "../GD91-116/generate.mjs": "aead3164c6ba2a61d5c4794d785c831e97848e52f925bce1d01ebaf241d39644",
+    "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
+    "../GD91-123/image-rules.mjs": "c00aa4d6a4ed4ef77be8a68e1a37af43f61096bcc4e12eedd81efd06f6e1b6de",
+    "../GD91-126/contract-rules.mjs": "f3a128ad1dbd05824498e48102fac0474331947559b446f97cd09e30ce59cb2e",
+    "bootstrap.mjs": "d9624a766e304391059a802f67753bdb78f1278edcf5905f7cddb651cdbafa5a",
+    "database.rules.json": "895004f59c2ca7d6bd988cac3dfa724138af9005b38a346ae4221fe121411a38",
+    "generate.mjs": "eaa7e6cad714270acf167bb903f203f9cb606bcbad09339f67dd4281cc8ce8c8",
+    "qr-model.mjs": "be6370acc9cf9a999ee114faf2dc4694eb870e95e63c9244829c63530613b59b",
+    "regression.mjs": "284bd4de150a7e35aa4ff76945aa4c2268c9cf3e9a67f2d3c284ca45466023b6",
+    "run-local.mjs": "481223f8ab389f3f4a518a8f07a9e93adcfa577cec23c433ca7c6cf5b60408ee",
+    "runtime-hook.mjs": "aa6ca5d536d2201f45c3ac780b1f06242158141fa0ee5f16a16f426d9e894558",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592"
+  },
+  "endSourceHashes": {
+    "../GD91-102/validate.mjs": "00891c523e633d607cbd6867accecef58e15ccc880de48ad150ba565f15b1446",
+    "../GD91-102/layout-model.mjs": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "../GD91-102/layout-rules.mjs": "203c663a98add6ec51d6f79de36c37f84cec77e3a056d43a165bd1d49409e59b",
+    "../GD91-102/generate.mjs": "e92734e5fb380680c361d73b09400d5cd1c43ca1d7954437299d7e8fd4564ea3",
+    "../GD91-102/snapshot.mjs": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "../GD91-102/publication.mjs": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "../GD91-102/publication-rules.mjs": "529785df44341d7d48936d87482abe4266ba34dc1245895bb3b58fc10124ea4b",
+    "../GD91-102/collection.mjs": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "../GD91-102/collection-rules.mjs": "c379d2a425f9f0adc3f3ab65f638896005f542efd8c17d45fa083176b5c1f186",
+    "../GD91-102/database.rules.json": "6447de98ee1df65e634eb02a8ebbdff52ba86b6acc08af43a3902b0e21696ba9",
+    "../GD91-102/../GD91-100/database.rules.json": "c35cb8b07414e9424a1ad06683a292078e1039612529a9db9018ce67e49485b4",
+    "../GD91-102/../GD91-07/planner.mjs": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "../GD91-102/../GD91-84/transport.mjs": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "../GD91-102/../GD91-84/generation-tests.mjs": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "../GD91-102/../GD91-89/support.mjs": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "../GD91-102/../GD91-96/snapshot.mjs": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "../GD91-102/../GD91-89/projection.mjs": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "../GD91-102/../GD91-92/model.mjs": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "../GD91-102/../GD91-92/references.mjs": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "../GD91-102/../GD91-91/sdk-adapter.mjs": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "../GD91-103/database.rules.json": "ff32390ddefdd82db23cc74030e08d574731df5a6963ae881e47bb96702b7f90",
+    "../GD91-104/geometry-rules.mjs": "ec559a93505d6221242a1ee0687f4be50f1f04184f56bbe7aaa88878c7b96cf4",
+    "../GD91-104/slide-rules.mjs": "982dec1ba747abdb6d51e7cca74ab849b9c68aa307140a92bea6ab8797aa7d79",
+    "../GD91-105/presentation-rules.mjs": "db3427e6a747728846e78ab0a6bd4681f6d715287e4d0cb7a296a5dae1b046df",
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-107/edit-rules.mjs": "88af9a8aacb1f9f1cbdf754e215d1fead1a4415ef69dd4928b45d94e60752dc4",
+    "../GD91-107/generate.mjs": "de3f8de9f2b06a7870b9318fe5545193150f183fa3c3c8421b2989131812e90b",
+    "../GD91-107/numbering-rules.mjs": "48506366a45af3ebe3836c0725cc4028d7892c9c26ff81bcbf52dcff89130c3f",
+    "../GD91-110/capacity-policy.mjs": "0a42d4de7d159f93c58c7c520e1d3ffc8412526316452f3b4b9423e72c7572ff",
+    "../GD91-110/generate.mjs": "5f032dffce73a5ab8514f6371d9f99a518b7182d27984daecfa8fd8ff0c5c8f1",
+    "../GD91-111/cancellation-rules.mjs": "fb9b94bd492ff9dbead4e0dfe8b3bf2fd66ef72487e6776e9554f1508356cab9",
+    "../GD91-111/closing-rules.mjs": "0e0db80c56f81e4a7edf05f43235de6fce7ccb456b9d2deb33040524d90b9f9f",
+    "../GD91-111/evidence-rules.mjs": "07c47e350083d7c9a10abcac94f39ced3b8fafc728aab345ef88a52a6a6b42f1",
+    "../GD91-111/generate.mjs": "e82debf736835ca18bb33c9c001f9be00e2521a4fa00fff5a575d974e005e6ec",
+    "../GD91-111/registry-rules.mjs": "6d15d91fde6099adb2c8aa3896732204788871dc4e9b8e1f5eadc1fe295af918",
+    "../GD91-113/generate.mjs": "fb1f1f100487daee99d1a75fad71684ca5158d6cadf3e880222d63c182750544",
+    "../GD91-116/generate.mjs": "aead3164c6ba2a61d5c4794d785c831e97848e52f925bce1d01ebaf241d39644",
+    "../GD91-116/policy.mjs": "927402996a3b5232de4dc86bf19c44c943e25fee5a9ae178127cfceb1c5b983e",
+    "../GD91-123/image-rules.mjs": "c00aa4d6a4ed4ef77be8a68e1a37af43f61096bcc4e12eedd81efd06f6e1b6de",
+    "../GD91-126/contract-rules.mjs": "f3a128ad1dbd05824498e48102fac0474331947559b446f97cd09e30ce59cb2e",
+    "bootstrap.mjs": "d9624a766e304391059a802f67753bdb78f1278edcf5905f7cddb651cdbafa5a",
+    "database.rules.json": "895004f59c2ca7d6bd988cac3dfa724138af9005b38a346ae4221fe121411a38",
+    "generate.mjs": "eaa7e6cad714270acf167bb903f203f9cb606bcbad09339f67dd4281cc8ce8c8",
+    "qr-model.mjs": "be6370acc9cf9a999ee114faf2dc4694eb870e95e63c9244829c63530613b59b",
+    "regression.mjs": "284bd4de150a7e35aa4ff76945aa4c2268c9cf3e9a67f2d3c284ca45466023b6",
+    "run-local.mjs": "481223f8ab389f3f4a518a8f07a9e93adcfa577cec23c433ca7c6cf5b60408ee",
+    "runtime-hook.mjs": "aa6ca5d536d2201f45c3ac780b1f06242158141fa0ee5f16a16f426d9e894558",
+    "../GD91-84/auth-rules.mjs": "11bd51f43c004330268f88f30a7fd6537e2b36233c0777a18601ec1db472fff4",
+    "../GD91-88/model.mjs": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592"
+  },
+  "reports": [
+    {
+      "id": "F01-full-layout-normal-save-and-roundtrip",
+      "cells": 10,
+      "distinctCellAndSeatIds": true,
+      "allSeatFieldsRoundtripped": true
+    },
+    {
+      "id": "F02-reception-reads-full-model-without-private-person-data",
+      "geometryReused": true,
+      "secondReadCalls": 2,
+      "privateProfilesDenied": true
+    },
+    {
+      "id": "F03-partial-index-and-coordinate-writes-rejected",
+      "omittedIndexesRejected": 24
+    },
+    {
+      "id": "F04-out-of-range-and-conflicting-coordinate-rejected",
+      "rangeAndDuplicateCoordinatesRejected": true
+    },
+    {
+      "id": "F05-missing-cell-cannot-be-sealed",
+      "incompleteGridRejected": true
+    },
+    {
+      "id": "F06-legacy-schema-bypass-rejected",
+      "versionRequiredByControl": true
+    },
+    {
+      "id": "F07-numbering-and-emergency-contracts-rejected-when-invalid",
+      "invalidFieldGroups": 6
+    },
+    {
+      "id": "F08-type-and-identity-bypasses-rejected",
+      "rosterCannotMasqueradeAsLayout": true,
+      "cellAndSeatIdentityMustDiffer": true
+    },
+    {
+      "id": "P01-assigned-seat-removal-refused-before-publication",
+      "missingAssignedSeatRejectedByServer": true
+    },
+    {
+      "id": "P02-assigned-seat-attribute-change-refused",
+      "assignedAttributeChangeRejectedByServer": true
+    },
+    {
+      "id": "P03-unchecked-and-incomplete-publication-refused",
+      "proofRequired": true,
+      "partialPublishRejected": true
+    },
+    {
+      "id": "P04-stale-proof-cannot-publish-after-event-update",
+      "eventRevisionFenced": true
+    },
+    {
+      "id": "P05-stale-proof-cannot-publish-after-control-update",
+      "controlRevisionFenced": true,
+      "controlFixtureRestored": true
+    },
+    {
+      "id": "P06-current-proof-publishes-with-assignment-preserved",
+      "protectedSeatUnchanged": true,
+      "qrUnchanged": true,
+      "publishedProofCannotBeCancelled": true,
+      "pinReleasedAfterAcknowledgement": true
+    },
+    {
+      "id": "P07-more-than-64-parts-can-be-published-and-read",
+      "publishedParts": 66,
+      "cells": 1050,
+      "readerPartBudget": 256,
+      "old64PartGuardRemoved": true,
+      "productCellLimitApproved": false
+    },
+    {
+      "id": "P08-cursor-jump-and-stale-slot-flags-refused",
+      "uncheckedClaimRejected": true,
+      "cursorJumpRejected": true,
+      "staleAndOmittedFlagsRejected": true
+    },
+    {
+      "id": "P09-event-change-cannot-be-bundled-with-publication",
+      "postUpdateEventFenceChecked": true,
+      "partialStateNotCommitted": true
+    },
+    {
+      "id": "P10-stale-proof-can-be-cancelled-after-new-assignment",
+      "newAssignmentRetained": true,
+      "staleCandidateNotPublished": true,
+      "explicitCancellationNotBlockedByNewAssignment": true
+    },
+    {
+      "id": "R01-publication-candidate-pin-prevents-collection",
+      "candidatePinned": true,
+      "unacknowledgedCompletionRejected": true,
+      "explicitCancellationReleasesPin": true
+    },
+    {
+      "id": "R02-retired-layout-indexes-and-parts-collected-in-order",
+      "indexesClearedBeforeParts": true,
+      "allGenerationPayloadCollected": true,
+      "operationAndAssignmentRetained": true
+    },
+    {
+      "id": "R03-current-layout-indexes-cannot-be-cleared",
+      "currentGenerationProtected": true
+    }
+  ],
+  "cleanup": {
+    "rulesClosed": true,
+    "trialRootEmpty": true
+  },
+  "metrics": {
+    "requests": 3400,
+    "requestBodyBytes": 24864673,
+    "responseBodyBytes": 35547518,
+    "ownerRequests": 480,
+    "userRequests": 2920
+  },
+  "formalLayoutSchemaConnected": true,
+  "assignedSeatPublicationProtectionVerified": true,
+  "publicationProtectionVerified": false,
+  "groupContractVerified": false,
+  "completeLayoutBusinessWorkflowVerified": false,
+  "externalFirebaseConnected": false,
+  "productionFreeTierVerified": false,
+  "tested3000": false,
+  "executedRulesSource": "database.rules.json",
+  "adaptedFrom": "../GD91-102/validate.mjs",
+  "transportAdaptation": "common clock, global ID index and review-progress coupling; legacy ACK shape"
+}
