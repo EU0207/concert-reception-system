@@ -1,0 +1,19 @@
+{
+  "sourceComparisons": 347,
+  "importGroups": 6,
+  "replayBoundaries": 4,
+  "negativeCases": 23,
+  "partialCorrectionsDenied": 7,
+  "coherentValueTamperDetected": true,
+  "targetReadBackUsedEmulatorOwner": true,
+  "browserTrafficExcludesDiagnosticNodeReads": true,
+  "earlierFailuresExcludedFromCurrentSourceAudit": true,
+  "cleanup": {
+    "targetDenyAll": true,
+    "targetEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "externalFirebaseConnected": false,
+  "allBusinessEventReplayVerified": false,
+  "allBusinessMigrationVerified": false
+}
