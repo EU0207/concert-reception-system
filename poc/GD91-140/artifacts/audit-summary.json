@@ -1,0 +1,30 @@
+{
+  "groups": 16,
+  "observations": [
+    {
+      "mode": "node",
+      "sourceComparisons": 10,
+      "lowerBoundExistingSdkAllowed": false,
+      "updatedExpiryExistingSdkAllowed": true,
+      "naturalSessionExpiryExistingSdkAllowed": true,
+      "naturalRoleExpiryExistingSdkAllowed": true,
+      "directResourceExpiredSdkAllowed": true
+    },
+    {
+      "mode": "browser",
+      "sourceComparisons": 10,
+      "lowerBoundExistingSdkAllowed": false,
+      "updatedExpiryExistingSdkAllowed": true,
+      "naturalSessionExpiryExistingSdkAllowed": true,
+      "naturalRoleExpiryExistingSdkAllowed": true,
+      "directResourceExpiredSdkAllowed": true
+    }
+  ],
+  "restGetAndBatchGetDeniedExpiredRequests": true,
+  "newSdkConnectionDeniedExpiredRequests": true,
+  "postCheckBlockedBufferedData": true,
+  "cleanupVerified": true,
+  "externalFirebaseConnected": false,
+  "productionBehaviorVerified": false,
+  "underlyingCauseConfirmed": false
+}

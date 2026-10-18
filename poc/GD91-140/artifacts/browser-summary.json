@@ -1,0 +1,218 @@
+{
+  "mode": "browser",
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "browser-fixture.mjs": "100648f0bf0ed56d6fd4f316d4bed3d0437d8d8588e4c0ea4bd2a11c5aa0a882",
+    "browser.html": "a11f7a23657a14925c2ec38864da94dd7a7c650ffbe7b85fecb2bce52174649a",
+    "browser.mjs": "d32ccc4d6bcbd5d98f91110197cc85d4ed42a8ef2fa9267eaaf583554eb7598c",
+    "client.mjs": "a9f2aa7649411a8cff164f1f59e1efeeba62f7903ba05199c1043acd4d0f0bec",
+    "firebase.json": "7d6c69201b65dcfb5a3b3f3efcb73feca84316c6252347ddd49bc5919a6d94d5",
+    "firestore.rules": "4f88912c1ee6b0c513c0b266a0e298d299272c101769dc3eefe66c551b3bb678",
+    "local.mjs": "8fb9f71e16f430f9239714a0ec2cf105f2742c95c54a14df836ffab19bd31b69",
+    "run-local.mjs": "d05a5575f7d464fd0eb09a3b217edc28f2f3ca2ca8dd232e327f10ea8a1060cf",
+    "sdk.mjs": "12d4fb1455010e0d278e364fa287bcd55a1bf71772c1d8ca63d9b9509d064fa4"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "browser-fixture.mjs": "100648f0bf0ed56d6fd4f316d4bed3d0437d8d8588e4c0ea4bd2a11c5aa0a882",
+    "browser.html": "a11f7a23657a14925c2ec38864da94dd7a7c650ffbe7b85fecb2bce52174649a",
+    "browser.mjs": "d32ccc4d6bcbd5d98f91110197cc85d4ed42a8ef2fa9267eaaf583554eb7598c",
+    "client.mjs": "a9f2aa7649411a8cff164f1f59e1efeeba62f7903ba05199c1043acd4d0f0bec",
+    "firebase.json": "7d6c69201b65dcfb5a3b3f3efcb73feca84316c6252347ddd49bc5919a6d94d5",
+    "firestore.rules": "4f88912c1ee6b0c513c0b266a0e298d299272c101769dc3eefe66c551b3bb678",
+    "local.mjs": "8fb9f71e16f430f9239714a0ec2cf105f2742c95c54a14df836ffab19bd31b69",
+    "run-local.mjs": "d05a5575f7d464fd0eb09a3b217edc28f2f3ca2ca8dd232e327f10ea8a1060cf",
+    "sdk.mjs": "12d4fb1455010e0d278e364fa287bcd55a1bf71772c1d8ca63d9b9509d064fa4"
+  },
+  "rulesHash": "4f88912c1ee6b0c513c0b266a0e298d299272c101769dc3eefe66c551b3bb678",
+  "versions": {
+    "node": "v24.19.0",
+    "firebase": "12.18.0",
+    "firebaseTools": "15.28.2"
+  },
+  "reports": [
+    {
+      "id": "T01-baseline",
+      "sdk": {
+        "allowed": true,
+        "currentCounterVerified": true
+      },
+      "restGet": {
+        "allowed": true,
+        "status": 200
+      },
+      "restBatchGet": {
+        "allowed": true,
+        "status": 200
+      }
+    },
+    {
+      "id": "T02-current-active-flag",
+      "sdk": {
+        "allowed": false,
+        "code": "permission-denied"
+      },
+      "restGet": {
+        "allowed": false,
+        "status": 403
+      },
+      "restBatchGet": {
+        "allowed": false,
+        "status": 403
+      }
+    },
+    {
+      "id": "T03-not-before-after-stream-open",
+      "existingConnection": {
+        "sdk": {
+          "allowed": false,
+          "code": "permission-denied"
+        },
+        "restGet": {
+          "allowed": true,
+          "status": 200
+        },
+        "restBatchGet": {
+          "allowed": true,
+          "status": 200
+        }
+      },
+      "newConnection": {
+        "allowed": true,
+        "currentCounterVerified": true
+      }
+    },
+    {
+      "id": "T04-expiry-updated-after-stream-open",
+      "existingConnection": {
+        "sdk": {
+          "allowed": true,
+          "currentCounterVerified": true
+        },
+        "restGet": {
+          "allowed": false,
+          "status": 403
+        },
+        "restBatchGet": {
+          "allowed": false,
+          "status": 403
+        }
+      },
+      "differentDocument": {
+        "allowed": true,
+        "currentCounterVerified": true
+      },
+      "newConnection": {
+        "allowed": false,
+        "code": "permission-denied"
+      }
+    },
+    {
+      "id": "T05-natural-session-expiry",
+      "beforeDeadline": {
+        "sdk": {
+          "allowed": true,
+          "currentCounterVerified": true
+        },
+        "restGet": {
+          "allowed": true,
+          "status": 200
+        },
+        "restBatchGet": {
+          "allowed": true,
+          "status": 200
+        }
+      },
+      "afterDeadline": {
+        "sdk": {
+          "allowed": true,
+          "currentCounterVerified": true
+        },
+        "restGet": {
+          "allowed": false,
+          "status": 403
+        },
+        "restBatchGet": {
+          "allowed": false,
+          "status": 403
+        }
+      },
+      "newConnection": {
+        "allowed": false,
+        "code": "permission-denied"
+      }
+    },
+    {
+      "id": "T06-natural-role-expiry",
+      "beforeDeadline": {
+        "sdk": {
+          "allowed": true,
+          "currentCounterVerified": true
+        },
+        "restGet": {
+          "allowed": true,
+          "status": 200
+        },
+        "restBatchGet": {
+          "allowed": true,
+          "status": 200
+        }
+      },
+      "afterDeadline": {
+        "sdk": {
+          "allowed": true,
+          "currentCounterVerified": true
+        },
+        "restGet": {
+          "allowed": false,
+          "status": 403
+        },
+        "restBatchGet": {
+          "allowed": false,
+          "status": 403
+        }
+      },
+      "newConnection": {
+        "allowed": false,
+        "code": "permission-denied"
+      }
+    },
+    {
+      "id": "T07-resource-time-without-dependent-get",
+      "existingConnection": {
+        "allowed": true,
+        "currentCounterVerified": true
+      },
+      "restGet": {
+        "allowed": false,
+        "status": 403
+      },
+      "restBatchGet": {
+        "allowed": false,
+        "status": 403
+      },
+      "newConnection": {
+        "allowed": false,
+        "code": "permission-denied"
+      }
+    },
+    {
+      "id": "T08-revoke-between-data-and-post-check",
+      "sdkDataBuffered": true,
+      "postCheckDenied": true,
+      "dataReturnedToCaller": false,
+      "syntheticMinimalRulesOnly": true
+    }
+  ],
+  "cleanup": {
+    "sdkClientsClosed": true,
+    "rulesClosed": true,
+    "trialDocumentsEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "externalFirebaseConnected": false,
+  "minimalDiagnosticOnly": true,
+  "businessRulesVerified": false,
+  "productionBehaviorVerified": false,
+  "underlyingCauseConfirmed": false
+}
