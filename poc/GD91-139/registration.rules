@@ -1,0 +1,67 @@
+    function registerHead(b,a,e) {
+      return a.diff(b).affectedKeys().hasOnly(['revision','operationId','peopleIds','nextOrdinal','assignments'])
+        && a.peopleIds == b.peopleIds.concat([e.personId]) && a.peopleIds.size() == a.peopleIds.toSet().size()
+        && a.nextOrdinal == b.nextOrdinal + 1
+        && (e.seatId == '' ? a.assignments == b.assignments
+          : b.seatIds.hasAny([e.seatId]) && b.assignments[e.seatId] == ''
+            && a.assignments[e.seatId] == e.personId && a.assignments.diff(b.assignments).affectedKeys().hasOnly([e.seatId]));
+    }
+    function registerPerson(p,id,e) {
+      let b = get(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      let a = getAfter(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      let x = getAfter(/databases/$(database)/documents/centerShows/$(p)/people/$(e.personId)).data;
+      let label = getAfter(/databases/$(database)/documents/centerShows/$(p)/labels/$(e.personId)).data;
+      return recent(p) && b.phase in ['preparing','operating','stopped']
+        && e.keys().hasOnly(['kind','expectedRevision','personId','seatId','reason','actor','at'])
+        && e.expectedRevision == b.revision && a.revision == b.revision + 1 && a.operationId == id
+        && e.reason is string && e.reason.size() <= 200 && (b.firstStartedAt == 0 || e.reason.matches('.*\\S.*'))
+        && x.personId == e.personId && x.seatId == e.seatId && x.lastOp == id && label.lastOp == id
+        && x.rosterOrder == b.nextOrdinal && a.peopleIds.size() == b.peopleIds.size() + 1;
+    }
+    function newPerson(p,id,a) {
+      let e = getAfter(/databases/$(database)/documents/centerShows/$(p)/operations/$(a.lastOp)).data;
+      let h = getAfter(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      return versionGuard(p,a.lastOp,e) && e.kind == 'registerPerson' && e.personId == id
+        && h.operationId == a.lastOp && h.peopleIds.hasAny([id])
+        && a.keys().hasOnly(['performanceId','personId','buyerId','buyerName','paid','rosterOrder','seatId','ticketId','credentialId','revision','lastOp'])
+        && a.performanceId == p && a.personId == id && a.buyerId is string
+        && a.buyerId.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
+        && a.buyerName is string && a.buyerName.size() <= 50 && a.buyerName.matches('^\\S([\\s\\S]*\\S)?$')
+        && a.paid is bool && a.rosterOrder is int && a.rosterOrder > 0
+        && a.seatId == e.seatId && a.ticketId == '' && a.credentialId == '' && a.revision == 1;
+    }
+    function newLabel(p,id,a) {
+      let e = getAfter(/databases/$(database)/documents/centerShows/$(p)/operations/$(a.lastOp)).data;
+      let h = getAfter(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      return versionGuard(p,a.lastOp,e) && e.kind == 'registerPerson' && e.personId == id && h.operationId == a.lastOp
+        && a.keys().hasOnly(['performanceId','personId','displayName','revision','lastOp'])
+        && a.performanceId == p && a.personId == id && a.revision == 1
+        && a.displayName is string && a.displayName.matches('.*\\S.*')
+        && a.displayName.matches('^([ 　]*[^ 　]){1,6}[ 　]*$');
+    }
+    function labelReadable(p,id) {
+      let h = get(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      return reader(p) && h.phase == 'operating' && h.assignments.values().hasAny([id]);
+    }
+    match /centerShows/{p}/head/current {
+      allow get: if request.auth != null && reader(p) && resource.data.phase == 'operating';
+    }
+    match /centerShows/{p}/access/current {
+      allow get: if request.auth != null && reader(p)
+        && get(/databases/$(database)/documents/centerShows/$(p)/head/current).data.phase == 'operating';
+    }
+    match /centerShows/{p}/people/{id} {
+      allow create: if request.auth != null && newPerson(p,id,request.resource.data);
+    }
+    match /centerShows/{p}/labels/{id} {
+      allow create: if request.auth != null && newLabel(p,id,request.resource.data);
+      allow get: if request.auth != null && (manager(p) || labelReadable(p,id));
+    }
+    match /centerShows/{p}/operations/{id} {
+      allow create: if request.auth != null && request.resource.data.kind == 'registerPerson'
+        && request.resource.data.actor == request.auth.uid && request.resource.data.at == request.time
+        && registerPerson(p,id,request.resource.data);
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

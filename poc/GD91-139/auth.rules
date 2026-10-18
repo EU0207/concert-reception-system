@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function roleValid(p,r) {
+      return r.performanceId == p && r.active == true && r.revision > 0
+        && r.role in ['owner','deputy','temporary','receptionist']
+        && r.startsAt <= request.time && request.time < r.endsAt;
+    }
+    function providerValid(r,provider) { return r.role in ['owner','deputy'] ? provider == 'google.com' : provider == 'password'; }
+    function identity(p,d,s,r) {
+      return request.auth.token.firebase.sign_in_provider == 'anonymous'
+        && d.performanceId == p && d.deviceUid == request.auth.uid && d.active == true
+        && s.performanceId == p && s.deviceUid == request.auth.uid && s.humanUid == d.humanUid
+        && s.active == true && s.emailVerified == true && s.expiresAt > request.time && s.issuedAt <= request.time
+        && roleValid(p,r) && providerValid(r,s.authProvider)
+        && d.preparedRoleRevision == r.revision && s.roleRevision == r.revision;
+    }
+    function manager(p) {
+      let d = get(/databases/$(database)/documents/centerShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/centerShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/centerShows/$(p)/roles/$(d.humanUid)).data;
+      return identity(p,d,s,r) && r.role in ['owner','deputy'];
+    }
+    function reader(p) {
+      let d = get(/databases/$(database)/documents/centerShows/$(p)/devices/$(request.auth.uid)).data;
+      let s = get(/databases/$(database)/documents/centerShows/$(p)/sessions/$(request.auth.uid)).data;
+      let r = get(/databases/$(database)/documents/centerShows/$(p)/roles/$(d.humanUid)).data;
+      return identity(p,d,s,r);
+    }
+    function recent(p) { return manager(p) && request.time <= get(/databases/$(database)/documents/centerShows/$(p)/sessions/$(request.auth.uid)).data.humanAuthTime + duration.value(15,'m'); }
+    function humanManager(p) {
+      let r = get(/databases/$(database)/documents/centerShows/$(p)/roles/$(request.auth.uid)).data;
+      return request.auth.token.firebase.sign_in_provider == 'google.com' && request.auth.token.email_verified == true
+        && roleValid(p,r) && r.role in ['owner','deputy']
+        && request.time <= timestamp.value(request.auth.token.auth_time * 1000) + duration.value(15,'m');
+    }
+    function issueSession(p,uid,a) {
+      let d = get(/databases/$(database)/documents/centerShows/$(p)/devices/$(uid)).data;
+      let r = get(/databases/$(database)/documents/centerShows/$(p)/roles/$(request.auth.uid)).data;
+      return request.auth.token.email_verified == true && roleValid(p,r) && providerValid(r,request.auth.token.firebase.sign_in_provider)
+        && d.performanceId == p && d.deviceUid == uid && d.humanUid == request.auth.uid && d.active == true
+        && a.keys().hasOnly(['performanceId','deviceUid','humanUid','active','roleRevision','revision','authProvider','emailVerified','issuedAt','expiresAt','humanAuthTime'])
+        && a.performanceId == p && a.deviceUid == uid && a.humanUid == request.auth.uid && a.active == true
+        && a.roleRevision == r.revision && d.preparedRoleRevision == r.revision && a.revision is int && a.revision > 0
+        && a.authProvider == request.auth.token.firebase.sign_in_provider && a.emailVerified == true
+        && a.issuedAt == request.time && a.humanAuthTime == timestamp.value(request.auth.token.auth_time * 1000)
+        && a.expiresAt > request.time && a.expiresAt <= request.time + duration.value(12,'h') && a.expiresAt <= r.endsAt;
+    }
+    match /centerShows/{p}/devices/{uid} {
+      allow get: if request.auth.uid == uid;
+      allow update: if humanManager(p)
+        && resource.data.performanceId == p && resource.data.deviceUid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['active','revision'])
+        && request.resource.data.active == false && request.resource.data.revision == resource.data.revision + 1;
+    }
+    match /centerShows/{p}/roles/{uid} {
+      allow get: if request.auth.uid == uid;
+      allow update: if humanManager(p)
+        && get(/databases/$(database)/documents/centerShows/$(p)/roles/$(request.auth.uid)).data.role == 'owner'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['active','revision'])
+        && request.resource.data.active == false && request.resource.data.revision == resource.data.revision + 1;
+    }
+    match /centerShows/{p}/sessions/{uid} {
+      allow get: if request.auth.uid == uid;
+      allow create, update: if issueSession(p,uid,request.resource.data);
+    }
