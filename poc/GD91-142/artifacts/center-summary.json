@@ -1,0 +1,347 @@
+{
+  "mode": "center",
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-136/firestore.rules": "5a8ac2d3a2ad4c6be897f41615b5a8971848ec27cf4235359ed0e0cf58710bc2",
+    "../GD91-138/business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "../GD91-139/auth.rules": "ee53560c8438783d235f25ac305bde6a01ec4e8cc712cba63242d1a253721e33",
+    "../GD91-139/generate.mjs": "b8d7110be2fc2be3d16f473a5922b1c163222dda2e98949ec5cbf0132c0be777",
+    "../GD91-139/registration.rules": "6d8b7f6347847467f0d1a6699d1911dd880ccc9bc5eeabc5900410b597994194",
+    "client.mjs": "bb55c7619a3963397039b0df16cefb260140ab27ee5d24504740c85a7e931cd7",
+    "firebase.json": "99a3245c6db9153a8da734264b962be063f6bc0c8ccb9914363f9688ed3d941b",
+    "local.mjs": "cd29ba1a0fdcb9449ccbd8c59b46c3abf6a52461ebd1a092260cb9ee81a6a7c2",
+    "rules.mjs": "7edd2aef8ebda4709c2adeafd173f990abe9b0c99a8b9ab696cc2fb9c495bc8d",
+    "run-local.mjs": "5ccbf9029187ebb158b342e32d74265f892b924d1080442859d51337d27936e1"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-136/firestore.rules": "5a8ac2d3a2ad4c6be897f41615b5a8971848ec27cf4235359ed0e0cf58710bc2",
+    "../GD91-138/business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "../GD91-139/auth.rules": "ee53560c8438783d235f25ac305bde6a01ec4e8cc712cba63242d1a253721e33",
+    "../GD91-139/generate.mjs": "b8d7110be2fc2be3d16f473a5922b1c163222dda2e98949ec5cbf0132c0be777",
+    "../GD91-139/registration.rules": "6d8b7f6347847467f0d1a6699d1911dd880ccc9bc5eeabc5900410b597994194",
+    "client.mjs": "bb55c7619a3963397039b0df16cefb260140ab27ee5d24504740c85a7e931cd7",
+    "firebase.json": "99a3245c6db9153a8da734264b962be063f6bc0c8ccb9914363f9688ed3d941b",
+    "local.mjs": "cd29ba1a0fdcb9449ccbd8c59b46c3abf6a52461ebd1a092260cb9ee81a6a7c2",
+    "rules.mjs": "7edd2aef8ebda4709c2adeafd173f990abe9b0c99a8b9ab696cc2fb9c495bc8d",
+    "run-local.mjs": "5ccbf9029187ebb158b342e32d74265f892b924d1080442859d51337d27936e1"
+  },
+  "rulesHash": "badeacb71379600cb40658b7ce1db0a260638c4c7f1f9b7835b1960bcb1b2d5d",
+  "reports": [
+    {
+      "id": "F01-normal-issued-session",
+      "normalSessionIssue": true,
+      "ownerRoleDeviceAndDataPreconditions": true,
+      "currentReads": {
+        "get": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        },
+        "maskedGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      }
+    },
+    {
+      "id": "H-device",
+      "revocationNormalRequest": true,
+      "revocationOwnerPrecondition": false,
+      "historicalBaseline": {
+        "get": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "maskedGet": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      },
+      "current": {
+        "get": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        },
+        "maskedGet": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        },
+        "batchGet": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        }
+      },
+      "historical": {
+        "get": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "maskedGet": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      },
+      "historicalReadOnlyTransaction": {
+        "status": 200,
+        "documents": 1,
+        "expectedDataMatched": true
+      },
+      "historicalGet400NotAnAuthorizationResult": true,
+      "otherPerformanceContinues": true,
+      "originalRestoredOwnerPrecondition": true
+    },
+    {
+      "id": "H-role",
+      "revocationNormalRequest": true,
+      "revocationOwnerPrecondition": false,
+      "historicalBaseline": {
+        "get": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "maskedGet": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      },
+      "current": {
+        "get": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        },
+        "maskedGet": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        },
+        "batchGet": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        }
+      },
+      "historical": {
+        "get": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "maskedGet": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      },
+      "historicalReadOnlyTransaction": {
+        "status": 200,
+        "documents": 1,
+        "expectedDataMatched": true
+      },
+      "historicalGet400NotAnAuthorizationResult": true,
+      "otherPerformanceContinues": true,
+      "originalRestoredOwnerPrecondition": true
+    },
+    {
+      "id": "H-session",
+      "revocationNormalRequest": false,
+      "revocationOwnerPrecondition": true,
+      "historicalBaseline": {
+        "get": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "maskedGet": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      },
+      "current": {
+        "get": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        },
+        "maskedGet": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        },
+        "batchGet": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        }
+      },
+      "historical": {
+        "get": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "maskedGet": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      },
+      "historicalReadOnlyTransaction": {
+        "status": 200,
+        "documents": 1,
+        "expectedDataMatched": true
+      },
+      "historicalGet400NotAnAuthorizationResult": true,
+      "otherPerformanceContinues": true,
+      "originalRestoredOwnerPrecondition": true
+    },
+    {
+      "id": "H-state",
+      "revocationNormalRequest": false,
+      "revocationOwnerPrecondition": true,
+      "historicalBaseline": {
+        "get": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "maskedGet": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      },
+      "current": {
+        "get": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        },
+        "maskedGet": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        },
+        "batchGet": {
+          "status": 403,
+          "documents": 0,
+          "expectedDataMatched": false
+        }
+      },
+      "historical": {
+        "get": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "maskedGet": {
+          "status": 400,
+          "documents": 0,
+          "expectedDataMatched": false,
+          "error": "Only timestamps past epoch are supported."
+        },
+        "batchGet": {
+          "status": 200,
+          "documents": 1,
+          "expectedDataMatched": true
+        }
+      },
+      "historicalReadOnlyTransaction": {
+        "status": 200,
+        "documents": 1,
+        "expectedDataMatched": true
+      },
+      "historicalGet400NotAnAuthorizationResult": true,
+      "otherPerformanceContinues": true,
+      "originalRestoredOwnerPrecondition": true
+    },
+    {
+      "id": "S01-ungranted-and-unauthenticated",
+      "bothDenied": true
+    }
+  ],
+  "meter": {
+    "requests": 113,
+    "upBytes": 21500,
+    "downBytes": 38932,
+    "normalCommits": 4,
+    "normalWrites": 4,
+    "maxRequestJsonBytes": 774
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialDocumentsEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "externalFirebaseConnected": false,
+  "productionBehaviorOfCurrentRulesVerified": false,
+  "allReadPathsRevocationVerified": false,
+  "businessWriteRegressionVerified": false
+}
