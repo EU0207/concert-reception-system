@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function window(a) {
+      return request.auth != null && request.auth.uid == a.uid && a.active == true
+        && a.notBefore <= request.time && request.time < a.expiresAt
+        && request.time < a.roleEndsAt;
+    }
+    match /timeProbes/{run}/rows/{id} {
+      allow get: if window(get(/databases/$(database)/documents/timeProbes/$(run)/gates/current).data);
+    }
+    match /directProbes/{run}/rows/{id} {
+      allow get: if window(resource.data);
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "firebaseVersion": "12.18.0",
+  "resolvedNodeEntry": "index.node.cjs.js",
+  "entrySha256": "8fefb817ae6e71f7bf064279cf41a9fb7475c710ff439724af920529a2ce4fe7",
+  "commonFile": "common-DW1GwHx2.node.cjs.js",
+  "commonSha256": "a443c80cde7b8367383057dc4f15918a7fc2f9e5a9d75463752e683410a0de9a",
+  "getDocFromServerUsesSnapshotListener": true,
+  "nodeConnectionFactoryUsesGrpc": true,
+  "browserBundleSha256": "01de70ec513d7f81be700a7a2217da796d019d4fa6d60cc4002b6a20e1e2b5c2",
+  "browserConnectionFactoryUsesWebChannel": true,
+  "browserUsesSameTransportVerified": false,
+  "underlyingCauseConfirmed": false
+}

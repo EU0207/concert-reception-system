@@ -30,6 +30,7 @@ poc/POC-005/.firebaserc
 
 # Dependencies and generated output
 node_modules/
+.vite/
 dist/
 dev-dist/
 coverage/
