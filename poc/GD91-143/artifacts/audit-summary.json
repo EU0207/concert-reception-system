@@ -1,0 +1,8 @@
+{
+  "sourceComparisons": 35,
+  "groups": 11,
+  "rejectedInputs": 18,
+  "rejectedActivationProofs": 45,
+  "realDatabaseTransferVerified": false,
+  "allBusinessMigrationVerified": false
+}
