@@ -1,0 +1,35 @@
+{
+  "sourceComparisons": 342,
+  "allCurrentSourcesMatch": true,
+  "allPeopleMeasured": false,
+  "rulesHash": "04f03f34ba083200367f9a9af5b1b9da0e9dd3e89dbe33ad83128574ec38304e",
+  "reports": [
+    {
+      "people": 4,
+      "normalRestRequests": 220,
+      "tlsDownloadBytes": 412369,
+      "tlsUploadBytes": 372840,
+      "rootJsonBytes": 77309,
+      "qrBytes": 16,
+      "qrCharacters": 22,
+      "codeCharacters": 8,
+      "sourceGeometryOwnerPreconditionsExcluded": true,
+      "providerBillingMeasured": false
+    },
+    {
+      "people": 600,
+      "normalRestRequests": 14723,
+      "tlsDownloadBytes": 44314114,
+      "tlsUploadBytes": 28242363,
+      "rootJsonBytes": 9953883,
+      "qrBytes": 16,
+      "qrCharacters": 22,
+      "codeCharacters": 8,
+      "sourceGeometryOwnerPreconditionsExcluded": true,
+      "providerBillingMeasured": false
+    }
+  ],
+  "externalFirebaseConnected": false,
+  "allBusinessRegressionVerified": false,
+  "fullBusinessFreeTierVerified": false
+}
