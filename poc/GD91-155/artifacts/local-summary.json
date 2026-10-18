@@ -1,0 +1,10 @@
+{
+  "status": "pending-local-rerun",
+  "date": "2026-10-19",
+  "previousAttempt": "first-inlet-begin-failure.json",
+  "latestRulesAndImporterRetested": false,
+  "fullScenarioPassed": false,
+  "externalTrialApproved": false,
+  "externalFirebaseConnected": false,
+  "note": "Failure evidence refers to its recorded source hashes. Rules and importer changed afterward; no current success is claimed."
+}
