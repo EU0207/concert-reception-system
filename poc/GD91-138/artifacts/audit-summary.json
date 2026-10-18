@@ -1,0 +1,29 @@
+{
+  "sourceComparisons": 8,
+  "groups": 26,
+  "profiles": [
+    600,
+    1000
+  ],
+  "cells": 4096,
+  "sections": 16,
+  "referenceBudget": {
+    "exchange": {
+      "operation": 10,
+      "head": 2,
+      "people": [
+        3,
+        3
+      ],
+      "total": 18
+    },
+    "appendPublication": {
+      "operation": 7,
+      "head": 2,
+      "total": 9
+    },
+    "cacheDiscountAssumed": false
+  },
+  "fullBusinessRegressionVerified": false,
+  "externalFirebaseConnected": false
+}
