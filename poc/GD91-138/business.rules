@@ -1,0 +1,83 @@
+    function versionGuard(p,id,e) {
+      return !exists(/databases/$(database)/documents/centerShows/$(p)/operations/$(id))
+        && e.actor == request.auth.uid && e.at == request.time;
+    }
+    function headWrite(p,b,a) {
+      let e = getAfter(/databases/$(database)/documents/centerShows/$(p)/operations/$(a.operationId)).data;
+      return versionGuard(p,a.operationId,e) && a.keys() == b.keys()
+        && a.revision == b.revision + 1 && e.expectedRevision == b.revision
+        && a.seatIds.size() <= 4096 && a.seatIds.size() == a.seatIds.toSet().size()
+        && a.assignments.keys().toSet() == a.seatIds.toSet()
+        && (e.kind == 'exchange'
+          ? a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments'])
+            && a.assignments.diff(b.assignments).affectedKeys().hasOnly([e.seatA,e.seatB])
+          : e.kind == 'appendPublication'
+            && a.diff(b).affectedKeys().hasOnly(['revision','operationId','assignments','seatIds','generation','geometryRevision','cellCount','sections'])
+            && a.geometryRevision == b.geometryRevision + 1 && a.cellCount <= 4096);
+    }
+    function personWrite(p,id,b,a) {
+      let e = getAfter(/databases/$(database)/documents/centerShows/$(p)/operations/$(a.lastOp)).data;
+      let h = getAfter(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      return versionGuard(p,a.lastOp,e) && e.kind == 'exchange'
+        && id in [e.personA,e.personB] && h.operationId == a.lastOp
+        && a.diff(b).affectedKeys().hasOnly(['seatId','revision','lastOp'])
+        && a.revision == b.revision + 1 && h.assignments[a.seatId] == id
+        && a.seatId == (id == e.personA ? e.seatB : e.seatA);
+    }
+    function exchange(p,id,e) {
+      let b = get(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      let a = getAfter(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      let x = get(/databases/$(database)/documents/centerShows/$(p)/people/$(e.personA)).data;
+      let y = get(/databases/$(database)/documents/centerShows/$(p)/people/$(e.personB)).data;
+      let nx = getAfter(/databases/$(database)/documents/centerShows/$(p)/people/$(e.personA)).data;
+      let ny = getAfter(/databases/$(database)/documents/centerShows/$(p)/people/$(e.personB)).data;
+      return recent(p) && b.phase in ['preparing','operating','stopped']
+        && e.keys().hasOnly(['kind','expectedRevision','seatA','seatB','personA','personB','reason','actor','at'])
+        && e.seatA != e.seatB && e.personA != e.personB && e.reason is string && e.reason.size() <= 200
+        && (b.firstStartedAt == 0 || e.reason.matches('.*\\S.*'))
+        && e.expectedRevision == b.revision && a.revision == b.revision + 1 && a.operationId == id
+        && b.assignments[e.seatA] == e.personA && b.assignments[e.seatB] == e.personB
+        && a.assignments[e.seatA] == e.personB && a.assignments[e.seatB] == e.personA
+        && x.seatId == e.seatA && y.seatId == e.seatB
+        && nx.seatId == e.seatB && ny.seatId == e.seatA
+        && nx.revision == x.revision + 1 && ny.revision == y.revision + 1
+        && nx.lastOp == a.operationId && ny.lastOp == a.operationId;
+    }
+    function appendPublication(p,id,e) {
+      let b = get(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      let a = getAfter(/databases/$(database)/documents/centerShows/$(p)/head/current).data;
+      let m = get(/databases/$(database)/documents/centerShows/$(p)/proofs/$(e.generation)).data;
+      let added = a.seatIds.toSet().difference(b.seatIds.toSet());
+      return recent(p) && b.phase == 'preparing'
+        && e.keys().hasOnly(['kind','expectedRevision','generation','added','actor','at'])
+        && e.expectedRevision == b.revision && a.revision == b.revision + 1 && a.operationId == id
+        && m.ready == true && m.baseRevision == b.revision && m.baseGeneration == b.generation
+        && m.generation == e.generation && a.generation == m.generation
+        && a.cellCount == m.cellCount && a.cellCount >= b.cellCount
+        && a.seatIds == m.seatIds && a.sections == m.sections && a.sections.size() <= 16
+        && a.seatIds.toSet().hasAll(b.seatIds) && e.added.keys().toSet() == added
+        && e.added.values().hasOnly(['']) && a.assignments.diff(b.assignments).removedKeys().size() == 0
+        && a.assignments.diff(b.assignments).changedKeys().size() == 0
+        && a.assignments.diff(e.added).unchangedKeys() == added;
+    }
+    match /centerShows/{p}/head/current {
+      allow get: if request.auth != null && manager(p);
+      allow update: if request.auth != null && headWrite(p,resource.data,request.resource.data);
+    }
+    match /centerShows/{p}/people/{id} {
+      allow get: if request.auth != null && manager(p);
+      allow update: if request.auth != null && personWrite(p,id,resource.data,request.resource.data);
+    }
+    match /centerShows/{p}/operations/{id} {
+      allow get: if request.auth != null && manager(p);
+      allow create: if request.auth != null && request.resource.data.actor == request.auth.uid
+        && request.resource.data.at == request.time
+        && (request.resource.data.kind == 'exchange' ? exchange(p,id,request.resource.data)
+          : request.resource.data.kind == 'appendPublication' && appendPublication(p,id,request.resource.data));
+    }
+    match /centerShows/{p}/proofs/{id} {
+      allow get: if request.auth != null && manager(p);
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

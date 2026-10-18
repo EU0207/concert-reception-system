@@ -1,0 +1,266 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-136/firestore.rules": "5a8ac2d3a2ad4c6be897f41615b5a8971848ec27cf4235359ed0e0cf58710bc2",
+    "business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "client.mjs": "0dbf6e34738bace01c9039a2647b39dd2bd38fc203e29cb70c929b31bf6a5616",
+    "firebase.json": "f78ce5c3f63d0d811087d1f9ec72c3e92f19bb57ef580c4c7461b08a996a94e2",
+    "generate.mjs": "8d506463625b01f7565d0a0fe87e8bb9603f4ba92c18c18de6d283e9cb3596bc",
+    "local.mjs": "8c4e5d92acca23cc1bb8cde515f42ea5ef2278434edb7c62f843f0886e84b633",
+    "run-local.mjs": "85bfc21ecc1e13353ee98cd6579670e5febd701ef5200082a3e129d1419a32bd"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-136/firestore.rules": "5a8ac2d3a2ad4c6be897f41615b5a8971848ec27cf4235359ed0e0cf58710bc2",
+    "business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "client.mjs": "0dbf6e34738bace01c9039a2647b39dd2bd38fc203e29cb70c929b31bf6a5616",
+    "firebase.json": "f78ce5c3f63d0d811087d1f9ec72c3e92f19bb57ef580c4c7461b08a996a94e2",
+    "generate.mjs": "8d506463625b01f7565d0a0fe87e8bb9603f4ba92c18c18de6d283e9cb3596bc",
+    "local.mjs": "8c4e5d92acca23cc1bb8cde515f42ea5ef2278434edb7c62f843f0886e84b633",
+    "run-local.mjs": "85bfc21ecc1e13353ee98cd6579670e5febd701ef5200082a3e129d1419a32bd"
+  },
+  "rulesHash": "5b18f237a5fedee8d93dcd388c6091f6d5c5da006fc1b0a14ec8753ef61c59cc",
+  "reports": [
+    {
+      "people": 600,
+      "id": "F01-preconditions",
+      "registeredPeople": 600,
+      "sections": 16,
+      "oldCells": 4032,
+      "normalHumanSessionIssuance": true,
+      "peopleHeadAndGeometryProofOwnerPreconditions": true
+    },
+    {
+      "people": 600,
+      "id": "E01-all-partial-exchanges-rejected",
+      "partialCombinations": 14,
+      "headAndPeopleUnchanged": true
+    },
+    {
+      "people": 600,
+      "id": "E02-forged-qr-partial-mapping-and-stale-rejected",
+      "tamperedCases": 8,
+      "qrAndTicketUnchanged": true,
+      "reasonRequiredAfterFirstStart": true
+    },
+    {
+      "people": 600,
+      "id": "E03-protected-exchange",
+      "normalWrites": 4,
+      "resultIdMatched": true,
+      "qrAndTicketPreserved": true,
+      "expectedRevision": 1,
+      "resultRevision": 2
+    },
+    {
+      "people": 600,
+      "id": "E04-old-operation-replay-rejected",
+      "writeResendAttemptRejected": true,
+      "resultLookupIsNotTransportCutTest": true
+    },
+    {
+      "people": 600,
+      "id": "E05-concurrent-exchange",
+      "successes": 1,
+      "rejectedStaleWrites": 1,
+      "headAndPeopleShareWinningOperation": true
+    },
+    {
+      "people": 600,
+      "id": "A01-current-device-stop",
+      "normalHumanStop": true,
+      "otherDeviceContinues": true,
+      "businessWriteDenied": true,
+      "restoreOwnerPrecondition": true
+    },
+    {
+      "people": 600,
+      "id": "A02-expired-revoked-and-stale-role-rejected",
+      "roleRevocationNormalRequest": true,
+      "roleAndSessionRestoreOwnerPrecondition": true
+    },
+    {
+      "people": 600,
+      "id": "P01-partial-publication-rejected",
+      "partialCombinations": 2,
+      "oldHeadPreserved": true
+    },
+    {
+      "people": 600,
+      "id": "P02-ready-proof-and-source-revision-required",
+      "readyProofOwnerPrecondition": true,
+      "normalProofCreationNotImplemented": true,
+      "forgedProofWritesDenied": true
+    },
+    {
+      "people": 600,
+      "id": "P03-existing-id-and-assignment-protected",
+      "assignedSeatRemovalAndOverwriteRejected": true
+    },
+    {
+      "people": 600,
+      "id": "P04-4096-cells-16-sections",
+      "normalWrites": 2,
+      "allAssignmentsPreserved": 600,
+      "peopleWrites": 0,
+      "postCommitProjectionCopyWrites": 0
+    },
+    {
+      "people": 600,
+      "id": "B01-cell-and-section-limits",
+      "cell4097Rejected": true,
+      "section17Rejected": true,
+      "documentSizeBelow1MiB": true
+    },
+    {
+      "people": 1000,
+      "id": "F01-preconditions",
+      "registeredPeople": 1000,
+      "sections": 16,
+      "oldCells": 4032,
+      "normalHumanSessionIssuance": true,
+      "peopleHeadAndGeometryProofOwnerPreconditions": true
+    },
+    {
+      "people": 1000,
+      "id": "E01-all-partial-exchanges-rejected",
+      "partialCombinations": 14,
+      "headAndPeopleUnchanged": true
+    },
+    {
+      "people": 1000,
+      "id": "E02-forged-qr-partial-mapping-and-stale-rejected",
+      "tamperedCases": 8,
+      "qrAndTicketUnchanged": true,
+      "reasonRequiredAfterFirstStart": true
+    },
+    {
+      "people": 1000,
+      "id": "E03-protected-exchange",
+      "normalWrites": 4,
+      "resultIdMatched": true,
+      "qrAndTicketPreserved": true,
+      "expectedRevision": 1,
+      "resultRevision": 2
+    },
+    {
+      "people": 1000,
+      "id": "E04-old-operation-replay-rejected",
+      "writeResendAttemptRejected": true,
+      "resultLookupIsNotTransportCutTest": true
+    },
+    {
+      "people": 1000,
+      "id": "E05-concurrent-exchange",
+      "successes": 1,
+      "rejectedStaleWrites": 1,
+      "headAndPeopleShareWinningOperation": true
+    },
+    {
+      "people": 1000,
+      "id": "A01-current-device-stop",
+      "normalHumanStop": true,
+      "otherDeviceContinues": true,
+      "businessWriteDenied": true,
+      "restoreOwnerPrecondition": true
+    },
+    {
+      "people": 1000,
+      "id": "A02-expired-revoked-and-stale-role-rejected",
+      "roleRevocationNormalRequest": true,
+      "roleAndSessionRestoreOwnerPrecondition": true
+    },
+    {
+      "people": 1000,
+      "id": "P01-partial-publication-rejected",
+      "partialCombinations": 2,
+      "oldHeadPreserved": true
+    },
+    {
+      "people": 1000,
+      "id": "P02-ready-proof-and-source-revision-required",
+      "readyProofOwnerPrecondition": true,
+      "normalProofCreationNotImplemented": true,
+      "forgedProofWritesDenied": true
+    },
+    {
+      "people": 1000,
+      "id": "P03-existing-id-and-assignment-protected",
+      "assignedSeatRemovalAndOverwriteRejected": true
+    },
+    {
+      "people": 1000,
+      "id": "P04-4096-cells-16-sections",
+      "normalWrites": 2,
+      "allAssignmentsPreserved": 1000,
+      "peopleWrites": 0,
+      "postCommitProjectionCopyWrites": 0
+    },
+    {
+      "people": 1000,
+      "id": "B01-cell-and-section-limits",
+      "cell4097Rejected": true,
+      "section17Rejected": true,
+      "documentSizeBelow1MiB": true
+    }
+  ],
+  "sizes": [
+    {
+      "people": 600,
+      "cells": 4096,
+      "sections": 16,
+      "headJsonBytes": 354916,
+      "headDocumentModelBytes": 330370,
+      "headIncludesAllSeatIds": true,
+      "headIncludesAllAssignmentIds": true,
+      "headContainsNames": false
+    },
+    {
+      "people": 1000,
+      "cells": 4096,
+      "sections": 16,
+      "headJsonBytes": 369316,
+      "headDocumentModelBytes": 344770,
+      "headIncludesAllSeatIds": true,
+      "headIncludesAllAssignmentIds": true,
+      "headContainsNames": false
+    }
+  ],
+  "meter": {
+    "requests": 180,
+    "upBytes": 37477820,
+    "downBytes": 8874235,
+    "normalCommits": 14,
+    "normalWrites": 28,
+    "maxRequestJsonBytes": 505256
+  },
+  "cleanup": {
+    "rulesClosed": true,
+    "trialDocumentsEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "conservativeReferenceBudget": {
+    "exchange": {
+      "operation": 10,
+      "head": 2,
+      "people": [
+        3,
+        3
+      ],
+      "total": 18
+    },
+    "appendPublication": {
+      "operation": 7,
+      "head": 2,
+      "total": 9
+    },
+    "cacheDiscountAssumed": false
+  },
+  "productionImplementation": false,
+  "externalFirebaseConnected": false,
+  "fullBusinessRegressionVerified": false,
+  "normalRegistrationAndProofGenerationVerified": false,
+  "receptionProjectionAndImagesVerified": false,
+  "actualSdkAndIndexedDbUsed": false,
+  "providerBillingMeasured": false
+}
