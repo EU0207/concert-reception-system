@@ -1,0 +1,21 @@
+{
+  "sourceComparisons": 45,
+  "rulesBytes": 10482821,
+  "observedEmulatorLimit": 10485760,
+  "remainingBytes": 2939,
+  "normalTokenReceptionDetailsPurgeSteps": 10,
+  "partialStepRequestsDenied": 3,
+  "orphanHistoryAndInvalidReviewDenied": true,
+  "retainedActualsTotalsAndClosingResultsUnchanged": true,
+  "postWriteResponseDiscardModel": true,
+  "injectedCounterexamplesOwnerCleaned": true,
+  "sourceBusinessOwnerSeeded": true,
+  "formalMigrationPipelineVerified": false,
+  "allCopiesDeletionVerified": false,
+  "cleanup": {
+    "rulesDeny": true,
+    "targetEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "externalFirebaseConnected": false
+}
