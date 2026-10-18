@@ -1,0 +1,25 @@
+{
+  "sourceComparisons": 50,
+  "rulesBytes": 10245395,
+  "observedEmulatorLimit": 10485760,
+  "remainingBytes": 240365,
+  "purgeSteps": 10,
+  "candidates": 3,
+  "amendments": 2,
+  "partialBeginRequestsDenied": 3,
+  "partialCandidateRequestsDenied": 3,
+  "partialCommitRequestsDenied": 4,
+  "reconstructionNegativeCases": 9,
+  "concurrentCandidatesPreserved": true,
+  "retainedBaseHashMatched": true,
+  "closingResultsUnchanged": true,
+  "sourceBusinessOwnerSeeded": true,
+  "formalMigrationPipelineVerified": false,
+  "allCopiesDeletionVerified": false,
+  "cleanup": {
+    "rulesDeny": true,
+    "targetEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "externalFirebaseConnected": false
+}
