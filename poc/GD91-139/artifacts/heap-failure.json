@@ -1,0 +1,316 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-138/business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "auth.rules": "ee53560c8438783d235f25ac305bde6a01ec4e8cc712cba63242d1a253721e33",
+    "client.mjs": "10cc8760ae0d300213028450b406540498882efb45492666890ff9c50d37ef53",
+    "firebase.json": "df5b1fd6622953a218a4b8c21262746e50a344a8524043e4c5e5a986087bcb3c",
+    "generate.mjs": "b8d7110be2fc2be3d16f473a5922b1c163222dda2e98949ec5cbf0132c0be777",
+    "local.mjs": "6b44be3ab9267f56196e61ec5f2731562ff36d39fcf5a345a41509790ee1a111",
+    "registration.rules": "6d8b7f6347847467f0d1a6699d1911dd880ccc9bc5eeabc5900410b597994194",
+    "run-local.mjs": "608777e80005ebbd15f8582f9453c2ab933350b95d41a3d091fd72e713334bc1",
+    "sdk.mjs": "6594e3613d807df173f6d13d6c55e19f4ea35825ea7e95f2646e3079f1ab584b"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-138/business.rules": "ad47165e14630a15c00f330cd6e7161152f7a702f55d1aa5b8c5b4d3706c74a9",
+    "auth.rules": "ee53560c8438783d235f25ac305bde6a01ec4e8cc712cba63242d1a253721e33",
+    "client.mjs": "10cc8760ae0d300213028450b406540498882efb45492666890ff9c50d37ef53",
+    "firebase.json": "df5b1fd6622953a218a4b8c21262746e50a344a8524043e4c5e5a986087bcb3c",
+    "generate.mjs": "b8d7110be2fc2be3d16f473a5922b1c163222dda2e98949ec5cbf0132c0be777",
+    "local.mjs": "6b44be3ab9267f56196e61ec5f2731562ff36d39fcf5a345a41509790ee1a111",
+    "registration.rules": "6d8b7f6347847467f0d1a6699d1911dd880ccc9bc5eeabc5900410b597994194",
+    "run-local.mjs": "608777e80005ebbd15f8582f9453c2ab933350b95d41a3d091fd72e713334bc1",
+    "sdk.mjs": "6594e3613d807df173f6d13d6c55e19f4ea35825ea7e95f2646e3079f1ab584b"
+  },
+  "rulesHash": "badeacb71379600cb40658b7ce1db0a260638c4c7f1f9b7835b1960bcb1b2d5d",
+  "reports": [
+    {
+      "people": 4,
+      "id": "F01-empty-roster",
+      "registeredDevices": 8,
+      "actualSdkContexts": 6,
+      "allSessionsNormallyIssued": true,
+      "headGeometryAndRoleRegistrationOwnerPreconditions": true,
+      "peopleOwnerSeeds": 0
+    },
+    {
+      "people": 4,
+      "id": "R01-registration-partials",
+      "rejectedCombinations": 14,
+      "headUnchanged": true
+    },
+    {
+      "people": 4,
+      "id": "R02-private-data-and-input-guards",
+      "invalidInputs": 7,
+      "receptionistBusinessWriteDenied": true,
+      "displayWhitespaceSixCharacterRule": true
+    },
+    {
+      "people": 3,
+      "id": "R03-normal-registration",
+      "elapsedMs": 526,
+      "normalWrites": 12,
+      "normalCommits": 3,
+      "restObservedRequestBytes": 7624,
+      "restObservedResponseBytes": 711450,
+      "ownerPersonOrLabelWrites": 0
+    },
+    {
+      "people": 4,
+      "id": "S01-six-sdk-public-labels",
+      "receivedPerClient": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "privateBuyerFieldsExcluded": true,
+      "mixedRevisionRejectedByComparison": true,
+      "sdkApplicationJsonBytes": [
+        334156,
+        334156,
+        334156,
+        334156,
+        334156,
+        334156
+      ],
+      "sdkWireBytesMeasured": false
+    },
+    {
+      "people": 4,
+      "id": "S02-management-data-denied",
+      "peopleAndOperationServerReadsDenied": true,
+      "roleListDenied": true
+    },
+    {
+      "people": 4,
+      "id": "R04-late-addition-and-optional-seat",
+      "finalPeople": 4,
+      "assignedPeople": 3,
+      "unassignedLabelHidden": true,
+      "oldOperationReplayRejected": true,
+      "newIdResultMatched": true
+    },
+    {
+      "people": 4,
+      "id": "X01-raw-sdk-expiry-observation",
+      "restReadDenied": true,
+      "rawSdkReturnedData": true,
+      "rawSdkAloneExpiryBoundaryVerified": false,
+      "newConnectionRejectedExpiredSession": true,
+      "freshGateRejectsBeforeReturningData": true,
+      "causeUnresolved": true
+    },
+    {
+      "people": 4,
+      "id": "A01-sdk-stop-role-and-session-expiry",
+      "normalManagerStopOfOtherHuman": true,
+      "otherDeviceContinues": true,
+      "normalRoleRevocation": true,
+      "sessionExpiryOwnerPrecondition": true,
+      "restoresOwnerPreconditions": true
+    },
+    {
+      "people": 4,
+      "id": "A02-performance-scoped-stop",
+      "sameAnonymousUidInTwoPerformances": true,
+      "otherPerformanceUnaffected": true,
+      "otherHeadOwnerPrecondition": true
+    },
+    {
+      "people": 600,
+      "id": "F01-empty-roster",
+      "registeredDevices": 8,
+      "actualSdkContexts": 6,
+      "allSessionsNormallyIssued": true,
+      "headGeometryAndRoleRegistrationOwnerPreconditions": true,
+      "peopleOwnerSeeds": 0
+    },
+    {
+      "people": 600,
+      "id": "R01-registration-partials",
+      "rejectedCombinations": 14,
+      "headUnchanged": true
+    },
+    {
+      "people": 600,
+      "id": "R02-private-data-and-input-guards",
+      "invalidInputs": 7,
+      "receptionistBusinessWriteDenied": true,
+      "displayWhitespaceSixCharacterRule": true
+    },
+    {
+      "people": 599,
+      "id": "R03-normal-registration",
+      "elapsedMs": 36609,
+      "normalWrites": 2396,
+      "normalCommits": 599,
+      "restObservedRequestBytes": 11318602,
+      "restObservedResponseBytes": 1002879,
+      "ownerPersonOrLabelWrites": 0
+    },
+    {
+      "people": 600,
+      "id": "S01-six-sdk-public-labels",
+      "receivedPerClient": [
+        599,
+        599,
+        599,
+        599,
+        599,
+        599
+      ],
+      "privateBuyerFieldsExcluded": true,
+      "mixedRevisionRejectedByComparison": true,
+      "sdkApplicationJsonBytes": [
+        495080,
+        495080,
+        495080,
+        495080,
+        495080,
+        495080
+      ],
+      "sdkWireBytesMeasured": false
+    },
+    {
+      "people": 600,
+      "id": "S02-management-data-denied",
+      "peopleAndOperationServerReadsDenied": true,
+      "roleListDenied": true
+    },
+    {
+      "people": 600,
+      "id": "R04-late-addition-and-optional-seat",
+      "finalPeople": 600,
+      "assignedPeople": 600,
+      "unassignedLabelHidden": false,
+      "oldOperationReplayRejected": true,
+      "newIdResultMatched": true
+    },
+    {
+      "people": 600,
+      "id": "X01-raw-sdk-expiry-observation",
+      "restReadDenied": true,
+      "rawSdkReturnedData": true,
+      "rawSdkAloneExpiryBoundaryVerified": false,
+      "newConnectionRejectedExpiredSession": true,
+      "freshGateRejectsBeforeReturningData": true,
+      "causeUnresolved": true
+    },
+    {
+      "people": 600,
+      "id": "A01-sdk-stop-role-and-session-expiry",
+      "normalManagerStopOfOtherHuman": true,
+      "otherDeviceContinues": true,
+      "normalRoleRevocation": true,
+      "sessionExpiryOwnerPrecondition": true,
+      "restoresOwnerPreconditions": true
+    },
+    {
+      "people": 600,
+      "id": "A02-performance-scoped-stop",
+      "sameAnonymousUidInTwoPerformances": true,
+      "otherPerformanceUnaffected": true,
+      "otherHeadOwnerPrecondition": true
+    },
+    {
+      "people": 1000,
+      "id": "F01-empty-roster",
+      "registeredDevices": 8,
+      "actualSdkContexts": 6,
+      "allSessionsNormallyIssued": true,
+      "headGeometryAndRoleRegistrationOwnerPreconditions": true,
+      "peopleOwnerSeeds": 0
+    },
+    {
+      "people": 1000,
+      "id": "R01-registration-partials",
+      "rejectedCombinations": 14,
+      "headUnchanged": true
+    },
+    {
+      "people": 1000,
+      "id": "R02-private-data-and-input-guards",
+      "invalidInputs": 7,
+      "receptionistBusinessWriteDenied": true,
+      "displayWhitespaceSixCharacterRule": true
+    }
+  ],
+  "profiles": [
+    {
+      "people": 4,
+      "normalRegistration": {
+        "people": 3,
+        "elapsedMs": 526,
+        "normalWrites": 12,
+        "normalCommits": 3,
+        "restObservedRequestBytes": 7624,
+        "restObservedResponseBytes": 711450
+      },
+      "lateRegistrationNormalWrites": 4,
+      "headApplicationJsonBytes": 333610,
+      "headDocumentModelBytes": 309056,
+      "registeredDeviceCount": 8,
+      "publicLabelsPerClient": 3,
+      "readContexts": 6,
+      "allPersonAndLabelWritesNormal": true,
+      "normalInitializationAndStartVerified": false,
+      "normalAutomaticAllocationVerified": false
+    },
+    {
+      "people": 600,
+      "normalRegistration": {
+        "people": 599,
+        "elapsedMs": 36609,
+        "normalWrites": 2396,
+        "normalCommits": 599,
+        "restObservedRequestBytes": 11318602,
+        "restObservedResponseBytes": 1002879
+      },
+      "lateRegistrationNormalWrites": 4,
+      "headApplicationJsonBytes": 378350,
+      "headDocumentModelBytes": 352600,
+      "registeredDeviceCount": 8,
+      "publicLabelsPerClient": 600,
+      "readContexts": 6,
+      "allPersonAndLabelWritesNormal": true,
+      "normalInitializationAndStartVerified": false,
+      "normalAutomaticAllocationVerified": false
+    }
+  ],
+  "meter": {
+    "requests": 1670,
+    "upBytes": 15353481,
+    "downBytes": 4234281,
+    "normalCommits": 721,
+    "normalWrites": 2788,
+    "maxRequestJsonBytes": 35417
+  },
+  "accessChecks": 718,
+  "blockedGroups": 8,
+  "cleanup": {
+    "error": "{\"status\":409,\"error\":\"Transaction lock timeout.\"}\n\n409 !== 200\n"
+  },
+  "failure": {
+    "phase": "1000/normal-registration",
+    "name": "AssertionError",
+    "message": "{\"status\":500}\n\n500 !== 200\n"
+  },
+  "externalFirebaseConnected": false,
+  "productionImplementation": false,
+  "actualSdkContextsUsed": true,
+  "allBusinessRegressionVerified": false,
+  "fullBusinessFreeTierVerified": false,
+  "normalInitializationAndStartVerified": false,
+  "deviceAndRoleRegistrationOwnerPreconditions": true,
+  "temporaryBaselineRoleTransitionVerified": false,
+  "sharedBuyerAndTicketLifecycleVerified": false,
+  "rawSdkExpiryEnforcementVerified": false,
+  "accessGateCandidateVerified": false,
+  "providerBillingMeasured": false,
+  "sdkWireBytesMeasured": false
+}
