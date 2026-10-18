@@ -18,7 +18,7 @@
 
 ## 決定
 
-#168でRTDB候補を評価中であり、本ADRのFirestore採用を変更済みとは扱わない。[TECH-DD91-115](ADR-007-seat-edit-commit-boundary.md#新規環境の方式採用案と移行ゲートtech-dd91-115)は、新規環境のオンライン共有と画像をRTDBへ揃え、全形式の既存データ移行を将来の移行前ゲートへ変更する提案である。回答前は未採用。AでもAuthenticationとPWA、配信方針は維持し、本番実装や公開を承認しない。
+#168では[TECH-DD91-116](ADR-007-seat-edit-commit-boundary.md#3方式の共通条件による比較tech-dd91-116)に従い、Firestore中心・公演状態で分担・RTDB統一を同じ要件・無料条件で比較する。Hostingによる配信は全案共通。115のA・Bは回答保留であり、本ADRのFirestore採用や移行ゲートを変更済みとは扱わない。AuthenticationとPWA、環境分離を維持し、本番実装・配備は開始しない。
 
 次の構成を採用する。
 
