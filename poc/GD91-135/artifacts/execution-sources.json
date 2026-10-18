@@ -1,0 +1,275 @@
+[
+  {
+    "source": "GD91-135/numbering-regression.mjs",
+    "originalHash": "6c377124190d1ff7a6c637251ec76e0227d025384b277f2192b680f9b0d34da9",
+    "executedHash": "6c377124190d1ff7a6c637251ec76e0227d025384b277f2192b680f9b0d34da9",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-105/source-audit.mjs",
+    "originalHash": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "executedHash": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-107/cases.mjs",
+    "originalHash": "75bd46ebff9df6b3ca040dd5e0eef4cd22f9112ec7e8ba0257e9ba4802c3b3cd",
+    "executedHash": "75bd46ebff9df6b3ca040dd5e0eef4cd22f9112ec7e8ba0257e9ba4802c3b3cd",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-07/planner.mjs",
+    "originalHash": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "executedHash": "16f9b2655bcbaf86b3e59726255d47c5c46cf725d68cef7b7651fd47ba309a7a",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-104/geometry.mjs",
+    "originalHash": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "executedHash": "cd336673d7868d8d291b4d26eee3db27c30215a45ef7a485f18d37879b188cf0",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-102/layout-model.mjs",
+    "originalHash": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "executedHash": "e4309d36a9061d92a8b63152fb7a55ddb33a0c23fafae6c5ace015237c02bc70",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-84/generation-tests.mjs",
+    "originalHash": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "executedHash": "455f6df130e95f030ff1e981ddd4714d21db88b2753c767e77c2424b29a6e737",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-84/transport.mjs",
+    "originalHash": "d692d004608470953b0385db0c4e4fe0c1e540ca623f4929e2d94eef0617e1b6",
+    "executedHash": "28a1c15789ed2ad8e9b36941c3ed57347baa8df42f53c157b23c77d918ade621",
+    "portsAdapted": true,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-104/slide.mjs",
+    "originalHash": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+    "executedHash": "25222cb60a40e62940e09a786629478afdd6df127f9b3545fcd208788ec6f5b1",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-08/slide.mjs",
+    "originalHash": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "executedHash": "ee87583116eb367d1efdcd9dd5173c649b4326ca5b3fb4226723b95c3c02ee71",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-10/projection.mjs",
+    "originalHash": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "executedHash": "86826237f00dec55fe095f1d2b681bf2bcc51bca8f9ed47140a5fde2d1ac0683",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-102/publication.mjs",
+    "originalHash": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "executedHash": "27046db20d8e4f2f85bae0e58260e8608e2eafd50048d29ec0b83f16b091164a",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-105/snapshot.mjs",
+    "originalHash": "b4b38ed1d5740fe7ab83cfcd08bfc7cb79ceee127b2faf8b3cd7c9f3e5762f5e",
+    "executedHash": "b4b38ed1d5740fe7ab83cfcd08bfc7cb79ceee127b2faf8b3cd7c9f3e5762f5e",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-104/snapshot.mjs",
+    "originalHash": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
+    "executedHash": "034ad32649cc0ff2e0f026a78cd19902420baa94f5c725960411544c771411a4",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-102/snapshot.mjs",
+    "originalHash": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "executedHash": "88c3462b23522ced9b9070ac7964b835299099efa746d41b33e7b1dc43f74393",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-96/snapshot.mjs",
+    "originalHash": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "executedHash": "2c016cb10028807ee9e10d157d4ce03a3ef827bf65e9c8efe8da5319d8af85bd",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-89/projection.mjs",
+    "originalHash": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "executedHash": "cf11c7cb02dca60bf9fbbd5363714382ca88e253271afd8f9424e8d5ab9b5e1b",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-131/qr-model.mjs",
+    "originalHash": "be6370acc9cf9a999ee114faf2dc4694eb870e95e63c9244829c63530613b59b",
+    "executedHash": "be6370acc9cf9a999ee114faf2dc4694eb870e95e63c9244829c63530613b59b",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-88/model.mjs",
+    "originalHash": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "executedHash": "e0c3f3601101a528e8e4afbccadd8dc268ee34f1c6dc723f77ce58ffb75e9592",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-86/model.mjs",
+    "originalHash": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "executedHash": "db5c65ab3a170d12a2b024ce1b3677ec31896715077ba02a40b60f61e22fc889",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-103/model.mjs",
+    "originalHash": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "executedHash": "b6e1f9b0b68af2a18563dc121d2fce8e21d2f232897fc07e679840e466f52806",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-92/model.mjs",
+    "originalHash": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "executedHash": "c1a1f4491e3b2900d26ed6f633ea32ea8610958dc2ddcf01332e2faba4df8145",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-91/model.mjs",
+    "originalHash": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "executedHash": "d5649a6076dbdd270f70df44c5a650184b3a16195bb7da0e380eb8af2f4d7159",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-90/model.mjs",
+    "originalHash": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "executedHash": "0d716891f1dca5dde3646f9496a0930f6adb9d8dbbc613d960b1bb049bb34c85",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-92/references.mjs",
+    "originalHash": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "executedHash": "eac413a31d3bb0dbf1912e5300d1872b1f1e9efccba073c3d7acfed87cbce3a1",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-91/sdk-adapter.mjs",
+    "originalHash": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "executedHash": "7b3042426423b5e23f686f9410f2179bfc767b480dd42e559de6a7e2d0296614",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-88/sdk-adapter.mjs",
+    "originalHash": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "executedHash": "7a200fd472a4710207cfe5e647fec0a95c7e74051af7dc532420a1cd868e50bd",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-86/sdk-adapter.mjs",
+    "originalHash": "f685ef7bf5874e14883c7927e63678e73a5559aaee048ab7e82dffa89f6f2b7c",
+    "executedHash": "df2ff2f7e1d1de86698cc34a5199dbf0ab9ad15fe3a3c98e051c5b3c78f7e3f5",
+    "portsAdapted": true,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-107/edit.mjs",
+    "originalHash": "711c0fc0791fda94ae4859aeea418ee7dcf7d26b45a60c217bbd1d1d649a6c06",
+    "executedHash": "711c0fc0791fda94ae4859aeea418ee7dcf7d26b45a60c217bbd1d1d649a6c06",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-104/edit.mjs",
+    "originalHash": "5c550f1386712b506aeef29b09d91cd9b90db333952990eb6448eafc5bbbf26b",
+    "executedHash": "5c550f1386712b506aeef29b09d91cd9b90db333952990eb6448eafc5bbbf26b",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-71/tests/model.mjs",
+    "originalHash": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "executedHash": "d302ea89614b73ab49b906a145848f7d61d2a9bd7150056c7b8215ad4170bbbc",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-107/negative-cases.mjs",
+    "originalHash": "fdf297eb35806a4d64dd489ba63c94ff9c527c009222c4a89e1e86c5fee2fcd6",
+    "executedHash": "fdf297eb35806a4d64dd489ba63c94ff9c527c009222c4a89e1e86c5fee2fcd6",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-104/collection.mjs",
+    "originalHash": "be39296d4bcd224baca59c2671f5444e169086ab992d5b41a04c2002d4414cc6",
+    "executedHash": "be39296d4bcd224baca59c2671f5444e169086ab992d5b41a04c2002d4414cc6",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-102/collection.mjs",
+    "originalHash": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "executedHash": "2b75ea5f50cd33d7645f057684bd2c38368ab095ec19a0a7dbc53403fe569604",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-105/model.mjs",
+    "originalHash": "f8cbccba9109a305d8ed0843a95d98d47b96b7aeea104b239751dfe13589fa8e",
+    "executedHash": "f8cbccba9109a305d8ed0843a95d98d47b96b7aeea104b239751dfe13589fa8e",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-89/sdk-client.mjs",
+    "originalHash": "66f63c4b093a4896145f69edb614c2b417a317bdd1c16307b53d0e539f1545fb",
+    "executedHash": "3a68d0578c3fa7d7a909e0e2fca7e3acd6035b412fd11f0e2c6bf28165233c5c",
+    "portsAdapted": true,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-88/receipt-client.mjs",
+    "originalHash": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "executedHash": "1be05f61e6624977fff45e868d223db9963d608c5423ffb4013b5cf84a1c3d20",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-87/receipt-client.mjs",
+    "originalHash": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "executedHash": "d3fd5ddcf3eac03a10f501e629cfefc711f7e5ad9415ca62d82c6775a5c60d9c",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  },
+  {
+    "source": "GD91-89/support.mjs",
+    "originalHash": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "executedHash": "e024912eb5a352b8c468d83223f5534af109219f522517c8a3561b7235434089",
+    "portsAdapted": false,
+    "positiveCodeFixturesAdapted": false
+  }
+]
