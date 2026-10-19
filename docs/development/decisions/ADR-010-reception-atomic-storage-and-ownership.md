@@ -2,12 +2,14 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review |
-| ADR状態 | Proposed |
+| 状態 | Approved（PR #242） |
+| ADR状態 | Accepted（案A・PR #242） |
 | 対象 | 設計#92、実装#233・104。CONF-057・060、MCT-11 |
 | 関連 | [DD-92](../detailed-design/reception-recovery-detail-design.md)、[BD-03](../basic-design/offline-sync-conflict-design.md)、[DD-89](../detailed-design/reception-screen-detail-design.md) |
 
 ## 問題と候補
+
+2026-10-20、開発者がPR #242の先頭`b1feded133426b21d7617e321ac14168a03b997f`をレビュー承認し、mainへ統合した（`1df62f334321f61c80b40548dabb7ada06a900d9`）。案AをAcceptedとし、以下の提案時の説明を判断根拠として保持する。製品試験・配備の承認は含まない。
 
 イベントだけを保存すると、再起動後に未送信や未確認結果を見失う。タブごとのメモリーや時刻だけで所有権を決めると、停止していた旧タブが戻って連番・キューを二重に更新できる。
 
