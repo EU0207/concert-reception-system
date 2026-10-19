@@ -2,12 +2,14 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review。CONF-057・060の業務条件は承認済み。製品実装・試験は未実施 |
+| 状態 | Approved（PR #242）。製品実装・試験は未実施 |
 | 読者・目的 | 開発者・設計担当者・テスト担当者が、保存単位と複数タブの所有権を実装へ渡す |
 | 関連Issue | 設計#92、画面#89、実装#233・104。認可#110、締め#111と資格#112 |
 | 根拠 | [BD-03](../basic-design/offline-sync-conflict-design.md)、[BD-05](../basic-design/security-privacy-design.md)、[承認済み復帰方針](../ui-mock/qr-reception-recovery-review.md)、[画面契約](reception-screen-detail-design.md)、[ADR-010](../decisions/ADR-010-reception-atomic-storage-and-ownership.md) |
 
 ## DD-92-01 保存単位と不変条件
+
+2026-10-20、開発者がPR #242の先頭`b1feded133426b21d7617e321ac14168a03b997f`をレビュー承認し、mainへ統合した（`1df62f334321f61c80b40548dabb7ada06a900d9`）。DD-92とADR-010の案Aが対象であり、14ケースの製品実行は未実施。
 
 成功表示と共有送信は、端末内の保存トランザクションの完了後だけ許可する。個別書込みの成功通知を保存完了としない。再起動後は保存正本から復帰し、カメラや画面メモリーの状態を正本にしない。
 
