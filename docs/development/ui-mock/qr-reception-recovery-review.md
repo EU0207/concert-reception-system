@@ -13,6 +13,8 @@
 
 2026-09-28、[CONF-060](ui-mock-client-response.md#conf-060-追加修正変更の包括承認)でここまでの追加変更を包括承認として受領した。本書は[本番引継ぎ台帳](ui-mock-production-handoff.md)のMCT-11・MHD-04に対応する承認済み設計とする。詳細な保存形式と実装後試験は引き続き未完了である。
 
+2026-10-20、保存形式・一体確定とタブ所有権を[DD-92](../detailed-design/reception-recovery-detail-design.md)へ具体化した。追加設計はIn Reviewであり、本書の承認と区別する。中断時点を増やしたDD92-T01～14は製品試験未実施。
+
 2026-09-27、開発者から[依頼者回答`CONF-057`](ui-mock-client-response.md#conf-057-qr受付中断時の扱い)が伝達された。端末保存を前提とする復帰方法は開発側へ委ねられたため、本書の方法を[#92](https://github.com/EU0207/concert-reception-system/issues/92)の設計判断とする。実装済みまたは試験合格とは扱わない。
 
 ## 既存設計と追加課題
