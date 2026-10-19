@@ -2,8 +2,8 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review |
-| ADR状態 | Proposed |
+| 状態 | Approved（PR #240） |
+| ADR状態 | Accepted（案A・PR #240） |
 | 対象 | 設計#90、実装#234。MHD-02、REQ-F-037とCONF-055・056・060 |
 | 関連 | [詳細設計DD-90](../detailed-design/staff-notice-confirmation-detail-design.md)、[正式RTDB契約](../detailed-design/rtdb-storage-contract.md)、[BD-03](../basic-design/offline-sync-conflict-design.md) |
 
@@ -18,6 +18,8 @@
 | C：連絡に全員共通の既読・確認を保存 | 状態が少ない | 利用者別の要件を満たさない。管理者の既読管理へも広がりやすい |
 
 ## 提案と適用範囲
+
+2026-10-20、開発者がPR #240の先頭`ba382f492a39649c1b3d3906c91302cdfae93252`をレビュー承認し、mainへ統合した（`ae07d7b53cdb6d065c5d9b66b6830605a0f04fdf`）。案AをAcceptedとし、以下の提案時の説明は判断根拠として保持する。製品試験・配備の承認は含まない。
 
 Aを提案する。連絡の原文・訂正と取消しは不変イベントとし、現在表示はその投影とする。本人状態は内容版ごとの読了と明示確認を分離し、通常の管理画面に他人の読了一覧を公開しない。#221の保守中バックアップの限定取得は別に認可・監査し、通常の取得許可へ転用しない。重要確認を管理者による代理確認や新しい認可条件へ使わない。
 

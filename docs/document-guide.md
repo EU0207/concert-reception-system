@@ -147,7 +147,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 |---|---|---|---|---|---|---|
 | RTDBの正式保存・復旧契約 | [rtdb-storage-contract.md](development/detailed-design/rtdb-storage-contract.md) | 採用した物理形式、現在認可・保持と正式バックアップを定め、未実施試験を引き渡す | 開発者、設計担当者、テスト担当者 | #168の方式採用後 | 形式・認可・復旧条件の変更時 | Approved（PR #228） |
 | お客様情報・対応状況と不参加の詳細設計 | [customer-ticket-detail-design.md](development/detailed-design/customer-ticket-detail-design.md) | MHD-05の共同契約と16ケース、#97の名簿追加と15ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | データ・権限・業務操作の変更時 | Approved（PR #231・238） |
-| スタッフ連絡・重大操作確認の詳細設計 | [staff-notice-confirmation-detail-design.md](development/detailed-design/staff-notice-confirmation-detail-design.md) | #90の本人別未読・重要確認、連絡の版と重大操作一覧、14ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | 連絡・確認条件の変更時 | In Review |
+| スタッフ連絡・重大操作確認の詳細設計 | [staff-notice-confirmation-detail-design.md](development/detailed-design/staff-notice-confirmation-detail-design.md) | #90の本人別未読・重要確認、連絡の版と重大操作一覧、14ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | 連絡・確認条件の変更時 | Approved（PR #240） |
+| QR受付画面・会場表示の詳細設計 | [reception-screen-detail-design.md](development/detailed-design/reception-screen-detail-design.md) | #89の画面状態・戻り先と写真・席表表示、12ケースを定める。保存・排他の詳細は#92 | 開発者、画面設計担当者、テスト担当者 | 詳細設計 | 受付導線・画面状態の変更時 | In Review |
 | 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91の仕様とデータ契約、主要試験DD91-T01～69を追跡する。検証結果は別記録を参照 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 仕様・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
@@ -163,7 +164,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | ADR-006 会場画像のFirestore保存方式 | [ADR-006-firestore-image-storage.md](development/decisions/ADR-006-firestore-image-storage.md) | 旧Firestore画像方式の比較履歴。初期保存方式は122-AでRTDBへ置換し、1MB・最大5枚を維持する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 保存方式・実画像条件の変更時 | Superseded（初期保存方式） |
 | ADR-007 席編集の確定境界 | [ADR-007-seat-edit-commit-boundary.md](development/decisions/ADR-007-seat-edit-commit-boundary.md) | 3案を比較し122-AでRTDBを初期設計採用。詳細契約と未実施試験を分離する | 開発者、設計担当者、テスト担当者 | 詳細設計 | 成立性検証・採否決定時 | Accepted（PR #228） |
 | ADR-008 購入者IDと確認用項目の保存単位 | [ADR-008-customer-identity-and-check-items.md](development/decisions/ADR-008-customer-identity-and-check-items.md) | 正本の分離とID参照、#97の登録経路を比較する | 開発者、設計担当者、テスト担当者 | #229・97の共同設計 | 保存・取得の境界変更時 | Accepted（PR #231・238） |
-| ADR-009 連絡の内容版と本人別状態の分離 | [ADR-009-notice-user-version-state.md](development/decisions/ADR-009-notice-user-version-state.md) | 本人・内容版ごとの状態を、端末内だけ・全員共通の案と比較する | 開発者、設計担当者、テスト担当者 | #90の設計 | 読了・重要確認の保存境界変更時 | In Review（Proposed） |
+| ADR-009 連絡の内容版と本人別状態の分離 | [ADR-009-notice-user-version-state.md](development/decisions/ADR-009-notice-user-version-state.md) | 本人・内容版ごとの状態を、端末内だけ・全員共通の案と比較する | 開発者、設計担当者、テスト担当者 | #90の設計 | 読了・重要確認の保存境界変更時 | Accepted（PR #240） |
 
 ## テンプレート
 
