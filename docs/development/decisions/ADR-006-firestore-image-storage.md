@@ -8,14 +8,12 @@
 | 主な読者 | 依頼者、開発者、設計担当者 |
 | 関連文書 | [C-03調査](../technical-validation/venue-image-storage-feasibility.md)、[POC-006](../technical-validation/poc-006-result.md)、[依頼者回答](../basic-design/basic-design-remediation-client-response.md)、[BD-02](../basic-design/logical-data-model.md) |
 | 関連Issue | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
-| ADR状態 | Accepted |
+| ADR状態 | Superseded（初期画像保存方式をADR-007の122-Aへ置換。1MB・最大5枚の業務条件は維持） |
 | 決定日 | 2026-09-26。`CONF-053`の1MB上限とPOC-006の限定検証を根拠に容量条件を改訂。基本設計一式の変更承認と実画像の受入試験は別判定 |
 
 ## 背景と候補
 
-現在は[TECH-DD91-116](ADR-007-seat-edit-commit-boundary.md#3方式の共通条件による比較tech-dd91-116)の3案比較中。115のA・Bは保留であり、本ADRをSupersededへ変更しない。画像の保存先と過去公演への移動対象は、同じ認可・無料条件で比較してから確定する。旧画像を含む全形式移行は未完了。1MB・最大5枚の業務条件と実画像・実機の受入を維持する。
-
-#168のRTDB候補との認可結合は[ADR-007のTECH-DD91-112-A](ADR-007-seat-edit-commit-boundary.md#v4の採用判断前の制約tech-dd91-112)で隔離検証を進めている。開発者が画像もRTDBへ揃える候補を選択し、ローカル画像・認可と追加予算を検証した。App Check外部準備の401を保持したうえで、114-Aの修正後1試行は13群合格・設定復元済み。方式採用は移行等の残条件があるため未決定。本ADRはAcceptedのままであり、画像のRTDB移行・本番実装を承認したものではない。1MB/枚・最大5枚の業務条件も維持する。
+2026-10-19、開発者が[TECH-DD91-122-A](ADR-007-seat-edit-commit-boundary.md#初期方式の設計採用を単独で判断するtech-dd91-122)で画像もRTDBへ揃える初期設計を採用した。本ADRのFirestore Bytes保存方式を置き換え、以下は比較履歴として保持する。現在の形式・認可と配布は[正式保存・復旧契約](../detailed-design/rtdb-storage-contract.md#画像と現在認可)へ定める。CONF-053の1枚1,000,000 B・最大5枚と実画像の可読性、実機受入は維持する。旧PoC画像の変換は121で対象外。本番実装・配備は未承認である。
 
 従来の会場画像は1枚5,000,000バイト、最大5枚だった。`CONF-051`でスマートフォン拡大時の可読性を業務条件とし、`CONF-052`で一度200,000バイトを上限に変更した。最新の`CONF-053`で1枚1,000,000バイト、最大5枚、合計5,000,000バイトへ変更した。カード登録なしの条件では[Cloud Storage for Firebase](https://firebase.google.com/docs/storage/web/start)のBlaze要件と合わない。公開Hostingは権限付きの登録・配布に合わず、手動端末配布は版管理と削除が難しい。
 

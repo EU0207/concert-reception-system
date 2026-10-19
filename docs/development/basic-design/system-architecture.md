@@ -16,7 +16,9 @@
 
 ## 結論
 
-本システムは、スマートフォンとPCのブラウザーで動く静的なPWAをFirebase Hostingから配信し、個別認証をFirebase Authentication、オンライン共有をCloud Firestore Standard edition、端末内の変更不能イベントと送信状態をアプリケーション管理のIndexedDB、静的資産の事前取得をService Workerが担当する構成とする。Cloud Functions等の常駐サーバー処理は設けない。
+2026-10-19の[122-A](../decisions/ADR-007-seat-edit-commit-boundary.md#初期方式の設計採用を単独で判断するtech-dd91-122)により、オンライン共有・画像と現在認可はRTDBへ変更する。本文・図に残るFirestoreの物理保存・SDK記述は当初設計の履歴とし、[正式保存・復旧契約](../detailed-design/rtdb-storage-contract.md)を優先する。PWA・環境分離と責務の境界は維持する。本書全体の再承認や本番実装開始を意味しない。
+
+本システムは、スマートフォンとPCのブラウザーで動く静的なPWAをFirebase Hostingから配信し、個別認証をFirebase Authentication、オンライン共有をFirebase Realtime Database、端末内の変更不能イベントと送信状態をアプリケーション管理のIndexedDB、静的資産の事前取得をService Workerが担当する構成とする。Cloud Functions等の常駐サーバー処理は設けない。
 
 依頼者用、開発用、第三者評価用、将来の各主催者用は、Firebaseプロジェクト、Webアプリ設定、Authentication利用者、Firestoreデータ、Hosting配信先を共有しない。設定はGitへ固定せず環境ごとの配布物として生成する。不足、不正、別環境への切替を検出した場合は、Firebase初期化と業務操作を開始せず安全に停止する。
 
