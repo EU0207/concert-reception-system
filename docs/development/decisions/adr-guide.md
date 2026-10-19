@@ -52,4 +52,4 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 | [ADR-006](ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存 | Superseded（初期画像方式はADR-007、上限CONF-053を維持） | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
 | [ADR-007](ADR-007-seat-edit-commit-boundary.md) | 席編集の原子的確定、版比較と大量操作の保存候補 | Accepted。122-A・PR #228でRTDBを初期採用 | [#91](https://github.com/EU0207/concert-reception-system/issues/91) |
 | [ADR-008](ADR-008-customer-identity-and-check-items.md) | 購入者名のID正本と確認用項目の保存単位、登録への適用 | Accepted（#229・PR #231、#97・PR #238） | [#229](https://github.com/EU0207/concert-reception-system/issues/229)、[#97](https://github.com/EU0207/concert-reception-system/issues/97) |
-| [ADR-009](ADR-009-notice-user-version-state.md) | 連絡の内容版と本人別の読了・重要確認 | Proposed | [#90](https://github.com/EU0207/concert-reception-system/issues/90) |
+| [ADR-009](ADR-009-notice-user-version-state.md) | 連絡の内容版と本人別の読了・重要確認 | Accepted（PR #240） | [#90](https://github.com/EU0207/concert-reception-system/issues/90) |
