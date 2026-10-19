@@ -1,0 +1,20 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-125/app-check.mjs": "1d8f2665187fb9ea6beed133b29cde23278af417af7e992e66310b9733aad92c",
+    "restore-check.mjs": "ad88b01704ac55d2f7eea996d4a054baed8a5835ff9dd0e0d5fce4edc5cd2846",
+    "restore.mjs": "6e646fd3e4974648481cee3114e2ea8a27868cfc7986d5bdbbbfea1572103562"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-125/app-check.mjs": "1d8f2665187fb9ea6beed133b29cde23278af417af7e992e66310b9733aad92c",
+    "restore-check.mjs": "ad88b01704ac55d2f7eea996d4a054baed8a5835ff9dd0e0d5fce4edc5cd2846",
+    "restore.mjs": "6e646fd3e4974648481cee3114e2ea8a27868cfc7986d5bdbbbfea1572103562"
+  },
+  "checks": 10,
+  "externalRequestsExecuted": 0,
+  "independentCleanupContinuedAfterFailure": true,
+  "recoveryOnlyIdempotenceVerified": true,
+  "unownedAuthUserPreserved": true,
+  "appCheckSuccessAndExchangeFailureRestored": true
+}
