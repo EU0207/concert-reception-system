@@ -1,0 +1,22 @@
+{
+  "report": [
+    {
+      "id": "formal-path-before-specialization",
+      "bytes": 13545464,
+      "status": 400,
+      "response": {
+        "error": "Rules larger than limit of 10485760"
+      }
+    },
+    {
+      "id": "formal-path-specialized-owner",
+      "bytes": 10196422,
+      "status": 200,
+      "response": {
+        "status": "ok"
+      }
+    }
+  ],
+  "rulesRestoredToDeny": true,
+  "externalFirebaseConnected": false
+}

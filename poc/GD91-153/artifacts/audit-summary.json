@@ -1,0 +1,23 @@
+{
+  "sourceComparisons": 48,
+  "beforeBytes": 10482821,
+  "afterBytes": 10165027,
+  "managerOccurrences": 208,
+  "ownerOnlyImportPermissionUnchanged": true,
+  "namespaceHierarchyUnchanged": true,
+  "savedBytes": 317794,
+  "observedEmulatorLimit": 10485760,
+  "remainingBytes": 320733,
+  "authorizationCounterexamples": 33,
+  "baselineAndReducedResultsEqual": true,
+  "ownerAndDeputyReadAllowed": true,
+  "deputyPurgeSteps": 10,
+  "cleanup": {
+    "rulesDeny": true,
+    "targetEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "externalFirebaseConnected": false,
+  "formalMigrationPipelineVerified": false,
+  "allCopiesDeletionVerified": false
+}

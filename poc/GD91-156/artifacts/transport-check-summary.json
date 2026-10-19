@@ -1,0 +1,32 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-155/meter.mjs": "5f62199899a1521e891dacdde6873e516fc065557a56e7b34d80a22512b6be70",
+    "../GD91-155/scope.mjs": "605ad28a167317a0232070c2c340c5d339307675b20e9e42284f260aa5efdd94",
+    "meter.mjs": "f8f4e4510047957c1d4fa98e86479e01696788d67d7d3c77389a8463fa8b9915",
+    "scope.mjs": "8d41249d9f56c6444a7c4683760ce0c2e30f61583cdb2acba7c8307a23b0d772",
+    "transport-check.mjs": "7cf301ced24dce1870ffc42cd7d0ad73a5292ce81ce7d9ac22cdcbf2348bd284"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "../GD91-155/meter.mjs": "5f62199899a1521e891dacdde6873e516fc065557a56e7b34d80a22512b6be70",
+    "../GD91-155/scope.mjs": "605ad28a167317a0232070c2c340c5d339307675b20e9e42284f260aa5efdd94",
+    "meter.mjs": "f8f4e4510047957c1d4fa98e86479e01696788d67d7d3c77389a8463fa8b9915",
+    "scope.mjs": "8d41249d9f56c6444a7c4683760ce0c2e30f61583cdb2acba7c8307a23b0d772",
+    "transport-check.mjs": "7cf301ced24dce1870ffc42cd7d0ad73a5292ce81ce7d9ac22cdcbf2348bd284"
+  },
+  "checks": 12,
+  "externalRequestsExecuted": 0,
+  "installedCliHashes": {
+    "auth.js": "3dc901ceed60f2dc6c699d00dab171d65c0f71d83af8233d5074611f1d03d64a",
+    "apiv2.js": "eada1f0c2f2bce92482647dcbf78fddff32eb6439d18f4a8cb26076fd2746db5"
+  },
+  "legacyFailureReproduced": true,
+  "fakeUnregisteredRefreshTokensOnly": true,
+  "officialExactTokenEndpointOnly": true,
+  "bufferRequestBodyCounted": true,
+  "normalOAuthCalls": 3,
+  "cleanupOAuthReserve": 3,
+  "unexpectedShapesRejectedBeforeSend": true,
+  "realCredentialsTransmitted": false
+}

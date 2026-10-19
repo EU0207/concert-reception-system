@@ -1,0 +1,6 @@
+import fs from 'node:fs';import net from 'node:net';import assert from 'node:assert/strict';import {spawn,execFileSync} from 'node:child_process';import {once} from 'node:events';
+const counts=process.argv.slice(2);assert(counts.length&&counts.every(n=>['4','600','1000'].includes(n)));
+for(const p of [9000,9191])await new Promise(resolve=>{const s=net.connect({host:'127.0.0.1',port:p});s.on('connect',()=>{s.destroy();assert.fail('port-in-use:'+p);});s.on('error',resolve);});
+fs.mkdirSync(new URL('artifacts/',import.meta.url),{recursive:true});
+execFileSync(process.execPath,['poc/GD91-145/capacity.mjs','--prepare'],{windowsHide:true,stdio:'pipe'});execFileSync(process.execPath,['--check','poc/GD91-145/node_modules/.cache/adapted-capacity.mjs'],{windowsHide:true,stdio:'pipe'});
+for(const count of counts){const cli=spawn(process.execPath,['poc/POC-004/node_modules/firebase-tools/lib/bin/firebase.js','emulators:exec','--project','demo-concert-seat-gd91-84','--config','poc/GD91-145/firebase.json','--only','auth,database','node poc/GD91-145/capacity.mjs'],{windowsHide:true,stdio:'inherit',env:{...process.env,GD101_PEOPLE:count,GD108_EMULATOR_MAINTENANCE:'true',JAVA_TOOL_OPTIONS:'-Xmx8g',FIREBASE_CLI_DISABLE_UPDATE_CHECK:'true'}});const [code]=await once(cli,'exit');if(code){process.exitCode=code;break;}}

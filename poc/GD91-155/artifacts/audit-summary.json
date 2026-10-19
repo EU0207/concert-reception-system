@@ -1,0 +1,23 @@
+{
+  "sourceComparisons": 399,
+  "rulesBytes": 10275696,
+  "observedEmulatorLimit": 10485760,
+  "remainingRulesBytes": 210064,
+  "representativeGroups": 7,
+  "guardComparisonGroups": 1,
+  "meterChecks": 9,
+  "restoreChecks": 10,
+  "preflightChecks": 5,
+  "observedRequests": 467,
+  "plannedCallsIncludingReservations": 596,
+  "plannedBodyBytesIncludingReservations": 63028720,
+  "approvalPending": true,
+  "externalFirebaseConnected": false,
+  "allFormatsMigrationVerified": false,
+  "cleanup": {
+    "rulesClosed": true,
+    "rootsEmpty": true,
+    "authUsersRemaining": 0,
+    "authEmpty": true
+  }
+}
