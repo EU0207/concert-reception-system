@@ -2,12 +2,14 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review。CONF-055・060の業務条件は承認済み。製品実装・試験は未実施 |
+| 状態 | Approved（PR #241）。製品実装・試験は未実施 |
 | 読者・目的 | 開発者・画面設計担当者・テスト担当者が、受付の画面状態と会場表示を実装へ渡す |
 | 関連Issue | 設計#89、中断・保存契約#92、実装#233・105。連絡#90・234、認可#110と資格#112 |
 | 根拠 | [BD-06](../basic-design/screen-flow-wireframe-design.md)、[復帰対策](../ui-mock/qr-reception-recovery-review.md)、[MCT-01～05・22](../ui-mock/ui-mock-production-handoff.md#当日受付と共通の操作)、[席管理](seat-management-detail-design.md) |
 
 ## DD-89-01 画面と戻り先
+
+2026-10-20、開発者がPR #241の先頭`8a34e45e8551d04b625f4a80694def2724dd5f10`をレビュー承認し、mainへ統合した（`028aa916ad11874c66da6fcb8f9b7bcf41ebc7a4`）。画面契約と12ケースが対象であり、追加する[DD-92の保存・所有権](reception-recovery-detail-design.md)と製品実行は承認範囲へ含めない。
 
 | 画面・操作 | 遷移先と条件 |
 |---|---|
