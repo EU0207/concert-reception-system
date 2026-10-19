@@ -9,6 +9,22 @@ body:
       value: |
         システム開発上の目的と、確認可能な完了条件を記載してください。
         個人情報、秘密情報、作成者個人の事情は記載しないでください。
+        タイトルにも工程を明記してください（例：[Detail Design]、[Implementation]）。
+  - type: dropdown
+    id: phase
+    attributes:
+      label: 工程
+      description: このIssueで完了させる作業の工程を選んでください。背景となった変更の発生時期とは区別します。
+      options:
+        - 詳細設計
+        - 本番実装・担当試験
+        - 受入試験
+        - 調査・技術検証
+        - 保守・管理
+        - 要件・基本設計
+        - UIモック
+    validations:
+      required: true
   - type: textarea
     id: purpose
     attributes:
