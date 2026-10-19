@@ -25,7 +25,7 @@
 | REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | [BD-01-01、BD-01-02](basic-design/system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
 | REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | [BD-01-09、BD-01-10](basic-design/system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
 | REQ-B-006 | CONF-030～CONF-032 | AC-033 | [BD-01-04～BD-01-08](basic-design/system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
-| REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028、CONF-043、CONF-048、CONF-067 | AC-001 | [BD-02-02、BD-02-09](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-04](basic-design/authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[BD-06-04、BD-06-09](basic-design/screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム)、[BD-07-02、BD-07-03](basic-design/file-output-report-design.md#bd-07-02-公演用excelテンプレート)、[DD-97](detailed-design/customer-ticket-detail-design.md#dd-97-01-個別登録の範囲と入力) | DD97-T01～15（製品試験未実施） | In Review（個別登録設計#97） |
+| REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028、CONF-043、CONF-048、CONF-067 | AC-001 | [BD-02-02、BD-02-09](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-04](basic-design/authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[BD-06-04、BD-06-09](basic-design/screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム)、[BD-07-02、BD-07-03](basic-design/file-output-report-design.md#bd-07-02-公演用excelテンプレート)、[DD-97](detailed-design/customer-ticket-detail-design.md#dd-97-01-個別登録の範囲と入力) | DD97-T01～15（製品試験未実施） | Approved（個別登録設計#97・PR #238） |
 | REQ-F-002 | INT-Q-009、INT-Q-026、CONF-037、CONF-043 | AC-001、AC-035 | [BD-02-02、BD-02-09](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06-09](basic-design/screen-flow-wireframe-design.md#bd-06-09-お客様チケット管理)、[BD-07-03](basic-design/file-output-report-design.md#bd-07-03-取込検証と確定) | 未登録 | In Review |
 | REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-03、BD-02-06、BD-02-07](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-07-04](basic-design/file-output-report-design.md#bd-07-04-qrと確認コード) | 未登録 | In Review |
 | REQ-F-004 | INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-04、BD-02-07](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-07-04](basic-design/file-output-report-design.md#bd-07-04-qrと確認コード) | 未登録 | In Review |
@@ -294,9 +294,20 @@ CONF-072の業務条件は[依頼者回答](ui-mock/ui-mock-client-response.md#c
 | CONF-067、MCT-38、REQ-F-001・002、AC-001 | [DD-97-01～04](detailed-design/customer-ticket-detail-design.md#dd-97-01-個別登録の範囲と入力)、DD97-T01～10・14・15。Excel経路を維持し、同名候補と正逆参照・名簿順を確定 | #230・104、保持と復旧#221、無料受入#220 |
 | CONF-067、AC-002・030・032 | DD97-T11～13。部分送信・失効と別公演を拒否し、席未設定では発券しない | #230・104・110～112 |
 
-DD-93とADR-008の案AはPR #231で承認済み。追加DD-97はIn Review、15ケースの製品実行は未実施。机上照合を試験合格へ読み替えない。
+DD-93とADR-008の案AはPR #231、DD-97と登録への適用はPR #238で承認済み。15ケースの製品実行は未実施。机上照合を試験合格へ読み替えない。
 
-### 技術判断の一覧
+### スタッフ連絡と重大操作の追加追跡（#90）
+
+| 要件・承認条件 | 設計・ケース | 実装・試験担当 |
+|---|---|---|
+| REQ-F-037、CONF-055・056・060、MCT-06、AC-027・032 | [DD-90-01～03](detailed-design/staff-notice-confirmation-detail-design.md#dd-90-01-範囲と表示)、DD90-T01～09。本人・内容版別の読了と重要確認、訂正・取消しと復帰 | #234・110、カメラ連携#233 |
+| CONF-056、MCT-07、AC-009・028・032 | [DD-90-04](detailed-design/staff-notice-confirmation-detail-design.md#dd-90-04-重大操作の一覧と共通ui)、DD90-T10～12。独立2回確認と業務条件を分離 | UI#234、認可#110、締め#111、手動削除#239 |
+| AC-002・035・036、MCT-07 | DD90-T13。不可逆な旧QR無効化・確認項目削除と通常取消しの区別 | #234・107・112・230 |
+| REQ-NF-015、AC-013・027・031 | DD90-T14。連絡原文と本人状態の保持、手動削除と古い世代からの復活拒否 | #234・239・221、無料受入#220 |
+
+DD-90とADR-009はIn Review。14ケースは製品試験未実施。既存要件・PoCの合格を追加領域の実行合格に転用しない。
+
+### ADR一覧
 
 | ADR | 判断対象 | 関連要件・未決定事項 | 関連受入条件 | 状態 |
 |---|---|---|---|---|
