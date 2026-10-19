@@ -1,0 +1,16 @@
+{
+  "decisionId": "TECH-DD91-119-A",
+  "serviceApiRequestsIssued": 0,
+  "authUsersCreated": 0,
+  "googleLoginUsed": false,
+  "rulesUploadAttempted": false,
+  "serviceMutationAttempted": false,
+  "localTrialMetadataRestored": true,
+  "diagnosis": "CLI refresh endpoint excluded by local transport policy; reproduced with fake credentials and zero network calls",
+  "rawReportConnectionFlagIsUnconditional": true,
+  "localProcessEnded": true,
+  "externalRequestsIssued": 0,
+  "externalTrialStarted": false,
+  "approvedExternalTrialRemaining": true,
+  "classification": "local bootstrap blocked before any fetcher invocation; approved external trial not started"
+}

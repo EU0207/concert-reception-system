@@ -1,0 +1,17 @@
+{
+  "sourceComparisons": 74,
+  "retainedPipelineSourceComparisons": 399,
+  "retainedRepresentativeGroups": 7,
+  "transportChecks": 12,
+  "meterChecks": 9,
+  "preflightChecks": 6,
+  "installedCliFilesVerified": true,
+  "plannedCallsIncludingReservations": 599,
+  "plannedBodyBytesIncludingReservations": 63028720,
+  "normalOAuthRefreshLimit": 3,
+  "cleanupOAuthRefreshReserve": 3,
+  "cleanupReserveContainsRecoveryOAuth": true,
+  "approvalPending": true,
+  "externalRequestsExecuted": 0,
+  "allFormatsMigrationVerified": false
+}
