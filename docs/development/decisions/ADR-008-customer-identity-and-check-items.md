@@ -2,8 +2,8 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | Approved（PR #231のID・確認項目契約）。#97の登録への適用はIn Review |
-| ADR状態 | Accepted（案A・PR #231）。末尾の追加範囲はProposed |
+| 状態 | Approved（ID・確認項目はPR #231、登録への適用はPR #238） |
+| ADR状態 | Accepted（案A・PR #231、#97への適用・PR #238） |
 | 対象 | 設計#229、変更#93・91。MHD-05とCONF-060を具体化する |
 | 関連文書 | [お客様管理の詳細設計](../detailed-design/customer-ticket-detail-design.md)、[RTDB契約](../detailed-design/rtdb-storage-contract.md)、[業務回答と追加条件](../ui-mock/ui-mock-production-handoff.md#データと安全性の追加条件) |
 
@@ -36,7 +36,7 @@ Aを技術レビューへ提示する。購入者IDは来場者ID・groupIdと�
 
 ## 個別登録とExcel追加への適用（#97）
 
-状態：In Review／Proposed。承認済み案Aの購入者正本とID参照を、[DD-97の名簿追加](../detailed-design/customer-ticket-detail-design.md#dd-97-02-名簿追加の処理と一体確定)へ接続する。CONF-067の業務条件と既存のExcel検査は維持する。
+状態：Approved／Accepted。2026-10-19、開発者がPR #238の先頭`9928ca49e39863fad33659b76bd0408647a001f7`をレビュー承認し、mainへ統合した（`42c4fe83f2254fdfd0fb830288a75a6b8e706839`）。承認済み案Aの購入者正本とID参照を、[DD-97の名簿追加](../detailed-design/customer-ticket-detail-design.md#dd-97-02-名簿追加の処理と一体確定)へ接続する。CONF-067の業務条件と既存のExcel検査は維持する。以下の提案時の説明は判断根拠として保持し、製品試験は未実施とする。
 
 | 登録案 | 利点 | 欠点・判断 |
 |---|---|---|
