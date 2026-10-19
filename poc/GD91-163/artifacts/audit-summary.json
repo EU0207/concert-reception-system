@@ -1,0 +1,16 @@
+{
+  "sourceComparisons": 107,
+  "uniqueSourceFiles": 59,
+  "modelConditions": 33,
+  "emulatorCases": 7,
+  "allSourcesMatch": true,
+  "normalAmendmentsBeforeAndAfterRecovery": true,
+  "rulesUnchangedFrom159": true,
+  "metadataWrites": 42,
+  "cleanupComplete": true,
+  "formalBrowserImportVerified": false,
+  "wholeProjectLossRecoveryVerified": false,
+  "realCredentialLifecycleVerified": false,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false
+}
