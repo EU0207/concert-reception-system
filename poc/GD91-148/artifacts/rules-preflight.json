@@ -1,0 +1,9 @@
+{
+  "bytes": 9851885,
+  "status": 200,
+  "response": {
+    "status": "ok"
+  },
+  "rulesRestoredToDeny": true,
+  "externalFirebaseConnected": false
+}

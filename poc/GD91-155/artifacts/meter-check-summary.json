@@ -1,0 +1,22 @@
+{
+  "sourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "meter-check.mjs": "d616e3dd95de725196e2cfc42787df327cf9d3240b14de3189d43c06dd4efba3",
+    "meter.mjs": "5f62199899a1521e891dacdde6873e516fc065557a56e7b34d80a22512b6be70",
+    "scope.mjs": "605ad28a167317a0232070c2c340c5d339307675b20e9e42284f260aa5efdd94"
+  },
+  "endSourceHashes": {
+    "../GD91-105/source-audit.mjs": "4c6dcda581529bb4d2ffa6c7b3b129f4fd52b9065eb02a0ee539c6f3dcef58c5",
+    "meter-check.mjs": "d616e3dd95de725196e2cfc42787df327cf9d3240b14de3189d43c06dd4efba3",
+    "meter.mjs": "5f62199899a1521e891dacdde6873e516fc065557a56e7b34d80a22512b6be70",
+    "scope.mjs": "605ad28a167317a0232070c2c340c5d339307675b20e9e42284f260aa5efdd94"
+  },
+  "checks": 9,
+  "externalRequestsExecuted": 0,
+  "unissuedRequestsNotCounted": true,
+  "requestAndResponseBodyCounted": true,
+  "responseCancellationVerified": true,
+  "cleanupReservationVerified": true,
+  "networkFailureCounted": true,
+  "wireAndTlsBytesMeasured": false
+}

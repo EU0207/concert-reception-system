@@ -1,0 +1,25 @@
+{
+  "sourceComparisons": 160,
+  "scales": [
+    {
+      "people": 4,
+      "groups": 5,
+      "areas": 17,
+      "images": 5,
+      "authUsersRemaining": 0,
+      "ordinaryClientRootImportDenied": true,
+      "migrationMeter": {
+        "requests": 70,
+        "requestBodyBytes": 16096231,
+        "responseBodyBytes": 26894118
+      }
+    }
+  ],
+  "earlierFourPeopleResultExcluded": true,
+  "people600IntentionallyInterrupted": true,
+  "people1000NotExecuted": true,
+  "externalFirebaseConnected": false,
+  "allBusinessMigrationVerified": false,
+  "privilegedImportToolIsEmulatorFixture": true,
+  "legacyFirestoreClosedConverted": false
+}

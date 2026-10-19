@@ -1,0 +1,17 @@
+export const areas=['control','head','operations','sharedHead','generations','view','private','shared','sharedOperations','event','receipts','quarantine','receiptClocks','receiptSources','receiptEventIds','quarantineReviewState','quarantineReviews','reviewOperations','managedReceipts','referenceClosures','reviewReleases','postClosePermits','postClosePermitHeads','lossDeclarations','postCloseCorrections','actuals','actualTotals','publicationChecks','sectionViews','sectionPresentation','numberProofs','closing','closingRuns','performanceFacts','closingResults','closingCancellations','images','references','migrationOrigins'];
+const forbidden=new Set(['password','token','idToken','refreshToken','privateKey','cryptoKey','deviceCryptoKey','qrPayload','invitationLink','serviceAccount','authenticationUsers','roles','devices','sessions']);
+export function ensure(ok,message){if(!ok)throw Error(message);}
+export function canonical(value){return JSON.stringify(value,(_,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.keys(v).sort().map(k=>[k,v[k]])):v);}
+export async function digest(value){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonical(value))))).map(x=>x.toString(16).padStart(2,'0')).join('');}
+export async function plan(bundle,identity){
+ ensure(bundle.format==='gd91-native-rtdb-closed-v2','format');ensure(bundle.areas.control.state==='closed','closed-only');ensure(await digest(bundle.areas)===bundle.sourceHash,'source-hash');
+ ensure(bundle.areas.control.businessSchemaVersion===3&&bundle.areas.control.layoutSchemaVersion===2,'schema');
+ const leaves=[];function walk(value,path){if(value&&typeof value==='object'){ensure(Object.keys(value).length>0,'empty-object');for(const [key,v]of Object.entries(value)){ensure(/^[^.#$\[\]\/\u0000-\u001f\u007f]+$/u.test(key)&&!forbidden.has(key),'invalid-path-key:'+path.split('/')[0]+':'+Array.from(key).filter(c=>!/[A-Za-z0-9_-]/.test(c)).map(c=>c.codePointAt(0).toString(16)).join(','));walk(v,path+'/'+key);}}else{ensure(['string','boolean','number'].includes(typeof value)&&Number.isFinite(typeof value==='number'?value:0),'primitive');ensure(path.length<=512&&path.split('/').length<=14,'path-bounds');ensure(typeof value!=='string'||value.length<=1333336,'string-bounds');leaves.push({path,value});}}
+ for(const [key,value]of Object.entries(bundle.areas)){ensure(areas.includes(key),'unknown-area');walk(value,key);}
+ leaves.sort((a,b)=>Number(a.path.startsWith('control/'))-Number(b.path.startsWith('control/'))||a.path.localeCompare(b.path,'en'));
+ const chunks=[];for(let i=0;i<leaves.length;i+=16){const values=leaves.slice(i,i+16);chunks.push({index:chunks.length,count:values.length,entries:Object.fromEntries(values.map((e,j)=>['e'+j,e]))});}
+ ensure(chunks.length<=20000,'chunk-budget');
+ return {exportId:identity.exportId,manifest:{format:bundle.format,sourceHash:bundle.sourceHash,sourceEnvironment:'local-demo-gd91-148',performanceId:identity.performanceId,sourceState:'closed',totalChunks:chunks.length,ownerDevice:identity.deviceUid,ownerHuman:identity.humanUid},chunks,areaNames:Object.keys(bundle.areas)};
+}
+export const initialMeta=()=>({phase:'uploading',uploaded:0,copied:0,cleaned:0,verifiedSourceHash:''});
+export function copyPatch(p,index,meta){const body={};for(const [key,e]of Object.entries(p.chunks[index].entries)){body[e.path]=e.value;body['imports/'+p.exportId+'/copiedPaths/'+e.path]=index*16+Number(key.slice(1));}body['imports/'+p.exportId+'/meta']={...meta,copied:index+1};return body;}

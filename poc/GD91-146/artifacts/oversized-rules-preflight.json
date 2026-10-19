@@ -1,0 +1,9 @@
+{
+  "bytes": 9080849,
+  "status": 400,
+  "response": {
+    "error": "1:8946209: missing ] in index expression\n"
+  },
+  "rulesRestoredToDeny": true,
+  "externalFirebaseConnected": false
+}

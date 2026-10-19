@@ -1,0 +1,8 @@
+{
+  "reason": "移行主体が試験用ownerだけであり、通常取込の権限境界を先に判断する",
+  "people600": "intentionally-interrupted-not-passed",
+  "people1000": "not-started",
+  "fourPeopleDiagnosticPassed": true,
+  "externalFirebaseConnected": false,
+  "stopMethod": "local-demo-namespace-deny-all-then-existing-finally-cleanup"
+}

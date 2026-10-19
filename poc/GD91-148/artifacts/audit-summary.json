@@ -1,0 +1,29 @@
+{
+  "sourceComparisons": 331,
+  "groups": 6,
+  "areas": 23,
+  "chunks": 89,
+  "ownerBoundaryCounterexamples": 27,
+  "partialCorrectionsDenied": 7,
+  "rulesBytes": 9851885,
+  "observedEmulatorLimit": 10485760,
+  "remainingBytes": 633875,
+  "cleanup": {
+    "targetDenyAll": true,
+    "targetEmpty": true,
+    "authUsersRemaining": 0
+  },
+  "browserTraffic": {
+    "requests": 1612,
+    "requestBodyBytes": 13921102,
+    "responseBodyBytes": 8367519,
+    "statuses": {
+      "200": 1311,
+      "204": 275,
+      "401": 26
+    }
+  },
+  "earlierFailuresExcludedFromCurrentSourceAudit": true,
+  "externalFirebaseConnected": false,
+  "allBusinessMigrationVerified": false
+}
