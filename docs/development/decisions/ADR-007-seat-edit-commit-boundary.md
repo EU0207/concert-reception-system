@@ -8,12 +8,16 @@
 | 読者 | 開発者、設計担当者、テスト担当者 |
 | 関連Issue | [#91](https://github.com/EU0207/concert-reception-system/issues/91)、[#93](https://github.com/EU0207/concert-reception-system/issues/93)、[#101](https://github.com/EU0207/concert-reception-system/issues/101) |
 | 関連文書 | [詳細設計](../detailed-design/seat-management-detail-design.md)、[BD-03](../basic-design/offline-sync-conflict-design.md)、[ADR-001](ADR-001-product-platform.md) |
-| 文書状態 | In Review |
-| ADR状態 | Accepted（TECH-DD91-122-Aの初期方式選択）。詳細契約はIn Review |
+| 文書状態 | Approved（122-AとPR #228の採用設計範囲） |
+| ADR状態 | Accepted（122-A・PR #228の採用設計範囲） |
 | 日付 | 2026-10-06 |
-| 採否 | 2026-10-19、開発者が122-Aを選択し、RTDBを新規製品の初期方式として設計採用。121の旧PoC互換移行の対象除外も維持。詳細契約のレビュー・PR統合と本番実装・配備は別判定 |
+| 採否 | 2026-10-19、開発者が122-Aを選択し、RTDBを新規製品の初期方式として設計採用。121の旧PoC互換移行の対象除外も維持。PR #228の最終レビュー・main統合済み。本番実装・配備は別判定 |
 
 2026-10-17、開発者がPR #222の先頭`35f4e100b32aee336107e033d3dfdc0c2b9ecce1`を会話でレビュー承認し、mainへ統合した。統合コミットは`de7842bc8268872429d6d1914a8490b0980d2bef`。V4の証拠照合、画像・デバッグApp CheckとQR形式修正候補の限定結果を承認したものであり、方式採用と#101・168の完了ではない。同じ#168で移行・切戻しと残る回帰を継続する。
+
+2026-10-19、開発者がPR #228の先頭`1d1fb3837d6ebbe4900598cd432f60529534a77a`を会話でレビュー承認し、mainへ統合した。統合コミットは`d1d2d33fc483ce5a89ed8e4fff37c69ea95c59f6`。初期方式・正式保存復旧契約と証拠対応が対象。本番実装・配備と未実施の製品試験は含まない。
+
+#101・168はClosed・Project完了。親#91・93の共同契約と製品の未実施試験は後続Issueで追跡する。以下のProposed・未採用という過去記録は当時の状態を示す。
 
 ## 旧PoC互換移行の対象除外（TECH-DD91-121）
 

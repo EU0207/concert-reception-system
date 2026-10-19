@@ -49,5 +49,6 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 | [ADR-003](ADR-003-role-based-auth-providers.md) | 管理者と公演限定スタッフの認証プロバイダー | Accepted | [#44](https://github.com/EU0207/concert-reception-system/issues/44) |
 | [ADR-004](ADR-004-retention-and-exceptional-close.md) | 詳細履歴の削除案内と紛失端末がある公演の例外締め | Accepted（CONF-051） | [#70](https://github.com/EU0207/concert-reception-system/issues/70)、[#72](https://github.com/EU0207/concert-reception-system/issues/72) |
 | [ADR-005](ADR-005-device-principal-authorization.md) | 端末別認証主体と本人認証の結合 | Accepted（CONF-051） | [#71](https://github.com/EU0207/concert-reception-system/issues/71) |
-| [ADR-006](ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存 | Accepted（最新上限CONF-053） | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
-| [ADR-007](ADR-007-seat-edit-commit-boundary.md) | 席編集の原子的確定、版比較と大量操作の保存候補 | Proposed。DD-91-T01検証待ち | [#91](https://github.com/EU0207/concert-reception-system/issues/91) |
+| [ADR-006](ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存 | Superseded（初期画像方式はADR-007、上限CONF-053を維持） | [#73](https://github.com/EU0207/concert-reception-system/issues/73) |
+| [ADR-007](ADR-007-seat-edit-commit-boundary.md) | 席編集の原子的確定、版比較と大量操作の保存候補 | Accepted。122-A・PR #228でRTDBを初期採用 | [#91](https://github.com/EU0207/concert-reception-system/issues/91) |
+| [ADR-008](ADR-008-customer-identity-and-check-items.md) | 購入者名のID正本と確認用項目の保存単位 | Proposed（#229で技術レビュー） | [#229](https://github.com/EU0207/concert-reception-system/issues/229)、[#93](https://github.com/EU0207/concert-reception-system/issues/93) |
