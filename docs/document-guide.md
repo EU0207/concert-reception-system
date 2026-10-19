@@ -146,7 +146,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | RTDBの正式保存・復旧契約 | [rtdb-storage-contract.md](development/detailed-design/rtdb-storage-contract.md) | 採用した物理形式、現在認可・保持と正式バックアップを定め、未実施試験を引き渡す | 開発者、設計担当者、テスト担当者 | #168の方式採用後 | 形式・認可・復旧条件の変更時 | Approved（PR #228） |
-| お客様情報・対応状況と不参加の詳細設計 | [customer-ticket-detail-design.md](development/detailed-design/customer-ticket-detail-design.md) | MHD-05の購入者・確認項目、席解放と旧QR無効化の共同契約と16ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | データ・権限・業務操作の変更時 | In Review |
+| お客様情報・対応状況と不参加の詳細設計 | [customer-ticket-detail-design.md](development/detailed-design/customer-ticket-detail-design.md) | MHD-05の共同契約と16ケース、#97の名簿追加と15ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | データ・権限・業務操作の変更時 | Approved（DD-93・PR #231）、In Review（DD-97） |
 | 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91の仕様とデータ契約、主要試験DD91-T01～69を追跡する。検証結果は別記録を参照 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 仕様・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
@@ -161,7 +161,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | ADR-005 端末別認証主体と本人認証の結合 | [ADR-005-device-principal-authorization.md](development/decisions/ADR-005-device-principal-authorization.md) | C-01の認可方式と検証条件を記録する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 認可方式または残存リスクの変更時 | Accepted |
 | ADR-006 会場画像のFirestore保存方式 | [ADR-006-firestore-image-storage.md](development/decisions/ADR-006-firestore-image-storage.md) | 旧Firestore画像方式の比較履歴。初期保存方式は122-AでRTDBへ置換し、1MB・最大5枚を維持する | 依頼者、開発者、設計担当者 | 基本設計の是正時 | 保存方式・実画像条件の変更時 | Superseded（初期保存方式） |
 | ADR-007 席編集の確定境界 | [ADR-007-seat-edit-commit-boundary.md](development/decisions/ADR-007-seat-edit-commit-boundary.md) | 3案を比較し122-AでRTDBを初期設計採用。詳細契約と未実施試験を分離する | 開発者、設計担当者、テスト担当者 | 詳細設計 | 成立性検証・採否決定時 | Accepted（PR #228） |
-| ADR-008 購入者IDと確認用項目の保存単位 | [ADR-008-customer-identity-and-check-items.md](development/decisions/ADR-008-customer-identity-and-check-items.md) | 正本の分離とID参照を、各行複写・名前一致の案と比較する | 開発者、設計担当者、テスト担当者 | #229の共同設計 | 保存・取得の境界変更時 | In Review（Proposed） |
+| ADR-008 購入者IDと確認用項目の保存単位 | [ADR-008-customer-identity-and-check-items.md](development/decisions/ADR-008-customer-identity-and-check-items.md) | 正本の分離とID参照、#97の登録経路を比較する | 開発者、設計担当者、テスト担当者 | #229・97の共同設計 | 保存・取得の境界変更時 | Accepted（#229・PR #231）、In Review（#97への適用） |
 
 ## テンプレート
 

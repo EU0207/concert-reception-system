@@ -25,7 +25,7 @@
 | REQ-B-004 | INT-Q-004、INT-Q-044 | AC-019 | [BD-01-01、BD-01-02](basic-design/system-architecture.md#bd-01-01-システムコンテキスト) | 未登録 | In Review |
 | REQ-B-005 | INT-Q-033、INT-Q-043 | AC-021 | [BD-01-09、BD-01-10](basic-design/system-architecture.md#bd-01-09-無料条件障害方式見直し) | 未登録 | In Review |
 | REQ-B-006 | CONF-030～CONF-032 | AC-033 | [BD-01-04～BD-01-08](basic-design/system-architecture.md#bd-01-04-起動設定と安全停止) | 未登録 | In Review |
-| REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028、CONF-043、CONF-048、CONF-067 | AC-001 | [BD-02-02、BD-02-09](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-04](basic-design/authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[BD-06-04、BD-06-09](basic-design/screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム)、[BD-07-02、BD-07-03](basic-design/file-output-report-design.md#bd-07-02-公演用excelテンプレート) | 未登録（個別登録は#97） | In Review |
+| REQ-F-001 | INT-Q-006、INT-Q-031、CONF-028、CONF-043、CONF-048、CONF-067 | AC-001 | [BD-02-02、BD-02-09](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-04-04](basic-design/authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[BD-06-04、BD-06-09](basic-design/screen-flow-wireframe-design.md#bd-06-04-公演一覧と公演準備ホーム)、[BD-07-02、BD-07-03](basic-design/file-output-report-design.md#bd-07-02-公演用excelテンプレート)、[DD-97](detailed-design/customer-ticket-detail-design.md#dd-97-01-個別登録の範囲と入力) | DD97-T01～15（製品試験未実施） | In Review（個別登録設計#97） |
 | REQ-F-002 | INT-Q-009、INT-Q-026、CONF-037、CONF-043 | AC-001、AC-035 | [BD-02-02、BD-02-09](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-06-09](basic-design/screen-flow-wireframe-design.md#bd-06-09-お客様チケット管理)、[BD-07-03](basic-design/file-output-report-design.md#bd-07-03-取込検証と確定) | 未登録 | In Review |
 | REQ-F-003 | INT-Q-008～INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-03、BD-02-06、BD-02-07](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-07-04](basic-design/file-output-report-design.md#bd-07-04-qrと確認コード) | 未登録 | In Review |
 | REQ-F-004 | INT-Q-010、INT-Q-036 | AC-002 | [BD-02-02、BD-02-04、BD-02-07](basic-design/logical-data-model.md#bd-02-02-論理エンティティと関係)、[BD-07-04](basic-design/file-output-report-design.md#bd-07-04-qrと確認コード) | 未登録 | In Review |
@@ -286,6 +286,17 @@
 CONF-072の業務条件は[依頼者回答](ui-mock/ui-mock-client-response.md#conf-072-自由な区画名と区画単位の印刷)で受領済み。[詳細設計](detailed-design/seat-management-detail-design.md#自由な区画名と独立した座席表conf-072)の技術方式とケース案はIn Review、本番試験は未実施。
 
 ## ADRとの対応
+
+### 個別登録の追加追跡（#97）
+
+| 要件・承認条件 | 設計とケース | 実装・試験担当 |
+|---|---|---|
+| CONF-067、MCT-38、REQ-F-001・002、AC-001 | [DD-97-01～04](detailed-design/customer-ticket-detail-design.md#dd-97-01-個別登録の範囲と入力)、DD97-T01～10・14・15。Excel経路を維持し、同名候補と正逆参照・名簿順を確定 | #230・104、保持と復旧#221、無料受入#220 |
+| CONF-067、AC-002・030・032 | DD97-T11～13。部分送信・失効と別公演を拒否し、席未設定では発券しない | #230・104・110～112 |
+
+DD-93とADR-008の案AはPR #231で承認済み。追加DD-97はIn Review、15ケースの製品実行は未実施。机上照合を試験合格へ読み替えない。
+
+### 技術判断の一覧
 
 | ADR | 判断対象 | 関連要件・未決定事項 | 関連受入条件 | 状態 |
 |---|---|---|---|---|
