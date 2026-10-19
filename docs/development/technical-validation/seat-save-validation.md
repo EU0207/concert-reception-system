@@ -16,7 +16,11 @@
 
 ## 現在の結果と残作業
 
-**V1 #165・V2 #166とV3 #167の設計検証は完了。V4 #168は3方式の比較中。** PR #225までの限定結果を承認・main統合済み。115のA・Bは回答保留。[TECH-DD91-116](../decisions/ADR-007-seat-edit-commit-boundary.md#3方式の共通条件による比較tech-dd91-116)でFirestore中心・公演状態で分担・RTDB統一を同じ条件で比較する。[全条件と証拠](seat-capacity-validation.md#親issue-101の全完了条件との照合)では旧Firestoreの225件と現行RTDB候補を区別する。
+現行の採用仕様は[RTDBの正式保存・復旧契約](../detailed-design/rtdb-storage-contract.md)、現在の全条件判定は[122-A後の最終照合](seat-capacity-validation.md#122-a後の親issueとv4の最終照合)を参照する。以下の個別節にある方式未採用・移行ゲート未達は、検証時点の記録である。本番実装・配備は未着手。
+
+2026-10-19、開発者が[TECH-DD91-121](../decisions/ADR-007-seat-edit-commit-boundary.md#旧poc互換移行の対象除外tech-dd91-121)で旧PoC形式の全移行・互換対応を初期採用条件と将来の必須対応から除外した。設計は最新の承認済み要件とモックの確認結果を基準にする。以下の旧移行ゲートは過去の記録として保持し、現在の作業範囲と残条件は[容量記録の冒頭](seat-capacity-validation.md#範囲整理後の残作業)へ集約する。初期方式は122-AでRTDBを設計採用し、詳細契約の最終レビューへ進む。
+
+**V1 #165・V2 #166とV3 #167の設計検証は完了。V4 #168は122-AでRTDBの初期設計採用を確定し、最終レビュー中。** PR #225までの限定結果を承認・main統合済み。115のA・Bは回答保留。[TECH-DD91-116](../decisions/ADR-007-seat-edit-commit-boundary.md#3方式の共通条件による比較tech-dd91-116)でFirestore中心・公演状態で分担・RTDB統一を同じ条件で比較する。[全条件と証拠](seat-capacity-validation.md#親issue-101の全完了条件との照合)では旧Firestoreの225件と現行RTDB候補を区別する。
 
 127～135の通常経路と回帰、DB・実IndexedDB切替の証拠を保持する。136・137の限定結果と未確認を承認済み。その後の[138](seat-capacity-validation.md#gd91-138-firestore中心候補の統合headと同一要求の認可)で、Firestore中心の別候補の交換・追加公開26群を確認した。参照予算は限定2経路だけで、全工程費用は未測定のまま。全領域移動と両側失効、手動削除も未完了。移行ゲート変更は未承認。方式未採用、#101・168はOpen・進行中。本番未着手。完成アプリの600人無料受入#220とバックアップ機能#221は未実施。
 

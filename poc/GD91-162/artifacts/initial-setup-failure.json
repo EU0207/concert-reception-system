@@ -1,0 +1,8 @@
+{
+  "phase": "model-setup",
+  "errorCode": "ERR_INVALID_ARG_TYPE",
+  "cause": "A directory URL was passed to path.join before conversion to a filesystem path.",
+  "completedModelConditions": 0,
+  "externalFirebaseConnected": false,
+  "repair": "Convert directory URLs with fileURLToPath before path.join."
+}
