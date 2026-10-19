@@ -1,0 +1,12 @@
+{
+  "sourceComparisons": 54,
+  "missingAuthorityFailsClosed": true,
+  "normalClientSelfInitializationDenied": true,
+  "wrongTrustedBootstrapIsAnUnresolvedLimit": true,
+  "cleanupComplete": true,
+  "authoritativeBootstrapVerified": false,
+  "crossProjectAuthenticationVerified": false,
+  "wholeProjectLossRecoveryVerified": false,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false
+}

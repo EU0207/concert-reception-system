@@ -1,0 +1,14 @@
+{
+  "sourceComparisons": 97,
+  "uniqueSourceFiles": 60,
+  "modelConditions": 24,
+  "emulatorCases": 5,
+  "allSourcesMatch": true,
+  "cleanupComplete": true,
+  "independentCurrentCatalogAssumed": true,
+  "wholeCatalogRollbackDetected": false,
+  "routineBackupRecoveryVerified": false,
+  "realCredentialLifecycleVerified": false,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false
+}

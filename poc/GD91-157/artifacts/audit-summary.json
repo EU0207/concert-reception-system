@@ -1,0 +1,8 @@
+{
+  "sourceComparisons": 92,
+  "nativePrePurgeThreeHopsVerified": true,
+  "postPurgeRemigrationVerified": false,
+  "staleBackupReactivationPrevented": false,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false
+}

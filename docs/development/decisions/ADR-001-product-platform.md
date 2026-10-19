@@ -18,13 +18,13 @@
 
 ## 決定
 
-#168では[TECH-DD91-116](ADR-007-seat-edit-commit-boundary.md#3方式の共通条件による比較tech-dd91-116)に従い、Firestore中心・公演状態で分担・RTDB統一を同じ要件・無料条件で比較する。Hostingによる配信は全案共通。115のA・Bは回答保留であり、本ADRのFirestore採用や移行ゲートを変更済みとは扱わない。AuthenticationとPWA、環境分離を維持し、本番実装・配備は開始しない。
+2026-10-19の開発者回答[TECH-DD91-122-A](ADR-007-seat-edit-commit-boundary.md#初期方式の設計採用を単独で判断するtech-dd91-122)により、オンライン共有・画像と現在認可の保存先をRTDBへ変更する。Hosting・AuthenticationとPWA、環境分離の判断は維持する。旧Firestore方式の比較・試験は当時の根拠として保持し、現在の採用仕様は[正式保存・復旧契約](../detailed-design/rtdb-storage-contract.md)を優先する。これは設計選択であり、本番実装・配備の開始承認ではない。
 
 次の構成を採用する。
 
 - スマートフォンとPCのブラウザーで動くPWAとする。
 - TypeScriptを使用し、画面、業務処理、端末保存、外部サービス接続を分離する。
-- 配信にFirebase Hosting、個別認証にFirebase Authenticationのメール・パスワード認証、オンライン共有にCloud Firestore Standard editionを使用する。
+- 配信にFirebase Hosting、個別認証にFirebase Authenticationのメール・パスワード認証、オンライン共有にFirebase Realtime Databaseを使用する。本人の認証プロバイダーはADR-003、端末別認可はADR-005に従う。
 - 端末内ではIndexedDBに変更不能な受付イベントと送信状態を保存し、Service Workerで静的資産を事前保存する。
 - オフライン中の受付結果を上書きせず一意なイベントとして追記し、復旧後に全イベントから現在状態と競合を導出する。
 - Firebaseは支払方法を登録しないSparkプランに限定し、Cloud Functions、FirestoreのTTL、管理バックアップ、PITR、管理エクスポート等の課金必須機能を使用しない。
@@ -108,7 +108,9 @@ POC-001～POC-004では、PWA、IndexedDB、Firebase Authentication、Cloud Fire
 | Firebase出力・復旧 | Firestoreの管理エクスポート／インポートは課金有効化とCloud Storageが必要。TTL、PITR、管理バックアップも無料枠対象外 | Spark限定ではアプリ機能による出力・再取込、端末イベント、紙資料を組み合わせる | [Export and import data](https://firebase.google.com/docs/firestore/manage-data/export-import)、[Firestore pricing](https://firebase.google.com/docs/firestore/pricing) |
 | Cloudflare代替 | Workers Freeは1日100,000要求、D1 Freeは1日500万行読取り・100,000行書込み、1DB 500MB、7日Time Travel。上限超過時は当日中の要求が失敗する | 代替採用時は独自認証・同期・再試行の追加検証と運用設計が必要 | [Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)、[D1 limits](https://developers.cloudflare.com/d1/platform/limits/)、[D1 Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/) |
 
-## 採用結果
+## 当初の採用結果と後続変更
+
+共有DBと画像の初期保存先は122-AでRTDBへ置換した。以下の当初判断は当時の範囲を示す。通常無料・課金登録なしの条件は維持し、600人必須・1,000人目標の設計予算は正式保存・復旧契約を参照する。
 
 候補Aを採用し、候補Bを見直し時の代替、候補Cを緊急時の補助手段とする。
 

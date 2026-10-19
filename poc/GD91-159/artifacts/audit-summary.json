@@ -1,0 +1,20 @@
+{
+  "sourceComparisons": 106,
+  "uniqueSourceFiles": 60,
+  "sameDatabaseRepresentativeGroups": 7,
+  "deniedCases": 25,
+  "cleanupComplete": true,
+  "generatedRulesBytes": 10460921,
+  "ruleHeadroomBytes": 24839,
+  "protectedReads": 118,
+  "protectedWrites": 769,
+  "oldPermissionsPreservedAsConjuncts": true,
+  "wrongTrustedBootstrapExcluded": true,
+  "authoritativeBootstrapVerified": false,
+  "postPurgeRemigrationVerified": false,
+  "normalAbortCleanupVerified": false,
+  "crossDatabaseAuthorityVerified": false,
+  "wholeProjectLossRecoveryVerified": false,
+  "externalFirebaseConnected": false,
+  "productionImplementation": false
+}
