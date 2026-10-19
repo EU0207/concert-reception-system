@@ -1,0 +1,40 @@
+{
+  "decisionId": "TECH-DD91-119-A",
+  "trialCompleted": true,
+  "approvalConsumed": true,
+  "sourceComparisons": 63,
+  "representativeGroups": 7,
+  "rulesAccepted": true,
+  "authUsersCreated": 4,
+  "manualGoogleLoginCount": 1,
+  "observedRequests": 507,
+  "oauthRequests": 3,
+  "serviceRequests": 504,
+  "callsIncludingManualReservation": 517,
+  "observedBodyBytes": 52653736,
+  "bodyBytesIncludingReservation": 61042344,
+  "appCheckGate": {
+    "validAccepted": true,
+    "missingAndInvalidDenied": true,
+    "invalidAuthDenied": true,
+    "propagationRounds": 1
+  },
+  "cleanup": {
+    "appCheck": {
+      "enforcementRestored": true,
+      "debugTokensRemoved": true,
+      "apiStateRestored": true
+    },
+    "appCheckRestored": true,
+    "rulesClosed": true,
+    "rootsEmpty": true,
+    "authUsersRemaining": 0,
+    "authUsersEmpty": true,
+    "authSettingsRestored": true,
+    "billingUnlinked": true,
+    "complete": true
+  },
+  "allFormatsMigrationVerified": false,
+  "productionImplementation": false,
+  "productionFreeTierVerified": false
+}
