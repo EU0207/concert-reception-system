@@ -6,8 +6,8 @@
 
 | 対象 | 詳細設計 | 本番実装・担当試験 |
 |---|---|---|
-| MHD-01：QR結果と導線・会場表示 | [#89](https://github.com/EU0207/concert-reception-system/issues/89) | [#233](https://github.com/EU0207/concert-reception-system/issues/233)の受付UI、[#105](https://github.com/EU0207/concert-reception-system/issues/105)の画像・席表示 |
-| MHD-02：連絡の未読と重大操作確認 | [#90](https://github.com/EU0207/concert-reception-system/issues/90)・[DD-90](../detailed-design/staff-notice-confirmation-detail-design.md)の追加設計はIn Review | [#234](https://github.com/EU0207/concert-reception-system/issues/234)の連絡保存・共通UI、#110の現在認可、#111の締め。手動削除と証跡は[#239](https://github.com/EU0207/concert-reception-system/issues/239)、復旧照合は#221 |
+| MHD-01：QR結果と導線・会場表示 | [#89](https://github.com/EU0207/concert-reception-system/issues/89)・[DD-89](../detailed-design/reception-screen-detail-design.md)はIn Review。保存・排他は#92を前提とする | [#233](https://github.com/EU0207/concert-reception-system/issues/233)の受付UI、[#105](https://github.com/EU0207/concert-reception-system/issues/105)の画像・席表示 |
+| MHD-02：連絡の未読と重大操作確認 | [#90](https://github.com/EU0207/concert-reception-system/issues/90)・[DD-90](../detailed-design/staff-notice-confirmation-detail-design.md)はPR #240で承認・統合済み | [#234](https://github.com/EU0207/concert-reception-system/issues/234)の連絡保存・共通UI、#110の現在認可、#111の締め。手動削除と証跡は[#239](https://github.com/EU0207/concert-reception-system/issues/239)、復旧照合は#221 |
 | MHD-03：席作成・席設定と共同契約 | [#91](https://github.com/EU0207/concert-reception-system/issues/91)の最終照合。保存方式#101・168は完了 | #102～108・110～112。実ファイル基盤は#236 |
 | MHD-04：受付の中断・再起動復帰 | [#92](https://github.com/EU0207/concert-reception-system/issues/92) | #233、端末保存・現在認可と資格は#104・110～112 |
 | MHD-05：購入者・確認項目と不参加 | [#229](https://github.com/EU0207/concert-reception-system/issues/229)はPR #231で設計完了 | [#230](https://github.com/EU0207/concert-reception-system/issues/230)、一体確定・不参加と資格は#104・107・112。未実施 |
