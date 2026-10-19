@@ -339,7 +339,17 @@ DD-235はPR #243で承認・統合済み。14ケースは製品実行未実施�
 
 [設計全体照合](detailed-design/seat-design-final-review.md)でG91-A～Eと共同契約を確認し、DD91-T01～103の取りまとめ担当を割り当てる。既存ケースの本文は変更せず、旧候補の比較記録とRTDB製品で再確認する業務不変条件を区別する。画像登録・差替えは#244、表示は#105、認可は#110へ渡し、IMG91-T01～07をMCT-04・08とAC-015・025・030・032へ追加追跡する。
 
-#91全体はIn Review、製品試験は未実施。#96・98と各実装の開始条件、#220の無料受入と#221の復旧を維持する。
+#91全体はPR #245で承認・統合済み。製品試験は未実施。#96・98と各実装の開始条件、#220の無料受入と#221の復旧を維持する。
+
+### 役割変更・端末再準備（#96）
+
+| 条件 | 設計・試験 | 実装と実施状態 |
+|---|---|---|
+| CONF-065、REQ-F-028、AC-014 | [DD-96-01～03](detailed-design/staff-role-change-detail-design.md#dd-96-01-対象と許可表)、DD96-T01～10 | #110。全6方向・2方向と禁止方向、UID・証跡と一体確定。製品未実施 |
+| ADR-003・005、AC-030・031 | DD-96-02・04、DD96-T03～06・11～18 | #110、端末保存#104・受付#233と公演#111の結合。全件未実施 |
+| AC-014・017・028・032、無料600人必須・1,000人目標 | DD-96-04～06、DD96-T11～18 | #110・220。期限・後着と差分容量を含む。全件未実施 |
+
+DD-96とADR-011はレビュー中。#98の業務権限設定を追加しない。照合結果は[検証記録](technical-validation/role-change-design-review.md)へ分離し、設計と製品動作の合格を区別する。
 
 ### ADR一覧
 
@@ -351,7 +361,7 @@ DD-235はPR #243で承認・統合済み。14ケースは製品実行未実施�
 | [ADR-004](decisions/ADR-004-retention-and-exceptional-close.md) | 詳細履歴の案内・手動削除、紛失端末の例外締め | REQ-F-025、REQ-F-040、REQ-NF-015 | AC-013、AC-028 | Accepted（CONF-051） |
 | [ADR-005](decisions/ADR-005-device-principal-authorization.md) | 端末別Authと本人Authの結合 | REQ-F-031、REQ-NF-017 | AC-030 | Accepted（CONF-051） |
 | [ADR-006](decisions/ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存。最新の1MB上限 | REQ-F-035 | AC-025 | Accepted（CONF-053） |
-| [ADR-007](decisions/ADR-007-seat-edit-commit-boundary.md) | 席編集の原子的確定と物理保存候補 | REQ-F-036・038・043・044、DD-91-T01 | AC-025・026・035・036 | Proposed。成立性未確認 |
+| [ADR-007](decisions/ADR-007-seat-edit-commit-boundary.md) | 席編集の原子的確定と物理保存候補 | REQ-F-036・038・043・044、DD-91-T01 | AC-025・026・035・036 | Accepted（RTDB初期方式・PR #228） |
 
 ## 更新ルール
 
