@@ -150,7 +150,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | スタッフ連絡・重大操作確認の詳細設計 | [staff-notice-confirmation-detail-design.md](development/detailed-design/staff-notice-confirmation-detail-design.md) | #90の本人別未読・重要確認、連絡の版と重大操作一覧、14ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | 連絡・確認条件の変更時 | Approved（PR #240） |
 | QR受付画面・会場表示の詳細設計 | [reception-screen-detail-design.md](development/detailed-design/reception-screen-detail-design.md) | #89の画面状態・戻り先と写真・席表表示、12ケースを定める。保存・排他の詳細は#92 | 開発者、画面設計担当者、テスト担当者 | 詳細設計 | 受付導線・画面状態の変更時 | Approved（PR #241） |
 | QR受付の端末保存・中断復帰の詳細設計 | [reception-recovery-detail-design.md](development/detailed-design/reception-recovery-detail-design.md) | #92の一体保存、暗号化とタブ所有権、中断復帰と14ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | 保存・中断復帰の契約変更時 | Approved（PR #242） |
-| 帳票・チケット出力の詳細設計 | [file-output-detail-design.md](development/detailed-design/file-output-detail-design.md) | #235の同一版入力、PDF・xlsxと補助出力、TBD-011への選定手順と14ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | 入力・出力レイアウトと採用部品の変更時 | In Review |
+| 帳票・チケット出力の詳細設計 | [file-output-detail-design.md](development/detailed-design/file-output-detail-design.md) | #235の同一版入力、PDF・xlsxと補助出力、TBD-011への選定手順と14ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | 入力・出力レイアウトと採用部品の変更時 | Approved（PR #243） |
+| 会場席作成・席設定の設計全体照合 | [seat-design-final-review.md](development/detailed-design/seat-design-final-review.md) | #91の共同契約・G91-A～E、DD91-T01～103と画像7ケースの担当を最終照合する | 開発者、設計担当者、テスト担当者 | #91の最終レビュー | 承認・受渡しと開始条件の変更時 | In Review |
 | 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91の仕様とデータ契約、主要試験DD91-T01～69を追跡する。検証結果は別記録を参照 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 仕様・試験・承認変更時 | In Review |
 
 ### 技術判断（ADR）
