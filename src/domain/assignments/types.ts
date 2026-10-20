@@ -1,6 +1,7 @@
 import type { Id, Scope, SeatAssignment, SeatLayout } from '../seats/types.ts';
 
-// 同じ取得版の全名簿を渡す。購入者ID・氏名からgroupIdを推測しない。
+// 同じ取得版の全名簿を渡す。#230・104で取込ラベルを内部UUIDへ解決し、
+// 追加ファイルも既存所属へ含める。購入者ID・氏名からgroupIdを推測しない。
 export interface AllocationPerson extends Scope {
   attendeeId: Id; groupId: Id | null; rosterOrder: number;
   attendancePlan: 'planned' | 'cancelled'; paid: boolean;
