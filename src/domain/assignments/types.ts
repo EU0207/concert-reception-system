@@ -42,6 +42,8 @@ export interface AssignmentEvent extends Scope {
     | 'unlockGroup' | 'reallocateGroup' | 'undoReallocation';
   expectedVersions: AssignmentVersions; resultVersions: AssignmentVersions;
   before: AssignmentProjection; after: AssignmentProjection;
+  // 操作直前のbeforeとは別に、固定解除前へ戻すための確定履歴を保持する。
+  undoTarget?: AssignmentProjection;
   groupId?: Id; reason?: string; referenceOperationId?: Id;
   individualOrder: Id[]; problems: UnplacedUnit[];
 }
