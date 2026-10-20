@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review。文書の照合のみ、製品試験未実施 |
+| 状態 | Approved（PR #247）。文書の照合のみ、権限設定の製品試験未実施 |
 | 対象 | #98、[DD-98](../detailed-design/temporary-admin-permissions-detail-design.md)、[ADR-012](../decisions/ADR-012-temporary-admin-permission-profiles.md) |
 | 日付・担当 | 2026-10-20、開発側の設計照合。製品実装・担当試験は#110 |
 

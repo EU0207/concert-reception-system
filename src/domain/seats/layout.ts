@@ -114,7 +114,10 @@ function numberCells(model: SectionModel, selected: Set<Id>, options: Calculatio
       const number = line.nextAutomaticNumber++;
       if (c.kind === 'gap') { c.consumedNumber = number; delete c.seatId; continue; }
       delete c.consumedNumber;
-      if (previous) { previous.lineId = line.lineId; previous.prefix = line.prefix; previous.number = number; }
+      if (previous) {
+        requireValue(previous.numberingMode === 'automatic', 'INVALID_NUMBERING_MODE');
+        previous.lineId = line.lineId; previous.prefix = line.prefix; previous.number = number;
+      }
       else {
         const seat: Seat = { ...scopeOf(s), seatId: newId(), sectionId: s.sectionId, lineId: line.lineId,
           numberingMode: 'automatic', prefix: line.prefix, number,
@@ -226,10 +229,12 @@ export function editUnassignedSeat(before: SeatLayout, sectionId: Id, seatId: Id
   validateLayout(before); text(input.reason, SEAT_LIMITS.reason, 'INVALID_REASON');
   requireValue(!before.assignments.some(a => a.seatId === seatId), 'ASSIGNED_SEAT_REQUIRES_RELEASE');
   requireValue((input.number !== undefined) !== (input.targetCellId !== undefined), 'ONE_EDIT_REQUIRED');
-  const after = structuredClone(before), model = section(after, sectionId), seat = model.seats.find(s => s.seatId === seatId);
+  const after = structuredClone(before), model = section(after, sectionId);
+  let seat = model.seats.find(s => s.seatId === seatId);
   requireValue(seat, 'SEAT_NOT_FOUND'); const source = model.section.cells.find(c => c.seatId === seatId)!;
   if (input.number !== undefined) {
-    seat.numberingMode = 'manual'; seat.manualNumber = input.number.trim(); delete seat.prefix; delete seat.number;
+    const updated = asManual(seat, input.number.trim());
+    model.seats = model.seats.map(s => s.seatId === seatId ? updated : s); seat = updated;
     mark(seat, 'number', input.reason, options);
   } else {
     const target = model.section.cells.find(c => c.cellId === input.targetCellId);
@@ -237,10 +242,17 @@ export function editUnassignedSeat(before: SeatLayout, sectionId: Id, seatId: Id
     const label = displayNumber(seat), line = lineFor(model, target);
     source.kind = 'space'; delete source.seatId; delete source.consumedNumber;
     target.kind = 'seat'; target.seatId = seatId; delete target.consumedNumber;
-    if (seat.lineId !== line.lineId) { seat.numberingMode = 'manual'; seat.manualNumber = label; delete seat.prefix; delete seat.number; }
+    if (seat.lineId !== line.lineId) {
+      const updated = asManual(seat, label);
+      model.seats = model.seats.map(s => s.seatId === seatId ? updated : s); seat = updated;
+    }
     seat.lineId = line.lineId; mark(seat, 'position', input.reason, options);
   }
   return plan(before, after);
+}
+function asManual(seat: Seat, manualNumber: string): Seat {
+  const { prefix: _prefix, number: _number, manualNumber: _manualNumber, numberingMode: _mode, ...base } = seat;
+  return { ...base, numberingMode: 'manual', manualNumber };
 }
 export function slideSection(before: SeatLayout, command: SlideSeatMapCommand): SeatChangePlan {
   validateLayout(before); checkScope(command, before);

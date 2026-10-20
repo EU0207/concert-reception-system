@@ -15,12 +15,15 @@ export interface LayoutCell extends Scope {
 export interface EmergencyChange {
   kind: 'add' | 'number' | 'position'; operationId: Id; markedAt: number; reason: string;
 }
-export interface Seat extends Scope {
-  seatId: Id; sectionId: Id; lineId: Id; numberingMode: 'automatic' | 'manual';
-  prefix?: string; number?: number; manualNumber?: string; displayOrder: number;
+export interface SeatBase extends Scope {
+  seatId: Id; sectionId: Id; lineId: Id; displayOrder: number;
   category: 'general' | 'reserved' | 'special'; usable: boolean;
   reservedLabel?: string; emergencyChange?: EmergencyChange;
 }
+export type Seat = SeatBase & (
+  | { numberingMode: 'automatic'; prefix: string; number: number; manualNumber?: never }
+  | { numberingMode: 'manual'; manualNumber: string; prefix?: never; number?: never }
+);
 export interface LayoutSection extends Scope {
   sectionId: Id; name: string; floorId?: Id; displayOrder: number;
   rows: number; columns: number; axis: Axis; seatOrder: SeatOrder;
