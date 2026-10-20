@@ -5,6 +5,7 @@
 .env
 .env.*
 !.env.example
+public/app-config.json
 *.local
 *.pem
 *.key
