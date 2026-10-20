@@ -1,5 +1,7 @@
 # UIモック変更の本番引継ぎ台帳
 
+2026-10-21の担当補完は[実装・試験の担当と順序](../traceability-matrix.md#実装試験の担当と実装順2026-10-21)を参照する。既存MCTの割当を維持し、共通PWA・受付同期と運用画面を#258～264、全体結合を#265、全AC最終受入を#266へ接続した。CI案は#259。以下の当時の状態と承認経緯を、現在の未承認事項へ読み替えない。
+
 ## 現在の作業Issue（2026-10-19）
 
 工程ごとの作業を以下へ整理する。番号と業務条件は維持し、以降の履歴にある旧`[Change]`と親Issueの記載は当時の管理方法として保持する。現在の担当は本表を優先する。整理の対象はIssueの責務と追跡先であり、仕様変更・本番実装の開始承認ではない。
@@ -8,9 +10,9 @@
 |---|---|---|
 | MHD-01：QR結果と導線・会場表示 | [#89](https://github.com/EU0207/concert-reception-system/issues/89)・[DD-89](../detailed-design/reception-screen-detail-design.md)はPR #241で承認・統合済み。保存・排他は#92を前提とする | [#233](https://github.com/EU0207/concert-reception-system/issues/233)の受付UI、[#105](https://github.com/EU0207/concert-reception-system/issues/105)の画像・席表示 |
 | MHD-02：連絡の未読と重大操作確認 | [#90](https://github.com/EU0207/concert-reception-system/issues/90)・[DD-90](../detailed-design/staff-notice-confirmation-detail-design.md)はPR #240で承認・統合済み | [#234](https://github.com/EU0207/concert-reception-system/issues/234)の連絡保存・共通UI、#110の現在認可、#111の締め。手動削除と証跡は[#239](https://github.com/EU0207/concert-reception-system/issues/239)、復旧照合は#221 |
-| MHD-03：席作成・席設定と共同契約 | [#91の全体照合](../detailed-design/seat-design-final-review.md)はPR #245で承認・統合済み。保存方式#101・168と各共同設計も承認済み | #102はPR #248で承認・統合済み。#103は[途中引継ぎ](../technical-validation/assignment-domain-handoff.md)で単体50件合格・最終照合前。#104～108・110～112と実ファイル基盤#236、画像登録#244は未着手 |
+| MHD-03：席作成・席設定と共同契約 | [#91の全体照合](../detailed-design/seat-design-final-review.md)はPR #245で承認・統合済み。保存方式#101・168と各共同設計も承認済み | #102はPR #248で承認・統合済み。#103は[実装・試験記録](../technical-validation/assignment-domain-handoff.md)で単体60件と所属契約を照合し、PR #249でレビューする。#104～108・110～112と実ファイル基盤#236、画像登録#244は未着手 |
 | MHD-04：受付の中断・再起動復帰 | [#92](https://github.com/EU0207/concert-reception-system/issues/92)・[DD-92](../detailed-design/reception-recovery-detail-design.md)とADR-010はPR #242で承認・統合済み | #233、端末保存・所有権は#104、現在認可・締めと資格は#110～112 |
-| MHD-05：購入者・確認項目と不参加 | [#229](https://github.com/EU0207/concert-reception-system/issues/229)はPR #231で設計完了。#251の[Excel所属是正](../detailed-design/customer-ticket-detail-design.md#excelのグループ所属から配置への契約251)はPR #253で承認済み | [#230](https://github.com/EU0207/concert-reception-system/issues/230)、一体確定・不参加と資格は#104・107・112。#103・PR #249は所属是正の承認・統合後に照合して再開。製品結合は未実施 |
+| MHD-05：購入者・確認項目と不参加 | [#229](https://github.com/EU0207/concert-reception-system/issues/229)はPR #231で設計完了。#251の[Excel所属是正](../detailed-design/customer-ticket-detail-design.md#excelのグループ所属から配置への契約251)はPR #253で承認済み | [#230](https://github.com/EU0207/concert-reception-system/issues/230)、一体確定・不参加と資格は#104・107・112。#103・PR #249は所属是正と計算を照合済み。製品結合は未実施 |
 | 役割変更・端末再準備（CONF-065） | [#96・DD-96](../detailed-design/staff-role-change-detail-design.md)とADR-011はPR #246で承認・統合済み | #110。Google本人・UIDの対応と新役割の準備、降格と18ケース。製品試験未実施 |
 | お客様の個別登録（CONF-067） | [#97](https://github.com/EU0207/concert-reception-system/issues/97) | #230・110・112。MCT-38の重複候補・初期状態と発券拒否を含む |
 | 臨時管理者の権限設定（CONF-068） | [#98・DD-98](../detailed-design/temporary-admin-permissions-detail-design.md)とADR-012はPR #247で承認・統合済み | #110。固定9項目と禁止12群、共通版・端末準備と21ケース。製品未実施 |

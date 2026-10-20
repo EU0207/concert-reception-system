@@ -325,6 +325,8 @@ function appendImportedPeople(s, added) {
 test('DG251-T08 追加ファイルの8人と2人を全名簿10人として連続配置する', () => {
   const initial = fixture(undefined, people(8));
   const s = appendImportedPeople(initial, people(2, true, 8));
+  s.people[8].paid = false;
+  assert.equal(listAssignmentCandidates(s).length, 9);
   const r = unchanged(s, () => autoAllocate(s, auto(s)));
   assert.deepEqual(contents(r.after), [...people(10).map(p => p.attendeeId), null, null]);
   assert.deepEqual(r.event.problems, []);
