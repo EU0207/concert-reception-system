@@ -116,6 +116,8 @@ test('RES-005-T10 固定解除後の再配置は旧席を解放し、4連続席�
   assert.deepEqual(contents(unlock.after), contents(split.after)); assert(unlock.after.layout.assignments.every(a => !a.fixed));
   assert.deepEqual(contents(reallocated.after), [null, null, null, null, null, ...split.after.people.map(p => p.attendeeId)]);
   assert.equal(reallocated.event.referenceOperationId, unlock.event.operationId);
+  assert.equal(reallocated.event.before.groups[0].fixed, false);
+  assert.equal(reallocated.event.undoTarget.groups[0].fixed, true);
 });
 test('RES-005-T11 直前再配置を取り消し、解除前の席・固定・理由を復元して版を進める', () => {
   const { split, reallocated } = splitFixture();
@@ -253,14 +255,62 @@ test('DD91-T09 確定履歴欠落・別操作・範囲改変・非直前の履�
   const changed = structuredClone(reallocated.after); changed.versions.control++;
   rejects('NOT_LAST_GROUP_OPERATION', () => undoReallocation(changed, groupCommand(changed), reallocated.event.operationId, read(reallocated.event)));
 });
-test('DD91-T09 取消履歴の他人混入・現状態不一致・旧席競合を拒否する', () => {
+test('DD91-T09 取消履歴の他人混入・現状態不一致・固定履歴の改変を拒否する', () => {
   const { reallocated } = splitFixture();
   for (const [code, mutate] of [
     ['INVALID_HISTORY_SCOPE', e => { e.before.rows[0].attendeeId = uuid(999); }],
     ['HISTORY_STATE_MISMATCH', e => { e.after.rows[0].assignment.revision++; }],
-    ['INVALID_HISTORY_STATE', e => { e.before.groups[0].fixed = false; e.before.rows.forEach(r => { r.assignment.fixed = false; }); }],
+    ['INVALID_HISTORY_STATE', e => { e.undoTarget.groups[0].fixed = false; e.undoTarget.rows.forEach(r => { r.assignment.fixed = false; }); }],
   ]) { const e = structuredClone(reallocated.event); mutate(e);
     rejects(code, () => undoReallocation(reallocated.after, groupCommand(reallocated.after), e.operationId, read(e))); }
+});
+test('DD91-T09 履歴の旧席が他人に占有される不整合を、取消しで上書きしない', () => {
+  const { reallocated } = splitFixture(), s = structuredClone(reallocated.after), p = people(1, false, 4)[0];
+  s.people.push(p); s.layout.ticketProtections.push({ ...scope, attendeeId: p.attendeeId, issued: false,
+    sent: false, hasIssuedHistory: false, activeCredentialId: null });
+  s.layout.assignments.push({ ...scope, attendeeId: p.attendeeId, seatId: seatAt(s, 0), fixed: false, revision: 1 });
+  unchanged(s, () => rejects('INVALID_ASSIGNMENT', () => undoReallocation(s, groupCommand(s), reallocated.event.operationId, read(reallocated.event))));
+});
+test('DD91-T09 固定の正本と割当投影が不一致なら拒否する', () => {
+  const { split } = splitFixture(); split.after.layout.assignments[0].fixed = false;
+  rejects('FIXED_PROJECTION_MISMATCH', () => unlockGroup(split.after, groupCommand(split.after)));
+});
+test('DD91-T92 同一名簿の所属と割当が違う、余分な券参照がある場合は拒否する', () => {
+  const { split } = splitFixture(), s = structuredClone(split.after);
+  s.layout.assignments[0].groupId = uuid(999);
+  rejects('ASSIGNMENT_ROSTER_MISMATCH', () => validateAllocation(s));
+  const t = structuredClone(split.after); t.layout.ticketProtections.push({ ...t.layout.ticketProtections[0], attendeeId: uuid(999) });
+  rejects('TICKET_ROSTER_MISMATCH', () => validateAllocation(t));
+});
+test('DD91-T08 一般席の欠番は隣接として数えず、使用不可席の手動指定も拒否する', () => {
+  const s = fixture(['GNGX'], people(2)); assert.equal(autoAllocate(s, auto(s)).event.problems[0].reason, 'NO_CONTIGUOUS_GENERAL_SEATS');
+  unchanged(s, () => rejects('MANUAL_SEAT_UNAVAILABLE', () => splitGroup(s,
+    command(s, { groupId, seatIds: [seatAt(s, 0), seatAt(s, 3)], reason: '架空' }))));
+});
+test('DD91-T08 個人の一般席不足は未配置理由を返し、他の配置を残す', () => {
+  const s = fixture(['G'], people(2, false)), r = autoAllocate(s, auto(s));
+  assert.equal(r.after.layout.assignments.length, 1);
+  assert.deepEqual(r.event.problems, [{ attendeeId: s.people[1].attendeeId, reason: 'NO_GENERAL_SEAT' }]);
+});
+test('DD91-T09 グループの別メンバーが発券済みなら一人の手動設定・解除も拒否する', () => {
+  const { split } = splitFixture(), s = split.after; s.layout.ticketProtections[1].hasIssuedHistory = true;
+  const c = command(s, { attendeeId: s.people[0].attendeeId, seatId: seatAt(s, 0, 1), reason: '架空' });
+  rejects('GROUP_ISSUED', () => manualAssign(s, c)); rejects('GROUP_ISSUED', () => clearAssignment(s, c));
+});
+test('DD91-T09 履歴の別公演・版遷移改変と解除時の席変更を拒否する', () => {
+  const { unlock } = splitFixture();
+  for (const [code, mutate] of [
+    ['SCOPE_MISMATCH', e => { e.performanceId = uuid(999); }],
+    ['INVALID_HISTORY_VERSIONS', e => { e.expectedVersions.commit++; }],
+    ['INVALID_UNLOCK_HISTORY', e => { e.before.rows[0].assignment.revision++; }],
+  ]) { const e = structuredClone(unlock.event); mutate(e);
+    rejects(code, () => reallocateGroup(unlock.after, groupCommand(unlock.after), e.operationId, read(e))); }
+});
+test('DD91-T92 読取専用の入力とコマンドを変更せず、結果の変更も元入力へ漏れない', () => {
+  const freeze = v => { if (v && typeof v === 'object') { Object.values(v).forEach(freeze); Object.freeze(v); } return v; };
+  const s = freeze(fixture(['GG'], people(2))), c = freeze(auto(s)), r = unchanged(s, () => autoAllocate(s, c));
+  r.after.people[0].paid = false; r.event.after.rows[0].assignment.fixed = true;
+  assert.equal(s.people[0].paid, true); assert.equal(r.after.layout.assignments[0].fixed, false);
 });
 for (const count of [500, 600, 1000]) for (const mode of ['roster', 'random']) {
   test(`DD91-T10 ${count}人・2区画/${mode}の順序計算を再現する（無料受入ではない）`, () => {

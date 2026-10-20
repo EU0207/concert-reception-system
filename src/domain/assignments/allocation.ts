@@ -193,6 +193,7 @@ export function manualAssign(s: AllocationSnapshot, c: ManualAssignmentCommand):
 }
 export function clearAssignment(s: AllocationSnapshot, c: ClearAssignmentCommand): AssignmentPlan {
   const after = begin(s, c), p = person(after, c.attendeeId);
+  if (c.reason !== undefined) text(c.reason, SEAT_LIMITS.reason, 'INVALID_REASON');
   requireValue(!issued(after, p.attendeeId), 'PERSON_ISSUED');
   requireValue(assigned(after, p.attendeeId), 'ASSIGNMENT_NOT_FOUND');
   const ids = fixManualGroup(after, p, c.reason);
@@ -234,7 +235,7 @@ function receipt(s: AllocationSnapshot, c: GroupCommand, operationId: Id,
   for (const k of ['commit', 'assignment', 'reception'] as const) expected[k]++;
   requireValue(sameVersions(expected, e.resultVersions), 'INVALID_HISTORY_VERSIONS');
   const group = members(s, c.groupId), ids = group.map(p => p.attendeeId);
-  for (const projection of [e.before, e.after]) {
+  for (const projection of kind === 'reallocateGroup' ? [e.before, e.after, e.undoTarget] : [e.before, e.after]) {
     requireValue(projection && Array.isArray(projection.rows) && projection.rows.length === ids.length
       && new Set(projection.rows.map(r => r.attendeeId)).size === ids.length
       && projection.rows.every(r => ids.includes(r.attendeeId))
@@ -250,10 +251,13 @@ function receipt(s: AllocationSnapshot, c: GroupCommand, operationId: Id,
   }
   requireValue(e.after.rows.every(r => sameAssignment(r.assignment, assigned(s, r.attendeeId) ?? null))
     && sameGroup(e.after.groups[0]!, state(s, c.groupId)), 'HISTORY_STATE_MISMATCH');
-  requireValue(e.before.groups[0]!.fixed && !e.after.groups[0]!.fixed
-    && e.before.groups[0]!.manualReason === e.after.groups[0]!.manualReason, 'INVALID_HISTORY_STATE');
-  if (kind === 'unlockGroup') requireValue(e.before.rows.every(r => {
-    const next = e.after.rows.find(n => n.attendeeId === r.attendeeId)!.assignment;
+  const origin = kind === 'unlockGroup' ? e.before : e.undoTarget!;
+  const unlocked = kind === 'unlockGroup' ? e.after : e.before;
+  requireValue(origin.groups[0]!.fixed && !unlocked.groups[0]!.fixed && !e.after.groups[0]!.fixed
+    && origin.groups[0]!.manualReason === unlocked.groups[0]!.manualReason
+    && origin.groups[0]!.manualReason === e.after.groups[0]!.manualReason, 'INVALID_HISTORY_STATE');
+  requireValue(origin.rows.every(r => {
+    const next = unlocked.rows.find(n => n.attendeeId === r.attendeeId)!.assignment;
     return r.assignment === null ? next === null : next !== null
       && next.seatId === r.assignment.seatId && next.revision === r.assignment.revision + 1;
   }), 'INVALID_UNLOCK_HISTORY');
@@ -269,15 +273,15 @@ export function reallocateGroup(s: AllocationSnapshot, c: GroupCommand, unlockOp
   group.forEach((p, i) => put(after, p, run[i]!.seat.seatId, assigned(s, p.attendeeId)));
   const result = finish(s, after, c, 'reallocateGroup', ids, [c.groupId], { groupId: c.groupId, referenceOperationId: e.operationId });
   // 取消しは解除直前の固定・理由も復元する。履歴の真正性は保存層が確認する。
-  result.event.before = copy(e.before); return result;
+  result.event.undoTarget = copy(e.before); return result;
 }
 export function undoReallocation(s: AllocationSnapshot, c: GroupCommand, operationId: Id,
   read: ReadCommittedAssignment): AssignmentPlan {
   const after = begin(s, c), group = editableGroup(after, c.groupId);
   const e = receipt(s, c, operationId, 'reallocateGroup', read), ids = group.map(p => p.attendeeId);
   after.layout.assignments = after.layout.assignments.filter(a => !ids.includes(a.attendeeId));
-  Object.assign(state(after, c.groupId), copy(e.before.groups[0]));
-  for (const row of e.before.rows) if (row.assignment) {
+  Object.assign(state(after, c.groupId), copy(e.undoTarget!.groups[0]));
+  for (const row of e.undoTarget!.rows) if (row.assignment) {
     manualSeat(after, row.assignment.seatId);
     const current = assigned(s, row.attendeeId);
     put(after, person(after, row.attendeeId), row.assignment.seatId,
