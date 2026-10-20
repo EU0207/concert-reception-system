@@ -77,3 +77,6 @@ export interface SeatChangePlan {
     retiredIds: Id[]; confirmationRequired: boolean;
   };
 }
+export interface SectionOffset { rowOffset: number; columnOffset: number }
+export interface BaseLayoutSnapshot { coordinateSpace: 'base'; layout: SeatLayout }
+export interface LogicalLayoutSnapshot { coordinateSpace: 'logical'; layout: SeatLayout }
