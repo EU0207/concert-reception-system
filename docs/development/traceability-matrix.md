@@ -349,7 +349,17 @@ DD-235はPR #243で承認・統合済み。14ケースは製品実行未実施�
 | ADR-003・005、AC-030・031 | DD-96-02・04、DD96-T03～06・11～18 | #110、端末保存#104・受付#233と公演#111の結合。全件未実施 |
 | AC-014・017・028・032、無料600人必須・1,000人目標 | DD-96-04～06、DD96-T11～18 | #110・220。期限・後着と差分容量を含む。全件未実施 |
 
-DD-96とADR-011はレビュー中。#98の業務権限設定を追加しない。照合結果は[検証記録](technical-validation/role-change-design-review.md)へ分離し、設計と製品動作の合格を区別する。
+DD-96とADR-011の案AはPR #246で承認・統合済み。#98の業務権限設定を追加しない。照合結果は[検証記録](technical-validation/role-change-design-review.md)へ分離し、設計と製品動作の合格を区別する。
+
+### 臨時管理者の公演・利用者別権限設定（#98）
+
+| 条件 | 設計・担当試験 | 製品の状態 |
+|---|---|---|
+| CONF-068、REQ-F-028・040、AC-014・028 | [DD-98-01～02](detailed-design/temporary-admin-permissions-detail-design.md#dd-98-01-範囲設定者と既定値)、DD98-T01～04・14～17。設定者と固定許可9項目・禁止12群 | #110と業務結合先。全件未実施 |
+| AC-030・031・032、DD-96 | DD-98-03～05、DD98-T05～13・18・19。共通役割版・確定、端末準備と後着保護 | #110・104・233・234、表示名#106。全件未実施 |
+| 無料600人必須・1,000人目標、保持・復旧 | DD98-T20・21。設定と監査・差分を全体測定へ含め、旧権限を復活させない | #110・220・221。全件未実施 |
+
+DD-98・ADR-012はIn Review。根拠と照合の範囲は[設計照合記録](technical-validation/temporary-permissions-design-review.md)へ分離する。
 
 ### ADR一覧
 
@@ -362,6 +372,8 @@ DD-96とADR-011はレビュー中。#98の業務権限設定を追加しない�
 | [ADR-005](decisions/ADR-005-device-principal-authorization.md) | 端末別Authと本人Authの結合 | REQ-F-031、REQ-NF-017 | AC-030 | Accepted（CONF-051） |
 | [ADR-006](decisions/ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存。最新の1MB上限 | REQ-F-035 | AC-025 | Accepted（CONF-053） |
 | [ADR-007](decisions/ADR-007-seat-edit-commit-boundary.md) | 席編集の原子的確定と物理保存候補 | REQ-F-036・038・043・044、DD-91-T01 | AC-025・026・035・036 | Accepted（RTDB初期方式・PR #228） |
+| [ADR-011](decisions/ADR-011-role-change-identity-binding.md) | 役割変更時のGoogle本人確認とUID維持 | CONF-065、REQ-F-028、DD-96 | AC-014・030 | Accepted（案A・PR #246） |
+| [ADR-012](decisions/ADR-012-temporary-admin-permission-profiles.md) | 臨時管理者の固定権限一覧と共通役割版 | CONF-068、REQ-F-028・040、DD-98 | AC-014・028・030 | Proposed（案A） |
 
 ## 更新ルール
 

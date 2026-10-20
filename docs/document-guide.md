@@ -152,8 +152,10 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | QR受付の端末保存・中断復帰の詳細設計 | [reception-recovery-detail-design.md](development/detailed-design/reception-recovery-detail-design.md) | #92の一体保存、暗号化とタブ所有権、中断復帰と14ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | 保存・中断復帰の契約変更時 | Approved（PR #242） |
 | 帳票・チケット出力の詳細設計 | [file-output-detail-design.md](development/detailed-design/file-output-detail-design.md) | #235の同一版入力、PDF・xlsxと補助出力、TBD-011への選定手順と14ケースを定める | 開発者、設計担当者、テスト担当者 | 詳細設計 | 入力・出力レイアウトと採用部品の変更時 | Approved（PR #243） |
 | 会場席作成・席設定の設計全体照合 | [seat-design-final-review.md](development/detailed-design/seat-design-final-review.md) | #91の共同契約・G91-A～E、DD91-T01～103と画像7ケースの担当を最終照合する | 開発者、設計担当者、テスト担当者 | #91の最終レビュー | 承認・受渡しと開始条件の変更時 | Approved（PR #245） |
-| スタッフの役割変更・端末再準備の詳細設計 | [staff-role-change-detail-design.md](development/detailed-design/staff-role-change-detail-design.md) | UID対応・現在認可と端末別準備、DD96-T01～18を定義する | 開発者、実装担当者、テスト担当者 | #96の詳細設計 | 役割・本人対応・試験変更時 | In Review |
-| 役割変更の設計照合記録 | [role-change-design-review.md](development/technical-validation/role-change-design-review.md) | 権限表・公式仕様と試験担当の照合範囲を記録する | 開発者、テスト担当者 | #96のレビュー | 照合結果・残条件の変更時 | In Review |
+| スタッフの役割変更・端末再準備の詳細設計 | [staff-role-change-detail-design.md](development/detailed-design/staff-role-change-detail-design.md) | UID対応・現在認可と端末別準備、DD96-T01～18を定義する | 開発者、実装担当者、テスト担当者 | #96の詳細設計 | 役割・本人対応・試験変更時 | Approved（PR #246） |
+| 役割変更の設計照合記録 | [role-change-design-review.md](development/technical-validation/role-change-design-review.md) | 権限表・公式仕様と試験担当の照合範囲を記録する | 開発者、テスト担当者 | #96のレビュー | 照合結果・残条件の変更時 | Approved（PR #246） |
+| 臨時管理者の公演・利用者別権限設定 | [temporary-admin-permissions-detail-design.md](development/detailed-design/temporary-admin-permissions-detail-design.md) | 固定9項目・禁止12群、共通版と取消し・端末別準備、製品試験21ケースを定義する | 開発者、実装担当者、テスト担当者 | #98の設計 | 権限・期限・準備条件の変更時 | In Review |
+| 臨時管理者の権限設定・設計照合記録 | [temporary-permissions-design-review.md](development/technical-validation/temporary-permissions-design-review.md) | 権限表・設定パターンと試験担当を照合した範囲を記録する | 開発者、テスト担当者 | #98のレビュー | 照合・残条件の変更時 | In Review |
 | 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91の仕様とデータ契約、主要試験DD91-T01～69を追跡する。検証結果は別記録を参照 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 仕様・試験・承認変更時 | Approved（PR #245） |
 
 ### 技術判断（ADR）
@@ -171,7 +173,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | ADR-008 購入者IDと確認用項目の保存単位 | [ADR-008-customer-identity-and-check-items.md](development/decisions/ADR-008-customer-identity-and-check-items.md) | 正本の分離とID参照、#97の登録経路を比較する | 開発者、設計担当者、テスト担当者 | #229・97の共同設計 | 保存・取得の境界変更時 | Accepted（PR #231・238） |
 | ADR-009 連絡の内容版と本人別状態の分離 | [ADR-009-notice-user-version-state.md](development/decisions/ADR-009-notice-user-version-state.md) | 本人・内容版ごとの状態を、端末内だけ・全員共通の案と比較する | 開発者、設計担当者、テスト担当者 | #90の設計 | 読了・重要確認の保存境界変更時 | Accepted（PR #240） |
 | ADR-010 受付の一体保存とタブ所有権 | [ADR-010-reception-atomic-storage-and-ownership.md](development/decisions/ADR-010-reception-atomic-storage-and-ownership.md) | 一体保存・Web Locksと、順次保存・時刻による所有権の案を比較する | 開発者、設計担当者、テスト担当者 | #92の設計 | 保存・排他方式の判断時 | Accepted（PR #242） |
-| ADR-011 役割変更時のGoogle本人確認とUID維持 | [ADR-011-role-change-identity-binding.md](development/decisions/ADR-011-role-change-identity-binding.md) | 同じ本人UIDへの明示連携と変更案専用の本人確認を比較・提案する | 開発者、設計担当者、テスト担当者 | #96の設計 | 本人対応・役割変更方式の判断時 | Proposed |
+| ADR-011 役割変更時のGoogle本人確認とUID維持 | [ADR-011-role-change-identity-binding.md](development/decisions/ADR-011-role-change-identity-binding.md) | 同じ本人UIDへの明示連携と変更案専用の本人確認を比較・提案する | 開発者、設計担当者、テスト担当者 | #96の設計 | 本人対応・役割変更方式の判断時 | Accepted（PR #246） |
+| ADR-012 臨時管理者の固定権限一覧と共通役割版 | [ADR-012-temporary-admin-permission-profiles.md](development/decisions/ADR-012-temporary-admin-permission-profiles.md) | 固定一覧と自由な設定、共通版と独立版を比較する | 開発者、設計担当者、テスト担当者 | #98の設計 | 権限設定方式の判断時 | Proposed |
 
 ## テンプレート
 
