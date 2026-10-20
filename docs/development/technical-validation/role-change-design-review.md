@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review。設計照合のみ、製品試験未実施 |
+| 状態 | Approved（PR #246）。設計照合のみ、製品試験未実施 |
 | 対象 | #96、[DD-96](../detailed-design/staff-role-change-detail-design.md)、[ADR-011](../decisions/ADR-011-role-change-identity-binding.md) |
 | 日付・担当 | 2026-10-20、開発側の設計照合。製品実装・担当試験は#110 |
 
