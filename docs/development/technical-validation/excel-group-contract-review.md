@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review。設計是正のみ、製品試験未実施 |
+| 状態 | Approved（PR #253）。設計是正のみ、製品試験未実施 |
 | 日付・読者 | 2026-10-20。開発者、設計担当者、実装・試験担当者 |
 | 起点 | main `23efce7d85dcf81a968fdbee43be42156ea72459`への第三者レビュー指摘2（P2）、Issue #251 |
 | 正本 | [DD-97の所属契約](../detailed-design/customer-ticket-detail-design.md#excelのグループ所属から配置への契約251) |
