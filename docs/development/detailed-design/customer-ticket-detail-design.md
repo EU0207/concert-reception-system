@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | Approved（DD-93はPR #231、DD-97はPR #238）。#251のExcel所属是正はIn Review。製品実装・試験は未実施 |
+| 状態 | Approved（DD-93はPR #231、DD-97はPR #238）。#251のExcel所属是正はPR #253で承認・統合済み。製品実装・試験は未実施 |
 | 読者・目的 | 開発者・設計担当者・テスト担当者が、MHD-05の保存・権限と共同操作を実装へ引き渡す |
 | 関連Issue | 設計#229・97、席設計#91、お客様管理実装#230、依存#104・110～112。受付の中断復帰は#92、権限カスタマイズは#98 |
 | 根拠 | [本番引継ぎの追加条件](../ui-mock/ui-mock-production-handoff.md#データと安全性の追加条件)、[席管理](seat-management-detail-design.md)、[正式RTDB契約](rtdb-storage-contract.md)、[保存単位のADR](../decisions/ADR-008-customer-identity-and-check-items.md) |
@@ -203,7 +203,7 @@ Excelの各入力行も同じ新規来場者と購入者参照へ変換する。
 
 ### Excelのグループ所属から配置への契約（#251）
 
-状態：In Review。REQ-F-036・AC-026とCONF-067の既存条件を維持する是正。個別登録の初期値をExcelへ一律適用しない。比較・採用理由は[ADR-008の所属是正](../decisions/ADR-008-customer-identity-and-check-items.md#excelのグループ所属の是正251)、照合結果は[設計照合記録](../technical-validation/excel-group-contract-review.md)へ分ける。
+状態：Approved（PR #253）。REQ-F-036・AC-026とCONF-067の既存条件を維持する是正。個別登録の初期値をExcelへ一律適用しない。比較・採用理由は[ADR-008の所属是正](../decisions/ADR-008-customer-identity-and-check-items.md#excelのグループ所属の是正251)、照合結果は[設計照合記録](../technical-validation/excel-group-contract-review.md)へ分ける。
 
 | 入力・識別 | 契約 |
 |---|---|
