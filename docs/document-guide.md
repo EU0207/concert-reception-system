@@ -156,7 +156,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | 役割変更の設計照合記録 | [role-change-design-review.md](development/technical-validation/role-change-design-review.md) | 権限表・公式仕様と試験担当の照合範囲を記録する | 開発者、テスト担当者 | #96のレビュー | 照合結果・残条件の変更時 | Approved（PR #246） |
 | 臨時管理者の公演・利用者別権限設定 | [temporary-admin-permissions-detail-design.md](development/detailed-design/temporary-admin-permissions-detail-design.md) | 固定9項目・禁止12群、共通版と取消し・端末別準備、製品試験21ケースを定義する | 開発者、実装担当者、テスト担当者 | #98の設計 | 権限・期限・準備条件の変更時 | Approved（PR #247） |
 | 臨時管理者の権限設定・設計照合記録 | [temporary-permissions-design-review.md](development/technical-validation/temporary-permissions-design-review.md) | 権限表・設定パターンと試験担当を照合した範囲を記録する | 開発者、テスト担当者 | #98のレビュー | 照合・残条件の変更時 | Approved（PR #247） |
-| 席ドメインの共通型・計算の単体試験結果 | [seat-domain-unit-test-results.md](development/technical-validation/seat-domain-unit-test-results.md) | #102の実装・59単体と型検査、後続保存・画面への受渡しを記録する | 開発者、実装担当者、テスト担当者 | #102の実装 | 型・計算と試験結果の変更時 | In Review |
+| 席ドメインの共通型・計算の単体試験結果 | [seat-domain-unit-test-results.md](development/technical-validation/seat-domain-unit-test-results.md) | #102の実装・61単体と型検査、後続保存・画面への受渡しを記録する | 開発者、実装担当者、テスト担当者 | #102の実装 | 型・計算と試験結果の変更時 | In Review |
 | 会場席作成・席設定の詳細設計 | [seat-management-detail-design.md](development/detailed-design/seat-management-detail-design.md) | #91の仕様とデータ契約、主要試験DD91-T01～69を追跡する。検証結果は別記録を参照 | 開発者、設計担当者、テスト担当者 | 詳細設計 | 仕様・試験・承認変更時 | Approved（PR #245） |
 
 ### 技術判断（ADR）

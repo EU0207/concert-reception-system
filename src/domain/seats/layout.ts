@@ -101,6 +101,11 @@ function mark(seat: Seat, kind: 'add' | 'number' | 'position', reason: string, o
 function numberCells(model: SectionModel, selected: Set<Id>, options: CalculationOptions, newId: () => Id) {
   const s = model.section;
   for (const line of s.lineSettings) {
+    // 手入力席へ変えた欠番の消費番号は予約したままにする。
+    const reserved = new Set(s.cells.filter(c => c.consumedNumber !== undefined
+      && lineFor(model, c).lineId === line.lineId
+      && model.seats.some(seat => seat.seatId === c.seatId && seat.numberingMode === 'manual'))
+      .map(c => c.consumedNumber!));
     const cells = s.cells.filter(c => selected.has(c.cellId) && lineFor(model, c).lineId === line.lineId)
       .sort((a, b) => (s.seatOrder === 'reverse' ? -1 : 1)
         * (s.axis === 'horizontal' ? a.column - b.column : a.row - b.row));
@@ -109,6 +114,9 @@ function numberCells(model: SectionModel, selected: Set<Id>, options: Calculatio
       const previous = model.seats.find(s => s.seatId === c.seatId);
       if (previous?.numberingMode === 'manual' && c.kind === 'seat') {
         previous.lineId = line.lineId; continue;
+      }
+      while (reserved.has(line.nextAutomaticNumber)) {
+        requireValue(positive(line.nextAutomaticNumber + 1), 'NUMBER_OVERFLOW'); line.nextAutomaticNumber++;
       }
       requireValue(positive(line.nextAutomaticNumber) && positive(line.nextAutomaticNumber + 1), 'NUMBER_OVERFLOW');
       const number = line.nextAutomaticNumber++;
@@ -125,6 +133,10 @@ function numberCells(model: SectionModel, selected: Set<Id>, options: Calculatio
         if (options.duringPerformance || options.emergency) mark(seat, 'add', options.emergency?.reason ?? '', options);
         model.seats.push(seat); c.seatId = seat.seatId;
       }
+    }
+    for (const number of reserved) {
+      requireValue(positive(number + 1), 'NUMBER_OVERFLOW');
+      line.nextAutomaticNumber = Math.max(line.nextAutomaticNumber, number + 1);
     }
   }
 }
