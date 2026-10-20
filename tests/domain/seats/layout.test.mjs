@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createLayout, createSection, numberInitial, reconfigureSection, extendSection, renameSection,
   changeStage, addManualSeat, editUnassignedSeat, slideSection, assessSeatChanges,
-  validateLayout, displayNumber, formatSeatDisplayName, SeatDomainError } from '../../../src/domain/seats/index.ts';
+  validateLayout, displayNumber, formatSeatDisplayName, projectBaseLayout, SeatDomainError } from '../../../src/domain/seats/index.ts';
 
 const uuid = n => `00000000-0000-4000-8000-${n.toString(16).padStart(12, '0')}`;
 const scope = { environmentId: uuid(1), performanceId: uuid(2) };
@@ -300,4 +300,27 @@ test('DD91-T05・102 安全整数上限直前と長い接頭部を検査', () =>
   const blank = createSection(createLayout(scope), spec, options()).after;
   const numbered = numberInitial(blank, model(blank).section.sectionId, select(model(blank), [[0, 0, 'seat']]), { newId: () => uuid(2000) });
   assert.equal(displayNumber(model(numbered.after).seats[0]).length, 64);
+});
+test('DD91-T42 基準座標からの投影はスライド計算と一致し、ID・列と番号を保持', () => {
+  const deltas = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
+  for (const axis of ['horizontal', 'vertical']) for (const direction of Object.keys(deltas)) {
+    const f = fixture({ rows: 3, columns: 3, axis, kinds: [[1, 1, 'seat']] }), [rowOffset, columnOffset] = deltas[direction];
+    const projected = projectBaseLayout({ coordinateSpace: 'base', layout: frozen(f.layout) }, { [f.sectionId]: { rowOffset, columnOffset } });
+    assert.deepEqual(projected.layout, slideSection(f.layout, slideCommand(f, direction)).after);
+    assert.equal(projected.coordinateSpace, 'logical');
+  }
+});
+test('DD91-T42 論理座標へ移動量を二重適用しない', () => {
+  const f = fixture({ rows: 3, columns: 3, kinds: [[1, 1, 'seat']] });
+  const offsets = { [f.sectionId]: { rowOffset: 0, columnOffset: 1 } };
+  const projected = projectBaseLayout({ coordinateSpace: 'base', layout: f.layout }, offsets);
+  rejects('BASE_COORDINATES_REQUIRED', () => projectBaseLayout(projected, offsets));
+  assert.equal(cell(model(projected.layout), 1, 2).kind, 'seat');
+});
+test('DD91-T42 基準投影は負の移動量を正規化し、不正な移動量・別区画を拒否', () => {
+  const f = fixture({ rows: 3, columns: 3, kinds: [[1, 1, 'seat']] }), snapshot = { coordinateSpace: 'base', layout: f.layout };
+  assert.deepEqual(projectBaseLayout(snapshot, { [f.sectionId]: { rowOffset: -1, columnOffset: 0 } }).layout,
+    projectBaseLayout(snapshot, { [f.sectionId]: { rowOffset: 2, columnOffset: 0 } }).layout);
+  rejects('INVALID_OFFSET', () => projectBaseLayout(snapshot, { [f.sectionId]: { rowOffset: 0.5, columnOffset: 0 } }));
+  rejects('OFFSET_SECTION_NOT_FOUND', () => projectBaseLayout(snapshot, { [uuid(99)]: { rowOffset: 0, columnOffset: 0 } }));
 });
