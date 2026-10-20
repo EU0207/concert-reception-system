@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | Approved。PR #248で実装#102を承認・統合済み |
+| 状態 | Approved（PR #248）。実装#102は承認・統合済み |
 | 日付・環境 | 2026-10-20。Windows x64、Node.js 24.19.0、pnpm 11.25.0、TypeScript 7.0.2 |
 | 対象 | [製品の共通型・計算](../../../src/domain/seats/index.ts)、[単体試験](../../../tests/domain/seats/layout.test.mjs) |
 | 根拠 | [DD-91-02・03](../detailed-design/seat-management-detail-design.md#dd-91-02-データ契約と不変条件)、[正式RTDB契約](../detailed-design/rtdb-storage-contract.md)、[#91の全体照合](../detailed-design/seat-design-final-review.md) |
