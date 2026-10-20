@@ -11,9 +11,9 @@
 | MHD-03：席作成・席設定と共同契約 | [#91の全体照合](../detailed-design/seat-design-final-review.md)はPR #245で承認・統合済み。保存方式#101・168と各共同設計も承認済み | #102～108・110～112。実ファイル基盤#236、画像登録#244を含め全実装未着手 |
 | MHD-04：受付の中断・再起動復帰 | [#92](https://github.com/EU0207/concert-reception-system/issues/92)・[DD-92](../detailed-design/reception-recovery-detail-design.md)とADR-010はPR #242で承認・統合済み | #233、端末保存・所有権は#104、現在認可・締めと資格は#110～112 |
 | MHD-05：購入者・確認項目と不参加 | [#229](https://github.com/EU0207/concert-reception-system/issues/229)はPR #231で設計完了 | [#230](https://github.com/EU0207/concert-reception-system/issues/230)、一体確定・不参加と資格は#104・107・112。未実施 |
-| 役割変更・端末再準備（CONF-065） | [#96・DD-96](../detailed-design/staff-role-change-detail-design.md)とADR-011はIn Review | #110。Google本人・UIDの対応と新役割の準備、降格と18ケース。製品試験未実施 |
+| 役割変更・端末再準備（CONF-065） | [#96・DD-96](../detailed-design/staff-role-change-detail-design.md)とADR-011はPR #246で承認・統合済み | #110。Google本人・UIDの対応と新役割の準備、降格と18ケース。製品試験未実施 |
 | お客様の個別登録（CONF-067） | [#97](https://github.com/EU0207/concert-reception-system/issues/97) | #230・110・112。MCT-38の重複候補・初期状態と発券拒否を含む |
-| 臨時管理者の権限設定（CONF-068） | [#98](https://github.com/EU0207/concert-reception-system/issues/98) | #110。設計承認前に権限を拡張しない |
+| 臨時管理者の権限設定（CONF-068） | [#98・DD-98](../detailed-design/temporary-admin-permissions-detail-design.md)とADR-012はIn Review | #110。固定9項目と禁止12群、共通版・端末準備と21ケース。製品未実施 |
 | 帳票生成とチケット出力（MCT-35） | [#235](https://github.com/EU0207/concert-reception-system/issues/235)・[DD-235](../detailed-design/file-output-detail-design.md)はPR #243で承認・統合済み | [#236](https://github.com/EU0207/concert-reception-system/issues/236)。#108の投影・#112の資格と#230の購入者正本から実ファイルを生成する |
 
 ### 変更記録#93の管理終了と残条件

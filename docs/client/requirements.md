@@ -48,6 +48,8 @@ REQ-NF-002・010の評価条件を、**通常無料・最低600人、目標1,000
 
 ## CONF-068による承認済み追補
 
+追加の具体化は[DD-98](../development/detailed-design/temporary-admin-permissions-detail-design.md)でレビュー中。従来の臨時管理者の許可操作を利用者別に設定し、締め等の禁止操作を追加許可しない。共通役割版・期限と取消し、端末別準備を定める案であり、本レビュー前は既存の承認範囲を変更しない。
+
 [依頼者回答](../development/ui-mock/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)により、REQ-F-040の通常締め・例外締めは主担当または代理管理者だけに許可し、臨時管理者には許可しない。REQ-F-028の臨時管理者権限は、公演と利用者ごとに設定できるようにする。設定可能な操作と条件は[変更Issue #98](https://github.com/EU0207/concert-reception-system/issues/98)で設計する。既存の禁止操作は、その設計と承認が済むまで許可しない。
 
 ## CONF-067による承認済み追補
