@@ -26,9 +26,9 @@ BD-04の端末廃止と公演データ削除では、操作対象が最後の利
 
 [DD-96](../detailed-design/staff-role-change-detail-design.md)と[ADR-011](../decisions/ADR-011-role-change-identity-binding.md)でGoogle本人・UID対応、役割版と端末別の追加準備を具体化する。追加契約はPR #246で承認・統合済みであり、以下の役割範囲を広げない。#98の権限カスタマイズは別設計、製品実装・試験は#110で未実施。
 
-## #98の権限設定の詳細化（In Review）
+## #98の権限設定の詳細化（PR #247承認済み）
 
-[DD-98](../detailed-design/temporary-admin-permissions-detail-design.md)と[ADR-012](../decisions/ADR-012-temporary-admin-permission-profiles.md)で、既存許可の9項目を公演・利用者別に設定する案を具体化する。初回は従来の範囲を維持し、取消し・期限切れで自動復活しない。締め・役割管理等の禁止は固定する。共通役割版と端末別準備、現在認可・オフラインの試験21ケースは#110で製品未実施。追加範囲は本レビューまで未承認とする。
+[DD-98](../detailed-design/temporary-admin-permissions-detail-design.md)と[ADR-012](../decisions/ADR-012-temporary-admin-permission-profiles.md)で、既存許可の9項目を公演・利用者別に設定する案を具体化する。初回は従来の範囲を維持し、取消し・期限切れで自動復活しない。締め・役割管理等の禁止は固定する。共通役割版と端末別準備、現在認可・オフラインの試験21ケースは#110で製品未実施。DD-98とADR-012の案AはPR #247で承認・統合済み。
 
 ## この文書について
 

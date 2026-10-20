@@ -21,7 +21,7 @@ export function checkScope(v: Scope, scope: Scope) {
   requireValue(v.environmentId === scope.environmentId && v.performanceId === scope.performanceId, 'SCOPE_MISMATCH');
 }
 export function displayNumber(seat: Seat): string {
-  return seat.numberingMode === 'manual' ? seat.manualNumber! : seat.prefix! + seat.number!;
+  return seat.numberingMode === 'manual' ? seat.manualNumber : seat.prefix + seat.number;
 }
 export function allIds(layout: SeatLayout): Id[] {
   return layout.sections.flatMap(m => [m.section.sectionId, ...m.section.lineSettings.map(l => l.lineId),

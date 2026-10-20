@@ -52,7 +52,7 @@ AC-037では3区画をまとめて番号版PDFと名前版PDF・Excelへ出力�
 
 ## CONF-068による承認済み追補
 
-[DD98-T01～21](../development/detailed-design/temporary-admin-permissions-detail-design.md#dd-98-06-製品試験と担当)へ設定の許可・拒否、途中変更と直接要求を対応付ける。追加試験計画はIn Review。取消しと期限後の自動復活拒否、端末別の追加準備と未送信保護を含め、既存ACの合格条件を縮小しない。製品試験は全件未実施。
+[DD98-T01～21](../development/detailed-design/temporary-admin-permissions-detail-design.md#dd-98-06-製品試験と担当)へ設定の許可・拒否、途中変更と直接要求を対応付ける。追加試験計画はPR #247で承認・統合済み。取消しと期限後の自動復活拒否、端末別の追加準備と未送信保護を含め、既存ACの合格条件を縮小しない。製品試験は全件未実施。
 
 AC-014とAC-028に、通常締め・例外締めを主担当と代理管理者だけが実行でき、臨時管理者と一般受付担当者は画面・サーバーの両方で拒否される試験を追加する。確認画面を開いた後に役割が変わった場合も、確定時に拒否する。臨時管理者の公演・利用者別権限設定については[変更Issue #98](https://github.com/EU0207/concert-reception-system/issues/98)で設定範囲と試験条件を定める。試験は未実施。
 
