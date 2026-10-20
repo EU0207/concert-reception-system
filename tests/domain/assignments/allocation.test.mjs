@@ -312,6 +312,94 @@ test('DD91-T92 読取専用の入力とコマンドを変更せず、結果の�
   r.after.people[0].paid = false; r.event.after.rows[0].assignment.fixed = true;
   assert.equal(s.people[0].paid, true); assert.equal(r.after.layout.assignments[0].fixed, false);
 });
+function appendImportedPeople(s, added) {
+  // #230・104の一体取込後の入力を再現する。ラベル解決・取込保存自体の試験ではない。
+  const next = structuredClone(s);
+  next.people.push(...added);
+  next.layout.ticketProtections.push(...added.map(p => ({ ...scope, attendeeId: p.attendeeId,
+    issued: false, sent: false, hasIssuedHistory: false, activeCredentialId: null })));
+  for (const key of ['commit', 'source', 'attendee']) next.versions[key]++;
+  return next;
+}
+
+test('DG251-T08 追加ファイルの8人と2人を全名簿10人として連続配置する', () => {
+  const initial = fixture(undefined, people(8));
+  const s = appendImportedPeople(initial, people(2, true, 8));
+  const r = unchanged(s, () => autoAllocate(s, auto(s)));
+  assert.deepEqual(contents(r.after), [...people(10).map(p => p.attendeeId), null, null]);
+  assert.deepEqual(r.event.problems, []);
+  assert.deepEqual(r.after.people, s.people);
+  assert.deepEqual(r.after.layout.ticketProtections, s.layout.ticketProtections);
+  assert.equal(initial.people.length, 8);
+});
+
+test('DG251-T08 追加で11人になったグループは全員除外し、個人だけ配置する', () => {
+  const initial = fixture(['G'.repeat(12)], people(8));
+  const ten = appendImportedPeople(initial, people(2, true, 8));
+  const s = appendImportedPeople(ten, [...people(1, true, 10), ...people(1, false, 11)]);
+  const r = unchanged(s, () => autoAllocate(s, auto(s)));
+  assert.deepEqual(r.event.problems, [{ groupId, reason: 'GROUP_OVER_10' }]);
+  assert.deepEqual(r.after.layout.assignments.map(a => a.attendeeId), [uuid(111)]);
+  assert.deepEqual(r.after.groupStates, s.groupStates);
+  assert.deepEqual(r.after.people, s.people);
+});
+
+test('DG251-T09 固定グループへ追加しても旧席・理由と全員固定を保持する', () => {
+  const initial = fixture(['G'.repeat(12)], people(8));
+  const fixed = splitGroup(initial, command(initial, { groupId,
+    seatIds: initial.people.map((_, i) => seatAt(initial, i)), reason: '架空の通路配慮' }));
+  const s = appendImportedPeople(fixed.after, people(2, true, 8));
+  const r = unchanged(s, () => autoAllocate(s, auto(s)));
+  assert.deepEqual(r.event.problems, [{ groupId, reason: 'GROUP_FIXED' }]);
+  assert.deepEqual(r.after.layout.assignments, fixed.after.layout.assignments);
+  assert.deepEqual(r.after.groupStates, fixed.after.groupStates);
+  assert.equal(r.after.people.length, 10);
+  assert.equal(r.after.layout.assignments.length, 8);
+});
+
+for (const protection of ['issued', 'sent', 'hasIssuedHistory', 'activeCredentialId']) {
+  test(`DG251-T09 既存メンバーの${protection}保護を追加取込後も保持する`, () => {
+    const initial = fixture(undefined, people(8)), placed = autoAllocate(initial, auto(initial)).after;
+    placed.layout.ticketProtections[0][protection] = protection === 'activeCredentialId' ? 'fictional-reference' : true;
+    const s = appendImportedPeople(placed, people(2, true, 8));
+    const r = unchanged(s, () => autoAllocate(s, auto(s)));
+    assert.deepEqual(r.event.problems, [{ groupId, reason: 'GROUP_ISSUED' }]);
+    assert.deepEqual(r.after.layout.assignments, placed.layout.assignments);
+    assert.deepEqual(r.after.layout.ticketProtections, s.layout.ticketProtections);
+  });
+}
+
+test('DG251-T09 不参加者を含む所属への追加でも残りだけを自動再編しない', () => {
+  const initial = fixture(undefined, people(8)); initial.people[2].attendancePlan = 'cancelled';
+  const s = appendImportedPeople(initial, people(2, true, 8));
+  const r = unchanged(s, () => autoAllocate(s, auto(s)));
+  assert.deepEqual(r.event.problems, [{ groupId, reason: 'GROUP_CANCELLED' }]);
+  assert.equal(r.after.layout.assignments.length, 0);
+  assert.deepEqual(r.after.people, s.people);
+});
+
+test('DG251-T08 11人以上の手動分割・解除は許可し、自動再配置だけ拒否する', () => {
+  const s = fixture(['G'.repeat(12)], people(11));
+  const split = unchanged(s, () => splitGroup(s, command(s, { groupId,
+    seatIds: s.people.map((_, i) => seatAt(s, i)), reason: '架空の大人数手動配置' })));
+  assert.equal(split.after.layout.assignments.length, 11);
+  assert(split.after.layout.assignments.every(a => a.fixed));
+  const unlocked = unlockGroup(split.after, groupCommand(split.after));
+  assert(unlocked.after.layout.assignments.every(a => !a.fixed));
+  unchanged(unlocked.after, () => rejects('GROUP_SIZE', () => reallocateGroup(unlocked.after,
+    groupCommand(unlocked.after), unlocked.event.operationId, read(unlocked.event))));
+  const assigned = manualAssign(s, command(s, { attendeeId: s.people[0].attendeeId,
+    seatId: seatAt(s, 0), reason: '架空の個別手動配置' }));
+  assert.equal(assigned.after.groupStates[0].fixed, true);
+  assert.equal(assigned.event.after.rows.length, 11);
+});
+
+test('DG251-T08 内部UUIDでない取込ラベルは計算へ直接渡さない', () => {
+  const s = fixture(['GG'], people(2));
+  s.people.forEach(p => { p.groupId = 'G-01'; }); s.groupStates[0].groupId = 'G-01';
+  unchanged(s, () => rejects('INVALID_ROSTER', () => autoAllocate(s, auto(s))));
+});
+
 for (const count of [500, 600, 1000]) for (const mode of ['roster', 'random']) {
   test(`DD91-T10 ${count}人・2区画/${mode}の順序計算を再現する（無料受入ではない）`, () => {
     const s = fixture(['G'.repeat(count / 2), 'G'.repeat(count / 2)], people(count, false));

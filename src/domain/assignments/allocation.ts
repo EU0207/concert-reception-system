@@ -159,7 +159,8 @@ export function autoAllocate(s: AllocationSnapshot, c: AutoAllocationCommand): A
   return finish(s, after, c, 'autoAllocate', changed, [], { individualOrder, problems });
 }
 function editableGroup(s: AllocationSnapshot, id: Id) {
-  const group = members(s, id); requireValue(group.length > 0 && group.length <= 10, 'GROUP_SIZE');
+  // 10人上限は自動配置だけに適用する。Excel取込・手動分割を制限しない。
+  const group = members(s, id); requireValue(group.length > 0, 'GROUP_SIZE');
   requireValue(group.every(p => p.attendancePlan === 'planned'), 'GROUP_CANCELLED');
   requireValue(!group.some(p => issued(s, p.attendeeId)), 'GROUP_ISSUED'); return group;
 }
@@ -266,6 +267,7 @@ function receipt(s: AllocationSnapshot, c: GroupCommand, operationId: Id,
 export function reallocateGroup(s: AllocationSnapshot, c: GroupCommand, unlockOperationId: Id,
   read: ReadCommittedAssignment): AssignmentPlan {
   const after = begin(s, c), group = editableGroup(after, c.groupId);
+  requireValue(group.length <= 10, 'GROUP_SIZE');
   const e = receipt(s, c, unlockOperationId, 'unlockGroup', read), ids = group.map(p => p.attendeeId);
   after.layout.assignments = after.layout.assignments.filter(a => !ids.includes(a.attendeeId));
   const run = contiguous(after, orderedSeats(after), group.length);
