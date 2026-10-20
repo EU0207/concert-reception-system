@@ -359,7 +359,11 @@ DD-96とADR-011の案AはPR #246で承認・統合済み。#98の業務権限設
 | AC-030・031・032、DD-96 | DD-98-03～05、DD98-T05～13・18・19。共通役割版・確定、端末準備と後着保護 | #110・104・233・234、表示名#106。全件未実施 |
 | 無料600人必須・1,000人目標、保持・復旧 | DD98-T20・21。設定と監査・差分を全体測定へ含め、旧権限を復活させない | #110・220・221。全件未実施 |
 
-DD-98・ADR-012はIn Review。根拠と照合の範囲は[設計照合記録](technical-validation/temporary-permissions-design-review.md)へ分離する。
+DD-98とADR-012の案AはPR #247で承認・統合済み。根拠と照合の範囲は[設計照合記録](technical-validation/temporary-permissions-design-review.md)へ分離する。
+
+### 製品の席ドメイン単体試験（#102）
+
+[単体試験結果](technical-validation/seat-domain-unit-test-results.md)で、DD91-T01～06・11・13、T26～28・30・31、T33～36・42・43・102の共通計算部分を61件へ対応付けた。元のDD91本文は変更しない。型検査・単体は合格、実装はレビュー中。保存・認可と実機の結合は未実施であり、これらのDD91ケース全体を合格へ変更しない。
 
 ### ADR一覧
 
@@ -373,7 +377,7 @@ DD-98・ADR-012はIn Review。根拠と照合の範囲は[設計照合記録](te
 | [ADR-006](decisions/ADR-006-firestore-image-storage.md) | 会場画像のFirestore固定枠・1画像1文書保存。最新の1MB上限 | REQ-F-035 | AC-025 | Accepted（CONF-053） |
 | [ADR-007](decisions/ADR-007-seat-edit-commit-boundary.md) | 席編集の原子的確定と物理保存候補 | REQ-F-036・038・043・044、DD-91-T01 | AC-025・026・035・036 | Accepted（RTDB初期方式・PR #228） |
 | [ADR-011](decisions/ADR-011-role-change-identity-binding.md) | 役割変更時のGoogle本人確認とUID維持 | CONF-065、REQ-F-028、DD-96 | AC-014・030 | Accepted（案A・PR #246） |
-| [ADR-012](decisions/ADR-012-temporary-admin-permission-profiles.md) | 臨時管理者の固定権限一覧と共通役割版 | CONF-068、REQ-F-028・040、DD-98 | AC-014・028・030 | Proposed（案A） |
+| [ADR-012](decisions/ADR-012-temporary-admin-permission-profiles.md) | 臨時管理者の固定権限一覧と共通役割版 | CONF-068、REQ-F-028・040、DD-98 | AC-014・028・030 | Accepted（案A・PR #247） |
 
 ## 更新ルール
 
