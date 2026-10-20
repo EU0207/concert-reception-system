@@ -387,7 +387,7 @@ DD-98とADR-012の案AはPR #247で承認・統合済み。根拠と照合の範
 
 ### 出力監査の中断境界の設計是正（#252）
 
-状態：In Review。[DD-235の端末保存・再開契約](detailed-design/file-output-detail-design.md#出力監査の端末保存と中断復帰252)、[ADR-014](decisions/ADR-014-export-audit-recovery.md)と[設計照合記録](technical-validation/export-audit-recovery-review.md)へ対応付ける。
+状態：Approved（PR #255）。[DD-235の端末保存・再開契約](detailed-design/file-output-detail-design.md#出力監査の端末保存と中断復帰252)、[ADR-014](decisions/ADR-014-export-audit-recovery.md)と[設計照合記録](technical-validation/export-audit-recovery-review.md)へ対応付ける。
 
 | 条件 | 追加試験・担当 | 現在の範囲 |
 |---|---|---|
