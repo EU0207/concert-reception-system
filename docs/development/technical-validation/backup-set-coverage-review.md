@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review。設計是正のみ、製品試験未実施 |
+| 状態 | Approved（PR #254）。設計是正のみ、製品試験未実施 |
 | 日付・読者 | 2026-10-20。開発者、設計担当者、実装・試験担当者 |
 | 起点 | main `23efce7d85dcf81a968fdbee43be42156ea72459`への第三者文書レビュー指摘1（P2）、Issue #250 |
 | 正本・理由 | [正式RTDB契約の公演集合](../detailed-design/rtdb-storage-contract.md#公演集合の保護と世代交代250)、[ADR-013](../decisions/ADR-013-backup-set-coverage.md) |
