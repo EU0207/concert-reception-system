@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | Approved（PR #243）。#252の監査・中断境界是正はIn Review。実ファイル・印刷試験は未実施 |
+| 状態 | Approved（PR #243）。#252の監査・中断境界是正はPR #255で承認済み。実ファイル・印刷試験は未実施 |
 | 読者・目的 | 開発者・設計担当者・テスト担当者が、同一版の入力と生成・保存の境界を実装へ渡す |
 | 関連Issue | 設計#235、実装#236。席表投影#108、資格#112と認可#110、お客様管理#230。バックアップは#221 |
 | 根拠 | [BD-07](../basic-design/file-output-report-design.md)、[席と帳票の共同契約](seat-management-detail-design.md#dd-91-07-93発券帳票未更新端末への受渡し)、[購入者正本](customer-ticket-detail-design.md#dd-93-02-idと保存の正本)、[TBD-011候補台帳](../basic-design/third-party-dependency-candidates.md) |
@@ -91,7 +91,7 @@ xlsxは1区画1シート、各シートA4横1ページの印刷範囲へ対応�
 
 ### 出力監査の端末保存と中断復帰（#252）
 
-状態：In Review。比較・提案理由は[ADR-014](../decisions/ADR-014-export-audit-recovery.md)、確認範囲は[設計照合記録](../technical-validation/export-audit-recovery-review.md)へ分ける。通常生成のDB書込み0件は維持し、監査用情報の端末保存と監査の受領を別に扱う。単なるプレビューや未確定の形式選択では監査待ちを作成せず、利用者が出力を確定した操作だけを対象とする。今回の追加は#236・104・110の実装前契約で、動作試験は未実施。
+状態：Approved（PR #255）。比較・採用理由は[ADR-014](../decisions/ADR-014-export-audit-recovery.md)、確認範囲は[設計照合記録](../technical-validation/export-audit-recovery-review.md)へ分ける。通常生成のDB書込み0件は維持し、監査用情報の端末保存と監査の受領を別に扱う。単なるプレビューや未確定の形式選択では監査待ちを作成せず、利用者が出力を確定した操作だけを対象とする。今回の追加は#236・104・110の実装前契約で、動作試験は未実施。
 
 #### 保存する情報と境界
 

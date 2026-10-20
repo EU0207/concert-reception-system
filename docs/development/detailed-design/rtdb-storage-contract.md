@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | Approved（PR #228、#251追補はPR #253）。#250の復旧範囲是正はPR #254で承認済み。#252の出力監査追補はIn Review。製品実装・試験は未実施 |
+| 状態 | Approved（PR #228、#251追補はPR #253）。#250の復旧範囲是正はPR #254で承認済み。#252の出力監査追補はPR #255で承認済み。製品実装・試験は未実施 |
 | 読者・目的 | 開発者・設計担当者・テスト担当者が、採用する保存境界と後続試験を確認する |
 | 根拠 | [ADR-007の122-A](../decisions/ADR-007-seat-edit-commit-boundary.md#初期方式の設計採用を単独で判断するtech-dd91-122)、[席管理の詳細設計](seat-management-detail-design.md)、[BD-08](../basic-design/operations-recovery-design.md) |
 | 関連Issue | #168・101。実装は#102～108・110～112、バックアップは#221、完成アプリの無料受入は#220 |
@@ -58,7 +58,7 @@ QR資格は暗号学的乱数16バイトを正規のBase64url 22文字へ変換�
 
 ### 出力監査の追補（#252）
 
-状態：In Review。[DD-235の監査契約](file-output-detail-design.md#出力監査の端末保存と中断復帰252)で、`event/exportAudits/{exportId}`の不変の最小監査本文・サーバー受領時刻と、`event/exportAuditHead`の監査revision・最終exportIdを一体保存する。新規受領だけ監査revisionを進め、同じID・本文は既存の1件を照合する。異内容や本文・headの片側更新を拒否する。端末の観測時刻・入力版と、サーバーの受領時刻・現在認可を分け、過去の監査受領で現在の席・券・受付を更新しない。
+状態：Approved（PR #255）。[DD-235の監査契約](file-output-detail-design.md#出力監査の端末保存と中断復帰252)で、`event/exportAudits/{exportId}`の不変の最小監査本文・サーバー受領時刻と、`event/exportAuditHead`の監査revision・最終exportIdを一体保存する。新規受領だけ監査revisionを進め、同じID・本文は既存の1件を照合する。異内容や本文・headの片側更新を拒否する。端末の観測時刻・入力版と、サーバーの受領時刻・現在認可を分け、過去の監査受領で現在の席・券・受付を更新しない。
 
 監査revisionは公演別バックアップの開始・終了の同一版検査と、公演集合の必要版へ含める。監査追加を業務版不変のまま見落として旧公演ファイルを再利用せず、生成中の監査revision変更ではバックアップ候補を未完了とする。
 
