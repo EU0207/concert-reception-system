@@ -7,7 +7,7 @@
   "engines": { "node": ">=24.19.0" },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/domain/seats/*.test.mjs mock/scenarios.test.cjs"
+    "test": "node --test tests/domain/seats/*.test.mjs tests/domain/assignments/*.test.mjs mock/scenarios.test.cjs"
   },
   "devDependencies": { "typescript": "7.0.2" }
 }
