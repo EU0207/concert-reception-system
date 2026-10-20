@@ -377,13 +377,23 @@ DD-98とADR-012の案AはPR #247で承認・統合済み。根拠と照合の範
 
 ### バックアップ集合の設計是正（#250）
 
-状態：In Review。[全公演の目録・世代交代](detailed-design/rtdb-storage-contract.md#公演集合の保護と世代交代250)、[ADR-013](decisions/ADR-013-backup-set-coverage.md)と[照合記録](technical-validation/backup-set-coverage-review.md)へ対応付ける。
+状態：Approved（PR #254）。[全公演の目録・世代交代](detailed-design/rtdb-storage-contract.md#公演集合の保護と世代交代250)、[ADR-013](decisions/ADR-013-backup-set-coverage.md)と[照合記録](technical-validation/backup-set-coverage-review.md)へ対応付ける。
 
 | 条件 | 追加試験・担当 | 現在の範囲 |
 |---|---|---|
 | CONF-049・050、REQ-NF-019、AC-013・031 | BK250-T01～04・08・10、#221・111 | 未削除公演の網羅性、ファイル再利用と世代交代・旧集合だけの不要複製の破棄。期待条件のみ |
 | 削除済み本文の復活禁止、現在認可と公演独立 | BK250-T05～07・09・11、#221・239・104・110 | 独立削除証跡、採用応答不明と集合復旧の再開。製品試験未実施 |
 | 無料600人必須・1,000人目標、課金登録なし | BK250-T12、#220・221 | 2・12公演の生成・全参照検査と全面復旧の予算。長期蓄積時の既存超過条件を維持し、無料合格を主張しない |
+
+### 出力監査の中断境界の設計是正（#252）
+
+状態：Approved（PR #255）。[DD-235の端末保存・再開契約](detailed-design/file-output-detail-design.md#出力監査の端末保存と中断復帰252)、[ADR-014](decisions/ADR-014-export-audit-recovery.md)と[設計照合記録](technical-validation/export-audit-recovery-review.md)へ対応付ける。
+
+| 条件 | 追加試験・担当 | 現在の範囲 |
+|---|---|---|
+| DD235-T13、AC-031・032と同一操作ID | EX252-T01～06、#236・104 | 引渡し前の永続化・判別不能な中断と監査本文の固定、同じIDの照会・再送。製品試験未実施 |
+| AC-030・031、現在認可と未受領保持 | EX252-T07～11、#110・104・111 | 過去の観測と現在認可の分離、失効ロックと所有タブ、回収前の受領一致。期待条件のみ |
+| 無料600人必須・1,000人目標、明示削除まで保持 | EX252-T12、#220・221・239・236 | 最小監査の目録と追加通信量。本体・氏名・QRを永続化せず、無料・製品の合格を主張しない |
 
 ### ADR一覧
 
