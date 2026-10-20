@@ -324,3 +324,19 @@ test('DD91-T42 基準投影は負の移動量を正規化し、不正な移動�
   rejects('INVALID_OFFSET', () => projectBaseLayout(snapshot, { [f.sectionId]: { rowOffset: 0.5, columnOffset: 0 } }));
   rejects('OFFSET_SECTION_NOT_FOUND', () => projectBaseLayout(snapshot, { [uuid(99)]: { rowOffset: 0, columnOffset: 0 } }));
 });
+test('DD91-T33 欠番からの手入力席を残した再採番でも消費番号を二重利用しない', () => {
+  const f = fixture({ kinds: [[0, 0, 'seat'], [0, 1, 'gap'], [0, 2, 'seat']] });
+  const before = addManualSeat(f.layout, f.sectionId, cell(model(f.layout), 0, 1).cellId, '補助', '架空の設置', f.opts).after;
+  assert.equal(reconfigureSection(before, f.sectionId, {}, f.opts).impact.changed, false);
+  const reversed = reconfigureSection(before, f.sectionId, { seatOrder: 'reverse' }, f.opts).after;
+  assert.deepEqual(labels(reversed), ['A-3', '補助', 'A-1', 'unset', 'unset', 'unset']);
+  assert.equal(cell(model(reversed), 0, 1).consumedNumber, 2);
+  assert.equal(model(reversed).section.lineSettings[0].nextAutomaticNumber, 4);
+});
+test('DD91-T33 後ろに自動席がない場合も、手入力にした欠番の消費を返却しない', () => {
+  const f = fixture({ kinds: [[0, 0, 'seat'], [0, 1, 'gap']] });
+  const before = addManualSeat(f.layout, f.sectionId, cell(model(f.layout), 0, 1).cellId, '補助', '架空', f.opts).after;
+  const after = reconfigureSection(before, f.sectionId, { selections: { [cell(model(before), 0, 0).cellId]: 'space' } }, f.opts).after;
+  assert.equal(model(after).section.lineSettings[0].nextAutomaticNumber, 3);
+  assert.equal(cell(model(after), 0, 1).consumedNumber, 2); validateLayout(after);
+});
