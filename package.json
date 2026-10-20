@@ -1,0 +1,13 @@
+{
+  "name": "concert-reception-system",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "engines": { "node": ">=24.19.0" },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/domain/seats/*.test.mjs"
+  },
+  "devDependencies": { "typescript": "7.0.2" }
+}
