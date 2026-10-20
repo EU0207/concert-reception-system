@@ -68,7 +68,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 |---|---|---|---|---|---|---|
 | 開発計画書 | [project-plan.md](development/project-plan.md) | 工程、成果物、進捗管理方法を定める | 開発担当者、依頼者 | プロジェクト開始時 | 計画変更時 | Draft |
 | 用語集 | [glossary.md](development/glossary.md) | 専門用語の意味を統一する | 全関係者 | 全工程 | 新しい用語の使用時 | Draft |
-| トレーサビリティ表 | [traceability-matrix.md](development/traceability-matrix.md) | 質問・要件・受入条件の対応を追跡する | 開発担当者、確認担当者 | 要件定義工程以降 | 関連成果物の変更時 | Approved |
+| トレーサビリティ表 | [traceability-matrix.md](development/traceability-matrix.md) | 質問・要件・受入条件を追跡。[実装・試験の担当と順序](development/traceability-matrix.md#実装試験の担当と実装順2026-10-21)から全39ACとIssueへ接続する | 開発担当者、確認担当者 | 要件定義工程以降 | 関連成果物の変更時 | Approved。実装担当の追補はIn Review |
 
 ### 技術検証
 
@@ -156,7 +156,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | 役割変更の設計照合記録 | [role-change-design-review.md](development/technical-validation/role-change-design-review.md) | 権限表・公式仕様と試験担当の照合範囲を記録する | 開発者、テスト担当者 | #96のレビュー | 照合結果・残条件の変更時 | Approved（PR #246） |
 | 臨時管理者の公演・利用者別権限設定 | [temporary-admin-permissions-detail-design.md](development/detailed-design/temporary-admin-permissions-detail-design.md) | 固定9項目・禁止12群、共通版と取消し・端末別準備、製品試験21ケースを定義する | 開発者、実装担当者、テスト担当者 | #98の設計 | 権限・期限・準備条件の変更時 | Approved（PR #247） |
 | 臨時管理者の権限設定・設計照合記録 | [temporary-permissions-design-review.md](development/technical-validation/temporary-permissions-design-review.md) | 権限表・設定パターンと試験担当を照合した範囲を記録する | 開発者、テスト担当者 | #98のレビュー | 照合・残条件の変更時 | Approved（PR #247） |
-| 席設定計算の途中引継ぎ | [assignment-domain-handoff.md](development/technical-validation/assignment-domain-handoff.md) | #103の配置計算・50単体と残る最終照合を引き継ぐ | 開発者、実装担当者 | #103の実装 | 次セッションの再開・検証時 | Draft |
+| 席設定計算の実装・試験記録 | [assignment-domain-handoff.md](development/technical-validation/assignment-domain-handoff.md) | #103の6完了条件・60単体と所属是正の照合、後続の保存・画面への契約を記録する | 開発者、実装担当者 | #103の実装 | 実装・試験と承認変更時 | In Review |
 | 出力監査・中断復帰の設計照合記録 | [export-audit-recovery-review.md](development/technical-validation/export-audit-recovery-review.md) | #252の事前保存・監査再送と追加12ケース、未検証範囲を照合する | 開発者、設計担当者、実装・試験担当者 | 設計是正 | 状態遷移・認可と回収条件の変更時 | Approved（PR #255） |
 | バックアップ集合の設計照合記録 | [backup-set-coverage-review.md](development/technical-validation/backup-set-coverage-review.md) | #250の公演集合・世代交代と追加12ケース、長期蓄積の測定条件を照合する | 開発者、設計担当者、実装・試験担当者 | 設計是正 | 目録・復旧範囲と承認変更時 | Approved（PR #254） |
 | Excel所属契約の設計照合記録 | [excel-group-contract-review.md](development/technical-validation/excel-group-contract-review.md) | #251の業務条件・是正と追加12ケース、後続への受渡しを照合する | 開発者、設計担当者、実装・試験担当者 | 設計是正 | 所属契約・承認変更時 | Approved（PR #253） |

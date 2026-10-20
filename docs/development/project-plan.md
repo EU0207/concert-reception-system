@@ -91,7 +91,7 @@ Issue #6の完了後、Issue #23とPR #24で要件定義書と受入条件書を
 
 ### 工程の状態と承認地点
 
-2026-10-12時点の一覧です。承認日とmain統合日は区別します。表のタグは、承認対象と記録が揃ったmainのコミットを指す説明付きタグです。タグ作成日は過去の承認日を変更しません。
+2026-10-21時点の一覧です。承認日とmain統合日は区別します。表のタグは、承認対象と記録が揃ったmainのコミットを指す説明付きタグです。タグ作成日は過去の承認日を変更しません。
 
 | 工程・区分 | 状態・範囲 | 承認日・確認日 | 承認・記録PR | タグ | 根拠 |
 |---|---|---|---|---|---|
@@ -102,9 +102,9 @@ Issue #6の完了後、Issue #23とPR #24で要件定義書と受入条件書を
 | 要件・基本設計変更（第三者レビュー是正） | Approved。11件の是正、CONF-049～054、ADR-004～006 | 2026-09-26 | [#84](https://github.com/EU0207/concert-reception-system/pull/84) | [approval/basic-design-change-2026-09-26](https://github.com/EU0207/concert-reception-system/tree/approval/basic-design-change-2026-09-26) | [変更承認記録](basic-design/basic-design-remediation-approval.md#承認の範囲) |
 | UIモック・変更承認（CONF-060） | Approved。対象コミットまでのモック変更とFB-01～33の書面上の変更 | 2026-09-28 | [#88](https://github.com/EU0207/concert-reception-system/pull/88) | [approval/ui-mock-change-2026-09-28](https://github.com/EU0207/concert-reception-system/tree/approval/ui-mock-change-2026-09-28) | [包括承認の対象](ui-mock/ui-mock-client-response.md#conf-060-追加修正変更の包括承認) |
 | UIモック・操作確認と引継ぎ | #85終了。CONF-061～069の個別回答も記録。版を固定した全体最終承認とは区別 | 2026-10-02に評価伝達、2026-10-03に統合・引継ぎ | [#88](https://github.com/EU0207/concert-reception-system/pull/88) | [milestone/ui-mock-handoff-2026-10-03](https://github.com/EU0207/concert-reception-system/tree/milestone/ui-mock-handoff-2026-10-03) | [確認記録](ui-mock/ui-mock-review.md#結論)、[Issue #85終了記録](https://github.com/EU0207/concert-reception-system/issues/85#issuecomment-5967824344) |
-| 詳細設計 | In Review。業務回答の承認と技術方式全体の承認を分離 | 工程全体は未承認 | [#109](https://github.com/EU0207/concert-reception-system/pull/109)以降の設計・検証PR | なし（進行中） | [詳細設計](detailed-design/seat-management-detail-design.md)、[保存成立性の検証](technical-validation/seat-save-validation.md) |
-| 本番実装 | 未着手。関連Issueを登録済み | 未承認 | なし | なし | [本番引継ぎ台帳](ui-mock/ui-mock-production-handoff.md#実装受入へのゲート) |
-| 本番テスト・リリース | 未実施 | 未承認 | なし | なし | [本番引継ぎ台帳](ui-mock/ui-mock-production-handoff.md#実装受入へのゲート)、[受入条件書](../client/acceptance-criteria.md) |
+| 詳細設計 | Approved。予定した詳細設計と第三者指摘3件の是正を承認・main統合済み。製品試験の合格とは区別 | 2026-10-20までの各承認記録 | #228・231・238・240～247・253～255、適用範囲の追補#257 | なし（新規タグ未作成） | [席管理全体照合](detailed-design/seat-design-final-review.md)、[所属是正](technical-validation/excel-group-contract-review.md)、[バックアップ集合](technical-validation/backup-set-coverage-review.md)、[出力監査](technical-validation/export-audit-recovery-review.md) |
+| 本番実装 | 進行中。#102承認・統合済み、#103は既存PR #249で継続。残りは対象設計と依存の開始条件を維持 | #102は2026-10-20承認、#103は未承認 | [#248](https://github.com/EU0207/concert-reception-system/pull/248)、[#249](https://github.com/EU0207/concert-reception-system/pull/249) | なし | [実装・試験の担当と順序](traceability-matrix.md#実装試験の担当と実装順2026-10-21) |
+| 本番テスト・リリース | 全体試験・受入は未実施。#265で結合、#220で無料受入、#266で全39ACの最終判定。配備・公開は未許可 | 未承認 | なし | なし | [受入条件書](../client/acceptance-criteria.md)、[担当割当](traceability-matrix.md#受入条件別の実装試験担当) |
 
 初回承認タグは当時の基準版です。その後の変更を含む最新版の承認を意味しません。CONF-033～046などの個別回答は各承認記録で追跡し、今回すべてに個別タグを付けるものではありません。UIモック統合後のCONF-070～075は[依頼者回答記録](ui-mock/ui-mock-client-response.md)で追跡し、今回のUIモックタグには含めません。
 
@@ -163,5 +163,7 @@ git rev-parse 'approval/requirements-initial-2026-09-09^{commit}'
 - ビルド、型チェック、Lint、自動テスト等のうち、繰り返し実行する確認コマンドが用意されている。
 
 CIでは、Pull Requestごとに同じ確認を自動実行できることを目的とします。GitHub中心の運用に適合する場合は、GitHub Actionsを第一候補として比較します。
+
+2026-10-21、実装・自動テストと`pnpm typecheck`・`pnpm test`が揃い、導入条件を満たすことを確認した。[#259](https://github.com/EU0207/concert-reception-system/issues/259)で単一ジョブの最小構成を提案した。状態はTodo、CI未導入。導入前のレビューで実版・権限と無料枠を確認し、実サービス試験・CDは含めない。
 
 CDは、公開先、リリース方法、権限管理、秘密情報の管理方法が決まった後に検討します。公開先が未決定の間は導入しません。
