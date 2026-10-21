@@ -52,11 +52,38 @@ test('APP258-B01 公演選択・戻る・接続状態とスマホのメニュー
   await page.getByRole('button', { name: '閉じる', exact: true }).click();
   await page.goBack(); await expect(page.getByRole('heading', { name: '公演一覧', exact: true })).toBeVisible();
   if (testInfo.project.name === 'phone-layout') {
-    await page.getByRole('button', { name: '☰ メニュー' }).click();
-    await page.getByRole('dialog').getByRole('link', { name: 'このアプリについて' }).click();
+    await page.getByRole('button', { name: 'メニューを開く' }).click();
+    await page.getByRole('complementary', { name: '画面メニュー' }).getByRole('link', { name: 'このアプリについて' }).click();
   } else await page.getByRole('navigation').getByRole('link', { name: 'このアプリについて' }).click();
   await expect(page.getByRole('heading', { name: 'このアプリについて' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+test('APP258-B10 メニューは左端から開き、閉じる操作と幅900pxの切替を保つ', async ({ page }) => {
+  await page.setViewportSize({ width: 900, height: 844 }); await ready(page);
+  const toggle = page.getByRole('button', { name: 'メニューを開く' });
+  const menu = page.getByRole('complementary', { name: '画面メニュー' });
+  const close = menu.getByRole('button', { name: 'メニューを閉じる' });
+  await expect(menu).not.toBeVisible(); await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true'); await expect(close).toBeFocused();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect.poll(async () => (await menu.boundingBox())?.x).toBe(0);
+  expect((await menu.boundingBox()).width).toBe(320);
+  expect(await page.locator('.content').evaluate(node => node.inert)).toBe(true);
+  await page.keyboard.press('Shift+Tab'); await expect(menu.getByRole('link', { name: 'このアプリについて' })).toBeFocused();
+  await page.keyboard.press('Tab'); await expect(close).toBeFocused();
+  await page.keyboard.press('Escape'); await expect(menu).not.toBeVisible(); await expect(toggle).toBeFocused();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  expect(await page.locator('.content').evaluate(node => node.inert)).toBe(false);
+  await toggle.click(); await close.click(); await expect(toggle).toBeFocused();
+  await toggle.click(); await page.locator('.drawer-backdrop').click({ position: { x: 850, y: 400 } });
+  await expect(menu).not.toBeVisible(); await expect(toggle).toBeFocused();
+  await toggle.click(); await menu.getByRole('link', { name: 'このアプリについて' }).click();
+  await expect(page.getByRole('heading', { name: 'このアプリについて' })).toBeVisible(); await expect(menu).not.toBeVisible();
+  await toggle.click(); await page.setViewportSize({ width: 901, height: 844 });
+  await expect(menu).toBeVisible(); await expect(toggle).not.toBeVisible();
+  await expect(page.locator('main')).toBeFocused();
+  expect(await page.locator('.content').evaluate(node => node.inert)).toBe(false);
+  await page.setViewportSize({ width: 900, height: 844 }); await expect(menu).not.toBeVisible();
 });
 for (const [name, body, status] of [
   ['未設定', '', 404], ['不正形式', { ...config, schemaVersion: 9 }, 200],

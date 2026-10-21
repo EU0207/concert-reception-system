@@ -58,23 +58,49 @@ function menuItems() {
   const nav = el('nav', 'menu-links'); nav.setAttribute('aria-label', 'メインメニュー');
   nav.append(routeLink('公演一覧', '/events'), routeLink('このアプリについて', '/about')); return nav;
 }
-function openMenu() {
-  const nav = menuItems(); const dialog = showDialog('メニュー', nav);
-  nav.addEventListener('click', e => { if ((e.target as HTMLElement).closest('a')) dialog.close(); });
-}
 function renderShell() {
   const shell = el('div', 'shell'), side = el('aside', 'side');
+  side.id = 'app-menu'; side.setAttribute('aria-label', '画面メニュー');
   const brand = el('div', 'brand'); brand.append(el('span', 'brand-icon', '▦'), el('span', '', 'コンサート受付'));
-  side.append(brand, el('p', 'side-caption', '準備から、当日の受付まで'), menuItems(), el('p', 'side-footer', '架空データでのローカル確認'));
+  const heading = el('div', 'side-heading');
+  const closeButton = button('×', () => setMenu(false), 'button secondary menu-close');
+  closeButton.setAttribute('aria-label', 'メニューを閉じる'); heading.append(brand, closeButton);
+  side.append(heading, el('p', 'side-caption', '準備から、当日の受付まで'), menuItems(), el('p', 'side-footer', '架空データでのローカル確認'));
   const content = el('div', 'content'), environment = el('div', 'environment', `${startup.config.environmentName} · 架空データのみ`);
   const header = el('header', 'topbar');
   const start = el('div', 'header-start');
-  start.append(button('☰ メニュー', openMenu, 'button secondary mobile-menu'), routeLink('公演一覧', '/events', 'home-link'));
+  const menuButton = button('☰', () => setMenu(true), 'button secondary mobile-menu');
+  menuButton.setAttribute('aria-label', 'メニューを開く'); menuButton.setAttribute('aria-controls', side.id); menuButton.setAttribute('aria-expanded', 'false');
+  start.append(menuButton, routeLink('公演一覧', '/events', 'home-link'));
+  const backdrop = button('', () => setMenu(false), 'drawer-backdrop');
+  backdrop.hidden = true; backdrop.tabIndex = -1; backdrop.setAttribute('aria-label', 'メニューを閉じる');
+  const narrow = matchMedia('(max-width: 900px)');
+  let menuOpen = false;
+  function setMenu(open: boolean, restoreFocus = true) {
+    menuOpen = open && narrow.matches;
+    side.classList.toggle('open', menuOpen); backdrop.hidden = !menuOpen;
+    content.inert = menuOpen; document.body.classList.toggle('menu-open', menuOpen);
+    menuButton.setAttribute('aria-expanded', String(menuOpen));
+    if (menuOpen) closeButton.focus(); else if (restoreFocus) menuButton.focus();
+  }
+  side.addEventListener('click', e => { if ((e.target as HTMLElement).closest('a') && menuOpen) setMenu(false); });
+  document.addEventListener('keydown', e => {
+    if (!menuOpen) return;
+    if (e.key === 'Escape') { e.preventDefault(); setMenu(false); }
+    if (e.key === 'Tab') {
+      const focusable = [...side.querySelectorAll<HTMLElement>('button, a[href]')];
+      const first = focusable[0]!, last = focusable.at(-1)!;
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  narrow.addEventListener('change', () => { if (menuOpen) { setMenu(false, false); main.focus({ preventScroll: true }); } });
+  window.addEventListener('popstate', () => { if (menuOpen) setMenu(false, false); });
   statusButton = button(connectionLabel(), connectionDialog, 'status-button');
   statusButton.setAttribute('aria-label', '接続と端末の状態'); header.append(start, statusButton);
   updateBanner = el('div', 'update-banner'); updateBanner.hidden = true; updateBanner.setAttribute('role', 'status');
   main = el('main', 'main'); main.id = 'main'; main.tabIndex = -1;
-  content.append(environment, header, updateBanner, main); shell.append(side, content); root.replaceChildren(shell);
+  content.append(environment, header, updateBanner, main); shell.append(side, backdrop, content); root.replaceChildren(shell);
   renderPage();
 }
 function pageHeading(eyebrow: string, title: string, description: string) {
