@@ -15,6 +15,8 @@ p { line-height: 1.8; }
 .skip:focus { top: 8px; left: 8px; }
 .shell { display: grid; grid-template-columns: 246px minmax(0, 1fr); min-height: 100dvh; }
 .side { background: #173b39; color: #fff; padding: 32px 24px; display: flex; flex-direction: column; position: sticky; top: 0; height: 100dvh; }
+.side-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.menu-close, .drawer-backdrop { display: none; }
 .brand { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; font-weight: 700; }
 .brand-icon { background: #31544e; border: 1px solid #5c7a6d; color: #e5efcd; border-radius: 11px; width: 36px; height: 36px; text-align: center; font-size: 1.5rem; }
 .side-caption { color: #c6d6cc; font-size: .75rem; margin-top: 13px; }
@@ -64,15 +66,18 @@ p { line-height: 1.8; }
 .dialog { border: 1px solid #dce2d8; border-radius: 15px; width: min(520px, calc(100% - 32px)); padding: 28px; color: #18302f; max-height: 85dvh; }
 .dialog::backdrop { background: #14262380; }
 .dialog h2 { margin-bottom: 20px; }
-.dialog .menu-links { margin-top: 0; }
 .dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 24px; }
 .dialog p { font-size: .9rem; }
 .update-banner { margin: 20px 40px 0; padding: 16px; border: 1px solid #b5c3b0; background: #fff8df; border-radius: 8px; line-height: 1.7; font-size: .85rem; }
 .mobile-menu { display: none; }
 .startup-error, .boot-message { max-width: 650px; margin: 10vh auto; padding: 30px; }
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .shell { grid-template-columns: 1fr; }
-  .side { display: none; }
+  body.menu-open { overflow: hidden; }
+  .side { position: fixed; inset: 0 auto 0 0; width: min(82vw, 320px); padding: 16px; z-index: 12; overflow-y: auto; transform: translateX(-100%); visibility: hidden; transition: transform .2s ease; }
+  .side.open { transform: translateX(0); visibility: visible; }
+  .side .menu-close { display: inline-grid; place-items: center; min-width: 44px; padding: 0; color: white; background: #32645e; border-color: #7ca9a0; }
+  .drawer-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 11; width: 100%; border: 0; background: #0b231f99; }
   .mobile-menu { display: inline-block; padding: 8px 10px; font-size: .8rem; }
   .topbar { padding: 12px 18px; min-height: 70px; }
   .header-start .home-link { display: none; }
