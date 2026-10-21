@@ -1,3 +1,5 @@
+// ブラウザー自動試験の設定。スマホ幅のChromium確認は実機試験と区別する。
+
 import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: 'tests/browser',
@@ -10,5 +12,9 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
     { name: 'phone-layout', use: { ...devices['iPhone 13'], defaultBrowserType: 'chromium' } },
   ],
-  webServer: { command: 'node scripts/serve-app.mjs', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI },
+  webServer: {
+    command: 'node scripts/serve-app.mjs',
+    url: 'http://127.0.0.1:4173',
+    reuseExistingServer: !process.env.CI,
+  },
 });
