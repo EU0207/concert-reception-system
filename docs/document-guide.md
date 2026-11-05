@@ -68,7 +68,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 |---|---|---|---|---|---|---|
 | 開発計画書 | [project-plan.md](development/project-plan.md) | 工程、成果物、進捗管理方法を定める | 開発担当者、依頼者 | プロジェクト開始時 | 計画変更時 | Draft |
 | 用語集 | [glossary.md](development/glossary.md) | 専門用語の意味を統一する | 全関係者 | 全工程 | 新しい用語の使用時 | Draft |
-| トレーサビリティ表 | [traceability-matrix.md](development/traceability-matrix.md) | 質問・要件・受入条件を追跡。[実装・試験の担当と順序](development/traceability-matrix.md#実装試験の担当と実装順2026-10-21)から全39ACとIssueへ接続する | 開発担当者、確認担当者 | 要件定義工程以降 | 関連成果物の変更時 | Approved。実装担当の追補はIn Review |
+| トレーサビリティ表 | [traceability-matrix.md](development/traceability-matrix.md) | 質問・要件・受入条件を追跡。[実装・試験の担当と順序](development/traceability-matrix.md#実装試験の担当と実装順2026-10-21)から全39ACとIssueへ接続する | 開発担当者、確認担当者 | 要件定義工程以降 | 関連成果物の変更時 | Approved（実装担当の追補はPR #249） |
+| 共通アプリ基盤・起動設定とPWA | [app-foundation-detail-design.md](development/detailed-design/app-foundation-detail-design.md) | 承認済みBD-01・05・06の実装具体化と、起動手順・担当試験・実機確認の残条件を記録する | 開発者、実装担当者 | #258の実装 | 起動契約・試験と操作確認時 | In Review |
 
 ### 技術検証
 

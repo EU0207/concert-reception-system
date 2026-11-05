@@ -4,10 +4,21 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.25.0",
-  "engines": { "node": ">=24.19.0" },
-  "scripts": {
-    "typecheck": "tsc --noEmit",
-    "test": "node --test tests/domain/seats/*.test.mjs tests/domain/assignments/*.test.mjs mock/scenarios.test.cjs"
+  "engines": {
+    "node": ">=24.19.0"
   },
-  "devDependencies": { "typescript": "7.0.2" }
+  "scripts": {
+    "setup:local": "node scripts/setup-local.mjs",
+    "dev": "vite --host 127.0.0.1 --port 4173 --strictPort",
+    "build": "pnpm typecheck && vite build && node scripts/build-pwa.mjs",
+    "preview": "node scripts/serve-app.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/domain/seats/*.test.mjs tests/domain/assignments/*.test.mjs tests/app/*.test.mjs mock/scenarios.test.cjs",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.4"
+  }
 }
