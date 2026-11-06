@@ -628,3 +628,285 @@ test('AUTH110-S05 セッション保存が使えなければ、未準備のま�
   }, config(randomUUID()));
   expect(code).toBe('SESSION_PERSISTENCE_UNAVAILABLE');
 });
+
+test('AUTH110-S06 製品SDKで通常登録を承認し、主担当の追加端末は一回リンクでだけ承認する', async ({
+  page,
+  context,
+}) => {
+  const issuer = await signedIn(page),
+    googleIdentity = { sub: randomUUID(), email: issuer.person.email };
+  await seed(issuer.environmentId, issuer.person.uid, issuer.deviceUid);
+  await page.evaluate(async (identity) => {
+    const { linkFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
+    await linkFictionalGoogle(window.testPrincipals, identity);
+  }, googleIdentity);
+  const rootUrl = `http://127.0.0.1:9100/environments/${issuer.environmentId}/performances/${performanceId}.json?ns=${project}-default-rtdb`;
+  const admin = async (updates) => {
+    const response = await fetch(rootUrl, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+      body: JSON.stringify(updates),
+    });
+    expect(response.status).toBe(200);
+  };
+  await admin({
+    [`roles/${issuer.person.uid}/role`]: 'owner',
+    [`devices/${issuer.deviceUid}/preparedRole`]: 'owner',
+    'control/ownerUid': issuer.person.uid,
+  });
+  await page.evaluate(
+    async ({ environmentId, performanceId }) => {
+      const { createAuthorizationPort } = await import(
+        '/src/adapters/firebase/authorization-port.ts'
+      );
+      const { AuthorizationController } = await import('/src/security/authorization-controller.ts');
+      const { ensureDeviceKey } = await import('/src/storage/device-vault.ts');
+      const { createAuthorizationOperationJournal } = await import(
+        '/src/storage/authorization-operations.ts'
+      );
+      const port = await createAuthorizationPort(
+        window.testPrincipals,
+        { environmentId, performanceId },
+        { emulatorDatabasePort: 9100 },
+      );
+      await port.issueSession(Date.now() + 120000);
+      const controller = new AuthorizationController(port, '0.1.0', () => {});
+      await controller.reconnect();
+      const { snapshot } = await port.fetchCurrent();
+      const scope = {
+        environmentId,
+        performanceId,
+        deviceUid: snapshot.deviceAuthUid,
+        humanUid: snapshot.role.humanUid,
+        storageEpoch: snapshot.device.storageEpoch,
+      };
+      await ensureDeviceKey(scope, true);
+      window.testAuthorizationPort = port;
+      window.testAuthorizationController = controller;
+      window.testJournal = createAuthorizationOperationJournal(scope);
+    },
+    { environmentId: issuer.environmentId, performanceId },
+  );
+
+  const openRegistration = async (person, google) => {
+    const participant = await context.newPage();
+    await participant.goto('http://127.0.0.1:4181/');
+    const registration = await participant.evaluate(
+      async ({ person, settings, google, performanceId }) => {
+        const principalsModule = await import('/src/adapters/firebase/principals.ts');
+        const { createAuthorizationPort } = await import(
+          '/src/adapters/firebase/authorization-port.ts'
+        );
+        const principals = principalsModule.createFirebasePrincipals(settings, 9291);
+        await principalsModule.signInHumanPassword(principals, person.email, person.password);
+        if (google) {
+          const { reauthenticateFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
+          await reauthenticateFictionalGoogle(principals, google);
+        }
+        const port = await createAuthorizationPort(
+          principals,
+          { environmentId: settings.environmentId, performanceId },
+          { emulatorDatabasePort: 9100 },
+        );
+        window.testPrincipals = principals;
+        window.testAuthorizationPort = port;
+        const requested = await port.registration.request();
+        const proof = await port.registration.bindHuman();
+        return {
+          deviceUid: requested.deviceUid,
+          storageEpoch: requested.storageEpoch,
+          humanUid: proof.humanUid,
+        };
+      },
+      { person, settings: issuer.settings, google, performanceId },
+    );
+    return { participant, registration };
+  };
+  const staff = await createPerson(),
+    now = Date.now();
+  await admin({
+    [`roles/${staff.uid}`]: {
+      environmentId: issuer.environmentId,
+      performanceId,
+      humanUid: staff.uid,
+      role: 'receptionist',
+      active: true,
+      revision: 1,
+      startsAt: now - 1000,
+      endsAt: now + 3600000,
+    },
+  });
+  const regular = await openRegistration(staff, null);
+  await page.evaluate(
+    async (input) => {
+      const port = window.testAuthorizationPort,
+        access = window.testAuthorizationController.access('manageDevices');
+      await port.devices.prepare(input, window.testJournal, access);
+      await port.devices.commit(input.operationId, window.testJournal, access);
+    },
+    {
+      operationId: randomUUID(),
+      targetDeviceUid: regular.registration.deviceUid,
+      expectedRevision: 1,
+      kind: 'approve',
+      replacementDeviceUid: '',
+    },
+  );
+  const regularState = await regular.participant.evaluate(async () => {
+    const { AuthorizationController } = await import('/src/security/authorization-controller.ts');
+    const port = window.testAuthorizationPort;
+    await port.issueSession(Date.now() + 60000);
+    const controller = new AuthorizationController(port, '0.1.0', () => {});
+    await controller.reconnect();
+    let denied = false;
+    try {
+      controller.access('qrReception');
+    } catch {
+      denied = true;
+    }
+    controller.dispose();
+    return denied;
+  });
+  expect(regularState).toBe(true);
+
+  const owner = await openRegistration(issuer.person, googleIdentity),
+    operationId = randomUUID();
+  const issued = await page.evaluate(
+    async ({ targetDeviceUid, operationId }) => {
+      const port = window.testAuthorizationPort,
+        access = window.testAuthorizationController.access('manageDevices');
+      const link = await port.ownerDeviceLinks.issue(
+        targetDeviceUid,
+        operationId,
+        window.testJournal,
+        access,
+      );
+      const fixed = await window.testJournal.read(operationId, access);
+      return {
+        token: link.token,
+        digest: link.digest,
+        fixedContainsToken: JSON.stringify(fixed).includes(link.token),
+      };
+    },
+    { targetDeviceUid: owner.registration.deviceUid, operationId },
+  );
+  expect(issued.fixedContainsToken).toBe(false);
+  const reader = await owner.participant.evaluate(async (token) => {
+    const { takeOwnerDeviceToken } = await import(
+      '/src/domain/authorization/device-registration.ts'
+    );
+    history.replaceState(null, '', '#owner-device-link=' + token);
+    const opened = takeOwnerDeviceToken(new URL(location.href), () =>
+      history.replaceState(null, '', '/'),
+    );
+    const reader = await window.testAuthorizationPort.ownerDeviceLinks.readToken(opened);
+    return { operationId: reader.operationId, cleanHash: location.hash === '' };
+  }, issued.token);
+  expect(reader).toEqual({ operationId, cleanHash: true });
+  const result = await owner.participant.evaluate(async (operationId) => {
+    const port = window.testAuthorizationPort;
+    const first = await port.ownerDeviceLinks.approve(operationId);
+    const repeated = await port.ownerDeviceLinks.approve(operationId);
+    return {
+      first: first.operationId,
+      repeated: repeated.operationId,
+      epoch: first.storageEpoch,
+      readers: (await port.ownerDeviceLinks.listReadLinks()).length,
+    };
+  }, operationId);
+  expect(result).toEqual({
+    first: operationId,
+    repeated: operationId,
+    epoch: owner.registration.storageEpoch,
+    readers: 1,
+  });
+  const stored = await (
+    await fetch(rootUrl, { headers: { authorization: 'Bearer owner' } })
+  ).json();
+  expect(JSON.stringify(stored).includes(issued.token)).toBe(false);
+  expect(stored.devices[owner.registration.deviceUid].preparedRoleRevision).toBe(0);
+  expect(stored.devices[owner.registration.deviceUid].storageEpoch).toBe(
+    owner.registration.storageEpoch,
+  );
+  for (const participant of [regular.participant, owner.participant]) {
+    await participant.evaluate(() => window.testAuthorizationPort.dispose());
+    await participant.close();
+  }
+  await page.evaluate(() => {
+    window.testAuthorizationController.dispose();
+    window.testAuthorizationPort.dispose();
+  });
+});
+
+test('AUTH110-S07 通常トークンの期限後も準備済み許可だけを復元し、オフラインで更新要求しない', async ({
+  page,
+  context,
+}) => {
+  const f = await signedIn(page);
+  await seed(f.environmentId, f.person.uid, f.deviceUid);
+  await page.evaluate(
+    async ({ environmentId, performanceId }) => {
+      const { createAuthorizationPort } = await import(
+        '/src/adapters/firebase/authorization-port.ts'
+      );
+      const { createOfflineAuthorizationPort } = await import(
+        '/src/adapters/firebase/offline-authorization-port.ts'
+      );
+      const { AuthorizationController } = await import('/src/security/authorization-controller.ts');
+      const live = await createAuthorizationPort(
+        window.testPrincipals,
+        { environmentId, performanceId },
+        { emulatorDatabasePort: 9100 },
+      );
+      await live.issueSession(Date.now() + 60000);
+      const confirmed = await live.fetchCurrent();
+      live.dispose();
+      window.testConfirmedSnapshot = confirmed.snapshot;
+      window.testOfflineFactory = createOfflineAuthorizationPort;
+      window.testOfflineControllerClass = AuthorizationController;
+    },
+    { environmentId: f.environmentId, performanceId },
+  );
+  let authRequests = 0;
+  page.on('request', (request) => {
+    if (new URL(request.url()).port === '9291') authRequests++;
+  });
+  await context.setOffline(true);
+  const result = await page.evaluate(async () => {
+    const snapshot = window.testConfirmedSnapshot;
+    const actualNow = Date.now,
+      future = actualNow() + 13 * 3600000;
+    Date.now = () => future;
+    try {
+      const port = await window.testOfflineFactory(window.testPrincipals, snapshot);
+      const controller = new window.testOfflineControllerClass(port, '0.1.0', () => {});
+      controller.useOffline(snapshot, {
+        environmentId: snapshot.environmentId,
+        performanceId: snapshot.performanceId,
+        deviceUid: snapshot.deviceAuthUid,
+        humanUid: snapshot.role.humanUid,
+        storageEpoch: snapshot.device.storageEpoch,
+        roleRevision: snapshot.role.revision,
+        issuedAt: snapshot.session.issuedAt,
+        expiresAt: snapshot.staffDeadline,
+        appVersion: '0.1.0',
+        dataRevision: 1,
+      });
+      controller.access('qrReception')();
+      const state = controller.state;
+      let managementDenied = false;
+      try {
+        controller.access('manageRoles');
+      } catch {
+        managementDenied = true;
+      }
+      controller.dispose();
+      port.dispose();
+      return { state, managementDenied };
+    } finally {
+      Date.now = actualNow;
+    }
+  });
+  expect(result).toEqual({ state: 'offline', managementDenied: true });
+  expect(authRequests).toBe(0);
+});

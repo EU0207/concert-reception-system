@@ -41,7 +41,13 @@ function record(fields, read, write, required = fields) {
   };
 }
 
-export function deviceManagementRules({ root, manager, ownMetadata }) {
+export function deviceManagementRules({
+  root,
+  manager,
+  ownMetadata,
+  roleValid,
+  registrationProof,
+}) {
   const ownDevice = `${root}.child('devices').child(auth.uid)`;
   const session = `${root}.child('sessions').child(auth.uid)`;
   const recent = `${manager} && ${f(session, 'humanAuthTime')} <= now && now - ${f(session, 'humanAuthTime')} <= 900000`;
@@ -66,6 +72,7 @@ export function deviceManagementRules({ root, manager, ownMetadata }) {
         ? (${f(replacementRole, 'role')} === 'owner' && ${f(replacementRole, 'humanUid')} === ${f(oldRole, 'humanUid')})
         : (${f(replacementRole, 'role')} === 'owner' || ${f(replacementRole, 'role')} === 'deputy'))`;
     const transitions = `(${f(operation, 'kind')} === 'approve' && ${f(before, 'approved')} === false && ${f(oldRole, 'role')} !== 'owner'
+        && ${roleValid(oldRole)} && ${registrationProof(before, oldRole)}
         && ${f(after, 'active')} === true && ${f(after, 'approved')} === true && ${f(after, 'retired')} === false)
       || (${f(operation, 'kind')} === 'stop' && ${f(before, 'approved')} === true && ${f(before, 'active')} === true
         && ${f(after, 'active')} === false && ${f(after, 'approved')} === true && ${f(after, 'retired')} === false)

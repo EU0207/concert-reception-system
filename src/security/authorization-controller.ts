@@ -24,10 +24,16 @@ export interface AuthorizationPort {
 }
 
 export type AuthorizationState = 'locked' | 'checking' | 'online' | 'offline' | 'stopped';
+export type AuthorizationLockReason =
+  | 'recheck'
+  | 'network'
+  | 'authorization'
+  | 'manual'
+  | 'expired';
 
 export class AuthorizationController {
   private port: AuthorizationPort;
-  private onLock: () => void;
+  private onLock: (reason: AuthorizationLockReason) => void;
   private version = 0;
   private snapshot: AuthorizationSnapshot | undefined;
   private permit: OfflinePermission | undefined;
@@ -39,13 +45,17 @@ export class AuthorizationController {
   private offlineBlocked = false;
   private expiryTimer: ReturnType<typeof setTimeout> | undefined;
 
-  constructor(port: AuthorizationPort, appVersion: string, onLock: () => void) {
+  constructor(
+    port: AuthorizationPort,
+    appVersion: string,
+    onLock: (reason: AuthorizationLockReason) => void,
+  ) {
     this.port = port;
     this.appVersion = appVersion;
     this.onLock = onLock;
     this.unsubscribe = port.onInvalidate((reason) => {
       if (reason !== 'network') this.offlineBlocked = true;
-      this.lock();
+      this.lock(reason === 'network' ? 'network' : 'authorization');
     });
   }
 
@@ -54,20 +64,20 @@ export class AuthorizationController {
   }
 
   /** 未受領の記録を回収できなくしないため、平文表示だけを止め、暗号文と鍵は保つ。 */
-  lock(): void {
+  lock(reason: AuthorizationLockReason = 'manual'): void {
     clearTimeout(this.expiryTimer);
     this.expiryTimer = undefined;
     this.version++;
     this.stateValue = 'locked';
     this.snapshot = undefined;
     this.permit = undefined;
-    this.onLock();
+    this.onLock(reason);
   }
 
   /** 通信が戻っただけでは操作を再開せず、現在認可の確認完了を待つ。 */
   async reconnect(): Promise<void> {
     requireValue(!this.disposed, 'AUTHORIZATION_DISPOSED');
-    this.lock();
+    this.lock('recheck');
     this.stateValue = 'checking';
     const version = this.version;
     let responseReceived = false;
@@ -85,16 +95,14 @@ export class AuthorizationController {
     } catch (error) {
       // 古い要求の失敗が、後から完了した新しい確認を上書きしないようにする。
       if (version === this.version) {
-        if (
-          responseReceived ||
-          (error &&
-            typeof error === 'object' &&
-            'code' in error &&
-            (String(error.code).toLowerCase().includes('permission') ||
-              error.code === 'DEVICE_UNAVAILABLE'))
-        )
-          this.offlineBlocked = true;
-        this.lock();
+        const code =
+          error && typeof error === 'object' && 'code' in error ? String(error.code) : '';
+        // AuthやApp Checkの拒否を通信断と扱うと、古い許可へ逃げられるため区別する。
+        const unavailable =
+          code.toLowerCase().includes('network') || code === 'ONLINE_ADAPTER_REQUIRED';
+        const rejected = responseReceived || (code !== '' && !unavailable);
+        if (rejected) this.offlineBlocked = true;
+        this.lock(rejected ? 'authorization' : 'network');
         this.stateValue =
           error &&
           typeof error === 'object' &&
@@ -188,8 +196,15 @@ export class AuthorizationController {
     this.expiryTimer = setTimeout(() => {
       if (version !== this.version) return;
       const currentTime = Date.now() + (this.stateValue === 'online' ? this.serverOffset : 0);
-      if (currentTime >= Math.min(...deadlines)) this.lock();
-      else this.scheduleExpiry(currentTime);
+      if (currentTime >= Math.min(...deadlines)) {
+        const permissionExpired =
+          currentTime >= snapshot.role.endsAt ||
+          (['temporary', 'receptionist'].includes(snapshot.role.role) &&
+            currentTime >= snapshot.staffDeadline) ||
+          (this.stateValue === 'offline' && this.permit && currentTime >= this.permit.expiresAt);
+        if (permissionExpired) this.offlineBlocked = true;
+        this.lock(permissionExpired ? 'expired' : 'recheck');
+      } else this.scheduleExpiry(currentTime);
     }, wait);
   }
 }

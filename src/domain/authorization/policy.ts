@@ -214,6 +214,7 @@ function authorizeOperation(
         'exportManagement',
         'handoverOwner',
         'manageCustomFields',
+        'correctClosedActuals',
       ].includes(operation)
     ) {
       requireRecentAuthentication(snapshot.session.humanAuthTime, now);
@@ -338,6 +339,23 @@ export function authorizeOffline(
     !MANAGEMENT_OPERATIONS.includes(operation as (typeof MANAGEMENT_OPERATIONS)[number]),
     'ONLINE_REQUIRED',
   );
+  if (
+    [
+      'exceptionManage',
+      'manualReception',
+      'arrivalCorrection',
+      'seatDisplayNameEdit',
+      'receptionConflictResolve',
+      'rereadManagementMemo',
+      'staffNoticeManage',
+    ].includes(operation)
+  ) {
+    // 公演後の紙入力や訂正はオンライン管理へ分け、過去の当日許可で新規操作をしない。
+    requireValue(
+      snapshot.state === 'operating' || snapshot.state === 'stopped',
+      'OFFLINE_DAY_OPERATION_ENDED',
+    );
+  }
   validateAuthorization(snapshot, now, 'offline');
   authorizeOperation(snapshot, operation, now);
 }
