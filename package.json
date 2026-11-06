@@ -14,11 +14,15 @@
     "preview": "node scripts/serve-app.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/domain/seats/*.test.mjs tests/domain/assignments/*.test.mjs tests/domain/authorization/*.test.mjs tests/app/*.test.mjs mock/scenarios.test.cjs",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "test:authorization": "node scripts/test-authorization-emulators.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
     "typescript": "7.0.2",
     "vite": "8.3.4"
+  },
+  "dependencies": {
+    "firebase": "13.2.0"
   }
 }

@@ -48,6 +48,7 @@ firebase-export/
 # Playwright temporary and sensitive state
 test-results/
 playwright-report/
+tests/emulator/artifacts/
 blob-report/
 **/playwright/.auth/
 **/auth-state/

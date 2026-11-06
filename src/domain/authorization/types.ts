@@ -1,10 +1,15 @@
 // 本人・端末・役割の認可契約。トークン本体やパスワードは保持しない。
 
-import type { Scope } from '../seats/types.ts';
+import type { Scope } from "../seats/types.ts";
 
-export type StaffRole = 'owner' | 'deputy' | 'temporary' | 'receptionist';
-export type HumanProvider = 'google.com' | 'password';
-export type PerformanceState = 'preparing' | 'operating' | 'stopped' | 'ended' | 'closed';
+export type StaffRole = "owner" | "deputy" | "temporary" | "receptionist";
+export type HumanProvider = "google.com" | "password";
+export type PerformanceState =
+  | "preparing"
+  | "operating"
+  | "stopped"
+  | "ended"
+  | "closed";
 
 /** SDKで確認した本人。認証時刻はトークンのauth_timeから取得する。 */
 export interface HumanIdentity {
@@ -22,6 +27,8 @@ export interface RoleGrant extends Scope {
   revision: number;
   startsAt: number;
   endsAt: number;
+  /** 変更結果と監査を一体確定した操作。初期割当では未設定。 */
+  lastOperationId?: string;
 }
 
 /** 準備済みの役割は、検証済みの端末準備結果から確定する。 */
@@ -54,15 +61,15 @@ export interface PersonSession extends Scope {
 
 /** DD-98で固定された9項目。未知のキーは許可項目に加えない。 */
 export const TEMPORARY_PERMISSIONS = [
-  'exceptionManage',
-  'manualReception',
-  'arrivalCorrection',
-  'seatDisplayNameEdit',
-  'receptionConflictResolve',
-  'rereadManagementMemo',
-  'dayManagementRead',
-  'staffNoticeManage',
-  'dayAuditRead',
+  "exceptionManage",
+  "manualReception",
+  "arrivalCorrection",
+  "seatDisplayNameEdit",
+  "receptionConflictResolve",
+  "rereadManagementMemo",
+  "dayManagementRead",
+  "staffNoticeManage",
+  "dayAuditRead",
 ] as const;
 export type TemporaryPermission = (typeof TEMPORARY_PERMISSIONS)[number];
 
@@ -70,41 +77,41 @@ export interface TemporaryProfile {
   schemaVersion: 1;
   humanUid: string;
   roleVersion: number;
-  status: 'active' | 'revoked';
+  status: "active" | "revoked";
   validFrom: number;
   validUntil: number;
   permissions: Record<TemporaryPermission, boolean>;
 }
 
 export const COMMON_OPERATIONS = [
-  'qrReception',
-  'receptionRead',
-  'ownResultRead',
-  'exceptionRead',
-  'exceptionPropose',
-  'exceptionStatusUpdate',
-  'ownRereadMemo',
-  'staffNoticeRead',
-  'ownNoticeAcknowledge',
+  "qrReception",
+  "receptionRead",
+  "ownResultRead",
+  "exceptionRead",
+  "exceptionPropose",
+  "exceptionStatusUpdate",
+  "ownRereadMemo",
+  "staffNoticeRead",
+  "ownNoticeAcknowledge",
 ] as const;
 
 export const MANAGEMENT_OPERATIONS = [
-  'editSeatLayout',
-  'editAssignments',
-  'manageCustomers',
-  'manageTickets',
-  'exportManagement',
-  'manageCustomFields',
-  'controlReception',
-  'closePerformance',
-  'manageRoles',
-  'manageTemporaryPermissions',
-  'manageDevices',
-  'backupRestore',
-  'authAuditRead',
-  'quarantineDecide',
-  'correctClosedActuals',
-  'handoverOwner',
+  "editSeatLayout",
+  "editAssignments",
+  "manageCustomers",
+  "manageTickets",
+  "exportManagement",
+  "manageCustomFields",
+  "controlReception",
+  "closePerformance",
+  "manageRoles",
+  "manageTemporaryPermissions",
+  "manageDevices",
+  "backupRestore",
+  "authAuditRead",
+  "quarantineDecide",
+  "correctClosedActuals",
+  "handoverOwner",
 ] as const;
 
 export type AuthorizedOperation =
