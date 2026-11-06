@@ -104,7 +104,7 @@ Vite、QR読取り、PDF生成などのライブラリは、PoCで候補を検�
 
 ## 共通計算の型検査・単体試験
 
-Node.js 24.19.0以上、pnpm 11.25.0を使用します。開発依存だけを固定版で取得します。
+Node.js 24.19.0以上、pnpm 11.25.0を使用します。依存は固定版で取得し、インストール用スクリプトは実行しません。
 
 ```sh
 pnpm install --frozen-lockfile --ignore-scripts
@@ -113,6 +113,11 @@ pnpm test
 ```
 
 席の共通計算61件・配置計算60件と既存モック回帰24件を実行します。Firebase接続・画面起動と配備は含みません。[共通計算の試験結果](docs/development/technical-validation/seat-domain-unit-test-results.md)と[#103の実装・試験記録](docs/development/technical-validation/assignment-domain-handoff.md)を参照してください。GitHub Pagesとリポジトリ公開は別の明示依頼まで行いません。
+
+本人・端末の認可と暗号化保存は、#110で実装中です。
+`pnpm test:authorization`は、ローカルのAuth・RTDBで製品SDKとRulesを確認します。
+実Googleのログインや配備は行いません。
+[実行手順と未完了の条件](docs/development/technical-validation/authorization-foundation-results.md)を参照してください。
 
 ## 主なドキュメント
 

@@ -1,21 +1,33 @@
-// 公演・端末用の保存基盤。後続の業務ストアも、このDBの版管理へ追加する。
+// 鍵と操作記録を同じ版管理へ置き、DB更新で片方だけ失われることを防ぐ。
 
-export const DEVICE_DATABASE = "concert-reception-device";
-export const DEVICE_DATABASE_VERSION = 1;
+export const DEVICE_DATABASE = 'concert-reception-device';
+export const DEVICE_DATABASE_VERSION = 2;
 
-/** 保存領域の作成・接続を行い、利用できない場合は呼出元へ失敗を返す。 */
+/** 保存不能を準備完了にしないため、作成・接続の失敗を呼出元へ返す。 */
 export function openDeviceDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
+    let failed = false;
     const request = indexedDB.open(DEVICE_DATABASE, DEVICE_DATABASE_VERSION);
     request.onupgradeneeded = () => {
-      request.result.createObjectStore("deviceKeys");
+      for (const store of ['deviceKeys', 'authorizationOperations']) {
+        if (!request.result.objectStoreNames.contains(store))
+          request.result.createObjectStore(store);
+      }
     };
     request.onsuccess = () => {
       const database = request.result;
+      // blockedで既に失敗を返した後に開けても、接続を残して次の更新を妨げない。
+      if (failed) {
+        database.close();
+        return;
+      }
       database.onversionchange = () => database.close();
       resolve(database);
     };
-    request.onerror = () => reject(new Error("DEVICE_STORAGE_UNAVAILABLE"));
-    request.onblocked = () => reject(new Error("DEVICE_STORAGE_BLOCKED"));
+    request.onerror = () => reject(new Error('DEVICE_STORAGE_UNAVAILABLE'));
+    request.onblocked = () => {
+      failed = true;
+      reject(new Error('DEVICE_STORAGE_BLOCKED'));
+    };
   });
 }

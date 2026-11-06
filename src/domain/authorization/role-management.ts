@@ -7,16 +7,10 @@ import type {
   StaffRole,
   TemporaryPermission,
   TemporaryProfile,
-} from "./types.ts";
-import { TEMPORARY_PERMISSIONS } from "./types.ts";
-import { authorizeOnline, requireRecentAuthentication } from "./policy.ts";
-import {
-  checkScope,
-  isId,
-  nonnegative,
-  positive,
-  requireValue,
-} from "../seats/validation.ts";
+} from './types.ts';
+import { TEMPORARY_PERMISSIONS } from './types.ts';
+import { authorizeOnline, requireRecentAuthentication } from './policy.ts';
+import { checkScope, isId, nonnegative, positive, requireValue } from '../seats/validation.ts';
 
 export interface RoleChangeRequest {
   schemaVersion: 1;
@@ -41,7 +35,7 @@ export interface GoogleAcceptance {
   operationId: string;
   targetUid: string;
   expectedRevision: number;
-  provider: "google.com";
+  provider: 'google.com';
   authenticatedAt: number;
 }
 
@@ -52,17 +46,59 @@ export interface RoleManagementPlan {
     schemaVersion: 1;
     environmentId: string;
     performanceId: string;
-    status: "committed";
+    status: 'committed' | 'cancelled';
     operationId: string;
     actorUid: string;
     actorDeviceUid: string;
     targetUid: string;
     expectedRevision: number;
     resultingRevision: number;
-    kind: "roleChange" | "permissionChange";
+    kind: 'roleChange' | 'permissionChange';
     previousRole: StaffRole;
     nextRole: StaffRole;
     committedAt: number;
+  };
+}
+
+/** 変更前後の設定を含め、結果と同じ確定で残す最小の認可監査を作る。 */
+export function createAuthorizationAudit(
+  plan: RoleManagementPlan,
+  previousRole: RoleGrant,
+  previousProfile: TemporaryProfile | null,
+): RoleManagementPlan['result'] & {
+  previousStartsAt: number;
+  previousEndsAt: number;
+  nextStartsAt: number;
+  nextEndsAt: number;
+  previousProfileVersion: number;
+  nextProfileVersion: number;
+  previousPermissions: Record<TemporaryPermission, boolean>;
+  nextPermissions: Record<TemporaryPermission, boolean>;
+} {
+  if (previousRole.role === 'temporary') {
+    requireValue(
+      previousProfile &&
+        previousProfile.humanUid === previousRole.humanUid &&
+        previousProfile.roleVersion === previousRole.revision,
+      'PREVIOUS_PROFILE_REQUIRED',
+    );
+  }
+  const off = () =>
+    Object.fromEntries(TEMPORARY_PERMISSIONS.map((key) => [key, false])) as Record<
+      TemporaryPermission,
+      boolean
+    >;
+  return {
+    ...plan.result,
+    previousStartsAt: previousRole.startsAt,
+    previousEndsAt: previousRole.endsAt,
+    nextStartsAt: plan.role.startsAt,
+    nextEndsAt: plan.role.endsAt,
+    previousProfileVersion: previousRole.role === 'temporary' ? previousRole.revision : 0,
+    nextProfileVersion: plan.profile?.roleVersion ?? 0,
+    previousPermissions:
+      previousRole.role === 'temporary' ? permissions(previousProfile!.permissions) : off(),
+    nextPermissions: plan.profile ? permissions(plan.profile.permissions) : off(),
   };
 }
 
@@ -79,7 +115,7 @@ function requireTarget(
       target.revision === expectedRevision &&
       target.startsAt <= now &&
       now < target.endsAt,
-    "STALE_OR_INACTIVE_TARGET",
+    'STALE_OR_INACTIVE_TARGET',
   );
 }
 
@@ -96,31 +132,31 @@ export function createRoleChangeRequest(
   },
   now: number,
 ): RoleChangeRequest {
-  authorizeOnline(actor, "manageRoles", now);
+  authorizeOnline(actor, 'manageRoles', now);
   requireTarget(actor, target, input.expectedRevision, now);
   requireValue(
     isId(input.operationId) &&
-      input.nextRole !== "owner" &&
-      target.role !== "owner" &&
-      ["deputy", "temporary", "receptionist"].includes(input.nextRole) &&
+      input.nextRole !== 'owner' &&
+      target.role !== 'owner' &&
+      ['deputy', 'temporary', 'receptionist'].includes(input.nextRole) &&
       input.nextRole !== target.role,
-    "ROLE_CHANGE_FORBIDDEN",
+    'ROLE_CHANGE_FORBIDDEN',
   );
   requireValue(
-    actor.role.role === "owner" ||
-      (actor.role.role === "deputy" &&
+    actor.role.role === 'owner' ||
+      (actor.role.role === 'deputy' &&
         [target.role, input.nextRole].every(
-          (role) => role === "temporary" || role === "receptionist",
+          (role) => role === 'temporary' || role === 'receptionist',
         )),
-    "ROLE_CHANGE_FORBIDDEN",
+    'ROLE_CHANGE_FORBIDDEN',
   );
   requireValue(
     nonnegative(input.startsAt) &&
       positive(input.endsAt) &&
       input.startsAt < input.endsAt &&
       now < input.endsAt &&
-      (input.nextRole === "deputy" || input.endsAt <= actor.staffDeadline),
-    "INVALID_ROLE_PERIOD",
+      (input.nextRole === 'deputy' || input.endsAt <= actor.staffDeadline),
+    'INVALID_ROLE_PERIOD',
   );
   return {
     schemaVersion: 1,
@@ -146,11 +182,11 @@ export function createGoogleAcceptance(
   now: number,
 ): GoogleAcceptance {
   requireValue(
-    request.nextRole === "deputy" &&
+    request.nextRole === 'deputy' &&
       identity.uid === request.targetUid &&
       identity.emailVerified === true &&
-      identity.provider === "google.com",
-    "GOOGLE_IDENTITY_REQUIRED",
+      identity.provider === 'google.com',
+    'GOOGLE_IDENTITY_REQUIRED',
   );
   requireRecentAuthentication(identity.authenticatedAt, now);
   return {
@@ -160,7 +196,7 @@ export function createGoogleAcceptance(
     operationId: request.operationId,
     targetUid: request.targetUid,
     expectedRevision: request.expectedRevision,
-    provider: "google.com",
+    provider: 'google.com',
     authenticatedAt: identity.authenticatedAt,
   };
 }
@@ -172,9 +208,9 @@ function permissions(
     input &&
       Object.keys(input).length === 9 &&
       TEMPORARY_PERMISSIONS.every(
-        (key) => Object.hasOwn(input, key) && typeof input[key] === "boolean",
+        (key) => Object.hasOwn(input, key) && typeof input[key] === 'boolean',
       ),
-    "INVALID_TEMPORARY_PERMISSIONS",
+    'INVALID_TEMPORARY_PERMISSIONS',
   );
   return structuredClone(input);
 }
@@ -184,15 +220,15 @@ function result(
   target: RoleGrant,
   operationId: string,
   next: RoleGrant,
-  kind: RoleManagementPlan["result"]["kind"],
+  kind: RoleManagementPlan['result']['kind'],
   now: number,
-): RoleManagementPlan["result"] {
-  requireValue(positive(next.revision), "ROLE_REVISION_OVERFLOW");
+): RoleManagementPlan['result'] {
+  requireValue(positive(next.revision), 'ROLE_REVISION_OVERFLOW');
   return {
     schemaVersion: 1,
     environmentId: actor.environmentId,
     performanceId: actor.performanceId,
-    status: "committed",
+    status: 'committed',
     operationId,
     actorUid: actor.role.humanUid,
     actorDeviceUid: actor.deviceAuthUid,
@@ -220,7 +256,7 @@ export function commitRoleChange(
   checkScope(request, actor);
   requireValue(
     request.schemaVersion === 1 && Object.keys(request).length === 13,
-    "INVALID_ROLE_REQUEST",
+    'INVALID_ROLE_REQUEST',
   );
   const current = createRoleChangeRequest(
     actor,
@@ -241,10 +277,10 @@ export function commitRoleChange(
       current.previousRole === request.previousRole &&
       nonnegative(request.requestedAt) &&
       request.requestedAt <= now,
-    "ROLE_REQUEST_MISMATCH",
+    'ROLE_REQUEST_MISMATCH',
   );
-  if (request.nextRole === "deputy") {
-    requireValue(acceptance, "GOOGLE_ACCEPTANCE_REQUIRED");
+  if (request.nextRole === 'deputy') {
+    requireValue(acceptance, 'GOOGLE_ACCEPTANCE_REQUIRED');
     checkScope(acceptance, actor);
     requireValue(
       acceptance.schemaVersion === 1 &&
@@ -252,8 +288,8 @@ export function commitRoleChange(
         acceptance.operationId === request.operationId &&
         acceptance.targetUid === request.targetUid &&
         acceptance.expectedRevision === request.expectedRevision &&
-        acceptance.provider === "google.com",
-      "GOOGLE_ACCEPTANCE_MISMATCH",
+        acceptance.provider === 'google.com',
+      'GOOGLE_ACCEPTANCE_MISMATCH',
     );
     requireRecentAuthentication(acceptance.authenticatedAt, now);
   }
@@ -266,12 +302,12 @@ export function commitRoleChange(
     lastOperationId: request.operationId,
   };
   const profile: TemporaryProfile | null =
-    role.role === "temporary"
+    role.role === 'temporary'
       ? {
           schemaVersion: 1,
           humanUid: role.humanUid,
           roleVersion: role.revision,
-          status: "active",
+          status: 'active',
           validFrom: role.startsAt,
           validUntil: role.endsAt,
           permissions: permissions(initialPermissions),
@@ -280,7 +316,7 @@ export function commitRoleChange(
   return {
     role,
     profile,
-    result: result(actor, target, request.operationId, role, "roleChange", now),
+    result: result(actor, target, request.operationId, role, 'roleChange', now),
   };
 }
 
@@ -298,13 +334,11 @@ export function changeTemporaryPermissions(
   },
   now: number,
 ): RoleManagementPlan {
-  authorizeOnline(actor, "manageTemporaryPermissions", now);
+  authorizeOnline(actor, 'manageTemporaryPermissions', now);
   requireTarget(actor, target, input.expectedRevision, now);
   requireValue(
-    target.role === "temporary" &&
-      isId(input.operationId) &&
-      typeof input.revoke === "boolean",
-    "TEMPORARY_TARGET_REQUIRED",
+    target.role === 'temporary' && isId(input.operationId) && typeof input.revoke === 'boolean',
+    'TEMPORARY_TARGET_REQUIRED',
   );
   requireValue(
     nonnegative(input.validFrom) &&
@@ -314,7 +348,7 @@ export function changeTemporaryPermissions(
       input.validUntil <= target.endsAt &&
       input.validUntil <= actor.staffDeadline &&
       now < input.validUntil,
-    "INVALID_PROFILE_PERIOD",
+    'INVALID_PROFILE_PERIOD',
   );
   const configured = permissions(input.permissions);
   const role = {
@@ -326,25 +360,42 @@ export function changeTemporaryPermissions(
     schemaVersion: 1,
     humanUid: target.humanUid,
     roleVersion: role.revision,
-    status: input.revoke ? "revoked" : "active",
+    status: input.revoke ? 'revoked' : 'active',
     validFrom: input.validFrom,
     validUntil: input.validUntil,
     permissions: input.revoke
-      ? (Object.fromEntries(
-          TEMPORARY_PERMISSIONS.map((key) => [key, false]),
-        ) as Record<TemporaryPermission, boolean>)
+      ? (Object.fromEntries(TEMPORARY_PERMISSIONS.map((key) => [key, false])) as Record<
+          TemporaryPermission,
+          boolean
+        >)
       : configured,
   };
   return {
     role,
     profile,
-    result: result(
-      actor,
-      target,
-      input.operationId,
-      role,
-      "permissionChange",
-      now,
-    ),
+    result: result(actor, target, input.operationId, role, 'permissionChange', now),
+  };
+}
+
+/** 未確定の案を取り消す。役割と設定は変えず、同じIDに終端結果を残す。 */
+export function cancelAuthorizationChange(
+  actor: AuthorizationSnapshot,
+  target: RoleGrant,
+  operationId: string,
+  expectedRevision: number,
+  kind: RoleManagementPlan['result']['kind'],
+  previousProfile: TemporaryProfile | null,
+  now: number,
+): RoleManagementPlan {
+  authorizeOnline(actor, kind === 'roleChange' ? 'manageRoles' : 'manageTemporaryPermissions', now);
+  requireTarget(actor, target, expectedRevision, now);
+  requireValue(
+    isId(operationId) && (kind === 'roleChange' || target.role === 'temporary'),
+    'INVALID_OPERATION',
+  );
+  return {
+    role: { ...target },
+    profile: previousProfile,
+    result: { ...result(actor, target, operationId, target, kind, now), status: 'cancelled' },
   };
 }
