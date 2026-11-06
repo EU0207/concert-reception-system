@@ -10,7 +10,8 @@
   "scripts": {
     "setup:local": "node scripts/setup-local.mjs",
     "dev": "vite --host 127.0.0.1 --port 4173 --strictPort",
-    "build": "pnpm typecheck && vite build && node scripts/build-pwa.mjs",
+    "build": "pnpm typecheck && pnpm check:rules && vite build && node scripts/build-pwa.mjs",
+    "check:rules": "node scripts/build-database-rules.mjs --check",
     "preview": "node scripts/serve-app.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/domain/seats/*.test.mjs tests/domain/assignments/*.test.mjs tests/domain/authorization/*.test.mjs tests/app/*.test.mjs mock/scenarios.test.cjs",
