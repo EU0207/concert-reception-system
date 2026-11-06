@@ -13,7 +13,7 @@
     "build": "pnpm typecheck && vite build && node scripts/build-pwa.mjs",
     "preview": "node scripts/serve-app.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/domain/seats/*.test.mjs tests/domain/assignments/*.test.mjs tests/app/*.test.mjs mock/scenarios.test.cjs",
+    "test": "node --test tests/domain/seats/*.test.mjs tests/domain/assignments/*.test.mjs tests/domain/authorization/*.test.mjs tests/app/*.test.mjs mock/scenarios.test.cjs",
     "test:browser": "playwright test"
   },
   "devDependencies": {
