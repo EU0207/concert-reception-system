@@ -3,6 +3,8 @@
 import { roleManagementRules } from './role-management-rules.mjs';
 import { deviceManagementRules } from './device-management-rules.mjs';
 import { ownerHandoverRules } from './owner-handover-rules.mjs';
+import { deviceRegistrationRules, registrationProofValid } from './device-registration-rules.mjs';
+import { ownerDeviceLinkRules } from './owner-device-link-rules.mjs';
 
 const field = (node, key) => `${node}.child('${key}').val()`;
 const child = (node, key) => `${node}.child('${key}')`;
@@ -135,12 +137,36 @@ export function authorizationRules() {
   });
   managementRules.roles.$humanUid['.write'] =
     `(${managementRules.roles.$humanUid['.write']}) || (${roleWrite})`;
+  const { pendingDeviceWrite, ...registrationRules } = deviceRegistrationRules({
+    root,
+    manager,
+    roleValid,
+    provider,
+  });
+  const deviceRules = deviceManagementRules({
+    root,
+    manager,
+    ownMetadata,
+    roleValid,
+    registrationProof: (device, role) => registrationProofValid(root, device, role, provider),
+  });
+  deviceRules.devices.$deviceUid['.write'] =
+    `(${deviceRules.devices.$deviceUid['.write']}) || (${pendingDeviceWrite})`;
+  const { approveDeviceWrite, ...ownerLinkRules } = ownerDeviceLinkRules({
+    root,
+    preparedAuthorization,
+    registrationProof: (device, role) => registrationProofValid(root, device, role, provider),
+  });
+  deviceRules.devices.$deviceUid['.write'] =
+    `(${deviceRules.devices.$deviceUid['.write']}) || (${approveDeviceWrite})`;
   return {
     '.read': false,
     '.write': false,
     ...managementRules,
     ...handoverRules,
-    ...deviceManagementRules({ root, manager, ownMetadata }),
+    ...deviceRules,
+    ...registrationRules,
+    ...ownerLinkRules,
     sessions: {
       $deviceUid: strictRecord(fields, ownMetadata, `(${issue}) || (${revoke})`),
     },

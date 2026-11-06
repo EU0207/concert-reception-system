@@ -141,3 +141,29 @@ test('AUTH110-C06 無操作でも本人セッションの期限に表示をロ�
   assert.throws(access);
   f.controller.dispose();
 });
+
+test('AUTH110-C07 Auth・App Checkの拒否後は古い許可へ戻さず、通信断とは区別する', async (context) => {
+  context.mock.method(Date, 'now', () => now);
+  for (const code of [
+    'auth/user-disabled',
+    'auth/user-token-expired',
+    'appCheck/recaptcha-error',
+    'AUTHORIZATION_CHANGED',
+  ]) {
+    const f = fixture();
+    f.port.fetchCurrent = async () => {
+      throw Object.assign(Error('fictional rejection'), { code });
+    };
+    await assert.rejects(f.controller.reconnect());
+    assert.throws(() => f.controller.useOffline(f.current, permit(f.current), now));
+    f.controller.dispose();
+  }
+  const network = fixture();
+  network.port.fetchCurrent = async () => {
+    throw Object.assign(Error('fictional network'), { code: 'appCheck/fetch-network-error' });
+  };
+  await assert.rejects(network.controller.reconnect());
+  network.controller.useOffline(network.current, permit(network.current), now);
+  network.controller.access('qrReception')();
+  network.controller.dispose();
+});

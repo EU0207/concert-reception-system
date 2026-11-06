@@ -57,6 +57,20 @@ for (const name of [
   'FIREBASE_TOKEN',
 ])
   delete environment[name];
+const selection = process.argv.slice(2);
+if (
+  selection.length > 1 ||
+  selection.some((value) => !['--link-rules-only', '--sdk-only'].includes(value))
+) {
+  throw Error('UNKNOWN_AUTHORIZATION_TEST_SELECTION');
+}
+// 確認済みの512設定を局所修正ごとに繰り返さないよう、固定の対象指定を用意する。
+const command =
+  selection[0] === '--link-rules-only'
+    ? 'node --test --test-name-pattern=AUTH110-Q tests/emulator/authorization.test.mjs'
+    : selection[0] === '--sdk-only'
+      ? 'pnpm exec playwright test --config tests/emulator/playwright.config.mjs'
+      : 'node --test tests/emulator/authorization.test.mjs && pnpm exec playwright test --config tests/emulator/playwright.config.mjs';
 const child = spawn(
   process.execPath,
   [
@@ -68,7 +82,7 @@ const child = spawn(
     'tests/emulator/firebase.json',
     '--only',
     'auth,database',
-    'node --test tests/emulator/authorization.test.mjs && pnpm exec playwright test --config tests/emulator/playwright.config.mjs',
+    command,
   ],
   {
     cwd: resolve(import.meta.dirname, '..'),

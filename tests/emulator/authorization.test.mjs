@@ -6,6 +6,7 @@ import { TEMPORARY_PERMISSIONS } from '../../src/domain/authorization/types.ts';
 import { createAuthorizationAudit } from '../../src/domain/authorization/role-management.ts';
 import { changeTemporaryPermissions } from '../../src/domain/authorization/role-management.ts';
 import { cancelAuthorizationChange } from '../../src/domain/authorization/role-management.ts';
+import { createOwnerDeviceToken } from '../../src/domain/authorization/device-registration.ts';
 
 const project = 'demo-concert-reception-product';
 const namespace = project + '-default-rtdb';
@@ -1077,4 +1078,464 @@ test('CONF069-R02 現主担当の開始と後任のGoogle受諾後だけ、主�
     ).status,
     200,
   );
+});
+
+async function registrationFixture(role = 'receptionist') {
+  const f = await fixture(role, role === 'receptionist' ? 'password' : 'google.com');
+  await request(`${root}/devices/${f.device.uid}`, 'DELETE');
+  const now = Date.now(),
+    storageEpoch = randomUUID();
+  const registration = {
+    ...scope,
+    schemaVersion: 1,
+    deviceUid: f.device.uid,
+    humanUid: f.human.uid,
+    storageEpoch,
+    revision: 1,
+    requestedAt: { '.sv': 'timestamp' },
+    expiresAt: now + 899000,
+  };
+  const device = {
+    ...scope,
+    schemaVersion: 2,
+    deviceUid: f.device.uid,
+    humanUid: f.human.uid,
+    storageEpoch,
+    active: false,
+    approved: false,
+    retired: false,
+    preparedRoleRevision: 0,
+    revision: 1,
+  };
+  const proof = {
+    ...scope,
+    schemaVersion: 1,
+    deviceUid: f.device.uid,
+    humanUid: f.human.uid,
+    storageEpoch,
+    roleRevision: 1,
+    authProvider: role === 'receptionist' ? 'password' : 'google.com',
+    emailVerified: true,
+    humanAuthTime: f.human.authTime,
+    issuedAt: { '.sv': 'timestamp' },
+    revision: 1,
+  };
+  return { ...f, registration, pendingDevice: device, proof };
+}
+
+test('AUTH110-R08 匿名の仮登録は権限を付けず、本人証明と承認待ちを一体作成する', async () => {
+  const f = await registrationFixture();
+  const requestPath = `${root}/deviceRegistrationRequests/${f.device.uid}`;
+  assert.equal((await request(requestPath, 'PUT', f.registration, f.human.token)).status, 401);
+  assert.equal((await request(requestPath, 'PUT', f.registration, f.device.token)).status, 200);
+  assert.equal(
+    (await request(`${root}/devices/${f.device.uid}`, 'PUT', f.pendingDevice, f.device.token))
+      .status,
+    401,
+  );
+  const updates = {
+    [`devices/${f.device.uid}`]: f.pendingDevice,
+    [`deviceRegistrationProofs/${f.device.uid}`]: f.proof,
+  };
+  for (const path of Object.keys(updates))
+    assert.equal(
+      (await request(`${root}/${path}`, 'PUT', updates[path], f.human.token)).status,
+      401,
+    );
+  assert.equal((await request(root, 'PATCH', updates, f.human.token)).status, 200);
+  assert.equal((await request(`${root}/control`, 'GET', undefined, f.device.token)).status, 401);
+  assert.equal(
+    (await request(`${root}/sessions/${f.device.uid}`, 'PUT', { ...f.session }, f.human.token))
+      .status,
+    401,
+  );
+  const administrator = await fixture('owner');
+  await request(
+    `${root}/sessions/${administrator.device.uid}`,
+    'PUT',
+    administrator.session,
+    administrator.human.token,
+  );
+  const approve = deviceUpdates(administrator, { registration: f.pendingDevice }, 'approve');
+  assert.equal((await request(root, 'PATCH', approve, administrator.device.token)).status, 200);
+  // 承認は準備完了ではないため、管理用の自己申告で準備版を増やせない。
+  assert.equal(
+    (
+      await request(
+        `${root}/devices/${f.device.uid}/preparedRoleRevision`,
+        'PUT',
+        1,
+        f.device.token,
+      )
+    ).status,
+    401,
+  );
+});
+
+test('AUTH110-R09 別本人の結合、自己承認、保存領域の置換と期限切れを拒否する', async () => {
+  const f = await registrationFixture(),
+    other = await auth();
+  await request(
+    `${root}/deviceRegistrationRequests/${f.device.uid}`,
+    'PUT',
+    f.registration,
+    f.device.token,
+  );
+  const updates = {
+    [`devices/${f.device.uid}`]: f.pendingDevice,
+    [`deviceRegistrationProofs/${f.device.uid}`]: f.proof,
+  };
+  assert.equal((await request(root, 'PATCH', updates, other.token)).status, 401);
+  for (const patch of [
+    { approved: true },
+    { active: true },
+    { preparedRoleRevision: 1 },
+    { storageEpoch: randomUUID() },
+    { lastOperationId: randomUUID() },
+  ]) {
+    assert.equal(
+      (
+        await request(
+          root,
+          'PATCH',
+          { ...updates, [`devices/${f.device.uid}`]: { ...f.pendingDevice, ...patch } },
+          f.human.token,
+        )
+      ).status,
+      401,
+    );
+  }
+  await request(
+    `${root}/deviceRegistrationRequests/${f.device.uid}/expiresAt`,
+    'PUT',
+    Date.now() - 1,
+  );
+  assert.equal((await request(root, 'PATCH', updates, f.human.token)).status, 401);
+});
+
+function ownerLinkAudit(link, event, reporterDeviceUid) {
+  const { status, revision, consumedAt, cancelledAt, ...fixed } = link;
+  return { ...fixed, event, reporterDeviceUid, recordedAt: { '.sv': 'timestamp' } };
+}
+async function ownerLinkFixture() {
+  const deputy = await fixture('deputy'),
+    issuer = await fixture('owner'),
+    target = await auth('anonymous');
+  await request(`${root}/control/ownerUid`, 'PUT', issuer.human.uid);
+  await request(`${root}/sessions/${issuer.device.uid}`, 'PUT', issuer.session, issuer.human.token);
+  await request(`${root}/sessions/${deputy.device.uid}`, 'PUT', deputy.session, deputy.human.token);
+  const now = Date.now(),
+    operationId = randomUUID(),
+    storageEpoch = randomUUID();
+  const registration = {
+    ...scope,
+    schemaVersion: 1,
+    deviceUid: target.uid,
+    humanUid: issuer.human.uid,
+    storageEpoch,
+    revision: 1,
+    requestedAt: { '.sv': 'timestamp' },
+    expiresAt: now + 899000,
+  };
+  await request(
+    `${root}/deviceRegistrationRequests/${target.uid}`,
+    'PUT',
+    registration,
+    target.token,
+  );
+  const pending = {
+    ...scope,
+    schemaVersion: 2,
+    deviceUid: target.uid,
+    humanUid: issuer.human.uid,
+    storageEpoch,
+    active: false,
+    approved: false,
+    retired: false,
+    preparedRoleRevision: 0,
+    revision: 1,
+  };
+  const proof = {
+    ...scope,
+    schemaVersion: 1,
+    deviceUid: target.uid,
+    humanUid: issuer.human.uid,
+    storageEpoch,
+    roleRevision: 1,
+    authProvider: 'google.com',
+    emailVerified: true,
+    humanAuthTime: issuer.human.authTime,
+    issuedAt: { '.sv': 'timestamp' },
+    revision: 1,
+  };
+  assert.equal(
+    (
+      await request(
+        root,
+        'PATCH',
+        { [`devices/${target.uid}`]: pending, [`deviceRegistrationProofs/${target.uid}`]: proof },
+        issuer.human.token,
+      )
+    ).status,
+    200,
+  );
+  const { token, digest } = await createOwnerDeviceToken();
+  const link = {
+    ...scope,
+    schemaVersion: 1,
+    operationId,
+    purpose: 'owner-device',
+    ownerUid: issuer.human.uid,
+    ownerRoleRevision: 1,
+    issuerDeviceUid: issuer.device.uid,
+    targetDeviceUid: target.uid,
+    storageEpoch,
+    issuedAt: { '.sv': 'timestamp' },
+    expiresAt: now + 899000,
+    status: 'pending',
+    revision: 1,
+  };
+  const index = {
+    ...scope,
+    schemaVersion: 1,
+    operationId,
+    linkDigest: digest,
+    ownerUid: issuer.human.uid,
+    issuerDeviceUid: issuer.device.uid,
+    targetDeviceUid: target.uid,
+    storageEpoch,
+    issuedAt: { '.sv': 'timestamp' },
+  };
+  const issueUpdates = {
+    [`ownerDeviceLinks/${digest}`]: link,
+    [`ownerDeviceLinkIssues/${operationId}`]: index,
+    [`ownerDeviceLinkAudit/${digest}/issued`]: ownerLinkAudit(link, 'issued', issuer.device.uid),
+  };
+  return {
+    issuer,
+    deputy,
+    target,
+    operationId,
+    storageEpoch,
+    pending,
+    token,
+    digest,
+    link,
+    issueUpdates,
+  };
+}
+async function readOwnerLink(f) {
+  const link = (await request(`${root}/ownerDeviceLinks/${f.digest}`)).body;
+  const reader = {
+    ...scope,
+    schemaVersion: 1,
+    operationId: f.operationId,
+    linkDigest: f.digest,
+    ownerUid: f.issuer.human.uid,
+    targetDeviceUid: f.target.uid,
+    storageEpoch: f.storageEpoch,
+    readAt: { '.sv': 'timestamp' },
+  };
+  const updates = {
+    [`ownerDeviceLinkReaders/${f.target.uid}/${f.operationId}`]: reader,
+    [`ownerDeviceLinkAudit/${f.digest}/read`]: ownerLinkAudit(link, 'read', f.target.uid),
+  };
+  return { link, reader, updates };
+}
+function ownerLinkApproval(f, link) {
+  const result = {
+    ...scope,
+    schemaVersion: 1,
+    operationId: f.operationId,
+    linkDigest: f.digest,
+    ownerUid: f.issuer.human.uid,
+    issuerDeviceUid: f.issuer.device.uid,
+    targetDeviceUid: f.target.uid,
+    storageEpoch: f.storageEpoch,
+    status: 'approved',
+    expectedRevision: 1,
+    resultingRevision: 2,
+    approvedAt: { '.sv': 'timestamp' },
+  };
+  return {
+    [`devices/${f.target.uid}`]: {
+      ...f.pending,
+      active: true,
+      approved: true,
+      revision: 2,
+      lastOperationId: f.operationId,
+    },
+    [`ownerDeviceLinks/${f.digest}`]: {
+      ...link,
+      status: 'consumed',
+      revision: 2,
+      consumedAt: { '.sv': 'timestamp' },
+    },
+    [`ownerDeviceLinkResults/${f.operationId}`]: result,
+    [`ownerDeviceLinkAudit/${f.digest}/approved`]: ownerLinkAudit(link, 'approved', f.target.uid),
+  };
+}
+
+test('AUTH110-Q01 主担当追加端末は既存端末のリンクと本人確認を一回だけ使い、部分承認を拒否する', async () => {
+  const f = await ownerLinkFixture();
+  for (const token of [f.target.token, f.issuer.human.token, f.deputy.device.token]) {
+    assert.equal((await request(root, 'PATCH', f.issueUpdates, token)).status, 401);
+  }
+  for (const omitted of Object.keys(f.issueUpdates)) {
+    const partial = { ...f.issueUpdates };
+    delete partial[omitted];
+    assert.equal((await request(root, 'PATCH', partial, f.issuer.device.token)).status, 401);
+  }
+  assert.equal((await request(root, 'PATCH', f.issueUpdates, f.issuer.device.token)).status, 200);
+  assert.equal(
+    (await request(`${root}/ownerDeviceLinks`, 'GET', undefined, f.target.token)).status,
+    401,
+  );
+  assert.equal(
+    (
+      await request(
+        `${root}/ownerDeviceLinkIssues/${f.operationId}`,
+        'GET',
+        undefined,
+        f.target.token,
+      )
+    ).status,
+    401,
+  );
+  const read = await readOwnerLink(f);
+  for (const omitted of Object.keys(read.updates)) {
+    const partial = { ...read.updates };
+    delete partial[omitted];
+    assert.equal((await request(root, 'PATCH', partial, f.target.token)).status, 401);
+  }
+  const approval = ownerLinkApproval(f, read.link);
+  assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 401);
+  assert.equal((await request(root, 'PATCH', read.updates, f.target.token)).status, 200);
+  for (const omitted of Object.keys(approval)) {
+    const partial = { ...approval };
+    delete partial[omitted];
+    assert.equal((await request(root, 'PATCH', partial, f.target.token)).status, 401);
+  }
+  assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 200);
+  assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 401);
+  const device = (await request(`${root}/devices/${f.target.uid}`)).body;
+  assert.equal(device.preparedRoleRevision, 0);
+  assert.equal(device.storageEpoch, f.storageEpoch);
+  assert.equal(
+    (
+      await request(
+        `${root}/ownerDeviceLinkResults/${f.operationId}`,
+        'GET',
+        undefined,
+        f.target.token,
+      )
+    ).status,
+    200,
+  );
+  assert.equal(
+    JSON.stringify((await request(`${root}/ownerDeviceLinks/${f.digest}`)).body).includes(f.token),
+    false,
+  );
+});
+
+test('AUTH110-Q02 発行元停止・期限切れ・取消し後は、保存済みの読取り証跡があっても承認しない', async () => {
+  const f = await ownerLinkFixture();
+  await request(root, 'PATCH', f.issueUpdates, f.issuer.device.token);
+  const read = await readOwnerLink(f);
+  await request(root, 'PATCH', read.updates, f.target.token);
+  const approval = ownerLinkApproval(f, read.link);
+  await request(`${root}/devices/${f.issuer.device.uid}/active`, 'PUT', false);
+  assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 401);
+  await request(`${root}/devices/${f.issuer.device.uid}/active`, 'PUT', true);
+  const cancelled = {
+    ...read.link,
+    status: 'cancelled',
+    revision: 2,
+    cancelledAt: { '.sv': 'timestamp' },
+  };
+  const cancellation = {
+    [`ownerDeviceLinks/${f.digest}`]: cancelled,
+    [`ownerDeviceLinkAudit/${f.digest}/cancelled`]: ownerLinkAudit(
+      read.link,
+      'cancelled',
+      f.issuer.device.uid,
+    ),
+  };
+  assert.equal((await request(root, 'PATCH', cancellation, f.issuer.device.token)).status, 200);
+  assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 401);
+  const expired = await ownerLinkFixture();
+  await request(root, 'PATCH', expired.issueUpdates, expired.issuer.device.token);
+  const past = { ...expired.link, issuedAt: Date.now() - 900000, expiresAt: Date.now() - 1 };
+  await request(`${root}/ownerDeviceLinks/${expired.digest}`, 'PUT', past);
+  const invalid = await readOwnerLink(expired);
+  assert.equal((await request(root, 'PATCH', invalid.updates, expired.target.token)).status, 401);
+  const report = {
+    [`ownerDeviceLinkAudit/${expired.digest}/expired`]: ownerLinkAudit(
+      past,
+      'expired',
+      expired.target.uid,
+    ),
+  };
+  assert.equal((await request(root, 'PATCH', report, expired.target.token)).status, 200);
+});
+
+test('AUTH110-Q03 同じ主担当の別端末への転用・操作ID再利用と平文の混入を拒否する', async () => {
+  const f = await ownerLinkFixture();
+  const leaked = structuredClone(f.issueUpdates);
+  leaked[`ownerDeviceLinks/${f.digest}`].token = f.token;
+  assert.equal((await request(root, 'PATCH', leaked, f.issuer.device.token)).status, 401);
+  assert.equal((await request(root, 'PATCH', f.issueUpdates, f.issuer.device.token)).status, 200);
+  const other = await auth('anonymous'),
+    epoch = randomUUID();
+  await request(`${root}/devices/${other.uid}`, 'PUT', {
+    ...f.pending,
+    deviceUid: other.uid,
+    storageEpoch: epoch,
+  });
+  const proof = (await request(`${root}/deviceRegistrationProofs/${f.target.uid}`)).body;
+  await request(`${root}/deviceRegistrationProofs/${other.uid}`, 'PUT', {
+    ...proof,
+    deviceUid: other.uid,
+    storageEpoch: epoch,
+  });
+  assert.equal(
+    (await request(`${root}/ownerDeviceLinks/${f.digest}`, 'GET', undefined, other.token)).status,
+    401,
+  );
+  const read = await readOwnerLink(f);
+  assert.equal((await request(root, 'PATCH', read.updates, other.token)).status, 401);
+  const wrongTarget = {
+    [`ownerDeviceLinkReaders/${other.uid}/${f.operationId}`]: {
+      ...read.reader,
+      targetDeviceUid: other.uid,
+      storageEpoch: epoch,
+    },
+    [`ownerDeviceLinkAudit/${f.digest}/read`]: ownerLinkAudit(read.link, 'read', other.uid),
+  };
+  assert.equal((await request(root, 'PATCH', wrongTarget, other.token)).status, 401);
+  const { digest } = await createOwnerDeviceToken();
+  const reusedId = {
+    [`ownerDeviceLinks/${digest}`]: f.link,
+    [`ownerDeviceLinkIssues/${f.operationId}`]: {
+      ...f.issueUpdates[`ownerDeviceLinkIssues/${f.operationId}`],
+      linkDigest: digest,
+    },
+    [`ownerDeviceLinkAudit/${digest}/issued`]:
+      f.issueUpdates[`ownerDeviceLinkAudit/${f.digest}/issued`],
+  };
+  assert.equal((await request(root, 'PATCH', reusedId, f.issuer.device.token)).status, 401);
+  assert.equal((await request(root, 'PATCH', read.updates, f.target.token)).status, 200);
+  const reported = {
+    [`ownerDeviceLinkAudit/${f.digest}/rejected`]: {
+      ...ownerLinkAudit(read.link, 'rejected', f.target.uid),
+      reasonCode: 'identity_mismatch',
+    },
+  };
+  assert.equal((await request(root, 'PATCH', reported, f.target.token)).status, 200);
+  const invalid = structuredClone(reported);
+  invalid[`ownerDeviceLinkAudit/${f.digest}/rejected`].reasonCode = 'arbitrary diagnostic text';
+  assert.equal((await request(root, 'PATCH', invalid, f.target.token)).status, 401);
+  const approval = ownerLinkApproval(f, read.link);
+  assert.equal((await request(root, 'PATCH', approval, other.token)).status, 401);
+  assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 200);
 });

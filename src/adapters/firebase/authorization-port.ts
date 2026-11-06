@@ -30,6 +30,8 @@ import { ensureDeviceIdentity, readHumanIdentity } from './principals.ts';
 import { createRoleManagementPort } from './role-management-port.ts';
 import { createOwnerHandoverPort } from './owner-handover-port.ts';
 import { createDeviceManagementPort } from './device-management-port.ts';
+import { createDeviceRegistrationPort } from './device-registration-port.ts';
+import { createOwnerDeviceLinkPort } from './owner-device-link-port.ts';
 
 interface ConnectionOptions {
   appCheckSiteKey?: string;
@@ -67,6 +69,8 @@ export async function createAuthorizationPort(
     roles: ReturnType<typeof createRoleManagementPort>;
     ownerHandover: ReturnType<typeof createOwnerHandoverPort>;
     devices: ReturnType<typeof createDeviceManagementPort>;
+    registration: ReturnType<typeof createDeviceRegistrationPort>;
+    ownerDeviceLinks: ReturnType<typeof createOwnerDeviceLinkPort>;
   }
 > {
   requireValue(
@@ -193,6 +197,8 @@ export async function createAuthorizationPort(
 
   const verified = async () => {
     requireValue(!disposed, 'AUTHORIZATION_PORT_DISPOSED');
+    // 本人確認が失敗した後に、前回の成功値で操作を続けないよう先に無効にする。
+    identity = null;
     identity = await readHumanIdentity(principals);
     requireValue(
       identity.emailVerified && principals.deviceAuth.currentUser?.uid === deviceUid,
@@ -334,8 +340,30 @@ export async function createAuthorizationPort(
     invalidate();
   }
 
+  const registration = createDeviceRegistrationPort({
+    humanDatabase,
+    deviceDatabase,
+    scope,
+    deviceUid,
+    root,
+    verify: verified,
+    serverNow,
+  });
   return {
     devices: createDeviceManagementPort({ deviceDatabase, root, verify: verified, fetchCurrent }),
+    registration,
+    ownerDeviceLinks: createOwnerDeviceLinkPort({
+      deviceDatabase,
+      deviceUid,
+      root,
+      verify: verified,
+      fetchCurrent,
+      serverNow,
+      refreshProof: async () => {
+        await registration.request();
+        await registration.bindHuman();
+      },
+    }),
     ownerHandover: createOwnerHandoverPort({
       humanDatabase,
       deviceDatabase,

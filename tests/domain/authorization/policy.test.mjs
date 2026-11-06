@@ -69,6 +69,32 @@ function snapshot(role = 'owner') {
   };
 }
 
+test('AUTH110-T11 公演後の紙入力・訂正を古いオフライン許可で実行しない', () => {
+  const current = snapshot();
+  const permit = {
+    ...scope,
+    deviceUid: current.deviceAuthUid,
+    humanUid: current.role.humanUid,
+    storageEpoch: current.device.storageEpoch,
+    roleRevision: 1,
+    issuedAt: now - 1000,
+    expiresAt: now + 3600000,
+    appVersion: '0.1.0',
+    dataRevision: 1,
+  };
+  for (const state of ['preparing', 'ended', 'closed']) {
+    current.state = state;
+    assert.throws(() =>
+      authorizeOffline(current, permit, current.role.humanUid, 'manualReception', now, '0.1.0'),
+    );
+  }
+  current.state = 'ended';
+  authorizeOffline(current, permit, current.role.humanUid, 'ownResultRead', now, '0.1.0');
+  current.session.humanAuthTime = now - 900001;
+  current.session.issuedAt = now - 900001;
+  assert.throws(() => authorizeOnline(current, 'correctClosedActuals', now));
+});
+
 test('AUTH110-T01 本人・端末を分け、別環境・別公演・自己申告と停止を拒否する', () => {
   authorizeOnline(snapshot(), 'editAssignments', now);
   for (const mutate of [

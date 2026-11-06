@@ -6,7 +6,7 @@ export type StaffRole = 'owner' | 'deputy' | 'temporary' | 'receptionist';
 export type HumanProvider = 'google.com' | 'password';
 export type PerformanceState = 'preparing' | 'operating' | 'stopped' | 'ended' | 'closed';
 
-/** SDKで確認した本人。認証時刻はトークンのauth_timeから取得する。 */
+/** オンラインはSDK、オフラインは検証済みの準備結果から本人の確認値を得る。 */
 export interface HumanIdentity {
   uid: string;
   emailVerified: boolean;
