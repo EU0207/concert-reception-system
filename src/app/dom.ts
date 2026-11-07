@@ -1,7 +1,5 @@
 // 共通の画面部品を作る。文字列はHTMLとして解釈させず、textContentで設定する。
 
-// # 本文：画面部品の生成
-
 /** 指定したHTML要素を作り、必要に応じてクラスと表示文字列を設定する。 */
 export function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,

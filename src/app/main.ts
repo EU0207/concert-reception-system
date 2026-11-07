@@ -9,10 +9,9 @@ import { NavigationGate } from './navigation.ts';
 import type { LeaveChoice } from './navigation.ts';
 import { registerPwa } from './pwa.ts';
 
-// # 本文：画面状態の準備と表示・操作の処理
-
-const root = document.querySelector<HTMLElement>('#app')!;
-const gate = new NavigationGate();
+// 設定・共有状態：起動処理で設定し、画面と操作の各関数から参照する。
+let root: HTMLElement;
+let gate: NavigationGate;
 
 // 保存機能の接続前に画面移動を確認するための架空データ。
 const events = [
@@ -33,10 +32,12 @@ const events = [
     seats: '座席の準備前',
   },
 ];
-let startup: StartupResult,
-  currentRoute = location.hash.slice(1) || '/events';
+let startup: StartupResult;
+let currentRoute: string;
 let main: HTMLElement, statusButton: HTMLButtonElement, updateBanner: HTMLElement;
 let pwaReady = false;
+
+// 関数の定義：処理内容を定義し、下部の起動処理や画面操作から使用する。
 
 /** ブラウザーの通信状態と設定の取得元から、接続状態の表示を選ぶ。 */
 function connectionLabel() {
@@ -406,47 +407,58 @@ function showStartupError(error: unknown) {
   root.replaceChildren(page);
 }
 
-// 通信状態やブラウザーの履歴操作を、画面表示へ反映する。
-window.addEventListener('online', () => {
-  if (statusButton) statusButton.textContent = connectionLabel();
-});
-window.addEventListener('offline', () => {
-  if (statusButton) statusButton.textContent = connectionLabel();
-});
-window.addEventListener('popstate', () => {
-  void navigate(location.hash.slice(1) || '/events', true);
-});
-window.addEventListener('beforeunload', (e) => {
-  if (gate.isDirty) {
-    e.preventDefault();
-    e.returnValue = '';
-  }
-});
-document.querySelector<HTMLAnchorElement>('a.skip')?.addEventListener('click', (event) => {
-  event.preventDefault();
-  main?.focus();
-});
+/** 画面の状態を初期化し、操作の登録と起動設定の確認を行う。 */
+async function runApplication(): Promise<void> {
+  root = document.querySelector<HTMLElement>('#app')!;
+  gate = new NavigationGate();
+  currentRoute = location.hash.slice(1) || '/events';
 
-// 起動確認が成功した後だけ画面を作り、オフライン起動の準備を進める。
-try {
-  startup = await startApplication();
-  renderShell();
-  void registerPwa(
-    () => {
-      updateBanner.textContent =
-        '新しいアプリ版の準備ができました。作業と送信を終えてから、すべてのアプリ画面を閉じて開き直してください。';
-      updateBanner.hidden = false;
-    },
-    () => {
-      pwaReady = true;
-
-      if (currentRoute === '/about') renderPage();
-    },
-  ).catch(() => {
-    updateBanner.textContent =
-      'オフライン起動の準備を完了できませんでした。通信できる状態で開き直してください。';
-    updateBanner.hidden = false;
+  // 通信状態やブラウザーの履歴操作を、画面表示へ反映する。
+  window.addEventListener('online', () => {
+    if (statusButton) statusButton.textContent = connectionLabel();
   });
-} catch (error) {
-  showStartupError(error);
+  window.addEventListener('offline', () => {
+    if (statusButton) statusButton.textContent = connectionLabel();
+  });
+  window.addEventListener('popstate', () => {
+    void navigate(location.hash.slice(1) || '/events', true);
+  });
+  window.addEventListener('beforeunload', (e) => {
+    if (gate.isDirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+  document.querySelector<HTMLAnchorElement>('a.skip')?.addEventListener('click', (event) => {
+    event.preventDefault();
+    main?.focus();
+  });
+
+  // 起動確認が成功した後だけ画面を作り、オフライン起動の準備を進める。
+  try {
+    startup = await startApplication();
+    renderShell();
+    void registerPwa(
+      () => {
+        updateBanner.textContent =
+          '新しいアプリ版の準備ができました。作業と送信を終えてから、すべてのアプリ画面を閉じて開き直してください。';
+        updateBanner.hidden = false;
+      },
+      () => {
+        pwaReady = true;
+
+        if (currentRoute === '/about') renderPage();
+      },
+    ).catch(() => {
+      updateBanner.textContent =
+        'オフライン起動の準備を完了できませんでした。通信できる状態で開き直してください。';
+      updateBanner.hidden = false;
+    });
+  } catch (error) {
+    showStartupError(error);
+  }
 }
+
+// # 本文：共通画面のアプリを起動する
+
+await runApplication();

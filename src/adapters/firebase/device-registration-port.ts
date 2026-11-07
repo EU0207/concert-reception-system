@@ -14,8 +14,6 @@ import type {
 } from '../../domain/authorization/device-registration.ts';
 import { requireValue } from '../../domain/seats/validation.ts';
 
-// # 本文：仮登録と本人証明の保存
-
 interface Context {
   root: string;
   scope: Scope;

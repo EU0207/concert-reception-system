@@ -13,8 +13,6 @@ import type {
 } from '../domain/authorization/types.ts';
 import { requireValue } from '../domain/seats/validation.ts';
 
-// # 本文：認可状態の型と操作のロック管理
-
 export interface AuthorizationPort {
   /** App Checkと認証を確認した要求で、同じ現在版の認可を取得する。 */
   fetchCurrent(): Promise<{

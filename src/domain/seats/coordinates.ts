@@ -5,8 +5,6 @@ import { requireValue, validateLayout } from './validation.ts';
 
 // 保存アダプターが取得した基準構成から、一度だけ論理座標を作る。
 
-// # 本文：基準座標から論理座標への変換
-
 /** 区画の移動量を一度だけ適用し、列設定の順序を整えた構成を返す。 */
 export function projectBaseLayout(
   snapshot: BaseLayoutSnapshot,

@@ -1,10 +1,11 @@
 /* ビルド時に固定した汎用シェルだけを保存する。環境設定・認証・業務要求は対象外。 */
 
-// # 本文：静的キャッシュの準備と取得処理
-
 const entries = __PRECACHE_ENTRIES__;
 const cacheName = 'concert-shell-__CACHE_VERSION__';
 const allowed = new Set(entries.map((item) => item.url));
+
+// # 本文：各イベントで動く処理を登録する
+// 読込み時は登録だけを行い、実際の保存・取得はイベント発生時に実行する。
 
 // 初回導入・更新時：すべての対象資産を取得できた場合だけ保存を完成させる。
 self.addEventListener('install', (event) => {

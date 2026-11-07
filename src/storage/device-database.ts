@@ -1,7 +1,5 @@
 // 鍵と操作記録を同じ版管理へ置き、DB更新で片方だけ失われることを防ぐ。
 
-// # 本文：端末保存用データベースの接続
-
 export const DEVICE_DATABASE = 'concert-reception-device';
 export const DEVICE_DATABASE_VERSION = 2;
 

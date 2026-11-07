@@ -5,20 +5,11 @@ import { createServer as createHttpsServer } from 'node:https';
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 
-// # 本文：配信設定とリクエストの処理
-
 const root = resolve(import.meta.dirname, '../dist');
 const args = process.argv.slice(2);
 
 /** 起動引数から指定値を取り出し、省略時は既定値を返す。 */
 const option = (name, fallback) => (args.includes(name) ? args[args.indexOf(name) + 1] : fallback);
-
-const host = option('--host', '127.0.0.1'),
-  port = Number(option('--port', '4173'));
-const cert = process.env.DEV_HTTPS_CERT,
-  key = process.env.DEV_HTTPS_KEY;
-
-if (Boolean(cert) !== Boolean(key)) throw new Error('Set both DEV_HTTPS_CERT and DEV_HTTPS_KEY.');
 
 const mime = {
   '.html': 'text/html; charset=utf-8',
@@ -70,11 +61,25 @@ const handler = async (request, response) => {
   }
 };
 
-// 証明書と秘密鍵が両方指定された場合だけHTTPSを使う。
-const server = cert
-  ? createHttpsServer({ cert: await readFile(cert), key: await readFile(key) }, handler)
-  : createHttpServer(handler);
+/** 配信設定を確認し、製品開発版のHTTPまたはHTTPSサーバーを起動する。 */
+async function main() {
+  const host = option('--host', '127.0.0.1'),
+    port = Number(option('--port', '4173'));
+  const cert = process.env.DEV_HTTPS_CERT,
+    key = process.env.DEV_HTTPS_KEY;
 
-server.listen(port, host, () =>
-  console.log(`製品開発版: ${cert ? 'https' : 'http'}://${host}:${port} （Ctrl+Cで終了）`),
-);
+  if (Boolean(cert) !== Boolean(key)) throw new Error('Set both DEV_HTTPS_CERT and DEV_HTTPS_KEY.');
+
+  // 証明書と秘密鍵が両方指定された場合だけHTTPSを使う。
+  const server = cert
+    ? createHttpsServer({ cert: await readFile(cert), key: await readFile(key) }, handler)
+    : createHttpServer(handler);
+
+  server.listen(port, host, () =>
+    console.log(`製品開発版: ${cert ? 'https' : 'http'}://${host}:${port} （Ctrl+Cで終了）`),
+  );
+}
+
+// # 本文：製品開発版の確認サーバーを起動する
+
+await main();

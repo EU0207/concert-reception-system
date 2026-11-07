@@ -4,8 +4,6 @@ import type { AuthorizationSnapshot, DeviceGrant, RoleGrant } from './types.ts';
 import { authorizeOnline, validUid } from './policy.ts';
 import { checkScope, requireValue, isId, positive } from '../seats/validation.ts';
 
-// # 本文：管理端末の保護と状態変更案の計算
-
 export interface DeviceInventory {
   roles: RoleGrant[];
   devices: DeviceGrant[];

@@ -1,7 +1,5 @@
 import { requireValue } from './validation.ts';
 
-// # 本文：席の表示名の検証と行分け
-
 /** 表示名の文字数を検証し、空白区切りまたは3文字区切りで表示行を作る。 */
 export function formatSeatDisplayName(raw: string): {
   raw: string;

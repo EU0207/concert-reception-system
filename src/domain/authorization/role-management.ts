@@ -12,8 +12,6 @@ import { TEMPORARY_PERMISSIONS } from './types.ts';
 import { authorizeOnline, requireRecentAuthentication } from './policy.ts';
 import { checkScope, isId, nonnegative, positive, requireValue } from '../seats/validation.ts';
 
-// # 本文：役割変更と臨時権限の案・結果の計算
-
 export interface RoleChangeRequest {
   schemaVersion: 1;
   environmentId: string;

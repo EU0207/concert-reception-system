@@ -2,8 +2,6 @@
 
 import { requireValue } from '../seats/validation.ts';
 
-// # 本文：会場の暦に基づく期限の計算
-
 /** 翌々日の開始を排他的な期限として返す。夏時間で1日の長さが変わる場合も扱う。 */
 export function offlineDeadline(performanceDate: string, timeZone: string): number {
   requireValue(/^\d{4}-\d{2}-\d{2}$/.test(performanceDate), 'INVALID_PERFORMANCE_DATE');

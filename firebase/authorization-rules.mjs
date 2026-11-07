@@ -6,8 +6,6 @@ import { ownerHandoverRules } from './owner-handover-rules.mjs';
 import { deviceRegistrationRules, registrationProofValid } from './device-registration-rules.mjs';
 import { ownerDeviceLinkRules } from './owner-device-link-rules.mjs';
 
-// # 本文：参照式と保存規則の組立て
-
 /** 指定した子キーの値を参照するRules式を作る。 */
 const field = (node, key) => `${node}.child('${key}').val()`;
 

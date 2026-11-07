@@ -17,8 +17,6 @@ import { requireOwnerHandover } from '../../domain/authorization/device-safety.t
 import type { AuthorizationOperationJournal } from '../../storage/authorization-operations.ts';
 import { isId, positive, requireValue } from '../../domain/seats/validation.ts';
 
-// # 本文：主担当引継ぎの型と保存処理
-
 interface HandoverRequest {
   schemaVersion: 1;
   environmentId: string;

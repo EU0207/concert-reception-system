@@ -2,8 +2,6 @@
 
 import { defineConfig, devices } from '@playwright/test';
 
-// # 本文：ブラウザー試験と起動サーバーの設定
-
 export default defineConfig({
   testDir: 'tests/browser',
   fullyParallel: false,

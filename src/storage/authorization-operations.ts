@@ -5,8 +5,6 @@ import { encryptRecord, decryptRecord } from './device-vault.ts';
 import type { DeviceKeyScope, EncryptedRecord, RecordIdentity } from './device-vault.ts';
 import { isId, requireValue } from '../domain/seats/validation.ts';
 
-// # 本文：操作記録の保存・読取り
-
 export interface AuthorizationOperationJournal {
   save(operationId: string, input: unknown, assertAuthorized: () => void): Promise<void>;
   read(operationId: string, assertAuthorized: () => void): Promise<unknown | null>;

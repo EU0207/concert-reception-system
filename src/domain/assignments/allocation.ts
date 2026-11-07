@@ -29,8 +29,6 @@ import type {
   UnplacedUnit,
 } from './types.ts';
 
-// # 本文：席割当の検証と配置・変更案の計算
-
 const versionKeys = [
   'commit',
   'layout',

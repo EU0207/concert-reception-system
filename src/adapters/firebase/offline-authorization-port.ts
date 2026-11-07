@@ -6,8 +6,6 @@ import type { AuthorizationSnapshot, HumanIdentity } from '../../domain/authoriz
 import type { AuthorizationPort } from '../../security/authorization-controller.ts';
 import { requireValue, SeatDomainError } from '../../domain/seats/validation.ts';
 
-// # 本文：復元した資格と準備結果の照合
-
 /** SDKが復元した資格と準備結果を使う、オフライン専用の認可窓口を作る。 */
 export async function createOfflineAuthorizationPort(
   principals: FirebasePrincipals,

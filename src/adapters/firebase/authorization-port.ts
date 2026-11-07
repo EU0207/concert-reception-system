@@ -33,8 +33,6 @@ import { createDeviceManagementPort } from './device-management-port.ts';
 import { createDeviceRegistrationPort } from './device-registration-port.ts';
 import { createOwnerDeviceLinkPort } from './owner-device-link-port.ts';
 
-// # 本文：認可の接続・取得と監視
-
 interface ConnectionOptions {
   appCheckSiteKey?: string;
   /** エミュレーター接続はdemo-プロジェクトの評価環境でだけ呼ぶ。 */

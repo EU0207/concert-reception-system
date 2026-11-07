@@ -25,8 +25,6 @@ import type { AuthorizationOperationJournal } from '../../storage/authorization-
 import { isId, requireValue } from '../../domain/seats/validation.ts';
 import { validUid } from '../../domain/authorization/policy.ts';
 
-// # 本文：役割管理の型と固定入力・確定処理
-
 interface Context {
   humanDatabase: Database;
   deviceDatabase: Database;

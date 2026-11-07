@@ -13,8 +13,6 @@ import type { DeviceChangeInput } from '../../domain/authorization/device-safety
 import type { AuthorizationOperationJournal } from '../../storage/authorization-operations.ts';
 import { isId, requireValue } from '../../domain/seats/validation.ts';
 
-// # 本文：端末管理の固定入力と確定処理
-
 interface Context {
   root: string;
   deviceDatabase: Database;
