@@ -62,7 +62,23 @@ function Invoke-GhRestPages {
     )
 }
 
-# 本文：対象Projectと状態欄を特定する。
+# 対象Issueとリポジトリに一致する、既存のProject項目を取得する。
+function Get-ProjectItem {
+    $itemData = Invoke-GhRestPages -Endpoint (
+        "$projectOwnerPath/projectsV2/$($project.number)/items" +
+        "?per_page=100&fields=$($statusField.id)"
+    )
+
+    return @($itemData) |
+        Where-Object {
+            $_.content_type -eq 'Issue' -and
+            $_.content.number -eq $IssueNumber -and
+            $_.content.repository.full_name -eq $Repository
+        } |
+        Select-Object -First 1
+}
+
+# 本文：対象Projectを特定し、Issueの登録・状態更新と照合を行う。
 
 $ownerData = Invoke-GhRestJson -ApiArguments @("users/$Owner")
 $projectOwnerPath = switch ($ownerData.type) {
@@ -107,23 +123,7 @@ if ($Status -ne '完了' -and $issueData.state -eq 'closed') {
     throw "Closed Issue must use Project status 完了: Issue #$IssueNumber"
 }
 
-# 対象Issueとリポジトリに一致する、既存のProject項目を取得する。
-function Get-ProjectItem {
-    $itemData = Invoke-GhRestPages -Endpoint (
-        "$projectOwnerPath/projectsV2/$($project.number)/items" +
-        "?per_page=100&fields=$($statusField.id)"
-    )
-
-    return @($itemData) |
-        Where-Object {
-            $_.content_type -eq 'Issue' -and
-            $_.content.number -eq $IssueNumber -and
-            $_.content.repository.full_name -eq $Repository
-        } |
-        Select-Object -First 1
-}
-
-# 本文：Issueを登録し、Projectの状態を更新する。
+# Issueを登録し、Projectの状態を更新する。
 
 $item = Get-ProjectItem
 if ($null -eq $item) {
@@ -152,7 +152,7 @@ $null = Invoke-GhRestJson -ApiArguments @(
     '-f', "fields[][value]=$($statusOption.id)"
 )
 
-# 本文：更新後の状態を再取得し、Issueとの一致を確認する。
+# 更新後の状態を再取得し、Issueとの一致を確認する。
 
 $verifiedItem = $null
 $verifiedStatus = $null

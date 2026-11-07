@@ -5,8 +5,6 @@ import { isId, nonnegative, positive, requireValue } from '../domain/seats/valid
 import { validUid } from '../domain/authorization/policy.ts';
 import { openDeviceDatabase } from './device-database.ts';
 
-// # 本文：暗号化の型と鍵・レコードの管理
-
 export interface DeviceKeyScope extends Scope {
   deviceUid: string;
   humanUid: string;

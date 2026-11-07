@@ -13,8 +13,6 @@ import type {
   TemporaryProfile,
 } from './types.ts';
 
-// # 本文：認可の契約検証と操作の許可判定
-
 export const RECENT_AUTH_WINDOW = 15 * 60 * 1000;
 export const SESSION_LIFETIME = 12 * 60 * 60 * 1000;
 const roles: StaffRole[] = ['owner', 'deputy', 'temporary', 'receptionist'];

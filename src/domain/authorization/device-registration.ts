@@ -10,8 +10,6 @@ import {
   RECENT_AUTH_WINDOW,
 } from './policy.ts';
 
-// # 本文：登録の型・本人確認とトークン処理
-
 export const REGISTRATION_LIFETIME = 15 * 60 * 1000;
 // 独立した期限設定を増やさないよう、承認済みの再認証15分をリンクの上限にも使う。
 export const OWNER_DEVICE_LINK_LIFETIME = RECENT_AUTH_WINDOW;

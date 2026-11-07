@@ -2,8 +2,6 @@
 
 import type { Id, Scope, Seat, SeatLayout, SectionModel, CalculationOptions } from './types.ts';
 
-// # 本文：共通の検証とIDの管理
-
 /** 会場構成と入力文字列に適用する、承認済みの上限値。 */
 export const SEAT_LIMITS = Object.freeze({
   sections: 16,

@@ -33,8 +33,6 @@ import {
   validateLayout,
 } from './validation.ts';
 
-// # 本文：席構成の検証と変更案の計算
-
 /** 環境IDと公演IDだけを取り出し、新しい要素へ同じ所属を引き継ぐ。 */
 const scopeOf = (s: Scope): Scope => ({
   environmentId: s.environmentId,

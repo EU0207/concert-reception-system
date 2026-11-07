@@ -21,8 +21,6 @@ import {
 import { checkScope, isId, requireValue } from '../../domain/seats/validation.ts';
 import type { AuthorizationOperationJournal } from '../../storage/authorization-operations.ts';
 
-// # 本文：追加端末リンクの型と発行・確認処理
-
 interface Reader {
   schemaVersion: 1;
   environmentId: string;

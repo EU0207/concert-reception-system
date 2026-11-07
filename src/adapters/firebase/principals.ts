@@ -25,8 +25,6 @@ import { parseConfig } from '../../app/config.ts';
 import { requireValue } from '../../domain/seats/validation.ts';
 import type { HumanIdentity } from '../../domain/authorization/types.ts';
 
-// # 本文：認証の型と本人・端末の資格管理
-
 export interface FirebasePrincipals {
   humanApp: FirebaseApp;
   deviceApp: FirebaseApp;

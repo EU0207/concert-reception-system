@@ -1,7 +1,5 @@
 // 画面のオフライン起動を準備する。更新版は通知だけ行い、作業中の画面を自動更新しない。
 
-// # 本文：Service Workerの登録と更新通知
-
 /** Service Workerを登録し、起動準備の完了と更新待ちを呼出元へ通知する。 */
 export async function registerPwa(onWaiting: () => void, onReady: () => void): Promise<void> {
   if (!('serviceWorker' in navigator) || !isSecureContext) return;

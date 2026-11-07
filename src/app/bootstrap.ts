@@ -3,8 +3,6 @@
 import { configFingerprint, parseConfig, StartupError } from './config.ts';
 import type { AppConfig } from './config.ts';
 
-// # 本文：起動設定の取得・照合と保存
-
 /** 端末を利用環境へ結び付けるために保存する、設定とその指紋。 */
 interface Binding {
   config: AppConfig;
