@@ -1,26 +1,32 @@
-// CONF-066・069の確定前検査。保存層も現在の台帳を使い、同じ条件を再検査する。
+// 最後の管理端末と主担当の引継ぎを検証し、端末状態の変更案と削除前の保護を扱う。
 
 import type { AuthorizationSnapshot, DeviceGrant, RoleGrant } from './types.ts';
 import { authorizeOnline, validUid } from './policy.ts';
 import { checkScope, requireValue, isId, positive } from '../seats/validation.ts';
+
+// # 本文：管理端末の保護と状態変更案の計算
 
 export interface DeviceInventory {
   roles: RoleGrant[];
   devices: DeviceGrant[];
 }
 
-/** 有効な主担当は公演につき1人。複数端末と複数の主担当を混同しない。 */
+/** 台帳を検証し、公演内の唯一の有効な主担当を取得する。 */
 function owner(inventory: DeviceInventory, snapshot: AuthorizationSnapshot): RoleGrant {
   for (const item of [...inventory.roles, ...inventory.devices]) checkScope(item, snapshot);
+
   const owners = inventory.roles.filter((role) => role.active && role.role === 'owner');
   const currentOwner = owners[0];
+
   requireValue(
     owners.length === 1 && currentOwner && validUid(currentOwner.humanUid),
     'UNIQUE_OWNER_REQUIRED',
   );
+
   return currentOwner;
 }
 
+/** 現在役割の準備が完了した、有効な承認端末か判定する。 */
 function prepared(device: DeviceGrant, role: RoleGrant, now: number): boolean {
   return (
     device.schemaVersion === 2 &&
@@ -43,31 +49,41 @@ export function requireReplacementDevice(
   now: number,
 ): DeviceGrant {
   authorizeOnline(actor, 'manageDevices', now);
+
   const currentOwner = owner(inventory, actor);
   const target = inventory.devices.find((device) => device.deviceUid === targetDeviceUid);
+
   requireValue(target, 'TARGET_DEVICE_MISSING');
+
   const targetRole = inventory.roles.find((role) => role.humanUid === target.humanUid);
+
   requireValue(targetRole, 'TARGET_ROLE_MISSING');
   requireValue(
     targetRole.role === 'owner' || targetRole.role === 'deputy',
     'MANAGEMENT_DEVICE_REQUIRED',
   );
+
   const replacement = inventory.devices.find((device) => {
     if (device.deviceUid === targetDeviceUid) return false;
+
     const role = inventory.roles.find((item) => item.humanUid === device.humanUid);
+
     if (!role || !prepared(device, role, now)) return false;
+
     return targetRole.role === 'owner'
       ? role.role === 'owner' && role.humanUid === currentOwner.humanUid
       : role.role === 'owner' || role.role === 'deputy';
   });
+
   requireValue(
     replacement,
     targetRole.role === 'owner' ? 'REPLACEMENT_OWNER_DEVICE_REQUIRED' : 'LAST_MANAGEMENT_DEVICE',
   );
+
   return replacement;
 }
 
-/** 代理だけで引継ぎを始めさせない。後任のGoogle本人確認と受諾も必要とする。 */
+/** 現主担当・後任の資格と受諾を確認し、引継ぎの可否を検証する。 */
 export function requireOwnerHandover(
   actor: AuthorizationSnapshot,
   inventory: DeviceInventory,
@@ -76,12 +92,16 @@ export function requireOwnerHandover(
   now: number,
 ): void {
   authorizeOnline(actor, 'handoverOwner', now);
+
   const currentOwner = owner(inventory, actor);
+
   requireValue(
     currentOwner.humanUid === actor.role.humanUid && successorUid !== currentOwner.humanUid,
     'CURRENT_OWNER_REQUIRED',
   );
+
   const successor = inventory.roles.find((role) => role.humanUid === successorUid);
+
   requireValue(
     successor &&
       successor.role === 'deputy' &&
@@ -107,7 +127,7 @@ export function requireOwnerHandover(
   );
 }
 
-/** 未受領・隔離・不明結果を残したまま、鍵や暗号文を回収しない。 */
+/** 受領状況と公演・端末状態から、端末内データを削除できるか検証する。 */
 export function requireLocalDataDeletion(input: {
   onlineConfirmed: boolean;
   allReceived: boolean;
@@ -136,7 +156,7 @@ export interface DeviceChangeInput {
   replacementDeviceUid: string;
 }
 
-/** 停止は削除と区別する。準備版と鍵の識別子を変更案へ便乗させない。 */
+/** 既存端末の承認・停止・停止解除と廃止の変更案を作る。 */
 export function createDeviceChangePlan(
   actor: AuthorizationSnapshot,
   inventory: DeviceInventory,
@@ -150,8 +170,11 @@ export function createDeviceChangePlan(
       ['approve', 'stop', 'resume', 'retire'].includes(input.kind),
     'INVALID_DEVICE_OPERATION',
   );
+
   for (const item of [...inventory.roles, ...inventory.devices]) checkScope(item, actor);
+
   const before = inventory.devices.find((device) => device.deviceUid === input.targetDeviceUid);
+
   requireValue(
     before &&
       before.retired === false &&
@@ -159,8 +182,11 @@ export function createDeviceChangePlan(
       (before.revision ?? 1) === input.expectedRevision,
     'STALE_OR_RETIRED_DEVICE',
   );
+
   const targetRole = inventory.roles.find((role) => role.humanUid === before.humanUid);
+
   requireValue(targetRole, 'TARGET_ROLE_MISSING');
+
   if (input.kind === 'approve') {
     requireValue(before.approved === false, 'DEVICE_ALREADY_APPROVED');
     // 主担当の追加端末は一回限りの所持確認を要するため、通常の承認へ混ぜない。
@@ -186,6 +212,7 @@ export function createDeviceChangePlan(
       now,
     );
   }
+
   const device: DeviceGrant = {
     ...before,
     active: input.kind === 'approve' || input.kind === 'resume',
@@ -194,7 +221,9 @@ export function createDeviceChangePlan(
     revision: input.expectedRevision + 1,
     lastOperationId: input.operationId,
   };
+
   requireValue(positive(device.revision), 'DEVICE_REVISION_OVERFLOW');
+
   const operation = {
     schemaVersion: 1,
     environmentId: actor.environmentId,
@@ -211,5 +240,6 @@ export function createDeviceChangePlan(
     nextApproved: device.approved,
     nextRetired: device.retired,
   };
+
   return { device, operation };
 }

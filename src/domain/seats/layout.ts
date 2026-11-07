@@ -33,6 +33,8 @@ import {
   validateLayout,
 } from './validation.ts';
 
+// # 本文：席構成の検証と変更案の計算
+
 /** 環境IDと公演IDだけを取り出し、新しい要素へ同じ所属を引き継ぐ。 */
 const scopeOf = (s: Scope): Scope => ({
   environmentId: s.environmentId,
@@ -45,7 +47,9 @@ const key = (c: { row: number; column: number }) => `${c.row},${c.column}`;
 /** 指定された区画を取得する。存在しない区画への操作は拒否する。 */
 function section(layout: SeatLayout, id: Id): SectionModel {
   const model = layout.sections.find((m) => m.section.sectionId === id);
+
   requireValue(model, 'SECTION_NOT_FOUND');
+
   return model;
 }
 
@@ -57,14 +61,16 @@ function lineFor(model: SectionModel, c: LayoutCell): LineSetting {
 /** 区画数・セル数と列数が、承認済みの上限内か確認する。 */
 function guardCapacity(layout: SeatLayout) {
   requireValue(layout.sections.length <= SEAT_LIMITS.sections, 'SECTION_LIMIT');
+
   let total = 0;
+
   for (const { section: s } of layout.sections) {
     requireValue(positive(s.rows) && positive(s.columns), 'INVALID_DIMENSIONS');
     total += s.rows * s.columns;
     requireValue(Number.isSafeInteger(total) && total <= SEAT_LIMITS.cells, 'CELL_LIMIT');
     requireValue(
       (s.axis === 'horizontal' ? s.rows : s.columns) <= SEAT_LIMITS.linesPerSection,
-      'LINE_LIMIT'
+      'LINE_LIMIT',
     );
   }
 }
@@ -75,9 +81,10 @@ function newLine(
   index: number,
   scope: Scope,
   newId: () => Id,
-  old?: LineSetting
+  old?: LineSetting,
 ): LineSetting {
   const start = input.startNumber ?? 1;
+
   return {
     ...scopeOf(scope),
     lineId: old?.lineId ?? newId(),
@@ -101,17 +108,21 @@ function stable(value: unknown): string {
         .join(',') +
       '}'
     );
+
   return JSON.stringify(value) ?? 'undefined';
 }
 
 /** 席IDから席情報と配置位置を引ける表を作る。 */
 function seatLocations(layout: SeatLayout) {
   const result = new Map<Id, { seat: Seat; cellId: Id; row: number; column: number }>();
+
   for (const model of layout.sections)
     for (const seat of model.seats) {
       const c = model.section.cells.find((c) => c.seatId === seat.seatId);
+
       if (c) result.set(seat.seatId, { seat, cellId: c.cellId, row: c.row, column: c.column });
     }
+
   return result;
 }
 
@@ -119,28 +130,38 @@ function seatLocations(layout: SeatLayout) {
 function plan(
   before: SeatLayout,
   after: SeatLayout,
-  translation?: { sectionId: Id; row: number; column: number }
+  translation?: { sectionId: Id; row: number; column: number },
 ): SeatChangePlan {
   validateLayout(before);
   checkScope(after, before);
+
+  /** 来場者ID順に並べたコピーを作り、参照の比較に使う。 */
   const sorted = <T extends { attendeeId: Id }>(values: T[]) =>
     [...values].sort((a, b) => a.attendeeId.localeCompare(b.attendeeId));
+
   requireValue(
     stable(sorted(before.assignments)) === stable(sorted(after.assignments)) &&
       stable(sorted(before.ticketProtections)) === stable(sorted(after.ticketProtections)),
-    'BUSINESS_REFERENCES_CHANGED'
+    'BUSINESS_REFERENCES_CHANGED',
   );
+
   const old = seatLocations(before),
     next = seatLocations(after),
     changed = new Set<Id>();
+
   for (const id of new Set([...old.keys(), ...next.keys()]))
     if (stable(old.get(id)) !== stable(next.get(id))) changed.add(id);
+
   const affected: Id[] = [];
+
   for (const assignment of before.assignments) {
     if (!changed.has(assignment.seatId)) continue;
+
     affected.push(assignment.attendeeId);
+
     const a = old.get(assignment.seatId),
       b = next.get(assignment.seatId);
+
     // 呼出元は全体平行移動を作る内部関数だけ。席単体の移動へ流用しない。
     if (
       translation &&
@@ -153,15 +174,20 @@ function plan(
       b.column === a.column + translation.column
     )
       continue;
+
     const t = before.ticketProtections.find((t) => t.attendeeId === assignment.attendeeId)!;
+
     requireValue(
       false,
       t.issued || t.sent || t.hasIssuedHistory || t.activeCredentialId !== null
         ? 'ISSUED_SEAT_PROTECTED'
-        : 'ASSIGNED_SEAT_REQUIRES_RELEASE'
+        : 'ASSIGNED_SEAT_REQUIRES_RELEASE',
     );
   }
+
   validateLayout(after);
+
+  /** 区画・列・セルと席のIDから、各IDの用途を引ける表を作る。 */
   const typedIds = (layout: SeatLayout) =>
     new Map(
       layout.sections.flatMap((m) => [
@@ -169,13 +195,17 @@ function plan(
         ...m.section.lineSettings.map((l) => [l.lineId, 'line'] as const),
         ...m.section.cells.map((c) => [c.cellId, 'cell'] as const),
         ...m.seats.map((s) => [s.seatId, 'seat'] as const),
-      ])
+      ]),
     );
+
   const oldTypes = typedIds(before),
     newTypes = typedIds(after);
+
   for (const [id, type] of oldTypes)
     requireValue(!newTypes.has(id) || newTypes.get(id) === type, 'ID_REUSED');
+
   const nextIds = new Set(allIds(after));
+
   return {
     after,
     impact: {
@@ -202,10 +232,11 @@ export function createLayout(scope: Scope): SeatLayout {
 export function createSection(
   before: SeatLayout,
   input: SectionInput,
-  options: CalculationOptions = {}
+  options: CalculationOptions = {},
 ): SeatChangePlan {
   validateLayout(before);
   requireValue(!options.duringPerformance, 'FULL_RECONFIGURATION_DURING_PERFORMANCE');
+
   const after = structuredClone(before),
     newId = idFactory(before, options);
   const model: SectionModel = {
@@ -226,17 +257,22 @@ export function createSection(
     seats: [],
     initialNumbered: false,
   };
+
   after.sections.push(model);
   guardCapacity(after);
+
   const s = model.section;
+
   requireValue(
     input.lines.length === (s.axis === 'horizontal' ? s.rows : s.columns),
-    'LINE_COUNT_MISMATCH'
+    'LINE_COUNT_MISMATCH',
   );
   s.lineSettings = input.lines.map((l, i) => newLine(l, i, before, newId));
+
   for (let row = 0; row < s.rows; row++)
     for (let column = 0; column < s.columns; column++)
       s.cells.push({ ...scopeOf(before), cellId: newId(), row, column, kind: 'unset' });
+
   return plan(before, after);
 }
 
@@ -245,7 +281,7 @@ function mark(
   seat: Seat,
   kind: 'add' | 'number' | 'position',
   reason: string,
-  options: CalculationOptions
+  options: CalculationOptions,
 ) {
   if (options.duringPerformance) requireValue(options.emergency, 'EMERGENCY_CONTEXT_REQUIRED');
   if (options.emergency) {
@@ -259,9 +295,10 @@ function numberCells(
   model: SectionModel,
   selected: Set<Id>,
   options: CalculationOptions,
-  newId: () => Id
+  newId: () => Id,
 ) {
   const s = model.section;
+
   for (const line of s.lineSettings) {
     // 手入力席へ変えた欠番の消費番号は予約したままにする。
     const reserved = new Set(
@@ -270,39 +307,50 @@ function numberCells(
           (c) =>
             c.consumedNumber !== undefined &&
             lineFor(model, c).lineId === line.lineId &&
-            model.seats.some((seat) => seat.seatId === c.seatId && seat.numberingMode === 'manual')
+            model.seats.some((seat) => seat.seatId === c.seatId && seat.numberingMode === 'manual'),
         )
-        .map((c) => c.consumedNumber!)
+        .map((c) => c.consumedNumber!),
     );
     const cells = s.cells
       .filter((c) => selected.has(c.cellId) && lineFor(model, c).lineId === line.lineId)
       .sort(
         (a, b) =>
           (s.seatOrder === 'reverse' ? -1 : 1) *
-          (s.axis === 'horizontal' ? a.column - b.column : a.row - b.row)
+          (s.axis === 'horizontal' ? a.column - b.column : a.row - b.row),
       );
+
     for (const c of cells) {
       if (c.kind !== 'seat' && c.kind !== 'gap') continue;
+
       const previous = model.seats.find((s) => s.seatId === c.seatId);
+
       if (previous?.numberingMode === 'manual' && c.kind === 'seat') {
         previous.lineId = line.lineId;
+
         continue;
       }
+
       while (reserved.has(line.nextAutomaticNumber)) {
         requireValue(positive(line.nextAutomaticNumber + 1), 'NUMBER_OVERFLOW');
         line.nextAutomaticNumber++;
       }
+
       requireValue(
         positive(line.nextAutomaticNumber) && positive(line.nextAutomaticNumber + 1),
-        'NUMBER_OVERFLOW'
+        'NUMBER_OVERFLOW',
       );
+
       const number = line.nextAutomaticNumber++;
+
       if (c.kind === 'gap') {
         c.consumedNumber = number;
         delete c.seatId;
+
         continue;
       }
+
       delete c.consumedNumber;
+
       if (previous) {
         requireValue(previous.numberingMode === 'automatic', 'INVALID_NUMBERING_MODE');
         previous.lineId = line.lineId;
@@ -321,8 +369,10 @@ function numberCells(
           category: 'general',
           usable: true,
         };
+
         if (options.duringPerformance || options.emergency)
           mark(seat, 'add', options.emergency?.reason ?? '', options);
+
         model.seats.push(seat);
         c.seatId = seat.seatId;
       }
@@ -338,11 +388,13 @@ function numberCells(
 function selectKinds(model: SectionModel, selections: CellSelections, allowed: Set<Id>) {
   for (const [id, kind] of Object.entries(selections)) {
     const c = model.section.cells.find((c) => c.cellId === id);
+
     requireValue(
       c && allowed.has(id) && ['unset', 'seat', 'gap', 'space', 'aisle'].includes(kind),
-      'INVALID_SELECTION'
+      'INVALID_SELECTION',
     );
     c.kind = kind;
+
     if (kind !== 'seat') {
       model.seats = model.seats.filter((s) => s.seatId !== c.seatId);
       delete c.seatId;
@@ -356,20 +408,25 @@ export function numberInitial(
   before: SeatLayout,
   sectionId: Id,
   selections: CellSelections,
-  options: CalculationOptions = {}
+  options: CalculationOptions = {},
 ): SeatChangePlan {
   validateLayout(before);
   requireValue(!options.duringPerformance, 'FULL_RECONFIGURATION_DURING_PERFORMANCE');
+
   const after = structuredClone(before),
     model = section(after, sectionId);
+
   requireValue(
     !model.initialNumbered && model.section.cells.every((c) => c.kind === 'unset'),
-    'ALREADY_NUMBERED'
+    'ALREADY_NUMBERED',
   );
+
   const selected = new Set(model.section.cells.map((c) => c.cellId));
+
   selectKinds(model, selections, selected);
   numberCells(model, selected, options, idFactory(before, options));
   model.initialNumbered = true;
+
   return plan(before, after);
 }
 
@@ -378,34 +435,47 @@ export function reconfigureSection(
   before: SeatLayout,
   sectionId: Id,
   input: ReconfigurationInput,
-  options: CalculationOptions = {}
+  options: CalculationOptions = {},
 ): SeatChangePlan {
   validateLayout(before);
   requireValue(!options.duringPerformance, 'FULL_RECONFIGURATION_DURING_PERFORMANCE');
+
   const after = structuredClone(before),
     model = section(after, sectionId),
     s = model.section;
+
   requireValue(model.initialNumbered, 'INITIAL_NUMBERING_REQUIRED');
+
   const rows = input.rows ?? s.rows,
     columns = input.columns ?? s.columns;
+
   requireValue(rows <= s.rows && columns <= s.columns, 'USE_PRESERVING_EXTENSION');
   s.rows = rows;
   s.columns = columns;
   s.axis = input.axis ?? s.axis;
   s.seatOrder = input.seatOrder ?? s.seatOrder;
   guardCapacity(after);
+
   const oldLines = s.lineSettings,
     lineCount = s.axis === 'horizontal' ? s.rows : s.columns;
   const inputs = input.lines ?? oldLines.slice(0, lineCount);
+
   requireValue(inputs.length === lineCount, 'LINE_COUNT_MISMATCH');
+
   const newId = idFactory(before, options);
+
   s.lineSettings = inputs.map((l, i) => newLine(l, i, before, newId, oldLines[i]));
   s.cells = s.cells.filter((c) => c.row < rows && c.column < columns);
+
   const ids = new Set(s.cells.filter((c) => c.seatId).map((c) => c.seatId));
+
   model.seats = model.seats.filter((s) => ids.has(s.seatId));
+
   const selected = new Set(s.cells.map((c) => c.cellId));
+
   selectKinds(model, input.selections ?? {}, selected);
   numberCells(model, selected, options, newId);
+
   return plan(before, after);
 }
 
@@ -414,53 +484,71 @@ export function extendSection(
   before: SeatLayout,
   sectionId: Id,
   input: ExtensionInput,
-  options: CalculationOptions = {}
+  options: CalculationOptions = {},
 ): SeatChangePlan {
   validateLayout(before);
   requireValue(
     ['rows', 'columns'].includes(input.dimension) && positive(input.count),
-    'INVALID_EXTENSION'
+    'INVALID_EXTENSION',
   );
+
   if (options.duringPerformance) requireValue(options.emergency, 'EMERGENCY_CONTEXT_REQUIRED');
   if (options.emergency) {
     text(options.emergency.reason, SEAT_LIMITS.reason, 'INVALID_REASON');
     requireValue(
       isId(options.emergency.operationId) && nonnegative(options.emergency.markedAt),
-      'INVALID_EMERGENCY_CHANGE'
+      'INVALID_EMERGENCY_CHANGE',
     );
   }
+
   const after = structuredClone(before),
     model = section(after, sectionId),
     s = model.section;
+
   requireValue(model.initialNumbered, 'INITIAL_NUMBERING_REQUIRED');
+
   const along = input.dimension === (s.axis === 'horizontal' ? 'columns' : 'rows');
   const prepend = along && s.seatOrder === 'reverse',
     oldSize = s[input.dimension];
+
   s[input.dimension] += input.count;
   guardCapacity(after);
+
   const newId = idFactory(before, options);
+
   if (along) requireValue(input.lines === undefined, 'UNEXPECTED_NEW_LINES');
   else {
     requireValue(input.lines && input.lines.length === input.count, 'NEW_LINES_REQUIRED');
     s.lineSettings.push(...input.lines.map((l, i) => newLine(l, oldSize + i, before, newId)));
   }
+
   const field = input.dimension === 'rows' ? 'row' : 'column';
+
   if (prepend) for (const c of s.cells) c[field] += input.count;
+
   const added = new Map<string, LayoutCell>();
+
   for (let row = 0; row < s.rows; row++)
     for (let column = 0; column < s.columns; column++) {
       const position = field === 'row' ? row : column;
+
       if (prepend ? position >= input.count : position < oldSize) continue;
+
       const c: LayoutCell = { ...scopeOf(before), cellId: newId(), row, column, kind: 'unset' };
+
       s.cells.push(c);
       added.set(key(c), c);
     }
+
   for (const [coordinate, kind] of Object.entries(input.selections ?? {})) {
     const c = added.get(coordinate);
+
     requireValue(c, 'EXISTING_CELL_IN_EXTENSION');
     selectKinds(model, { [c.cellId]: kind }, new Set([c.cellId]));
   }
+
   numberCells(model, new Set([...added.values()].map((c) => c.cellId)), options, newId);
+
   return plan(before, after, {
     sectionId,
     row: prepend && field === 'row' ? input.count : 0,
@@ -471,8 +559,11 @@ export function extendSection(
 /** 区画名だけを変更し、席や割当への影響を共通の保護判定で確認する。 */
 export function renameSection(before: SeatLayout, sectionId: Id, name: string): SeatChangePlan {
   validateLayout(before);
+
   const after = structuredClone(before);
+
   section(after, sectionId).section.name = name;
+
   return plan(before, after);
 }
 
@@ -480,11 +571,14 @@ export function renameSection(before: SeatLayout, sectionId: Id, name: string): 
 export function changeStage(
   before: SeatLayout,
   sectionId: Id,
-  position: StagePosition
+  position: StagePosition,
 ): SeatChangePlan {
   validateLayout(before);
+
   const after = structuredClone(before);
+
   section(after, sectionId).section.stagePosition = position;
+
   return plan(before, after);
 }
 
@@ -495,15 +589,20 @@ export function addManualSeat(
   cellId: Id,
   label: string,
   reason: string,
-  options: CalculationOptions = {}
+  options: CalculationOptions = {},
 ): SeatChangePlan {
   validateLayout(before);
   text(reason, SEAT_LIMITS.reason, 'INVALID_REASON');
+
   const after = structuredClone(before),
     model = section(after, sectionId);
+
   requireValue(model.initialNumbered, 'INITIAL_NUMBERING_REQUIRED');
+
   const c = model.section.cells.find((c) => c.cellId === cellId);
+
   requireValue(c && c.kind !== 'seat', 'INVALID_MANUAL_TARGET');
+
   const line = lineFor(model, c);
   const seat: Seat = {
     ...scopeOf(before),
@@ -516,10 +615,12 @@ export function addManualSeat(
     category: 'general',
     usable: true,
   };
+
   mark(seat, 'add', reason, options);
   c.kind = 'seat';
   c.seatId = seat.seatId;
   model.seats.push(seat);
+
   return plan(before, after);
 }
 
@@ -529,50 +630,62 @@ export function editUnassignedSeat(
   sectionId: Id,
   seatId: Id,
   input: { number?: string; targetCellId?: Id; reason: string },
-  options: CalculationOptions = {}
+  options: CalculationOptions = {},
 ): SeatChangePlan {
   validateLayout(before);
   text(input.reason, SEAT_LIMITS.reason, 'INVALID_REASON');
   requireValue(
     !before.assignments.some((a) => a.seatId === seatId),
-    'ASSIGNED_SEAT_REQUIRES_RELEASE'
+    'ASSIGNED_SEAT_REQUIRES_RELEASE',
   );
   requireValue(
     (input.number !== undefined) !== (input.targetCellId !== undefined),
-    'ONE_EDIT_REQUIRED'
+    'ONE_EDIT_REQUIRED',
   );
+
   const after = structuredClone(before),
     model = section(after, sectionId);
   let seat = model.seats.find((s) => s.seatId === seatId);
+
   requireValue(seat, 'SEAT_NOT_FOUND');
+
   const source = model.section.cells.find((c) => c.seatId === seatId)!;
+
   if (input.number !== undefined) {
     const updated = asManual(seat, input.number.trim());
+
     model.seats = model.seats.map((s) => (s.seatId === seatId ? updated : s));
     seat = updated;
     mark(seat, 'number', input.reason, options);
   } else {
     const target = model.section.cells.find((c) => c.cellId === input.targetCellId);
+
     requireValue(
       target && (target.kind === 'unset' || target.kind === 'space'),
-      'OCCUPIED_MOVE_TARGET'
+      'OCCUPIED_MOVE_TARGET',
     );
+
     const label = displayNumber(seat),
       line = lineFor(model, target);
+
     source.kind = 'space';
     delete source.seatId;
     delete source.consumedNumber;
     target.kind = 'seat';
     target.seatId = seatId;
     delete target.consumedNumber;
+
     if (seat.lineId !== line.lineId) {
       const updated = asManual(seat, label);
+
       model.seats = model.seats.map((s) => (s.seatId === seatId ? updated : s));
       seat = updated;
     }
+
     seat.lineId = line.lineId;
     mark(seat, 'position', input.reason, options);
   }
+
   return plan(before, after);
 }
 
@@ -585,6 +698,7 @@ function asManual(seat: Seat, manualNumber: string): Seat {
     numberingMode: _mode,
     ...base
   } = seat;
+
   return { ...base, numberingMode: 'manual', manualNumber };
 }
 
@@ -594,26 +708,31 @@ export function slideSection(before: SeatLayout, command: SlideSeatMapCommand): 
   checkScope(command, before);
   requireValue(
     isId(command.operationId) && !Object.hasOwn(command, 'reason'),
-    'INVALID_SLIDE_COMMAND'
+    'INVALID_SLIDE_COMMAND',
   );
   requireValue(
     command.expectedVersions &&
       Object.values(command.expectedVersions).length === 4 &&
       ['layoutRevision', 'assignmentRevision', 'ticketRevision', 'controlRevision'].every((k) =>
-        nonnegative(command.expectedVersions[k as keyof typeof command.expectedVersions])
+        nonnegative(command.expectedVersions[k as keyof typeof command.expectedVersions]),
       ),
-    'INVALID_EXPECTED_VERSIONS'
+    'INVALID_EXPECTED_VERSIONS',
   );
+
   const directions = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] } as const;
+
   requireValue(
     Object.hasOwn(directions, command.direction) && command.amount === 1,
-    'INVALID_SLIDE_DIRECTION'
+    'INVALID_SLIDE_DIRECTION',
   );
+
   const [row, column] = directions[command.direction],
     after = structuredClone(before),
     model = section(after, command.sectionId),
     s = model.section;
+
   requireValue(model.initialNumbered, 'INITIAL_NUMBERING_REQUIRED');
+
   const edge = s.cells.filter((c) =>
     row < 0
       ? c.row === 0
@@ -621,25 +740,33 @@ export function slideSection(before: SeatLayout, command: SlideSeatMapCommand): 
         ? c.row === s.rows - 1
         : column < 0
           ? c.column === 0
-          : c.column === s.columns - 1
+          : c.column === s.columns - 1,
   );
+
   requireValue(
     edge.every(
-      (c) => c.kind === 'unset' && c.seatId === undefined && c.consumedNumber === undefined
+      (c) => c.kind === 'unset' && c.seatId === undefined && c.consumedNumber === undefined,
     ),
-    'SLIDE_BOUNDARY_NOT_UNSET'
+    'SLIDE_BOUNDARY_NOT_UNSET',
   );
+
   if (s.cells.every((c) => c.kind === 'unset')) return plan(before, after);
+
   for (const c of s.cells) {
     c.row = (c.row + row + s.rows) % s.rows;
     c.column = (c.column + column + s.columns) % s.columns;
   }
+
   const delta = s.axis === 'horizontal' ? row : column,
     count = s.lineSettings.length;
+
   for (const line of s.lineSettings) line.index = (line.index + delta + count) % count;
+
   s.lineSettings.sort((a, b) => a.index - b.index);
+
   return plan(before, after, { sectionId: s.sectionId, row, column });
 }
+
 // 保存層・画面が作った構成案にも、同じ保護判定を適用する。
 
 /** 呼出元が作った構成案にも、共通の変更検出と席保護を適用する。 */

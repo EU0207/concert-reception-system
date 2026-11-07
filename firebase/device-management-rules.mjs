@@ -1,5 +1,10 @@
-// 既存の端末登録の承認・停止・廃止。初回登録と準備完了は#111の契約へ接続する。
+// 端末の承認・停止・停止解除と廃止について、RTDBの保存規則を生成する。
+
+// # 本文：参照式と保存規則の組立て
+
+/** 指定した子キーの値を参照するRules式を作る。 */
 const f = (node, key) => `${node}.child('${key}').val()`;
+
 const immutable = [
   'schemaVersion',
   'environmentId',
@@ -32,6 +37,7 @@ const operationFields = [
   'nextRetired',
 ];
 
+/** 必須項目と許可・拒否の条件を持つ、厳密なレコード規則を作る。 */
 function record(fields, read, write, required = fields) {
   return {
     '.read': read,
@@ -41,6 +47,7 @@ function record(fields, read, write, required = fields) {
   };
 }
 
+/** 既存端末の承認・停止・停止解除と廃止の規則を作る。 */
 export function deviceManagementRules({
   root,
   manager,
@@ -51,8 +58,14 @@ export function deviceManagementRules({
   const ownDevice = `${root}.child('devices').child(auth.uid)`;
   const session = `${root}.child('sessions').child(auth.uid)`;
   const recent = `${manager} && ${f(session, 'humanAuthTime')} <= now && now - ${f(session, 'humanAuthTime')} <= 900000`;
+
+  /** 台帳の現在版を参照し、版のない既存行は初期版1として扱う。 */
   const oldRevision = (node) => `(${node}.child('revision').exists() ? ${f(node, 'revision')} : 1)`;
+
+  /** 指定した端末の台帳を参照する式を作る。 */
   const device = (base, uid) => `${base}.child('devices').child(${uid})`;
+
+  /** 端末状態と操作結果の一体更新を検査する式を作る。 */
   function commit(post, id) {
     const operation = `${post}.child('deviceAuthorizationOperations').child(${id})`;
     const uid = f(operation, 'targetDeviceUid'),
@@ -81,6 +94,7 @@ export function deviceManagementRules({
       || (${f(operation, 'kind')} === 'retire' && ${f(after, 'active')} === false && ${f(after, 'retired')} === true
         && ${f(after, 'approved')} === ${f(before, 'approved')}
         && ((${f(oldRole, 'role')} !== 'owner' && ${f(oldRole, 'role')} !== 'deputy') || (${replacementValid})))`;
+
     return `(${recent} && !${root}.child('deviceAuthorizationOperations').child(${id}).exists()
       && ${operation}.hasChildren(${JSON.stringify(operationFields)}) && ${f(operation, 'schemaVersion')} === 1
       && ${f(operation, 'environmentId')} === $environmentId && ${f(operation, 'performanceId')} === $performanceId
@@ -101,6 +115,7 @@ export function deviceManagementRules({
         .join(' && ')}
       && (${transitions}))`;
   }
+
   return {
     devices: {
       '.read': manager,

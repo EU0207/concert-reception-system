@@ -1,5 +1,10 @@
-// 現主担当の開始と後任のGoogle受諾を分け、常に主担当UIDと2人の役割を一体変更する。
+// 主担当引継ぎの案と受諾を検査し、主担当UID・役割と結果を一体保存する規則を生成する。
+
+// # 本文：参照式と保存規則の組立て
+
+/** 指定した子キーの値を参照するRules式を作る。 */
 const f = (node, key) => `${node}.child('${key}').val()`;
+
 const fields = [
   'schemaVersion',
   'environmentId',
@@ -31,9 +36,15 @@ const resultFields = [
   'targetResultingRevision',
   'committedAt',
 ];
+
+/** 指定した各項目が変更前後で一致するRules式を作る。 */
 const same = (a, b, keys) => keys.map((key) => `${f(a, key)} === ${f(b, key)}`).join(' && ');
+
+/** 環境IDと公演IDの一致を検査するRules式を作る。 */
 const scope = (node) =>
   `${f(node, 'environmentId')} === $environmentId && ${f(node, 'performanceId')} === $performanceId`;
+
+/** 必須項目と許可・拒否の条件を持つ、厳密なレコード規則を作る。 */
 function record(keys, read, write) {
   return {
     '.read': read,
@@ -43,6 +54,7 @@ function record(keys, read, write) {
   };
 }
 
+/** 現主担当の引継ぎ開始・後任の受諾と一体確定の規則を作る。 */
 export function ownerHandoverRules({ root, preparedAuthorization, manager }) {
   const ownDevice = `${root}.child('devices').child(auth.uid)`;
   const ownRole = `${root}.child('roles').child(${f(ownDevice, 'humanUid')})`;
@@ -50,8 +62,11 @@ export function ownerHandoverRules({ root, preparedAuthorization, manager }) {
   const currentOwner = `${preparedAuthorization()} && ${f(ownRole, 'role')} === 'owner'
     && ${f(`${root}.child('control')`, 'ownerUid')} === ${f(ownRole, 'humanUid')}
     && ${f(ownSession, 'humanAuthTime')} <= now && now - ${f(ownSession, 'humanAuthTime')} <= 900000`;
+
+  /** 引継ぎ案の所属・操作者と現在版を検査する式を作る。 */
   function requestValid(request, id) {
     const target = `${root}.child('roles').child(${f(request, 'targetUid')})`;
+
     return `${currentOwner} && ${scope(request)} && ${f(request, 'schemaVersion')} === 1
       && ${f(request, 'operationId')} === ${id} && ${f(request, 'actorUid')} === ${f(ownRole, 'humanUid')}
       && ${f(request, 'actorDeviceUid')} === auth.uid && ${f(request, 'targetUid')} !== ${f(request, 'actorUid')}
@@ -61,6 +76,8 @@ export function ownerHandoverRules({ root, preparedAuthorization, manager }) {
       && ${f(request, 'targetExpectedRevision')} === ${f(target, 'revision')}
       && (${f(request, 'previousOwnerDisposition')} === 'deputy' || ${f(request, 'previousOwnerDisposition')} === 'inactive')`;
   }
+
+  /** 主担当UIDと役割2件・結果と監査の一体更新を検査する。 */
   function commit(post, id) {
     const request = `${root}.child('ownerHandoverRequests').child(${id})`;
     const acceptance = `${root}.child('ownerHandoverAcceptances').child(${id})`;
@@ -72,6 +89,7 @@ export function ownerHandoverRules({ root, preparedAuthorization, manager }) {
     const afterTarget = `${post}.child('roles').child(${f(request, 'targetUid')})`;
     const deviceUid = f(result, 'successorDeviceUid');
     const successorDevice = `${post}.child('devices').child(${deviceUid})`;
+
     return `(${requestValid(request, id)} && !${root}.child('ownerHandoverResults').child(${id}).exists()
       && !${root}.child('ownerHandoverAudit').child(${id}).exists()
       && ${acceptance}.exists() && ${same(acceptance, request, ['environmentId', 'performanceId', 'operationId', 'targetUid', 'targetExpectedRevision'])}
@@ -103,6 +121,7 @@ export function ownerHandoverRules({ root, preparedAuthorization, manager }) {
       && ${f(successorDevice, 'preparedRoleRevision')} === ${f(oldTarget, 'revision')}
       && ${audit}.exists() && ${same(audit, result, resultFields)})`;
   }
+
   const selectedRequest = `${root}.child('ownerHandoverRequests').child($operationId)`;
   const humanRead = `auth != null && auth.token.email_verified === true && auth.uid === data.child('targetUid').val()
     && auth.token.firebase.sign_in_provider === 'google.com'`;
@@ -110,6 +129,7 @@ export function ownerHandoverRules({ root, preparedAuthorization, manager }) {
   const receiptRead = `${manager} || (auth != null && auth.token.firebase.sign_in_provider === 'anonymous'
     && ((auth.uid === data.child('actorDeviceUid').val() && ${f(ownDevice, 'humanUid')} === data.child('actorUid').val())
       || ${f(ownDevice, 'humanUid')} === data.child('targetUid').val()))`;
+
   return {
     roleWrite: `newData.child('humanUid').val() === $humanUid
       && ($humanUid === ${f(`${root}.child('ownerHandoverRequests').child(${f('newData', 'lastOperationId')})`, 'actorUid')}

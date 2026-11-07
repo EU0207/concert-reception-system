@@ -3,6 +3,9 @@
 import type { Id, Scope, SeatAssignment, SeatLayout } from '../seats/types.ts';
 
 // 同じ取得版の全名簿を渡す。#230・104で取込ラベルを内部UUIDへ解決し、
+
+// # 型定義と操作名
+
 // 追加ファイルも既存所属へ含める。購入者ID・氏名からgroupIdを推測しない。
 export interface AllocationPerson extends Scope {
   attendeeId: Id;
@@ -135,5 +138,6 @@ export interface AssignmentPlan {
   after: AllocationSnapshot;
   event: AssignmentEvent;
 }
+
 // #104が確定済み履歴を取得して実装する。端末の未確定プランを履歴として渡さない。
 export type ReadCommittedAssignment = (operationId: Id) => AssignmentEvent | undefined;

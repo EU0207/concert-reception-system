@@ -12,6 +12,8 @@ import { TEMPORARY_PERMISSIONS } from './types.ts';
 import { authorizeOnline, requireRecentAuthentication } from './policy.ts';
 import { checkScope, isId, nonnegative, positive, requireValue } from '../seats/validation.ts';
 
+// # 本文：役割変更と臨時権限の案・結果の計算
+
 export interface RoleChangeRequest {
   schemaVersion: 1;
   environmentId: string;
@@ -83,11 +85,14 @@ export function createAuthorizationAudit(
       'PREVIOUS_PROFILE_REQUIRED',
     );
   }
+
+  /** 臨時権限の固定9項目を、すべてOFFにした設定を作る。 */
   const off = () =>
     Object.fromEntries(TEMPORARY_PERMISSIONS.map((key) => [key, false])) as Record<
       TemporaryPermission,
       boolean
     >;
+
   return {
     ...plan.result,
     previousStartsAt: previousRole.startsAt,
@@ -102,6 +107,7 @@ export function createAuthorizationAudit(
   };
 }
 
+/** 対象の所属・現在役割と、変更時に期待する版を検証する。 */
 function requireTarget(
   actor: AuthorizationSnapshot,
   target: RoleGrant,
@@ -119,7 +125,7 @@ function requireTarget(
   );
 }
 
-/** 役割変更の許可表。主担当の変更は、別の引継ぎ操作へ分ける。 */
+/** 許可された役割の組合せを確認し、固定する変更案を作る。 */
 export function createRoleChangeRequest(
   actor: AuthorizationSnapshot,
   target: RoleGrant,
@@ -158,6 +164,7 @@ export function createRoleChangeRequest(
       (input.nextRole === 'deputy' || input.endsAt <= actor.staffDeadline),
     'INVALID_ROLE_PERIOD',
   );
+
   return {
     schemaVersion: 1,
     environmentId: actor.environmentId,
@@ -175,7 +182,7 @@ export function createRoleChangeRequest(
   };
 }
 
-/** 代理へ昇格する対象者の本人確認。Google連携済みだけでは証跡を作らない。 */
+/** 対象本人のGoogle確認値から、役割変更への本人確認証跡を作る。 */
 export function createGoogleAcceptance(
   request: RoleChangeRequest,
   identity: HumanIdentity,
@@ -189,6 +196,7 @@ export function createGoogleAcceptance(
     'GOOGLE_IDENTITY_REQUIRED',
   );
   requireRecentAuthentication(identity.authenticatedAt, now);
+
   return {
     schemaVersion: 1,
     environmentId: request.environmentId,
@@ -201,6 +209,7 @@ export function createGoogleAcceptance(
   };
 }
 
+/** 臨時権限が固定9項目の真偽値か確認し、コピーを返す。 */
 function permissions(
   input: Record<TemporaryPermission, boolean>,
 ): Record<TemporaryPermission, boolean> {
@@ -212,9 +221,11 @@ function permissions(
       ),
     'INVALID_TEMPORARY_PERMISSIONS',
   );
+
   return structuredClone(input);
 }
 
+/** 役割変更の変更前後と、操作IDに対応する確定結果を作る。 */
 function result(
   actor: AuthorizationSnapshot,
   target: RoleGrant,
@@ -224,6 +235,7 @@ function result(
   now: number,
 ): RoleManagementPlan['result'] {
   requireValue(positive(next.revision), 'ROLE_REVISION_OVERFLOW');
+
   return {
     schemaVersion: 1,
     environmentId: actor.environmentId,
@@ -258,6 +270,7 @@ export function commitRoleChange(
     request.schemaVersion === 1 && Object.keys(request).length === 13,
     'INVALID_ROLE_REQUEST',
   );
+
   const current = createRoleChangeRequest(
     actor,
     target,
@@ -270,6 +283,7 @@ export function commitRoleChange(
     },
     now,
   );
+
   requireValue(
     current.actorUid === request.actorUid &&
       current.actorDeviceUid === request.actorDeviceUid &&
@@ -279,6 +293,7 @@ export function commitRoleChange(
       request.requestedAt <= now,
     'ROLE_REQUEST_MISMATCH',
   );
+
   if (request.nextRole === 'deputy') {
     requireValue(acceptance, 'GOOGLE_ACCEPTANCE_REQUIRED');
     checkScope(acceptance, actor);
@@ -293,6 +308,7 @@ export function commitRoleChange(
     );
     requireRecentAuthentication(acceptance.authenticatedAt, now);
   }
+
   const role: RoleGrant = {
     ...target,
     role: request.nextRole,
@@ -313,6 +329,7 @@ export function commitRoleChange(
           permissions: permissions(initialPermissions),
         }
       : null;
+
   return {
     role,
     profile,
@@ -350,6 +367,7 @@ export function changeTemporaryPermissions(
       now < input.validUntil,
     'INVALID_PROFILE_PERIOD',
   );
+
   const configured = permissions(input.permissions);
   const role = {
     ...target,
@@ -370,6 +388,7 @@ export function changeTemporaryPermissions(
         >)
       : configured,
   };
+
   return {
     role,
     profile,
@@ -393,6 +412,7 @@ export function cancelAuthorizationChange(
     isId(operationId) && (kind === 'roleChange' || target.role === 'temporary'),
     'INVALID_OPERATION',
   );
+
   return {
     role: { ...target },
     profile: previousProfile,

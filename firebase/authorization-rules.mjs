@@ -6,21 +6,30 @@ import { ownerHandoverRules } from './owner-handover-rules.mjs';
 import { deviceRegistrationRules, registrationProofValid } from './device-registration-rules.mjs';
 import { ownerDeviceLinkRules } from './owner-device-link-rules.mjs';
 
+// # 本文：参照式と保存規則の組立て
+
+/** 指定した子キーの値を参照するRules式を作る。 */
 const field = (node, key) => `${node}.child('${key}').val()`;
+
+/** 指定した子キーを参照するRules式を作る。 */
 const child = (node, key) => `${node}.child('${key}')`;
+
 const root = "root.child('environments/'+$environmentId+'/performances/'+$performanceId)";
 const ownDevice = `${root}.child('devices').child(auth.uid)`;
 const ownSession = `${root}.child('sessions').child(auth.uid)`;
 const ownRole = `${root}.child('roles').child(${field(ownDevice, 'humanUid')})`;
 
+/** 環境IDと公演IDの一致を検査するRules式を作る。 */
 function scope(node) {
   return `${field(node, 'environmentId')} === $environmentId && ${field(node, 'performanceId')} === $performanceId`;
 }
 
+/** 指定した下限以上の安全な整数か検査するRules式を作る。 */
 function integer(expression, minimum = 0) {
   return `(${expression} >= ${minimum} && ${expression} % 1 === 0 && ${expression} <= 9007199254740991)`;
 }
 
+/** 役割の所属・形式と有効期間を検査するRules式を作る。 */
 function roleValid(node) {
   return `(${scope(node)} && ${field(node, 'active')} === true
     && (${['owner', 'deputy', 'temporary', 'receptionist'].map((role) => `${field(node, 'role')} === '${role}'`).join(' || ')})
@@ -29,12 +38,13 @@ function roleValid(node) {
     && ${field(node, 'startsAt')} <= now && now < ${field(node, 'endsAt')})`;
 }
 
+/** 役割に対応する本人の認証方式を検査するRules式を作る。 */
 function provider(role, providerExpression) {
   return `((${field(role, 'role')} === 'owner' || ${field(role, 'role')} === 'deputy')
     ? ${providerExpression} === 'google.com' : ${providerExpression} === 'password')`;
 }
 
-/** 保存アダプターが接続する業務経路でも再利用する、現在認可の共通式。 */
+/** 本人と端末の結合・現在役割と期限を検査する共通Rules式を作る。 */
 export function currentAuthorization() {
   return `(auth != null && auth.token.firebase.sign_in_provider === 'anonymous'
     && ${scope(ownDevice)} && ${scope(ownSession)}
@@ -54,13 +64,14 @@ export function currentAuthorization() {
       || now < ${field(`${root}.child('control')`, 'staffDeadline')}))`;
 }
 
-/** 準備完了が必要な業務操作向け。本人証跡の作成とは分ける。 */
+/** 現在認可に加えて、端末と本人証跡の準備版を検査する式を作る。 */
 export function preparedAuthorization() {
   return `(${currentAuthorization()} && ${field(ownDevice, 'preparedRoleRevision')} === ${field(ownRole, 'revision')}
     && ${field(ownSession, 'roleRevision')} === ${field(ownRole, 'revision')}
     && ${field(ownDevice, 'preparedRole')} === ${field(ownRole, 'role')})`;
 }
 
+/** 必須項目と許可・拒否の条件を持つ、厳密なレコード規則を作る。 */
 function strictRecord(fields, read, write) {
   return {
     '.read': read,
@@ -70,6 +81,7 @@ function strictRecord(fields, read, write) {
   };
 }
 
+/** 本人証跡と役割・端末管理の、公演内の規則を組み立てる。 */
 export function authorizationRules() {
   const selectedDevice = `${root}.child('devices').child($deviceUid)`;
   const humanRole = `${root}.child('roles').child(auth.uid)`;
@@ -135,8 +147,10 @@ export function authorizationRules() {
     preparedAuthorization,
     manager,
   });
+
   managementRules.roles.$humanUid['.write'] =
     `(${managementRules.roles.$humanUid['.write']}) || (${roleWrite})`;
+
   const { pendingDeviceWrite, ...registrationRules } = deviceRegistrationRules({
     root,
     manager,
@@ -148,17 +162,23 @@ export function authorizationRules() {
     manager,
     ownMetadata,
     roleValid,
+    /** 端末に結んだ本人証明が、現在役割に一致するか検査する式を返す。 */
     registrationProof: (device, role) => registrationProofValid(root, device, role, provider),
   });
+
   deviceRules.devices.$deviceUid['.write'] =
     `(${deviceRules.devices.$deviceUid['.write']}) || (${pendingDeviceWrite})`;
+
   const { approveDeviceWrite, ...ownerLinkRules } = ownerDeviceLinkRules({
     root,
     preparedAuthorization,
+    /** 端末に結んだ本人証明が、現在役割に一致するか検査する式を返す。 */
     registrationProof: (device, role) => registrationProofValid(root, device, role, provider),
   });
+
   deviceRules.devices.$deviceUid['.write'] =
     `(${deviceRules.devices.$deviceUid['.write']}) || (${approveDeviceWrite})`;
+
   return {
     '.read': false,
     '.write': false,
@@ -179,6 +199,7 @@ export function authorizationRules() {
   };
 }
 
+/** 環境・公演の名前空間へ、既定拒否の認可規則を配置する。 */
 export function generateDatabaseRules() {
   return {
     rules: {

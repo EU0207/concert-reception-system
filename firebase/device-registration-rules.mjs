@@ -1,7 +1,14 @@
-// 匿名端末の仮登録だけで本人を装えないよう、本人Authによる証明と承認待ち台帳を一体作成する。
+// 匿名端末の仮登録と本人Authの証明、承認待ち台帳のRTDB規則を生成する。
+
+// # 本文：参照式と保存規則の組立て
+
+/** 指定した子キーの値を参照するRules式を作る。 */
 const f = (node, key) => `${node}.child('${key}').val()`;
+
+/** 環境IDと公演IDの一致を検査するRules式を作る。 */
 const scope = (node) =>
   `${f(node, 'environmentId')} === $environmentId && ${f(node, 'performanceId')} === $performanceId`;
+
 const requestFields = [
   'schemaVersion',
   'environmentId',
@@ -28,10 +35,15 @@ const proofFields = [
   'revision',
 ];
 const binding = ['environmentId', 'performanceId', 'deviceUid', 'humanUid', 'storageEpoch'];
+
+/** 指定した各項目が変更前後で一致するRules式を作る。 */
 const same = (a, b, fields) => fields.map((key) => `${f(a, key)} === ${f(b, key)}`).join(' && ');
+
+/** 指定項目が1以上の安全な整数か検査する式を作る。 */
 const positive = (node, key) =>
   `${node}.child('${key}').isNumber() && ${f(node, key)} >= 1 && ${f(node, key)} % 1 === 0 && ${f(node, key)} <= 9007199254740991`;
 
+/** 必須項目と許可・拒否の条件を持つ、厳密なレコード規則を作る。 */
 function record(fields, read, write) {
   return {
     '.read': read,
@@ -41,9 +53,10 @@ function record(fields, read, write) {
   };
 }
 
-/** 承認時も現在役割版へ結ぶ。古い役割の登録証明を、新しい役割へ流用しない。 */
+/** 登録証明の所属・本人と現在役割版を検査する式を作る。 */
 export function registrationProofValid(root, device, role, provider) {
   const proof = `${root}.child('deviceRegistrationProofs').child(${f(device, 'deviceUid')})`;
+
   return `${proof}.exists() && ${scope(proof)} && ${f(proof, 'schemaVersion')} === 1
     && ${same(proof, device, ['deviceUid', 'humanUid', 'storageEpoch'])}
     && ${f(proof, 'roleRevision')} === ${f(role, 'revision')} && ${f(proof, 'emailVerified')} === true
@@ -51,6 +64,7 @@ export function registrationProofValid(root, device, role, provider) {
     && ${provider(role, f(proof, 'authProvider'))}`;
 }
 
+/** 端末の仮登録・本人証明と承認待ち台帳の規則を作る。 */
 export function deviceRegistrationRules({ root, manager, roleValid, provider }) {
   const device = `${root}.child('devices').child($deviceUid)`;
   const request = `${root}.child('deviceRegistrationRequests').child($deviceUid)`;
@@ -59,11 +73,14 @@ export function deviceRegistrationRules({ root, manager, roleValid, provider }) 
     && ${f(ownRole, 'humanUid')} === auth.uid && ${provider(ownRole, 'auth.token.firebase.sign_in_provider')}
     && ((${f(ownRole, 'role')} === 'owner' || ${f(ownRole, 'role')} === 'deputy')
       || now < ${f(`${root}.child('control')`, 'staffDeadline')})`;
+
+  /** 端末が初期版の承認待ち状態か検査する式を作る。 */
   const pending = (node) => `${scope(node)} && ${f(node, 'schemaVersion')} === 2
     && ${f(node, 'deviceUid')} === $deviceUid && ${f(node, 'active')} === false && ${f(node, 'approved')} === false
     && ${f(node, 'retired')} === false && ${f(node, 'preparedRole')} === null
     && ${f(node, 'preparedRoleRevision')} === 0 && ${f(node, 'revision')} === 1
     && !${node}.child('lastOperationId').exists()`;
+
   const read = `${manager} || (auth != null && ((auth.token.firebase.sign_in_provider === 'anonymous' && auth.uid === $deviceUid)
     || (auth.uid === data.child('humanUid').val() && (auth.token.firebase.sign_in_provider === 'google.com' || auth.token.firebase.sign_in_provider === 'password'))))`;
   const requestWrite = `auth != null && auth.token.firebase.sign_in_provider === 'anonymous' && auth.uid === $deviceUid
@@ -78,10 +95,12 @@ export function deviceRegistrationRules({ root, manager, roleValid, provider }) 
     && (!data.exists() || (${same('newData', 'data', binding)}))
     && (!${device}.exists() || (${pending(device)} && ${same(device, 'newData', ['humanUid', 'storageEpoch'])}))`;
 
+  /** 本人Authによる証明と、承認待ち端末の一体作成を検査する。 */
   function bind(post) {
     const proof = `${post}.child('deviceRegistrationProofs').child($deviceUid)`;
     const oldProof = `${root}.child('deviceRegistrationProofs').child($deviceUid)`;
     const after = `${post}.child('devices').child($deviceUid)`;
+
     return `(${currentHuman} && ${request}.exists() && ${scope(request)} && ${f(request, 'schemaVersion')} === 1
       && ${f(request, 'deviceUid')} === $deviceUid && ${f(request, 'humanUid')} === auth.uid
       && ${f(request, 'requestedAt')} <= now && now < ${f(request, 'expiresAt')}
@@ -96,6 +115,7 @@ export function deviceRegistrationRules({ root, manager, roleValid, provider }) 
       && ${after}.exists() && ${pending(after)} && ${same(after, proof, ['humanUid', 'storageEpoch'])}
       && (!${device}.exists() || (${pending(device)} && ${same(after, device, binding)})))`;
   }
+
   return {
     pendingDeviceWrite: `!data.exists() && newData.exists() && ${bind('newData.parent().parent()')}`,
     deviceRegistrationRequests: { $deviceUid: record(requestFields, read, requestWrite) },

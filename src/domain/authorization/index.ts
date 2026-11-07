@@ -1,5 +1,9 @@
 // 本人・端末認可の公開窓口。Firebase SDKに依存しない判定を公開する。
+
+// # 公開する型と関数
+
 export type * from './types.ts';
+
 export { COMMON_OPERATIONS, MANAGEMENT_OPERATIONS, TEMPORARY_PERMISSIONS } from './types.ts';
 export {
   authorizeOnline,

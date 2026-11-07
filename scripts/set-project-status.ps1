@@ -1,3 +1,5 @@
+# IssueをProjectへ登録し、状態を変更して再取得・照合する。
+
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
@@ -16,6 +18,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $GitHubApiVersion = '2026-03-10'
 
+# ghを実行し、成功した出力をJSONのオブジェクトへ変換する。
 function Invoke-GhJson {
     param([Parameter(Mandatory = $true)][string[]]$GhArguments)
 
@@ -27,6 +30,7 @@ function Invoke-GhJson {
     return ($output | Out-String | ConvertFrom-Json)
 }
 
+# 共通のAPI版を付けて、GitHub REST APIを呼び出す。
 function Invoke-GhRestJson {
     param(
         [Parameter(Mandatory = $true)]
@@ -41,6 +45,7 @@ function Invoke-GhRestJson {
     return Invoke-GhJson -GhArguments $ghArguments
 }
 
+# ページ分割されたREST応答を、ひとつの一覧へまとめる。
 function Invoke-GhRestPages {
     param(
         [Parameter(Mandatory = $true)]
@@ -56,6 +61,8 @@ function Invoke-GhRestPages {
         }
     )
 }
+
+# 本文：対象Projectと状態欄を特定する。
 
 $ownerData = Invoke-GhRestJson -ApiArguments @("users/$Owner")
 $projectOwnerPath = switch ($ownerData.type) {
@@ -100,6 +107,7 @@ if ($Status -ne '完了' -and $issueData.state -eq 'closed') {
     throw "Closed Issue must use Project status 完了: Issue #$IssueNumber"
 }
 
+# 対象Issueとリポジトリに一致する、既存のProject項目を取得する。
 function Get-ProjectItem {
     $itemData = Invoke-GhRestPages -Endpoint (
         "$projectOwnerPath/projectsV2/$($project.number)/items" +
@@ -115,6 +123,8 @@ function Get-ProjectItem {
         Select-Object -First 1
 }
 
+# 本文：Issueを登録し、Projectの状態を更新する。
+
 $item = Get-ProjectItem
 if ($null -eq $item) {
     $addedItem = Invoke-GhRestJson -ApiArguments @(
@@ -123,7 +133,7 @@ if ($null -eq $item) {
         '-f', 'type=Issue',
         '-F', "id=$($issueData.id)"
     )
-    # The REST endpoint may return the created item directly or wrap it in value.
+    # APIの応答形式が直接値・value内のどちらでも、同じ項目として扱う。
     $item = if ($addedItem.PSObject.Properties.Name -contains 'value') {
         $addedItem.value
     } else {
@@ -141,6 +151,8 @@ $null = Invoke-GhRestJson -ApiArguments @(
     '-F', "fields[][id]=$($statusField.id)",
     '-f', "fields[][value]=$($statusOption.id)"
 )
+
+# 本文：更新後の状態を再取得し、Issueとの一致を確認する。
 
 $verifiedItem = $null
 $verifiedStatus = $null
