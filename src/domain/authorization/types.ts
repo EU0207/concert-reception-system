@@ -2,6 +2,8 @@
 
 import type { Scope } from '../seats/types.ts';
 
+// # 型定義と操作名
+
 export type StaffRole = 'owner' | 'deputy' | 'temporary' | 'receptionist';
 export type HumanProvider = 'google.com' | 'password';
 export type PerformanceState = 'preparing' | 'operating' | 'stopped' | 'ended' | 'closed';
@@ -11,6 +13,7 @@ export interface HumanIdentity {
   uid: string;
   emailVerified: boolean;
   provider: HumanProvider;
+  /** 本人がログイン・再認証した時刻。トークン更新時刻とは異なる。単位はミリ秒。 */
   authenticatedAt: number;
 }
 
@@ -19,6 +22,7 @@ export interface RoleGrant extends Scope {
   humanUid: string;
   role: StaffRole;
   active: boolean;
+  /** 役割と臨時権限に共通する版。変更前に読んだ版との照合に使う。 */
   revision: number;
   startsAt: number;
   endsAt: number;
@@ -34,8 +38,10 @@ export interface DeviceGrant extends Scope {
   active: boolean;
   approved: boolean;
   retired: boolean;
+  /** 端末登録時に固定する保存領域の識別子。旧記録との混同を防ぐ。 */
   storageEpoch: string;
   preparedRole: StaffRole | null;
+  /** この端末で準備を終えた役割版。0は未準備を表す。 */
   preparedRoleRevision: number;
   revision?: number;
   lastOperationId?: string;
@@ -68,6 +74,7 @@ export const TEMPORARY_PERMISSIONS = [
   'staffNoticeManage',
   'dayAuditRead',
 ] as const;
+
 export type TemporaryPermission = (typeof TEMPORARY_PERMISSIONS)[number];
 
 export interface TemporaryProfile {

@@ -13,12 +13,14 @@ import type {
   TemporaryProfile,
 } from './types.ts';
 
+// # 本文：認可の契約検証と操作の許可判定
+
 export const RECENT_AUTH_WINDOW = 15 * 60 * 1000;
 export const SESSION_LIFETIME = 12 * 60 * 60 * 1000;
 const roles: StaffRole[] = ['owner', 'deputy', 'temporary', 'receptionist'];
 const states = ['preparing', 'operating', 'stopped', 'ended', 'closed'];
 
-/** RTDBのパス解釈が変わらないよう、UIDへ子キーの禁止文字を含めない。 */
+/** Firebaseの子キーに使用できるUIDか判定する。 */
 export function validUid(value: unknown): value is string {
   return (
     typeof value === 'string' &&
@@ -28,10 +30,12 @@ export function validUid(value: unknown): value is string {
   );
 }
 
+/** 現在役割に必要な本人の認証方式を返す。 */
 export function providerFor(role: StaffRole): HumanProvider {
   return role === 'owner' || role === 'deputy' ? 'google.com' : 'password';
 }
 
+/** 本人の再認証が、現在時刻から15分以内か検証する。 */
 export function requireRecentAuthentication(authenticatedAt: number, now: number): void {
   requireValue(
     nonnegative(now) &&
@@ -55,8 +59,11 @@ export function validateAuthorization(
       nonnegative(snapshot.staffDeadline),
     'INVALID_AUTHORIZATION_SCOPE',
   );
+
   const { role, device, session } = snapshot;
+
   for (const item of [role, device, session]) checkScope(item, snapshot);
+
   requireValue(
     validUid(snapshot.deviceAuthUid) &&
       validUid(role.humanUid) &&
@@ -106,18 +113,20 @@ export function validateAuthorization(
   );
   requireValue(session.authProvider === providerFor(role.role), 'AUTH_PROVIDER_MISMATCH');
   requireValue(states.includes(snapshot.state), 'INVALID_PERFORMANCE_STATE');
+
   if (role.role === 'temporary' || role.role === 'receptionist') {
     requireValue(now < snapshot.staffDeadline, 'STAFF_DEADLINE_EXPIRED');
   }
 }
 
-/** プロファイルがなくても全ONを補わず、不正・旧版・期限切れを拒否する。 */
+/** 臨時権限の形式・現在版と有効期間を検証する。 */
 export function validateTemporaryProfile(
   profile: TemporaryProfile,
   snapshot: AuthorizationSnapshot,
   now: number,
 ): void {
   const { role } = snapshot;
+
   requireValue(
     profile &&
       profile.schemaVersion === 1 &&
@@ -146,6 +155,7 @@ export function validateTemporaryProfile(
       ),
     'INVALID_TEMPORARY_PERMISSIONS',
   );
+
   if (profile.status === 'revoked') {
     requireValue(
       TEMPORARY_PERMISSIONS.every((key) => profile.permissions[key] === false),
@@ -157,16 +167,20 @@ export function validateTemporaryProfile(
 /** 権限追加の準備前は、検証済みの旧準備と現在役割の共通受付範囲だけを許可する。 */
 function requirePreparation(snapshot: AuthorizationSnapshot, common: boolean): void {
   const { role, device, session } = snapshot;
+
   requireValue(
     positive(device.preparedRoleRevision) && session.roleRevision === device.preparedRoleRevision,
     'DEVICE_NOT_PREPARED',
   );
+
   if (device.preparedRoleRevision === role.revision && device.preparedRole === role.role) return;
+
   const baseline =
     common &&
     device.preparedRoleRevision < role.revision &&
     role.role === 'temporary' &&
     (device.preparedRole === 'receptionist' || device.preparedRole === 'temporary');
+
   requireValue(baseline, 'ROLE_PREPARATION_REQUIRED');
 }
 
@@ -180,6 +194,7 @@ export function authorizeOnline(
   authorizeOperation(snapshot, operation, now);
 }
 
+/** 現在役割と公演状態から、指定した操作を許可できるか検証する。 */
 function authorizeOperation(
   snapshot: AuthorizationSnapshot,
   operation: AuthorizedOperation,
@@ -188,8 +203,10 @@ function authorizeOperation(
   const common = (COMMON_OPERATIONS as readonly string[]).includes(operation);
   const temporary = (TEMPORARY_PERMISSIONS as readonly string[]).includes(operation);
   const management = (MANAGEMENT_OPERATIONS as readonly string[]).includes(operation);
+
   requireValue(common || temporary || management, 'UNKNOWN_OPERATION');
   requirePreparation(snapshot, common);
+
   if (operation === 'qrReception')
     requireValue(snapshot.state === 'operating', 'RECEPTION_NOT_OPERATING');
   if (common) {
@@ -199,9 +216,12 @@ function authorizeOperation(
         'DAY_OPERATION_ENDED',
       );
     }
+
     return;
   }
+
   const role = snapshot.role.role;
+
   if (role === 'owner' || role === 'deputy') {
     if (operation === 'handoverOwner') requireValue(role === 'owner', 'OWNER_REQUIRED');
     if (
@@ -219,14 +239,18 @@ function authorizeOperation(
     ) {
       requireRecentAuthentication(snapshot.session.humanAuthTime, now);
     }
+
     return;
   }
+
   requireValue(role === 'temporary' && temporary, 'ROLE_FORBIDDEN');
   requireValue(
     snapshot.state === 'operating' || snapshot.state === 'stopped',
     'DAY_MANAGEMENT_ENDED',
   );
+
   const profile = snapshot.temporaryProfile;
+
   requireValue(profile, 'TEMPORARY_PROFILE_REQUIRED');
   validateTemporaryProfile(profile, snapshot, now);
   requireValue(
@@ -236,7 +260,7 @@ function authorizeOperation(
   );
 }
 
-/** 端末の自己申告で本人を装えないよう、本人Authの確認値からだけ証跡を作る。 */
+/** 本人の確認値から、端末別の期限付きセッション証跡を作る。 */
 export function createPersonSession(
   snapshot: Pick<AuthorizationSnapshot, 'environmentId' | 'performanceId' | 'role' | 'device'>,
   identity: HumanIdentity,
@@ -245,6 +269,7 @@ export function createPersonSession(
   previous: PersonSession | null = null,
 ): PersonSession {
   const { role, device } = snapshot;
+
   checkScope(role, snapshot);
   checkScope(device, snapshot);
   requireValue(
@@ -279,6 +304,7 @@ export function createPersonSession(
     'INVALID_SESSION_EXPIRY',
   );
   requireValue(device.active && device.approved && !device.retired, 'DEVICE_UNAVAILABLE');
+
   if (previous) {
     checkScope(previous, snapshot);
     requireValue(
@@ -288,6 +314,7 @@ export function createPersonSession(
       'PRINCIPAL_MISMATCH',
     );
   }
+
   const next: PersonSession = {
     schemaVersion: 2,
     environmentId: snapshot.environmentId,
@@ -303,7 +330,9 @@ export function createPersonSession(
     expiresAt,
     humanAuthTime: identity.authenticatedAt,
   };
+
   requireValue(positive(next.revision), 'SESSION_REVISION_OVERFLOW');
+
   return next;
 }
 
@@ -339,6 +368,7 @@ export function authorizeOffline(
     !MANAGEMENT_OPERATIONS.includes(operation as (typeof MANAGEMENT_OPERATIONS)[number]),
     'ONLINE_REQUIRED',
   );
+
   if (
     [
       'exceptionManage',
@@ -356,6 +386,7 @@ export function authorizeOffline(
       'OFFLINE_DAY_OPERATION_ENDED',
     );
   }
+
   validateAuthorization(snapshot, now, 'offline');
   authorizeOperation(snapshot, operation, now);
 }
