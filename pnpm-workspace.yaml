@@ -1,0 +1,7 @@
+# 製品ルートだけを対象にする。過去のPoCをworkspaceへ含めない。
+packages:
+  - "."
+
+# Firebaseに含まれるNode向けの間接依存を、既知問題の修正版へ固定する。
+overrides:
+  "@grpc/grpc-js": "1.14.7"

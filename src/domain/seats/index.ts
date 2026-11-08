@@ -1,6 +1,9 @@
 // 席構成の公開窓口。呼出元はこのファイルから型と計算処理を利用する。
 
+// # 公開する型と関数
+
 export type * from './types.ts';
+
 export { SEAT_LIMITS, SeatDomainError, validateLayout, displayNumber } from './validation.ts';
 export {
   createLayout,
