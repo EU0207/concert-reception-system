@@ -15,6 +15,7 @@ export class NavigationGate {
   editor: EditorSession | undefined;
   private busy = false;
 
+  /** 現在の編集画面に、未保存の変更があるか返す。 */
   get isDirty() {
     return this.editor?.isDirty() ?? false;
   }
@@ -23,13 +24,19 @@ export class NavigationGate {
   async leave(confirm: () => Promise<LeaveChoice>): Promise<boolean> {
     if (this.busy) return false;
     if (!this.isDirty) return true;
+
     this.busy = true;
+
     const editor = this.editor!;
+
     try {
       const choice = await confirm();
+
       if (choice === 'continue') return false;
       if (choice === 'save') return await editor.save();
+
       editor.discard();
+
       return true;
     } finally {
       this.busy = false;

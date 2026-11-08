@@ -3,16 +3,27 @@
 import { copyFile, mkdir } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { resolve } from 'node:path';
-const root = resolve(import.meta.dirname, '..');
-await mkdir(resolve(root, 'public'), { recursive: true });
-try {
-  await copyFile(
-    resolve(root, 'config/app-config.local.example.json'),
-    resolve(root, 'public/app-config.json'),
-    constants.COPYFILE_EXCL
-  );
-  console.log('架空データ専用のローカル設定を作成しました。外部サービスへは接続しません。');
-} catch (error) {
-  if (error.code !== 'EEXIST') throw error;
-  console.log('設定ファイルは既にあります。上書きせず保持しました。');
+
+/** 既存設定を上書きせず、ローカル評価用の設定を作成する。 */
+async function main() {
+  const root = resolve(import.meta.dirname, '..');
+
+  await mkdir(resolve(root, 'public'), { recursive: true });
+
+  try {
+    await copyFile(
+      resolve(root, 'config/app-config.local.example.json'),
+      resolve(root, 'public/app-config.json'),
+      constants.COPYFILE_EXCL,
+    );
+    console.log('架空データ専用のローカル設定を作成しました。外部サービスへは接続しません。');
+  } catch (error) {
+    if (error.code !== 'EEXIST') throw error;
+
+    console.log('設定ファイルは既にあります。上書きせず保持しました。');
+  }
 }
+
+// # 本文：既存設定を上書きせず、ローカル評価用の設定を作成する。
+
+await main();
