@@ -53,7 +53,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | 初回要件ヒアリング議事録 | [2026-08-30-initial-requirements-interview.md](client/meeting-notes/2026-08-30-initial-requirements-interview.md) | 初回ヒアリングの正式な回答・決定事項を質問ID単位で記録する | 依頼者、受付担当者、運用担当者、開発担当者 | 初回ヒアリング時 | 訂正が承認された時 | Approved |
 | 要件定義書 | [requirements.md](client/requirements.md) | 必要な機能と条件を合意する | 依頼者、開発担当者 | 要件定義工程 | 要件の追加・変更時 | Approved |
 | 受入条件書 | [acceptance-criteria.md](client/acceptance-criteria.md) | 完成と判断する条件を合意する | 依頼者、開発担当者 | 要件定義工程 | 要件・確認方法の変更時 | Approved |
-| Firebase初期設定・引継ぎ手順書 | [firebase-initial-setup-guide.md](client/firebase-initial-setup-guide.md) | 本番環境の所有、初期設定、権限返却を非技術者にも分かる形で案内する | 依頼者、後任管理者、技術担当者 | Firebase候補の検証時 | 採用・本番構成・画面変更時 | Draft |
+| 初期設定・引渡し・利用開始手順書 | [firebase-initial-setup-guide.md](client/firebase-initial-setup-guide.md) | 自分専用の環境作成から、最初の管理端末・スタッフの準備までを案内する。製品実装待ちと完成時の単独実施確認を明示する | 依頼者、環境所有者、第三者の自主運用者 | 初期設定設計時 | 製品実装・配布・画面変更時 | Draft |
 | 打合せ記録 | [meeting-notes-guide.md](client/meeting-notes/meeting-notes-guide.md) | 確認事項と合意事項を記録する | 依頼者、開発担当者 | 打合せ実施時 | 記録の訂正時 | Draft |
 
 ## 開発者向け文書
