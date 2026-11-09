@@ -207,3 +207,5 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 [本人・端末認可基盤の実装・試験記録](development/technical-validation/authorization-foundation-results.md)に、#110のローカル確認と後続の結合条件を記録する。状態はIn Review。実機の認証寿命と初期主担当の実環境割当は未確認である。
 
 [公演保存基盤の実装・試験記録](development/technical-validation/performance-foundation-results.md)に、#111段階Aの受付状態の計算とRTDB接続に必要な残条件を記録する。
+
+[受付優先の差分同期設計](development/detailed-design/reception-live-sync-design.md)に、#271の業務回答と設計・受入の変更を記録する。状態はApproved。
