@@ -227,6 +227,7 @@ function authorizeOperation(
         'manageRoles',
         'manageTemporaryPermissions',
         'manageDevices',
+        'controlReception',
         'closePerformance',
         'backupRestore',
         'exportManagement',
