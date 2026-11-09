@@ -1539,3 +1539,28 @@ test('AUTH110-Q03 同じ主担当の別端末への転用・操作ID再利用と
   assert.equal((await request(root, 'PATCH', approval, other.token)).status, 401);
   assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 200);
 });
+
+test('PERF111-R01 保存契約の接続前は、認可済み主担当でも受付開始を直接書き込めない', async () => {
+  const { human, device, session } = await fixture();
+  assert.equal((await request(`${root}/sessions/${device.uid}`, 'PUT', session, human.token)).status, 200);
+
+  const control = {
+    ...scope,
+    state: 'preparing',
+    controlRevision: 1,
+    staffDeadline: Date.now() + 86400000,
+  };
+  assert.equal((await request(`${root}/control`, 'PUT', control)).status, 200);
+  assert.deepEqual(await request(`${root}/control`, 'GET', undefined, device.token), {
+    status: 200,
+    body: control,
+  });
+
+  const updates = {
+    'control/state': 'operating',
+    'control/controlRevision': 2,
+    'control/firstReceptionStartedAt': { '.sv': 'timestamp' },
+  };
+  assert.equal((await request(root, 'PATCH', updates, device.token)).status, 401);
+  assert.deepEqual((await request(`${root}/control`, 'GET', undefined, device.token)).body, control);
+});
