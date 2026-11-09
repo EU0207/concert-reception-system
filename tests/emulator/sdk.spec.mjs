@@ -27,15 +27,16 @@ async function createPerson() {
   return { uid: account.localId, email, password };
 }
 
-async function seed(environmentId, humanUid, deviceUid) {
-  const scope = { environmentId, performanceId },
+/** 通常の業務書込みと分け、試験用の初期認可を投入する。 */
+async function seed(environmentId, humanUid, deviceUid, role = 'receptionist', targetPerformanceId = performanceId) {
+  const scope = { environmentId, performanceId: targetPerformanceId },
     now = Date.now();
   const data = {
     roles: {
       [humanUid]: {
         ...scope,
         humanUid,
-        role: 'receptionist',
+        role,
         active: true,
         revision: 1,
         startsAt: now - 10000,
@@ -52,14 +53,19 @@ async function seed(environmentId, humanUid, deviceUid) {
         approved: true,
         retired: false,
         storageEpoch: randomUUID(),
-        preparedRole: 'receptionist',
+        preparedRole: role,
         preparedRoleRevision: 1,
       },
     },
-    control: { ...scope, state: 'operating', staffDeadline: now + 86400000 },
+    control: {
+      ...scope,
+      state: role === 'owner' ? 'preparing' : 'operating',
+      staffDeadline: now + 86400000,
+      ...(role === 'owner' ? { ownerUid: humanUid } : {}),
+    },
   };
   const response = await fetch(
-    `http://127.0.0.1:9100/environments/${environmentId}/performances/${performanceId}.json?ns=${project}-default-rtdb`,
+    `http://127.0.0.1:9100/environments/${environmentId}/performances/${targetPerformanceId}.json?ns=${project}-default-rtdb`,
     {
       method: 'PUT',
       headers: {
@@ -107,6 +113,155 @@ async function signedIn(page) {
   );
   return { person, environmentId, settings, deviceUid };
 }
+
+test('PERF111-S01 主担当が製品SDKで公演を初期化し、最新データ版で準備確認を保存する', async ({ page }) => {
+  const f = await signedIn(page);
+  await seed(f.environmentId, f.person.uid, f.deviceUid, 'owner');
+  await page.evaluate(
+    async ({ environmentId, performanceId, identity }) => {
+      const { linkFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
+      const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+      const principals = window.testPrincipals;
+      await linkFictionalGoogle(principals, identity);
+
+      const port = await createAuthorizationPort(principals, { environmentId, performanceId }, {
+        emulatorDatabasePort: 9100,
+      });
+      try {
+        await port.issueSession(Date.now() + 3600000);
+        await port.initializePerformanceControl();
+        await port.initializePerformanceBusiness(1);
+      } finally {
+        port.dispose();
+      }
+    },
+    { environmentId: f.environmentId, performanceId, identity: { sub: randomUUID(), email: f.person.email } },
+  );
+
+  const root = `http://127.0.0.1:9100/environments/${f.environmentId}/performances/${performanceId}`;
+  const query = `ns=${project}-default-rtdb`;
+  const response = await fetch(
+    `${root}/control.json?${query}`,
+    { headers: { authorization: 'Bearer owner' } },
+  );
+  expect(response.status).toBe(200);
+  expect(await response.json()).toMatchObject({
+    ownerUid: f.person.uid,
+    state: 'preparing',
+    controlRevision: 1,
+    businessSchemaVersion: 3,
+    layoutSchemaVersion: 2,
+    initializedAt: expect.any(Number),
+    businessInitializedFromRevision: 1,
+  });
+  const emptyBusiness = await fetch(`${root}/event.json?${query}`, {
+    headers: { authorization: 'Bearer owner' },
+  });
+  expect(await emptyBusiness.json()).toEqual({
+    commit: { revision: 1, operationId: 'initialize' },
+    roster: { count: 0 },
+    reception: { '0000000000': 1 },
+  });
+
+  // 初回公開の製品経路は後続のため、版だけを試験で投入する。
+  const seeded = await fetch(`${root}.json?${query}`, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+    body: JSON.stringify({ 'event/commit/revision': 4, 'head/revision': 1, 'head/viewRevision': 2 }),
+  });
+  expect(seeded.status).toBe(200);
+  await page.evaluate(async (scope) => {
+    const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+    const port = await createAuthorizationPort(window.testPrincipals, scope, { emulatorDatabasePort: 9100 });
+    try {
+      await port.confirmReceptionPreparation(await port.readReceptionPreparationBasis());
+    } finally {
+      port.dispose();
+    }
+  }, { environmentId: f.environmentId, performanceId });
+  const preparation = await fetch(`${root}/receptionPreparation.json?${query}`, {
+    headers: { authorization: 'Bearer owner' },
+  });
+  expect(preparation.status).toBe(200);
+  expect(await preparation.json()).toMatchObject({
+    environmentId: f.environmentId,
+    performanceId,
+    controlRevision: 1,
+    dataVersion: { commitRevision: 4, layoutRevision: 1, viewRevision: 2 },
+    humanUid: f.person.uid,
+    deviceUid: f.deviceUid,
+    confirmedAt: expect.any(Number),
+  });
+
+  // 開始済みの状態だけを投入し、停止と結果照会は通常の端末資格で実行する。
+  const firstReceptionStartedAt = Date.now() - 1000;
+  const operating = await fetch(`${root}/control.json?${query}`, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+    body: JSON.stringify({ state: 'operating', controlRevision: 2, firstReceptionStartedAt }),
+  });
+  expect(operating.status).toBe(200);
+  const operationId = randomUUID();
+  const result = await page.evaluate(async ({ scope, operationId }) => {
+    const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+    const port = await createAuthorizationPort(window.testPrincipals, scope, { emulatorDatabasePort: 9100 });
+    try {
+      await port.stopReception(2, operationId);
+      return await port.readReceptionStopResult(operationId);
+    } finally {
+      port.dispose();
+    }
+  }, { scope: { environmentId: f.environmentId, performanceId }, operationId });
+  expect(result).toMatchObject({ operationId, state: 'stopped', controlRevision: 3, firstReceptionStartedAt });
+});
+
+test('PERF111-S02 製品SDKで会場を別公演へコピーし、元の変更を反映しない', async ({ page }) => {
+  const f = await signedIn(page);
+  const targetPerformanceId = randomUUID();
+  await seed(f.environmentId, f.person.uid, f.deviceUid, 'owner');
+  await seed(f.environmentId, f.person.uid, f.deviceUid, 'owner', targetPerformanceId);
+
+  const copied = await page.evaluate(async ({ environmentId, performanceId, targetPerformanceId, identity }) => {
+    const { linkFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
+    const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+    const principals = window.testPrincipals;
+    await linkFictionalGoogle(principals, identity);
+    const source = await createAuthorizationPort(principals, { environmentId, performanceId }, {
+      emulatorDatabasePort: 9100,
+    });
+    const target = await createAuthorizationPort(principals, {
+      environmentId,
+      performanceId: targetPerformanceId,
+    }, { emulatorDatabasePort: 9100 });
+
+    try {
+      await source.issueSession(Date.now() + 3600000);
+      await target.issueSession(Date.now() + 3600000);
+      await source.savePerformanceVenue(0, '架空ホール', '架空市1丁目');
+      const original = await target.readPerformanceVenue(performanceId);
+      await target.copyPerformanceVenue(original);
+      await source.savePerformanceVenue(1, '架空ホール改称', '架空市2丁目');
+      return await target.readPerformanceVenue(targetPerformanceId);
+    } finally {
+      source.dispose();
+      target.dispose();
+    }
+  }, {
+    environmentId: f.environmentId,
+    performanceId,
+    targetPerformanceId,
+    identity: { sub: randomUUID(), email: f.person.email },
+  });
+
+  expect(copied).toMatchObject({
+    performanceId: targetPerformanceId,
+    name: '架空ホール',
+    address: '架空市1丁目',
+    revision: 1,
+    sourcePerformanceId: performanceId,
+    sourceRevision: 1,
+  });
+});
 
 test('AUTH110-S01 本人・端末のAuthを分離し、準備時だけ認証状態を永続化する', async ({ page }) => {
   const f = await signedIn(page);

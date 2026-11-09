@@ -8,14 +8,17 @@ import {
   ref,
   serverTimestamp,
   set,
+  update,
 } from 'firebase/database';
 import type { Database } from 'firebase/database';
 import { initializeAppCheck, getToken, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import type { AppCheck } from 'firebase/app-check';
 import { onIdTokenChanged } from 'firebase/auth';
 import type { Scope } from '../../domain/seats/types.ts';
-import { isId, requireValue } from '../../domain/seats/validation.ts';
-import { createPersonSession, validUid } from '../../domain/authorization/policy.ts';
+import { checkScope, isId, nonnegative, positive, requireValue, text } from '../../domain/seats/validation.ts';
+import { authorizeOnline, createPersonSession, validUid } from '../../domain/authorization/policy.ts';
+import type { ReceptionPreparationBasis } from '../../domain/authorization/reception-control.ts';
+import { planReceptionControl } from '../../domain/authorization/reception-control.ts';
 import type {
   AuthorizationSnapshot,
   DeviceGrant,
@@ -37,6 +40,26 @@ interface ConnectionOptions {
   appCheckSiteKey?: string;
   /** エミュレーター接続はdemo-プロジェクトの評価環境でだけ呼ぶ。 */
   emulatorDatabasePort?: number;
+}
+
+interface ReceptionStopResult extends Scope {
+  operationId: string;
+  humanUid: string;
+  deviceUid: string;
+  previousState: 'operating';
+  state: 'stopped';
+  controlRevision: number;
+  firstReceptionStartedAt: number;
+  occurredAt: number;
+}
+
+interface PerformanceVenue extends Scope {
+  revision: number;
+  name: string;
+  address: string;
+  updatedAt: number;
+  sourcePerformanceId?: string;
+  sourceRevision?: number;
 }
 
 const appChecks = new Map<string, { siteKey: string; instance: AppCheck }>();
@@ -69,6 +92,15 @@ export async function createAuthorizationPort(
   options: ConnectionOptions,
 ): Promise<
   AuthorizationPort & {
+    initializePerformanceControl(): Promise<void>;
+    initializePerformanceBusiness(expectedControlRevision: number): Promise<void>;
+    readReceptionPreparationBasis(): Promise<ReceptionPreparationBasis>;
+    confirmReceptionPreparation(basis: ReceptionPreparationBasis): Promise<void>;
+    stopReception(expectedControlRevision: number, operationId: string): Promise<void>;
+    readReceptionStopResult(operationId: string): Promise<ReceptionStopResult | null>;
+    readPerformanceVenue(performanceId: string): Promise<PerformanceVenue | null>;
+    savePerformanceVenue(expectedRevision: number, name: string, address: string): Promise<void>;
+    copyPerformanceVenue(source: PerformanceVenue): Promise<void>;
     issueSession(expiresAt: number): Promise<PersonSession>;
     revokeSession(): Promise<void>;
     dispose(): void;
@@ -411,6 +443,160 @@ export async function createAuthorizationPort(
     invalidate();
   }
 
+  /** 明示割当済みの主担当として、公演の管理版と形式版を一体で初期化する。 */
+  async function initializePerformanceControl(): Promise<void> {
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    authorizeOnline(snapshot, 'controlReception', confirmedTime);
+    requireValue(snapshot.role.role === 'owner' && snapshot.state === 'preparing', 'OWNER_REQUIRED');
+
+    await update(ref(deviceDatabase, `${root}/control`), {
+      controlRevision: 1,
+      businessSchemaVersion: 3,
+      layoutSchemaVersion: 2,
+      initializedAt: serverTimestamp(),
+    });
+  }
+
+  /** 確認した公演管理版で、業務確定版と空名簿を一体で初期化する。 */
+  async function initializePerformanceBusiness(expectedControlRevision: number): Promise<void> {
+    requireValue(positive(expectedControlRevision), 'STALE_PERFORMANCE_CONTROL');
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    authorizeOnline(snapshot, 'controlReception', confirmedTime);
+    requireValue(snapshot.state === 'preparing', 'PERFORMANCE_NOT_PREPARING');
+
+    await update(ref(deviceDatabase, root), {
+      'control/businessInitializedFromRevision': expectedControlRevision,
+      'event/commit': { revision: 1, operationId: 'initialize' },
+      'event/roster/count': 0,
+      'event/reception/0000000000': 1,
+    });
+  }
+
+  /** 準備確認で表示する、対象公演の管理版と確定済みデータ版を取得する。 */
+  async function readReceptionPreparationBasis(): Promise<ReceptionPreparationBasis> {
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    authorizeOnline(snapshot, 'controlReception', confirmedTime);
+
+    const [controlRevision, commitRevision, layoutRevision, viewRevision] = await Promise.all([
+      read(deviceDatabase, 'control/controlRevision'),
+      read(deviceDatabase, 'event/commit/revision'),
+      read(deviceDatabase, 'head/revision'),
+      read(deviceDatabase, 'head/viewRevision'),
+    ]);
+    requireValue(
+      positive(controlRevision) && nonnegative(commitRevision) &&
+        positive(layoutRevision) && nonnegative(viewRevision),
+      'RECEPTION_DATA_NOT_PUBLISHED',
+    );
+
+    return { controlRevision, dataVersion: { commitRevision, layoutRevision, viewRevision } };
+  }
+
+  /** 管理者が確認した版を保存する。確認中に版が変わればRulesが拒否する。 */
+  async function confirmReceptionPreparation(basis: ReceptionPreparationBasis): Promise<void> {
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    authorizeOnline(snapshot, 'controlReception', confirmedTime);
+
+    await set(ref(deviceDatabase, `${root}/receptionPreparation`), {
+      ...scope,
+      controlRevision: basis.controlRevision,
+      dataVersion: basis.dataVersion,
+      humanUid: snapshot.role.humanUid,
+      deviceUid,
+      confirmedAt: serverTimestamp(),
+    });
+  }
+
+  /** 管理者の停止操作を、期待版と監査を含む1回の書き込みで確定する。 */
+  async function stopReception(expectedControlRevision: number, operationId: string): Promise<void> {
+    requireValue(isId(operationId), 'INVALID_OPERATION_ID');
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    const control = (await read(deviceDatabase, 'control')) as {
+      controlRevision: number;
+      state: AuthorizationSnapshot['state'];
+      firstReceptionStartedAt?: number;
+    } | null;
+    requireValue(control, 'AUTHORIZATION_RECORD_MISSING');
+
+    const { next, audit } = planReceptionControl(
+      { ...scope, ...control, firstReceptionStartedAt: control.firstReceptionStartedAt ?? null },
+      { ...scope, expectedControlRevision, action: 'stop' },
+      { authorization: snapshot, serverTime: confirmedTime, currentDataVersion: null, preparation: null },
+    );
+    await update(ref(deviceDatabase, root), {
+      'control/state': next.state,
+      'control/controlRevision': next.controlRevision,
+      'control/lastReceptionOperationId': operationId,
+      [`receptionStopAudits/${operationId}`]: {
+        ...audit,
+        operationId,
+        firstReceptionStartedAt: next.firstReceptionStartedAt,
+        occurredAt: serverTimestamp(),
+      },
+    });
+  }
+
+  /** 応答が不明な場合に、同じ操作IDで確定済みの停止結果を取得する。 */
+  async function readReceptionStopResult(operationId: string): Promise<ReceptionStopResult | null> {
+    requireValue(isId(operationId), 'INVALID_OPERATION_ID');
+    await verified();
+    await serverNow();
+
+    return (await read(deviceDatabase, `receptionStopAudits/${operationId}`)) as ReceptionStopResult | null;
+  }
+
+  /** 管理権限を持つ公演の会場情報と版を読み取る。 */
+  async function readPerformanceVenue(performanceId: string): Promise<PerformanceVenue | null> {
+    requireValue(isId(performanceId), 'INVALID_PERFORMANCE_ID');
+    await verified();
+    await serverNow();
+
+    const path = `environments/${scope.environmentId}/performances/${performanceId}/performanceVenue`;
+    const venue = (await get(ref(deviceDatabase, path))).val() as PerformanceVenue | null;
+    if (venue) checkScope(venue, { environmentId: scope.environmentId, performanceId });
+
+    return venue;
+  }
+
+  /** 準備中の公演に、編集開始時の版を照合して会場情報を保存する。 */
+  async function savePerformanceVenue(expectedRevision: number, name: string, address: string): Promise<void> {
+    requireValue(nonnegative(expectedRevision) && positive(expectedRevision + 1), 'INVALID_VENUE_REVISION');
+    text(name, 200, 'INVALID_VENUE_NAME');
+    text(address, 500, 'INVALID_VENUE_ADDRESS');
+    await verified();
+    await serverNow();
+
+    // 差分更新なら、コピー元を示す既存の項目をそのまま保持できる。
+    await update(ref(deviceDatabase, `${root}/performanceVenue`), {
+      ...scope,
+      revision: expectedRevision + 1,
+      name: name.trim(),
+      address: address.trim(),
+      updatedAt: serverTimestamp(),
+    });
+  }
+
+  /** 確認したコピー元の会場情報を、新しい公演の初回会場情報として保存する。 */
+  async function copyPerformanceVenue(source: PerformanceVenue): Promise<void> {
+    requireValue(
+      source.environmentId === scope.environmentId && isId(source.performanceId) &&
+        source.performanceId !== scope.performanceId && positive(source.revision),
+      'INVALID_VENUE_COPY_SOURCE',
+    );
+    await verified();
+    await serverNow();
+
+    await set(ref(deviceDatabase, `${root}/performanceVenue`), {
+      ...scope,
+      revision: 1,
+      name: source.name,
+      address: source.address,
+      sourcePerformanceId: source.performanceId,
+      sourceRevision: source.revision,
+      updatedAt: serverTimestamp(),
+    });
+  }
+
   const registration = createDeviceRegistrationPort({
     humanDatabase,
     deviceDatabase,
@@ -455,6 +641,15 @@ export async function createAuthorizationPort(
       serverNow,
     }),
     fetchCurrent,
+    initializePerformanceControl,
+    initializePerformanceBusiness,
+    readReceptionPreparationBasis,
+    confirmReceptionPreparation,
+    stopReception,
+    readReceptionStopResult,
+    readPerformanceVenue,
+    savePerformanceVenue,
+    copyPerformanceVenue,
     issueSession,
     revokeSession,
 

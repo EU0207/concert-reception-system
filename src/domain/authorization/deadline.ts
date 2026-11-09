@@ -1,18 +1,9 @@
 // 会場の暦に従って、翌日が終わる境界を求める。固定24時間・48時間では計算しない。
 
-import { requireValue } from '../seats/validation.ts';
+import { nonnegative, requireValue } from '../seats/validation.ts';
 
-/** 翌々日の開始を排他的な期限として返す。夏時間で1日の長さが変わる場合も扱う。 */
-export function offlineDeadline(performanceDate: string, timeZone: string): number {
-  requireValue(/^\d{4}-\d{2}-\d{2}$/.test(performanceDate), 'INVALID_PERFORMANCE_DATE');
-
-  const parsed = new Date(performanceDate + 'T00:00:00Z');
-
-  requireValue(
-    Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === performanceDate,
-    'INVALID_PERFORMANCE_DATE',
-  );
-
+/** 会場のタイムゾーンを使用し、指定時刻を年月日へ変換する。 */
+function venueDateFormatter(timeZone: string): (time: number) => string {
   let formatter: Intl.DateTimeFormat;
 
   try {
@@ -26,20 +17,39 @@ export function offlineDeadline(performanceDate: string, timeZone: string): numb
     throw new Error('INVALID_TIME_ZONE');
   }
 
-  parsed.setUTCDate(parsed.getUTCDate() + 2);
-
-  const target = parsed.toISOString().slice(0, 10);
-
-  /** 指定時刻を、会場のタイムゾーンの日付へ変換する。 */
-  const localDate = (time: number) => {
+  return (time) => {
     const parts = formatter.formatToParts(time);
 
     /** 日付の構成要素から、指定した年・月・日の値を取り出す。 */
     const read = (kind: Intl.DateTimeFormatPartTypes) =>
       parts.find((part) => part.type === kind)!.value;
 
-    return `${read('year')}-${read('month')}-${read('day')}`;
+    return `${read('year').padStart(4, '0')}-${read('month')}-${read('day')}`;
   };
+}
+
+/** サーバー時刻を会場の年月日に変換する。公演日との照合に使う。 */
+export function venueDateAtServerTime(serverTime: number, timeZone: string): string {
+  requireValue(nonnegative(serverTime) && serverTime <= 8_640_000_000_000_000, 'INVALID_SERVER_TIME');
+
+  return venueDateFormatter(timeZone)(serverTime);
+}
+
+/** 翌々日の開始を排他的な期限として返す。夏時間で1日の長さが変わる場合も扱う。 */
+export function offlineDeadline(performanceDate: string, timeZone: string): number {
+  requireValue(/^\d{4}-\d{2}-\d{2}$/.test(performanceDate), 'INVALID_PERFORMANCE_DATE');
+
+  const parsed = new Date(performanceDate + 'T00:00:00Z');
+
+  requireValue(
+    Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === performanceDate,
+    'INVALID_PERFORMANCE_DATE',
+  );
+
+  parsed.setUTCDate(parsed.getUTCDate() + 2);
+
+  const target = parsed.toISOString().slice(0, 10);
+  const localDate = venueDateFormatter(timeZone);
 
   // lowとhighは、会場の日付境界を探すUTC時刻の下限と上限。
   let low = parsed.getTime() - 36 * 60 * 60 * 1000;
