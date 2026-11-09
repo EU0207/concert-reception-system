@@ -17,10 +17,18 @@ const start = { ...scope, expectedControlRevision: 1, action: 'start' };
 
 /** 指定した状態と役割に対応する、保存側の確認結果を作る。 */
 function context(state = 'preparing', role = 'owner', serverTime = now) {
+  const dataVersion = { commitRevision: 10, layoutRevision: 3, viewRevision: 5 };
+
   return {
     authorization: { ...snapshot(role), state },
     serverTime,
-    preparationConfirmed: true,
+    currentDataVersion: dataVersion,
+    preparation: {
+      ...scope,
+      controlRevision: state === 'stopped' ? 3 : 1,
+      dataVersion: { ...dataVersion },
+      confirmedAt: now - 1000,
+    },
   };
 }
 
@@ -75,7 +83,7 @@ test('別公演・旧版と、確定済みの開始要求の再送を拒否す�
 
 test('未準備・役割不足・再認証期限切れ・公演期限切れの開始を拒否する', () => {
   assert.throws(
-    () => planReceptionControl(initial, start, { ...context(), preparationConfirmed: false }),
+    () => planReceptionControl(initial, start, { ...context(), preparation: null }),
     { code: 'RECEPTION_PREPARATION_REQUIRED' },
   );
   for (const role of ['temporary', 'receptionist']) {
@@ -93,6 +101,24 @@ test('未準備・役割不足・再認証期限切れ・公演期限切れの�
   expiredPerformance.authorization.staffDeadline = now;
   assert.throws(() => planReceptionControl(initial, start, expiredPerformance), {
     code: 'STAFF_DEADLINE_EXPIRED',
+  });
+});
+
+test('確定業務・構成・表示・公演管理の版ずれを検出し、同じ版で再確認した場合だけ開始できる', () => {
+  for (const key of ['commitRevision', 'layoutRevision', 'viewRevision']) {
+    const updated = context();
+    updated.currentDataVersion[key] += 1;
+    assert.throws(() => planReceptionControl(initial, start, updated), {
+      code: 'STALE_RECEPTION_PREPARATION',
+    });
+    updated.preparation.dataVersion[key] = updated.currentDataVersion[key];
+    assert.equal(planReceptionControl(initial, start, updated).next.state, 'operating');
+  }
+
+  const updated = context();
+  updated.preparation.controlRevision = 2;
+  assert.throws(() => planReceptionControl(initial, start, updated), {
+    code: 'STALE_RECEPTION_PREPARATION',
   });
 });
 

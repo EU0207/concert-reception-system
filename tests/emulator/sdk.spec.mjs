@@ -27,7 +27,8 @@ async function createPerson() {
   return { uid: account.localId, email, password };
 }
 
-async function seed(environmentId, humanUid, deviceUid) {
+/** 通常の業務書込みと分け、試験用の初期認可を投入する。 */
+async function seed(environmentId, humanUid, deviceUid, role = 'receptionist') {
   const scope = { environmentId, performanceId },
     now = Date.now();
   const data = {
@@ -35,7 +36,7 @@ async function seed(environmentId, humanUid, deviceUid) {
       [humanUid]: {
         ...scope,
         humanUid,
-        role: 'receptionist',
+        role,
         active: true,
         revision: 1,
         startsAt: now - 10000,
@@ -52,11 +53,16 @@ async function seed(environmentId, humanUid, deviceUid) {
         approved: true,
         retired: false,
         storageEpoch: randomUUID(),
-        preparedRole: 'receptionist',
+        preparedRole: role,
         preparedRoleRevision: 1,
       },
     },
-    control: { ...scope, state: 'operating', staffDeadline: now + 86400000 },
+    control: {
+      ...scope,
+      state: role === 'owner' ? 'preparing' : 'operating',
+      staffDeadline: now + 86400000,
+      ...(role === 'owner' ? { ownerUid: humanUid } : {}),
+    },
   };
   const response = await fetch(
     `http://127.0.0.1:9100/environments/${environmentId}/performances/${performanceId}.json?ns=${project}-default-rtdb`,
@@ -107,6 +113,44 @@ async function signedIn(page) {
   );
   return { person, environmentId, settings, deviceUid };
 }
+
+test('PERF111-S01 公演の管理情報を製品SDKの主担当経路で初期化する', async ({ page }) => {
+  const f = await signedIn(page);
+  await seed(f.environmentId, f.person.uid, f.deviceUid, 'owner');
+  await page.evaluate(
+    async ({ environmentId, performanceId, identity }) => {
+      const { linkFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
+      const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+      const principals = window.testPrincipals;
+      await linkFictionalGoogle(principals, identity);
+
+      const port = await createAuthorizationPort(principals, { environmentId, performanceId }, {
+        emulatorDatabasePort: 9100,
+      });
+      try {
+        await port.issueSession(Date.now() + 3600000);
+        await port.initializePerformanceControl();
+      } finally {
+        port.dispose();
+      }
+    },
+    { environmentId: f.environmentId, performanceId, identity: { sub: randomUUID(), email: f.person.email } },
+  );
+
+  const response = await fetch(
+    `http://127.0.0.1:9100/environments/${f.environmentId}/performances/${performanceId}/control.json?ns=${project}-default-rtdb`,
+    { headers: { authorization: 'Bearer owner' } },
+  );
+  expect(response.status).toBe(200);
+  expect(await response.json()).toMatchObject({
+    ownerUid: f.person.uid,
+    state: 'preparing',
+    controlRevision: 1,
+    businessSchemaVersion: 3,
+    layoutSchemaVersion: 2,
+    initializedAt: expect.any(Number),
+  });
+});
 
 test('AUTH110-S01 本人・端末のAuthを分離し、準備時だけ認証状態を永続化する', async ({ page }) => {
   const f = await signedIn(page);

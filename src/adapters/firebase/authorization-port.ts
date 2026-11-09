@@ -8,6 +8,7 @@ import {
   ref,
   serverTimestamp,
   set,
+  update,
 } from 'firebase/database';
 import type { Database } from 'firebase/database';
 import { initializeAppCheck, getToken, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
@@ -15,7 +16,7 @@ import type { AppCheck } from 'firebase/app-check';
 import { onIdTokenChanged } from 'firebase/auth';
 import type { Scope } from '../../domain/seats/types.ts';
 import { isId, requireValue } from '../../domain/seats/validation.ts';
-import { createPersonSession, validUid } from '../../domain/authorization/policy.ts';
+import { authorizeOnline, createPersonSession, validUid } from '../../domain/authorization/policy.ts';
 import type {
   AuthorizationSnapshot,
   DeviceGrant,
@@ -69,6 +70,7 @@ export async function createAuthorizationPort(
   options: ConnectionOptions,
 ): Promise<
   AuthorizationPort & {
+    initializePerformanceControl(): Promise<void>;
     issueSession(expiresAt: number): Promise<PersonSession>;
     revokeSession(): Promise<void>;
     dispose(): void;
@@ -411,6 +413,20 @@ export async function createAuthorizationPort(
     invalidate();
   }
 
+  /** 明示割当済みの主担当として、公演の管理版と形式版を一体で初期化する。 */
+  async function initializePerformanceControl(): Promise<void> {
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    authorizeOnline(snapshot, 'controlReception', confirmedTime);
+    requireValue(snapshot.role.role === 'owner' && snapshot.state === 'preparing', 'OWNER_REQUIRED');
+
+    await update(ref(deviceDatabase, `${root}/control`), {
+      controlRevision: 1,
+      businessSchemaVersion: 3,
+      layoutSchemaVersion: 2,
+      initializedAt: serverTimestamp(),
+    });
+  }
+
   const registration = createDeviceRegistrationPort({
     humanDatabase,
     deviceDatabase,
@@ -455,6 +471,7 @@ export async function createAuthorizationPort(
       serverNow,
     }),
     fetchCurrent,
+    initializePerformanceControl,
     issueSession,
     revokeSession,
 
