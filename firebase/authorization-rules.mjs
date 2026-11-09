@@ -6,6 +6,7 @@ import { ownerHandoverRules } from './owner-handover-rules.mjs';
 import { deviceRegistrationRules, registrationProofValid } from './device-registration-rules.mjs';
 import { ownerDeviceLinkRules } from './owner-device-link-rules.mjs';
 import { performanceInitializationRules } from './performance-initialization-rules.mjs';
+import { receptionPreparationRules } from './reception-preparation-rules.mjs';
 
 /** 指定した子キーの値を参照するRules式を作る。 */
 const field = (node, key) => `${node}.child('${key}').val()`;
@@ -186,6 +187,7 @@ export function authorizationRules() {
     ...deviceRules,
     ...registrationRules,
     ...ownerLinkRules,
+    ...receptionPreparationRules({ root, manager, integer, strictRecord }),
     sessions: {
       $deviceUid: strictRecord(fields, ownMetadata, `(${issue}) || (${revoke})`),
     },

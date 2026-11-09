@@ -114,7 +114,7 @@ async function signedIn(page) {
   return { person, environmentId, settings, deviceUid };
 }
 
-test('PERF111-S01 公演の管理情報を製品SDKの主担当経路で初期化する', async ({ page }) => {
+test('PERF111-S01 主担当が製品SDKで公演を初期化し、最新データ版で準備確認を保存する', async ({ page }) => {
   const f = await signedIn(page);
   await seed(f.environmentId, f.person.uid, f.deviceUid, 'owner');
   await page.evaluate(
@@ -137,8 +137,10 @@ test('PERF111-S01 公演の管理情報を製品SDKの主担当経路で初期�
     { environmentId: f.environmentId, performanceId, identity: { sub: randomUUID(), email: f.person.email } },
   );
 
+  const root = `http://127.0.0.1:9100/environments/${f.environmentId}/performances/${performanceId}`;
+  const query = `ns=${project}-default-rtdb`;
   const response = await fetch(
-    `http://127.0.0.1:9100/environments/${f.environmentId}/performances/${performanceId}/control.json?ns=${project}-default-rtdb`,
+    `${root}/control.json?${query}`,
     { headers: { authorization: 'Bearer owner' } },
   );
   expect(response.status).toBe(200);
@@ -149,6 +151,36 @@ test('PERF111-S01 公演の管理情報を製品SDKの主担当経路で初期�
     businessSchemaVersion: 3,
     layoutSchemaVersion: 2,
     initializedAt: expect.any(Number),
+  });
+
+  // 初回公開の製品経路は後続のため、版だけを試験で投入する。
+  const seeded = await fetch(`${root}.json?${query}`, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+    body: JSON.stringify({ 'event/commit/revision': 4, 'head/revision': 1, 'head/viewRevision': 2 }),
+  });
+  expect(seeded.status).toBe(200);
+  await page.evaluate(async (scope) => {
+    const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+    const port = await createAuthorizationPort(window.testPrincipals, scope, { emulatorDatabasePort: 9100 });
+    try {
+      await port.confirmReceptionPreparation(await port.readReceptionPreparationBasis());
+    } finally {
+      port.dispose();
+    }
+  }, { environmentId: f.environmentId, performanceId });
+  const preparation = await fetch(`${root}/receptionPreparation.json?${query}`, {
+    headers: { authorization: 'Bearer owner' },
+  });
+  expect(preparation.status).toBe(200);
+  expect(await preparation.json()).toMatchObject({
+    environmentId: f.environmentId,
+    performanceId,
+    controlRevision: 1,
+    dataVersion: { commitRevision: 4, layoutRevision: 1, viewRevision: 2 },
+    humanUid: f.person.uid,
+    deviceUid: f.deviceUid,
+    confirmedAt: expect.any(Number),
   });
 });
 
