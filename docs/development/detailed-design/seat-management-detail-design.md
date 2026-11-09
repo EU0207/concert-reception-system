@@ -1,5 +1,7 @@
 # 会場席作成・席設定の詳細設計
 
+受付中の差分更新に関する変更案は[受付優先の差分同期設計](../detailed-design/reception-live-sync-design.md)を参照する。状態はIn Review。承認後は、同追補を安全な更新の受付継続条件と試験条件に適用する。
+
 ## 要点
 
 状態：**Approved（PR #245・#91全体の最終レビュー承認済み）**。RTDBの物理・復旧契約はPR #228、お客様管理はPR #231・238、受付画面・復帰はPR #241・242、出力はPR #243で承認・統合済み。[全体照合](seat-design-final-review.md)で共同契約・G91-A～EとDD91-T01～103の担当を対応付けた。画像登録基盤は#244へ補完。共通型・計算#102はPR #248で承認・統合済み。#103は[配置計算の実装・試験記録](../technical-validation/assignment-domain-handoff.md)で60単体と所属契約の照合を記録。#102の単体61件は[製品試験記録](../technical-validation/seat-domain-unit-test-results.md)を参照し、保存・認証と画面の結合は未実施とする。
