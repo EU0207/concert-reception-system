@@ -1564,3 +1564,50 @@ test('PERF111-R01 保存契約の接続前は、認可済み主担当でも受�
   assert.equal((await request(root, 'PATCH', updates, device.token)).status, 401);
   assert.deepEqual((await request(`${root}/control`, 'GET', undefined, device.token)).body, control);
 });
+
+test('PERF111-R02 明示割当済み主担当の一体初期化だけを許可する', async () => {
+  const { human, device, session } = await fixture();
+  const deputy = await fixture('deputy');
+  for (const actor of [{ human, device, session }, deputy]) {
+    assert.equal(
+      (await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token)).status,
+      200,
+    );
+  }
+
+  const control = {
+    ...scope,
+    ownerUid: human.uid,
+    state: 'preparing',
+    staffDeadline: Date.now() + 86400000,
+  };
+  assert.equal((await request(`${root}/control`, 'PUT', control)).status, 200);
+
+  const fields = {
+    controlRevision: 1,
+    businessSchemaVersion: 3,
+    layoutSchemaVersion: 2,
+    initializedAt: { '.sv': 'timestamp' },
+  };
+  const path = `${root}/control`;
+  const entries = Object.entries(fields);
+  for (let mask = 1; mask < (1 << entries.length) - 1; mask += 1) {
+    const partial = Object.fromEntries(entries.filter((_, index) => mask & (1 << index)));
+    assert.equal((await request(path, 'PATCH', partial, device.token)).status, 401);
+  }
+  assert.equal((await request(path, 'PATCH', fields, deputy.device.token)).status, 401);
+  assert.equal((await request(path, 'PATCH', { ...fields, layoutSchemaVersion: 1 }, device.token)).status, 401);
+  assert.equal((await request(path, 'PATCH', { ...fields, state: 'operating' }, device.token)).status, 401);
+  assert.deepEqual((await request(path, 'GET', undefined, device.token)).body, control);
+
+  assert.equal((await request(path, 'PATCH', fields, device.token)).status, 200);
+  const { initializedAt, ...initialized } = (await request(path, 'GET', undefined, device.token)).body;
+  assert.ok(Number.isSafeInteger(initializedAt));
+  assert.deepEqual(initialized, {
+    ...control,
+    controlRevision: 1,
+    businessSchemaVersion: 3,
+    layoutSchemaVersion: 2,
+  });
+  assert.equal((await request(path, 'PATCH', fields, device.token)).status, 401);
+});

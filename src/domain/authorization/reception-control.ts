@@ -1,7 +1,7 @@
 // 公演管理版を照合し、本番受付の状態変更と一緒に保存する監査情報を組み立てる。
 
 import type { Scope } from '../seats/types.ts';
-import { checkScope, positive, requireValue } from '../seats/validation.ts';
+import { checkScope, nonnegative, positive, requireValue } from '../seats/validation.ts';
 import { authorizeOnline } from './policy.ts';
 import type { AuthorizationSnapshot, PerformanceState } from './types.ts';
 
@@ -16,11 +16,44 @@ interface ReceptionControlRequest extends Scope {
   action: 'start' | 'stop';
 }
 
+interface ConfirmedDataVersion {
+  commitRevision: number;
+  layoutRevision: number;
+  viewRevision: number;
+}
+
+interface ReceptionPreparation extends Scope {
+  controlRevision: number;
+  dataVersion: ConfirmedDataVersion;
+  confirmedAt: number;
+}
+
 interface ReceptionControlContext {
   authorization: AuthorizationSnapshot;
   serverTime: number;
-  /** 保存側が最新版でBD-08-04の確認を終えた場合だけ設定する。要求本文から受け取らない。 */
-  preparationConfirmed: boolean;
+  /** 保存側が取得した確定版とBD-08-04の確認記録。要求本文から受け取らない。 */
+  currentDataVersion: ConfirmedDataVersion | null;
+  preparation: ReceptionPreparation | null;
+}
+
+/** 確定業務・構成・表示版が準備確認時点から変わっていないかを検査する。 */
+function requireCurrentPreparation(current: ReceptionControl, context: ReceptionControlContext) {
+  const { preparation, currentDataVersion, serverTime } = context;
+  requireValue(preparation?.dataVersion && currentDataVersion, 'RECEPTION_PREPARATION_REQUIRED');
+  checkScope(preparation, current);
+
+  const revisions = ['commitRevision', 'layoutRevision', 'viewRevision'] as const;
+  requireValue(
+    preparation.controlRevision === current.controlRevision &&
+      positive(preparation.confirmedAt) &&
+      preparation.confirmedAt <= serverTime &&
+      positive(currentDataVersion.layoutRevision) &&
+      revisions.every(
+        (key) => nonnegative(currentDataVersion[key]) &&
+          preparation.dataVersion[key] === currentDataVersion[key],
+      ),
+    'STALE_RECEPTION_PREPARATION',
+  );
 }
 
 /** 現在認可と公演管理版を検査し、受付の開始・停止に必要な次の値を返す。 */
@@ -29,7 +62,7 @@ export function planReceptionControl(
   request: ReceptionControlRequest,
   context: ReceptionControlContext,
 ) {
-  const { authorization, serverTime, preparationConfirmed } = context;
+  const { authorization, serverTime } = context;
   checkScope(request, current);
   checkScope(authorization, current);
   authorizeOnline(authorization, 'controlReception', serverTime);
@@ -57,7 +90,7 @@ export function planReceptionControl(
       current.state === 'preparing' || current.state === 'stopped',
       'RECEPTION_CANNOT_START',
     );
-    requireValue(preparationConfirmed === true, 'RECEPTION_PREPARATION_REQUIRED');
+    requireCurrentPreparation(current, context);
     requireValue(serverTime < authorization.staffDeadline, 'STAFF_DEADLINE_EXPIRED');
     state = 'operating';
   } else {

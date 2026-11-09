@@ -5,6 +5,7 @@ import { deviceManagementRules } from './device-management-rules.mjs';
 import { ownerHandoverRules } from './owner-handover-rules.mjs';
 import { deviceRegistrationRules, registrationProofValid } from './device-registration-rules.mjs';
 import { ownerDeviceLinkRules } from './owner-device-link-rules.mjs';
+import { performanceInitializationRules } from './performance-initialization-rules.mjs';
 
 /** 指定した子キーの値を参照するRules式を作る。 */
 const field = (node, key) => `${node}.child('${key}').val()`;
@@ -191,6 +192,7 @@ export function authorizationRules() {
     control: {
       '.read': currentAuthorization(),
       '.write': false,
+      ...performanceInitializationRules({ root, preparedAuthorization, integer }),
       ownerUid: { '.write': ownerUidWrite },
       ownerHandoverOperationId: { '.write': pointerWrite },
     },
