@@ -1,6 +1,6 @@
 # オフライン同期・競合設計
 
-受付中の差分更新に関する変更案は[受付優先の差分同期設計](../detailed-design/reception-live-sync-design.md)を参照する。状態はIn Review。承認後は、同追補を安全な更新の受付継続条件と試験条件に適用する。
+受付中の差分更新の承認済み追補は[受付優先の差分同期設計](../detailed-design/reception-live-sync-design.md)を参照する。同追補を安全な更新の受付継続条件と試験条件に適用する。
 
 ## CONF-074による座席編集の保存境界
 
