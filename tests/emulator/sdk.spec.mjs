@@ -130,6 +130,7 @@ test('PERF111-S01 主担当が製品SDKで公演を初期化し、最新デー�
       try {
         await port.issueSession(Date.now() + 3600000);
         await port.initializePerformanceControl();
+        await port.initializePerformanceBusiness(1);
       } finally {
         port.dispose();
       }
@@ -151,6 +152,15 @@ test('PERF111-S01 主担当が製品SDKで公演を初期化し、最新デー�
     businessSchemaVersion: 3,
     layoutSchemaVersion: 2,
     initializedAt: expect.any(Number),
+    businessInitializedFromRevision: 1,
+  });
+  const emptyBusiness = await fetch(`${root}/event.json?${query}`, {
+    headers: { authorization: 'Bearer owner' },
+  });
+  expect(await emptyBusiness.json()).toEqual({
+    commit: { revision: 1, operationId: 'initialize' },
+    roster: { count: 0 },
+    reception: { '0000000000': 1 },
   });
 
   // 初回公開の製品経路は後続のため、版だけを試験で投入する。
@@ -182,6 +192,27 @@ test('PERF111-S01 主担当が製品SDKで公演を初期化し、最新デー�
     deviceUid: f.deviceUid,
     confirmedAt: expect.any(Number),
   });
+
+  // 開始済みの状態だけを投入し、停止と結果照会は通常の端末資格で実行する。
+  const firstReceptionStartedAt = Date.now() - 1000;
+  const operating = await fetch(`${root}/control.json?${query}`, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+    body: JSON.stringify({ state: 'operating', controlRevision: 2, firstReceptionStartedAt }),
+  });
+  expect(operating.status).toBe(200);
+  const operationId = randomUUID();
+  const result = await page.evaluate(async ({ scope, operationId }) => {
+    const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+    const port = await createAuthorizationPort(window.testPrincipals, scope, { emulatorDatabasePort: 9100 });
+    try {
+      await port.stopReception(2, operationId);
+      return await port.readReceptionStopResult(operationId);
+    } finally {
+      port.dispose();
+    }
+  }, { scope: { environmentId: f.environmentId, performanceId }, operationId });
+  expect(result).toMatchObject({ operationId, state: 'stopped', controlRevision: 3, firstReceptionStartedAt });
 });
 
 test('AUTH110-S01 本人・端末のAuthを分離し、準備時だけ認証状態を永続化する', async ({ page }) => {

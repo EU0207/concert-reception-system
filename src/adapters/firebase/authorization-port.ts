@@ -18,6 +18,7 @@ import type { Scope } from '../../domain/seats/types.ts';
 import { isId, nonnegative, positive, requireValue } from '../../domain/seats/validation.ts';
 import { authorizeOnline, createPersonSession, validUid } from '../../domain/authorization/policy.ts';
 import type { ReceptionPreparationBasis } from '../../domain/authorization/reception-control.ts';
+import { planReceptionControl } from '../../domain/authorization/reception-control.ts';
 import type {
   AuthorizationSnapshot,
   DeviceGrant,
@@ -39,6 +40,17 @@ interface ConnectionOptions {
   appCheckSiteKey?: string;
   /** エミュレーター接続はdemo-プロジェクトの評価環境でだけ呼ぶ。 */
   emulatorDatabasePort?: number;
+}
+
+interface ReceptionStopResult extends Scope {
+  operationId: string;
+  humanUid: string;
+  deviceUid: string;
+  previousState: 'operating';
+  state: 'stopped';
+  controlRevision: number;
+  firstReceptionStartedAt: number;
+  occurredAt: number;
 }
 
 const appChecks = new Map<string, { siteKey: string; instance: AppCheck }>();
@@ -72,8 +84,11 @@ export async function createAuthorizationPort(
 ): Promise<
   AuthorizationPort & {
     initializePerformanceControl(): Promise<void>;
+    initializePerformanceBusiness(expectedControlRevision: number): Promise<void>;
     readReceptionPreparationBasis(): Promise<ReceptionPreparationBasis>;
     confirmReceptionPreparation(basis: ReceptionPreparationBasis): Promise<void>;
+    stopReception(expectedControlRevision: number, operationId: string): Promise<void>;
+    readReceptionStopResult(operationId: string): Promise<ReceptionStopResult | null>;
     issueSession(expiresAt: number): Promise<PersonSession>;
     revokeSession(): Promise<void>;
     dispose(): void;
@@ -430,6 +445,21 @@ export async function createAuthorizationPort(
     });
   }
 
+  /** 確認した公演管理版で、業務確定版と空名簿を一体で初期化する。 */
+  async function initializePerformanceBusiness(expectedControlRevision: number): Promise<void> {
+    requireValue(positive(expectedControlRevision), 'STALE_PERFORMANCE_CONTROL');
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    authorizeOnline(snapshot, 'controlReception', confirmedTime);
+    requireValue(snapshot.state === 'preparing', 'PERFORMANCE_NOT_PREPARING');
+
+    await update(ref(deviceDatabase, root), {
+      'control/businessInitializedFromRevision': expectedControlRevision,
+      'event/commit': { revision: 1, operationId: 'initialize' },
+      'event/roster/count': 0,
+      'event/reception/0000000000': 1,
+    });
+  }
+
   /** 準備確認で表示する、対象公演の管理版と確定済みデータ版を取得する。 */
   async function readReceptionPreparationBasis(): Promise<ReceptionPreparationBasis> {
     const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
@@ -463,6 +493,44 @@ export async function createAuthorizationPort(
       deviceUid,
       confirmedAt: serverTimestamp(),
     });
+  }
+
+  /** 管理者の停止操作を、期待版と監査を含む1回の書き込みで確定する。 */
+  async function stopReception(expectedControlRevision: number, operationId: string): Promise<void> {
+    requireValue(isId(operationId), 'INVALID_OPERATION_ID');
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    const control = (await read(deviceDatabase, 'control')) as {
+      controlRevision: number;
+      state: AuthorizationSnapshot['state'];
+      firstReceptionStartedAt?: number;
+    } | null;
+    requireValue(control, 'AUTHORIZATION_RECORD_MISSING');
+
+    const { next, audit } = planReceptionControl(
+      { ...scope, ...control, firstReceptionStartedAt: control.firstReceptionStartedAt ?? null },
+      { ...scope, expectedControlRevision, action: 'stop' },
+      { authorization: snapshot, serverTime: confirmedTime, currentDataVersion: null, preparation: null },
+    );
+    await update(ref(deviceDatabase, root), {
+      'control/state': next.state,
+      'control/controlRevision': next.controlRevision,
+      'control/lastReceptionOperationId': operationId,
+      [`receptionStopAudits/${operationId}`]: {
+        ...audit,
+        operationId,
+        firstReceptionStartedAt: next.firstReceptionStartedAt,
+        occurredAt: serverTimestamp(),
+      },
+    });
+  }
+
+  /** 応答が不明な場合に、同じ操作IDで確定済みの停止結果を取得する。 */
+  async function readReceptionStopResult(operationId: string): Promise<ReceptionStopResult | null> {
+    requireValue(isId(operationId), 'INVALID_OPERATION_ID');
+    await verified();
+    await serverNow();
+
+    return (await read(deviceDatabase, `receptionStopAudits/${operationId}`)) as ReceptionStopResult | null;
   }
 
   const registration = createDeviceRegistrationPort({
@@ -510,8 +578,11 @@ export async function createAuthorizationPort(
     }),
     fetchCurrent,
     initializePerformanceControl,
+    initializePerformanceBusiness,
     readReceptionPreparationBasis,
     confirmReceptionPreparation,
+    stopReception,
+    readReceptionStopResult,
     issueSession,
     revokeSession,
 

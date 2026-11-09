@@ -1658,3 +1658,113 @@ test('PERF111-R03 準備確認は現在の公演管理版と確定データ版�
   }, token)).status, 200);
   assert.equal((await request(`${root}/control/state`, 'PUT', 'operating', token)).status, 401);
 });
+
+test('PERF111-R04 明示停止は状態・版・監査を一体確定し、同時要求の一方だけを受理する', async () => {
+  const deputy = await fixture('deputy');
+  const receptionist = await fixture('receptionist');
+  for (const actor of [deputy, receptionist]) {
+    assert.equal(
+      (await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token)).status,
+      200,
+    );
+  }
+  const firstReceptionStartedAt = Date.now() - 1000;
+  const control = {
+    ...scope,
+    state: 'operating',
+    controlRevision: 6,
+    firstReceptionStartedAt,
+    staffDeadline: Date.now() + 86400000,
+  };
+  assert.equal((await request(`${root}/control`, 'PUT', control)).status, 200);
+
+  /** 操作IDだけを変え、同じ公演管理版に対する停止要求を作る。 */
+  function stopUpdates(operationId) {
+    return {
+      'control/state': 'stopped',
+      'control/controlRevision': 7,
+      'control/lastReceptionOperationId': operationId,
+      [`receptionStopAudits/${operationId}`]: {
+        ...scope,
+        operationId,
+        humanUid: deputy.human.uid,
+        deviceUid: deputy.device.uid,
+        previousState: 'operating',
+        state: 'stopped',
+        controlRevision: 7,
+        firstReceptionStartedAt,
+        occurredAt: { '.sv': 'timestamp' },
+      },
+    };
+  }
+
+  const ids = [randomUUID(), randomUUID()];
+  const updates = stopUpdates(ids[0]);
+  const token = deputy.device.token;
+  const entries = Object.entries(updates);
+  for (let mask = 1; mask < (1 << entries.length) - 1; mask += 1) {
+    const partial = Object.fromEntries(entries.filter((_, index) => mask & (1 << index)));
+    assert.equal((await request(root, 'PATCH', partial, token)).status, 401);
+  }
+  assert.equal((await request(root, 'PATCH', updates, receptionist.device.token)).status, 401);
+  assert.equal((await request(root, 'PATCH', {
+    ...updates, 'control/firstReceptionStartedAt': firstReceptionStartedAt + 1,
+  }, token)).status, 401);
+  assert.deepEqual((await request(`${root}/control`, 'GET', undefined, token)).body, control);
+
+  const attempts = await Promise.all(ids.map((id) => request(root, 'PATCH', stopUpdates(id), token)));
+  assert.deepEqual(attempts.map((result) => result.status).sort(), [200, 401]);
+  const winner = ids[attempts.findIndex((result) => result.status === 200)];
+  const audit = `${root}/receptionStopAudits/${winner}`;
+  assert.deepEqual((await request(`${root}/control`, 'GET', undefined, token)).body, {
+    ...control, state: 'stopped', controlRevision: 7, lastReceptionOperationId: winner,
+  });
+  assert.equal((await request(audit, 'GET', undefined, token)).body.operationId, winner);
+  assert.equal((await request(audit, 'GET', undefined, receptionist.device.token)).status, 401);
+  assert.equal((await request(audit, 'DELETE', undefined, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', stopUpdates(winner), token)).status, 401);
+});
+
+test('PERF111-R05 対象公演の最新管理版で空名簿と確定版だけを一度初期化する', async () => {
+  const owner = await fixture();
+  assert.equal((await request(`${root}/sessions/${owner.device.uid}`, 'PUT', owner.session, owner.human.token)).status, 200);
+  assert.equal((await request(root, 'PATCH', {
+    'control/state': 'preparing',
+    'control/controlRevision': 2,
+    'control/businessSchemaVersion': 3,
+    'control/layoutSchemaVersion': 2,
+    event: null,
+    head: null,
+  })).status, 200);
+
+  const token = owner.device.token;
+  const updates = {
+    'control/businessInitializedFromRevision': 2,
+    'event/commit': { revision: 1, operationId: 'initialize' },
+    'event/roster/count': 0,
+    'event/reception/0000000000': 1,
+  };
+  const entries = Object.entries(updates);
+  for (let mask = 1; mask < (1 << entries.length) - 1; mask += 1) {
+    const partial = Object.fromEntries(entries.filter((_, index) => mask & (1 << index)));
+    assert.equal((await request(root, 'PATCH', partial, token)).status, 401);
+  }
+  assert.equal((await request(root, 'PATCH', {
+    ...updates, 'control/businessInitializedFromRevision': 1,
+  }, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', {
+    ...updates, 'event/people/fictional-attendee': true,
+  }, token)).status, 401);
+
+  assert.equal((await request(`${root}/head/revision`, 'PUT', 1)).status, 200);
+  assert.equal((await request(root, 'PATCH', updates, token)).status, 401);
+  assert.equal((await request(`${root}/head`, 'DELETE')).status, 200);
+  assert.equal((await request(root, 'PATCH', updates, token)).status, 200);
+  assert.deepEqual((await request(`${root}/event`)).body, {
+    commit: { revision: 1, operationId: 'initialize' },
+    roster: { count: 0 },
+    reception: { '0000000000': 1 },
+  });
+  assert.equal((await request(`${root}/head`)).body, null);
+  assert.equal((await request(root, 'PATCH', updates, token)).status, 401);
+});
