@@ -1539,3 +1539,276 @@ test('AUTH110-Q03 同じ主担当の別端末への転用・操作ID再利用と
   assert.equal((await request(root, 'PATCH', approval, other.token)).status, 401);
   assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 200);
 });
+
+test('PERF111-R01 保存契約の接続前は、認可済み主担当でも受付開始を直接書き込めない', async () => {
+  const { human, device, session } = await fixture();
+  assert.equal((await request(`${root}/sessions/${device.uid}`, 'PUT', session, human.token)).status, 200);
+
+  const control = {
+    ...scope,
+    state: 'preparing',
+    controlRevision: 1,
+    staffDeadline: Date.now() + 86400000,
+  };
+  assert.equal((await request(`${root}/control`, 'PUT', control)).status, 200);
+  assert.deepEqual(await request(`${root}/control`, 'GET', undefined, device.token), {
+    status: 200,
+    body: control,
+  });
+
+  const updates = {
+    'control/state': 'operating',
+    'control/controlRevision': 2,
+    'control/firstReceptionStartedAt': { '.sv': 'timestamp' },
+  };
+  assert.equal((await request(root, 'PATCH', updates, device.token)).status, 401);
+  assert.deepEqual((await request(`${root}/control`, 'GET', undefined, device.token)).body, control);
+});
+
+test('PERF111-R02 明示割当済み主担当の一体初期化だけを許可する', async () => {
+  const { human, device, session } = await fixture();
+  const deputy = await fixture('deputy');
+  for (const actor of [{ human, device, session }, deputy]) {
+    assert.equal(
+      (await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token)).status,
+      200,
+    );
+  }
+
+  const control = {
+    ...scope,
+    ownerUid: human.uid,
+    state: 'preparing',
+    staffDeadline: Date.now() + 86400000,
+  };
+  assert.equal((await request(`${root}/control`, 'PUT', control)).status, 200);
+
+  const fields = {
+    controlRevision: 1,
+    businessSchemaVersion: 3,
+    layoutSchemaVersion: 2,
+    initializedAt: { '.sv': 'timestamp' },
+  };
+  const path = `${root}/control`;
+  const entries = Object.entries(fields);
+  for (let mask = 1; mask < (1 << entries.length) - 1; mask += 1) {
+    const partial = Object.fromEntries(entries.filter((_, index) => mask & (1 << index)));
+    assert.equal((await request(path, 'PATCH', partial, device.token)).status, 401);
+  }
+  assert.equal((await request(path, 'PATCH', fields, deputy.device.token)).status, 401);
+  assert.equal((await request(path, 'PATCH', { ...fields, layoutSchemaVersion: 1 }, device.token)).status, 401);
+  assert.equal((await request(path, 'PATCH', { ...fields, state: 'operating' }, device.token)).status, 401);
+  assert.deepEqual((await request(path, 'GET', undefined, device.token)).body, control);
+
+  assert.equal((await request(path, 'PATCH', fields, device.token)).status, 200);
+  const { initializedAt, ...initialized } = (await request(path, 'GET', undefined, device.token)).body;
+  assert.ok(Number.isSafeInteger(initializedAt));
+  assert.deepEqual(initialized, {
+    ...control,
+    controlRevision: 1,
+    businessSchemaVersion: 3,
+    layoutSchemaVersion: 2,
+  });
+  assert.equal((await request(path, 'PATCH', fields, device.token)).status, 401);
+});
+
+test('PERF111-R03 準備確認は現在の公演管理版と確定データ版でだけ保存できる', async () => {
+  const owner = await fixture();
+  const receptionist = await fixture('receptionist');
+  for (const actor of [owner, receptionist]) {
+    assert.equal(
+      (await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token)).status,
+      200,
+    );
+  }
+
+  // 後続の確定公開で作られる版だけを投入し、準備確認は通常の端末資格で保存する。
+  assert.equal((await request(root, 'PATCH', {
+    'control/state': 'preparing',
+    'control/controlRevision': 1,
+    'event/commit/revision': 10,
+    'head/revision': 3,
+    'head/viewRevision': 5,
+  })).status, 200);
+  const path = `${root}/receptionPreparation`;
+  const confirmation = {
+    ...scope,
+    controlRevision: 1,
+    dataVersion: { commitRevision: 10, layoutRevision: 3, viewRevision: 5 },
+    humanUid: owner.human.uid,
+    deviceUid: owner.device.uid,
+    confirmedAt: { '.sv': 'timestamp' },
+  };
+  const token = owner.device.token;
+  assert.equal((await request(path, 'PUT', confirmation, receptionist.device.token)).status, 401);
+  assert.equal((await request(path, 'PUT', { ...confirmation, controlRevision: 2 }, token)).status, 401);
+  assert.equal((await request(path, 'PUT', { ...confirmation, humanUid: receptionist.human.uid }, token)).status, 401);
+  assert.equal((await request(`${root}/event`, 'GET', undefined, token)).status, 401);
+  assert.equal((await request(`${root}/event/commit/revision`, 'GET', undefined, token)).body, 10);
+  assert.equal((await request(`${root}/event/commit/revision`, 'GET', undefined, receptionist.device.token)).status, 401);
+
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 200);
+  assert.equal((await request(`${root}/head/viewRevision`, 'PUT', 6)).status, 200);
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 401);
+  const stale = await request(path, 'GET', undefined, token);
+  assert.equal(stale.body.dataVersion.viewRevision, 5);
+  assert.equal((await request(path, 'PUT', {
+    ...confirmation,
+    dataVersion: { ...confirmation.dataVersion, viewRevision: 6 },
+  }, token)).status, 200);
+  assert.equal((await request(`${root}/control/state`, 'PUT', 'operating', token)).status, 401);
+});
+
+test('PERF111-R04 明示停止は状態・版・監査を一体確定し、同時要求の一方だけを受理する', async () => {
+  const deputy = await fixture('deputy');
+  const receptionist = await fixture('receptionist');
+  for (const actor of [deputy, receptionist]) {
+    assert.equal(
+      (await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token)).status,
+      200,
+    );
+  }
+  const firstReceptionStartedAt = Date.now() - 1000;
+  const control = {
+    ...scope,
+    state: 'operating',
+    controlRevision: 6,
+    firstReceptionStartedAt,
+    staffDeadline: Date.now() + 86400000,
+  };
+  assert.equal((await request(`${root}/control`, 'PUT', control)).status, 200);
+
+  /** 操作IDだけを変え、同じ公演管理版に対する停止要求を作る。 */
+  function stopUpdates(operationId) {
+    return {
+      'control/state': 'stopped',
+      'control/controlRevision': 7,
+      'control/lastReceptionOperationId': operationId,
+      [`receptionStopAudits/${operationId}`]: {
+        ...scope,
+        operationId,
+        humanUid: deputy.human.uid,
+        deviceUid: deputy.device.uid,
+        previousState: 'operating',
+        state: 'stopped',
+        controlRevision: 7,
+        firstReceptionStartedAt,
+        occurredAt: { '.sv': 'timestamp' },
+      },
+    };
+  }
+
+  const ids = [randomUUID(), randomUUID()];
+  const updates = stopUpdates(ids[0]);
+  const token = deputy.device.token;
+  const entries = Object.entries(updates);
+  for (let mask = 1; mask < (1 << entries.length) - 1; mask += 1) {
+    const partial = Object.fromEntries(entries.filter((_, index) => mask & (1 << index)));
+    assert.equal((await request(root, 'PATCH', partial, token)).status, 401);
+  }
+  assert.equal((await request(root, 'PATCH', updates, receptionist.device.token)).status, 401);
+  assert.equal((await request(root, 'PATCH', {
+    ...updates, 'control/firstReceptionStartedAt': firstReceptionStartedAt + 1,
+  }, token)).status, 401);
+  assert.deepEqual((await request(`${root}/control`, 'GET', undefined, token)).body, control);
+
+  const attempts = await Promise.all(ids.map((id) => request(root, 'PATCH', stopUpdates(id), token)));
+  assert.deepEqual(attempts.map((result) => result.status).sort(), [200, 401]);
+  const winner = ids[attempts.findIndex((result) => result.status === 200)];
+  const audit = `${root}/receptionStopAudits/${winner}`;
+  assert.deepEqual((await request(`${root}/control`, 'GET', undefined, token)).body, {
+    ...control, state: 'stopped', controlRevision: 7, lastReceptionOperationId: winner,
+  });
+  assert.equal((await request(audit, 'GET', undefined, token)).body.operationId, winner);
+  assert.equal((await request(audit, 'GET', undefined, receptionist.device.token)).status, 401);
+  assert.equal((await request(audit, 'DELETE', undefined, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', stopUpdates(winner), token)).status, 401);
+});
+
+test('PERF111-R05 対象公演の最新管理版で空名簿と確定版だけを一度初期化する', async () => {
+  const owner = await fixture();
+  assert.equal((await request(`${root}/sessions/${owner.device.uid}`, 'PUT', owner.session, owner.human.token)).status, 200);
+  assert.equal((await request(root, 'PATCH', {
+    'control/state': 'preparing',
+    'control/controlRevision': 2,
+    'control/businessSchemaVersion': 3,
+    'control/layoutSchemaVersion': 2,
+    event: null,
+    head: null,
+  })).status, 200);
+
+  const token = owner.device.token;
+  const updates = {
+    'control/businessInitializedFromRevision': 2,
+    'event/commit': { revision: 1, operationId: 'initialize' },
+    'event/roster/count': 0,
+    'event/reception/0000000000': 1,
+  };
+  const entries = Object.entries(updates);
+  for (let mask = 1; mask < (1 << entries.length) - 1; mask += 1) {
+    const partial = Object.fromEntries(entries.filter((_, index) => mask & (1 << index)));
+    assert.equal((await request(root, 'PATCH', partial, token)).status, 401);
+  }
+  assert.equal((await request(root, 'PATCH', {
+    ...updates, 'control/businessInitializedFromRevision': 1,
+  }, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', {
+    ...updates, 'event/people/fictional-attendee': true,
+  }, token)).status, 401);
+
+  assert.equal((await request(`${root}/head/revision`, 'PUT', 1)).status, 200);
+  assert.equal((await request(root, 'PATCH', updates, token)).status, 401);
+  assert.equal((await request(`${root}/head`, 'DELETE')).status, 200);
+  assert.equal((await request(root, 'PATCH', updates, token)).status, 200);
+  assert.deepEqual((await request(`${root}/event`)).body, {
+    commit: { revision: 1, operationId: 'initialize' },
+    roster: { count: 0 },
+    reception: { '0000000000': 1 },
+  });
+  assert.equal((await request(`${root}/head`)).body, null);
+  assert.equal((await request(root, 'PATCH', updates, token)).status, 401);
+});
+
+test('PERF111-R06 会場コピーは両公演の現在認可と元の版を照合し、コピー後は独立する', async () => {
+  const { human, device, grant, registration, session } = await fixture();
+  const target = { environmentId, performanceId: randomUUID() };
+  const targetRoot = `environments/${environmentId}/performances/${target.performanceId}`;
+  const control = { state: 'preparing', staffDeadline: Date.now() + 86400000 };
+  assert.equal((await request(`${root}/control`, 'PATCH', control)).status, 200);
+  assert.equal((await request(`${root}/sessions/${device.uid}`, 'PUT', session, human.token)).status, 200);
+
+  const venue = {
+    ...scope, revision: 1, name: '架空ホール', address: '架空市1丁目', updatedAt: { '.sv': 'timestamp' },
+  };
+  const origin = `${root}/performanceVenue`;
+  const destination = `${targetRoot}/performanceVenue`;
+  assert.equal((await request(origin, 'PUT', venue, device.token)).status, 200);
+  const copy = {
+    ...venue, ...target, sourcePerformanceId: performanceId, sourceRevision: 1,
+  };
+  assert.equal((await request(destination, 'PUT', copy, device.token)).status, 401);
+
+  assert.equal((await request(targetRoot, 'PUT', {
+    control: { ...target, ...control },
+    roles: { [human.uid]: { ...grant, ...target } },
+    devices: { [device.uid]: { ...registration, ...target } },
+  })).status, 200);
+  assert.equal((await request(`${targetRoot}/sessions/${device.uid}`, 'PUT', { ...session, ...target }, human.token)).status, 200);
+  assert.equal((await request(destination, 'PUT', { ...copy, sourceRevision: 2 }, device.token)).status, 401);
+  assert.equal((await request(destination, 'PUT', { ...copy, address: '別の住所' }, device.token)).status, 401);
+  assert.equal((await request(destination, 'PUT', { ...copy, sourcePerformanceId: randomUUID() }, device.token)).status, 401);
+  assert.equal((await request(destination, 'PUT', { ...copy, roles: grant }, device.token)).status, 401);
+
+  assert.equal((await request(`${root}/devices/${device.uid}/active`, 'PUT', false)).status, 200);
+  assert.equal((await request(destination, 'PUT', copy, device.token)).status, 401);
+  assert.equal((await request(`${root}/devices/${device.uid}/active`, 'PUT', true)).status, 200);
+  assert.equal((await request(destination, 'PUT', copy, device.token)).status, 200);
+  assert.equal((await request(origin, 'PUT', { ...venue, revision: 2, name: '架空ホール改称' }, device.token)).status, 200);
+  const targetVenue = (await request(destination, 'GET', undefined, device.token)).body;
+  assert.equal(targetVenue.name, venue.name);
+  assert.equal(targetVenue.sourceRevision, 1);
+  assert.equal((await request(destination, 'PATCH', {
+    revision: 2, address: '架空市2丁目', updatedAt: { '.sv': 'timestamp' },
+  }, device.token)).status, 200);
+  assert.equal((await request(origin, 'GET', undefined, device.token)).body.address, venue.address);
+});

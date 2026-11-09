@@ -5,6 +5,11 @@ import { deviceManagementRules } from './device-management-rules.mjs';
 import { ownerHandoverRules } from './owner-handover-rules.mjs';
 import { deviceRegistrationRules, registrationProofValid } from './device-registration-rules.mjs';
 import { ownerDeviceLinkRules } from './owner-device-link-rules.mjs';
+import { performanceInitializationRules } from './performance-initialization-rules.mjs';
+import { receptionPreparationRules } from './reception-preparation-rules.mjs';
+import { receptionStopRules } from './reception-stop-rules.mjs';
+import { performanceBusinessInitializationRules } from './performance-business-initialization-rules.mjs';
+import { performanceVenueRules } from './performance-venue-rules.mjs';
 
 /** 指定した子キーの値を参照するRules式を作る。 */
 const field = (node, key) => `${node}.child('${key}').val()`;
@@ -18,8 +23,8 @@ const ownSession = `${root}.child('sessions').child(auth.uid)`;
 const ownRole = `${root}.child('roles').child(${field(ownDevice, 'humanUid')})`;
 
 /** 環境IDと公演IDの一致を検査するRules式を作る。 */
-function scope(node) {
-  return `${field(node, 'environmentId')} === $environmentId && ${field(node, 'performanceId')} === $performanceId`;
+function scope(node, performance = '$performanceId') {
+  return `${field(node, 'environmentId')} === $environmentId && ${field(node, 'performanceId')} === ${performance}`;
 }
 
 /** 指定した下限以上の安全な整数か検査するRules式を作る。 */
@@ -28,8 +33,8 @@ function integer(expression, minimum = 0) {
 }
 
 /** 役割の所属・形式と有効期間を検査するRules式を作る。 */
-function roleValid(node) {
-  return `(${scope(node)} && ${field(node, 'active')} === true
+function roleValid(node, performance = '$performanceId') {
+  return `(${scope(node, performance)} && ${field(node, 'active')} === true
     && (${['owner', 'deputy', 'temporary', 'receptionist'].map((role) => `${field(node, 'role')} === '${role}'`).join(' || ')})
     && ${child(node, 'revision')}.isNumber() && ${integer(field(node, 'revision'), 1)}
     && ${child(node, 'startsAt')}.isNumber() && ${child(node, 'endsAt')}.isNumber()
@@ -43,9 +48,14 @@ function provider(role, providerExpression) {
 }
 
 /** 本人と端末の結合・現在役割と期限を検査する共通Rules式を作る。 */
-export function currentAuthorization() {
+export function currentAuthorization(performance = '$performanceId') {
+  const performanceRoot = `root.child('environments/'+$environmentId+'/performances/'+${performance})`;
+  const ownDevice = `${performanceRoot}.child('devices').child(auth.uid)`;
+  const ownSession = `${performanceRoot}.child('sessions').child(auth.uid)`;
+  const ownRole = `${performanceRoot}.child('roles').child(${field(ownDevice, 'humanUid')})`;
+
   return `(auth != null && auth.token.firebase.sign_in_provider === 'anonymous'
-    && ${scope(ownDevice)} && ${scope(ownSession)}
+    && ${scope(ownDevice, performance)} && ${scope(ownSession, performance)}
     && ${field(ownDevice, 'schemaVersion')} === 2 && ${field(ownSession, 'schemaVersion')} === 2
     && ${field(ownDevice, 'deviceUid')} === auth.uid && ${field(ownSession, 'deviceUid')} === auth.uid
     && ${field(ownDevice, 'humanUid')} !== auth.uid
@@ -57,14 +67,19 @@ export function currentAuthorization() {
     && ${field(ownSession, 'issuedAt')} <= now && now < ${field(ownSession, 'expiresAt')}
     && ${field(ownSession, 'humanAuthTime')} <= ${field(ownSession, 'issuedAt')}
     && ${field(ownSession, 'expiresAt')} <= ${field(ownSession, 'issuedAt')} + 43200000
-    && ${roleValid(ownRole)} && ${provider(ownRole, field(ownSession, 'authProvider'))}
+    && ${roleValid(ownRole, performance)} && ${provider(ownRole, field(ownSession, 'authProvider'))}
     && ((${field(ownRole, 'role')} === 'owner' || ${field(ownRole, 'role')} === 'deputy')
-      || now < ${field(`${root}.child('control')`, 'staffDeadline')}))`;
+      || now < ${field(`${performanceRoot}.child('control')`, 'staffDeadline')}))`;
 }
 
 /** 現在認可に加えて、端末と本人証跡の準備版を検査する式を作る。 */
-export function preparedAuthorization() {
-  return `(${currentAuthorization()} && ${field(ownDevice, 'preparedRoleRevision')} === ${field(ownRole, 'revision')}
+export function preparedAuthorization(performance = '$performanceId') {
+  const performanceRoot = `root.child('environments/'+$environmentId+'/performances/'+${performance})`;
+  const ownDevice = `${performanceRoot}.child('devices').child(auth.uid)`;
+  const ownSession = `${performanceRoot}.child('sessions').child(auth.uid)`;
+  const ownRole = `${performanceRoot}.child('roles').child(${field(ownDevice, 'humanUid')})`;
+
+  return `(${currentAuthorization(performance)} && ${field(ownDevice, 'preparedRoleRevision')} === ${field(ownRole, 'revision')}
     && ${field(ownSession, 'roleRevision')} === ${field(ownRole, 'revision')}
     && ${field(ownDevice, 'preparedRole')} === ${field(ownRole, 'role')})`;
 }
@@ -177,6 +192,12 @@ export function authorizationRules() {
   deviceRules.devices.$deviceUid['.write'] =
     `(${deviceRules.devices.$deviceUid['.write']}) || (${approveDeviceWrite})`;
 
+  const initialization = performanceInitializationRules({ root, preparedAuthorization, integer });
+  const preparation = receptionPreparationRules({ root, manager, integer, strictRecord });
+  const business = performanceBusinessInitializationRules({ root, manager, integer });
+  const { controlWrites, receptionStopAudits } = receptionStopRules({ root, manager, integer, strictRecord });
+  const controlRevisionWrite = `(${initialization.controlRevision['.write']}) || (${controlWrites.controlRevision})`;
+
   return {
     '.read': false,
     '.write': false,
@@ -185,12 +206,27 @@ export function authorizationRules() {
     ...deviceRules,
     ...registrationRules,
     ...ownerLinkRules,
+    performanceVenue: performanceVenueRules({ root, manager, preparedAuthorization, integer }),
+    ...preparation,
+    event: {
+      ...business.event,
+      commit: {
+        ...business.event.commit,
+        revision: preparation.event.commit.revision,
+      },
+    },
+    receptionStopAudits,
     sessions: {
       $deviceUid: strictRecord(fields, ownMetadata, `(${issue}) || (${revoke})`),
     },
     control: {
       '.read': currentAuthorization(),
       '.write': false,
+      ...initialization,
+      ...business.control,
+      state: { '.write': controlWrites.state },
+      controlRevision: { '.write': controlRevisionWrite },
+      lastReceptionOperationId: { '.write': controlWrites.lastReceptionOperationId },
       ownerUid: { '.write': ownerUidWrite },
       ownerHandoverOperationId: { '.write': pointerWrite },
     },
