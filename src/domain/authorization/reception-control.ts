@@ -16,15 +16,18 @@ interface ReceptionControlRequest extends Scope {
   action: 'start' | 'stop';
 }
 
-interface ConfirmedDataVersion {
+export interface ConfirmedDataVersion {
   commitRevision: number;
   layoutRevision: number;
   viewRevision: number;
 }
 
-interface ReceptionPreparation extends Scope {
+export interface ReceptionPreparationBasis {
   controlRevision: number;
   dataVersion: ConfirmedDataVersion;
+}
+
+interface ReceptionPreparation extends Scope, ReceptionPreparationBasis {
   confirmedAt: number;
 }
 

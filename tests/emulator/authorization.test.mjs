@@ -1611,3 +1611,50 @@ test('PERF111-R02 明示割当済み主担当の一体初期化だけを許可�
   });
   assert.equal((await request(path, 'PATCH', fields, device.token)).status, 401);
 });
+
+test('PERF111-R03 準備確認は現在の公演管理版と確定データ版でだけ保存できる', async () => {
+  const owner = await fixture();
+  const receptionist = await fixture('receptionist');
+  for (const actor of [owner, receptionist]) {
+    assert.equal(
+      (await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token)).status,
+      200,
+    );
+  }
+
+  // 後続の確定公開で作られる版だけを投入し、準備確認は通常の端末資格で保存する。
+  assert.equal((await request(root, 'PATCH', {
+    'control/state': 'preparing',
+    'control/controlRevision': 1,
+    'event/commit/revision': 10,
+    'head/revision': 3,
+    'head/viewRevision': 5,
+  })).status, 200);
+  const path = `${root}/receptionPreparation`;
+  const confirmation = {
+    ...scope,
+    controlRevision: 1,
+    dataVersion: { commitRevision: 10, layoutRevision: 3, viewRevision: 5 },
+    humanUid: owner.human.uid,
+    deviceUid: owner.device.uid,
+    confirmedAt: { '.sv': 'timestamp' },
+  };
+  const token = owner.device.token;
+  assert.equal((await request(path, 'PUT', confirmation, receptionist.device.token)).status, 401);
+  assert.equal((await request(path, 'PUT', { ...confirmation, controlRevision: 2 }, token)).status, 401);
+  assert.equal((await request(path, 'PUT', { ...confirmation, humanUid: receptionist.human.uid }, token)).status, 401);
+  assert.equal((await request(`${root}/event`, 'GET', undefined, token)).status, 401);
+  assert.equal((await request(`${root}/event/commit/revision`, 'GET', undefined, token)).body, 10);
+  assert.equal((await request(`${root}/event/commit/revision`, 'GET', undefined, receptionist.device.token)).status, 401);
+
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 200);
+  assert.equal((await request(`${root}/head/viewRevision`, 'PUT', 6)).status, 200);
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 401);
+  const stale = await request(path, 'GET', undefined, token);
+  assert.equal(stale.body.dataVersion.viewRevision, 5);
+  assert.equal((await request(path, 'PUT', {
+    ...confirmation,
+    dataVersion: { ...confirmation.dataVersion, viewRevision: 6 },
+  }, token)).status, 200);
+  assert.equal((await request(`${root}/control/state`, 'PUT', 'operating', token)).status, 401);
+});

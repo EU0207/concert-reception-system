@@ -15,8 +15,9 @@ import { initializeAppCheck, getToken, ReCaptchaEnterpriseProvider } from 'fireb
 import type { AppCheck } from 'firebase/app-check';
 import { onIdTokenChanged } from 'firebase/auth';
 import type { Scope } from '../../domain/seats/types.ts';
-import { isId, requireValue } from '../../domain/seats/validation.ts';
+import { isId, nonnegative, positive, requireValue } from '../../domain/seats/validation.ts';
 import { authorizeOnline, createPersonSession, validUid } from '../../domain/authorization/policy.ts';
+import type { ReceptionPreparationBasis } from '../../domain/authorization/reception-control.ts';
 import type {
   AuthorizationSnapshot,
   DeviceGrant,
@@ -71,6 +72,8 @@ export async function createAuthorizationPort(
 ): Promise<
   AuthorizationPort & {
     initializePerformanceControl(): Promise<void>;
+    readReceptionPreparationBasis(): Promise<ReceptionPreparationBasis>;
+    confirmReceptionPreparation(basis: ReceptionPreparationBasis): Promise<void>;
     issueSession(expiresAt: number): Promise<PersonSession>;
     revokeSession(): Promise<void>;
     dispose(): void;
@@ -427,6 +430,41 @@ export async function createAuthorizationPort(
     });
   }
 
+  /** 準備確認で表示する、対象公演の管理版と確定済みデータ版を取得する。 */
+  async function readReceptionPreparationBasis(): Promise<ReceptionPreparationBasis> {
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    authorizeOnline(snapshot, 'controlReception', confirmedTime);
+
+    const [controlRevision, commitRevision, layoutRevision, viewRevision] = await Promise.all([
+      read(deviceDatabase, 'control/controlRevision'),
+      read(deviceDatabase, 'event/commit/revision'),
+      read(deviceDatabase, 'head/revision'),
+      read(deviceDatabase, 'head/viewRevision'),
+    ]);
+    requireValue(
+      positive(controlRevision) && nonnegative(commitRevision) &&
+        positive(layoutRevision) && nonnegative(viewRevision),
+      'RECEPTION_DATA_NOT_PUBLISHED',
+    );
+
+    return { controlRevision, dataVersion: { commitRevision, layoutRevision, viewRevision } };
+  }
+
+  /** 管理者が確認した版を保存する。確認中に版が変わればRulesが拒否する。 */
+  async function confirmReceptionPreparation(basis: ReceptionPreparationBasis): Promise<void> {
+    const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
+    authorizeOnline(snapshot, 'controlReception', confirmedTime);
+
+    await set(ref(deviceDatabase, `${root}/receptionPreparation`), {
+      ...scope,
+      controlRevision: basis.controlRevision,
+      dataVersion: basis.dataVersion,
+      humanUid: snapshot.role.humanUid,
+      deviceUid,
+      confirmedAt: serverTimestamp(),
+    });
+  }
+
   const registration = createDeviceRegistrationPort({
     humanDatabase,
     deviceDatabase,
@@ -472,6 +510,8 @@ export async function createAuthorizationPort(
     }),
     fetchCurrent,
     initializePerformanceControl,
+    readReceptionPreparationBasis,
+    confirmReceptionPreparation,
     issueSession,
     revokeSession,
 
