@@ -7,6 +7,8 @@ import { deviceRegistrationRules, registrationProofValid } from './device-regist
 import { ownerDeviceLinkRules } from './owner-device-link-rules.mjs';
 import { performanceInitializationRules } from './performance-initialization-rules.mjs';
 import { receptionPreparationRules } from './reception-preparation-rules.mjs';
+import { receptionStopRules } from './reception-stop-rules.mjs';
+import { performanceBusinessInitializationRules } from './performance-business-initialization-rules.mjs';
 
 /** 指定した子キーの値を参照するRules式を作る。 */
 const field = (node, key) => `${node}.child('${key}').val()`;
@@ -179,6 +181,12 @@ export function authorizationRules() {
   deviceRules.devices.$deviceUid['.write'] =
     `(${deviceRules.devices.$deviceUid['.write']}) || (${approveDeviceWrite})`;
 
+  const initialization = performanceInitializationRules({ root, preparedAuthorization, integer });
+  const preparation = receptionPreparationRules({ root, manager, integer, strictRecord });
+  const business = performanceBusinessInitializationRules({ root, manager, integer });
+  const { controlWrites, receptionStopAudits } = receptionStopRules({ root, manager, integer, strictRecord });
+  const controlRevisionWrite = `(${initialization.controlRevision['.write']}) || (${controlWrites.controlRevision})`;
+
   return {
     '.read': false,
     '.write': false,
@@ -187,14 +195,26 @@ export function authorizationRules() {
     ...deviceRules,
     ...registrationRules,
     ...ownerLinkRules,
-    ...receptionPreparationRules({ root, manager, integer, strictRecord }),
+    ...preparation,
+    event: {
+      ...business.event,
+      commit: {
+        ...business.event.commit,
+        revision: preparation.event.commit.revision,
+      },
+    },
+    receptionStopAudits,
     sessions: {
       $deviceUid: strictRecord(fields, ownMetadata, `(${issue}) || (${revoke})`),
     },
     control: {
       '.read': currentAuthorization(),
       '.write': false,
-      ...performanceInitializationRules({ root, preparedAuthorization, integer }),
+      ...initialization,
+      ...business.control,
+      state: { '.write': controlWrites.state },
+      controlRevision: { '.write': controlRevisionWrite },
+      lastReceptionOperationId: { '.write': controlWrites.lastReceptionOperationId },
       ownerUid: { '.write': ownerUidWrite },
       ownerHandoverOperationId: { '.write': pointerWrite },
     },
