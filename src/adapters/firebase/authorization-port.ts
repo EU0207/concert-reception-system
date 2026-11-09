@@ -15,7 +15,7 @@ import { initializeAppCheck, getToken, ReCaptchaEnterpriseProvider } from 'fireb
 import type { AppCheck } from 'firebase/app-check';
 import { onIdTokenChanged } from 'firebase/auth';
 import type { Scope } from '../../domain/seats/types.ts';
-import { isId, nonnegative, positive, requireValue } from '../../domain/seats/validation.ts';
+import { checkScope, isId, nonnegative, positive, requireValue, text } from '../../domain/seats/validation.ts';
 import { authorizeOnline, createPersonSession, validUid } from '../../domain/authorization/policy.ts';
 import type { ReceptionPreparationBasis } from '../../domain/authorization/reception-control.ts';
 import { planReceptionControl } from '../../domain/authorization/reception-control.ts';
@@ -51,6 +51,15 @@ interface ReceptionStopResult extends Scope {
   controlRevision: number;
   firstReceptionStartedAt: number;
   occurredAt: number;
+}
+
+interface PerformanceVenue extends Scope {
+  revision: number;
+  name: string;
+  address: string;
+  updatedAt: number;
+  sourcePerformanceId?: string;
+  sourceRevision?: number;
 }
 
 const appChecks = new Map<string, { siteKey: string; instance: AppCheck }>();
@@ -89,6 +98,9 @@ export async function createAuthorizationPort(
     confirmReceptionPreparation(basis: ReceptionPreparationBasis): Promise<void>;
     stopReception(expectedControlRevision: number, operationId: string): Promise<void>;
     readReceptionStopResult(operationId: string): Promise<ReceptionStopResult | null>;
+    readPerformanceVenue(performanceId: string): Promise<PerformanceVenue | null>;
+    savePerformanceVenue(expectedRevision: number, name: string, address: string): Promise<void>;
+    copyPerformanceVenue(source: PerformanceVenue): Promise<void>;
     issueSession(expiresAt: number): Promise<PersonSession>;
     revokeSession(): Promise<void>;
     dispose(): void;
@@ -533,6 +545,58 @@ export async function createAuthorizationPort(
     return (await read(deviceDatabase, `receptionStopAudits/${operationId}`)) as ReceptionStopResult | null;
   }
 
+  /** 管理権限を持つ公演の会場情報と版を読み取る。 */
+  async function readPerformanceVenue(performanceId: string): Promise<PerformanceVenue | null> {
+    requireValue(isId(performanceId), 'INVALID_PERFORMANCE_ID');
+    await verified();
+    await serverNow();
+
+    const path = `environments/${scope.environmentId}/performances/${performanceId}/performanceVenue`;
+    const venue = (await get(ref(deviceDatabase, path))).val() as PerformanceVenue | null;
+    if (venue) checkScope(venue, { environmentId: scope.environmentId, performanceId });
+
+    return venue;
+  }
+
+  /** 準備中の公演に、編集開始時の版を照合して会場情報を保存する。 */
+  async function savePerformanceVenue(expectedRevision: number, name: string, address: string): Promise<void> {
+    requireValue(nonnegative(expectedRevision) && positive(expectedRevision + 1), 'INVALID_VENUE_REVISION');
+    text(name, 200, 'INVALID_VENUE_NAME');
+    text(address, 500, 'INVALID_VENUE_ADDRESS');
+    await verified();
+    await serverNow();
+
+    // 差分更新なら、コピー元を示す既存の項目をそのまま保持できる。
+    await update(ref(deviceDatabase, `${root}/performanceVenue`), {
+      ...scope,
+      revision: expectedRevision + 1,
+      name: name.trim(),
+      address: address.trim(),
+      updatedAt: serverTimestamp(),
+    });
+  }
+
+  /** 確認したコピー元の会場情報を、新しい公演の初回会場情報として保存する。 */
+  async function copyPerformanceVenue(source: PerformanceVenue): Promise<void> {
+    requireValue(
+      source.environmentId === scope.environmentId && isId(source.performanceId) &&
+        source.performanceId !== scope.performanceId && positive(source.revision),
+      'INVALID_VENUE_COPY_SOURCE',
+    );
+    await verified();
+    await serverNow();
+
+    await set(ref(deviceDatabase, `${root}/performanceVenue`), {
+      ...scope,
+      revision: 1,
+      name: source.name,
+      address: source.address,
+      sourcePerformanceId: source.performanceId,
+      sourceRevision: source.revision,
+      updatedAt: serverTimestamp(),
+    });
+  }
+
   const registration = createDeviceRegistrationPort({
     humanDatabase,
     deviceDatabase,
@@ -583,6 +647,9 @@ export async function createAuthorizationPort(
     confirmReceptionPreparation,
     stopReception,
     readReceptionStopResult,
+    readPerformanceVenue,
+    savePerformanceVenue,
+    copyPerformanceVenue,
     issueSession,
     revokeSession,
 

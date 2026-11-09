@@ -1768,3 +1768,47 @@ test('PERF111-R05 対象公演の最新管理版で空名簿と確定版だけ�
   assert.equal((await request(`${root}/head`)).body, null);
   assert.equal((await request(root, 'PATCH', updates, token)).status, 401);
 });
+
+test('PERF111-R06 会場コピーは両公演の現在認可と元の版を照合し、コピー後は独立する', async () => {
+  const { human, device, grant, registration, session } = await fixture();
+  const target = { environmentId, performanceId: randomUUID() };
+  const targetRoot = `environments/${environmentId}/performances/${target.performanceId}`;
+  const control = { state: 'preparing', staffDeadline: Date.now() + 86400000 };
+  assert.equal((await request(`${root}/control`, 'PATCH', control)).status, 200);
+  assert.equal((await request(`${root}/sessions/${device.uid}`, 'PUT', session, human.token)).status, 200);
+
+  const venue = {
+    ...scope, revision: 1, name: '架空ホール', address: '架空市1丁目', updatedAt: { '.sv': 'timestamp' },
+  };
+  const origin = `${root}/performanceVenue`;
+  const destination = `${targetRoot}/performanceVenue`;
+  assert.equal((await request(origin, 'PUT', venue, device.token)).status, 200);
+  const copy = {
+    ...venue, ...target, sourcePerformanceId: performanceId, sourceRevision: 1,
+  };
+  assert.equal((await request(destination, 'PUT', copy, device.token)).status, 401);
+
+  assert.equal((await request(targetRoot, 'PUT', {
+    control: { ...target, ...control },
+    roles: { [human.uid]: { ...grant, ...target } },
+    devices: { [device.uid]: { ...registration, ...target } },
+  })).status, 200);
+  assert.equal((await request(`${targetRoot}/sessions/${device.uid}`, 'PUT', { ...session, ...target }, human.token)).status, 200);
+  assert.equal((await request(destination, 'PUT', { ...copy, sourceRevision: 2 }, device.token)).status, 401);
+  assert.equal((await request(destination, 'PUT', { ...copy, address: '別の住所' }, device.token)).status, 401);
+  assert.equal((await request(destination, 'PUT', { ...copy, sourcePerformanceId: randomUUID() }, device.token)).status, 401);
+  assert.equal((await request(destination, 'PUT', { ...copy, roles: grant }, device.token)).status, 401);
+
+  assert.equal((await request(`${root}/devices/${device.uid}/active`, 'PUT', false)).status, 200);
+  assert.equal((await request(destination, 'PUT', copy, device.token)).status, 401);
+  assert.equal((await request(`${root}/devices/${device.uid}/active`, 'PUT', true)).status, 200);
+  assert.equal((await request(destination, 'PUT', copy, device.token)).status, 200);
+  assert.equal((await request(origin, 'PUT', { ...venue, revision: 2, name: '架空ホール改称' }, device.token)).status, 200);
+  const targetVenue = (await request(destination, 'GET', undefined, device.token)).body;
+  assert.equal(targetVenue.name, venue.name);
+  assert.equal(targetVenue.sourceRevision, 1);
+  assert.equal((await request(destination, 'PATCH', {
+    revision: 2, address: '架空市2丁目', updatedAt: { '.sv': 'timestamp' },
+  }, device.token)).status, 200);
+  assert.equal((await request(origin, 'GET', undefined, device.token)).body.address, venue.address);
+});
