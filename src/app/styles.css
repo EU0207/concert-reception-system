@@ -408,7 +408,21 @@ p {
 .seat-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 8px;
+}
+
+.seat-action {
+  display: grid;
+  max-width: 10rem;
+  gap: 4px;
+}
+
+.seat-actions .seat-action-note {
+  margin: 0;
+  color: #48625d;
+  font-size: 0.8rem;
+  line-height: 1.4;
 }
 
 .seat-section {
