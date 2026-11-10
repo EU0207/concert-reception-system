@@ -464,6 +464,13 @@ p {
   border-color: #ccd8cc;
 }
 
+/* 席編集では端末への下書き保存も強調し、確定保存と濃淡で区別する。 */
+.button.draft-save {
+  background: #dcece4;
+  color: #24594c;
+  border-color: #86ac9e;
+}
+
 .button:disabled {
   color: #6d7774;
   background: #f0f2ee;
