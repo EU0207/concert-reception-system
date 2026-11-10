@@ -203,7 +203,12 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
 
   /** 確認を経た明示操作だけを、保存完了後に試験用の操作先へ渡す。 */
   function confirmOperation(action: '下書きを共有' | '確定保存') {
-    const body = el('p', '', `端末に下書きを保存してから「${action}」の試験操作を実行します。対象は ${layout.sections.length} 区画です。`);
+    const body = el('div');
+    if (action === '下書きを共有') {
+      body.append(el('p', '', '下書きを共有すると、ほかの管理担当者が別の端末で編集を引き継げます。'));
+    }
+    body.append(el('p', '', `端末に下書きを保存してから「${action}」の試験操作を実行します。対象は ${layout.sections.length} 区画です。`));
+
     const confirm = button('試験操作を実行', async () => {
       dialog.close();
       if (await save()) result.textContent = runEvaluationOperation(action);
@@ -217,9 +222,9 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
     }, '追加する');
   }, 'button secondary');
   actions.append(
-    button('下書き保存', () => { void save(); }),
+    button('下書き保存', () => { void save(); }, 'button draft-save'),
     button('下書きを共有', () => confirmOperation('下書きを共有'), 'button secondary'),
-    button('確定保存', () => confirmOperation('確定保存'), 'button secondary'),
+    button('確定保存', () => confirmOperation('確定保存')),
   );
   panel.append(actions, error, result, storageNote, add, sections);
   renderSections();
