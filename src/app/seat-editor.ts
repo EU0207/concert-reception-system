@@ -70,6 +70,18 @@ function runEvaluationOperation(action: '下書きを共有' | '確定保存') {
   return `「${action}」の試験操作が完了しました。端末下書きは未確定のままです。`;
 }
 
+/** ボタンの下に保存先を表示し、読み上げでもボタンの説明として伝える。 */
+function describeSaveAction(action: HTMLButtonElement, noteId: string, text: string) {
+  const group = el('div', 'seat-action');
+  const note = el('p', 'seat-action-note', text);
+
+  note.id = noteId;
+  action.setAttribute('aria-describedby', noteId);
+  group.append(action, note);
+
+  return group;
+}
+
 /** 同じ公演の下書きを復元し、画面操作と保存・離脱の接続口を組み立てる。 */
 export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<EditorSession | undefined> {
   const binding = { ...scope, ...evaluationBinding };
@@ -222,8 +234,16 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
     }, '追加する');
   }, 'button secondary');
   actions.append(
-    button('下書き保存', () => { void save(); }, 'button draft-save'),
-    button('下書きを共有', () => confirmOperation('下書きを共有'), 'button secondary'),
+    describeSaveAction(
+      button('下書き保存', () => { void save(); }, 'button draft-save'),
+      'seat-draft-save-note',
+      'この端末に下書きを保存',
+    ),
+    describeSaveAction(
+      button('下書きを共有', () => confirmOperation('下書きを共有'), 'button secondary'),
+      'seat-draft-share-note',
+      '別端末でも確認できるように保存します',
+    ),
     button('確定保存', () => confirmOperation('確定保存')),
   );
   panel.append(actions, error, result, storageNote, add, sections);
