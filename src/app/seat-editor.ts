@@ -70,18 +70,6 @@ function runEvaluationOperation(action: '下書きを共有' | '確定保存') {
   return `「${action}」の試験操作が完了しました。端末下書きは未確定のままです。`;
 }
 
-/** ボタンの下に保存先を表示し、読み上げでもボタンの説明として伝える。 */
-function describeSaveAction(action: HTMLButtonElement, noteId: string, text: string) {
-  const group = el('div', 'seat-action');
-  const note = el('p', 'seat-action-note', text);
-
-  note.id = noteId;
-  action.setAttribute('aria-describedby', noteId);
-  group.append(action, note);
-
-  return group;
-}
-
 /** 同じ公演の下書きを復元し、画面操作と保存・離脱の接続口を組み立てる。 */
 export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<EditorSession | undefined> {
   const binding = { ...scope, ...evaluationBinding };
@@ -213,13 +201,22 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
     }
   }
 
+  /** 保存先を確認し、実行を選んだ場合にだけこの端末へ保存する。 */
+  function confirmDraftSave() {
+    const body = el('p', '', 'この端末に下書きを保存します。');
+    const confirm = button('保存する', () => {
+      dialog.close();
+      void save();
+    });
+    const dialog = showDialog('下書き保存の確認', body, [confirm]);
+  }
+
   /** 確認を経た明示操作だけを、保存完了後に試験用の操作先へ渡す。 */
   function confirmOperation(action: '下書きを共有' | '確定保存') {
-    const body = el('div');
-    if (action === '下書きを共有') {
-      body.append(el('p', '', '下書きを共有すると、ほかの管理担当者が別の端末で編集を引き継げます。'));
-    }
-    body.append(el('p', '', `端末に下書きを保存してから「${action}」の試験操作を実行します。対象は ${layout.sections.length} 区画です。`));
+    const message = action === '下書きを共有'
+      ? '別端末でも確認できるように保存します。この確認版では共有の試験操作を行います。'
+      : `端末に下書きを保存してから、確定保存の試験操作を実行します。対象は ${layout.sections.length} 区画です。`;
+    const body = el('p', '', message);
 
     const confirm = button('試験操作を実行', async () => {
       dialog.close();
@@ -234,16 +231,8 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
     }, '追加する');
   }, 'button secondary');
   actions.append(
-    describeSaveAction(
-      button('下書き保存', () => { void save(); }, 'button draft-save'),
-      'seat-draft-save-note',
-      'この端末に下書きを保存',
-    ),
-    describeSaveAction(
-      button('下書きを共有', () => confirmOperation('下書きを共有'), 'button secondary'),
-      'seat-draft-share-note',
-      '別端末でも確認できるように保存します',
-    ),
+    button('下書き保存', confirmDraftSave, 'button draft-save'),
+    button('下書きを共有', () => confirmOperation('下書きを共有'), 'button secondary'),
     button('確定保存', () => confirmOperation('確定保存')),
   );
   panel.append(actions, error, result, storageNote, add, sections);

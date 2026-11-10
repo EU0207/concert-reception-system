@@ -30,8 +30,18 @@ test('DD91-T37 端末保存から復元し、共有と確定は明示した試�
   await page.getByRole('button', { name: '確認区画の席 A-1 を編集' }).click();
   await page.getByRole('textbox', { name: '席番号', exact: true }).fill('補助席');
   await page.getByRole('button', { name: '変更を反映' }).click();
-  await page.getByRole('button', { name: '下書き保存', exact: true }).click();
+  const saveDraft = page.getByRole('button', { name: '下書き保存', exact: true });
+  const saveDialog = page.getByRole('dialog', { name: '下書き保存の確認' });
   const saved = page.getByText(/この端末に保存済み・未確定（/);
+
+  await saveDraft.click();
+  await expect(saveDialog).toContainText('この端末に下書きを保存します。');
+  await saveDialog.getByRole('button', { name: '閉じる', exact: true }).click();
+  await expect(saved).toHaveCount(0);
+  await expect(page.getByText(/未保存の変更があります/)).toBeVisible();
+
+  await saveDraft.click();
+  await saveDialog.getByRole('button', { name: '保存する', exact: true }).click();
   await expect(saved).toBeVisible();
   const savedMessage = await saved.textContent();
 
@@ -41,7 +51,9 @@ test('DD91-T37 端末保存から復元し、共有と確定は明示した試�
   await expect(page.getByRole('checkbox')).toHaveCount(0);
 
   await page.getByRole('button', { name: '下書きを共有', exact: true }).click();
-  await page.getByRole('button', { name: '閉じる', exact: true }).click();
+  const shareDialog = page.getByRole('dialog', { name: '下書きを共有の確認' });
+  await expect(shareDialog).toContainText('別端末でも確認できるように保存します。');
+  await shareDialog.getByRole('button', { name: '閉じる', exact: true }).click();
   await expect(page.getByText(/試験操作が完了しました/)).toHaveCount(0);
 
   for (const label of ['下書きを共有', '確定保存']) {
@@ -85,6 +97,7 @@ test('DD91-T19・T39 古いタブの離脱保存を拒否し、入力と最新�
   await openEditor(other);
   await addSection(other, '先に保存する区画');
   await other.getByRole('button', { name: '下書き保存', exact: true }).click();
+  await other.getByRole('dialog', { name: '下書き保存の確認' }).getByRole('button', { name: '保存する', exact: true }).click();
   await expect(other.getByText(/この端末に保存済み・未確定（/)).toBeVisible();
 
   await addSection(page, '古いタブで入力した区画');
