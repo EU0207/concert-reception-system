@@ -31,12 +31,18 @@ function addSampleSection(layout: SeatLayout, name: string): SeatChangePlan {
 }
 
 /** 入力を確かめて適用する。計算が拒否したときはダイアログ内に入力を残す。 */
-function editText(title: string, label: string, value: string, apply: (text: string) => void) {
+function editText(
+  title: string,
+  label: string,
+  value: string,
+  apply: (text: string) => void,
+  submitLabel = '変更を反映',
+) {
   const form = el('form', 'seat-input');
   const field = el('label', '', label);
   const input = el('input');
   const error = el('p');
-  const submit = el('button', 'button', '変更を反映');
+  const submit = el('button', 'button', submitLabel);
 
   input.required = true;
   input.value = value;
@@ -206,7 +212,9 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
   }
 
   const add = button('区画を追加', () => {
-    editText('区画を追加', '区画名', '', (name) => applyChange(addSampleSection(layout, name)));
+    editText('区画を追加', '区画名', '', (name) => {
+      applyChange(addSampleSection(layout, name));
+    }, '追加する');
   }, 'button secondary');
   actions.append(
     button('下書き保存', () => { void save(); }),
