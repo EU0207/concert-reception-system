@@ -258,7 +258,7 @@ function pageHeading(eyebrow: string, title: string, description: string) {
 /** ローカル評価の公演だけを対象に、席編集の端末保存を初期化する。 */
 async function mountSeatEditor(panel: HTMLElement, performanceId: string) {
   try {
-    const editor = await openSeatEditor(panel, { environmentId: startup.config.environmentId, performanceId });
+    const editor = await openSeatEditor(panel, { environmentId: startup.config.environmentId, performanceId }, leaveDialog);
     if (panel.isConnected) gate.editor = editor;
   } catch {
     if (!panel.isConnected) return;
@@ -272,6 +272,7 @@ async function mountSeatEditor(panel: HTMLElement, performanceId: string) {
 /** 現在のURLに対応する本文を描画し、選択中のメニューとページ名を更新する。 */
 function renderPage() {
   gate.editor = undefined;
+  main.classList.remove('seat-editor-page');
   main.replaceChildren();
 
   // 公演一覧・アプリ情報・公演準備の順で、URLに対応する本文を選ぶ。
@@ -347,7 +348,8 @@ function renderPage() {
     const event = events.find((item) => currentRoute === `/events/${item.id}`);
 
     if (editingEvent) {
-      const panel = el('section', 'panel');
+      main.classList.add('seat-editor-page');
+      const panel = el('section', 'seat-editor-panel');
       main.append(
         routeLink('← 公演の準備へ', `/events/${editingEvent.id}`, 'back-link'),
         pageHeading('公演準備', '会場席の編集', editingEvent.name),

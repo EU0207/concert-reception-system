@@ -411,33 +411,177 @@ p {
   gap: 8px;
 }
 
-.seat-section {
-  margin-top: 20px;
-  padding-top: 12px;
-  border-top: 1px solid #dce2d8;
+.seat-workspace {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
 }
 
-.seat-section h3 {
+.seat-settings,
+.seat-sections {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  gap: 12px;
+}
+
+.seat-editor-page {
+  max-width: 1440px;
+  padding: 22px 28px 52px;
+}
+
+.seat-editor-page .back-link {
+  padding-bottom: 12px;
+}
+
+.seat-editor-page .page-heading,
+.seat-editor-page .notice {
+  margin-bottom: 12px;
+}
+
+.seat-editor-page .notice {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.seat-settings,
+.seat-selection,
+.seat-section {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #bfd0c7;
+  border-radius: 11px;
+  background: white;
+}
+
+.seat-settings :is(h2, p),
+.seat-settings h3 {
+  margin: 0;
+}
+
+.seat-settings p:empty,
+.seat-section-details:empty {
+  display: none;
+}
+
+.seat-selection-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: 8px;
+}
+
+.seat-selection-details h3 {
+  margin: 0;
+}
+
+.seat-section h3,
+.seat-section-details h3 {
+  margin: 0 0 8px;
   overflow-wrap: anywhere;
+}
+
+.seat-canvas {
+  min-width: 0;
+  max-height: 430px;
+  overflow: auto;
+  border: 1px solid #bfd0c7;
+  border-radius: 12px;
+  background: #edf3eb;
+}
+
+.seat-map {
+  display: flex;
+  width: max-content;
+  padding: 16px;
+  gap: 6px;
+}
+
+.seat-map.stage-top {
+  flex-direction: column;
+}
+
+.seat-stage-label {
+  display: grid;
+  place-items: center;
+  min-width: 54px;
+  min-height: 40px;
+  border-radius: 11px;
+  background: #205b55;
+  color: white;
+  font-weight: 800;
+}
+
+.stage-left .seat-stage-label {
+  writing-mode: vertical-rl;
 }
 
 .seat-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
-  margin-top: 12px;
 }
 
-.seat-grid .button {
-  padding-inline: 4px;
+.seat-row {
+  display: flex;
+  gap: 6px;
+}
+
+.seat-tile {
+  display: grid;
+  place-content: center;
+  width: 74px;
+  height: 72px;
+  padding: 4px;
+  border: 2px solid #a9c5b6;
+  border-radius: 9px;
+  background: white;
+  color: #164a3b;
+  font-size: 0.85rem;
+  overflow: auto;
   overflow-wrap: anywhere;
 }
 
-.seat-input input {
+.seat-tile span {
+  font-size: 0.75rem;
+}
+
+.seat-tile.cell-unset { background: #f3f6f2; }
+.seat-tile.cell-gap { background: #fff1cf; }
+.seat-tile.cell-space { background: #eef4fb; }
+.seat-tile.cell-aisle { background: #dce6eb; }
+
+.seat-tile[aria-pressed='true'] {
+  border-color: #205b55;
+  box-shadow: inset 0 0 0 2px #205b55;
+}
+
+.seat-input input,
+.seat-field select {
   display: block;
   width: 100%;
   min-height: 44px;
   font: inherit;
+}
+
+.seat-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-block: 8px;
+}
+
+@media (max-width: 1100px) {
+  .seat-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .seat-editor-page {
+    padding-inline: 14px;
+  }
 }
 
 /* 入力欄の内側にフォーカスを表示し、外側への張り出しを避ける。 */
