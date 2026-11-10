@@ -15,7 +15,7 @@ async function openEditor(page) {
 async function addSection(page, name) {
   await page.getByRole('button', { name: '区画を追加' }).click();
   await page.getByLabel('区画名').fill(name);
-  await page.getByRole('button', { name: '変更を反映' }).click();
+  await page.getByRole('button', { name: '追加する', exact: true }).click();
   await expect(page.getByRole('heading', { name, exact: true })).toBeVisible();
 }
 
