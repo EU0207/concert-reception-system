@@ -3,6 +3,7 @@
 /** 編集画面が提供する、未保存判定・保存と破棄の処理。 */
 export interface EditorSession {
   isDirty(): boolean;
+  isSaving?(): boolean;
   save(): Promise<boolean>;
   discard(): void;
 }
@@ -22,7 +23,7 @@ export class NavigationGate {
 
   /** 変更があれば確認し、保存成功または明示的な破棄の場合だけ移動を許可する。 */
   async leave(confirm: () => Promise<LeaveChoice>): Promise<boolean> {
-    if (this.busy) return false;
+    if (this.busy || this.editor?.isSaving?.()) return false;
     if (!this.isDirty) return true;
 
     this.busy = true;
