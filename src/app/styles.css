@@ -398,6 +398,54 @@ p {
   font-size: 0.7rem;
 }
 
+/* 席編集の操作と座席を、画面幅に合わせて並べる。 */
+.feature-link {
+  text-align: center;
+  text-decoration: none;
+  align-self: start;
+}
+
+.seat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.seat-section {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid #dce2d8;
+}
+
+.seat-section h3 {
+  overflow-wrap: anywhere;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.seat-grid .button {
+  padding-inline: 4px;
+  overflow-wrap: anywhere;
+}
+
+.seat-input input {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  font: inherit;
+}
+
+/* 入力欄の内側にフォーカスを表示し、外側への張り出しを避ける。 */
+.seat-input input:focus-visible {
+  outline: 2px solid #5e6b68;
+  outline-offset: -2px;
+}
+
 /* 通常ボタンとダイアログなどの共通部品。 */
 .button {
   border: 1px solid #24594c;
@@ -414,6 +462,13 @@ p {
   background: white;
   color: #345749;
   border-color: #ccd8cc;
+}
+
+/* 席編集では端末への下書き保存も強調し、確定保存と濃淡で区別する。 */
+.button.draft-save {
+  background: #dcece4;
+  color: #24594c;
+  border-color: #86ac9e;
 }
 
 .button:disabled {

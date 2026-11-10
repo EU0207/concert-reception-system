@@ -8,6 +8,7 @@ import { button, el, showDialog } from './dom.ts';
 import { NavigationGate } from './navigation.ts';
 import type { LeaveChoice } from './navigation.ts';
 import { registerPwa } from './pwa.ts';
+import { openSeatEditor } from './seat-editor.ts';
 
 // 設定・共有状態：起動処理で設定し、画面と操作の各関数から参照する。
 let root: HTMLElement;
@@ -56,7 +57,7 @@ function connectionDialog() {
     el('p', 'pill', connectionLabel()),
     el('p', '', 'この環境は外部サービスへ接続しません。架空の公演で画面移動を確認できます。'),
     el('p', '', '端末準備：未実施 ／ 未送信件数：未取得'),
-    el('p', '', 'オフライン保存は、画面の起動に必要な設定・静的ファイルだけが対象です。'),
+    el('p', '', '起動用ファイルと、席編集で保存した下書きは、このブラウザーで利用できます。'),
   );
   showDialog('接続と端末の状態', body);
 }
@@ -254,8 +255,23 @@ function pageHeading(eyebrow: string, title: string, description: string) {
   return heading;
 }
 
+/** ローカル評価の公演だけを対象に、席編集の端末保存を初期化する。 */
+async function mountSeatEditor(panel: HTMLElement, performanceId: string) {
+  try {
+    const editor = await openSeatEditor(panel, { environmentId: startup.config.environmentId, performanceId });
+    if (panel.isConnected) gate.editor = editor;
+  } catch {
+    if (!panel.isConnected) return;
+
+    const error = el('p', '', '端末の下書きを確認できませんでした。保存データを保持したまま画面を開き直してください。');
+    error.setAttribute('role', 'alert');
+    panel.replaceChildren(error);
+  }
+}
+
 /** 現在のURLに対応する本文を描画し、選択中のメニューとページ名を更新する。 */
 function renderPage() {
+  gate.editor = undefined;
   main.replaceChildren();
 
   // 公演一覧・アプリ情報・公演準備の順で、URLに対応する本文を選ぶ。
@@ -269,7 +285,7 @@ function renderPage() {
       el(
         'p',
         '',
-        '公演の選択、画面の移動、接続状態の表示をお試しください。名簿・席設定・受付の操作は、今後利用できるようになります。',
+        '公演を選択すると、会場席の編集と端末への下書き保存を試せます。',
       ),
     );
     main.append(notice);
@@ -319,17 +335,30 @@ function renderPage() {
           ? '起動に必要なファイルをこの端末に保存しました。'
           : 'オフライン起動の準備状況を確認しています。',
       ),
-      el('p', 'muted', '認証、名簿、席設定と受付の保存・共有は、まだ接続されていません。'),
+      el('p', 'muted', 'ローカル評価では、会場席の下書きをこの端末へ保存できます。'),
     );
     main.append(card);
     document.title = 'このアプリについて | コンサート受付';
   } else {
+    const localEvaluation = startup.config.environmentType === 'evaluation-local';
+    const editingEvent = localEvaluation
+      ? events.find((item) => currentRoute === `/events/${item.id}/seats`)
+      : undefined;
     const event = events.find((item) => currentRoute === `/events/${item.id}`);
 
-    main.append(routeLink('← 公演一覧へ', '/events', 'back-link'));
-
-    if (!event) {
+    if (editingEvent) {
+      const panel = el('section', 'panel');
       main.append(
+        routeLink('← 公演の準備へ', `/events/${editingEvent.id}`, 'back-link'),
+        pageHeading('公演準備', '会場席の編集', editingEvent.name),
+        el('p', 'notice', '架空公演の操作確認です。下書き保存はこの端末に行います。共有と確定は試験操作です。'),
+        panel,
+      );
+      document.title = '会場席の編集 | コンサート受付';
+      void mountSeatEditor(panel, editingEvent.id);
+    } else if (!event) {
+      main.append(
+        routeLink('← 公演一覧へ', '/events', 'back-link'),
         pageHeading(
           'NOT FOUND',
           '画面が見つかりません',
@@ -337,7 +366,10 @@ function renderPage() {
         ),
       );
     } else {
-      main.append(pageHeading('公演準備', event.name, `${event.date} ／ ${event.venue}`));
+      main.append(
+        routeLink('← 公演一覧へ', '/events', 'back-link'),
+        pageHeading('公演準備', event.name, `${event.date} ／ ${event.venue}`),
+      );
 
       const card = el('section', 'panel');
 
@@ -356,10 +388,15 @@ function renderPage() {
         'チケットデータ出力',
       ]) {
         const item = el('div', 'feature');
-        const b = button(label, () => {}, 'button secondary');
 
-        b.disabled = true;
-        item.append(b, el('span', 'muted', '準備中'));
+        if (localEvaluation && label === '会場席の編集') {
+          item.append(routeLink(label, `/events/${event.id}/seats`, 'button secondary feature-link'));
+        } else {
+          const b = button(label, () => {}, 'button secondary');
+          b.disabled = true;
+          item.append(b, el('span', 'muted', '準備中'));
+        }
+
         grid.append(item);
       }
 
