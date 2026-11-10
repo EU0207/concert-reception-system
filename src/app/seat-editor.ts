@@ -1,12 +1,13 @@
 // 架空公演の席編集を、暗号化された端末下書きと試験用の操作先へつなぐ。
 
-import { createLayout, createSection, editUnassignedSeat, numberInitial, renameSection } from '../domain/seats/layout.ts';
-import type { Scope, SeatChangePlan, SeatLayout } from '../domain/seats/types.ts';
+import { changeStage, createLayout, createSection, editUnassignedSeat, numberInitial, reconfigureSection, renameSection } from '../domain/seats/layout.ts';
+import type { CellKind, LayoutCell, Scope, SeatChangePlan } from '../domain/seats/types.ts';
 import { displayNumber, SeatDomainError, validateLayout } from '../domain/seats/validation.ts';
 import { createSeatDraftStore } from '../storage/seat-drafts.ts';
 import { ensureDeviceKey } from '../storage/device-vault.ts';
 import { button, el, showDialog } from './dom.ts';
-import type { EditorSession } from './navigation.ts';
+import type { EditorSession, LeaveChoice } from './navigation.ts';
+import { openSectionForm, setSeatOptions } from './seat-layout-form.ts';
 
 const evaluationBinding = {
   humanUid: 'local-evaluation-human',
@@ -18,17 +19,7 @@ const evaluationVersions = {
   layoutRevision: 0, assignmentRevision: 0, ticketRevision: 0, controlRevision: 0, attendeeRevision: 0,
 };
 
-/** 架空公演の区画に、画面で編集できる2列分の座席を作る。 */
-function addSampleSection(layout: SeatLayout, name: string): SeatChangePlan {
-  const added = createSection(layout, {
-    name, rows: 2, columns: 4, axis: 'horizontal', seatOrder: 'forward',
-    lines: [{ name: 'A', prefix: 'A-' }, { name: 'B', prefix: 'B-' }],
-  }).after;
-  const section = added.sections.at(-1)!.section;
-  const seats = Object.fromEntries(section.cells.map((cell) => [cell.cellId, 'seat' as const]));
-
-  return numberInitial(added, section.sectionId, seats);
-}
+const cellLabels = { unset: '未', seat: '席', gap: '欠番', space: '空間', aisle: '通路' } satisfies Record<CellKind, string>;
 
 /** 入力を確かめて適用する。計算が拒否したときはダイアログ内に入力を残す。 */
 function editText(
@@ -36,13 +27,12 @@ function editText(
   label: string,
   value: string,
   apply: (text: string) => void,
-  submitLabel = '変更を反映',
 ) {
   const form = el('form', 'seat-input');
   const field = el('label', '', label);
   const input = el('input');
   const error = el('p');
-  const submit = el('button', 'button', submitLabel);
+  const submit = el('button', 'button', '変更を反映');
 
   input.required = true;
   input.value = value;
@@ -71,7 +61,11 @@ function runEvaluationOperation(action: '下書きを共有' | '確定保存') {
 }
 
 /** 同じ公演の下書きを復元し、画面操作と保存・離脱の接続口を組み立てる。 */
-export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<EditorSession | undefined> {
+export async function openSeatEditor(
+  panel: HTMLElement,
+  scope: Scope,
+  confirmLeave: () => Promise<LeaveChoice>,
+): Promise<EditorSession | undefined> {
   const binding = { ...scope, ...evaluationBinding };
 
   /** 公演の編集画面が閉じられた後は、端末保存の処理を継続しない。 */
@@ -94,12 +88,22 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
   const draftId = draft?.draftId ?? crypto.randomUUID();
   const baseVersions = draft?.baseVersions ?? evaluationVersions;
   let layout = draft ? validateLayout(draft.layout) : createLayout(scope);
+  let savedLayout = layout;
+  let activeId = layout.sections[0]?.section.sectionId;
+  let selectionMode = 'single';
+  let rangeStart: LayoutCell | undefined;
+  const selected = new Set<string>();
   let localRevision = draft?.localRevision ?? 0;
   let savedAt = draft?.savedAt;
   let dirty = false;
   let saving = false;
+  let switching = false;
   const sections = el('div', 'seat-sections');
   const actions = el('div', 'seat-actions');
+  const settings = el('section', 'seat-settings');
+  const sectionDetails = el('div', 'seat-section-details');
+  const workspace = el('div', 'seat-workspace');
+  const sectionChoice = el('select');
   const result = el('p');
   const error = el('p');
   const storageNote = el('p', 'muted');
@@ -116,10 +120,13 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
     actions.querySelectorAll('button').forEach((node) => { node.disabled = saving || !layout.sections.length; });
     sections.inert = saving;
     add.disabled = saving;
+    sectionChoice.disabled = saving || switching || layout.sections.length < 2;
   }
 
   /** 計算が完了した編集案を表示し、端末保存が必要な状態にする。 */
   function applyChange(plan: SeatChangePlan) {
+    if (!plan.impact.changed) return;
+
     layout = plan.after;
     dirty = true;
     result.textContent = '';
@@ -128,46 +135,177 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
     updateStatus();
   }
 
-  /** 区画と座席の一覧を描画し、各操作から既存の席計算を呼び出す。 */
-  function renderSections() {
-    sections.replaceChildren();
-    if (!layout.sections.length) sections.append(el('p', 'muted', '区画を追加すると座席が表示されます。'));
+  /** 切替前に未保存の変更を確認し、保存失敗や取消しでは現在の区画に戻す。 */
+  async function switchSection() {
+    const target = sectionChoice.value;
+    sectionChoice.value = activeId ?? '';
+    if (switching || saving || target === activeId) return;
 
-    for (const { section, seats } of layout.sections) {
-      const card = el('section', 'seat-section');
-      const grid = el('div', 'seat-grid');
-      const seatsById = new Map(seats.map((seat) => [seat.seatId, seat]));
-
-      card.append(el('h3', '', section.name), button('区画名を変更', () => {
-        editText('区画名を変更', '区画名', section.name, (name) => {
-          applyChange(renameSection(layout, section.sectionId, name));
-        });
-      }, 'button secondary'));
-
-      for (const cell of section.cells) {
-        const seat = cell.seatId ? seatsById.get(cell.seatId) : undefined;
-        if (!seat) {
-          grid.append(el('span', 'muted', '空欄'));
-          continue;
+    switching = true;
+    try {
+      if (dirty) {
+        const choice = await confirmLeave();
+        if (!panel.isConnected || choice === 'continue' || (choice === 'save' && !(await save()))) return;
+        if (choice === 'discard') {
+          layout = savedLayout;
+          dirty = false;
+          result.textContent = '';
+          error.textContent = '';
         }
-
-        const number = displayNumber(seat);
-        const edit = button(number, () => {
-          editText('席番号を変更', '席番号', number, (next) => {
-            if (next === number) return;
-            applyChange(editUnassignedSeat(layout, section.sectionId, seat.seatId, {
-              number: next, reason: 'ローカル評価での番号編集',
-            }));
-          });
-        }, 'button secondary');
-
-        edit.setAttribute('aria-label', `${section.name}の席 ${number} を編集`);
-        grid.append(edit);
       }
 
-      card.append(grid);
-      sections.append(card);
+      activeId = layout.sections.find(({ section }) => section.sectionId === target)?.section.sectionId
+        ?? layout.sections[0]?.section.sectionId;
+      selected.clear();
+      rangeStart = undefined;
+      renderSections(false);
+    } finally {
+      switching = false;
+      updateStatus();
+      if (!sectionChoice.disabled) sectionChoice.focus();
     }
+  }
+
+  /** モックと同じ個別・複数・始点終点の操作でセルを選択する。 */
+  function selectCell(cell: LayoutCell, cells: readonly LayoutCell[]) {
+    if (selectionMode === 'multiple') {
+      if (!selected.delete(cell.cellId)) selected.add(cell.cellId);
+    } else if (selectionMode === 'range' && rangeStart) {
+      const top = Math.min(rangeStart.row, cell.row), bottom = Math.max(rangeStart.row, cell.row);
+      const left = Math.min(rangeStart.column, cell.column), right = Math.max(rangeStart.column, cell.column);
+      selected.clear();
+      for (const candidate of cells) {
+        if (candidate.row >= top && candidate.row <= bottom && candidate.column >= left && candidate.column <= right) {
+          selected.add(candidate.cellId);
+        }
+      }
+      rangeStart = undefined;
+    } else {
+      selected.clear();
+      selected.add(cell.cellId);
+      if (selectionMode === 'range') rangeStart = cell;
+    }
+
+    renderSections();
+    sections.querySelector<HTMLButtonElement>(`[data-cell-id="${cell.cellId}"]`)?.focus({ preventScroll: true });
+  }
+
+  /** 選んだ区画だけを、設定・選択情報・座席キャンバスの順に表示する。 */
+  function renderSections(keepScroll = true) {
+    const previousCanvas = sections.querySelector('.seat-canvas');
+    const scrollLeft = previousCanvas?.scrollLeft ?? 0;
+    const scrollTop = previousCanvas?.scrollTop ?? 0;
+    const names = layout.sections.map(({ section }) => section.name || '指定なし');
+    setSeatOptions(sectionChoice, layout.sections.map(({ section }, index) => {
+      const name = names[index]!;
+      const duplicate = names.indexOf(name) !== names.lastIndexOf(name);
+
+      return [section.sectionId, duplicate ? `${name}（区画 ${index + 1}）` : name];
+    }));
+    sectionChoice.value = activeId ?? '';
+    sectionDetails.replaceChildren();
+    sections.replaceChildren();
+    const model = layout.sections.find(({ section }) => section.sectionId === activeId);
+    if (!model) {
+      sections.append(el('p', 'muted', '区画を追加すると座席が表示されます。'));
+      return;
+    }
+
+    const { section, seats } = model;
+    const selection = el('section', 'seat-selection');
+    const selectionDetails = el('div', 'seat-selection-details');
+    const selectionActions = el('div', 'seat-actions');
+    const mode = el('select');
+    const modeLabel = el('label', 'seat-field', '選択方法');
+    const card = el('section', 'seat-section');
+    const canvas = el('div', 'seat-canvas');
+    const map = el('div', `seat-map stage-${section.stagePosition}`);
+    const grid = el('div', 'seat-grid');
+    const seatsById = new Map(seats.map((seat) => [seat.seatId, seat]));
+    const cells = section.cells.filter((cell) => selected.has(cell.cellId));
+    const single = cells.length === 1 ? cells[0] : undefined;
+    const seat = single?.seatId ? seatsById.get(single.seatId) : undefined;
+
+    setSeatOptions(mode, [['single', '個別'], ['multiple', '複数'], ['range', '範囲（始点→終点）']]);
+    mode.value = selectionMode;
+    modeLabel.append(mode);
+    mode.addEventListener('change', () => {
+      selectionMode = mode.value;
+      selected.clear();
+      rangeStart = undefined;
+      renderSections();
+      sections.querySelector('select')?.focus();
+    });
+    const selectionText = seat ? `${displayNumber(seat)} ／ 席` : single ? cellLabels[single.kind] : '';
+    selectionDetails.append(el('h3', '', '選択'), el('span', '', selectionText), el('span', '',
+      `${cells.length}セル${rangeStart ? '。終点を選んでください。' : ''}`), modeLabel);
+    selection.append(selectionDetails);
+
+    for (const [kind, label] of Object.entries(cellLabels)) {
+      const change = button(`${label}に`, () => {
+        const changes = Object.fromEntries(cells.map((cell) => [cell.cellId, kind as CellKind]));
+
+        try {
+          applyChange(model.initialNumbered
+            ? reconfigureSection(layout, section.sectionId, { selections: changes })
+            : numberInitial(layout, section.sectionId, changes));
+          sections.querySelector<HTMLButtonElement>(`[data-cell-id="${cells[0]?.cellId}"]`)?.focus({ preventScroll: true });
+        } catch {
+          error.textContent = 'セルを変更できませんでした。席番号の重複と選択したセルを確認してください。';
+        }
+      }, 'button secondary');
+      change.disabled = !cells.length;
+      selectionActions.append(change);
+    }
+
+    if (seat) {
+      selectionActions.append(button('席番号を変更', () => {
+        const number = displayNumber(seat);
+        editText('席番号を変更', '席番号', number, (next) => {
+          if (next === number) return;
+          applyChange(editUnassignedSeat(layout, section.sectionId, seat.seatId, {
+            number: next, reason: '公演前の席番号編集',
+          }));
+        });
+      }, 'button secondary'));
+    }
+    selection.append(selectionActions);
+
+    sectionDetails.append(el('h3', '', section.name || '指定なし'), el('p', 'muted', `${section.rows}行 × ${section.columns}列 ／ ${section.axis === 'horizontal' ? '横方向' : '縦方向'}`));
+    const sectionActions = el('div', 'seat-actions');
+    sectionActions.append(button('区画名を変更', () => {
+      editText('区画名を変更', '区画名', section.name, (name) => {
+        applyChange(renameSection(layout, section.sectionId, name));
+      });
+    }, 'button secondary'), button(section.stagePosition === 'left' ? '舞台を上に' : '舞台を左に', () => {
+      applyChange(changeStage(layout, section.sectionId, section.stagePosition === 'left' ? 'top' : 'left'));
+    }, 'button secondary'));
+    sectionDetails.append(sectionActions);
+    card.append(el('h3', '', '座席キャンバス'));
+
+    const rows = Array.from({ length: section.rows }, () => el('div', 'seat-row'));
+    for (const cell of section.cells) {
+      const current = cell.seatId ? seatsById.get(cell.seatId) : undefined;
+      const line = section.lineSettings[section.axis === 'horizontal' ? cell.row : cell.column];
+      const number = current ? displayNumber(current) : cell.consumedNumber === undefined
+        ? undefined : `${line?.prefix ?? ''}${cell.consumedNumber}`;
+      const kind = cellLabels[cell.kind];
+      const label = number ?? kind;
+      const tile = button(label, () => selectCell(cell, section.cells), `seat-tile cell-${cell.kind}`);
+      tile.dataset.cellId = cell.cellId;
+      tile.setAttribute('aria-pressed', String(selected.has(cell.cellId)));
+      tile.setAttribute('aria-label', current
+        ? `${section.name}の席 ${label} を選択`
+        : `${cell.row + 1}行${cell.column + 1}列 ${kind}${number ? ` ${number}` : ''}`);
+      if (number) tile.append(el('span', '', kind));
+      rows[cell.row]?.append(tile);
+    }
+    grid.append(...rows);
+    map.append(el('div', 'seat-stage-label', '舞台'), grid);
+    canvas.append(map);
+    card.append(canvas);
+    sections.append(selection, card);
+    if (keepScroll) canvas.scrollTo(scrollLeft, scrollTop);
   }
 
   /** 最後に読んだ版を条件に保存し、失敗時は入力と直前の保存情報を維持する。 */
@@ -183,6 +321,7 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
       const saved = await store.saveLocalDraft({ draftId, layout, baseVersions }, localRevision);
       localRevision = saved.localRevision;
       savedAt = saved.savedAt;
+      savedLayout = layout;
       dirty = false;
       if (saved.persistence === 'unavailable') {
         storageNote.textContent = 'ブラウザーが保存領域の永続化を許可していません。保存した下書きが自動消去される場合があります。';
@@ -226,16 +365,25 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
   }
 
   const add = button('区画を追加', () => {
-    editText('区画を追加', '区画名', '', (name) => {
-      applyChange(addSampleSection(layout, name));
-    }, '追加する');
+    openSectionForm((input) => {
+      const plan = createSection(layout, input);
+      activeId = plan.after.sections.at(-1)?.section.sectionId;
+      selected.clear();
+      rangeStart = undefined;
+      applyChange(plan);
+    });
   }, 'button secondary');
+  const sectionLabel = el('label', 'seat-field', '表示する区画');
+  sectionLabel.append(sectionChoice);
+  sectionChoice.addEventListener('change', () => { void switchSection(); });
   actions.append(
     button('下書き保存', confirmDraftSave, 'button draft-save'),
     button('下書きを共有', () => confirmOperation('下書きを共有'), 'button secondary'),
     button('確定保存', () => confirmOperation('確定保存')),
   );
-  panel.append(actions, error, result, storageNote, add, sections);
+  settings.append(el('h2', '', '席の設定'), sectionLabel, add, sectionDetails, actions, error, result, storageNote);
+  workspace.append(settings, sections);
+  panel.append(workspace);
   renderSections();
   updateStatus();
 
@@ -243,7 +391,7 @@ export async function openSeatEditor(panel: HTMLElement, scope: Scope): Promise<
     /** 保存対象になる変更があるかを離脱確認へ伝える。 */
     isDirty: () => dirty,
     /** 保存中は画面を維持し、保存完了後に離脱できるようにする。 */
-    isSaving: () => saving,
+    isSaving: () => saving || switching,
     save,
     /** 保存済み下書きを維持したまま、画面上の変更を破棄する。 */
     discard: () => { dirty = false; },

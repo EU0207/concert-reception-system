@@ -27,7 +27,9 @@ test('DD91-T37 端末保存から復元し、共有と確定は明示した試�
 
   await openEditor(page);
   await addSection(page, '確認区画');
-  await page.getByRole('button', { name: '確認区画の席 A-1 を編集' }).click();
+  await page.getByRole('button', { name: '1行1列 未', exact: true }).click();
+  await page.getByRole('button', { name: '席に', exact: true }).click();
+  await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
   await page.getByRole('textbox', { name: '席番号', exact: true }).fill('補助席');
   await page.getByRole('button', { name: '変更を反映' }).click();
   const saveDraft = page.getByRole('button', { name: '下書き保存', exact: true });
@@ -46,7 +48,7 @@ test('DD91-T37 端末保存から復元し、共有と確定は明示した試�
   const savedMessage = await saved.textContent();
 
   await page.reload();
-  await expect(page.getByRole('button', { name: '確認区画の席 補助席 を編集' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '確認区画の席 補助席 を選択' })).toBeVisible();
   await expect(saved).toHaveText(savedMessage);
   await expect(page.getByRole('checkbox')).toHaveCount(0);
 
@@ -115,4 +117,52 @@ test('DD91-T19・T39 古いタブの離脱保存を拒否し、入力と最新�
   await other.reload();
   await expect(other.getByRole('heading', { name: '先に保存する区画' })).toBeVisible();
   await expect(other.getByRole('heading', { name: '古いタブで入力した区画' })).toHaveCount(0);
+});
+
+test('DD91-T31 区画ごとのセル設定を保存し、切替の取消しと破棄を区別する', async ({ page }) => {
+  await openEditor(page);
+  await page.getByRole('button', { name: '区画を追加', exact: true }).click();
+  await page.getByLabel('区画名').fill('前方席');
+  await page.getByLabel('縦', { exact: true }).fill('2');
+  await page.getByLabel('横', { exact: true }).fill('3');
+  await page.getByLabel('席番の順序').selectOption('reverse');
+  await page.getByText('列名・開始番号', { exact: true }).click();
+  await page.getByLabel('1列の名前').fill('前');
+  await page.getByLabel('1列の開始番号').fill('7');
+  await page.getByRole('button', { name: '追加する', exact: true }).click();
+  await expect(page.getByRole('button', { name: /行\d列 未$/ })).toHaveCount(6);
+
+  await page.getByRole('button', { name: '1行3列 未', exact: true }).click();
+  await page.getByRole('button', { name: '欠番に', exact: true }).click();
+  await page.getByRole('button', { name: '1行2列 未', exact: true }).click();
+  await page.getByRole('button', { name: '席に', exact: true }).click();
+  await expect(page.getByRole('button', { name: '前方席の席 前-8 を選択' })).toBeVisible();
+
+  await addSection(page, '後方席');
+  const picker = page.getByLabel('表示する区画');
+  await picker.selectOption({ label: '前方席' });
+  await page.getByRole('button', { name: '編集を続ける' }).click();
+  await expect(page.getByRole('heading', { name: '後方席', exact: true })).toBeVisible();
+  await picker.selectOption({ label: '前方席' });
+  await page.getByRole('button', { name: '保存して移動' }).click();
+  await expect(page.getByRole('button', { name: '前方席の席 前-8 を選択' })).toBeVisible();
+
+  await page.getByRole('button', { name: '1行1列 未', exact: true }).click();
+  await page.getByRole('button', { name: '通路に', exact: true }).click();
+  await picker.selectOption({ label: '後方席' });
+  await page.getByRole('button', { name: '保存せず移動' }).click();
+  await expect(page.getByRole('heading', { name: '後方席', exact: true })).toBeVisible();
+  await picker.selectOption({ label: '前方席' });
+  await expect(page.getByRole('button', { name: '1行1列 未', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '前方席の席 前-8 を選択' })).toBeVisible();
+
+  await page.getByLabel('選択方法').selectOption('range');
+  await page.getByRole('button', { name: '2行1列 未', exact: true }).click();
+  await page.getByRole('button', { name: '2行3列 未', exact: true }).click();
+  await expect(page.getByText('3セル', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '空間に', exact: true }).click();
+  await expect(page.getByRole('button', { name: /2行\d列 空間$/ })).toHaveCount(3);
+
+  await page.getByRole('button', { name: '舞台を上に', exact: true }).click();
+  await expect(page.locator('.seat-map')).toHaveClass('seat-map stage-top');
 });
