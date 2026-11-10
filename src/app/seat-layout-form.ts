@@ -1,7 +1,8 @@
 // 区画の寸法と採番設定を入力し、未設定の座席表を作るためのフォーム。
 
 import type { Axis, SeatOrder, SectionInput } from '../domain/seats/types.ts';
-import { button, el, showDialog } from './dom.ts';
+import { SEAT_LIMITS } from '../domain/seats/validation.ts';
+import { el, showDialog } from './dom.ts';
 
 /** フォーム部品とその入力名を組にする。 */
 function field(label: string, control: HTMLInputElement | HTMLSelectElement) {
@@ -12,7 +13,7 @@ function field(label: string, control: HTMLInputElement | HTMLSelectElement) {
 }
 
 /** 指定した初期値と範囲を持つ必須の数値入力欄を作る。 */
-function numberInput(value: number, max = 30) {
+function numberInput(value: number, max: number) {
   const input = el('input');
   input.type = 'number';
   input.min = '1';
@@ -33,12 +34,12 @@ export function setSeatOptions(select: HTMLSelectElement, options: readonly (rea
   }));
 }
 
-/** モックの初期寸法から区画を作り、寸法・方向・列ごとの設定を反映する。 */
+/** 設計で推奨された初期寸法から、区画の寸法・方向・列設定を受け付ける。 */
 export function openSectionForm(apply: (input: SectionInput) => void) {
   const form = el('form', 'seat-input');
   const name = el('input');
-  const rows = numberInput(5);
-  const columns = numberInput(8);
+  const rows = numberInput(5, SEAT_LIMITS.linesPerSection);
+  const columns = numberInput(8, SEAT_LIMITS.cells);
   const axis = el('select');
   const order = el('select');
   const dimensions = el('div', 'seat-form-row');
@@ -49,12 +50,15 @@ export function openSectionForm(apply: (input: SectionInput) => void) {
 
   /** 縦横の設定に応じて、既存の列入力を保持しながら必要な列を並べる。 */
   function renderLines() {
-    const count = (axis.value === 'horizontal' ? rows : columns).valueAsNumber;
+    const horizontal = axis.value === 'horizontal';
+    const count = (horizontal ? rows : columns).valueAsNumber;
     const previousOrder = order.value || 'forward';
-    const directions = axis.value === 'horizontal' ? ['左から', '右から'] : ['上から', '下から'];
+    const directions = horizontal ? ['左から', '右から'] : ['上から', '下から'];
+    rows.max = String(horizontal ? SEAT_LIMITS.linesPerSection : SEAT_LIMITS.cells);
+    columns.max = String(horizontal ? SEAT_LIMITS.cells : SEAT_LIMITS.linesPerSection);
     setSeatOptions(order, [['forward', directions[0]!], ['reverse', directions[1]!]]);
     order.value = previousOrder;
-    if (!Number.isInteger(count) || count < 1 || count > 30) return;
+    if (!Number.isInteger(count) || count < 1 || count > SEAT_LIMITS.linesPerSection || count === lineInputs.length) return;
 
     lineInputs = Array.from({ length: count }, (_, index) => {
       const lineName = el('input');
@@ -94,7 +98,7 @@ export function openSectionForm(apply: (input: SectionInput) => void) {
       apply({
         name: name.value.trim(), rows: rows.valueAsNumber, columns: columns.valueAsNumber,
         axis: axis.value as Axis, seatOrder: order.value as SeatOrder,
-        lines: lineInputs.map((line) => ({ name: line.name.value.trim(), prefix: `${line.name.value.trim()}-`, startNumber: line.start.valueAsNumber })),
+        lines: lineInputs.map((line) => ({ name: line.name.value.trim(), startNumber: line.start.valueAsNumber })),
       });
       dialog.close();
     } catch {

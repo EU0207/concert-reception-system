@@ -138,7 +138,13 @@ test('DD91-T31 区画ごとのセル設定を保存し、切替の取消しと�
   await page.getByRole('button', { name: '席に', exact: true }).click();
   await expect(page.getByRole('button', { name: '前方席の席 前-8 を選択' })).toBeVisible();
 
-  await addSection(page, '後方席');
+  await page.getByRole('button', { name: '区画を追加', exact: true }).click();
+  await page.getByLabel('区画名').fill('後方席');
+  await page.getByLabel('縦', { exact: true }).fill('1');
+  await page.getByLabel('横', { exact: true }).fill('31');
+  await page.getByRole('button', { name: '追加する', exact: true }).click();
+  await expect(page.getByRole('button', { name: '1行31列 未', exact: true })).toHaveCount(1);
+
   const picker = page.getByLabel('表示する区画');
   await picker.selectOption({ label: '前方席' });
   await page.getByRole('button', { name: '編集を続ける' }).click();
