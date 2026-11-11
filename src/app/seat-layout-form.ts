@@ -99,7 +99,8 @@ export function createSectionForm(
   dimensions.append(field('縦', rows), field('横', columns), field('列の並び', axis), field('席番の順序', order));
   lineDetails.append(el('summary', '', '列名・開始番号'), lineFields);
   const submit = el('button', 'button', initial ? '設定を反映' : '追加する');
-  form.append(field('区画名', name), dimensions, lineDetails, error, submit);
+  if (!initial) form.append(field('区画名', name));
+  form.append(dimensions, lineDetails, error, submit);
 
   rows.addEventListener('input', renderLines);
   columns.addEventListener('input', renderLines);
@@ -112,7 +113,7 @@ export function createSectionForm(
 
     try {
       apply({
-        name: name.value.trim(), rows: rows.valueAsNumber, columns: columns.valueAsNumber,
+        name: initial?.name ?? name.value.trim(), rows: rows.valueAsNumber, columns: columns.valueAsNumber,
         axis: axis.value as Axis, seatOrder: order.value as SeatOrder,
         lines: lineInputs.map((line) => ({ name: line.name.value.trim(), prefix: line.prefix.value, startNumber: line.start.valueAsNumber })),
       });
