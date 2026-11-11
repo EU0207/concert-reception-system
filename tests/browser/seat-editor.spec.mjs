@@ -193,7 +193,7 @@ test('DD91-T03・T06 作成済み区画の設定を確認して反映し、取�
   await settings.getByRole('button', { name: '設定を反映', exact: true }).click();
   const preview = page.getByRole('dialog', { name: '席の設定変更を確認' });
   await expect(preview).toContainText('5行 × 8列 → 4行 × 9列');
-  await expect(preview).toContainText('A-1 → 前方-7');
+  await expect(preview).toContainText('席番号の変更・削除 1件。');
   await preview.getByRole('button', { name: '閉じる', exact: true }).click();
   await expect(settings.getByLabel('横', { exact: true })).toHaveValue('9');
   await settings.getByRole('button', { name: '設定を反映', exact: true }).click();
