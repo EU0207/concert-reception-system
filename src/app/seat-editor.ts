@@ -1,13 +1,14 @@
 // 架空公演の席編集を、暗号化された端末下書きと試験用の操作先へつなぐ。
 
-import { changeStage, createLayout, createSection, editUnassignedSeat, numberInitial, reconfigureSection, renameSection } from '../domain/seats/layout.ts';
-import type { CellKind, LayoutCell, Scope, SeatChangePlan } from '../domain/seats/types.ts';
+import { changeStage, createLayout, createSection, editUnassignedSeat, extendSection, numberInitial, reconfigureSection, renameSection } from '../domain/seats/layout.ts';
+import type { CellKind, LayoutCell, Scope, SeatChangePlan, SectionInput } from '../domain/seats/types.ts';
 import { displayNumber, SeatDomainError, validateLayout } from '../domain/seats/validation.ts';
 import { createSeatDraftStore } from '../storage/seat-drafts.ts';
 import { ensureDeviceKey } from '../storage/device-vault.ts';
 import { button, el, showDialog } from './dom.ts';
 import type { EditorSession, LeaveChoice } from './navigation.ts';
-import { openSectionForm, setSeatOptions } from './seat-layout-form.ts';
+import { createSectionForm, openSectionExtension, openSectionForm, setSeatOptions } from './seat-layout-form.ts';
+import { planSectionSettings } from './seat-section-settings.ts';
 
 const evaluationBinding = {
   humanUid: 'local-evaluation-human',
@@ -96,12 +97,14 @@ export async function openSeatEditor(
   let localRevision = draft?.localRevision ?? 0;
   let savedAt = draft?.savedAt;
   let dirty = false;
+  let pendingSettings = false;
   let saving = false;
   let switching = false;
   const sections = el('div', 'seat-sections');
   const actions = el('div', 'seat-actions');
   const settings = el('section', 'seat-settings');
   const sectionDetails = el('div', 'seat-section-details');
+  const settingsForm = el('div');
   const workspace = el('div', 'seat-workspace');
   const sectionChoice = el('select');
   const result = el('p');
@@ -116,10 +119,13 @@ export async function openSeatEditor(
       `この端末に保存済み・未確定（${new Date(savedAt).toLocaleString('ja-JP')}）`;
 
     status.textContent = saving ? '端末に下書きを保存しています。' :
-      dirty ? `未保存の変更があります。 ${saved}` : saved;
+      pendingSettings ? '席の設定を変更しています。「設定を反映」で変更前後を確認してください。' :
+        dirty ? `未保存の変更があります。 ${saved}` : saved;
     actions.querySelectorAll('button').forEach((node) => { node.disabled = saving || !layout.sections.length; });
-    sections.inert = saving;
-    add.disabled = saving;
+    sections.inert = saving || pendingSettings;
+    settingsForm.inert = saving;
+    sectionDetails.inert = saving || pendingSettings;
+    add.disabled = saving || pendingSettings;
     sectionChoice.disabled = saving || switching || layout.sections.length < 2;
   }
 
@@ -143,12 +149,13 @@ export async function openSeatEditor(
 
     switching = true;
     try {
-      if (dirty) {
+      if (dirty || pendingSettings) {
         const choice = await confirmLeave();
         if (!panel.isConnected || choice === 'continue' || (choice === 'save' && !(await save()))) return;
         if (choice === 'discard') {
           layout = savedLayout;
           dirty = false;
+          pendingSettings = false;
           result.textContent = '';
           error.textContent = '';
         }
@@ -164,6 +171,60 @@ export async function openSeatEditor(
       updateStatus();
       if (!sectionChoice.disabled) sectionChoice.focus();
     }
+  }
+
+  /** 設定変更案を実データへ渡す前に、寸法と席番号の差分を確認する。 */
+  function previewSettings(input: SectionInput) {
+    previewSectionPlan(planSectionSettings(layout, activeId!, input));
+  }
+
+  /** 計算済みの構成案を比較し、確認後に画面の編集内容へ反映する。 */
+  function previewSectionPlan(plan: SeatChangePlan) {
+    const before = layout;
+    const sectionId = activeId!;
+    if (!plan.impact.changed) {
+      pendingSettings = false;
+      renderSections();
+      updateStatus();
+      return;
+    }
+
+    const old = before.sections.find(({ section }) => section.sectionId === sectionId)!;
+    const next = plan.after.sections.find(({ section }) => section.sectionId === sectionId)!;
+    const body = el('div');
+    const numbers = el('ul', 'seat-change-list');
+    const previousSeats = new Map(old.seats.map((seat) => [seat.seatId, seat]));
+    const newSeats = new Map(next.seats.map((seat) => [seat.seatId, seat]));
+    let changes = 0;
+
+    for (const id of new Set([...previousSeats.keys(), ...newSeats.keys()])) {
+      const a = previousSeats.get(id), b = newSeats.get(id);
+      const from = a ? displayNumber(a) : '追加';
+      const to = b ? displayNumber(b) : '削除';
+      if (from === to) continue;
+
+      changes++;
+      numbers.append(el('li', '', `${from} → ${to}`));
+    }
+    body.append(
+      el('p', '', `${old.section.rows}行 × ${old.section.columns}列 → ${next.section.rows}行 × ${next.section.columns}列`),
+      el('p', '', `席番号の変更・削除 ${changes}件。反映後は下書き保存できます。`),
+      numbers,
+    );
+    const confirm = button('反映する', () => {
+      if (layout !== before) {
+        dialog.close();
+        error.textContent = '表示中の構成が変わりました。設定をもう一度確認してください。';
+        return;
+      }
+
+      pendingSettings = false;
+      selected.clear();
+      rangeStart = undefined;
+      dialog.close();
+      applyChange(plan);
+    });
+    const dialog = showDialog('席の設定変更を確認', body, [confirm]);
   }
 
   /** モックと同じ個別・複数・始点終点の操作でセルを選択する。 */
@@ -204,6 +265,7 @@ export async function openSeatEditor(
     }));
     sectionChoice.value = activeId ?? '';
     sectionDetails.replaceChildren();
+    settingsForm.replaceChildren();
     sections.replaceChildren();
     const model = layout.sections.find(({ section }) => section.sectionId === activeId);
     if (!model) {
@@ -212,6 +274,15 @@ export async function openSeatEditor(
     }
 
     const { section, seats } = model;
+    const form = createSectionForm(previewSettings, section, () => {
+      pendingSettings = true;
+      updateStatus();
+    });
+    settingsForm.append(form, button('設定を元に戻す', () => {
+      pendingSettings = false;
+      renderSections();
+      updateStatus();
+    }, 'button secondary'));
     const selection = el('section', 'seat-selection');
     const selectionDetails = el('div', 'seat-selection-details');
     const selectionActions = el('div', 'seat-actions');
@@ -280,6 +351,12 @@ export async function openSeatEditor(
     }, 'button secondary'), button(section.stagePosition === 'left' ? '舞台を上に' : '舞台を左に', () => {
       applyChange(changeStage(layout, section.sectionId, section.stagePosition === 'left' ? 'top' : 'left'));
     }, 'button secondary'));
+    sectionActions.append(button('行・列を追加', () => {
+      openSectionExtension(section, (input) => {
+        const prepared = model.initialNumbered ? layout : numberInitial(layout, section.sectionId, {}).after;
+        previewSectionPlan(extendSection(prepared, section.sectionId, input));
+      });
+    }, 'button secondary'));
     sectionDetails.append(sectionActions);
     card.append(el('h3', '', '座席キャンバス'));
 
@@ -311,6 +388,10 @@ export async function openSeatEditor(
   /** 最後に読んだ版を条件に保存し、失敗時は入力と直前の保存情報を維持する。 */
   async function save() {
     if (saving) return false;
+    if (pendingSettings) {
+      error.textContent = '先に「設定を反映」で席の設定を確認してください。';
+      return false;
+    }
 
     saving = true;
     error.textContent = '';
@@ -381,7 +462,7 @@ export async function openSeatEditor(
     button('下書きを共有', () => confirmOperation('下書きを共有'), 'button secondary'),
     button('確定保存', () => confirmOperation('確定保存')),
   );
-  settings.append(el('h2', '', '席の設定'), sectionLabel, add, sectionDetails, actions, error, result, storageNote);
+  settings.append(el('h2', '', '席の設定'), sectionLabel, add, settingsForm, sectionDetails, actions, error, result, storageNote);
   workspace.append(settings, sections);
   panel.append(workspace);
   renderSections();
@@ -389,7 +470,7 @@ export async function openSeatEditor(
 
   return {
     /** 保存対象になる変更があるかを離脱確認へ伝える。 */
-    isDirty: () => dirty,
+    isDirty: () => dirty || pendingSettings,
     /** 保存中は画面を維持し、保存完了後に離脱できるようにする。 */
     isSaving: () => saving || switching,
     save,
