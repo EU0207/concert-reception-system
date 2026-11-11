@@ -155,11 +155,17 @@ export function openSectionExtension(section: LayoutSection, apply: (input: Exte
     newLines = Array.from({ length: size }, (_, index) => {
       const name = el('input');
       name.required = true;
-      name.value = newLines[index]?.name.value ?? `追加列${index + 1}`;
+      name.pattern = '.*\\S.*';
+      name.value = newLines[index]?.name.value ?? '';
+      name.addEventListener('invalid', () => {
+        error.textContent = '追加行・列の名前を入力してください。';
+      });
       const start = numberInput(1, Number.MAX_SAFE_INTEGER);
       start.value = newLines[index]?.start.value ?? '1';
       const group = el('div', 'seat-form-row');
-      group.append(field(`追加${index + 1}列の名前`, name), field(`追加${index + 1}列の開始番号`, start));
+      group.setAttribute('role', 'group');
+      group.setAttribute('aria-label', `追加する${index + 1}列目`);
+      group.append(field('追加行・列の名前', name), field('追加行・列の開始番号', start));
       lines.append(group);
 
       return { name, start };

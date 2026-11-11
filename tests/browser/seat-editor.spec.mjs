@@ -214,4 +214,25 @@ test('DD91-T03・T06 作成済み区画の設定を確認して反映し、取�
   await preview.getByRole('button', { name: '反映する', exact: true }).click();
   await expect(page.getByRole('button', { name: '設定確認区画の席 前方-7 を選択' })).toBeVisible();
   await expect(page.getByRole('button', { name: '1行1列 未', exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: '行・列を追加', exact: true }).click();
+  const lineName = extension.getByLabel('追加行・列の名前', { exact: true });
+  await expect(lineName).toHaveValue('');
+  await extension.getByRole('button', { name: '追加内容を確認' }).click();
+  await expect(extension.getByRole('alert')).toHaveText('追加行・列の名前を入力してください。');
+  await lineName.fill('　 ');
+  await extension.getByRole('button', { name: '追加内容を確認' }).click();
+  await expect(extension).toBeVisible();
+  await expect(preview).toHaveCount(0);
+  await lineName.fill('追加C');
+  await extension.getByLabel('追加数', { exact: true }).fill('2');
+  await expect(extension.getByRole('group', { name: '追加する1列目' }).getByLabel('追加行・列の名前')).toHaveValue('追加C');
+  await expect(extension.getByRole('group', { name: '追加する2列目' }).getByLabel('追加行・列の名前')).toHaveValue('');
+  await extension.getByRole('button', { name: '追加内容を確認' }).click();
+  await expect(extension).toBeVisible();
+  await extension.getByRole('group', { name: '追加する2列目' }).getByLabel('追加行・列の名前').fill('追加D');
+  await extension.getByRole('button', { name: '追加内容を確認' }).click();
+  await expect(preview).toContainText('4行 × 10列 → 6行 × 10列');
+  await preview.getByRole('button', { name: '反映する', exact: true }).click();
+  await expect(page.getByRole('button', { name: '設定確認区画の席 前方-7 を選択' })).toBeVisible();
 });
