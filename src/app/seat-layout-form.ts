@@ -50,7 +50,7 @@ export function createSectionForm(
   const lineDetails = el('details');
   const lineFields = el('div', 'seat-line-fields');
   const error = el('p');
-  let lineInputs: { name: HTMLInputElement; prefix: HTMLInputElement; start: HTMLInputElement }[] = [];
+  let lineInputs: { name: HTMLInputElement; start: HTMLInputElement }[] = [];
 
   /** 縦横の設定に応じて、既存の列入力を保持しながら必要な列を並べる。 */
   function renderLines() {
@@ -69,21 +69,14 @@ export function createSectionForm(
       lineName.required = true;
       const prior = initial?.lineSettings[index];
       lineName.value = lineInputs[index]?.name.value ?? prior?.name ?? (index < 26 ? String.fromCharCode(65 + index) : `列${index + 1}`);
-      const prefix = el('input');
-      prefix.value = lineInputs[index]?.prefix.value ?? prior?.prefix ?? `${lineName.value}-`;
-      let previousName = lineName.value;
-      lineName.addEventListener('input', () => {
-        if (!initial && prefix.value === `${previousName}-`) prefix.value = `${lineName.value}-`;
-        previousName = lineName.value;
-      });
       const start = numberInput(1, Number.MAX_SAFE_INTEGER);
       start.value = lineInputs[index]?.start.value ?? String(prior?.startNumber ?? 1);
 
-      return { name: lineName, prefix, start };
+      return { name: lineName, start };
     });
     lineFields.replaceChildren(...lineInputs.map((line, index) => {
       const fields = el('div', 'seat-form-row');
-      fields.append(field(`${index + 1}列の名前`, line.name), field(`${index + 1}列の接頭部`, line.prefix), field(`${index + 1}列の開始番号`, line.start));
+      fields.append(field(`${index + 1}列の名前`, line.name), field(`${index + 1}列の開始番号`, line.start));
 
       return fields;
     }));
@@ -115,7 +108,15 @@ export function createSectionForm(
       apply({
         name: initial?.name ?? name.value.trim(), rows: rows.valueAsNumber, columns: columns.valueAsNumber,
         axis: axis.value as Axis, seatOrder: order.value as SeatOrder,
-        lines: lineInputs.map((line) => ({ name: line.name.value.trim(), prefix: line.prefix.value, startNumber: line.start.valueAsNumber })),
+        lines: lineInputs.map((line, index) => {
+          const name = line.name.value.trim();
+          const previous = initial?.lineSettings[index];
+
+          // 列名を変えていない既存データは、保存済みの番号形式を引き継ぐ。
+          return { name, startNumber: line.start.valueAsNumber,
+            ...(previous?.name === name ? { prefix: previous.prefix } : {}),
+          };
+        }),
       });
     } catch {
       error.textContent = '設定を反映できませんでした。入力内容と、割当・発券済みの席への影響を確認してください。';
@@ -142,7 +143,7 @@ export function openSectionExtension(section: LayoutSection, apply: (input: Exte
   const count = numberInput(1, SEAT_LIMITS.cells);
   const lines = el('div');
   const error = el('p');
-  let newLines: { name: HTMLInputElement; prefix: HTMLInputElement; start: HTMLInputElement }[] = [];
+  let newLines: { name: HTMLInputElement; start: HTMLInputElement }[] = [];
 
   /** 採番列を増やす方向を選んだ場合、新しい列だけの設定を表示する。 */
   function renderLines() {
@@ -155,15 +156,13 @@ export function openSectionExtension(section: LayoutSection, apply: (input: Exte
       const name = el('input');
       name.required = true;
       name.value = newLines[index]?.name.value ?? `追加列${index + 1}`;
-      const prefix = el('input');
-      prefix.value = newLines[index]?.prefix.value ?? `${name.value}-`;
       const start = numberInput(1, Number.MAX_SAFE_INTEGER);
       start.value = newLines[index]?.start.value ?? '1';
       const group = el('div', 'seat-form-row');
-      group.append(field(`追加${index + 1}列の名前`, name), field(`追加${index + 1}列の接頭部`, prefix), field(`追加${index + 1}列の開始番号`, start));
+      group.append(field(`追加${index + 1}列の名前`, name), field(`追加${index + 1}列の開始番号`, start));
       lines.append(group);
 
-      return { name, prefix, start };
+      return { name, start };
     });
   }
 
@@ -181,7 +180,7 @@ export function openSectionExtension(section: LayoutSection, apply: (input: Exte
     event.preventDefault();
     try {
       apply({ dimension: dimension.value as 'rows' | 'columns', count: count.valueAsNumber,
-        ...(newLines.length ? { lines: newLines.map((line) => ({ name: line.name.value.trim(), prefix: line.prefix.value, startNumber: line.start.valueAsNumber })) } : {}),
+        ...(newLines.length ? { lines: newLines.map((line) => ({ name: line.name.value.trim(), startNumber: line.start.valueAsNumber })) } : {}),
       });
       dialog.close();
     } catch {
