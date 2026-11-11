@@ -192,7 +192,6 @@ export async function openSeatEditor(
     const old = before.sections.find(({ section }) => section.sectionId === sectionId)!;
     const next = plan.after.sections.find(({ section }) => section.sectionId === sectionId)!;
     const body = el('div');
-    const numbers = el('ul', 'seat-change-list');
     const previousSeats = new Map(old.seats.map((seat) => [seat.seatId, seat]));
     const newSeats = new Map(next.seats.map((seat) => [seat.seatId, seat]));
     let changes = 0;
@@ -204,12 +203,10 @@ export async function openSeatEditor(
       if (from === to) continue;
 
       changes++;
-      numbers.append(el('li', '', `${from} → ${to}`));
     }
     body.append(
       el('p', '', `${old.section.rows}行 × ${old.section.columns}列 → ${next.section.rows}行 × ${next.section.columns}列`),
       el('p', '', `席番号の変更・削除 ${changes}件。反映後は下書き保存できます。`),
-      numbers,
     );
     const confirm = button('反映する', () => {
       if (layout !== before) {
