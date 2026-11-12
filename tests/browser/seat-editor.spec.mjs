@@ -123,6 +123,40 @@ test('DD91-T03・T04 手動番号を見分け、自動採番への復帰を確�
   await expect(page.locator('.seat-tile.is-manual')).toHaveCount(0);
 });
 
+test('DD91-T34 手動のA-6を飛ばして後続席を作成し、保存から復元する', async ({ page }) => {
+  await openEditor(page);
+  await page.getByRole('button', { name: '区画を追加', exact: true }).click();
+  const create = page.getByRole('dialog', { name: '区画を追加', exact: true });
+  await create.getByLabel('区画名').fill('採番重複確認');
+  await create.getByLabel('縦', { exact: true }).fill('1');
+  await create.getByLabel('横', { exact: true }).fill('8');
+  await create.getByRole('button', { name: '追加する', exact: true }).click();
+  await page.getByLabel('選択方法').selectOption('range');
+  await page.getByRole('button', { name: '1行1列 未', exact: true }).click();
+  await page.getByRole('button', { name: '1行5列 未', exact: true }).click();
+  await page.getByRole('button', { name: '席に', exact: true }).click();
+  await page.getByLabel('選択方法').selectOption('single');
+  await page.getByRole('button', { name: '採番重複確認の席 A-4 を選択', exact: true }).click();
+  await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
+  await page.getByRole('textbox', { name: '席番号', exact: true }).fill('A-6');
+  await page.getByRole('button', { name: '変更を反映', exact: true }).click();
+  const manual = page.getByRole('button', { name: '採番重複確認の席 A-6 を選択', exact: true });
+  await expect(manual).toHaveClass(/is-manual/);
+  for (const [column, number] of [[6, 7], [7, 8], [8, 9]]) {
+    await page.getByRole('button', { name: `1行${column}列 未`, exact: true }).click();
+    await page.getByRole('button', { name: '席に', exact: true }).click();
+    await expect(page.getByRole('button', { name: `採番重複確認の席 A-${number} を選択`, exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '採番重複確認の席 A-5 を選択', exact: true })).toBeVisible();
+  }
+  await expect(manual).toHaveClass(/is-manual/);
+  await page.getByRole('button', { name: '下書き保存', exact: true }).click();
+  await page.getByRole('dialog', { name: '下書き保存の確認' }).getByRole('button', { name: '保存する', exact: true }).click();
+  await expect(page.getByText(/この端末に保存済み・未確定（/)).toBeVisible();
+  await page.reload();
+  await expect(manual).toHaveClass(/is-manual/);
+  await expect(page.getByRole('button', { name: '採番重複確認の席 A-9 を選択', exact: true })).toBeVisible();
+});
+
 test('DD91-T19・T41 離脱保存と破棄を区別し、別公演には下書きを表示しない', async ({ page }) => {
   await openEditor(page);
   await addSection(page, '保存する区画');
