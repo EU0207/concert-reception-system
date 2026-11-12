@@ -158,6 +158,8 @@ export interface ReconfigurationInput {
   seatOrder?: SeatOrder;
   lines?: readonly LineInput[];
   selections?: CellSelections;
+  /** 手入力を解除し、区画の採番順へ戻す席。公演前の再構成だけで扱う。 */
+  automaticSeatIds?: readonly Id[];
 }
 
 /** 席構成の保存時に照合するデータ版。 */

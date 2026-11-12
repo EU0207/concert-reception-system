@@ -573,6 +573,12 @@ p {
 .seat-tile.cell-space { background: #eef4fb; }
 .seat-tile.cell-aisle { background: #dce6eb; }
 
+/* 手動番号は淡い紫と文字で示し、選択状態の枠とは区別する。 */
+.seat-tile.is-manual {
+  background: #f4edf7;
+  color: #5f496b;
+}
+
 .seat-tile[aria-pressed='true'] {
   border-color: #205b55;
   box-shadow: inset 0 0 0 2px #205b55;

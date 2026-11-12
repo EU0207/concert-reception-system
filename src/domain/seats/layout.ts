@@ -472,6 +472,22 @@ export function reconfigureSection(
   const selected = new Set(s.cells.map((c) => c.cellId));
 
   selectKinds(model, input.selections ?? {}, selected);
+
+  for (const seatId of input.automaticSeatIds ?? []) {
+    const seat = model.seats.find((candidate) => candidate.seatId === seatId);
+
+    requireValue(seat?.numberingMode === 'manual', 'MANUAL_SEAT_REQUIRED');
+
+    const { manualNumber: _manualNumber, numberingMode: _mode, ...base } = seat;
+    const cell = s.cells.find((candidate) => candidate.seatId === seatId)!;
+    const line = lineFor(model, cell);
+
+    // 仮の番号は公開せず、直後の区画再採番で位置と方向から決定する。
+    model.seats = model.seats.map((candidate) => candidate.seatId === seatId
+      ? { ...base, numberingMode: 'automatic', prefix: line.prefix, number: line.startNumber }
+      : candidate);
+  }
+
   numberCells(model, selected, options, newId);
 
   return plan(before, after);
