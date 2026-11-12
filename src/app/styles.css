@@ -490,6 +490,27 @@ p {
   border: 1px solid #bfd0c7;
   border-radius: 12px;
   background: #edf3eb;
+  cursor: grab;
+  touch-action: pan-x pan-y;
+  user-select: none;
+}
+
+.seat-canvas.is-panning,
+.seat-canvas.is-panning .seat-tile {
+  cursor: grabbing;
+}
+
+.seat-canvas-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.seat-canvas-tools p {
+  flex-basis: 100%;
+  margin: 0;
 }
 
 .seat-map {
