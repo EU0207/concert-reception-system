@@ -182,7 +182,7 @@ export async function openSeatEditor(
   }
 
   /** 計算済みの構成案を比較し、確認後に画面の編集内容へ反映する。 */
-  function previewSectionPlan(plan: SeatChangePlan) {
+  function previewSectionPlan(plan: SeatChangePlan, description?: string) {
     const before = layout;
     const sectionId = activeId!;
     if (!plan.impact.changed) {
@@ -195,6 +195,7 @@ export async function openSeatEditor(
     const old = before.sections.find(({ section }) => section.sectionId === sectionId)!;
     const next = plan.after.sections.find(({ section }) => section.sectionId === sectionId)!;
     const body = el('div');
+    if (description) body.append(el('p', '', description));
     const previousSeats = new Map(old.seats.map((seat) => [seat.seatId, seat]));
     const newSeats = new Map(next.seats.map((seat) => [seat.seatId, seat]));
     let changes = 0;
@@ -345,6 +346,17 @@ export async function openSeatEditor(
           }));
         });
       }, 'button secondary'));
+      if (seat.numberingMode === 'manual') {
+        selectionActions.append(button('自動採番に戻す', () => {
+          try {
+            previewSectionPlan(reconfigureSection(layout, section.sectionId, {
+              automaticSeatIds: [seat.seatId],
+            }), '選択した席を自動採番に戻し、区画の採番順で番号を振り直します。他の手動番号は保持します。');
+          } catch {
+            error.textContent = '自動採番に戻せませんでした。席番号の重複や割当・発券済みの席を確認してください。';
+          }
+        }, 'button secondary'));
+      }
     }
     selection.append(selectionActions);
 
@@ -375,12 +387,15 @@ export async function openSeatEditor(
       const kind = cellLabels[cell.kind];
       const label = number ?? kind;
       const tile = button(label, () => selectCell(cell, section.cells), `seat-tile cell-${cell.kind}`);
+      const manual = current?.numberingMode === 'manual';
+      tile.classList.toggle('is-manual', manual);
+      if (manual) tile.setAttribute('aria-description', '手動で番号を設定した席');
       tile.dataset.cellId = cell.cellId;
       tile.setAttribute('aria-pressed', String(selected.has(cell.cellId)));
       tile.setAttribute('aria-label', current
         ? `${section.name}の席 ${label} を選択`
         : `${cell.row + 1}行${cell.column + 1}列 ${kind}${number ? ` ${number}` : ''}`);
-      if (number) tile.append(el('span', '', kind));
+      if (number) tile.append(el('span', '', manual ? '手動' : kind));
       rows[cell.row]?.append(tile);
     }
     grid.append(...rows);

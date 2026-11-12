@@ -1,3 +1,5 @@
+// 席構成の採番・変更案と割当・発券の保護を検証する。
+
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createLayout, createSection, numberInitial, reconfigureSection, extendSection, renameSection,
@@ -339,4 +341,58 @@ test('DD91-T33 後ろに自動席がない場合も、手入力にした欠番�
   const after = reconfigureSection(before, f.sectionId, { selections: { [cell(model(before), 0, 0).cellId]: 'space' } }, f.opts).after;
   assert.equal(model(after).section.lineSettings[0].nextAutomaticNumber, 3);
   assert.equal(cell(model(after), 0, 1).consumedNumber, 2); validateLayout(after);
+});
+
+for (const axis of ['horizontal', 'vertical']) for (const seatOrder of ['forward', 'reverse']) {
+  test(`DD91-T03・T04 手入力席を自動採番へ戻す ${axis}/${seatOrder}`, () => {
+    const f = fixture({ rows: axis === 'vertical' ? 6 : 1, columns: axis === 'vertical' ? 1 : 6,
+      axis, seatOrder, startNumber: 7,
+      kinds: [0, 1, 3, 5].map((i) => [axis === 'vertical' ? i : 0, axis === 'vertical' ? 0 : i, i === 1 ? 'gap' : 'seat']) });
+    const original = model(f.layout).seats[0];
+    const manual = editUnassignedSeat(f.layout, f.sectionId, original.seatId,
+      { number: '補助', reason: '架空の番号修正' }, f.opts).after;
+    const before = structuredClone(manual);
+    frozen(manual);
+    const after = reconfigureSection(manual, f.sectionId, { automaticSeatIds: [original.seatId] }, f.opts).after;
+
+    assert.deepEqual(labels(after), labels(f.layout));
+    assert.deepEqual(model(after).section.cells, model(f.layout).section.cells);
+    assert.equal(model(after).seats.find((s) => s.seatId === original.seatId).numberingMode, 'automatic');
+    assert.equal(model(after).section.lineSettings[0].nextAutomaticNumber, 11);
+    assert.deepEqual(manual, before);
+  });
+}
+
+test('DD91-T06 自動採番への復帰は割当・発券・公演中と重複番号の保護を維持する', () => {
+  const f = fixture();
+  const seat = model(f.layout).seats[0];
+  const manual = editUnassignedSeat(f.layout, f.sectionId, seat.seatId,
+    { number: '補助', reason: '架空の番号修正' }, f.opts).after;
+  const input = { automaticSeatIds: [seat.seatId] };
+
+  rejects('ASSIGNED_SEAT_REQUIRES_RELEASE', () => reconfigureSection(protect(manual), f.sectionId, input));
+  rejects('ISSUED_SEAT_PROTECTED', () => reconfigureSection(protect(manual, model(manual).seats[0], { issued: true }), f.sectionId, input));
+  rejects('FULL_RECONFIGURATION_DURING_PERFORMANCE', () => reconfigureSection(manual, f.sectionId, input, { duringPerformance: true }));
+  rejects('MANUAL_SEAT_REQUIRED', () => reconfigureSection(f.layout, f.sectionId, input));
+  const other = model(manual).seats[1];
+  const collision = editUnassignedSeat(manual, f.sectionId, other.seatId,
+    { number: 'A-1', reason: '架空の番号修正' }, f.opts).after;
+  const before = structuredClone(collision);
+  rejects('DUPLICATE_DISPLAY_NUMBER', () => reconfigureSection(collision, f.sectionId, input));
+  assert.deepEqual(collision, before);
+});
+
+test('DD91-T03 自動採番に戻した後も再採番に追従し、他の手動番号を保持する', () => {
+  const f = fixture();
+  const [target, other] = model(f.layout).seats;
+  let before = editUnassignedSeat(f.layout, f.sectionId, target.seatId,
+    { number: '補助', reason: '架空の番号修正' }, f.opts).after;
+  before = editUnassignedSeat(before, f.sectionId, other.seatId,
+    { number: '特別', reason: '架空の番号修正' }, f.opts).after;
+  const after = reconfigureSection(before, f.sectionId, { automaticSeatIds: [target.seatId] }, f.opts).after;
+  const reversed = reconfigureSection(after, f.sectionId, { seatOrder: 'reverse' }, f.opts).after;
+
+  assert.equal(displayNumber(model(after).seats.find(s => s.seatId === target.seatId)), 'A-1');
+  assert.equal(displayNumber(model(reversed).seats.find(s => s.seatId === target.seatId)), 'A-3');
+  assert.deepEqual(model(reversed).seats.find(s => s.seatId === other.seatId), model(before).seats.find(s => s.seatId === other.seatId));
 });

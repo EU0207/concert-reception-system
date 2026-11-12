@@ -67,6 +67,7 @@ test('DD91-T37 端末保存から復元し、共有と確定は明示した試�
 
   await page.reload();
   await expect(page.getByRole('button', { name: '確認区画の席 補助席 を選択' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '確認区画の席 補助席 を選択' })).toHaveClass(/is-manual/);
   await expect(saved).toHaveText(savedMessage);
   await expect(page.getByRole('checkbox')).toHaveCount(0);
 
@@ -85,6 +86,41 @@ test('DD91-T37 端末保存から復元し、共有と確定は明示した試�
 
   expect(externalRequests).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('DD91-T03・T04 手動番号を見分け、自動採番への復帰を確認して保存する', async ({ page }) => {
+  await openEditor(page);
+  await addSection(page, '採番確認区画');
+  await page.getByRole('button', { name: '1行1列 未', exact: true }).click();
+  await page.getByRole('button', { name: '席に', exact: true }).click();
+  const automatic = page.locator('.seat-tile[aria-pressed="true"]');
+  const originalLabel = await automatic.getAttribute('aria-label');
+  const originalColor = await automatic.evaluate(node => getComputedStyle(node).backgroundColor);
+  await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
+  await page.getByRole('textbox', { name: '席番号', exact: true }).fill('補助席');
+  await page.getByRole('button', { name: '変更を反映', exact: true }).click();
+  const manual = page.getByRole('button', { name: '採番確認区画の席 補助席 を選択', exact: true });
+  await expect(manual).toHaveClass(/is-manual/);
+  await expect(manual).toContainText('手動');
+  expect(await manual.evaluate(node => getComputedStyle(node).backgroundColor)).not.toBe(originalColor);
+
+  await page.getByRole('button', { name: '自動採番に戻す', exact: true }).click();
+  const preview = page.getByRole('dialog', { name: '席の設定変更を確認', exact: true });
+  await expect(preview).toContainText('選択した席を自動採番に戻し');
+  await preview.getByRole('button', { name: '閉じる', exact: true }).click();
+  await expect(manual).toHaveClass(/is-manual/);
+  await page.getByRole('button', { name: '自動採番に戻す', exact: true }).click();
+  await preview.getByRole('button', { name: '反映する', exact: true }).click();
+  const restored = page.getByRole('button', { name: originalLabel, exact: true });
+  await expect(restored).not.toHaveClass(/is-manual/);
+  expect(await restored.evaluate(node => getComputedStyle(node).backgroundColor)).toBe(originalColor);
+  await expect(page.getByRole('button', { name: '自動採番に戻す', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: '下書き保存', exact: true }).click();
+  await page.getByRole('dialog', { name: '下書き保存の確認' }).getByRole('button', { name: '保存する', exact: true }).click();
+  await expect(page.getByText(/この端末に保存済み・未確定（/)).toBeVisible();
+  await page.reload();
+  await expect(restored).toBeVisible();
+  await expect(page.locator('.seat-tile.is-manual')).toHaveCount(0);
 });
 
 test('DD91-T19・T41 離脱保存と破棄を区別し、別公演には下書きを表示しない', async ({ page }) => {
