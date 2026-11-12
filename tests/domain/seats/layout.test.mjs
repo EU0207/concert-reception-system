@@ -170,10 +170,14 @@ test('DD91-T33・36 手入力の大文字小文字・全半角を勝手に統合
   const b = addManualSeat(a, f.sectionId, cell(model(a), 0, 4).cellId, 'Ａ-1', '架空', f.opts).after;
   assert(labels(b).includes('A-1')); assert(labels(b).includes('a-1')); assert(labels(b).includes('Ａ-1'));
 });
-test('DD91-T27・34 後続の自動採番が手入力番号へ衝突したら全体を拒否', () => {
+test('DD91-T27・34 後続の自動採番は同じ列の手入力番号を飛ばす', () => {
   const f = fixture(), m = model(f.layout), before = addManualSeat(f.layout, f.sectionId, cell(m, 0, 2).cellId, 'A-5', '架空', f.opts).after;
-  frozen(before); rejects('DUPLICATE_DISPLAY_NUMBER', () => extendSection(before, f.sectionId,
-    { dimension: 'columns', count: 1, selections: { '0,6': 'seat' } }, f.opts));
+  frozen(before);
+  const after = extendSection(before, f.sectionId,
+    { dimension: 'columns', count: 1, selections: { '0,6': 'seat' } }, f.opts).after;
+  assert.equal(displayNumber(model(after).seats.at(-1)), 'A-6');
+  assert.deepEqual(model(after).seats.slice(0, -1), model(before).seats);
+  assert.equal(model(after).section.lineSettings[0].nextAutomaticNumber, 7);
   assert.equal(model(before).section.columns, 6);
 });
 test('DD91-T33・35 当日の追加だけに緊急情報を付け、通常の舞台・スライドでは書換えない', () => {
@@ -363,7 +367,7 @@ for (const axis of ['horizontal', 'vertical']) for (const seatOrder of ['forward
   });
 }
 
-test('DD91-T06 自動採番への復帰は割当・発券・公演中と重複番号の保護を維持する', () => {
+test('DD91-T06 自動採番への復帰は保護を維持し、占有済みの番号を飛ばす', () => {
   const f = fixture();
   const seat = model(f.layout).seats[0];
   const manual = editUnassignedSeat(f.layout, f.sectionId, seat.seatId,
@@ -378,7 +382,9 @@ test('DD91-T06 自動採番への復帰は割当・発券・公演中と重複�
   const collision = editUnassignedSeat(manual, f.sectionId, other.seatId,
     { number: 'A-1', reason: '架空の番号修正' }, f.opts).after;
   const before = structuredClone(collision);
-  rejects('DUPLICATE_DISPLAY_NUMBER', () => reconfigureSection(collision, f.sectionId, input));
+  const restored = reconfigureSection(collision, f.sectionId, input).after;
+  assert.equal(displayNumber(model(restored).seats.find(s => s.seatId === seat.seatId)), 'A-2');
+  assert.equal(displayNumber(model(restored).seats.find(s => s.seatId === other.seatId)), 'A-1');
   assert.deepEqual(collision, before);
 });
 
@@ -393,6 +399,49 @@ test('DD91-T03 自動採番に戻した後も再採番に追従し、他の手�
   const reversed = reconfigureSection(after, f.sectionId, { seatOrder: 'reverse' }, f.opts).after;
 
   assert.equal(displayNumber(model(after).seats.find(s => s.seatId === target.seatId)), 'A-1');
-  assert.equal(displayNumber(model(reversed).seats.find(s => s.seatId === target.seatId)), 'A-3');
+  assert.equal(displayNumber(model(reversed).seats.find(s => s.seatId === target.seatId)), 'A-4');
   assert.deepEqual(model(reversed).seats.find(s => s.seatId === other.seatId), model(before).seats.find(s => s.seatId === other.seatId));
+});
+
+for (const axis of ['horizontal', 'vertical']) for (const seatOrder of ['forward', 'reverse']) {
+  test(`DD91-T27・34 A-4をA-6へ変更した後はA-7から追加する ${axis}/${seatOrder}`, () => {
+    const vertical = axis === 'vertical';
+    const f = fixture({ rows: vertical ? 5 : 1, columns: vertical ? 1 : 5, axis, seatOrder,
+      kinds: Array.from({ length: 5 }, (_, i) => [vertical ? i : 0, vertical ? 0 : i, 'seat']) });
+    const target = model(f.layout).seats.find(s => s.number === 4);
+    const before = editUnassignedSeat(f.layout, f.sectionId, target.seatId,
+      { number: 'A-6', reason: '架空の番号修正' }, f.opts).after;
+    const positions = seatOrder === 'reverse' ? [0, 1] : [5, 6];
+    const selections = Object.fromEntries(positions.map(i => [vertical ? `${i},0` : `0,${i}`, 'seat']));
+    const after = extendSection(before, f.sectionId,
+      { dimension: vertical ? 'rows' : 'columns', count: 2, selections }, f.opts).after;
+
+    assert.deepEqual(model(after).seats.slice(0, 5), model(before).seats);
+    assert.deepEqual(model(after).seats.slice(5).map(displayNumber), ['A-7', 'A-8']);
+    assert.equal(model(after).section.lineSettings[0].nextAutomaticNumber, 9);
+    assert.equal(model(before).section.lineSettings[0].nextAutomaticNumber, 6);
+  });
+}
+
+test('DD91-T34 連続する手動番号は飛ばし、別列や枝番の文字列は混同しない', () => {
+  const f = fixture({ rows: 2, columns: 5,
+    kinds: [[0, 0, 'seat'], [0, 1, 'seat'], [0, 2, 'seat'], [0, 3, 'seat'], [0, 4, 'seat'], [1, 0, 'seat']] });
+  const fourth = model(f.layout).seats.find(s => s.number === 4);
+  const third = model(f.layout).seats.find(s => s.number === 3);
+  let before = editUnassignedSeat(f.layout, f.sectionId, fourth.seatId,
+    { number: 'A-6', reason: '架空' }, f.opts).after;
+  before = editUnassignedSeat(before, f.sectionId, third.seatId,
+    { number: 'A-7', reason: '架空' }, f.opts).after;
+  const other = model(before).seats.find(s => s.lineId !== fourth.lineId);
+  before = editUnassignedSeat(before, f.sectionId, other.seatId,
+    { number: 'A-8', reason: '架空' }, f.opts).after;
+  const after = extendSection(before, f.sectionId,
+    { dimension: 'columns', count: 1, selections: { '0,5': 'seat' } }, f.opts).after;
+  assert.equal(displayNumber(model(after).seats.at(-1)), 'A-8');
+
+  const branch = editUnassignedSeat(f.layout, f.sectionId, fourth.seatId,
+    { number: 'A-6a', reason: '架空' }, f.opts).after;
+  const withBranch = extendSection(branch, f.sectionId,
+    { dimension: 'columns', count: 1, selections: { '0,5': 'seat' } }, f.opts).after;
+  assert.equal(displayNumber(model(withBranch).seats.at(-1)), 'A-6');
 });

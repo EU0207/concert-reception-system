@@ -296,9 +296,16 @@ function numberCells(
   newId: () => Id,
 ) {
   const s = model.section;
+  const manualSeats = new Map(model.seats
+    .filter((seat) => seat.numberingMode === 'manual')
+    .map((seat) => [seat.seatId, displayNumber(seat).trim()]));
 
   for (const line of s.lineSettings) {
-    // 手入力席へ変えた欠番の消費番号は予約したままにする。
+    // 軸変更時にも新しい列の所属で比較し、枝番や全半角を数値へ変換しない。
+    const manualNumbers = new Set(s.cells
+      .filter((cell) => lineFor(model, cell).lineId === line.lineId && manualSeats.has(cell.seatId ?? ''))
+      .map((cell) => manualSeats.get(cell.seatId!)!));
+    // 手入力へ変えた自動席・欠番の元番号は予約し、後続席を詰めない。
     const reserved = new Set(
       s.cells
         .filter(
@@ -328,7 +335,8 @@ function numberCells(
         continue;
       }
 
-      while (reserved.has(line.nextAutomaticNumber)) {
+      while (reserved.has(line.nextAutomaticNumber) ||
+        manualNumbers.has(`${line.prefix}${line.nextAutomaticNumber}`.trim())) {
         requireValue(positive(line.nextAutomaticNumber + 1), 'NUMBER_OVERFLOW');
         line.nextAutomaticNumber++;
       }
@@ -666,6 +674,7 @@ export function editUnassignedSeat(
   const source = model.section.cells.find((c) => c.seatId === seatId)!;
 
   if (input.number !== undefined) {
+    if (seat.numberingMode === 'automatic') source.consumedNumber = seat.number;
     const updated = asManual(seat, input.number.trim());
 
     model.seats = model.seats.map((s) => (s.seatId === seatId ? updated : s));
