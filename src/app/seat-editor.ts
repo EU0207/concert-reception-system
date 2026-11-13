@@ -1,7 +1,7 @@
 // 架空公演の席編集を、暗号化された端末下書きと試験用の操作先へつなぐ。
 
-import { changeStage, createLayout, createSection, editUnassignedSeat, extendSection, numberInitial, reconfigureSection, renameSection } from '../domain/seats/layout.ts';
-import type { CellKind, LayoutCell, Scope, SeatChangePlan, SectionInput } from '../domain/seats/types.ts';
+import { changeStage, createLayout, createSection, editUnassignedSeat, extendSection, numberInitial, reconfigureSection, renameSection, slideSection } from '../domain/seats/layout.ts';
+import type { CellKind, LayoutCell, Scope, SeatChangePlan, SectionInput, SlideSeatMapCommand } from '../domain/seats/types.ts';
 import { displayNumber, SeatDomainError, validateLayout } from '../domain/seats/validation.ts';
 import { createSeatDraftStore } from '../storage/seat-drafts.ts';
 import { ensureDeviceKey } from '../storage/device-vault.ts';
@@ -11,6 +11,7 @@ import { createSectionForm, openSectionExtension, openSectionForm, setSeatOption
 import { planSectionSettings } from './seat-section-settings.ts';
 import { mountSeatCanvasNavigation } from './seat-canvas-navigation.ts';
 import type { SeatCanvasView } from './seat-canvas-navigation.ts';
+import { openSectionSlide } from './seat-section-slide.ts';
 
 const evaluationBinding = {
   humanUid: 'local-evaluation-human',
@@ -228,6 +229,43 @@ export async function openSeatEditor(
     const dialog = showDialog('席の設定変更を確認', body, [confirm]);
   }
 
+  /** 余白を確認する共通計算へ渡し、確認済みの1区画だけを一括で移動する。 */
+  function previewSlide(direction: SlideSeatMapCommand['direction']) {
+    const before = layout;
+    const sectionId = activeId!;
+    const model = before.sections.find((candidate) => candidate.section.sectionId === sectionId)!;
+    const { layoutRevision, assignmentRevision, ticketRevision, controlRevision } = baseVersions;
+
+    try {
+      const prepared = model.initialNumbered ? before : numberInitial(before, sectionId, {}).after;
+      const plan = slideSection(prepared, {
+        ...scope, operationId: crypto.randomUUID(), sectionId, direction, amount: 1,
+        expectedVersions: { layoutRevision, assignmentRevision, ticketRevision, controlRevision },
+      });
+      if (!plan.impact.changed) {
+        result.textContent = '移動する席構成がありません。';
+        return;
+      }
+
+      openSectionSlide(model, plan, direction, () => {
+        if (layout !== before || activeId !== sectionId || pendingSettings) {
+          error.textContent = '編集中の構成が変わりました。移動内容をもう一度確認してください。';
+          return;
+        }
+
+        // 固定セルIDが移動するため選択を解除し、新しい座標を見てから選び直す。
+        selected.clear();
+        rangeStart = undefined;
+        error.textContent = '';
+        applyChange(plan);
+      });
+    } catch (caught) {
+      error.textContent = caught instanceof SeatDomainError && caught.code === 'SLIDE_BOUNDARY_NOT_UNSET'
+        ? '移動先側の外周に未設定以外のセルがあります。外周を「未」にしてから移動してください。'
+        : '席構成を移動できませんでした。表示中の区画を確認してください。';
+    }
+  }
+
   /** モックと同じ個別・複数・始点終点の操作でセルを選択する。 */
   function selectCell(cell: LayoutCell, cells: readonly LayoutCell[]) {
     if (selectionMode === 'multiple') {
@@ -376,6 +414,15 @@ export async function openSeatEditor(
       });
     }, 'button secondary'));
     sectionDetails.append(sectionActions);
+    const slide = el('details', 'seat-slide-tools');
+    const slideActions = el('div', 'seat-actions');
+    slide.append(el('summary', '', '席構成全体を1マスずらす'),
+      el('p', 'muted', '移動先の端がすべて「未」の場合に移動できます。反映前に席構成を確認します。'));
+    for (const [direction, label] of [['up', '上へ1行'], ['down', '下へ1行'], ['left', '左へ1列'], ['right', '右へ1列']] as const) {
+      slideActions.append(button(label, () => previewSlide(direction), 'button secondary'));
+    }
+    slide.append(slideActions);
+    sectionDetails.append(slide);
     card.append(el('h3', '', '座席キャンバス'));
 
     const rows = Array.from({ length: section.rows }, () => el('div', 'seat-row'));
