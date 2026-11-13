@@ -53,6 +53,43 @@ async function canvasCells(page) {
     nodes.map(node => ({ id: node.dataset.cellId, label: node.getAttribute('aria-label'), text: node.textContent })));
 }
 
+for (const [rows, columns] of [[64, 64], [256, 16], [1, 4096]]) {
+  test(`DD91-T43 移動前後の全体表示 ${rows}行×${columns}列は幅変更後も枠内に収まる`, async ({ page }) => {
+    await openEditor(page);
+    await page.getByRole('button', { name: '区画を追加', exact: true }).click();
+    const create = page.getByRole('dialog', { name: '区画を追加', exact: true });
+    await create.getByLabel('区画名').fill('全体表示確認');
+    await create.getByLabel('縦', { exact: true }).fill(String(rows));
+    await create.getByLabel('横', { exact: true }).fill(String(columns));
+    await create.getByRole('button', { name: '追加する', exact: true }).click();
+    await page.getByRole('button', { name: '1行2列 未', exact: true }).click();
+    await page.getByRole('button', { name: '席に', exact: true }).click();
+    const dialog = await previewSlide(page, '右へ1列');
+    await expect(dialog).toContainText('左端1列が「未」になります。');
+    await expect(dialog.locator('.is-vacated')).toHaveCount(rows);
+    const originalWidth = page.viewportSize().width;
+    for (const width of [originalWidth, originalWidth > 600 ? 390 : 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const name of ['移動前', '移動後']) {
+        const region = dialog.getByRole('region', { name: `${name}の席構成`, exact: true });
+        await expect(region.getByRole('cell')).toHaveCount(rows * columns);
+        await expect.poll(() => region.evaluate(node => {
+          const frame = node.getBoundingClientRect();
+          const table = node.querySelector('table').getBoundingClientRect();
+          return table.width > 0 && table.height > 0 && table.left >= frame.left &&
+            table.right <= frame.right && table.top >= frame.top && table.bottom <= frame.bottom;
+        })).toBe(true);
+      }
+      const before = await dialog.getByRole('region', { name: '移動前の席構成', exact: true }).boundingBox();
+      const after = await dialog.getByRole('region', { name: '移動後の席構成', exact: true }).boundingBox();
+      if (width <= 600) expect(after.y).toBeGreaterThan(before.y + before.height);
+      else expect(after.x).toBeGreaterThan(before.x + before.width);
+    }
+    await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
+    await expect(dialog).toHaveCount(0);
+  });
+}
+
 test('DD91-T43〜45 席構成の上下左右移動は前後確認と取消しを経て番号・IDを保存する', async ({ page }) => {
   await openEditor(page);
   await addSection(page, '余白調整区画');
