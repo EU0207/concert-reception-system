@@ -13,6 +13,7 @@ function sectionPreview(model: SectionModel, title: string, direction?: SlideSea
   const table = el('table', 'seat-slide-table');
   const rows = Array.from({ length: model.section.rows }, () => el('tr'));
   const seats = new Map(model.seats.map((seat) => [seat.seatId, seat]));
+  viewport.tabIndex = 0;
   viewport.setAttribute('role', 'region');
   viewport.setAttribute('aria-label', `${title}の席構成`);
   table.setAttribute('aria-label', title);
@@ -43,26 +44,6 @@ function sectionPreview(model: SectionModel, title: string, direction?: SlideSea
   return figure;
 }
 
-/** 席表全体が枠へ収まる倍率にそろえ、ダイアログ幅の変化にも追従する。 */
-function fitPreviews(dialog: HTMLDialogElement) {
-  const viewports = [...dialog.querySelectorAll<HTMLElement>('.seat-slide-viewport')];
-
-  /** 変形前の席表寸法から倍率を求め、縦横比を保って中央へ配置する。 */
-  function fit() {
-    for (const viewport of viewports) {
-      const table = viewport.querySelector<HTMLTableElement>('table')!;
-      const scale = Math.min(1, (viewport.clientWidth - 12) / table.offsetWidth,
-        (viewport.clientHeight - 12) / table.offsetHeight);
-      table.style.transform = `translate(-50%, -50%) scale(${Math.max(0, scale)})`;
-    }
-  }
-
-  const observer = new ResizeObserver(fit);
-  viewports.forEach((viewport) => observer.observe(viewport));
-  dialog.addEventListener('close', () => observer.disconnect(), { once: true });
-  fit();
-}
-
 /** 共通計算の移動案を表示し、明示確認した場合だけ呼出元へ反映を依頼する。 */
 export function openSectionSlide(
   before: SectionModel,
@@ -87,5 +68,4 @@ export function openSectionSlide(
     apply();
   });
   const dialog = showDialog('席構成の移動を確認', body, [confirm]);
-  fitPreviews(dialog);
 }
