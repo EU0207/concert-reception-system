@@ -617,14 +617,19 @@ p {
 }
 
 .seat-slide-viewport {
-  overflow: auto;
-  max-height: 220px;
+  position: relative;
+  overflow: hidden;
+  height: 220px;
   border: 1px solid #bfd0c7;
   border-radius: 8px;
   background: #f3f6f2;
 }
 
 .seat-slide-table {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max-content;
   border-spacing: 4px;
 }
 
@@ -652,9 +657,19 @@ p {
 .seat-slide-cell.cell-aisle { background: #dce6eb; }
 .seat-slide-cell.is-manual { background: #f4edf7; color: #5f496b; }
 
+.seat-slide-cell.is-vacated {
+  background: #fff8e7;
+  outline: 3px solid #a86a14;
+  outline-offset: -3px;
+}
+
 @media (max-width: 600px) {
   .seat-slide-previews {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .seat-slide-viewport {
+    height: 180px;
   }
 }
 
