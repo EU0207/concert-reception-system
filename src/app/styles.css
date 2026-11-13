@@ -617,20 +617,17 @@ p {
 }
 
 .seat-slide-viewport {
-  position: relative;
-  overflow: hidden;
-  height: 220px;
+  overflow: auto;
+  max-height: 220px;
   border: 1px solid #bfd0c7;
   border-radius: 8px;
   background: #f3f6f2;
 }
 
 .seat-slide-table {
-  position: absolute;
-  top: 50%;
-  left: 50%;
   width: max-content;
   border-spacing: 4px;
+  zoom: 0.5;
 }
 
 .seat-slide-cell {
@@ -669,7 +666,7 @@ p {
   }
 
   .seat-slide-viewport {
-    height: 180px;
+    max-height: 180px;
   }
 }
 

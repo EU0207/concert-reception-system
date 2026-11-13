@@ -54,11 +54,11 @@ async function canvasCells(page) {
 }
 
 for (const [rows, columns] of [[64, 64], [256, 16], [1, 4096]]) {
-  test(`DD91-T43 移動前後の全体表示 ${rows}行×${columns}列は幅変更後も枠内に収まる`, async ({ page }) => {
+  test(`DD91-T43 移動前後の半分表示 ${rows}行×${columns}列は幅変更後も倍率を保ってスクロールできる`, async ({ page }) => {
     await openEditor(page);
     await page.getByRole('button', { name: '区画を追加', exact: true }).click();
     const create = page.getByRole('dialog', { name: '区画を追加', exact: true });
-    await create.getByLabel('区画名').fill('全体表示確認');
+    await create.getByLabel('区画名').fill('半分表示確認');
     await create.getByLabel('縦', { exact: true }).fill(String(rows));
     await create.getByLabel('横', { exact: true }).fill(String(columns));
     await create.getByRole('button', { name: '追加する', exact: true }).click();
@@ -73,12 +73,16 @@ for (const [rows, columns] of [[64, 64], [256, 16], [1, 4096]]) {
       for (const name of ['移動前', '移動後']) {
         const region = dialog.getByRole('region', { name: `${name}の席構成`, exact: true });
         await expect(region.getByRole('cell')).toHaveCount(rows * columns);
-        await expect.poll(() => region.evaluate(node => {
-          const frame = node.getBoundingClientRect();
-          const table = node.querySelector('table').getBoundingClientRect();
-          return table.width > 0 && table.height > 0 && table.left >= frame.left &&
-            table.right <= frame.right && table.top >= frame.top && table.bottom <= frame.bottom;
-        })).toBe(true);
+        const cell = await region.getByRole('cell').first().boundingBox();
+        expect(cell.width).toBeCloseTo(27, 0);
+        expect(cell.height).toBeCloseTo(24, 0);
+        await region.evaluate(node => { node.scrollLeft = node.scrollWidth; node.scrollTop = node.scrollHeight; });
+        const last = await region.getByRole('cell').last().boundingBox();
+        const frame = await region.boundingBox();
+        expect(last.x).toBeGreaterThanOrEqual(frame.x);
+        expect(last.x + last.width).toBeLessThanOrEqual(frame.x + frame.width);
+        expect(last.y).toBeGreaterThanOrEqual(frame.y);
+        expect(last.y + last.height).toBeLessThanOrEqual(frame.y + frame.height);
       }
       const before = await dialog.getByRole('region', { name: '移動前の席構成', exact: true }).boundingBox();
       const after = await dialog.getByRole('region', { name: '移動後の席構成', exact: true }).boundingBox();
