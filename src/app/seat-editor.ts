@@ -9,6 +9,8 @@ import { button, el, showDialog } from './dom.ts';
 import type { EditorSession, LeaveChoice } from './navigation.ts';
 import { createSectionForm, openSectionExtension, openSectionForm, setSeatOptions } from './seat-layout-form.ts';
 import { planSectionSettings } from './seat-section-settings.ts';
+import { mountSeatCanvasNavigation } from './seat-canvas-navigation.ts';
+import type { SeatCanvasView } from './seat-canvas-navigation.ts';
 
 const evaluationBinding = {
   humanUid: 'local-evaluation-human',
@@ -94,6 +96,7 @@ export async function openSeatEditor(
   let selectionMode = 'single';
   let rangeStart: LayoutCell | undefined;
   const selected = new Set<string>();
+  const canvasViews = new Map<string, SeatCanvasView>();
   let localRevision = draft?.localRevision ?? 0;
   let savedAt = draft?.savedAt;
   let dirty = false;
@@ -165,7 +168,7 @@ export async function openSeatEditor(
         ?? layout.sections[0]?.section.sectionId;
       selected.clear();
       rangeStart = undefined;
-      renderSections(false);
+      renderSections();
     } finally {
       switching = false;
       updateStatus();
@@ -179,7 +182,7 @@ export async function openSeatEditor(
   }
 
   /** 計算済みの構成案を比較し、確認後に画面の編集内容へ反映する。 */
-  function previewSectionPlan(plan: SeatChangePlan) {
+  function previewSectionPlan(plan: SeatChangePlan, description?: string) {
     const before = layout;
     const sectionId = activeId!;
     if (!plan.impact.changed) {
@@ -192,6 +195,7 @@ export async function openSeatEditor(
     const old = before.sections.find(({ section }) => section.sectionId === sectionId)!;
     const next = plan.after.sections.find(({ section }) => section.sectionId === sectionId)!;
     const body = el('div');
+    if (description) body.append(el('p', '', description));
     const previousSeats = new Map(old.seats.map((seat) => [seat.seatId, seat]));
     const newSeats = new Map(next.seats.map((seat) => [seat.seatId, seat]));
     let changes = 0;
@@ -249,10 +253,15 @@ export async function openSeatEditor(
   }
 
   /** 選んだ区画だけを、設定・選択情報・座席キャンバスの順に表示する。 */
-  function renderSections(keepScroll = true) {
-    const previousCanvas = sections.querySelector('.seat-canvas');
-    const scrollLeft = previousCanvas?.scrollLeft ?? 0;
-    const scrollTop = previousCanvas?.scrollTop ?? 0;
+  function renderSections() {
+    const previousCanvas = sections.querySelector<HTMLElement>('.seat-canvas');
+    const previousView = previousCanvas?.dataset.sectionId
+      ? canvasViews.get(previousCanvas.dataset.sectionId) : undefined;
+    if (previousCanvas && previousView) {
+      previousView.left = previousCanvas.scrollLeft;
+      previousView.top = previousCanvas.scrollTop;
+    }
+
     const names = layout.sections.map(({ section }) => section.name || '指定なし');
     setSeatOptions(sectionChoice, layout.sections.map(({ section }, index) => {
       const name = names[index]!;
@@ -287,6 +296,7 @@ export async function openSeatEditor(
     const modeLabel = el('label', 'seat-field', '選択方法');
     const card = el('section', 'seat-section');
     const canvas = el('div', 'seat-canvas');
+    canvas.dataset.sectionId = section.sectionId;
     const map = el('div', `seat-map stage-${section.stagePosition}`);
     const grid = el('div', 'seat-grid');
     const seatsById = new Map(seats.map((seat) => [seat.seatId, seat]));
@@ -336,6 +346,17 @@ export async function openSeatEditor(
           }));
         });
       }, 'button secondary'));
+      if (seat.numberingMode === 'manual') {
+        selectionActions.append(button('自動採番に戻す', () => {
+          try {
+            previewSectionPlan(reconfigureSection(layout, section.sectionId, {
+              automaticSeatIds: [seat.seatId],
+            }), '選択した席を自動採番に戻し、区画の採番順で番号を振り直します。他の手動番号は保持します。');
+          } catch {
+            error.textContent = '自動採番に戻せませんでした。席番号の重複や割当・発券済みの席を確認してください。';
+          }
+        }, 'button secondary'));
+      }
     }
     selection.append(selectionActions);
 
@@ -366,12 +387,15 @@ export async function openSeatEditor(
       const kind = cellLabels[cell.kind];
       const label = number ?? kind;
       const tile = button(label, () => selectCell(cell, section.cells), `seat-tile cell-${cell.kind}`);
+      const manual = current?.numberingMode === 'manual';
+      tile.classList.toggle('is-manual', manual);
+      if (manual) tile.setAttribute('aria-description', '手動で番号を設定した席');
       tile.dataset.cellId = cell.cellId;
       tile.setAttribute('aria-pressed', String(selected.has(cell.cellId)));
       tile.setAttribute('aria-label', current
         ? `${section.name}の席 ${label} を選択`
         : `${cell.row + 1}行${cell.column + 1}列 ${kind}${number ? ` ${number}` : ''}`);
-      if (number) tile.append(el('span', '', kind));
+      if (number) tile.append(el('span', '', manual ? '手動' : kind));
       rows[cell.row]?.append(tile);
     }
     grid.append(...rows);
@@ -379,7 +403,9 @@ export async function openSeatEditor(
     canvas.append(map);
     card.append(canvas);
     sections.append(selection, card);
-    if (keepScroll) canvas.scrollTo(scrollLeft, scrollTop);
+    const view = canvasViews.get(section.sectionId) ?? { scale: 1, left: 0, top: 0 };
+    canvasViews.set(section.sectionId, view);
+    card.append(mountSeatCanvasNavigation(canvas, map, view, () => selected.size === 1 ? [...selected][0] : undefined));
   }
 
   /** 最後に読んだ版を条件に保存し、失敗時は入力と直前の保存情報を維持する。 */
