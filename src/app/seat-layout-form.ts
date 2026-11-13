@@ -2,7 +2,7 @@
 
 import type { Axis, ExtensionInput, LayoutSection, SeatOrder, SectionInput } from '../domain/seats/types.ts';
 import { SEAT_LIMITS } from '../domain/seats/validation.ts';
-import { el, showDialog } from './dom.ts';
+import { button, el, showDialog } from './dom.ts';
 
 /** フォーム部品とその入力名を組にする。 */
 function field(label: string, control: HTMLInputElement | HTMLSelectElement) {
@@ -39,6 +39,7 @@ export function createSectionForm(
   apply: (input: SectionInput) => void,
   initial?: LayoutSection,
   onEdit: () => void = () => {},
+  onReset?: () => void,
 ) {
   const form = el('form', 'seat-input');
   const name = el('input');
@@ -92,8 +93,11 @@ export function createSectionForm(
   dimensions.append(field('縦', rows), field('横', columns), field('列の並び', axis), field('席番の順序', order));
   lineDetails.append(el('summary', '', '列名・開始番号'), lineFields);
   const submit = el('button', 'button', initial ? '設定を反映' : '追加する');
+  const actions = el('div', 'seat-form-actions');
+  actions.append(submit);
+  if (initial && onReset) actions.append(button('設定を元に戻す', onReset, 'button secondary'));
   if (!initial) form.append(field('区画名', name));
-  form.append(dimensions, lineDetails, error, submit);
+  form.append(dimensions, lineDetails, error, actions);
 
   rows.addEventListener('input', renderLines);
   columns.addEventListener('input', renderLines);

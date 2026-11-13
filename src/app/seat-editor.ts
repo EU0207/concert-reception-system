@@ -321,12 +321,12 @@ export async function openSeatEditor(
     const form = createSectionForm(previewSettings, section, () => {
       pendingSettings = true;
       updateStatus();
-    });
-    settingsForm.append(form, button('設定を元に戻す', () => {
+    }, () => {
       pendingSettings = false;
       renderSections();
       updateStatus();
-    }, 'button secondary'));
+    });
+    settingsForm.append(form);
     const selection = el('section', 'seat-selection');
     const selectionDetails = el('div', 'seat-selection-details');
     const selectionActions = el('div', 'seat-actions');

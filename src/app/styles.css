@@ -658,6 +658,18 @@ p {
   }
 }
 
+.seat-form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* PCの設定欄でも2つの操作を同じ行に収める。 */
+.seat-form-actions .button {
+  padding-inline: 8px;
+  white-space: nowrap;
+}
+
 .seat-form-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
