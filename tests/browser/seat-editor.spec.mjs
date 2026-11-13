@@ -37,6 +37,96 @@ async function draftRevisions(page) {
   }));
 }
 
+/** 席構成の移動欄を開き、指定した方向の確認画面へ進む。 */
+async function previewSlide(page, label) {
+  const tools = page.locator('.seat-slide-tools');
+  if (!await tools.evaluate(node => node.open)) {
+    await page.getByText('席構成全体を1マスずらす', { exact: true }).click();
+  }
+  await tools.getByRole('button', { name: label, exact: true }).click();
+  return page.getByRole('dialog', { name: '席構成の移動を確認', exact: true });
+}
+
+/** セルの順序、IDと表示番号を画面から読み、移動前後と保存復元を照合する。 */
+async function canvasCells(page) {
+  return page.locator('.seat-canvas .seat-tile').evaluateAll(nodes =>
+    nodes.map(node => ({ id: node.dataset.cellId, label: node.getAttribute('aria-label'), text: node.textContent })));
+}
+
+test('DD91-T43〜45 席構成の上下左右移動は前後確認と取消しを経て番号・IDを保存する', async ({ page }) => {
+  await openEditor(page);
+  await addSection(page, '余白調整区画');
+  await page.getByRole('button', { name: '3行3列 未', exact: true }).click();
+  await page.getByRole('button', { name: '席に', exact: true }).click();
+  await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
+  await page.getByRole('textbox', { name: '席番号', exact: true }).fill('中央席');
+  await page.getByRole('button', { name: '変更を反映', exact: true }).click();
+  for (const [position, kind] of [['3行2列 未', '欠番に'], ['3行4列 未', '空間に'], ['4行3列 未', '通路に']]) {
+    await page.getByRole('button', { name: position, exact: true }).click();
+    await page.getByRole('button', { name: kind, exact: true }).click();
+  }
+  const baseline = await canvasCells(page);
+  for (const [direction, inverse, row, column] of [
+    ['上へ1行', '下へ1行', 2, 3], ['下へ1行', '上へ1行', 4, 3],
+    ['左へ1列', '右へ1列', 3, 2], ['右へ1列', '左へ1列', 3, 4],
+  ]) {
+    let dialog = await previewSlide(page, direction);
+    const previous = dialog.getByRole('table', { name: '移動前', exact: true });
+    const next = dialog.getByRole('table', { name: '移動後', exact: true });
+    const oldCell = previous.getByRole('cell', { name: '3行3列 席 中央席', exact: true });
+    const newCell = next.getByRole('cell', { name: `${row}行${column}列 席 中央席`, exact: true });
+    await expect(newCell).toHaveAttribute('data-seat-id', await oldCell.getAttribute('data-seat-id'));
+    await expect(newCell).toHaveAttribute('data-cell-id', await oldCell.getAttribute('data-cell-id'));
+    await expect(dialog.getByRole('textbox')).toHaveCount(0);
+    await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
+    expect(await canvasCells(page)).toEqual(baseline);
+
+    dialog = await previewSlide(page, direction);
+    await dialog.getByRole('button', { name: '移動を反映', exact: true }).click();
+    await expect(page.getByRole('button', { name: '余白調整区画の席 中央席 を選択', exact: true })).toHaveClass(/is-manual/);
+    await expect(page.getByText(/未保存の変更があります/)).toBeVisible();
+    dialog = await previewSlide(page, inverse);
+    await dialog.getByRole('button', { name: '移動を反映', exact: true }).click();
+    expect(await canvasCells(page)).toEqual(baseline);
+  }
+
+  const last = await previewSlide(page, '右へ1列');
+  await last.getByRole('button', { name: '移動を反映', exact: true }).click();
+  const moved = await canvasCells(page);
+  await page.getByRole('button', { name: '下書き保存', exact: true }).click();
+  await page.getByRole('dialog', { name: '下書き保存の確認' }).getByRole('button', { name: '保存する', exact: true }).click();
+  await expect(page.getByText(/この端末に保存済み・未確定（/)).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('button', { name: '余白調整区画の席 中央席 を選択', exact: true })).toBeVisible();
+  expect(await canvasCells(page)).toEqual(moved);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('DD91-T43 未以外の外周はどの種別・方向も移動を拒否し、設定入力中は操作できない', async ({ page }) => {
+  await openEditor(page);
+  await page.getByRole('button', { name: '区画を追加', exact: true }).click();
+  const create = page.getByRole('dialog', { name: '区画を追加', exact: true });
+  await create.getByLabel('区画名').fill('外周確認');
+  await create.getByLabel('縦', { exact: true }).fill('1');
+  await create.getByLabel('横', { exact: true }).fill('1');
+  await create.getByRole('button', { name: '追加する', exact: true }).click();
+  await previewSlide(page, '右へ1列');
+  await expect(page.getByText('移動する席構成がありません。', { exact: true })).toBeVisible();
+  for (const kind of ['席に', '欠番に', '空間に', '通路に']) {
+    await page.locator('.seat-canvas .seat-tile').click();
+    await page.getByRole('button', { name: kind, exact: true }).click();
+    const baseline = await canvasCells(page);
+    for (const direction of ['上へ1行', '下へ1行', '左へ1列', '右へ1列']) {
+      await previewSlide(page, direction);
+      await expect(page.getByRole('alert')).toContainText('移動先側の外周に未設定以外のセルがあります。');
+      await expect(page.getByRole('dialog')).toHaveCount(0);
+      expect(await canvasCells(page)).toEqual(baseline);
+    }
+  }
+  await page.getByLabel('横', { exact: true }).fill('2');
+  await expect(page.locator('.seat-section-details')).toHaveAttribute('inert', '');
+});
+
 test('DD91-T37 端末保存から復元し、共有と確定は明示した試験操作だけを行う', async ({ page }) => {
   const externalRequests = [];
   page.on('request', (request) => {
