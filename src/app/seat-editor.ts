@@ -426,7 +426,8 @@ export async function openSeatEditor(
     card.append(el('h3', '', '座席キャンバス'));
 
     const rows = Array.from({ length: section.rows }, () => el('div', 'seat-row'));
-    for (const cell of section.cells) {
+    // スライド後も配列の格納順は変わらないため、現在の座標順で描画する。
+    for (const cell of [...section.cells].sort((a, b) => a.row - b.row || a.column - b.column)) {
       const current = cell.seatId ? seatsById.get(cell.seatId) : undefined;
       const line = section.lineSettings[section.axis === 'horizontal' ? cell.row : cell.column];
       const number = current ? displayNumber(current) : cell.consumedNumber === undefined
