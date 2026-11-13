@@ -2000,7 +2000,7 @@ Aの採用理由は、設計検証・実装と本番受入の判定を分け、�
 
 ## 手動番号と自動採番候補の衝突時の扱い（#279）
 
-状態はIn Review。2026-11-13、開発者から席追加の停止が報告され、手動番号を飛ばして自動採番を継続する方針が指定された。[変更Issue #279](https://github.com/EU0207/concert-reception-system/issues/279)と[検証結果](../technical-validation/seat-local-storage-results.md#手動番号と重なる自動採番候補のスキップ279)へ追跡する。
+状態はApproved（PR #277の範囲）。2026-11-13、開発者が内容コミット `b766db6f324b717c0c51bd75b92812c5f72cc07c` をレビュー承認した。2026-11-13、開発者から席追加の停止が報告され、手動番号を飛ばして自動採番を継続する方針が指定された。[変更Issue #279](https://github.com/EU0207/concert-reception-system/issues/279)と[検証結果](../technical-validation/seat-local-storage-results.md#手動番号と重なる自動採番候補のスキップ279)へ追跡する。
 
 | 候補 | 利点 | 欠点・判断 |
 |---|---|---|
