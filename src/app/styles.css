@@ -592,6 +592,96 @@ p {
   font: inherit;
 }
 
+.seat-slide-tools {
+  margin-top: 12px;
+}
+
+.seat-slide-tools summary {
+  cursor: pointer;
+}
+
+.seat-slide-previews {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.seat-slide-preview {
+  margin: 0;
+  min-width: 0;
+}
+
+.seat-slide-preview figcaption {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.seat-slide-viewport {
+  overflow: auto;
+  max-height: 220px;
+  border: 1px solid #bfd0c7;
+  border-radius: 8px;
+  background: #f3f6f2;
+}
+
+.seat-slide-table {
+  width: max-content;
+  border-spacing: 4px;
+  zoom: 0.5;
+}
+
+.seat-slide-cell {
+  min-width: 54px;
+  height: 48px;
+  max-width: 74px;
+  padding: 3px;
+  border: 1px solid #a9c5b6;
+  border-radius: 6px;
+  background: white;
+  color: #164a3b;
+  font-size: 0.75rem;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.seat-slide-cell span {
+  display: block;
+}
+
+.seat-slide-cell.cell-unset { background: #f3f6f2; }
+.seat-slide-cell.cell-gap { background: #fff1cf; }
+.seat-slide-cell.cell-space { background: #eef4fb; }
+.seat-slide-cell.cell-aisle { background: #dce6eb; }
+.seat-slide-cell.is-manual { background: #f4edf7; color: #5f496b; }
+
+.seat-slide-cell.is-vacated {
+  background: #fff8e7;
+  outline: 3px solid #a86a14;
+  outline-offset: -3px;
+}
+
+@media (max-width: 600px) {
+  .seat-slide-previews {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .seat-slide-viewport {
+    max-height: 180px;
+  }
+}
+
+.seat-form-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* PCの設定欄でも2つの操作を同じ行に収める。 */
+.seat-form-actions .button {
+  padding-inline: 8px;
+  white-space: nowrap;
+}
+
 .seat-form-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
