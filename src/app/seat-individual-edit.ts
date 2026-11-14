@@ -20,6 +20,7 @@ export function openIndividualSeatEdit(
   mode: 'number' | 'position',
   reasonValue: string,
   apply: (input: IndividualEdit) => void,
+  targetCellId?: string,
 ) {
   const seat = model.seats.find((candidate) => candidate.seatId === seatId)!;
   const source = model.section.cells.find((cell) => cell.seatId === seatId)!;
@@ -27,8 +28,8 @@ export function openIndividualSeatEdit(
   const form = el('form', 'seat-input');
   const preview = el('p');
   const number = el('input');
-  const row = el('input');
-  const column = el('input');
+  const target = model.section.cells.find((cell) => cell.cellId === targetCellId);
+  const other = target?.seatId ? model.seats.find((candidate) => candidate.seatId === target.seatId) : undefined;
   const reason = el('input');
   const error = el('p');
   const submit = el('button', 'button', '変更を反映');
@@ -41,15 +42,11 @@ export function openIndividualSeatEdit(
     number.pattern = '.*\\S.*';
     form.append(field('席番号', number));
   } else {
-    const position = el('div', 'seat-form-row');
-    for (const [input, maximum] of [[row, model.section.rows], [column, model.section.columns]] as const) {
-      input.type = 'number';
-      input.min = '1';
-      input.max = String(maximum);
-      input.required = true;
-    }
-    position.append(field('移動先の行', row), field('移動先の列', column));
-    form.append(position, el('p', 'muted', '「未」または「空間」へ移動できます。移動元は「空間」になります。別の採番列へ移す場合も番号を保持し、「手動」と表示します。'));
+    if (!target) throw new SeatDomainError('INVALID_MOVE_TARGET');
+    form.append(el('p', '', other
+      ? `交換する席：${displayNumber(other)} ／ ${target.row + 1}行${target.column + 1}列 → ${source.row + 1}行${source.column + 1}列`
+      : '移動元は「空間」になります。'));
+    form.append(el('p', 'muted', '席番号を保持します。別の採番列へ移す場合は「手動」と表示します。'));
   }
   reason.required = true;
   reason.pattern = '.*\\S.*';
@@ -60,17 +57,15 @@ export function openIndividualSeatEdit(
   /** 入力中の変更後表示を更新する。 */
   function updatePreview() {
     preview.textContent = mode === 'number' ? `変更後：${number.value || '未入力'} ／ ${source.row + 1}行${source.column + 1}列`
-      : `変更後：${label} ／ ${row.value || '未入力'}行${column.value || '未入力'}列`;
+      : `変更後：${label} ／ ${target!.row + 1}行${target!.column + 1}列`;
   }
 
-  [number, row, column].forEach((input) => input.addEventListener('input', updatePreview));
+  number.addEventListener('input', updatePreview);
   updatePreview();
   const dialog = showDialog(mode === 'number' ? '席番号を変更' : '席の位置を変更', form);
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     try {
-      const target = model.section.cells.find((cell) => cell.row === row.valueAsNumber - 1 && cell.column === column.valueAsNumber - 1);
-      if (mode === 'position' && !target) throw new SeatDomainError('INVALID_MOVE_TARGET');
       apply({ ...(mode === 'number' ? { number: number.value.trim() } : { targetCellId: target!.cellId }), reason: reason.value.trim() });
       dialog.close();
     } catch (caught) {
@@ -81,5 +76,5 @@ export function openIndividualSeatEdit(
           : '変更できませんでした。番号の重複、入力内容と割当・発券済みの席を確認してください。';
     }
   });
-  (mode === 'number' ? number : row).focus();
+  (mode === 'number' ? number : reason).focus();
 }
