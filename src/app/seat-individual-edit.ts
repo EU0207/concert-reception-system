@@ -1,10 +1,10 @@
-// 未割当席の番号・位置の変更前後と理由を確認する入力画面。
+// 下書きの未割当席の番号・位置の変更前後を確認する入力画面。
 
 import type { SectionModel } from '../domain/seats/types.ts';
 import { displayNumber, SEAT_LIMITS, SeatDomainError } from '../domain/seats/validation.ts';
 import { el, showDialog } from './dom.ts';
 
-type IndividualEdit = { number?: string; targetCellId?: string; reason: string };
+type IndividualEdit = { number?: string; targetCellId?: string };
 
 /** 入力名と入力欄を対応付ける。 */
 function field(label: string, input: HTMLInputElement) {
@@ -13,12 +13,11 @@ function field(label: string, input: HTMLInputElement) {
   return wrapper;
 }
 
-/** 入力値を反映した場合の番号・位置を示し、理由を確認してから変更を依頼する。 */
+/** 下書きでの番号・位置の変更内容を示し、確認後に反映を依頼する。 */
 export function openIndividualSeatEdit(
   model: SectionModel,
   seatId: string,
   mode: 'number' | 'position',
-  reasonValue: string,
   apply: (input: IndividualEdit) => void,
   targetCellId?: string,
 ) {
@@ -30,7 +29,6 @@ export function openIndividualSeatEdit(
   const number = el('input');
   const target = model.section.cells.find((cell) => cell.cellId === targetCellId);
   const other = target?.seatId ? model.seats.find((candidate) => candidate.seatId === target.seatId) : undefined;
-  const reason = el('input');
   const error = el('p');
   const submit = el('button', 'button', '変更を反映');
   error.setAttribute('role', 'alert');
@@ -48,11 +46,7 @@ export function openIndividualSeatEdit(
       : '移動元は「空間」になります。'));
     form.append(el('p', 'muted', '席番号を保持します。別の採番列へ移す場合は「手動」と表示します。'));
   }
-  reason.required = true;
-  reason.pattern = '.*\\S.*';
-  reason.maxLength = SEAT_LIMITS.reason;
-  reason.value = reasonValue;
-  form.append(preview, field('変更理由', reason), error, submit);
+  form.append(preview, error, submit);
 
   /** 入力中の変更後表示を更新する。 */
   function updatePreview() {
@@ -66,7 +60,7 @@ export function openIndividualSeatEdit(
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     try {
-      apply({ ...(mode === 'number' ? { number: number.value.trim() } : { targetCellId: target!.cellId }), reason: reason.value.trim() });
+      apply(mode === 'number' ? { number: number.value.trim() } : { targetCellId: target!.cellId });
       dialog.close();
     } catch (caught) {
       error.textContent = caught instanceof SeatDomainError && caught.code === 'OCCUPIED_MOVE_TARGET'
@@ -76,5 +70,5 @@ export function openIndividualSeatEdit(
           : '変更できませんでした。番号の重複、入力内容と割当・発券済みの席を確認してください。';
     }
   });
-  (mode === 'number' ? number : reason).focus();
+  if (mode === 'number') number.focus();
 }

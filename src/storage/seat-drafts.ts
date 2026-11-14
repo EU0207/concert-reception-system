@@ -10,7 +10,7 @@ interface DraftInput {
   draftId: string;
   baseVersions: SeatVersions & { attendeeRevision: number };
   layout: SeatLayout;
-  // 未確定の個別編集に対応する最新理由。業務履歴とは分離する。
+  // 旧版の未確定理由を復元するために保持する。確定済みの業務履歴ではない。
   editReasons?: Record<string, string>;
 }
 

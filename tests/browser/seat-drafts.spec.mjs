@@ -84,7 +84,7 @@ test('DD91-T37 500席・複数区画の保存と固定操作を再読み込み�
   expect(external).toEqual([]);
 });
 
-test('DD91-T30・T37 個別編集理由を構成と一体保存し、不正な理由や旧版で上書きしない', async ({ page }) => {
+test('DD91-T30・T37 旧版の理由付き下書きを復元し、不正な理由や旧版で上書きしない', async ({ page }) => {
   await setup(page, scope, true);
   const result = await page.evaluate(async () => {
     const { draftInput: input, seatDraftStore: store } = window;
