@@ -84,6 +84,45 @@ test('DD91-T37 500席・複数区画の保存と固定操作を再読み込み�
   expect(external).toEqual([]);
 });
 
+test('DD91-T30・T37 個別編集理由を構成と一体保存し、不正な理由や旧版で上書きしない', async ({ page }) => {
+  await setup(page, scope, true);
+  const result = await page.evaluate(async () => {
+    const { draftInput: input, seatDraftStore: store } = window;
+    const seatId = input.layout.sections[0].seats[0].seatId;
+    const reason = '架空の席位置調整';
+    await store.saveLocalDraft(input, 0);
+    await store.saveLocalDraft({ ...input, editReasons: { [seatId]: reason } }, 1);
+    const failures = [];
+    for (const editReasons of [[], { [seatId]: '' }, { [seatId]: '   ' }, { [seatId]: 'x'.repeat(201) },
+      { '00000000-0000-4000-8000-000000000099': reason }]) {
+      try { await store.saveLocalDraft({ ...input, editReasons }, 2); }
+      catch (error) { failures.push(error.code); }
+    }
+    try { await store.saveLocalDraft(input, 2); }
+    catch (error) { failures.push(error.code); }
+    try { await store.saveLocalDraft({ ...input, editReasons: { [seatId]: '架空の別理由' } }, 1); }
+    catch (error) { failures.push(error.code); }
+    const restored = await store.loadLocalDraft();
+    const { openDeviceDatabase } = await import('/src/storage/device-database.ts');
+    const { decryptRecord } = await import('/src/storage/device-vault.ts');
+    const database = await openDeviceDatabase();
+    const records = await new Promise((resolve, reject) => {
+      const request = database.transaction('seatDrafts').objectStore('seatDrafts').getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    database.close();
+    const record = records[0];
+    const legacy = await Promise.allSettled([decryptRecord({ ...record, schemaVersion: 1 }, record, () => {})]);
+    return { count: failures.length, failures, reason: restored.editReasons[seatId], revision: restored.localRevision,
+      schemaVersion: record.schemaVersion, plaintextReason: Object.hasOwn(record, 'editReasons'), legacy: legacy[0].status };
+  });
+  expect(result).toEqual({ count: 7, failures: [
+    'INVALID_EDIT_REASONS', 'INVALID_EDIT_REASON', 'INVALID_EDIT_REASON', 'INVALID_EDIT_REASON',
+    'INVALID_EDIT_REASONS', 'SEAT_DRAFT_FORMAT_DOWNGRADE', 'STALE_SEAT_DRAFT',
+  ], reason: '架空の席位置調整', revision: 2, schemaVersion: 2, plaintextReason: false, legacy: 'rejected' });
+});
+
 test('DD91-T38 永続化拒否と保存成功を区別し、操作保存の失敗で下書きも巻き戻す', async ({ page }) => {
   await setup(page, scope);
   const result = await page.evaluate(async () => {

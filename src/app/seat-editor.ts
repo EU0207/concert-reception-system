@@ -12,6 +12,7 @@ import { planSectionSettings } from './seat-section-settings.ts';
 import { mountSeatCanvasNavigation } from './seat-canvas-navigation.ts';
 import type { SeatCanvasView } from './seat-canvas-navigation.ts';
 import { openSectionSlide } from './seat-section-slide.ts';
+import { openIndividualSeatEdit } from './seat-individual-edit.ts';
 
 const evaluationBinding = {
   humanUid: 'local-evaluation-human',
@@ -93,6 +94,8 @@ export async function openSeatEditor(
   const baseVersions = draft?.baseVersions ?? evaluationVersions;
   let layout = draft ? validateLayout(draft.layout) : createLayout(scope);
   let savedLayout = layout;
+  let editReasons = draft?.editReasons ?? {};
+  let savedReasons = { ...editReasons };
   let activeId = layout.sections[0]?.section.sectionId;
   let selectionMode = 'single';
   let rangeStart: LayoutCell | undefined;
@@ -134,9 +137,13 @@ export async function openSeatEditor(
   }
 
   /** 計算が完了した編集案を表示し、端末保存が必要な状態にする。 */
-  function applyChange(plan: SeatChangePlan) {
+  function applyChange(plan: SeatChangePlan, edit?: { seatId: string; reason: string }) {
     if (!plan.impact.changed) return;
 
+    // 再採番などで席が変わった場合、以前の個別編集と対応しない理由を残さない。
+    const changed = new Set(plan.impact.changedSeatIds);
+    editReasons = Object.fromEntries(Object.entries(editReasons).filter(([seatId]) => !changed.has(seatId)));
+    if (edit) editReasons[edit.seatId] = edit.reason;
     layout = plan.after;
     dirty = true;
     result.textContent = '';
@@ -158,6 +165,7 @@ export async function openSeatEditor(
         if (!panel.isConnected || choice === 'continue' || (choice === 'save' && !(await save()))) return;
         if (choice === 'discard') {
           layout = savedLayout;
+          editReasons = { ...savedReasons };
           dirty = false;
           pendingSettings = false;
           result.textContent = '';
@@ -375,15 +383,24 @@ export async function openSeatEditor(
     }
 
     if (seat) {
-      selectionActions.append(button('席番号を変更', () => {
-        const number = displayNumber(seat);
-        editText('席番号を変更', '席番号', number, (next) => {
-          if (next === number) return;
-          applyChange(editUnassignedSeat(layout, section.sectionId, seat.seatId, {
-            number: next, reason: '公演前の席番号編集',
-          }));
-        });
-      }, 'button secondary'));
+      for (const [mode, label] of [['number', '席番号を変更'], ['position', '席の位置を変更']] as const) {
+        const edit = button(label, () => {
+          const before = layout;
+          openIndividualSeatEdit(model, seat.seatId, mode, editReasons[seat.seatId] ?? '', (input) => {
+            if (!panel.isConnected || layout !== before || activeId !== section.sectionId) {
+              throw new SeatDomainError('STALE_INDIVIDUAL_EDIT');
+            }
+            if (mode === 'number' && input.number === displayNumber(seat)) return;
+            const plan = editUnassignedSeat(before, section.sectionId, seat.seatId, input);
+            selected.clear();
+            rangeStart = undefined;
+            selected.add(input.targetCellId ?? single!.cellId);
+            applyChange(plan, { seatId: seat.seatId, reason: input.reason });
+          });
+        }, 'button secondary');
+        edit.disabled = layout.assignments.some((assignment) => assignment.seatId === seat.seatId);
+        selectionActions.append(edit);
+      }
       if (seat.numberingMode === 'manual') {
         selectionActions.append(button('自動採番に戻す', () => {
           try {
@@ -470,10 +487,11 @@ export async function openSeatEditor(
     updateStatus();
 
     try {
-      const saved = await store.saveLocalDraft({ draftId, layout, baseVersions }, localRevision);
+      const saved = await store.saveLocalDraft({ draftId, layout, baseVersions, editReasons }, localRevision);
       localRevision = saved.localRevision;
       savedAt = saved.savedAt;
       savedLayout = layout;
+      savedReasons = { ...editReasons };
       dirty = false;
       if (saved.persistence === 'unavailable') {
         storageNote.textContent = 'ブラウザーが保存領域の永続化を許可していません。保存した下書きが自動消去される場合があります。';
