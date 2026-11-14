@@ -32,6 +32,7 @@ import {
   text,
   validateLayout,
 } from './validation.ts';
+import { validateSeatEditReason } from './reason-policy.ts';
 
 /** 環境IDと公演IDだけを取り出し、新しい要素へ同じ所属を引き継ぐ。 */
 const scopeOf = (s: Scope): Scope => ({
@@ -651,11 +652,12 @@ export function editUnassignedSeat(
   before: SeatLayout,
   sectionId: Id,
   seatId: Id,
-  input: { number?: string; targetCellId?: Id; reason: string },
+  input: { number?: string; targetCellId?: Id; reason?: string },
   options: CalculationOptions = {},
 ): SeatChangePlan {
   validateLayout(before);
-  text(input.reason, SEAT_LIMITS.reason, 'INVALID_REASON');
+  if (options.editReasonContext) requireValue(options.editReasonContext.operation === 'layoutChange', 'INVALID_REASON_CONTEXT');
+  validateSeatEditReason(input.reason, options.editReasonContext);
   requireValue(
     !before.assignments.some((a) => a.seatId === seatId),
     'ASSIGNED_SEAT_REQUIRES_RELEASE',
@@ -679,7 +681,7 @@ export function editUnassignedSeat(
 
     model.seats = model.seats.map((s) => (s.seatId === seatId ? updated : s));
     seat = updated;
-    mark(seat, 'number', input.reason, options);
+    mark(seat, 'number', input.reason ?? '', options);
   } else {
     const target = model.section.cells.find((c) => c.cellId === input.targetCellId);
 
@@ -704,7 +706,7 @@ export function editUnassignedSeat(
           : candidate.seatId === other.seatId
             ? { ...asManual(candidate, displayNumber(candidate)), lineId: sourceLine.lineId } : candidate);
       }
-      for (const id of [seatId, other.seatId]) mark(model.seats.find((candidate) => candidate.seatId === id)!, 'position', input.reason, options);
+      for (const id of [seatId, other.seatId]) mark(model.seats.find((candidate) => candidate.seatId === id)!, 'position', input.reason ?? '', options);
       return plan(before, after);
     }
 
@@ -731,7 +733,7 @@ export function editUnassignedSeat(
     }
 
     seat.lineId = line.lineId;
-    mark(seat, 'position', input.reason, options);
+    mark(seat, 'position', input.reason ?? '', options);
   }
 
   return plan(before, after);

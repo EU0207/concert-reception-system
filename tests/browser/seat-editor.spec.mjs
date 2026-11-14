@@ -101,7 +101,6 @@ test('DD91-T43〜45 席構成の上下左右移動は前後確認と取消しを
   await page.getByRole('button', { name: '席に', exact: true }).click();
   await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
   await page.getByRole('textbox', { name: '席番号', exact: true }).fill('中央席');
-  await page.getByRole('textbox', { name: '変更理由', exact: true }).fill('架空の番号調整');
   await page.getByRole('button', { name: '変更を反映', exact: true }).click();
   for (const [position, kind] of [['3行2列 未', '欠番に'], ['3行4列 未', '空間に'], ['4行3列 未', '通路に']]) {
     await page.getByRole('button', { name: position, exact: true }).click();
@@ -212,7 +211,6 @@ test('DD91-T37 端末保存から復元し、共有と確定は明示した試�
   await page.getByRole('button', { name: '席に', exact: true }).click();
   await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
   await page.getByRole('textbox', { name: '席番号', exact: true }).fill('補助席');
-  await page.getByRole('textbox', { name: '変更理由', exact: true }).fill('架空の番号調整');
   await page.getByRole('button', { name: '変更を反映' }).click();
   const saveDraft = page.getByRole('button', { name: '下書き保存', exact: true });
   const saveDialog = page.getByRole('dialog', { name: '下書き保存の確認' });
@@ -262,7 +260,6 @@ test('DD91-T03・T04 手動番号を見分け、自動採番への復帰を確�
   const originalColor = await automatic.evaluate(node => getComputedStyle(node).backgroundColor);
   await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
   await page.getByRole('textbox', { name: '席番号', exact: true }).fill('補助席');
-  await page.getByRole('textbox', { name: '変更理由', exact: true }).fill('架空の番号調整');
   await page.getByRole('button', { name: '変更を反映', exact: true }).click();
   const manual = page.getByRole('button', { name: '採番確認区画の席 補助席 を選択', exact: true });
   await expect(manual).toHaveClass(/is-manual/);
@@ -288,7 +285,7 @@ test('DD91-T03・T04 手動番号を見分け、自動採番への復帰を確�
   await expect(page.locator('.seat-tile.is-manual')).toHaveCount(0);
   await restored.click();
   await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
-  await expect(page.getByRole('dialog', { name: '席番号を変更', exact: true }).getByLabel('変更理由')).toHaveValue('');
+  await expect(page.getByRole('dialog', { name: '席番号を変更', exact: true }).getByLabel('変更理由')).toHaveCount(0);
 });
 
 test('DD91-T34 手動のA-6を飛ばして後続席を作成し、保存から復元する', async ({ page }) => {
@@ -307,7 +304,6 @@ test('DD91-T34 手動のA-6を飛ばして後続席を作成し、保存から�
   await page.getByRole('button', { name: '採番重複確認の席 A-4 を選択', exact: true }).click();
   await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
   await page.getByRole('textbox', { name: '席番号', exact: true }).fill('A-6');
-  await page.getByRole('textbox', { name: '変更理由', exact: true }).fill('架空の番号調整');
   await page.getByRole('button', { name: '変更を反映', exact: true }).click();
   const manual = page.getByRole('button', { name: '採番重複確認の席 A-6 を選択', exact: true });
   await expect(manual).toHaveClass(/is-manual/);
@@ -326,7 +322,7 @@ test('DD91-T34 手動のA-6を飛ばして後続席を作成し、保存から�
   await expect(page.getByRole('button', { name: '採番重複確認の席 A-9 を選択', exact: true })).toBeVisible();
 });
 
-test('DD91-T30 キャンバスで移動先を選び、取消し・同列移動・別列移動と理由を復元する', async ({ page }) => {
+test('DD91-T30 キャンバスで移動先を選び、理由入力なしで取消し・同列移動・別列移動を保存復元する', async ({ page }) => {
   await openEditor(page);
   await addSection(page, '個別移動確認');
   const targetId = await page.getByRole('button', { name: '2行3列 未', exact: true }).getAttribute('data-cell-id');
@@ -346,10 +342,8 @@ test('DD91-T30 キャンバスで移動先を選び、取消し・同列移動�
   await page.getByRole('button', { name: '1行3列 空間', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: '席の位置を変更', exact: true });
   await expect(dialog.getByLabel('移動先の行')).toHaveCount(0);
-  await dialog.getByRole('button', { name: '変更を反映', exact: true }).click();
-  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel('変更理由')).toHaveCount(0);
   expect(await canvasCells(page)).toEqual(before);
-  await dialog.getByLabel('変更理由').fill('架空の位置調整');
   await expect(dialog).toContainText('変更前：A-1 ／ 1行1列');
   await expect(dialog).toContainText('変更後：A-1 ／ 1行3列');
   await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
@@ -358,14 +352,12 @@ test('DD91-T30 キャンバスで移動先を選び、取消し・同列移動�
 
   await page.getByRole('button', { name: '席の位置を変更', exact: true }).click();
   await page.getByRole('button', { name: '1行3列 空間', exact: true }).click();
-  await dialog.getByLabel('変更理由').fill('架空の位置調整');
   await dialog.getByRole('button', { name: '変更を反映', exact: true }).click();
   await expect(page.getByRole('button', { name: '1行1列 空間', exact: true })).toBeVisible();
   await expect(source).not.toHaveClass(/is-manual/);
   await page.getByRole('button', { name: '席の位置を変更', exact: true }).click();
   await page.getByRole('button', { name: '2行3列 未', exact: true }).click();
-  await expect(dialog.getByLabel('変更理由')).toHaveValue('架空の位置調整');
-  await dialog.getByLabel('変更理由').fill('架空の別列への調整');
+  await expect(dialog.getByLabel('変更理由')).toHaveCount(0);
   await dialog.getByRole('button', { name: '変更を反映', exact: true }).click();
   await expect(source).toHaveAttribute('data-cell-id', targetId);
   await expect(source).toHaveClass(/is-manual/);
@@ -377,10 +369,10 @@ test('DD91-T30 キャンバスで移動先を選び、取消し・同列移動�
   await page.getByRole('button', { name: '席の位置を変更', exact: true }).click();
   await page.getByRole('button', { name: '2行4列 未', exact: true }).click();
   await expect(dialog).toContainText('変更前：A-1 ／ 2行3列');
-  await expect(dialog.getByLabel('変更理由')).toHaveValue('架空の別列への調整');
+  await expect(dialog.getByLabel('変更理由')).toHaveCount(0);
 });
 
-test('DD91-T30 押した未割当席と位置を交換し、キャンバスの並びと双方の理由を復元する', async ({ page }) => {
+test('DD91-T30 押した未割当席と位置を交換し、理由入力なしでキャンバスの並びを保存復元する', async ({ page }) => {
   await openEditor(page);
   await addSection(page, '個別交換確認');
   await page.getByLabel('選択方法').selectOption('range');
@@ -400,7 +392,6 @@ test('DD91-T30 押した未割当席と位置を交換し、キャンバスの�
   await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
   expect(await canvasCells(page)).toEqual(before);
   await target.click();
-  await dialog.getByLabel('変更理由').fill('架空の位置交換');
   await dialog.getByRole('button', { name: '変更を反映', exact: true }).click();
   expect((await canvasCells(page)).slice(0, 2).map(cell => cell.text)).toEqual(['A-2席', 'A-1席']);
   await page.getByRole('button', { name: '下書き保存', exact: true }).click();
@@ -411,10 +402,10 @@ test('DD91-T30 押した未割当席と位置を交換し、キャンバスの�
   expect((await canvasCells(page)).slice(0, 2).map(cell => cell.text)).toEqual(['A-2席', 'A-1席']);
   await page.getByRole('button', { name: '席の位置を変更', exact: true }).click();
   await source.click();
-  await expect(dialog.getByLabel('変更理由')).toHaveValue('架空の位置交換');
+  await expect(dialog.getByLabel('変更理由')).toHaveCount(0);
 });
 
-test('DD91-T30 個別編集の欠番・通路への移動と番号重複・空白理由を拒否する', async ({ page }) => {
+test('DD91-T30 個別編集の欠番・通路への移動と番号重複を拒否する', async ({ page }) => {
   await openEditor(page);
   await addSection(page, '個別編集拒否');
   for (const [position, kind] of [['1行1列 未', '席に'], ['1行2列 未', '席に'], ['1行3列 未', '欠番に'], ['1行4列 未', '通路に']]) {
@@ -435,10 +426,8 @@ test('DD91-T30 個別編集の欠番・通路への移動と番号重複・空�
   await page.getByRole('button', { name: '席番号を変更', exact: true }).click();
   const number = page.getByRole('dialog', { name: '席番号を変更', exact: true });
   await number.getByLabel('席番号', { exact: true }).fill('A-2');
-  await number.getByLabel('変更理由').fill('   ');
   await number.getByRole('button', { name: '変更を反映', exact: true }).click();
   await expect(number).toBeVisible();
-  await number.getByLabel('変更理由').fill('架空の調整');
   await number.getByRole('button', { name: '変更を反映', exact: true }).click();
   await expect(number.getByRole('alert')).toContainText('番号の重複');
   expect(await canvasCells(page)).toEqual(before);

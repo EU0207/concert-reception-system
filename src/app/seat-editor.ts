@@ -138,13 +138,12 @@ export async function openSeatEditor(
   }
 
   /** 計算が完了した編集案を表示し、端末保存が必要な状態にする。 */
-  function applyChange(plan: SeatChangePlan, edit?: { seatIds: string[]; reason: string }) {
+  function applyChange(plan: SeatChangePlan) {
     if (!plan.impact.changed) return;
 
     // 再採番などで席が変わった場合、以前の個別編集と対応しない理由を残さない。
     const changed = new Set(plan.impact.changedSeatIds);
     editReasons = Object.fromEntries(Object.entries(editReasons).filter(([seatId]) => !changed.has(seatId)));
-    if (edit) for (const seatId of edit.seatIds) editReasons[seatId] = edit.reason;
     layout = plan.after;
     dirty = true;
     result.textContent = '';
@@ -282,18 +281,19 @@ export async function openSeatEditor(
     const model = before.sections.find((candidate) => candidate.section.sectionId === sectionId)!;
     const source = model.section.cells.find((cell) => cell.seatId === seatId)!;
     const seat = model.seats.find((candidate) => candidate.seatId === seatId)!;
-    const target = model.section.cells.find((cell) => cell.cellId === targetCellId);
-    openIndividualSeatEdit(model, seatId, mode, editReasons[seatId] ?? '', (input) => {
+    openIndividualSeatEdit(model, seatId, mode, (input) => {
       if (!panel.isConnected || layout !== before || activeId !== sectionId || pendingSettings || saving) {
         throw new SeatDomainError('STALE_INDIVIDUAL_EDIT');
       }
       if (mode === 'number' && input.number === displayNumber(seat)) return;
-      const plan = editUnassignedSeat(before, sectionId, seatId, input);
+      const plan = editUnassignedSeat(before, sectionId, seatId, input, {
+        editReasonContext: { phase: 'draft', operation: 'layoutChange' },
+      });
       selected.clear();
       rangeStart = undefined;
       movingSeatId = undefined;
       selected.add(targetCellId ?? source.cellId);
-      applyChange(plan, { seatIds: target?.seatId ? [seatId, target.seatId] : [seatId], reason: input.reason });
+      applyChange(plan);
     }, targetCellId);
   }
 
