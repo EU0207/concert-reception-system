@@ -1,7 +1,7 @@
 // 席の下書きと固定した操作案を、認可済み端末のIndexedDBへ暗号化保存する。
 
 import type { Scope, SeatLayout, SeatVersions } from '../domain/seats/types.ts';
-import { checkScope, isId, nonnegative, positive, requireValue } from '../domain/seats/validation.ts';
+import { checkScope, isId, nonnegative, positive, requireValue, SEAT_LIMITS, text } from '../domain/seats/validation.ts';
 import { openDeviceDatabase } from './device-database.ts';
 import { decryptRecord, encryptRecord } from './device-vault.ts';
 import type { DeviceKeyScope, EncryptedRecord, RecordIdentity } from './device-vault.ts';
@@ -10,6 +10,8 @@ interface DraftInput {
   draftId: string;
   baseVersions: SeatVersions & { attendeeRevision: number };
   layout: SeatLayout;
+  // 未確定の個別編集に対応する最新理由。業務履歴とは分離する。
+  editReasons?: Record<string, string>;
 }
 
 interface LocalDraft extends DraftInput {
@@ -51,6 +53,17 @@ function validateDraft(scope: DeviceKeyScope, input: DraftInput): void {
   }
   for (const assignment of input.layout.assignments) checkScope(assignment, scope);
   for (const ticket of input.layout.ticketProtections) checkScope(ticket, scope);
+  if (input.editReasons !== undefined) {
+    requireValue(input.editReasons && typeof input.editReasons === 'object' && !Array.isArray(input.editReasons), 'INVALID_EDIT_REASONS');
+    const seats = new Set(input.layout.sections.flatMap((model) => model.seats.map((seat) => seat.seatId)));
+    const entries = Object.entries(input.editReasons);
+    requireValue(entries.length <= SEAT_LIMITS.cells, 'INVALID_EDIT_REASONS');
+    for (const [seatId, reason] of entries) {
+      requireValue(isId(seatId) && seats.has(seatId), 'INVALID_EDIT_REASONS');
+      text(reason, SEAT_LIMITS.reason, 'INVALID_EDIT_REASON');
+      requireValue(reason === reason.trim(), 'INVALID_EDIT_REASON');
+    }
+  }
 }
 
 /** 暗号化前の一時バッファを保存用の暗号文に変換し、処理後に消去する。 */
@@ -95,9 +108,9 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
   };
   const draftKey = JSON.stringify([binding.environmentId, binding.performanceId, binding.deviceUid]);
 
-  /** 下書きIDまたは操作IDと保存版を、暗号文の追加認証情報へ含める。 */
-  function identity(recordKind: 'seat-draft' | 'seat-operation', recordId: string, dataRevision: number): RecordIdentity {
-    return { ...binding, schemaVersion: 1, recordKind, recordId, dataRevision };
+  /** 下書き・操作のIDと保存版、形式版を暗号文の追加認証情報へ含める。 */
+  function identity(recordKind: 'seat-draft' | 'seat-operation', recordId: string, dataRevision: number, schemaVersion = 1): RecordIdentity {
+    return { ...binding, schemaVersion, recordKind, recordId, dataRevision };
   }
 
   /** 操作IDを、この端末の下書きと同じ所属に結び付ける。 */
@@ -133,7 +146,8 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     if (!record) return null;
 
     requireValue(isId(record.recordId) && positive(record.dataRevision), 'INVALID_SEAT_DRAFT');
-    const expected = identity('seat-draft', record.recordId, record.dataRevision);
+    requireValue(record.schemaVersion === 1 || record.schemaVersion === 2, 'INVALID_SEAT_DRAFT');
+    const expected = identity('seat-draft', record.recordId, record.dataRevision, record.schemaVersion);
     const draft = JSON.parse(await unseal(expected, record, assertAuthorized)) as LocalDraft;
     requireValue(
       draft?.draftId === expected.recordId && draft.localRevision === expected.dataRevision &&
@@ -141,6 +155,7 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
       'INVALID_SEAT_DRAFT',
     );
     validateDraft(binding, draft);
+    requireValue(record.schemaVersion !== 2 || draft.editReasons !== undefined, 'INVALID_EDIT_REASONS');
 
     return draft;
   }
@@ -165,7 +180,8 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     const localRevision = expectedRevision + 1;
     const savedAt = Date.now();
     const draft = await seal(
-      identity('seat-draft', input.draftId, localRevision),
+      // 理由を扱えない旧版が読み出して再保存し、理由を落とすことを防ぐ。
+      identity('seat-draft', input.draftId, localRevision, input.editReasons === undefined ? 1 : 2),
       JSON.stringify({ ...input, localRevision, savedAt }),
       assertAuthorized,
     );
@@ -207,10 +223,11 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
                 prior
                   ? prior.dataRevision === expectedRevision && prior.recordId === draft.recordId &&
                     prior.humanUid === binding.humanUid && prior.storageEpoch === binding.storageEpoch &&
-                    prior.schemaVersion === 1 && prior.recordKind === 'seat-draft'
+                    (prior.schemaVersion === 1 || prior.schemaVersion === 2) && prior.recordKind === 'seat-draft'
                   : expectedRevision === 0,
                 'STALE_SEAT_DRAFT',
               );
+              requireValue(prior?.schemaVersion !== 2 || draft.schemaVersion === 2, 'SEAT_DRAFT_FORMAT_DOWNGRADE');
               drafts.put(draft, draftKey);
               if (operation) transaction.objectStore('seatOperations').add(operation.record, operation.key);
             } catch (error) {
