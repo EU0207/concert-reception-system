@@ -135,8 +135,16 @@ export interface CalculationOptions {
   // 保存層が過去に削除したIDを渡す。過去のID台帳をこの計算層で推測しない。
   retiredIds?: readonly Id[];
   duringPerformance?: boolean;
+  // 下書き計算用。共有先は要求本文でなく、保存経路と現在の確定状態から判定する。
+  editReasonContext?: SeatEditReasonContext;
   emergency?: Omit<EmergencyChange, 'kind'>;
 }
+
+/** 下書きと、保存側が確認した席構成の確定段階を区別する。 */
+export type SeatEditReasonContext =
+  | { phase: 'draft'; operation: 'layoutChange' | 'slide' }
+  | { phase: 'commit'; operation: 'layoutChange' | 'slide'; hasConfirmedLayout: boolean;
+      isPerformanceDay: boolean; receptionStarted: boolean };
 
 /** セルIDごとに指定する変更後のセル種別。 */
 export type CellSelections = Readonly<Record<Id, CellKind>>;
