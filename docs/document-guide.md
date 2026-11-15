@@ -211,3 +211,5 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 [受付優先の差分同期設計](development/detailed-design/reception-live-sync-design.md)に、#271の業務回答と設計・受入の変更を記録する。状態はApproved。
 
 [席編集の端末保存の実装・試験記録](development/technical-validation/seat-local-storage-results.md)に、#104-Aの保存境界と#105-Aへの受渡しを記録する。状態はApproved。
+
+[席編集の理由条件と簡易操作履歴の変更](development/detailed-design/seat-edit-reason-operation-history-change.md)は、#283・#284の業務回答と後続の取得・表示条件をまとめる。開発者と実装担当者が参照し、理由条件・履歴対象または開始条件の変更時に更新する。業務回答はApproved、確定保存と履歴閲覧の技術追補はIn Review。

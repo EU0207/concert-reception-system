@@ -137,13 +137,68 @@ test('DD91-T30 別列への位置変更でも表示番号を変えず、両セ�
   assert.equal(cell(model(p.after), 1, 1).cellId, target.cellId); assert.equal(displayNumber(model(p.after).seats[0]), displayNumber(seat));
   assert.equal(model(p.after).seats[0].numberingMode, 'manual');
 });
-test('DD91-T30 個別編集の空理由・占有先・割当済みを拒否', () => {
+test('DD91-T30 個別編集の空理由・通路・割当済みを拒否', () => {
   const f = fixture(), seat = model(f.layout).seats[0];
   rejects('INVALID_REASON', () => editUnassignedSeat(f.layout, f.sectionId, seat.seatId, { number: '補助', reason: '　' }));
   rejects('OCCUPIED_MOVE_TARGET', () => editUnassignedSeat(f.layout, f.sectionId, seat.seatId,
-    { targetCellId: model(f.layout).section.cells[3].cellId, reason: '架空' }));
+    { targetCellId: model(f.layout).section.cells[4].cellId, reason: '架空' }));
   rejects('ASSIGNED_SEAT_REQUIRES_RELEASE', () => editUnassignedSeat(protect(f.layout), f.sectionId, seat.seatId, { number: '補助', reason: '架空' }));
 });
+
+test('DD91-T30 未割当席の交換は番号・ID・区分を保持し、元の構成を変更しない', () => {
+  const f = fixture();
+  const [source, target] = [cell(model(f.layout), 0, 0), cell(model(f.layout), 0, 3)];
+  const before = structuredClone(f.layout);
+  model(before).seats[0].category = 'special';
+  const snapshot = structuredClone(before);
+  frozen(before);
+  const after = editUnassignedSeat(before, f.sectionId, source.seatId,
+    { targetCellId: target.cellId, reason: '架空の交換' }).after;
+  assert.equal(cell(model(after), 0, 0).seatId, target.seatId);
+  assert.equal(cell(model(after), 0, 3).seatId, source.seatId);
+  assert.deepEqual(model(after).seats, model(before).seats);
+  assert.deepEqual(before, snapshot);
+  const manual = editUnassignedSeat(f.layout, f.sectionId, source.seatId, { number: '補助', reason: '架空' }).after;
+  const swapped = editUnassignedSeat(manual, f.sectionId, source.seatId, { targetCellId: target.cellId, reason: '架空' }).after;
+  assert.equal(cell(model(swapped), 0, 3).consumedNumber, 1);
+  assert.equal(cell(model(swapped), 0, 0).consumedNumber, undefined);
+  validateLayout(swapped);
+});
+
+test('DD91-T30 別列の交換は表示番号を手動扱いで保持し、双方の割当・発券を保護する', () => {
+  const f = fixture({ rows: 2, columns: 2, kinds: [[0, 0, 'seat'], [1, 0, 'seat'], [0, 1, 'seat'], [1, 1, 'seat']] });
+  const source = cell(model(f.layout), 0, 0), target = cell(model(f.layout), 1, 0);
+  const after = editUnassignedSeat(f.layout, f.sectionId, source.seatId, { targetCellId: target.cellId, reason: '架空' }).after;
+  assert.equal(displayNumber(model(after).seats.find(seat => seat.seatId === source.seatId)), 'A-1');
+  assert.equal(displayNumber(model(after).seats.find(seat => seat.seatId === target.seatId)), 'B-1');
+  assert.equal(model(after).seats.find(seat => seat.seatId === source.seatId).numberingMode, 'manual');
+  assert.equal(cell(model(after), 0, 0).seatId, target.seatId);
+  for (const id of [source.seatId, target.seatId]) for (const state of [{}, { issued: true }, { hasIssuedHistory: true }]) {
+    const protectedLayout = protect(f.layout, model(f.layout).seats.find(seat => seat.seatId === id), state);
+    rejects('ASSIGNED_SEAT_REQUIRES_RELEASE', () => editUnassignedSeat(protectedLayout, f.sectionId, source.seatId,
+      { targetCellId: target.cellId, reason: '架空' }));
+  }
+  rejects('SEAT_SWAP_DURING_PERFORMANCE', () => editUnassignedSeat(f.layout, f.sectionId, source.seatId,
+    { targetCellId: target.cellId, reason: '架空' }, { duringPerformance: true }));
+  rejects('SAME_MOVE_TARGET', () => editUnassignedSeat(f.layout, f.sectionId, source.seatId,
+    { targetCellId: source.cellId, reason: '架空' }));
+});
+test('DD91-T30 別列交換は元列の予約番号を持ち込まず、表示番号の衝突では全体拒否する', () => {
+  const f = fixture({ rows: 2, columns: 2, kinds: [[0, 0, 'seat'], [0, 1, 'seat'], [1, 0, 'seat'], [1, 1, 'seat']] });
+  const source = cell(model(f.layout), 0, 0), target = cell(model(f.layout), 1, 0);
+  const manual = editUnassignedSeat(f.layout, f.sectionId, source.seatId, { number: '補助', reason: '架空' }).after;
+  const after = editUnassignedSeat(manual, f.sectionId, source.seatId, { targetCellId: target.cellId, reason: '架空' }).after;
+  assert.equal(cell(model(after), 0, 0).consumedNumber, undefined);
+  assert.equal(cell(model(after), 1, 0).consumedNumber, undefined);
+  validateLayout(after);
+  const conflict = editUnassignedSeat(f.layout, f.sectionId, source.seatId, { number: 'B-2', reason: '架空' }).after;
+  const before = structuredClone(conflict);
+  frozen(conflict);
+  rejects('DUPLICATE_DISPLAY_NUMBER', () => editUnassignedSeat(conflict, f.sectionId, source.seatId,
+    { targetCellId: target.cellId, reason: '架空' }));
+  assert.deepEqual(conflict, before);
+});
+
 test('DD91-T31 区画の同名・名前変更でsectionIdと他区画を変えない', () => {
   const f = fixture(), p = createSection(f.layout, { name: '架空区画', rows: 1, columns: 1, axis: 'horizontal', seatOrder: 'forward', lines: [{ name: 'A' }] }, f.opts);
   const renamed = renameSection(p.after, f.sectionId, 'バルコニー').after;

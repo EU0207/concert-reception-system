@@ -5,6 +5,7 @@
 export type * from './types.ts';
 
 export { SEAT_LIMITS, SeatDomainError, validateLayout, displayNumber } from './validation.ts';
+export { requiresSeatEditReason } from './reason-policy.ts';
 export {
   createLayout,
   createSection,

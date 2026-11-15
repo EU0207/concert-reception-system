@@ -32,6 +32,7 @@ import {
   text,
   validateLayout,
 } from './validation.ts';
+import { validateSeatEditReason } from './reason-policy.ts';
 
 /** 環境IDと公演IDだけを取り出し、新しい要素へ同じ所属を引き継ぐ。 */
 const scopeOf = (s: Scope): Scope => ({
@@ -651,11 +652,12 @@ export function editUnassignedSeat(
   before: SeatLayout,
   sectionId: Id,
   seatId: Id,
-  input: { number?: string; targetCellId?: Id; reason: string },
+  input: { number?: string; targetCellId?: Id; reason?: string },
   options: CalculationOptions = {},
 ): SeatChangePlan {
   validateLayout(before);
-  text(input.reason, SEAT_LIMITS.reason, 'INVALID_REASON');
+  if (options.editReasonContext) requireValue(options.editReasonContext.operation === 'layoutChange', 'INVALID_REASON_CONTEXT');
+  validateSeatEditReason(input.reason, options.editReasonContext);
   requireValue(
     !before.assignments.some((a) => a.seatId === seatId),
     'ASSIGNED_SEAT_REQUIRES_RELEASE',
@@ -679,9 +681,34 @@ export function editUnassignedSeat(
 
     model.seats = model.seats.map((s) => (s.seatId === seatId ? updated : s));
     seat = updated;
-    mark(seat, 'number', input.reason, options);
+    mark(seat, 'number', input.reason ?? '', options);
   } else {
     const target = model.section.cells.find((c) => c.cellId === input.targetCellId);
+
+    if (target?.kind === 'seat') {
+      requireValue(!options.duringPerformance, 'SEAT_SWAP_DURING_PERFORMANCE');
+      requireValue(target.seatId !== seatId, 'SAME_MOVE_TARGET');
+      const other = model.seats.find((candidate) => candidate.seatId === target.seatId)!;
+      requireValue(!before.assignments.some((assignment) => assignment.seatId === other.seatId), 'ASSIGNED_SEAT_REQUIRES_RELEASE');
+      const sourceLine = lineFor(model, source), targetLine = lineFor(model, target);
+      const sourceConsumed = source.consumedNumber, targetConsumed = target.consumedNumber;
+      source.seatId = other.seatId;
+      target.seatId = seat.seatId;
+      delete source.consumedNumber;
+      delete target.consumedNumber;
+      if (sourceLine.lineId === targetLine.lineId) {
+        if (sourceConsumed !== undefined) target.consumedNumber = sourceConsumed;
+        if (targetConsumed !== undefined) source.consumedNumber = targetConsumed;
+      } else {
+        // 別列へ移した番号は元の表示を保持し、移動元の列の消費番号は持ち込まない。
+        model.seats = model.seats.map((candidate) => candidate.seatId === seatId
+          ? { ...asManual(candidate, displayNumber(candidate)), lineId: targetLine.lineId }
+          : candidate.seatId === other.seatId
+            ? { ...asManual(candidate, displayNumber(candidate)), lineId: sourceLine.lineId } : candidate);
+      }
+      for (const id of [seatId, other.seatId]) mark(model.seats.find((candidate) => candidate.seatId === id)!, 'position', input.reason ?? '', options);
+      return plan(before, after);
+    }
 
     requireValue(
       target && (target.kind === 'unset' || target.kind === 'space'),
@@ -706,7 +733,7 @@ export function editUnassignedSeat(
     }
 
     seat.lineId = line.lineId;
-    mark(seat, 'position', input.reason, options);
+    mark(seat, 'position', input.reason ?? '', options);
   }
 
   return plan(before, after);
