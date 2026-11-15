@@ -1,5 +1,7 @@
 // 公演の準備確認を、確定済みデータ版と現在の管理版に結び付ける。
 
+import { validPerformanceCalendar } from './performance-calendar-rules.mjs';
+
 /** 準備確認の保存条件と、確認に使う版だけの読取り条件を組み立てる。 */
 export function receptionPreparationRules({ root, manager, integer, strictRecord }) {
   const control = `${root}.child('control')`;
@@ -8,11 +10,12 @@ export function receptionPreparationRules({ root, manager, integer, strictRecord
     commitRevision: 'event/commit/revision',
     layoutRevision: 'head/revision',
     viewRevision: 'head/viewRevision',
+    calendarRevision: 'control/calendar/calendarRevision',
   };
   const versions = Object.entries(revisionPaths).map(([key, path]) => {
     const revision = `${root}.child('${path}')`;
 
-    return `${revision}.isNumber() && ${integer(`${revision}.val()`, key === 'layoutRevision' ? 1 : 0)}
+    return `${revision}.isNumber() && ${integer(`${revision}.val()`, ['layoutRevision', 'calendarRevision'].includes(key) ? 1 : 0)}
       && newData.child('dataVersion/${key}').val() === ${revision}.val()`;
   });
   const fields = [
@@ -20,6 +23,7 @@ export function receptionPreparationRules({ root, manager, integer, strictRecord
     'confirmedAt', 'humanUid', 'deviceUid',
   ];
   const record = strictRecord(fields, manager, `${manager}
+    && ${validPerformanceCalendar(root, integer)}
     && ${session}.child('humanAuthTime').val() >= now - 900000
     && (${control}.child('state').val() === 'preparing' || ${control}.child('state').val() === 'stopped')
     && ${control}.child('staffDeadline').val() > now

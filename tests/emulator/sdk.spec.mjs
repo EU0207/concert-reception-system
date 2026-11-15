@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
+import { createPerformanceCalendar } from '../../src/domain/authorization/performance-calendar.ts';
 
 const project = 'demo-concert-reception-product';
 const performanceId = '00000000-0000-4000-8000-000000000002';
@@ -61,6 +62,7 @@ async function seed(environmentId, humanUid, deviceUid, role = 'receptionist', t
       ...scope,
       state: role === 'owner' ? 'preparing' : 'operating',
       staffDeadline: now + 86400000,
+      calendar: createPerformanceCalendar(scope, '2026-11-22', 'Asia/Tokyo', 1),
       ...(role === 'owner' ? { ownerUid: humanUid } : {}),
     },
   };
@@ -174,7 +176,8 @@ test('PERF111-S01 主担当が製品SDKで公演を初期化し、最新デー�
     const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
     const port = await createAuthorizationPort(window.testPrincipals, scope, { emulatorDatabasePort: 9100 });
     try {
-      await port.confirmReceptionPreparation(await port.readReceptionPreparationBasis());
+      window.savedPreparationBasis = await port.readReceptionPreparationBasis();
+      await port.confirmReceptionPreparation(window.savedPreparationBasis);
     } finally {
       port.dispose();
     }
@@ -187,11 +190,32 @@ test('PERF111-S01 主担当が製品SDKで公演を初期化し、最新デー�
     environmentId: f.environmentId,
     performanceId,
     controlRevision: 1,
-    dataVersion: { commitRevision: 4, layoutRevision: 1, viewRevision: 2 },
+    dataVersion: { commitRevision: 4, layoutRevision: 1, viewRevision: 2, calendarRevision: 1 },
     humanUid: f.person.uid,
     deviceUid: f.deviceUid,
     confirmedAt: expect.any(Number),
   });
+
+  const corrected = await fetch(`${root}/control/calendar.json?${query}`, {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+    body: JSON.stringify(createPerformanceCalendar({ environmentId: f.environmentId, performanceId }, '2026-11-23', 'Asia/Tokyo', 2)),
+  });
+  expect(corrected.status).toBe(200);
+  const checkedAgain = await page.evaluate(async (scope) => {
+    const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+    const port = await createAuthorizationPort(window.testPrincipals, scope, { emulatorDatabasePort: 9100 });
+    try {
+      const stale = await Promise.allSettled([port.confirmReceptionPreparation(window.savedPreparationBasis)]);
+      const current = await port.readReceptionPreparationBasis();
+      await port.confirmReceptionPreparation(current);
+
+      return { oldResult: stale[0].status, current };
+    } finally {
+      port.dispose();
+    }
+  }, { environmentId: f.environmentId, performanceId });
+  expect(checkedAgain).toMatchObject({ oldResult: 'rejected', current: { dataVersion: { calendarRevision: 2 } } });
 
   // 開始済みの状態だけを投入し、停止と結果照会は通常の端末資格で実行する。
   const firstReceptionStartedAt = Date.now() - 1000;

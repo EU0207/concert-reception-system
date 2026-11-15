@@ -20,6 +20,7 @@ export interface ConfirmedDataVersion {
   commitRevision: number;
   layoutRevision: number;
   viewRevision: number;
+  calendarRevision: number;
 }
 
 export interface ReceptionPreparationBasis {
@@ -45,12 +46,13 @@ function requireCurrentPreparation(current: ReceptionControl, context: Reception
   requireValue(preparation?.dataVersion && currentDataVersion, 'RECEPTION_PREPARATION_REQUIRED');
   checkScope(preparation, current);
 
-  const revisions = ['commitRevision', 'layoutRevision', 'viewRevision'] as const;
+  const revisions = ['commitRevision', 'layoutRevision', 'viewRevision', 'calendarRevision'] as const;
   requireValue(
     preparation.controlRevision === current.controlRevision &&
       positive(preparation.confirmedAt) &&
       preparation.confirmedAt <= serverTime &&
       positive(currentDataVersion.layoutRevision) &&
+      positive(currentDataVersion.calendarRevision) &&
       revisions.every(
         (key) => nonnegative(currentDataVersion[key]) &&
           preparation.dataVersion[key] === currentDataVersion[key],

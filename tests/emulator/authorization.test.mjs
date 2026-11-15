@@ -7,6 +7,7 @@ import { createAuthorizationAudit } from '../../src/domain/authorization/role-ma
 import { changeTemporaryPermissions } from '../../src/domain/authorization/role-management.ts';
 import { cancelAuthorizationChange } from '../../src/domain/authorization/role-management.ts';
 import { createOwnerDeviceToken } from '../../src/domain/authorization/device-registration.ts';
+import { createPerformanceCalendar } from '../../src/domain/authorization/performance-calendar.ts';
 
 const project = 'demo-concert-reception-product';
 const namespace = project + '-default-rtdb';
@@ -131,6 +132,7 @@ async function fixture(
         ...scope,
         state: 'operating',
         staffDeadline: now + 86400000,
+        calendar: createPerformanceCalendar(scope, '2026-11-22', 'Asia/Tokyo', 1),
       })
     ).status,
     200,
@@ -1580,6 +1582,7 @@ test('PERF111-R02 明示割当済み主担当の一体初期化だけを許可�
     ownerUid: human.uid,
     state: 'preparing',
     staffDeadline: Date.now() + 86400000,
+    calendar: createPerformanceCalendar(scope, '2026-11-22', 'Asia/Tokyo', 1),
   };
   assert.equal((await request(`${root}/control`, 'PUT', control)).status, 200);
 
@@ -1588,6 +1591,7 @@ test('PERF111-R02 明示割当済み主担当の一体初期化だけを許可�
     businessSchemaVersion: 3,
     layoutSchemaVersion: 2,
     initializedAt: { '.sv': 'timestamp' },
+    calendarInitializedFromRevision: 1,
   };
   const path = `${root}/control`;
   const entries = Object.entries(fields);
@@ -1608,8 +1612,55 @@ test('PERF111-R02 明示割当済み主担当の一体初期化だけを許可�
     controlRevision: 1,
     businessSchemaVersion: 3,
     layoutSchemaVersion: 2,
+    calendarInitializedFromRevision: 1,
   });
   assert.equal((await request(path, 'PATCH', fields, device.token)).status, 401);
+});
+
+test('CAL285-R01 公演暦は通常端末から変更できず、未登録・別公演と旧版の初期化を拒否する', async () => {
+  const owner = await fixture();
+  assert.equal((await request(`${root}/sessions/${owner.device.uid}`, 'PUT', owner.session, owner.human.token)).status, 200);
+  await request(root, 'PATCH', { event: null, head: null });
+  const calendar = createPerformanceCalendar(scope, '2026-11-22', 'Asia/Tokyo', 1);
+  const base = { ...scope, ownerUid: owner.human.uid, state: 'preparing', staffDeadline: Date.now() + 86400000 };
+  const fields = { controlRevision: 1, businessSchemaVersion: 3, layoutSchemaVersion: 2,
+    initializedAt: { '.sv': 'timestamp' }, calendarInitializedFromRevision: 1 };
+  const token = owner.device.token;
+  for (const value of [null, { ...calendar, calendarRevision: 0 }, { ...calendar, performanceId: scope.environmentId },
+    { ...calendar, dayEndsAt: calendar.dayStartsAt }, { ...calendar, calendarRevision: 2 }]) {
+    assert.equal((await request(`${root}/control`, 'PUT', { ...base, calendar: value })).status, 200);
+    assert.equal((await request(`${root}/control`, 'PATCH', fields, token)).status, 401);
+    assert.equal((await request(`${root}/control/controlRevision`)).body, null);
+  }
+  await request(`${root}/control`, 'PUT', { ...base, calendar });
+  for (const patch of [null, { ...calendar, calendarRevision: 2 }, { ...calendar, dayStartsAt: 0 }]) {
+    assert.equal((await request(`${root}/control/calendar`, 'PUT', patch, token)).status, 401);
+  }
+  assert.equal((await request(`${root}/control`, 'PATCH', { 'calendar/dayStartsAt': 0 }, token)).status, 401);
+  assert.equal((await request(`${root}/control`, 'PATCH', { ...fields, isPerformanceDay: false }, token)).status, 401);
+  assert.deepEqual((await request(`${root}/control/calendar`)).body, calendar);
+  assert.equal((await request(`${root}/control`, 'PATCH', fields, token)).status, 200);
+});
+
+test('CAL285-R02 暦の訂正後は古い準備確認を拒否し、最新版での再確認だけを受け付ける', async () => {
+  const owner = await fixture();
+  assert.equal((await request(`${root}/sessions/${owner.device.uid}`, 'PUT', owner.session, owner.human.token)).status, 200);
+  await request(root, 'PATCH', { 'control/controlRevision': 1, 'control/state': 'preparing',
+    'control/calendar': createPerformanceCalendar(scope, '2026-11-22', 'Asia/Tokyo', 2),
+    'head/revision': 3, 'head/viewRevision': 5, 'event/commit/revision': 10 });
+  const confirmation = { ...scope, controlRevision: 1,
+    dataVersion: { commitRevision: 10, layoutRevision: 3, viewRevision: 5, calendarRevision: 1 },
+    humanUid: owner.human.uid, deviceUid: owner.device.uid, confirmedAt: { '.sv': 'timestamp' } };
+  const path = `${root}/receptionPreparation`, token = owner.device.token;
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 401);
+  delete confirmation.dataVersion.calendarRevision;
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 401);
+  confirmation.dataVersion.calendarRevision = 2;
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 200);
+  await request(`${root}/control/calendar`, 'PUT', createPerformanceCalendar(scope, '2026-11-23', 'Asia/Tokyo', 3));
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 401);
+  confirmation.dataVersion.calendarRevision = 3;
+  assert.equal((await request(path, 'PUT', confirmation, token)).status, 200);
 });
 
 test('PERF111-R03 準備確認は現在の公演管理版と確定データ版でだけ保存できる', async () => {
@@ -1634,7 +1685,7 @@ test('PERF111-R03 準備確認は現在の公演管理版と確定データ版�
   const confirmation = {
     ...scope,
     controlRevision: 1,
-    dataVersion: { commitRevision: 10, layoutRevision: 3, viewRevision: 5 },
+    dataVersion: { commitRevision: 10, layoutRevision: 3, viewRevision: 5, calendarRevision: 1 },
     humanUid: owner.human.uid,
     deviceUid: owner.device.uid,
     confirmedAt: { '.sv': 'timestamp' },
