@@ -261,3 +261,60 @@ test('IMG91-T01・06 大きすぎる画像は読込み前に拒否し、5枠と�
   await expect(viewer.getByRole('alert')).toContainText('5枚まで');
   await expect(page.getByRole('dialog')).toHaveCount(0);
 });
+
+test('画像削除は影響する区画を確認し、取消し・削除後の再読込みと枠の再利用ができる', async ({ page }) => {
+  await openEditor(page);
+  await addSection(page, '画像を使う第一区画');
+  const file = await imageFile(page);
+  await addImage(page, file);
+  await saveDraft(page);
+  await addSection(page, '画像を使う第二区画');
+  const viewer = page.locator('.venue-images');
+  await viewer.getByLabel('この区画の画像').selectOption('0');
+  await saveDraft(page);
+  await viewer.getByRole('button', { name: '画像を削除', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: '会場画像を削除', exact: true });
+  await expect(dialog).toContainText('2区画でも表示されなくなります');
+  await expect(dialog.getByRole('button', { name: '閉じる', exact: true })).toBeFocused();
+  await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
+  await expect(viewer.locator('img')).toBeVisible();
+  await viewer.getByRole('button', { name: '画像を削除', exact: true }).click();
+  await dialog.getByRole('button', { name: '削除する', exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(viewer.locator('img')).toBeHidden();
+  await expect(viewer).toContainText('この区画の画像は削除済み');
+  await expect(page.getByRole('heading', { name: '画像を使う第二区画', exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('button', { name: '区画を追加' })).toBeEnabled();
+  await viewer.locator('summary').click();
+  await expect(viewer.getByRole('button', { name: '画像を削除', exact: true })).toBeDisabled();
+  await expect(viewer.locator('img')).toBeHidden();
+  await addImage(page, file);
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
+  expect(await viewer.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+});
+
+test('画像削除の保存失敗では旧画像を保持し、明示した再試行だけで削除する', async ({ page }) => {
+  await openEditor(page);
+  await addSection(page, '架空の区画');
+  await addImage(page, await imageFile(page));
+  const viewer = page.locator('.venue-images');
+  await page.evaluate(() => {
+    const put = IDBObjectStore.prototype.put;
+    window.failImageDelete = true;
+    // 削除済み版の保存だけを失敗させ、旧画像がトランザクションに残ることを確認する。
+    IDBObjectStore.prototype.put = function (...args) {
+      if (this.name === 'venueImages' && window.failImageDelete) throw new DOMException('test quota', 'QuotaExceededError');
+      return put.apply(this, args);
+    };
+  });
+  await viewer.getByRole('button', { name: '画像を削除', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: '会場画像を削除', exact: true });
+  await dialog.getByRole('button', { name: '削除する', exact: true }).click();
+  await expect(dialog.getByRole('alert')).toContainText('元の画像を保持');
+  await expect(viewer.locator('img')).toBeVisible();
+  await page.evaluate(() => { window.failImageDelete = false; });
+  await dialog.getByRole('button', { name: '削除する', exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(viewer.locator('img')).toBeHidden();
+});

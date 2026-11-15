@@ -118,6 +118,7 @@ export function createVenueImageViewer(context: Context) {
   const larger = button('＋', () => changeZoom(0.25), 'button secondary');
   const add = button('画像を追加', () => { replacing = false; file.click(); }, 'button secondary');
   const replace = button('画像を差し替え', () => { replacing = true; file.click(); }, 'button secondary');
+  const remove = button('画像を削除', () => { void removeImage(); }, 'button secondary venue-image-remove');
   previous.setAttribute('aria-label', '前の会場画像');
   next.setAttribute('aria-label', '次の会場画像');
   smaller.setAttribute('aria-label', '会場画像を縮小');
@@ -127,7 +128,7 @@ export function createVenueImageViewer(context: Context) {
   scale.append(smaller, zoomLabel, larger);
   controls.append(pages, scale);
   const manage = el('div', 'venue-image-manage');
-  manage.append(bindingLabel, add, replace, file);
+  manage.append(bindingLabel, add, replace, remove, file);
   root.append(summary, fallback, viewport, controls, manage, error, status);
 
   /** 確認済みのキャッシュを表示し、欠損時は座席表を使える案内を維持する。 */
@@ -147,13 +148,15 @@ export function createVenueImageViewer(context: Context) {
     choice.disabled = !context.section() || loading || writing;
     add.disabled = loading || writing;
     replace.disabled = loading || writing || !value?.blob;
+    remove.disabled = loading || writing || !value?.blob;
     const slots = navigableSlots();
     pageLabel.textContent = `${slot && slots.includes(slot) ? slots.indexOf(slot) + 1 : 0}/${slots.length}`;
     previous.disabled = next.disabled = slots.length < 2 || writing || !value?.blob;
     viewport.hidden = controls.hidden = !value?.blob;
     fallback.hidden = !!value?.blob;
     fallback.textContent = loading ? '会場画像を端末で確認しています。座席表はそのまま操作できます。' :
-      slot ? 'この区画の画像を取得できません。座席表で確認してください。' : '会場画像は未設定です。座席表で確認できます。';
+      slot ? value && !value.head.active ? 'この区画の画像は削除済みです。座席表で確認できます。' :
+        'この区画の画像を取得できません。座席表で確認してください。' : '会場画像は未設定です。座席表で確認できます。';
     if (!value?.blob) {
       if (url) URL.revokeObjectURL(url);
       url = undefined;
@@ -199,7 +202,7 @@ export function createVenueImageViewer(context: Context) {
         'この端末に確認用画像を保存します。共有は行いません。'));
       body.append(el('p', '', '「この区画の画像」の設定は「下書き保存」で保存します。'));
       const affected = context.sections().filter((section) => context.bindings()[section.id] === slot).length;
-      if (replacing && affected > 1) body.append(el('p', '', `この画像を使用中の${affected}区画に反映されます。`));
+      if (affected > 1) body.append(el('p', '', `この画像を使用中の${affected}区画に反映されます。`));
       const message = el('p');
       message.setAttribute('role', 'alert');
       body.append(message);
@@ -234,6 +237,48 @@ export function createVenueImageViewer(context: Context) {
     } catch {
       error.textContent = '画像を読み込めません。PNG・JPEGで1枚1MB以下の画像を選び、区画を変えずに確認してください。';
     }
+  }
+
+  /** 対象と影響を確認した後、画像本文を空にした削除済み版へ一体置換する。 */
+  async function removeImage() {
+    const slot = currentSlot(), prior = slot ? images.get(slot) : null;
+    if (!slot || !prior?.blob || loading || writing) return;
+    const affected = context.sections().filter((section) => context.bindings()[section.id] === slot).length;
+    const body = el('div');
+    body.append(el('p', '', `画像${Number(slot) + 1}をこの端末から削除します。元には戻せません。`));
+    if (affected) body.append(el('p', '', `この画像を使用する${affected}区画でも表示されなくなります。座席は変更しません。`));
+    body.append(el('p', '', '共有先の画像は削除しません。'));
+    const message = el('p');
+    message.setAttribute('role', 'alert');
+    body.append(message);
+    const confirm = button('削除する', async () => {
+      if (writing) return;
+      writing = true;
+      confirm.disabled = true;
+      refresh();
+      try {
+        context.assertAuthorized();
+        // 未解決の送信本文は、画面の削除で消したり置き換えたりしない。
+        const pending = await store.readUpload(slot);
+        if (pending?.status === 'prepared') throw Error('PENDING_IMAGE_OPERATION');
+        const head: VenueImageHead = { environmentId: context.scope.environmentId, performanceId: context.scope.performanceId,
+          schemaVersion: 1, revision: prior.head.revision + 1, active: false, bank: '',
+          operationId: crypto.randomUUID(), sha256: '' };
+        const saved = await store.saveImage(slot, head, null, prior.localRevision);
+        images.set(slot, saved);
+        status.textContent = 'この端末の確認用画像を削除しました。';
+        dialog.close();
+      } catch {
+        message.textContent = '削除できませんでした。元の画像を保持しています。未完了の送信や別タブの変更を確認してください。';
+      } finally {
+        writing = false;
+        confirm.disabled = false;
+        refresh();
+      }
+    }, 'button secondary venue-image-remove');
+    const dialog = showDialog('会場画像を削除', body, [confirm]);
+    // 破壊的な操作は確認ボタンを初期フォーカスにせず、取消しから選べるようにする。
+    dialog.querySelector<HTMLButtonElement>('.dialog-actions button:last-child')?.focus();
   }
 
   // 操作・表示イベント：画像の拡大・切替は席データを変更せず、対応付けだけを下書きへ通知する。
