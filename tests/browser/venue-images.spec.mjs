@@ -182,11 +182,13 @@ async function saveDraft(page) {
   await expect(page.getByText(/^この端末に保存済み・未確定/)).toBeVisible();
 }
 
-test('IMG91-T06・REQ-NF-014 画像の下部操作・中央縮小と区画連動を確認し、再起動後も表示する', async ({ page }, info) => {
+test('IMG91-T06・REQ-NF-014 画像の下部操作・中央縮小と任意の区画連動を確認し、再起動後も表示する', async ({ page }, info) => {
   await openEditor(page);
   await addSection(page, '架空の第一区画');
   await addImage(page, await imageFile(page));
   const viewer = page.locator('.venue-images');
+  await expect(viewer.getByLabel('この区画で最初に表示する画像（任意）')).toHaveValue('');
+  await viewer.getByLabel('この区画で最初に表示する画像（任意）').selectOption('0');
   await viewer.getByRole('button', { name: '会場画像を縮小' }).click();
   await viewer.getByRole('button', { name: '会場画像を縮小' }).click();
   await viewer.locator('img').evaluate((node) => Promise.all(node.getAnimations().map((animation) => animation.finished)));
@@ -215,14 +217,23 @@ test('IMG91-T06・REQ-NF-014 画像の下部操作・中央縮小と区画連動
   await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('200%');
   await saveDraft(page);
   await addSection(page, '架空の第二区画');
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
   await addImage(page, await imageFile(page, '#5d3b71'));
   await saveDraft(page);
   await viewer.getByRole('button', { name: '次の会場画像' }).click();
-  await expect(page.getByRole('heading', { name: '架空の第一区画', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '架空の第二区画', exact: true })).toBeVisible();
   await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
   await viewer.locator('.venue-image-viewport').dispatchEvent('pointerdown', { clientX: 250, clientY: 120, pointerType: 'touch' });
   await viewer.locator('.venue-image-viewport').dispatchEvent('pointerup', { clientX: 100, clientY: 120, pointerType: 'touch' });
   await expect(page.getByRole('heading', { name: '架空の第二区画', exact: true })).toBeVisible();
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像2');
+  await page.getByLabel('表示する区画').selectOption({ label: '架空の第一区画' });
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
+  await viewer.getByRole('button', { name: '前の会場画像' }).click();
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像2');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await page.getByLabel('表示する区画').selectOption({ label: '架空の第二区画' });
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像2');
   await page.reload();
   await expect(page.getByRole('button', { name: '区画を追加' })).toBeEnabled();
   const restored = page.locator('.venue-images');
@@ -267,14 +278,15 @@ test('画像削除は影響する区画を確認し、取消し・削除後の�
   await addSection(page, '画像を使う第一区画');
   const file = await imageFile(page);
   await addImage(page, file);
+  await page.getByLabel('この区画で最初に表示する画像（任意）').selectOption('0');
   await saveDraft(page);
   await addSection(page, '画像を使う第二区画');
   const viewer = page.locator('.venue-images');
-  await viewer.getByLabel('この区画の画像').selectOption('0');
+  await viewer.getByLabel('この区画で最初に表示する画像（任意）').selectOption('0');
   await saveDraft(page);
   await viewer.getByRole('button', { name: '画像を削除', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: '会場画像を削除', exact: true });
-  await expect(dialog).toContainText('2区画でも表示されなくなります');
+  await expect(dialog).toContainText('設定している区画は2区画');
   await expect(dialog.getByRole('button', { name: '閉じる', exact: true })).toBeFocused();
   await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
   await expect(viewer.locator('img')).toBeVisible();
@@ -282,7 +294,7 @@ test('画像削除は影響する区画を確認し、取消し・削除後の�
   await dialog.getByRole('button', { name: '削除する', exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await expect(viewer.locator('img')).toBeHidden();
-  await expect(viewer).toContainText('この区画の画像は削除済み');
+  await expect(viewer).toContainText('表示できる会場画像はありません');
   await expect(page.getByRole('heading', { name: '画像を使う第二区画', exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('button', { name: '区画を追加' })).toBeEnabled();
@@ -317,4 +329,48 @@ test('画像削除の保存失敗では旧画像を保持し、明示した再�
   await dialog.getByRole('button', { name: '削除する', exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await expect(viewer.locator('img')).toBeHidden();
+});
+
+test('全区画から5画像を閲覧でき、未設定や優先画像の削除でも残りの画像を表示する', async ({ page }) => {
+  await openEditor(page);
+  await addSection(page, '１階');
+  const file = await imageFile(page);
+  for (let index = 0; index < 5; index++) await addImage(page, file);
+  const viewer = page.locator('.venue-images');
+  const preferred = viewer.getByLabel('この区画で最初に表示する画像（任意）');
+  await expect(viewer).toContainText('公演全体の画像：5／5枚');
+  await expect(preferred).toHaveValue('');
+  await saveDraft(page);
+  await addSection(page, '２階');
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像5');
+  await saveDraft(page);
+  for (let index = 1; index <= 5; index++) {
+    await viewer.getByRole('button', { name: '次の会場画像' }).click();
+    await expect(viewer.locator('img')).toHaveAttribute('alt', `会場画像${index}`);
+    await expect(page.getByRole('heading', { name: '２階', exact: true })).toBeVisible();
+  }
+  await preferred.selectOption('2');
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像3');
+  await saveDraft(page);
+  await page.getByLabel('表示する区画').selectOption({ label: '１階' });
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像3');
+  await viewer.getByRole('button', { name: '次の会場画像' }).click();
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像4');
+  await page.getByLabel('表示する区画').selectOption({ label: '２階' });
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像3');
+  await preferred.selectOption('');
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像3');
+  await preferred.selectOption('2');
+  await saveDraft(page);
+  await viewer.getByRole('button', { name: '画像を削除', exact: true }).click();
+  await page.getByRole('dialog').getByRole('button', { name: '削除する', exact: true }).click();
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
+  await expect(viewer).toContainText('公演全体の画像：4／5枚');
+  await page.reload();
+  await expect(page.getByRole('button', { name: '区画を追加' })).toBeEnabled();
+  await viewer.locator('summary').click();
+  await page.getByLabel('表示する区画').selectOption({ label: '２階' });
+  await expect(preferred).toHaveValue('2');
+  await expect(viewer.locator('img')).toBeVisible();
+  await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
 });

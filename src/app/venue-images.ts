@@ -14,7 +14,6 @@ interface Context {
   sections(): readonly { id: string; name: string }[];
   bindings(): Readonly<Record<string, ImageSlot>>;
   bind(sectionId: string, slot: ImageSlot | undefined): void;
-  navigate(sectionId: string): Promise<void>;
 }
 
 type ImageValue = Awaited<ReturnType<ReturnType<typeof createVenueImageStore>['readImage']>>;
@@ -29,16 +28,20 @@ export function createVenueImageViewer(context: Context) {
   const image = el('img');
   const fallback = el('p', 'muted', '会場画像は未設定です。座席表で確認できます。');
   const status = el('p', 'muted');
+  const count = el('p', 'muted');
   const error = el('p', 'field-error');
   const controls = el('div', 'venue-image-controls');
   const pageLabel = el('span', '', '0/0');
   const zoomLabel = el('span', '', '100%');
-  const bindingLabel = el('label', 'seat-field', 'この区画の画像');
+  const bindingName = 'この区画で最初に表示する画像（任意）';
+  const bindingLabel = el('label', 'seat-field', bindingName);
   const choice = el('select');
   const file = el('input');
   const images = new Map<ImageSlot, ImageValue>();
   const failed = new Set<ImageSlot>();
   let previewSlot: ImageSlot | undefined;
+  let previousSection: string | undefined;
+  let previousBinding: ImageSlot | undefined;
   let url: string | undefined;
   let shownIdentity = '';
   let zoom = 1;
@@ -53,7 +56,7 @@ export function createVenueImageViewer(context: Context) {
   viewport.setAttribute('aria-label', '会場画像の表示領域');
   error.setAttribute('role', 'alert');
   status.setAttribute('role', 'status');
-  choice.setAttribute('aria-label', 'この区画の画像');
+  choice.setAttribute('aria-label', bindingName);
   file.type = 'file';
   file.accept = 'image/png,image/jpeg,.png,.jpg,.jpeg';
   file.hidden = true;
@@ -61,18 +64,24 @@ export function createVenueImageViewer(context: Context) {
   stage.append(image);
   viewport.append(stage);
 
-  /** 現在の区画に対応する枠を使い、別区画の画像へ勝手に代替しない。 */
+  /** 区画切替時だけ任意の優先画像を選び、未設定なら表示中の画像を維持する。 */
   function currentSlot(): ImageSlot | undefined {
     const section = context.section();
+    const preferred = section ? context.bindings()[section] : undefined;
+    const slots = navigableSlots();
+    if ((section !== previousSection || preferred !== previousBinding || !previewSlot) && preferred && slots.includes(preferred)) {
+      previewSlot = preferred;
+    }
+    if (!previewSlot || !slots.includes(previewSlot)) previewSlot = slots[0];
+    previousSection = section;
+    previousBinding = preferred;
 
-    return section ? context.bindings()[section] : previewSlot;
+    return previewSlot;
   }
 
-  /** 区画に対応する画像だけを前後操作の対象にする。区画未作成時は単独確認を許可する。 */
+  /** 区画との対応に関係なく、公演全体の検証済み画像を閲覧対象にする。 */
   function navigableSlots(): ImageSlot[] {
-    const referenced = new Set(Object.values(context.bindings()));
-
-    return IMAGE_SLOTS.filter((slot) => images.get(slot)?.blob && (!context.section() || referenced.has(slot)));
+    return IMAGE_SLOTS.filter((slot) => images.get(slot)?.blob);
   }
 
   /** 表示領域へ収めた100%を基準にし、小さい画像も中央へ配置する。 */
@@ -94,14 +103,12 @@ export function createVenueImageViewer(context: Context) {
     }
   }
 
-  /** 指定した関連画像へ移動し、その画像が対応する区画も同じ手順で切り替える。 */
-  async function navigate(direction: -1 | 1) {
+  /** 公演全体の画像だけを前後へ切り替え、区画と下書きは変更しない。 */
+  function navigate(direction: -1 | 1) {
     const slots = navigableSlots(), slot = currentSlot();
     if (slots.length < 2 || !slot) return;
     const target = slots[(slots.indexOf(slot) + direction + slots.length) % slots.length]!;
-    const section = context.sections().find((item) => context.bindings()[item.id] === target);
-    if (section) await context.navigate(section.id);
-    else previewSlot = target;
+    previewSlot = target;
     refresh();
   }
 
@@ -129,34 +136,35 @@ export function createVenueImageViewer(context: Context) {
   controls.append(pages, scale);
   const manage = el('div', 'venue-image-manage');
   manage.append(bindingLabel, add, replace, remove, file);
-  root.append(summary, fallback, viewport, controls, manage, error, status);
+  root.append(summary, count, fallback, viewport, controls, manage, error, status);
 
   /** 確認済みのキャッシュを表示し、欠損時は座席表を使える案内を維持する。 */
   function refresh() {
     if (!context.isActive()) return;
     const slot = currentSlot(), value = slot ? images.get(slot) : null;
+    const section = context.section(), preferred = section ? context.bindings()[section] : undefined;
     const options = [el('option', '', '指定なし')];
     options[0]!.value = '';
     for (const candidate of IMAGE_SLOTS) {
-      if (!images.get(candidate)?.blob && candidate !== slot) continue;
+      if (!images.get(candidate)?.blob && candidate !== preferred) continue;
       const option = el('option', '', `画像${Number(candidate) + 1}${images.get(candidate)?.blob ? '' : '（未取得）'}`);
       option.value = candidate;
       options.push(option);
     }
     choice.replaceChildren(...options);
-    choice.value = slot ?? '';
+    choice.value = preferred ?? '';
     choice.disabled = !context.section() || loading || writing;
     add.disabled = loading || writing;
     replace.disabled = loading || writing || !value?.blob;
     remove.disabled = loading || writing || !value?.blob;
     const slots = navigableSlots();
+    count.textContent = loading ? '公演全体の画像を確認しています。' : `公演全体の画像：${slots.length}／5枚`;
     pageLabel.textContent = `${slot && slots.includes(slot) ? slots.indexOf(slot) + 1 : 0}/${slots.length}`;
     previous.disabled = next.disabled = slots.length < 2 || writing || !value?.blob;
     viewport.hidden = controls.hidden = !value?.blob;
     fallback.hidden = !!value?.blob;
     fallback.textContent = loading ? '会場画像を端末で確認しています。座席表はそのまま操作できます。' :
-      slot ? value && !value.head.active ? 'この区画の画像は削除済みです。座席表で確認できます。' :
-        'この区画の画像を取得できません。座席表で確認してください。' : '会場画像は未設定です。座席表で確認できます。';
+      '表示できる会場画像はありません。座席表で確認できます。';
     if (!value?.blob) {
       if (url) URL.revokeObjectURL(url);
       url = undefined;
@@ -188,7 +196,7 @@ export function createVenueImageViewer(context: Context) {
     error.textContent = '';
     const sectionId = context.section();
     const slot = replacing ? currentSlot() : IMAGE_SLOTS.find((item) => !images.get(item)?.blob && !failed.has(item));
-    if (!slot) { error.textContent = '画像は5枚までです。表示中の画像を差し替えてください。'; return; }
+    if (!slot) { error.textContent = '画像は公演全体で5枚までです。表示中の画像を差し替えてください。'; return; }
     const prior = images.get(slot);
     try {
       context.assertAuthorized();
@@ -200,7 +208,7 @@ export function createVenueImageViewer(context: Context) {
       const body = el('div');
       body.append(el('p', '', replacing ? 'この端末の確認用画像を差し替えて保存します。共有は行いません。' :
         'この端末に確認用画像を保存します。共有は行いません。'));
-      body.append(el('p', '', '「この区画の画像」の設定は「下書き保存」で保存します。'));
+      body.append(el('p', '', '区画との対応は任意です。設定した場合は「下書き保存」で保存します。'));
       const affected = context.sections().filter((section) => context.bindings()[section.id] === slot).length;
       if (affected > 1) body.append(el('p', '', `この画像を使用中の${affected}区画に反映されます。`));
       const message = el('p');
@@ -220,12 +228,11 @@ export function createVenueImageViewer(context: Context) {
           savedToDevice = true;
           context.assertAuthorized();
           images.set(slot, saved);
-          if (sectionId) context.bind(sectionId, slot);
-          else previewSlot = slot;
+          previewSlot = slot;
           status.textContent = '確認用画像をこの端末に保存しました。';
           dialog.close();
         } catch {
-          message.textContent = savedToDevice ? '画像は端末に保存しました。区画との対応を選び直してください。' :
+          message.textContent = savedToDevice ? '画像は端末に保存しました。画面を開き直して確認してください。' :
             '保存できませんでした。元の画像を保持しています。別タブの変更や保存容量を確認してください。';
         } finally {
           writing = false;
@@ -246,7 +253,8 @@ export function createVenueImageViewer(context: Context) {
     const affected = context.sections().filter((section) => context.bindings()[section.id] === slot).length;
     const body = el('div');
     body.append(el('p', '', `画像${Number(slot) + 1}をこの端末から削除します。元には戻せません。`));
-    if (affected) body.append(el('p', '', `この画像を使用する${affected}区画でも表示されなくなります。座席は変更しません。`));
+    body.append(el('p', '', '全ての区画で、この画像を表示できなくなります。座席は変更しません。'));
+    if (affected) body.append(el('p', '', `最初に表示する画像に設定している区画は${affected}区画です。`));
     body.append(el('p', '', '共有先の画像は削除しません。'));
     const message = el('p');
     message.setAttribute('role', 'alert');
