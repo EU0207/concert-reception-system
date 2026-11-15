@@ -19,18 +19,20 @@ interface LocalDraft extends DraftInput {
   savedAt: number;
 }
 
-interface SeatOperationInput {
+export interface SeatOperationInput {
   operationId: string;
   kind: 'share' | 'commit';
   expectedVersions: DraftInput['baseVersions'] & { roleRevision: number; deviceRevision: number };
   command: Scope & Record<string, unknown>;
 }
 
-type PendingSeatOperation = SeatOperationInput & {
+export type PendingSeatOperation = SeatOperationInput & {
   draftId: string;
   draftRevision: number;
   draftDigest: string;
   status: 'prepared';
+  // 形式2では後から編集する下書きとは別に、送信対象の構成を固定する。
+  draftSnapshot?: DraftInput;
 };
 
 const draftVersionKeys = [
@@ -165,8 +167,21 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     const record = await readRecord('seatOperations', operationKey(operationId));
     if (!record) return null;
 
-    const operation = JSON.parse(await unseal(identity('seat-operation', operationId, 1), record, assertAuthorized));
+    requireValue(record.schemaVersion === 1 || record.schemaVersion === 2, 'INVALID_SEAT_OPERATION');
+    const operation = JSON.parse(await unseal(identity('seat-operation', operationId, 1, record.schemaVersion), record, assertAuthorized));
     requireValue(operation?.operationId === operationId && operation.status === 'prepared', 'INVALID_SEAT_OPERATION');
+    if (record.schemaVersion === 2) {
+      requireValue(operation.draftSnapshot && operation.draftSnapshot.draftId === operation.draftId, 'INVALID_SEAT_OPERATION');
+      validateDraft(binding, operation.draftSnapshot);
+      const bytes = new TextEncoder().encode(JSON.stringify(operation.draftSnapshot));
+      try {
+        const hash = await crypto.subtle.digest('SHA-256', bytes);
+        const digest = Array.from(new Uint8Array(hash), (byte) => byte.toString(16).padStart(2, '0')).join('');
+        requireValue(digest === operation.draftDigest, 'INVALID_SEAT_OPERATION');
+      } finally {
+        bytes.fill(0);
+      }
+    }
 
     return operation;
   }
@@ -294,13 +309,15 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     const draftDigest = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
     const pending: PendingSeatOperation = {
       ...fixedOperation, draftId: fixedInput.draftId, draftRevision: localRevision, draftDigest, status: 'prepared',
+      draftSnapshot: fixedInput,
     };
     const serialized = JSON.stringify(pending);
-    const expected = identity('seat-operation', fixedOperation.operationId, 1);
+    const expected = identity('seat-operation', fixedOperation.operationId, 1, 2);
     const record = await seal(expected, serialized, assertAuthorized);
     const prior = await writeDraft(draft, expectedRevision, { key, record });
 
     if (prior) {
+      requireValue(prior.schemaVersion === 2, 'SEAT_OPERATION_FORMAT_MISMATCH');
       requireValue(await unseal(expected, prior, assertAuthorized) === serialized, 'OPERATION_ID_REUSED');
     }
     assertAuthorized();
