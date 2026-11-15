@@ -22,7 +22,7 @@ async function addSection(page, name) {
 /** 表示操作が端末下書きを書き換えないことを、実際の保存版で照合する。 */
 async function draftRevisions(page) {
   return page.evaluate(() => new Promise((resolve, reject) => {
-    const open = indexedDB.open('concert-reception-device', 3);
+    const open = indexedDB.open('concert-reception-device');
     open.onerror = () => reject(open.error);
     open.onsuccess = () => {
       const database = open.result;

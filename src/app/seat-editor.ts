@@ -13,6 +13,8 @@ import { mountSeatCanvasNavigation } from './seat-canvas-navigation.ts';
 import type { SeatCanvasView } from './seat-canvas-navigation.ts';
 import { openSectionSlide } from './seat-section-slide.ts';
 import { openIndividualSeatEdit } from './seat-individual-edit.ts';
+import { createVenueImageViewer } from './venue-images.ts';
+import type { ImageSlot } from '../domain/seats/venue-image.ts';
 
 const evaluationBinding = {
   humanUid: 'local-evaluation-human',
@@ -96,6 +98,8 @@ export async function openSeatEditor(
   let savedLayout = layout;
   let editReasons = draft?.editReasons ?? {};
   let savedReasons = { ...editReasons };
+  let imageBindings: Record<string, ImageSlot> = draft?.imageBindings ?? {};
+  let savedImageBindings = { ...imageBindings };
   let activeId = layout.sections[0]?.section.sectionId;
   let selectionMode = 'single';
   let rangeStart: LayoutCell | undefined;
@@ -120,6 +124,33 @@ export async function openSeatEditor(
   const storageNote = el('p', 'muted');
   result.setAttribute('role', 'status');
   error.setAttribute('role', 'alert');
+  const images = createVenueImageViewer({
+    scope: binding,
+    assertAuthorized: assertActive,
+    /** 背景読込みが終わる前に離脱しても、旧画面を更新しない。 */
+    isActive: () => panel.isConnected,
+    /** 画像と対応させる現在の区画IDを返す。 */
+    section: () => activeId,
+    /** 画像の切替先と同じ区画を、表示順のまま選べるようにする。 */
+    sections: () => layout.sections.map(({ section }) => ({ id: section.sectionId, name: section.name })),
+    /** 未保存を含む区画と画像の対応を返す。 */
+    bindings: () => imageBindings,
+    /** 対応付けだけを席構成と同じ下書きへ保存する対象にする。 */
+    bind: (sectionId, slot) => {
+      assertActive();
+      if (!layout.sections.some(({ section }) => section.sectionId === sectionId)) throw Error('IMAGE_SECTION_CHANGED');
+      imageBindings = { ...imageBindings };
+      if (slot) imageBindings[sectionId] = slot;
+      else delete imageBindings[sectionId];
+      dirty = true;
+      updateStatus();
+    },
+    /** 画像の前後操作でも、区画切替の保存・取消し確認を維持する。 */
+    navigate: async (sectionId) => {
+      sectionChoice.value = sectionId;
+      await switchSection();
+    },
+  });
 
   /** 最後の保存時刻と、その後に変更した内容の有無を表示する。 */
   function updateStatus() {
@@ -166,6 +197,7 @@ export async function openSeatEditor(
         if (choice === 'discard') {
           layout = savedLayout;
           editReasons = { ...savedReasons };
+          imageBindings = { ...savedImageBindings };
           dirty = false;
           pendingSettings = false;
           result.textContent = '';
@@ -362,6 +394,8 @@ export async function openSeatEditor(
     const model = layout.sections.find(({ section }) => section.sectionId === activeId);
     if (!model) {
       sections.append(el('p', 'muted', '区画を追加すると座席が表示されます。'));
+      sections.append(images.element);
+      images.refresh();
       return;
     }
 
@@ -513,7 +547,9 @@ export async function openSeatEditor(
     map.append(el('div', 'seat-stage-label', '舞台'), grid);
     canvas.append(map);
     card.append(canvas);
+    selection.append(images.element);
     sections.append(selection, card);
+    images.refresh();
     const view = canvasViews.get(section.sectionId) ?? { scale: 1, left: 0, top: 0 };
     canvasViews.set(section.sectionId, view);
     card.append(mountSeatCanvasNavigation(canvas, map, view, () => selected.size === 1 ? [...selected][0] : undefined));
@@ -522,6 +558,10 @@ export async function openSeatEditor(
   /** 最後に読んだ版を条件に保存し、失敗時は入力と直前の保存情報を維持する。 */
   async function save() {
     if (saving) return false;
+    if (images.isSaving()) {
+      error.textContent = '画像を端末に保存しています。完了してから下書き保存してください。';
+      return false;
+    }
     if (movingSeatId) {
       error.textContent = '席の移動を反映するか「席の移動をやめる」を選んでから保存してください。';
       return false;
@@ -537,12 +577,14 @@ export async function openSeatEditor(
     updateStatus();
 
     try {
-      const saved = await store.saveLocalDraft({ draftId, layout, baseVersions, editReasons }, localRevision);
+      const fixedImageBindings = { ...imageBindings };
+      const saved = await store.saveLocalDraft({ draftId, layout, baseVersions, editReasons, imageBindings: fixedImageBindings }, localRevision);
       localRevision = saved.localRevision;
       savedAt = saved.savedAt;
       savedLayout = layout;
       savedReasons = { ...editReasons };
-      dirty = false;
+      savedImageBindings = fixedImageBindings;
+      dirty = JSON.stringify(imageBindings) !== JSON.stringify(fixedImageBindings);
       if (saved.persistence === 'unavailable') {
         storageNote.textContent = 'ブラウザーが保存領域の永続化を許可していません。保存した下書きが自動消去される場合があります。';
       }
@@ -611,7 +653,7 @@ export async function openSeatEditor(
     /** 保存対象になる変更があるかを離脱確認へ伝える。 */
     isDirty: () => dirty || pendingSettings || !!movingSeatId,
     /** 保存中は画面を維持し、保存完了後に離脱できるようにする。 */
-    isSaving: () => saving || switching,
+    isSaving: () => saving || switching || images.isSaving(),
     save,
     /** 保存済み下書きを維持したまま、画面上の変更を破棄する。 */
     discard: () => { dirty = false; movingSeatId = undefined; },
