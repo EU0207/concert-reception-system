@@ -43,6 +43,7 @@ const draftVersionKeys = [
 function validateDraft(scope: DeviceKeyScope, input: DraftInput): void {
   requireValue(isId(input.draftId) && input.baseVersions && input.layout, 'INVALID_SEAT_DRAFT');
   requireValue(draftVersionKeys.every((key) => nonnegative(input.baseVersions[key])), 'INVALID_SEAT_VERSIONS');
+  requireValue(input.baseVersions.calendarRevision === undefined || positive(input.baseVersions.calendarRevision), 'INVALID_SEAT_VERSIONS');
   checkScope(input.layout, scope);
   requireValue(
     Array.isArray(input.layout.sections) && Array.isArray(input.layout.assignments) &&
@@ -295,7 +296,8 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     checkScope(fixedOperation.command, binding);
     requireValue(
       fixedInput.baseVersions &&
-        draftVersionKeys.every((version) => fixedOperation.expectedVersions[version] === fixedInput.baseVersions[version]),
+        draftVersionKeys.every((version) => fixedOperation.expectedVersions[version] === fixedInput.baseVersions[version]) &&
+        fixedOperation.expectedVersions.calendarRevision === fixedInput.baseVersions.calendarRevision,
       'SEAT_OPERATION_VERSION_MISMATCH',
     );
     const { draft, localRevision } = await makeDraft(fixedInput, expectedRevision);

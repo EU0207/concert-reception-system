@@ -19,6 +19,8 @@ import { checkScope, isId, nonnegative, positive, requireValue, text } from '../
 import { authorizeOnline, createPersonSession, validUid } from '../../domain/authorization/policy.ts';
 import type { ReceptionPreparationBasis } from '../../domain/authorization/reception-control.ts';
 import { planReceptionControl } from '../../domain/authorization/reception-control.ts';
+import { validatePerformanceCalendar } from '../../domain/authorization/performance-calendar.ts';
+import type { PerformanceCalendar } from '../../domain/authorization/performance-calendar.ts';
 import type {
   AuthorizationSnapshot,
   DeviceGrant,
@@ -448,12 +450,14 @@ export async function createAuthorizationPort(
     const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
     authorizeOnline(snapshot, 'controlReception', confirmedTime);
     requireValue(snapshot.role.role === 'owner' && snapshot.state === 'preparing', 'OWNER_REQUIRED');
+    const calendar = await readValidatedCalendar();
 
     await update(ref(deviceDatabase, `${root}/control`), {
       controlRevision: 1,
       businessSchemaVersion: 3,
       layoutSchemaVersion: 2,
       initializedAt: serverTimestamp(),
+      calendarInitializedFromRevision: calendar.calendarRevision,
     });
   }
 
@@ -463,6 +467,7 @@ export async function createAuthorizationPort(
     const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
     authorizeOnline(snapshot, 'controlReception', confirmedTime);
     requireValue(snapshot.state === 'preparing', 'PERFORMANCE_NOT_PREPARING');
+    await readValidatedCalendar();
 
     await update(ref(deviceDatabase, root), {
       'control/businessInitializedFromRevision': expectedControlRevision,
@@ -472,24 +477,34 @@ export async function createAuthorizationPort(
     });
   }
 
-  /** 準備確認で表示する、対象公演の管理版と確定済みデータ版を取得する。 */
+  /** 環境所有者が登録した会場暦の実在日とUTC境界を、製品側でも再検証する。 */
+  async function readValidatedCalendar(): Promise<PerformanceCalendar> {
+    const calendar = await read(deviceDatabase, 'control/calendar') as PerformanceCalendar;
+    validatePerformanceCalendar(calendar, scope);
+
+    return calendar;
+  }
+
+  /** 準備確認で表示する、対象公演の管理・暦と確定済みデータ版を取得する。 */
   async function readReceptionPreparationBasis(): Promise<ReceptionPreparationBasis> {
     const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
     authorizeOnline(snapshot, 'controlReception', confirmedTime);
 
-    const [controlRevision, commitRevision, layoutRevision, viewRevision] = await Promise.all([
+    const [controlRevision, commitRevision, layoutRevision, viewRevision, calendar] = await Promise.all([
       read(deviceDatabase, 'control/controlRevision'),
       read(deviceDatabase, 'event/commit/revision'),
       read(deviceDatabase, 'head/revision'),
       read(deviceDatabase, 'head/viewRevision'),
+      readValidatedCalendar(),
     ]);
+    const calendarRevision = calendar.calendarRevision;
     requireValue(
       positive(controlRevision) && nonnegative(commitRevision) &&
-        positive(layoutRevision) && nonnegative(viewRevision),
+        positive(layoutRevision) && nonnegative(viewRevision) && positive(calendarRevision),
       'RECEPTION_DATA_NOT_PUBLISHED',
     );
 
-    return { controlRevision, dataVersion: { commitRevision, layoutRevision, viewRevision } };
+    return { controlRevision, dataVersion: { commitRevision, layoutRevision, viewRevision, calendarRevision } };
   }
 
   /** 管理者が確認した版を保存する。確認中に版が変わればRulesが拒否する。 */
