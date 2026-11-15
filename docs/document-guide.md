@@ -204,6 +204,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 ## 実装中の認可基盤
 
+会場画像の通常SDK保存基盤と、ローカル評価画面の画像操作は[会場画像の保存・表示　実装・試験記録](development/technical-validation/venue-image-results.md)（Approved、PR #287の範囲）を参照する。#244・105・104の確認済み範囲と残条件を分けて記録している。
+
 [本人・端末認可基盤の実装・試験記録](development/technical-validation/authorization-foundation-results.md)に、#110のローカル確認と後続の結合条件を記録する。状態はIn Review。実機の認証寿命と初期主担当の実環境割当は未確認である。
 
 [公演保存基盤の実装・試験記録](development/technical-validation/performance-foundation-results.md)に、#111段階Aの受付状態の計算とRTDB接続に必要な残条件を記録する。

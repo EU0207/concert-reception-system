@@ -21,6 +21,7 @@ import type { ReceptionPreparationBasis } from '../../domain/authorization/recep
 import { planReceptionControl } from '../../domain/authorization/reception-control.ts';
 import { validatePerformanceCalendar } from '../../domain/authorization/performance-calendar.ts';
 import type { PerformanceCalendar } from '../../domain/authorization/performance-calendar.ts';
+import { createVenueImagePort } from './venue-image-port.ts';
 import type {
   AuthorizationSnapshot,
   DeviceGrant,
@@ -111,6 +112,7 @@ export async function createAuthorizationPort(
     devices: ReturnType<typeof createDeviceManagementPort>;
     registration: ReturnType<typeof createDeviceRegistrationPort>;
     ownerDeviceLinks: ReturnType<typeof createOwnerDeviceLinkPort>;
+    images: ReturnType<typeof createVenueImagePort>;
   }
 > {
   requireValue(
@@ -655,6 +657,7 @@ export async function createAuthorizationPort(
       fetchCurrent,
       serverNow,
     }),
+    images: createVenueImagePort({ scope, root, deviceDatabase, fetchCurrent }),
     fetchCurrent,
     initializePerformanceControl,
     initializePerformanceBusiness,

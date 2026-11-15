@@ -546,7 +546,7 @@ test('端末DBの版更新で既存の鍵・認可操作を保持する', async 
     }
   });
   expect(result).toEqual({
-    version: 3, key: 'key-fixture', operation: 'operation-fixture',
-    stores: ['authorizationOperations', 'deviceKeys', 'seatDrafts', 'seatOperations'],
+    version: 4, key: 'key-fixture', operation: 'operation-fixture',
+    stores: ['authorizationOperations', 'deviceKeys', 'seatDrafts', 'seatOperations', 'venueImages'],
   });
 });
