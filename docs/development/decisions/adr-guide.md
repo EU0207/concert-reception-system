@@ -44,7 +44,7 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 
 | ADR | 判断対象 | 状態 | 関連Issue |
 |---|---|---|---|
-| [ADR-016](ADR-016-shared-draft-editor-state.md) | 共有下書きの初回採番状態と任意画像設定を欠落なく復元する契約 | Proposed（案A推奨） | #290・104・105・244 |
+| [ADR-016](ADR-016-shared-draft-editor-state.md) | 共有下書きの初回採番状態と任意画像設定を欠落なく復元する契約 | Accepted（案A） | #290・104・105・244 |
 | [ADR-015](ADR-015-performance-calendar-authority.md) | 公演日のサーバー判定に使う暦の登録責任 | Accepted（案A） | #285・111・104・283 |
 | [ADR-001](ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | Accepted | [#25](https://github.com/EU0207/concert-reception-system/issues/25) |
 | [ADR-002](ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | Accepted | [#32](https://github.com/EU0207/concert-reception-system/issues/32) |
