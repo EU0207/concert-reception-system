@@ -129,6 +129,16 @@ test('DD91-T41 未確定だった操作は明示再送だけで同じID・内容
   assert.equal((await f.controller.run(f.operation.operationId, 'retry')).status, 'confirmed');
 });
 
+test('SHARE104-T04 共有の準備途中は照会だけでは進めず、同じ固定入力の明示再開だけを許可する', async () => {
+  const f = fixture();
+  f.operation.kind = 'share';
+  f.setRemote({ status: 'preparing' });
+  assert.equal((await f.controller.run(f.operation.operationId, 'check')).status, 'unknown');
+  assert(!f.calls.includes('send'));
+  assert.equal((await f.controller.run(f.operation.operationId, 'retry')).status, 'confirmed');
+  assert.equal(f.calls.filter((call) => call === 'send').length, 1);
+});
+
 for (const field of ['operationId', 'inputDigest', 'kind', 'resultRevision']) {
   test(`DD91-T41 結果の${field}不一致を確定扱いにしない`, async () => {
     const f = fixture();
