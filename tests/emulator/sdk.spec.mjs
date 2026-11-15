@@ -287,6 +287,71 @@ test('PERF111-S02 製品SDKで会場を別公演へコピーし、元の変更�
   });
 });
 
+test('IMG244-S01 実画像を製品SDKで準備・公開し、端末保存失敗から同じIDで復帰する', async ({ page }) => {
+  const f = await signedIn(page);
+  await seed(f.environmentId, f.person.uid, f.deviceUid, 'owner');
+  const rootUrl = `http://127.0.0.1:9100/environments/${f.environmentId}/performances/${performanceId}`;
+  const query = `ns=${project}-default-rtdb`;
+  const configured = await fetch(`${rootUrl}/control/calendar.json?${query}`, {
+    method: 'PUT', headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+    body: JSON.stringify(createPerformanceCalendar({ environmentId: f.environmentId, performanceId }, '2099-10-10', 'UTC', 1)),
+  });
+  expect(configured.status).toBe(200);
+  const saved = await page.evaluate(async ({ scope, identity }) => {
+    const { linkFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
+    const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+    const { prepareVenueImage } = await import('/src/domain/seats/venue-image.ts');
+    const { createVenueImageStore } = await import('/src/storage/venue-images.ts');
+    const { ensureDeviceKey } = await import('/src/storage/device-vault.ts');
+    const principals = window.testPrincipals;
+    await linkFictionalGoogle(principals, identity);
+    const port = await createAuthorizationPort(principals, scope, { emulatorDatabasePort: 9100 });
+    try {
+      await port.issueSession(Date.now() + 3600000);
+      await port.initializePerformanceControl();
+      const { snapshot } = await port.fetchCurrent();
+      const binding = { ...scope, humanUid: snapshot.role.humanUid, deviceUid: snapshot.device.deviceUid, storageEpoch: snapshot.device.storageEpoch };
+      await ensureDeviceKey(binding, true);
+      const store = createVenueImageStore(binding, () => {});
+      const canvas = document.createElement('canvas');
+      canvas.width = 160; canvas.height = 80;
+      const draw = canvas.getContext('2d');
+      draw.fillStyle = '#326560'; draw.fillRect(0, 0, 160, 80);
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+      const bytes = new Uint8Array(await blob.arrayBuffer());
+      const payload = await prepareVenueImage(scope, bytes, 'image/png', 0, crypto.randomUUID());
+      const failure = await Promise.allSettled([port.images.publish('0', 'a', payload, {
+        prepare: store.prepare,
+        /** サーバー確定直後の端末保存不足を注入し、未解決本文を残す。 */
+        async confirm() { throw Error('FICTIONAL_CONFIRM_QUOTA'); },
+      })]);
+      const pending = await store.readUpload('0');
+      const result = await port.images.publish('0', 'a', payload, store);
+      const current = await port.images.readCurrent('0');
+      await store.saveImage('0', current.head, current.payload, 0);
+      const local = await store.readImage('0');
+      const next = await prepareVenueImage(scope, bytes, 'image/png', 1, crypto.randomUUID());
+      const second = await port.images.publish('0', 'b', next, store);
+      const replaced = await port.images.readCurrent('0');
+      await store.saveImage('0', replaced.head, replaced.payload, 1);
+      const keyResult = await store.readUpload('0');
+      await port.images.collect('0', 'a');
+
+      return { failure: failure[0].status, pending: pending.status, firstRevision: result.revision, firstControlRevision: result.controlRevision,
+        cachedRevision: local.head.revision, blobSize: local.blob.size, secondRevision: second.revision,
+        secondControlRevision: second.controlRevision, journalCompact: keyResult.status === 'confirmed' && !Object.hasOwn(keyResult, 'payload') };
+    } finally {
+      port.dispose();
+    }
+  }, { scope: { environmentId: f.environmentId, performanceId }, identity: { sub: randomUUID(), email: f.person.email } });
+  expect(saved).toMatchObject({ failure: 'rejected', pending: 'prepared', firstRevision: 1, firstControlRevision: 2,
+    cachedRevision: 1, secondRevision: 2, secondControlRevision: 3, journalCompact: true });
+  expect(saved.blobSize).toBeGreaterThan(0);
+  const response = await fetch(`${rootUrl}/images/0/operations.json?${query}`, { headers: { authorization: 'Bearer owner' } });
+  expect(response.status).toBe(200);
+  expect(Object.keys(await response.json())).toHaveLength(2);
+});
+
 test('AUTH110-S01 本人・端末のAuthを分離し、準備時だけ認証状態を永続化する', async ({ page }) => {
   const f = await signedIn(page);
   const first = await page.evaluate(async () => {

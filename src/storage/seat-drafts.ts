@@ -1,6 +1,8 @@
 // 席の下書きと固定した操作案を、認可済み端末のIndexedDBへ暗号化保存する。
 
 import type { Scope, SeatLayout, SeatVersions } from '../domain/seats/types.ts';
+import { validateImageSlot } from '../domain/seats/venue-image.ts';
+import type { ImageSlot } from '../domain/seats/venue-image.ts';
 import { checkScope, isId, nonnegative, positive, requireValue, SEAT_LIMITS, text } from '../domain/seats/validation.ts';
 import { openDeviceDatabase } from './device-database.ts';
 import { decryptRecord, encryptRecord } from './device-vault.ts';
@@ -12,6 +14,7 @@ interface DraftInput {
   layout: SeatLayout;
   // 旧版の未確定理由を復元するために保持する。確定済みの業務履歴ではない。
   editReasons?: Record<string, string>;
+  imageBindings?: Record<string, ImageSlot>;
 }
 
 interface LocalDraft extends DraftInput {
@@ -56,6 +59,15 @@ function validateDraft(scope: DeviceKeyScope, input: DraftInput): void {
   }
   for (const assignment of input.layout.assignments) checkScope(assignment, scope);
   for (const ticket of input.layout.ticketProtections) checkScope(ticket, scope);
+  if (input.imageBindings !== undefined) {
+    requireValue(input.editReasons !== undefined, 'INVALID_EDIT_REASONS');
+    requireValue(input.imageBindings && typeof input.imageBindings === 'object' && !Array.isArray(input.imageBindings), 'INVALID_IMAGE_BINDINGS');
+    const sections = new Set(input.layout.sections.map((model) => model.section.sectionId));
+    for (const [sectionId, slot] of Object.entries(input.imageBindings)) {
+      requireValue(sections.has(sectionId), 'INVALID_IMAGE_BINDINGS');
+      validateImageSlot(slot);
+    }
+  }
   if (input.editReasons !== undefined) {
     requireValue(input.editReasons && typeof input.editReasons === 'object' && !Array.isArray(input.editReasons), 'INVALID_EDIT_REASONS');
     const seats = new Set(input.layout.sections.flatMap((model) => model.seats.map((seat) => seat.seatId)));
@@ -149,7 +161,7 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     if (!record) return null;
 
     requireValue(isId(record.recordId) && positive(record.dataRevision), 'INVALID_SEAT_DRAFT');
-    requireValue(record.schemaVersion === 1 || record.schemaVersion === 2, 'INVALID_SEAT_DRAFT');
+    requireValue([1, 2, 3].includes(record.schemaVersion), 'INVALID_SEAT_DRAFT');
     const expected = identity('seat-draft', record.recordId, record.dataRevision, record.schemaVersion);
     const draft = JSON.parse(await unseal(expected, record, assertAuthorized)) as LocalDraft;
     requireValue(
@@ -158,7 +170,9 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
       'INVALID_SEAT_DRAFT',
     );
     validateDraft(binding, draft);
-    requireValue(record.schemaVersion !== 2 || draft.editReasons !== undefined, 'INVALID_EDIT_REASONS');
+    requireValue((record.schemaVersion === 3) === (draft.imageBindings !== undefined), 'INVALID_IMAGE_BINDINGS');
+    requireValue(record.schemaVersion < 2 || draft.editReasons !== undefined, 'INVALID_EDIT_REASONS');
+    requireValue(record.schemaVersion !== 3 || draft.imageBindings !== undefined, 'INVALID_IMAGE_BINDINGS');
 
     return draft;
   }
@@ -168,12 +182,15 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     const record = await readRecord('seatOperations', operationKey(operationId));
     if (!record) return null;
 
-    requireValue(record.schemaVersion === 1 || record.schemaVersion === 2, 'INVALID_SEAT_OPERATION');
+    requireValue([1, 2, 3].includes(record.schemaVersion), 'INVALID_SEAT_OPERATION');
     const operation = JSON.parse(await unseal(identity('seat-operation', operationId, 1, record.schemaVersion), record, assertAuthorized));
     requireValue(operation?.operationId === operationId && operation.status === 'prepared', 'INVALID_SEAT_OPERATION');
-    if (record.schemaVersion === 2) {
+    requireValue(record.schemaVersion !== 1 || operation.draftSnapshot === undefined, 'INVALID_SEAT_OPERATION');
+    if (record.schemaVersion >= 2) {
       requireValue(operation.draftSnapshot && operation.draftSnapshot.draftId === operation.draftId, 'INVALID_SEAT_OPERATION');
       validateDraft(binding, operation.draftSnapshot);
+      requireValue((record.schemaVersion === 3) === (operation.draftSnapshot.imageBindings !== undefined), 'INVALID_IMAGE_BINDINGS');
+      requireValue(record.schemaVersion !== 3 || operation.draftSnapshot.imageBindings !== undefined, 'INVALID_IMAGE_BINDINGS');
       const bytes = new TextEncoder().encode(JSON.stringify(operation.draftSnapshot));
       try {
         const hash = await crypto.subtle.digest('SHA-256', bytes);
@@ -197,7 +214,7 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     const savedAt = Date.now();
     const draft = await seal(
       // 理由を扱えない旧版が読み出して再保存し、理由を落とすことを防ぐ。
-      identity('seat-draft', input.draftId, localRevision, input.editReasons === undefined ? 1 : 2),
+      identity('seat-draft', input.draftId, localRevision, input.imageBindings !== undefined ? 3 : input.editReasons === undefined ? 1 : 2),
       JSON.stringify({ ...input, localRevision, savedAt }),
       assertAuthorized,
     );
@@ -239,11 +256,11 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
                 prior
                   ? prior.dataRevision === expectedRevision && prior.recordId === draft.recordId &&
                     prior.humanUid === binding.humanUid && prior.storageEpoch === binding.storageEpoch &&
-                    (prior.schemaVersion === 1 || prior.schemaVersion === 2) && prior.recordKind === 'seat-draft'
+                    [1, 2, 3].includes(prior.schemaVersion) && prior.recordKind === 'seat-draft'
                   : expectedRevision === 0,
                 'STALE_SEAT_DRAFT',
               );
-              requireValue(prior?.schemaVersion !== 2 || draft.schemaVersion === 2, 'SEAT_DRAFT_FORMAT_DOWNGRADE');
+              requireValue(!prior || draft.schemaVersion >= prior.schemaVersion, 'SEAT_DRAFT_FORMAT_DOWNGRADE');
               drafts.put(draft, draftKey);
               if (operation) transaction.objectStore('seatOperations').add(operation.record, operation.key);
             } catch (error) {
@@ -314,12 +331,13 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
       draftSnapshot: fixedInput,
     };
     const serialized = JSON.stringify(pending);
-    const expected = identity('seat-operation', fixedOperation.operationId, 1, 2);
+    const operationFormat = fixedInput.imageBindings === undefined ? 2 : 3;
+    const expected = identity('seat-operation', fixedOperation.operationId, 1, operationFormat);
     const record = await seal(expected, serialized, assertAuthorized);
     const prior = await writeDraft(draft, expectedRevision, { key, record });
 
     if (prior) {
-      requireValue(prior.schemaVersion === 2, 'SEAT_OPERATION_FORMAT_MISMATCH');
+      requireValue(prior.schemaVersion === operationFormat, 'SEAT_OPERATION_FORMAT_MISMATCH');
       requireValue(await unseal(expected, prior, assertAuthorized) === serialized, 'OPERATION_ID_REUSED');
     }
     assertAuthorized();
