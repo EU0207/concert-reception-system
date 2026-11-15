@@ -10,6 +10,7 @@ import { receptionPreparationRules } from './reception-preparation-rules.mjs';
 import { receptionStopRules } from './reception-stop-rules.mjs';
 import { performanceBusinessInitializationRules } from './performance-business-initialization-rules.mjs';
 import { performanceVenueRules } from './performance-venue-rules.mjs';
+import { venueImageRules } from './venue-image-rules.mjs';
 
 /** 指定した子キーの値を参照するRules式を作る。 */
 const field = (node, key) => `${node}.child('${key}').val()`;
@@ -196,7 +197,8 @@ export function authorizationRules() {
   const preparation = receptionPreparationRules({ root, manager, integer, strictRecord });
   const business = performanceBusinessInitializationRules({ root, manager, integer });
   const { controlWrites, receptionStopAudits } = receptionStopRules({ root, manager, integer, strictRecord });
-  const controlRevisionWrite = `(${initialization.controlRevision['.write']}) || (${controlWrites.controlRevision})`;
+  const venueImages = venueImageRules({ root, manager, preparedAuthorization, integer });
+  const controlRevisionWrite = `(${initialization.controlRevision['.write']}) || (${controlWrites.controlRevision}) || (${venueImages.controlRevisionWrite})`;
 
   return {
     '.read': false,
@@ -207,6 +209,7 @@ export function authorizationRules() {
     ...registrationRules,
     ...ownerLinkRules,
     performanceVenue: performanceVenueRules({ root, manager, preparedAuthorization, integer }),
+    images: venueImages.images,
     ...preparation,
     event: {
       ...business.event,

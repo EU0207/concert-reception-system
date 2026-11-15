@@ -1,7 +1,9 @@
 // 新しい製品Rulesをローカルだけで確認する。既存PoCのシナリオは実行しない。
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
+import { crc32, deflateSync } from 'node:zlib';
+import { writeFile } from 'node:fs/promises';
 import { TEMPORARY_PERMISSIONS } from '../../src/domain/authorization/types.ts';
 import { createAuthorizationAudit } from '../../src/domain/authorization/role-management.ts';
 import { changeTemporaryPermissions } from '../../src/domain/authorization/role-management.ts';
@@ -15,6 +17,156 @@ const environmentId = '00000000-0000-4000-8000-000000000001';
 const performanceId = '00000000-0000-4000-8000-000000000002';
 const root = `environments/${environmentId}/performances/${performanceId}`;
 const scope = { environmentId, performanceId };
+
+/** 画像の実体検査とは別に、Rulesのバンク・版と原容量を照合する架空本文を作る。 */
+function imageInput(expectedRevision = 0, bytes = Buffer.from('fictional image bytes')) {
+  return { ...scope, schemaVersion: 1, expectedRevision, revision: expectedRevision + 1,
+    operationId: randomUUID(), mime: 'image/png', rawBytes: bytes.length,
+    base64: bytes.toString('base64'), sha256: createHash('sha256').update(bytes).digest('hex') };
+}
+
+/** 6資格からの取得量測定に使う、復号可能な架空PNGを1MBへ調整する。 */
+function fullSizePng() {
+  /** PNGの長さ・種類と本文に対応するCRCを持つチャンクを作る。 */
+  function chunk(kind, body) {
+    const result = Buffer.alloc(body.length + 12);
+    result.writeUInt32BE(body.length, 0);
+    result.write(kind, 4, 'ascii');
+    body.copy(result, 8);
+    result.writeUInt32BE(crc32(result.subarray(4, body.length + 8)) >>> 0, body.length + 8);
+
+    return result;
+  }
+
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(2, 0); ihdr.writeUInt32BE(2, 4); ihdr[8] = 8; ihdr[9] = 6;
+  const pixels = Buffer.from([0, 50, 101, 96, 255, 50, 101, 96, 255, 0, 50, 101, 96, 255, 50, 101, 96, 255]);
+  const png = Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr), chunk('IDAT', deflateSync(pixels)), chunk('IEND', Buffer.alloc(0))]);
+  const full = Buffer.alloc(1_000_000);
+  png.copy(full);
+
+  return full;
+}
+
+/** 既に準備した画像の公開先と、同じIDの操作結果を一体更新する本文を作る。 */
+function publishImage(slot, bank, payload, controlRevision, actor) {
+  return { 'control/controlRevision': controlRevision + 1, [`images/${slot}/head`]: { ...scope, schemaVersion: 1, revision: payload.revision, active: true, bank,
+    operationId: payload.operationId, sha256: payload.sha256 },
+  [`images/${slot}/operations/${payload.operationId}`]: { ...scope, schemaVersion: 1, kind: 'publish', slot, revision: payload.revision,
+    bank, sha256: payload.sha256, committedAt: { '.sv': 'timestamp' }, controlRevision: controlRevision + 1,
+    humanUid: actor.human.uid, deviceUid: actor.device.uid } };
+}
+
+test('IMG244-R01 非公開準備後だけ公開先と結果を一体更新し、旧・参照中バンクを保護する', async () => {
+  const owner = await fixture();
+  const token = owner.device.token;
+  assert.equal((await request(`${root}/sessions/${owner.device.uid}`, 'PUT', owner.session, owner.human.token)).status, 200);
+  await request(root, 'PATCH', { images: null, 'control/state': 'preparing', 'control/firstReceptionStartedAt': null,
+    'control/calendar': createPerformanceCalendar(scope, '2099-10-10', 'Asia/Tokyo', 1),
+    'control/controlRevision': 1, 'control/businessSchemaVersion': 3, 'control/layoutSchemaVersion': 2,
+    'head/revision': 1, 'head/viewRevision': 0, 'event/commit/revision': 1 });
+  const preparation = { ...scope, controlRevision: 1,
+    dataVersion: { commitRevision: 1, layoutRevision: 1, viewRevision: 0, calendarRevision: 1 },
+    humanUid: owner.human.uid, deviceUid: owner.device.uid, confirmedAt: { '.sv': 'timestamp' } };
+  assert.equal((await request(`${root}/receptionPreparation`, 'PUT', preparation, token)).status, 200);
+  const path = `${root}/images/0`, a = imageInput();
+  assert.equal((await request(root, 'PATCH', publishImage('0', 'a', a, 1, owner), token)).status, 401);
+  assert.equal((await request(`${path}/banks/a`, 'PUT', a, token)).status, 200);
+  assert.equal((await request(`${path}/banks/a`, 'PUT', a, token)).status, 200);
+  assert.equal((await request(`${path}/banks/a`, 'GET', undefined, token)).status, 401);
+  const first = publishImage('0', 'a', a, 1, owner);
+  assert.equal((await request(`${path}/head`, 'PUT', first['images/0/head'], token)).status, 401);
+  assert.equal((await request(`${root}/control/controlRevision`, 'PUT', 2, token)).status, 401);
+  const forged = structuredClone(first);
+  forged[`images/0/operations/${a.operationId}`].humanUid = 'fictional-other-human';
+  assert.equal((await request(root, 'PATCH', forged, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', first, token)).status, 200);
+  assert.equal((await request(`${root}/receptionPreparation`, 'PUT', preparation, token)).status, 401);
+  preparation.controlRevision = 2;
+  assert.equal((await request(`${root}/receptionPreparation`, 'PUT', preparation, token)).status, 200);
+  assert.equal((await request(`${path}/banks/a`, 'GET', undefined, token)).body.base64, a.base64);
+  assert.equal((await request(`${path}/banks/a`, 'PUT', null, token)).status, 401);
+  assert.equal((await request(`${path}/banks/a`, 'PUT', imageInput(1), token)).status, 401);
+  const b = imageInput(1);
+  assert.equal((await request(`${path}/banks/b`, 'PUT', b, token)).status, 200);
+  assert.equal((await request(root, 'PATCH', publishImage('0', 'b', b, 2, owner), token)).status, 200);
+  assert.equal((await request(`${path}/banks/a`, 'GET', undefined, token)).status, 401);
+  assert.equal((await request(`${path}/banks/b`, 'GET', undefined, token)).body.base64, b.base64);
+  await request(`${path}/references/a`, 'PUT', { 'fictional-backup-reference': true });
+  assert.equal((await request(`${path}/references/a`, 'PUT', null, token)).status, 401);
+  assert.equal((await request(`${path}/banks/a`, 'PUT', null, token)).status, 401);
+  await request(`${path}/references/a`, 'PUT', null);
+  assert.equal((await request(`${path}/banks/a`, 'PUT', null, token)).status, 200);
+  assert.equal((await request(`${path}/banks/a`, 'PUT', null, token)).status, 200);
+  assert.equal((await request(`${path}/operations/${a.operationId}`, 'PUT', null, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', first, token)).status, 401);
+  await request(`${path}/banks/a`, 'PUT', a);
+  await request(`${root}/control/state`, 'PUT', 'operating');
+  assert.equal((await request(`${path}/banks/a`, 'PUT', null, token)).status, 200);
+  assert.equal((await request(`${path}/banks/b`, 'PUT', null, token)).status, 401);
+});
+
+test('IMG244-R02 1MB・5枠の境界、別公演・部分公開と公演当日の直接要求を検査する', async () => {
+  const owner = await fixture(), reader = await fixture('receptionist'), temporary = await fixture('temporary');
+  for (const actor of [owner, reader, temporary]) await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token);
+  await request(root, 'PATCH', { images: null, 'control/state': 'preparing', 'control/firstReceptionStartedAt': null,
+    'control/calendar': createPerformanceCalendar(scope, '2099-10-10', 'Asia/Tokyo', 1),
+    'control/controlRevision': 1, 'control/businessSchemaVersion': 3, 'control/layoutSchemaVersion': 2 });
+  const token = owner.device.token;
+  const full = imageInput(0, Buffer.alloc(1_000_000, 65));
+  assert.equal((await request(`${root}/images/4/banks/a`, 'PUT', full, token)).status, 200);
+  assert.equal((await request(root, 'PATCH', publishImage('4', 'a', full, 1, owner), token)).status, 200);
+  assert.equal((await request(`${root}/images/4/banks/a`, 'GET', undefined, reader.device.token)).body.rawBytes, 1_000_000);
+  const plain = imageInput();
+  for (const [slot, body] of [['5', plain], ['-1', plain], ['0', { ...plain, mime: 'application/pdf' }],
+    ['0', { ...plain, performanceId: scope.environmentId }], ['0', imageInput(0, Buffer.alloc(1_000_001, 65))],
+    ['0', { ...plain, rawBytes: 1 }], ['0', { ...imageInput(0, Buffer.alloc(1)), base64: 'AB==' }]]) {
+    assert.equal((await request(`${root}/images/${slot}/banks/a`, 'PUT', body, token)).status, 401);
+  }
+  assert.equal((await request(`${root}/images/0/banks/a`, 'PUT', plain, reader.device.token)).status, 401);
+  assert.equal((await request(`${root}/images/0/banks/a`, 'PUT', plain, temporary.device.token)).status, 401);
+  await request(`${root}/devices/${reader.device.uid}/active`, 'PUT', false);
+  assert.equal((await request(`${root}/images/4/banks/a`, 'GET', undefined, reader.device.token)).status, 401);
+  for (const patch of [{ 'control/state': 'operating' }, { 'control/state': 'stopped' },
+    { 'control/state': 'preparing', 'control/calendar': createPerformanceCalendar(scope, new Date().toISOString().slice(0, 10), 'UTC', 2) }]) {
+    await request(root, 'PATCH', patch);
+    assert.equal((await request(`${root}/images/0/banks/a`, 'PUT', plain, token)).status, 401);
+  }
+});
+
+test('IMG244-R03 1MBの5画像を6つの独立した受付資格で取得し、本文量とSHA-256を照合する', async () => {
+  const owner = await fixture();
+  const readers = [];
+  for (let i = 0; i < 6; i++) readers.push(await fixture('receptionist'));
+  for (const actor of [owner, ...readers]) await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token);
+  await request(root, 'PATCH', { images: null, 'control/state': 'preparing', 'control/firstReceptionStartedAt': null,
+    'control/calendar': createPerformanceCalendar(scope, '2099-10-10', 'UTC', 1),
+    'control/controlRevision': 1, 'control/businessSchemaVersion': 3, 'control/layoutSchemaVersion': 2 });
+  const bytes = fullSizePng(), hash = createHash('sha256').update(bytes).digest('hex');
+  for (let index = 0; index < 5; index++) {
+    const slot = String(index), body = imageInput(0, bytes);
+    assert.equal((await request(`${root}/images/${slot}/banks/a`, 'PUT', body, owner.device.token)).status, 200);
+    assert.equal((await request(root, 'PATCH', publishImage(slot, 'a', body, index + 1, owner), owner.device.token)).status, 200);
+  }
+  let rawBytes = 0, jsonBytes = 0, reads = 0;
+  for (const reader of readers) {
+    for (let index = 0; index < 5; index++) {
+      const endpoint = new URL(`http://127.0.0.1:9100/${root}/images/${index}/banks/a.json`);
+      endpoint.searchParams.set('ns', namespace);
+      endpoint.searchParams.set('auth', reader.device.token);
+      const response = await fetch(endpoint, { signal: AbortSignal.timeout(10000) });
+      assert.equal(response.status, 200);
+      const text = await response.text(), payload = JSON.parse(text), decoded = Buffer.from(payload.base64, 'base64');
+      assert.equal(createHash('sha256').update(decoded).digest('hex'), hash);
+      assert.equal(decoded.length, 1_000_000);
+      rawBytes += decoded.length; jsonBytes += Buffer.byteLength(text); reads++;
+    }
+  }
+  assert.equal(new Set(readers.map((reader) => reader.device.uid)).size, 6);
+  assert.equal(reads, 30); assert.equal(rawBytes, 30_000_000);
+  await writeFile(new URL('./artifacts/venue-image-transfer.json', import.meta.url), JSON.stringify({ readers: 6, images: 5,
+    bankReads: reads, rawBytes, decodedJsonBytes: jsonBytes, excludes: ['authorization and head reads', 'HTTP and TLS', 'retries and backups'] }, null, 2) + '\n');
+});
 
 async function request(path, method = 'GET', body, token = 'owner') {
   const url = new URL(`http://127.0.0.1:9100/${path}.json`);
@@ -1584,6 +1736,8 @@ test('PERF111-R02 明示割当済み主担当の一体初期化だけを許可�
     staffDeadline: Date.now() + 86400000,
     calendar: createPerformanceCalendar(scope, '2026-11-22', 'Asia/Tokyo', 1),
   };
+  // 他機能のケースが作った構成・名簿を、この初期化試験の前提へ持ち込まない。
+  await request(root, 'PATCH', { head: null, event: null });
   assert.equal((await request(`${root}/control`, 'PUT', control)).status, 200);
 
   const fields = {

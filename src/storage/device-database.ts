@@ -1,7 +1,7 @@
 // 鍵と操作記録を同じ版管理へ置き、DB更新で片方だけ失われることを防ぐ。
 
 export const DEVICE_DATABASE = 'concert-reception-device';
-export const DEVICE_DATABASE_VERSION = 3;
+export const DEVICE_DATABASE_VERSION = 4;
 
 /** 端末の鍵と固定操作記録を保存するIndexedDBを開く。 */
 export function openDeviceDatabase(): Promise<IDBDatabase> {
@@ -12,7 +12,7 @@ export function openDeviceDatabase(): Promise<IDBDatabase> {
     const request = indexedDB.open(DEVICE_DATABASE, DEVICE_DATABASE_VERSION);
 
     request.onupgradeneeded = () => {
-      for (const store of ['deviceKeys', 'authorizationOperations', 'seatDrafts', 'seatOperations']) {
+      for (const store of ['deviceKeys', 'authorizationOperations', 'seatDrafts', 'seatOperations', 'venueImages']) {
         if (!request.result.objectStoreNames.contains(store))
           request.result.createObjectStore(store);
       }
