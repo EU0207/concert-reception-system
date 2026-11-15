@@ -84,6 +84,252 @@ test('DD91-T37 500席・複数区画の保存と固定操作を再読み込み�
   expect(external).toEqual([]);
 });
 
+test('DD91-T15・T41 新しい下書きで固定操作の構成を変えず、送信状態を暗号化して復元する', async ({ page }) => {
+  await setup(page, scope, true);
+  const saved = await page.evaluate(async (scope) => {
+    const { createSeatDeliveryStore } = await import('/src/storage/seat-operation-delivery.ts');
+    const { seatOperationDigest } = await import('/src/storage/seat-operation-controller.ts');
+    const { openDeviceDatabase } = await import('/src/storage/device-database.ts');
+    const { seatDraftStore: store, draftInput: input, seatOperation: operation } = window;
+    await store.prepareSeatOperation(input, 0, operation);
+    const fixed = await store.readPendingSeatOperation(operation.operationId);
+    const digest = await seatOperationDigest(fixed);
+    const delivery = createSeatDeliveryStore(scope, () => {});
+    await delivery.write(operation.operationId, digest, 0, { status: 'unknown' });
+    input.layout.sections[0].section.name = '後から変更した区画';
+    await store.saveLocalDraft(input, 1);
+    const database = await openDeviceDatabase();
+    const records = await new Promise((resolve, reject) => {
+      const transaction = database.transaction('seatOperations', 'readonly');
+      const request = transaction.objectStore('seatOperations').getAll();
+      transaction.oncomplete = () => resolve(request.result);
+      transaction.onabort = () => reject(Error('READ_FAILED'));
+    });
+    database.close();
+
+    return { operationId: operation.operationId, digest, originalName: fixed.draftSnapshot.layout.sections[0].section.name,
+      records: records.map((record) => ({ kind: record.recordKind, version: record.schemaVersion, encrypted: record.ciphertext instanceof ArrayBuffer,
+        plaintext: Object.hasOwn(record, 'outcome') || Object.hasOwn(record, 'draftSnapshot') })) };
+  }, scope);
+  await page.reload();
+  const restored = await page.evaluate(async ({ scope, saved }) => {
+    const { createSeatDeliveryStore } = await import('/src/storage/seat-operation-delivery.ts');
+    const { createSeatDraftStore } = await import('/src/storage/seat-drafts.ts');
+    const store = createSeatDraftStore(scope, () => {});
+
+    return { fixed: await store.readPendingSeatOperation(saved.operationId), draft: await store.loadLocalDraft(),
+      delivery: await createSeatDeliveryStore(scope, () => {}).read(saved.operationId) };
+  }, { scope, saved });
+  expect(saved.records).toEqual(expect.arrayContaining([
+    { kind: 'seat-operation', version: 2, encrypted: true, plaintext: false },
+    { kind: 'seat-operation-delivery', version: 1, encrypted: true, plaintext: false },
+  ]));
+  expect(restored.fixed.draftSnapshot.layout.sections[0].section.name).toBe(saved.originalName);
+  expect(restored.draft.layout.sections[0].section.name).toBe('後から変更した区画');
+  expect(restored.delivery).toMatchObject({ inputDigest: saved.digest, localRevision: 1, outcome: { status: 'unknown' } });
+});
+
+test('DD91-T38・T41 送信状態の競合・終端上書き・別本人・破損を拒否する', async ({ page }) => {
+  await setup(page, scope);
+  const result = await page.evaluate(async (scope) => {
+    const { createSeatDeliveryStore } = await import('/src/storage/seat-operation-delivery.ts');
+    const { openDeviceDatabase } = await import('/src/storage/device-database.ts');
+    const store = createSeatDeliveryStore(scope, () => {});
+    const id = crypto.randomUUID(), digest = 'a'.repeat(64);
+    const writes = await Promise.allSettled([
+      store.write(id, digest, 0, { status: 'unknown' }), store.write(id, digest, 0, { status: 'unknown' }),
+    ]);
+    const confirmed = await store.write(id, digest, 1, { status: 'confirmed', receipt: { operationId: id, inputDigest: digest, kind: 'commit', resultRevision: 2 } });
+    const terminal = await Promise.allSettled([store.write(id, digest, 2, { status: 'unknown' })]);
+    const other = await Promise.allSettled([createSeatDeliveryStore({ ...scope, humanUid: 'other-human' }, () => {}).read(id)]);
+    const revoked = await Promise.allSettled([createSeatDeliveryStore(scope, () => { throw Error('ACCESS_REVOKED'); }).read(id)]);
+    const database = await openDeviceDatabase();
+    await new Promise((resolve, reject) => {
+      const transaction = database.transaction('seatOperations', 'readwrite');
+      const records = transaction.objectStore('seatOperations');
+      const request = records.openCursor();
+      request.onsuccess = () => {
+        const cursor = request.result;
+        if (cursor) {
+          if (cursor.value.recordKind === 'seat-operation-delivery') {
+            const record = cursor.value;
+            new Uint8Array(record.ciphertext)[0] ^= 1;
+            cursor.update(record);
+          }
+          cursor.continue();
+        }
+      };
+      transaction.oncomplete = () => resolve();
+      transaction.onabort = () => reject(Error('WRITE_FAILED'));
+    });
+    database.close();
+    const corrupt = await Promise.allSettled([store.read(id)]);
+
+    return { writes: writes.map((result) => result.status).sort(), confirmed, terminal: terminal[0].status,
+      other: other[0].status, revoked: revoked[0].status, corrupt: corrupt[0].status };
+  }, scope);
+  expect(result).toMatchObject({ writes: ['fulfilled', 'rejected'], confirmed: { localRevision: 2, outcome: { status: 'confirmed' } },
+    terminal: 'rejected', other: 'rejected', revoked: 'rejected', corrupt: 'rejected' });
+});
+
+for (const kind of ['share', 'commit']) {
+  test(`DD91-T41 ${kind}の応答喪失後、再起動して照会する。Web Locksで並行送信を防ぐ`, async ({ page }) => {
+    await setup(page, scope);
+    const saved = await page.evaluate(async ({ scope, kind }) => {
+      const { createSeatDeliveryStore } = await import('/src/storage/seat-operation-delivery.ts');
+      const { createSeatOperationController, withSeatOperationOwnership, seatOperationDigest } = await import('/src/storage/seat-operation-controller.ts');
+      const operation = { ...window.seatOperation, kind };
+      await window.seatDraftStore.prepareSeatOperation(window.draftInput, 0, operation);
+      let sends = 0, receipt;
+      const controller = createSeatOperationController({ scope, operations: window.seatDraftStore,
+        delivery: createSeatDeliveryStore(scope, () => {}), withOwnership: withSeatOperationOwnership,
+        /** この試験では失効させず、通信中断だけを注入する。 */
+        assertAuthorized() {},
+        transport: {
+          /** 確定前の応答に相当する未検出を返す。 */
+          async lookup() { return { status: 'notFound' }; },
+          /** この試験では送信前の版照合を通す。 */
+          async canSend() { return true; },
+          /** サーバー側へ結果が残った直後の応答喪失を再現する。 */
+          async send(fixed) {
+            sends++;
+            receipt = { operationId: fixed.operationId, kind, inputDigest: await seatOperationDigest(fixed), resultRevision: 2 };
+            throw Error('RESPONSE_LOST');
+          },
+          /** 結果が未取得の間は確定版の照合へ進ませない。 */
+          async verifyApplied() { throw Error('UNEXPECTED_VERIFICATION'); },
+        } });
+      const calls = await Promise.allSettled([controller.run(operation.operationId, 'send'), controller.run(operation.operationId, 'send')]);
+
+      return { sends, receipt, failures: calls.map((call) => call.reason?.message) };
+    }, { scope, kind });
+    expect(saved.sends).toBe(1);
+    expect(saved.failures).toEqual(['RESPONSE_LOST', 'SEAT_OPERATION_RESULT_REQUIRED']);
+    await page.reload();
+    const result = await page.evaluate(async ({ scope, receipt }) => {
+      const { createSeatDeliveryStore } = await import('/src/storage/seat-operation-delivery.ts');
+      const { createSeatDraftStore } = await import('/src/storage/seat-drafts.ts');
+      const { createSeatOperationController, withSeatOperationOwnership } = await import('/src/storage/seat-operation-controller.ts');
+      let checked = false;
+      const controller = createSeatOperationController({ scope, operations: createSeatDraftStore(scope, () => {}),
+        delivery: createSeatDeliveryStore(scope, () => {}), withOwnership: withSeatOperationOwnership,
+        /** 再起動後も同じ本人・端末への許可を保つ。 */
+        assertAuthorized() {},
+        transport: {
+          /** 再起動前の要求がサーバーで確定していた結果を返す。 */
+          async lookup() { return { status: 'confirmed', receipt }; },
+          /** 照会経路から再送前検査を呼ばないことを確認する。 */
+          async canSend() { throw Error('UNEXPECTED_RETRY'); },
+          /** 照会だけで送信を始めないことを確認する。 */
+          async send() { throw Error('UNEXPECTED_SEND'); },
+          /** 結果に対応する版を取得したことを記録する。 */
+          async verifyApplied() { checked = true; },
+        } });
+
+      return { result: await controller.run(receipt.operationId, 'check'), checked };
+    }, { scope, receipt: saved.receipt });
+    expect(result).toEqual({ checked: true, result: { status: 'confirmed', receipt: saved.receipt } });
+  });
+}
+
+test('DD91-T38 送信直前の状態保存で容量不足になったら、固定入力を保全して通信しない', async ({ page }) => {
+  await setup(page, scope);
+  const result = await page.evaluate(async (scope) => {
+    const { createSeatDeliveryStore } = await import('/src/storage/seat-operation-delivery.ts');
+    const { createSeatOperationController, withSeatOperationOwnership } = await import('/src/storage/seat-operation-controller.ts');
+    const store = window.seatDraftStore, id = window.seatOperation.operationId;
+    await store.prepareSeatOperation(window.draftInput, 0, window.seatOperation);
+    let sent = false;
+    const delivery = createSeatDeliveryStore(scope, () => {});
+    const controller = createSeatOperationController({ scope, operations: store, delivery, withOwnership: withSeatOperationOwnership,
+      /** 容量不足だけを注入し、認可は維持する。 */
+      assertAuthorized() {},
+      transport: {
+        /** サーバーにはまだ確定結果がない。 */
+        async lookup() { return { status: 'notFound' }; },
+        /** 版が一致していても、保存失敗なら送信を止める。 */
+        async canSend() { return true; },
+        /** 誤って送信が始まった場合に記録する。 */
+        async send() { sent = true; },
+        /** 保存前に失敗するため、この試験で確定版は不要。 */
+        async verifyApplied() {},
+      } });
+    const put = IDBObjectStore.prototype.put;
+    IDBObjectStore.prototype.put = function (...args) {
+      if (this.name === 'seatOperations') throw new DOMException('fictional quota failure', 'QuotaExceededError');
+
+      return put.apply(this, args);
+    };
+    let rejected = false;
+    try { await controller.run(id, 'send'); } catch { rejected = true; }
+    finally { IDBObjectStore.prototype.put = put; }
+
+    return { sent, rejected, state: await delivery.read(id), fixed: Boolean(await store.readPendingSeatOperation(id)) };
+  }, scope);
+  expect(result).toEqual({ sent: false, rejected: true, state: null, fixed: true });
+});
+
+for (const mode of ['legacy', 'corrupt-snapshot']) {
+  test(`DD91-T41 固定操作の${mode}は原本を保持し、現在の下書きから送信案を補わない`, async ({ page }) => {
+    await setup(page, scope);
+    const result = await page.evaluate(async ({ scope, mode }) => {
+      const { openDeviceDatabase } = await import('/src/storage/device-database.ts');
+      const { encryptRecord, decryptRecord } = await import('/src/storage/device-vault.ts');
+      const { createSeatDeliveryStore } = await import('/src/storage/seat-operation-delivery.ts');
+      const { createSeatOperationController, withSeatOperationOwnership } = await import('/src/storage/seat-operation-controller.ts');
+      const store = window.seatDraftStore, id = window.seatOperation.operationId;
+      await store.prepareSeatOperation(window.draftInput, 0, window.seatOperation);
+      const database = await openDeviceDatabase();
+      const entry = await new Promise((resolve) => {
+        const transaction = database.transaction('seatOperations', 'readonly');
+        const request = transaction.objectStore('seatOperations').openCursor();
+        request.onsuccess = () => resolve({ key: request.result.key, encrypted: request.result.value });
+      });
+      const plaintext = await decryptRecord(entry.encrypted, entry.encrypted, () => {});
+      const value = JSON.parse(new TextDecoder().decode(plaintext));
+      plaintext.fill(0);
+      if (mode === 'legacy') delete value.draftSnapshot;
+      else value.draftSnapshot.layout.sections.push({});
+      const serialized = new TextEncoder().encode(JSON.stringify(value));
+      const encrypted = await encryptRecord({ ...entry.encrypted, schemaVersion: mode === 'legacy' ? 1 : 2 }, serialized, () => {});
+      serialized.fill(0);
+      await new Promise((resolve, reject) => {
+        const transaction = database.transaction('seatOperations', 'readwrite');
+        transaction.objectStore('seatOperations').put(encrypted, entry.key);
+        transaction.oncomplete = () => resolve();
+        transaction.onabort = () => reject(Error('WRITE_FAILED'));
+      });
+      let contacted = false;
+      const controller = createSeatOperationController({ scope, operations: store, delivery: createSeatDeliveryStore(scope, () => {}),
+        withOwnership: withSeatOperationOwnership,
+        /** 形式の拒否だけを確認するため、認可は維持する。 */
+        assertAuthorized() {},
+        transport: {
+          /** 読めない入力で結果照会を始めた場合も記録する。 */
+          async lookup() { contacted = true; return { status: 'notFound' }; },
+          /** 誤って送信検査へ到達しても、版の拒否で問題を隠さない。 */
+          async canSend() { return true; },
+          /** 固定本文の不足・破損で送信していないことを観測する。 */
+          async send() { contacted = true; },
+          /** 入力の復元時点で拒否するため、確定版は不要。 */
+          async verifyApplied() {},
+        } });
+      const calls = await Promise.allSettled([controller.run(id, 'send')]);
+      const saved = await new Promise((resolve) => {
+        const transaction = database.transaction('seatOperations', 'readonly');
+        const request = transaction.objectStore('seatOperations').get(entry.key);
+        transaction.oncomplete = () => resolve(request.result);
+      });
+      database.close();
+      const draft = await store.loadLocalDraft();
+
+      return { rejected: calls[0].status, contacted, savedVersion: saved.schemaVersion, draftRevision: draft.localRevision,
+        preserved: Array.from(new Uint8Array(saved.ciphertext)).join() === Array.from(new Uint8Array(encrypted.ciphertext)).join() };
+    }, { scope, mode });
+    expect(result).toEqual({ rejected: 'rejected', contacted: false, savedVersion: mode === 'legacy' ? 1 : 2, draftRevision: 1, preserved: true });
+  });
+}
+
 test('DD91-T30・T37 旧版の理由付き下書きを復元し、不正な理由や旧版で上書きしない', async ({ page }) => {
   await setup(page, scope, true);
   const result = await page.evaluate(async () => {
