@@ -91,6 +91,8 @@ test('DD91-T15・T41 新しい下書きで固定操作の構成を変えず、�
     const { seatOperationDigest } = await import('/src/storage/seat-operation-controller.ts');
     const { openDeviceDatabase } = await import('/src/storage/device-database.ts');
     const { seatDraftStore: store, draftInput: input, seatOperation: operation } = window;
+    input.baseVersions.calendarRevision = 1;
+    operation.expectedVersions.calendarRevision = 1;
     await store.prepareSeatOperation(input, 0, operation);
     const fixed = await store.readPendingSeatOperation(operation.operationId);
     const digest = await seatOperationDigest(fixed);
@@ -98,6 +100,9 @@ test('DD91-T15・T41 新しい下書きで固定操作の構成を変えず、�
     await delivery.write(operation.operationId, digest, 0, { status: 'unknown' });
     input.layout.sections[0].section.name = '後から変更した区画';
     await store.saveLocalDraft(input, 1);
+    const staleCalendar = await Promise.allSettled([store.prepareSeatOperation(input, 2, {
+      ...operation, operationId: crypto.randomUUID(), expectedVersions: { ...operation.expectedVersions, calendarRevision: 2 },
+    })]);
     const database = await openDeviceDatabase();
     const records = await new Promise((resolve, reject) => {
       const transaction = database.transaction('seatOperations', 'readonly');
@@ -107,7 +112,7 @@ test('DD91-T15・T41 新しい下書きで固定操作の構成を変えず、�
     });
     database.close();
 
-    return { operationId: operation.operationId, digest, originalName: fixed.draftSnapshot.layout.sections[0].section.name,
+    return { operationId: operation.operationId, digest, staleCalendar: staleCalendar[0].status, originalName: fixed.draftSnapshot.layout.sections[0].section.name,
       records: records.map((record) => ({ kind: record.recordKind, version: record.schemaVersion, encrypted: record.ciphertext instanceof ArrayBuffer,
         plaintext: Object.hasOwn(record, 'outcome') || Object.hasOwn(record, 'draftSnapshot') })) };
   }, scope);
@@ -125,6 +130,8 @@ test('DD91-T15・T41 新しい下書きで固定操作の構成を変えず、�
     { kind: 'seat-operation-delivery', version: 1, encrypted: true, plaintext: false },
   ]));
   expect(restored.fixed.draftSnapshot.layout.sections[0].section.name).toBe(saved.originalName);
+  expect(saved.staleCalendar).toBe('rejected');
+  expect(restored.fixed.expectedVersions.calendarRevision).toBe(1);
   expect(restored.draft.layout.sections[0].section.name).toBe('後から変更した区画');
   expect(restored.delivery).toMatchObject({ inputDigest: saved.digest, localRevision: 1, outcome: { status: 'unknown' } });
 });

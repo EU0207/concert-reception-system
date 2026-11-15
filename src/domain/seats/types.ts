@@ -176,6 +176,8 @@ export interface SeatVersions {
   assignmentRevision: number;
   ticketRevision: number;
   controlRevision: number;
+  /** 旧端末下書きでは省略できる。暦を使う実保存では、登録済みの正の版を必要とする。 */
+  calendarRevision?: number;
 }
 
 /** 参照版を指定し、区画を1マス平行移動する操作。 */

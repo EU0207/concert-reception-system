@@ -214,4 +214,4 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 [席編集の理由条件と簡易操作履歴の変更](development/detailed-design/seat-edit-reason-operation-history-change.md)は、#283・#284の業務回答と後続の取得・表示条件をまとめる。開発者と実装担当者が参照し、理由条件・履歴対象または開始条件の変更時に更新する。業務回答はApproved、確定保存と履歴閲覧の技術追補はIn Review。
 
-[ADR-015：公演日のサーバー判定に使う暦の登録](development/decisions/ADR-015-performance-calendar-authority.md)は、#111・#104・#283の保存側が使う日付境界の登録責任を扱う。状態はIn Review。開発者が候補を判断し、採用後に初期設定と直接API試験へ反映する。
+[ADR-015：公演日のサーバー判定に使う暦の登録](development/decisions/ADR-015-performance-calendar-authority.md)は、#111・#104・#283の保存側が使う日付境界の登録責任を扱う。2026-11-15に案Aを選択し、登録責任はApproved。初期設定と直接API試験の実装結果は公演保存基盤の記録で確認する。

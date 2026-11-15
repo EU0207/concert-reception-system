@@ -1,4 +1,4 @@
-// 会場の暦に従って、翌日が終わる境界を求める。固定24時間・48時間では計算しない。
+// 会場暦の日付境界とオフライン期限を求める。固定24時間・48時間では計算しない。
 
 import { nonnegative, requireValue } from '../seats/validation.ts';
 
@@ -35,8 +35,8 @@ export function venueDateAtServerTime(serverTime: number, timeZone: string): str
   return venueDateFormatter(timeZone)(serverTime);
 }
 
-/** 翌々日の開始を排他的な期限として返す。夏時間で1日の長さが変わる場合も扱う。 */
-export function offlineDeadline(performanceDate: string, timeZone: string): number {
+/** 会場暦の日付から指定日数後の日付境界を探す。夏時間を固定時間の加算で扱わない。 */
+function shiftedVenueDayStart(performanceDate: string, timeZone: string, daysAfter: number): number {
   requireValue(/^\d{4}-\d{2}-\d{2}$/.test(performanceDate), 'INVALID_PERFORMANCE_DATE');
 
   const parsed = new Date(performanceDate + 'T00:00:00Z');
@@ -46,7 +46,7 @@ export function offlineDeadline(performanceDate: string, timeZone: string): numb
     'INVALID_PERFORMANCE_DATE',
   );
 
-  parsed.setUTCDate(parsed.getUTCDate() + 2);
+  parsed.setUTCDate(parsed.getUTCDate() + daysAfter);
 
   const target = parsed.toISOString().slice(0, 10);
   const localDate = venueDateFormatter(timeZone);
@@ -66,4 +66,19 @@ export function offlineDeadline(performanceDate: string, timeZone: string): numb
   }
 
   return high;
+}
+
+/** 翌々日の開始を排他的な期限として返す。夏時間で1日の長さが変わる場合も扱う。 */
+export function offlineDeadline(performanceDate: string, timeZone: string): number {
+  return shiftedVenueDayStart(performanceDate, timeZone, 2);
+}
+
+/** 会場に実在する公演日の開始と翌日開始を求める。日付が飛ぶ会場では欠けた日を拒否する。 */
+export function venueDayBounds(performanceDate: string, timeZone: string) {
+  const dayStartsAt = shiftedVenueDayStart(performanceDate, timeZone, 0);
+  const dayEndsAt = shiftedVenueDayStart(performanceDate, timeZone, 1);
+  requireValue(venueDateAtServerTime(dayStartsAt, timeZone) === performanceDate &&
+    dayStartsAt < dayEndsAt, 'INVALID_PERFORMANCE_DATE_AT_VENUE');
+
+  return { dayStartsAt, dayEndsAt };
 }

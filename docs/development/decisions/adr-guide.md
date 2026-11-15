@@ -44,7 +44,7 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 
 | ADR | 判断対象 | 状態 | 関連Issue |
 |---|---|---|---|
-| [ADR-015](ADR-015-performance-calendar-authority.md) | 公演日のサーバー判定に使う暦の登録責任 | Proposed | #285・111・104・283 |
+| [ADR-015](ADR-015-performance-calendar-authority.md) | 公演日のサーバー判定に使う暦の登録責任 | Accepted（案A） | #285・111・104・283 |
 | [ADR-001](ADR-001-product-platform.md) | 製品基盤、外部サービス、オフライン同期、環境分離 | Accepted | [#25](https://github.com/EU0207/concert-reception-system/issues/25) |
 | [ADR-002](ADR-002-quota-emergency-response.md) | Firebase上限時の紙運用・手動課金・復旧方式 | Accepted | [#32](https://github.com/EU0207/concert-reception-system/issues/32) |
 | [ADR-003](ADR-003-role-based-auth-providers.md) | 管理者と公演限定スタッフの認証プロバイダー | Accepted | [#44](https://github.com/EU0207/concert-reception-system/issues/44) |

@@ -1,5 +1,7 @@
 // 業務確定版と空名簿を、対象公演の管理版と照合して初期化する。
 
+import { validPerformanceCalendar } from './performance-calendar-rules.mjs';
+
 /** 最初の業務データと公演管理版の照合記録を一体で作成する規則を組み立てる。 */
 export function performanceBusinessInitializationRules({ root, manager, integer }) {
   const control = `${root}.child('control')`;
@@ -12,6 +14,7 @@ export function performanceBusinessInitializationRules({ root, manager, integer 
     const event = `${post}.child('event')`;
 
     return `${manager} && ${session}.child('humanAuthTime').val() >= now - 900000
+      && ${validPerformanceCalendar(root, integer)}
       && ${control}.child('environmentId').val() === $environmentId
       && ${control}.child('performanceId').val() === $performanceId
       && ${control}.child('state').val() === 'preparing'
