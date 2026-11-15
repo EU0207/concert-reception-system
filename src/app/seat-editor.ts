@@ -131,7 +131,7 @@ export async function openSeatEditor(
     isActive: () => panel.isConnected,
     /** 画像と対応させる現在の区画IDを返す。 */
     section: () => activeId,
-    /** 画像の切替先と同じ区画を、表示順のまま選べるようにする。 */
+    /** 優先画像を設定した区画を、確認画面で照合できるようにする。 */
     sections: () => layout.sections.map(({ section }) => ({ id: section.sectionId, name: section.name })),
     /** 未保存を含む区画と画像の対応を返す。 */
     bindings: () => imageBindings,
@@ -144,11 +144,6 @@ export async function openSeatEditor(
       else delete imageBindings[sectionId];
       dirty = true;
       updateStatus();
-    },
-    /** 画像の前後操作でも、区画切替の保存・取消し確認を維持する。 */
-    navigate: async (sectionId) => {
-      sectionChoice.value = sectionId;
-      await switchSection();
     },
   });
 
