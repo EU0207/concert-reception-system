@@ -222,6 +222,7 @@ export function authorizationRules() {
     control: {
       '.read': currentAuthorization(),
       '.write': false,
+      calendar: { '.write': false },
       ...initialization,
       ...business.control,
       state: { '.write': controlWrites.state },

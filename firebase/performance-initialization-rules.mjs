@@ -1,5 +1,7 @@
 // 明示割当済みの主担当による、公演管理情報の一度限りの初期化を検査する。
 
+import { validPerformanceCalendar } from './performance-calendar-rules.mjs';
+
 /** 認可の台帳に触れず、管理版・形式版・初期化時刻の一体作成だけを許可する。 */
 export function performanceInitializationRules({ root, preparedAuthorization, integer }) {
   const control = `${root}.child('control')`;
@@ -12,14 +14,16 @@ export function performanceInitializationRules({ root, preparedAuthorization, in
     businessSchemaVersion: 3,
     layoutSchemaVersion: 2,
     initializedAt: 'now',
+    calendarInitializedFromRevision: `${control}.child('calendar/calendarRevision').val()`,
   };
 
   const previous = Object.keys(fields).map((key) => `!${control}.child('${key}').exists()`);
   const next = Object.entries(fields).map(
     ([key, value]) => `newData.parent().child('${key}').val() === ${value}`,
   );
-  // 親に書込み権限を与えるとownerUidなども変更できるため、4項目だけを同条件で許可する。
+  // 親に書込み権限を与えるとownerUidや暦も変更できるため、5項目だけを同条件で許可する。
   const write = `${preparedAuthorization()}
+    && ${validPerformanceCalendar(root, integer)}
     && ${role}.child('role').val() === 'owner' && ${control}.child('ownerUid').val() === ${humanUid}
     && ${session}.child('humanAuthTime').val() >= now - 900000
     && ${control}.child('environmentId').val() === $environmentId
