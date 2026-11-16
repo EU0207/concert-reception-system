@@ -66,6 +66,18 @@ test('PHOTO294-T01 1MB超の写真を端末内で調整し、確認前と取消�
   await select(page, file);
   await dialog.getByRole('button', { name: '端末に保存する' }).click();
   await expect(page.locator('.venue-images img')).toBeVisible();
+  const viewer = page.locator('.venue-images');
+  await viewer.getByRole('button', { name: '原寸', exact: true }).click();
+  await expect.poll(() => viewer.locator('img').evaluate((node) => node.getBoundingClientRect().width / node.naturalWidth)).toBeCloseTo(1, 2);
+  const initialViewport = page.viewportSize();
+  await page.setViewportSize({ ...initialViewport, width: initialViewport.width + 80 });
+  await expect.poll(() => viewer.locator('img').evaluate((node) => node.getBoundingClientRect().width / node.naturalWidth)).toBeCloseTo(1, 2);
+  await page.setViewportSize(initialViewport);
+  for (let step = 0; step < 4; step++) await viewer.getByRole('button', { name: '会場画像を拡大' }).click();
+  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('400%');
+  expect(await viewer.locator('img').evaluate((node) => node.getBoundingClientRect().width / node.naturalWidth)).toBeCloseTo(4, 2);
+  await viewer.getByRole('button', { name: '全体表示', exact: true }).click();
+  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('全体表示');
   await page.reload();
   await page.locator('.venue-images summary').click();
   await expect(page.locator('.venue-images img')).toBeVisible();
