@@ -102,7 +102,7 @@ export function createVenueImageViewer(context: Context) {
     const base = fitScale();
     const scale = zoom ?? base;
     const percentage = Math.round(scale * 100);
-    zoomLabel.textContent = zoom === undefined ? `全体表示（${percentage}%）` : `${percentage}%`;
+    zoomLabel.textContent = `${percentage}%`;
     const width = image.naturalWidth * scale, height = image.naturalHeight * scale;
     image.style.width = `${width}px`;
     image.style.height = `${height}px`;
@@ -198,7 +198,7 @@ export function createVenueImageViewer(context: Context) {
       url = URL.createObjectURL(value.blob);
       shownIdentity = identity;
       zoom = undefined;
-      zoomLabel.textContent = '全体表示';
+      zoomLabel.textContent = '100%';
       image.alt = `会場画像${Number(slot) + 1}`;
       image.src = url;
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
