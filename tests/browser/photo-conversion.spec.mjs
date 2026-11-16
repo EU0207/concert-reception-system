@@ -106,6 +106,28 @@ test('PHOTO294-T01 1MB超の写真を端末内で調整し、確認前と取消�
   for (let step = 0; step < 8; step++) await viewer.getByRole('button', { name: '会場画像を拡大' }).click();
   await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('400%');
   expect(await viewer.locator('img').evaluate((node) => node.getBoundingClientRect().width / node.naturalWidth)).toBeCloseTo(4, 2);
+  await viewer.locator('.venue-image-viewport').evaluate((node) => {
+    node.scrollLeft = (node.scrollWidth - node.clientWidth) * 0.3;
+    node.scrollTop = (node.scrollHeight - node.clientHeight) * 0.4;
+  });
+
+  /** 表示枠の中心が指す画像内の位置を、表示中の寸法だけから測る。 */
+  async function visiblePoint() {
+    return viewer.evaluate((node) => {
+      const viewport = node.querySelector('.venue-image-viewport'), image = node.querySelector('img');
+      const frame = viewport.getBoundingClientRect(), picture = image.getBoundingClientRect();
+      return { x: (frame.left + viewport.clientLeft + viewport.clientWidth / 2 - picture.left) / picture.width,
+        y: (frame.top + viewport.clientTop + viewport.clientHeight / 2 - picture.top) / picture.height };
+    });
+  }
+
+  const position = await visiblePoint();
+  for (const name of ['会場画像を縮小', '会場画像を拡大', '原寸']) {
+    await viewer.getByRole('button', { name, exact: true }).click();
+    const after = await visiblePoint();
+    expect(Math.abs(after.x - position.x)).toBeLessThan(0.002);
+    expect(Math.abs(after.y - position.y)).toBeLessThan(0.002);
+  }
   await viewer.getByRole('button', { name: '全体表示', exact: true }).click();
   await expect(viewer.locator('.venue-image-zoom-controls > span')).toHaveText(/^\d+%$/);
   await page.reload();
