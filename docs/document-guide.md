@@ -168,7 +168,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 [ADR-016：共有下書きの編集状態](development/decisions/ADR-016-shared-draft-editor-state.md)はApproved（案A）。#104の共有保存へ接続する前に、初回採番状態と公演全体の画像・任意の優先設定を欠落なく復元する保存契約を比較する。2026-11-16に開発者が構成形式2を維持する案Aを選択した。
 
-[ADR-017：会場写真の端末内変換](development/decisions/ADR-017-venue-photo-conversion.md)はApproved（機能方針）。#294で写真の入力上限と保存後1MBを分け、PNG／JPEGの選択と拡大確認を定める。[試験結果・実機確認手順](development/technical-validation/photo-conversion-results.md)はIn Review。実画像の画質受入は未了。
+[ADR-017：会場写真の端末内変換](development/decisions/ADR-017-venue-photo-conversion.md)はApproved（機能方針）。#294で写真の入力上限と保存後1MBを分け、PNG／JPEGの選択と拡大確認を定める。[試験結果・実機確認手順](development/technical-validation/photo-conversion-results.md)はApproved（PR #295の範囲）。実画像の画質受入は未了。
 
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
