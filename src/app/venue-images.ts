@@ -2,6 +2,7 @@
 
 import { el, button, showDialog } from './dom.ts';
 import { convertPhoto } from './photo-conversion.ts';
+import { createVenueImageGestures } from './venue-image-gestures.ts';
 import { createVenueImageStore } from '../storage/venue-images.ts';
 import type { DeviceKeyScope } from '../storage/device-vault.ts';
 import { IMAGE_SLOTS, prepareVenueImage } from '../domain/seats/venue-image.ts';
@@ -52,7 +53,6 @@ export function createVenueImageViewer(context: Context) {
   let converting: AbortController | undefined;
   let photoDialog: HTMLDialogElement | undefined;
   let replacing = false;
-  let gesture: { x: number; y: number; left: number; top: number; mouse: boolean } | undefined;
 
   image.alt = '会場画像';
   image.draggable = false;
@@ -108,7 +108,8 @@ export function createVenueImageViewer(context: Context) {
     image.style.height = `${height}px`;
     stage.style.width = `${Math.max(viewport.clientWidth, width)}px`;
     stage.style.height = `${Math.max(viewport.clientHeight, height)}px`;
-    viewport.style.touchAction = scale <= base ? 'pan-y' : 'pan-x pan-y';
+    // 画像枠内だけでピンチを処理する。ページ全体のタッチ操作は変更しない。
+    viewport.style.touchAction = 'none';
     if (center) {
       viewport.scrollLeft = (stage.clientWidth - viewport.clientWidth) / 2;
       viewport.scrollTop = (stage.clientHeight - viewport.clientHeight) / 2;
@@ -125,17 +126,19 @@ export function createVenueImageViewer(context: Context) {
   }
 
   /** 拡大率だけを変更し、席の設定・下書き・画像本文には書き込まない。 */
-  function changeZoom(factor: number) {
+  function changeZoom(direction: -1 | 1) {
     if (!image.naturalWidth || !viewport.clientWidth) return;
-    const base = fitScale();
-    zoom = Math.max(base * 0.5, Math.min(4, (zoom ?? base) * factor));
+    const steps = [0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4];
+    const current = zoom ?? fitScale();
+    zoom = direction === 1 ? steps.find((step) => step > current + 0.000001) ?? 4 :
+      steps.findLast((step) => step < current - 0.000001) ?? 0.01;
     sizeImage(true);
   }
 
   const previous = button('←', () => { void navigate(-1); }, 'button secondary');
   const next = button('→', () => { void navigate(1); }, 'button secondary');
-  const smaller = button('－', () => changeZoom(1 / 1.5), 'button secondary');
-  const larger = button('＋', () => changeZoom(1.5), 'button secondary');
+  const smaller = button('－', () => changeZoom(-1), 'button secondary');
+  const larger = button('＋', () => changeZoom(1), 'button secondary');
   const actualSize = button('原寸', () => {
     if (!image.naturalWidth || !viewport.clientWidth) return;
     zoom = 1;
@@ -156,6 +159,10 @@ export function createVenueImageViewer(context: Context) {
   const manage = el('div', 'venue-image-manage');
   manage.append(bindingLabel, add, replace, remove, file);
   root.append(summary, count, fallback, viewport, controls, manage, error, status);
+  const gestures = createVenueImageGestures(viewport, image, {
+    scale: () => zoom ?? fitScale(), fit: fitScale, navigate,
+    resize: (value) => { zoom = value; sizeImage(); },
+  });
 
   /** 確認済みのキャッシュを表示し、欠損時は座席表を使える案内を維持する。 */
   function refresh() {
@@ -186,6 +193,7 @@ export function createVenueImageViewer(context: Context) {
     fallback.textContent = loading ? '会場画像を端末で確認しています。座席表はそのまま操作できます。' :
       '表示できる会場画像はありません。座席表で確認できます。';
     if (!value?.blob) {
+      gestures.reset();
       if (url) URL.revokeObjectURL(url);
       url = undefined;
       shownIdentity = '';
@@ -194,6 +202,7 @@ export function createVenueImageViewer(context: Context) {
     }
     const identity = `${slot}/${value.head.revision}/${value.head.sha256}`;
     if (identity !== shownIdentity) {
+      gestures.reset();
       if (url) URL.revokeObjectURL(url);
       url = URL.createObjectURL(value.blob);
       shownIdentity = identity;
@@ -363,32 +372,17 @@ export function createVenueImageViewer(context: Context) {
   image.addEventListener('load', () => sizeImage(true));
   image.addEventListener('error', () => {
     if (!url || !image.getAttribute('src')) return;
+    gestures.reset();
     error.textContent = '画像を表示できません。座席表で確認してください。';
     viewport.hidden = controls.hidden = true;
     fallback.hidden = false;
   });
-  viewport.addEventListener('pointerdown', (event) => {
-    gesture = { x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop, mouse: event.pointerType === 'mouse' };
-    if (gesture.mouse && zoom !== undefined && zoom > fitScale()) viewport.setPointerCapture(event.pointerId);
-  });
-  viewport.addEventListener('pointermove', (event) => {
-    if (!gesture?.mouse || zoom === undefined || zoom <= fitScale()) return;
-    viewport.scrollLeft = gesture.left - (event.clientX - gesture.x);
-    viewport.scrollTop = gesture.top - (event.clientY - gesture.y);
-  });
-  viewport.addEventListener('pointerup', (event) => {
-    const start = gesture;
-    gesture = undefined;
-    if (!start || (zoom !== undefined && zoom > fitScale())) return;
-    const dx = event.clientX - start.x, dy = event.clientY - start.y;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) void navigate(dx < 0 ? 1 : -1);
-  });
-  viewport.addEventListener('pointercancel', () => { gesture = undefined; });
   const resize = new ResizeObserver(() => sizeImage());
   resize.observe(viewport);
   const observer = new MutationObserver(() => {
     if (context.isActive()) return;
     converting?.abort();
+    gestures.dispose();
     photoDialog?.close();
     if (url) URL.revokeObjectURL(url);
     url = undefined;
