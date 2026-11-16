@@ -243,9 +243,9 @@ export function createVenueImageViewer(context: Context) {
     pendingDialog.addEventListener('close', () => controller.abort(), { once: true });
     try {
       context.assertAuthorized();
-      const converted = await convertPhoto(selected, controller.signal);
+      let converted = await convertPhoto(selected, controller.signal);
       if (controller.signal.aborted || !pendingDialog.open || !context.isActive()) throw Error('PHOTO_CANCELLED');
-      const payload = await prepareVenueImage(context.scope, new Uint8Array(await converted.blob.arrayBuffer()), converted.blob.type,
+      let payload = await prepareVenueImage(context.scope, new Uint8Array(await converted.blob.arrayBuffer()), converted.blob.type,
         prior?.head.revision ?? 0, crypto.randomUUID());
       context.assertAuthorized();
       if (controller.signal.aborted || !pendingDialog.open || !context.isActive() || context.section() !== sectionId) throw Error('PHOTO_CANCELLED');
@@ -254,14 +254,24 @@ export function createVenueImageViewer(context: Context) {
       const body = el('div');
       body.append(el('p', '', isReplacing ? 'この端末の確認用画像を差し替えて保存します。共有は行いません。' :
         'この端末に確認用画像を保存します。共有は行いません。'));
-      const information = [
-        ['形式：', converted.blob.type === 'image/png' ? 'PNG' : 'JPEG'],
-        ['容量：', `${(converted.blob.size / 1_000_000).toFixed(2)}MB`],
-        ['サイズ：', `${converted.width}×${converted.height}px（元 ${converted.originalWidth}×${converted.originalHeight}px）`],
-      ].map(([label, value]) => `${label}${value}`).join('　');
-      body.append(el('p', 'photo-information', information));
+      const originalConverted = converted, originalPayload = payload;
+      let quarterTurns = 0, rotating = false;
+      let rotationController: AbortController | undefined;
+      const information = el('p', 'photo-information');
+
+      /** 確認中の画像に一致する形式・容量・寸法を表示する。 */
+      function updateInformation() {
+        information.textContent = [
+          ['形式：', converted.blob.type === 'image/png' ? 'PNG' : 'JPEG'],
+          ['容量：', `${(converted.blob.size / 1_000_000).toFixed(2)}MB`],
+          ['サイズ：', `${converted.width}×${converted.height}px（元 ${converted.originalWidth}×${converted.originalHeight}px）`],
+        ].map(([label, value]) => `${label}${value}`).join('　');
+      }
+
+      updateInformation();
+      body.append(information);
       body.append(el('p', '', '「原寸で確認」で、席番号と画像の向きを確認してください。'));
-      const previewUrl = URL.createObjectURL(converted.blob);
+      let previewUrl = URL.createObjectURL(converted.blob);
       const preview = el('div', 'photo-preview');
       const previewImage = el('img');
       previewImage.src = previewUrl;
@@ -273,7 +283,15 @@ export function createVenueImageViewer(context: Context) {
         zoom.setAttribute('aria-pressed', String(actual));
       }, 'button secondary');
       zoom.setAttribute('aria-pressed', 'false');
-      body.append(preview, zoom);
+      const rotateLeft = button('左回り', () => { void rotate(-1); }, 'button secondary');
+      const rotateRight = button('右回り', () => { void rotate(1); }, 'button secondary');
+      rotateLeft.title = '左に90度回転';
+      rotateRight.title = '右に90度回転';
+      const rotationStatus = el('span', 'muted');
+      rotationStatus.setAttribute('role', 'status');
+      const previewControls = el('div', 'photo-preview-controls');
+      previewControls.append(zoom, rotateLeft, rotateRight, rotationStatus);
+      body.append(preview, previewControls);
       body.append(el('p', '', '区画との対応は任意です。設定した場合は「下書き保存」で保存します。'));
       const affected = context.sections().filter((section) => context.bindings()[section.id] === slot).length;
       if (affected > 1) body.append(el('p', '', `この画像を使用中の${affected}区画に反映されます。`));
@@ -281,7 +299,7 @@ export function createVenueImageViewer(context: Context) {
       message.setAttribute('role', 'alert');
       body.append(message);
       const confirm = button('端末に保存する', async () => {
-        if (writing) return;
+        if (writing || rotating) return;
         writing = true;
         confirm.disabled = true;
         let savedToDevice = false;
@@ -309,7 +327,49 @@ export function createVenueImageViewer(context: Context) {
       });
       const dialog = showDialog(isReplacing ? '会場画像を差し替え' : '会場画像を追加', body, [confirm]);
       photoDialog = dialog;
-      dialog.addEventListener('close', () => { URL.revokeObjectURL(previewUrl); if (photoDialog === dialog) photoDialog = undefined; }, { once: true });
+
+      /** 元写真から指定の向きを作り、検査成功後だけ確認画像と保存予定本文を一緒に替える。 */
+      async function rotate(direction: -1 | 1) {
+        if (writing || rotating || !dialog.open) return;
+        const target = (quarterTurns + direction + 4) % 4;
+        const turnController = new AbortController();
+        rotationController = turnController;
+        rotating = true;
+        zoom.disabled = rotateLeft.disabled = rotateRight.disabled = confirm.disabled = true;
+        rotationStatus.textContent = '回転しています…';
+        message.textContent = '';
+        try {
+          context.assertAuthorized();
+          // 直前のJPEGを繰り返し圧縮せず、常に元写真から回転・調整する。
+          const next = target === 0 ? originalConverted : await convertPhoto(selected!, turnController.signal, target);
+          const nextPayload = target === 0 ? originalPayload : await prepareVenueImage(context.scope,
+            new Uint8Array(await next.blob.arrayBuffer()), next.blob.type, prior?.head.revision ?? 0, crypto.randomUUID());
+          context.assertAuthorized();
+          if (!dialog.open || turnController.signal.aborted || !context.isActive() || context.section() !== sectionId) return;
+          const nextUrl = URL.createObjectURL(next.blob);
+          URL.revokeObjectURL(previewUrl);
+          previewUrl = nextUrl;
+          converted = next;
+          payload = nextPayload;
+          quarterTurns = target;
+          previewImage.src = previewUrl;
+          preview.scrollLeft = preview.scrollTop = 0;
+          updateInformation();
+        } catch {
+          if (dialog.open && !turnController.signal.aborted) message.textContent = '回転できませんでした。確認中の画像は変更していません。';
+        } finally {
+          rotating = false;
+          rotationController = undefined;
+          rotationStatus.textContent = '';
+          zoom.disabled = rotateLeft.disabled = rotateRight.disabled = confirm.disabled = writing;
+        }
+      }
+
+      dialog.addEventListener('close', () => {
+        rotationController?.abort();
+        URL.revokeObjectURL(previewUrl);
+        if (photoDialog === dialog) photoDialog = undefined;
+      }, { once: true });
     } catch (cause) {
       const reason = cause instanceof Error ? cause.message : '';
       if (reason !== 'PHOTO_CANCELLED' && context.isActive()) {
