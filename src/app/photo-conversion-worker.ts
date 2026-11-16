@@ -3,7 +3,13 @@
 import { heicTo } from 'heic-to/csp';
 import { IMAGE_MAX_BYTES } from '../domain/seats/venue-image.ts';
 import { PHOTO_INPUT_MAX_BYTES } from './photo-policy.ts';
-import type { ConvertedPhoto } from './photo-policy.ts';
+import type { ConvertedPhoto, PhotoRequest } from './photo-policy.ts';
+
+type Encoding = { type: 'image/png' | 'image/jpeg'; quality?: number };
+let source: ImageBitmap | undefined;
+let originalWidth = 0, originalHeight = 0;
+let preferred: Encoding | undefined;
+let queue = Promise.resolve();
 
 /** 申告された拡張子ではなく画像ヘッダーから許可する入力形式を判定する。 */
 async function inputKind(file: File): Promise<'native' | 'heic'> {
@@ -25,15 +31,18 @@ async function decode(file: File): Promise<ImageBitmap> {
   }
 }
 
-/** 指定の向きで描画し、無劣化PNGまたは高品質JPEGを段階的な寸法で選ぶ。 */
-async function convert(file: File, quarterTurns: number): Promise<ConvertedPhoto> {
-  if (!file.size || file.size > PHOTO_INPUT_MAX_BYTES) throw Error('PHOTO_INPUT_SIZE');
+/** 保存条件を満たすBlobだけを、成功した符号化条件と共に返す。 */
+async function encode(canvas: OffscreenCanvas, encoding: Encoding) {
+  const blob = await canvas.convertToBlob(encoding);
+  return blob.size > 0 && blob.size <= IMAGE_MAX_BYTES && ['image/png', 'image/jpeg'].includes(blob.type) ? { blob, encoding } : undefined;
+}
+
+/** 初回は形式を比較し、回転時は確認済みの形式・品質を優先して再探索を避ける。 */
+async function convert(bitmap: ImageBitmap, quarterTurns: number, retainSource: boolean): Promise<ConvertedPhoto> {
   if (!Number.isInteger(quarterTurns) || quarterTurns < 0 || quarterTurns > 3) throw Error('PHOTO_ROTATION');
-  const bitmap = await decode(file);
   const canvas = new OffscreenCanvas(1, 1);
   try {
     const { width, height } = bitmap;
-    if (!width || !height || width * height > 50_000_000 || Math.max(width, height) > 12_000) throw Error('PHOTO_DIMENSIONS');
     const draw = canvas.getContext('2d');
     if (!draw) throw Error('PHOTO_DECODE');
     const longest = Math.max(width, height);
@@ -54,26 +63,52 @@ async function convert(file: File, quarterTurns: number): Promise<ConvertedPhoto
       draw.rotate(quarterTurns * Math.PI / 2);
       draw.drawImage(bitmap, -targetWidth / 2, -targetHeight / 2, targetWidth, targetHeight);
       draw.restore();
-      let blob = await canvas.convertToBlob({ type: 'image/png' });
-      if (blob.size > IMAGE_MAX_BYTES) {
+      let candidate = scale === 1 && preferred ? await encode(canvas, preferred) : undefined;
+      candidate ??= await encode(canvas, { type: 'image/png' });
+      if (!candidate) {
         for (const quality of [0.94, 0.9, 0.85]) {
-          blob = await canvas.convertToBlob({ type: 'image/jpeg', quality });
-          if (blob.size <= IMAGE_MAX_BYTES) break;
+          candidate = await encode(canvas, { type: 'image/jpeg', quality });
+          if (candidate) break;
         }
       }
-      if (blob.size <= IMAGE_MAX_BYTES && ['image/png', 'image/jpeg'].includes(blob.type)) {
-        return { blob, width: canvas.width, height: canvas.height, originalWidth: width, originalHeight: height };
+      if (candidate) {
+        if (retainSource) {
+          // JPEGを復号し直さず、初回縮小後の無圧縮画素だけを確認画面の間保持する。
+          source = await createImageBitmap(canvas);
+          preferred = candidate.encoding;
+        }
+        return { blob: candidate.blob, width: canvas.width, height: canvas.height, originalWidth, originalHeight };
       }
     }
     throw Error('PHOTO_CANNOT_FIT');
   } finally {
-    bitmap.close();
     canvas.width = canvas.height = 1;
   }
 }
 
-// 変換要求ごとに作られるWorker。結果は親画面へ返し、保存や通信は行わない。
-self.onmessage = async (event: MessageEvent<{ file: File; quarterTurns: number }>) => {
-  try { self.postMessage({ value: await convert(event.data.file, event.data.quarterTurns) }); }
-  catch (error) { self.postMessage({ error: error instanceof Error ? error.message : 'PHOTO_DECODE' }); }
+/** 元写真は一度だけ復号し、以後は初回調整後の無圧縮画素を使う。 */
+async function handle(message: PhotoRequest) {
+  try {
+    let value: ConvertedPhoto;
+    if (message.kind === 'initialize') {
+      if (source || !message.file.size || message.file.size > PHOTO_INPUT_MAX_BYTES) throw Error('PHOTO_INPUT_SIZE');
+      const bitmap = await decode(message.file);
+      try {
+        originalWidth = bitmap.width; originalHeight = bitmap.height;
+        if (!originalWidth || !originalHeight || originalWidth * originalHeight > 50_000_000 || Math.max(originalWidth, originalHeight) > 12_000) throw Error('PHOTO_DIMENSIONS');
+        value = await convert(bitmap, 0, true);
+      } finally { bitmap.close(); }
+    } else {
+      if (!source) throw Error('PHOTO_NOT_READY');
+      value = await convert(source, message.quarterTurns, false);
+    }
+    self.postMessage({ id: message.id, value });
+  } catch (error) {
+    self.postMessage({ id: message.id, error: error instanceof Error ? error.message : 'PHOTO_DECODE' });
+  }
+}
+
+// 要求は直列化し、確認画面の終了時は親がWorkerごとキャッシュを破棄する。
+self.onmessage = (event: MessageEvent<PhotoRequest>) => {
+  queue = queue.then(() => handle(event.data));
 };
