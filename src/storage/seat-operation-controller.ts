@@ -115,7 +115,9 @@ export function createSeatOperationController(context: ControllerContext) {
       }
 
       const known = await reconcile(await context.transport.lookup(structuredClone(operation), digest));
-      if (known) return known;
+      // 構成共有の準備だけは、固定入力と全基準版を再照合した明示操作で再開できる。
+      // 確定処理のpreparingを、同じ条件で再送可能とは扱わない。
+      if (known && !(action === 'retry' && operation.kind === 'share' && known.status === 'unknown')) return known;
       if (action === 'check') return local ? { status: 'unknown' } : { status: 'notFound' };
 
       const allowed = await context.transport.canSend(structuredClone(operation));

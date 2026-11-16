@@ -80,40 +80,50 @@ async function main() {
   }
 
   // 確認済みの512設定を局所修正ごとに繰り返さないよう、固定の対象指定を用意する。
-  const command =
+  const commands =
     selection[0] === '--link-rules-only'
-      ? 'node --test --test-name-pattern=AUTH110-Q tests/emulator/authorization.test.mjs'
+      ? ['node --test --test-name-pattern=AUTH110-Q tests/emulator/authorization.test.mjs']
       : selection[0] === '--sdk-only'
-        ? 'pnpm exec playwright test --config tests/emulator/playwright.config.mjs'
-        : 'node --test tests/emulator/authorization.test.mjs && pnpm exec playwright test --config tests/emulator/playwright.config.mjs';
-  const child = spawn(
-    process.execPath,
-    [
-      cli,
-      'emulators:exec',
-      '--project',
-      project,
-      '--config',
-      'tests/emulator/firebase.json',
-      '--only',
-      'auth,database',
-      command,
-    ],
-    {
-      cwd: resolve(import.meta.dirname, '..'),
-      windowsHide: true,
-      stdio: 'inherit',
-      env: environment,
-    },
-  );
+        ? ['pnpm exec playwright test --config tests/emulator/playwright.config.mjs']
+        : [
+          'node --test --test-skip-pattern=DD98-R00 tests/emulator/authorization.test.mjs',
+          'node --test --test-name-pattern=DD98-R00 tests/emulator/authorization.test.mjs',
+          'pnpm exec playwright test --config tests/emulator/playwright.config.mjs',
+        ];
+  // 512設定を連続検査した後のJavaヒープ不足を避け、同じRulesを独立プロセスで全件確認する。
+  for (const command of commands) {
+    const child = spawn(
+      process.execPath,
+      [
+        cli,
+        'emulators:exec',
+        '--project',
+        project,
+        '--config',
+        'tests/emulator/firebase.json',
+        '--only',
+        'auth,database',
+        command,
+      ],
+      {
+        cwd: resolve(import.meta.dirname, '..'),
+        windowsHide: true,
+        stdio: 'inherit',
+        env: environment,
+      },
+    );
 
-  child.once('error', (error) => {
-    throw error;
-  });
+    child.once('error', (error) => {
+      throw error;
+    });
 
-  const [code] = await once(child, 'exit');
+    const [code] = await once(child, 'exit');
 
-  process.exitCode = code ?? 1;
+    if (code !== 0) {
+      process.exitCode = code ?? 1;
+      return;
+    }
+  }
 }
 
 // # 本文：ローカルの試験環境を確認し、指定した認可試験を実行する。
