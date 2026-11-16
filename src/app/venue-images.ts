@@ -45,7 +45,8 @@ export function createVenueImageViewer(context: Context) {
   let previousBinding: ImageSlot | undefined;
   let url: string | undefined;
   let shownIdentity = '';
-  let zoom = 1;
+  // 未指定は全体表示。数値は画像の原寸に対する倍率として保持する。
+  let zoom: number | undefined;
   let loading = true;
   let writing = false;
   let converting: AbortController | undefined;
@@ -87,19 +88,27 @@ export function createVenueImageViewer(context: Context) {
     return IMAGE_SLOTS.filter((slot) => images.get(slot)?.blob);
   }
 
-  /** 表示領域へ収めた100%を基準にし、小さい画像も中央へ配置する。 */
+  /** 原寸を超えない範囲で、スクロールバーに影響されない全体表示倍率を計算する。 */
+  function fitScale() {
+    const frame = viewport.getBoundingClientRect();
+    const width = frame.width - viewport.clientLeft * 2, height = frame.height - viewport.clientTop * 2;
+
+    return Math.min(1, width / image.naturalWidth, height / image.naturalHeight);
+  }
+
+  /** 原寸基準の倍率を適用し、全体表示の場合だけ表示枠に合わせる。 */
   function sizeImage(center = false) {
     if (!image.naturalWidth || !viewport.clientWidth || viewport.hidden) return;
-    // スクロールバーの出入りで100%の基準が揺れないよう、表示枠の内側を基準にする。
-    const frame = viewport.getBoundingClientRect();
-    const baseWidth = frame.width - viewport.clientLeft * 2, baseHeight = frame.height - viewport.clientTop * 2;
-    const base = Math.min(baseWidth / image.naturalWidth, baseHeight / image.naturalHeight);
-    const width = image.naturalWidth * base * zoom, height = image.naturalHeight * base * zoom;
+    const base = fitScale();
+    const scale = zoom ?? base;
+    const percentage = Math.round(scale * 100);
+    zoomLabel.textContent = zoom === undefined ? `全体表示（${percentage}%）` : `${percentage}%`;
+    const width = image.naturalWidth * scale, height = image.naturalHeight * scale;
     image.style.width = `${width}px`;
     image.style.height = `${height}px`;
     stage.style.width = `${Math.max(viewport.clientWidth, width)}px`;
     stage.style.height = `${Math.max(viewport.clientHeight, height)}px`;
-    viewport.style.touchAction = zoom <= 1 ? 'pan-y' : 'pan-x pan-y';
+    viewport.style.touchAction = scale <= base ? 'pan-y' : 'pan-x pan-y';
     if (center) {
       viewport.scrollLeft = (stage.clientWidth - viewport.clientWidth) / 2;
       viewport.scrollTop = (stage.clientHeight - viewport.clientHeight) / 2;
@@ -116,16 +125,23 @@ export function createVenueImageViewer(context: Context) {
   }
 
   /** 拡大率だけを変更し、席の設定・下書き・画像本文には書き込まない。 */
-  function changeZoom(amount: number) {
-    zoom = Math.max(0.5, Math.min(2, Math.round((zoom + amount) * 100) / 100));
-    zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+  function changeZoom(factor: number) {
+    if (!image.naturalWidth || !viewport.clientWidth) return;
+    const base = fitScale();
+    zoom = Math.max(base * 0.5, Math.min(4, (zoom ?? base) * factor));
     sizeImage(true);
   }
 
   const previous = button('←', () => { void navigate(-1); }, 'button secondary');
   const next = button('→', () => { void navigate(1); }, 'button secondary');
-  const smaller = button('－', () => changeZoom(-0.25), 'button secondary');
-  const larger = button('＋', () => changeZoom(0.25), 'button secondary');
+  const smaller = button('－', () => changeZoom(1 / 1.5), 'button secondary');
+  const larger = button('＋', () => changeZoom(1.5), 'button secondary');
+  const actualSize = button('原寸', () => {
+    if (!image.naturalWidth || !viewport.clientWidth) return;
+    zoom = 1;
+    sizeImage(true);
+  }, 'button secondary');
+  const fit = button('全体表示', () => { zoom = undefined; sizeImage(true); }, 'button secondary');
   const add = button('画像を追加', () => { replacing = false; file.click(); }, 'button secondary');
   const replace = button('画像を差し替え', () => { replacing = true; file.click(); }, 'button secondary');
   const remove = button('画像を削除', () => { void removeImage(); }, 'button secondary venue-image-remove');
@@ -135,7 +151,7 @@ export function createVenueImageViewer(context: Context) {
   larger.setAttribute('aria-label', '会場画像を拡大');
   const pages = el('div', 'venue-image-page-controls'), scale = el('div', 'venue-image-zoom-controls');
   pages.append(previous, pageLabel, next);
-  scale.append(smaller, zoomLabel, larger);
+  scale.append(smaller, zoomLabel, larger, actualSize, fit);
   controls.append(pages, scale);
   const manage = el('div', 'venue-image-manage');
   manage.append(bindingLabel, add, replace, remove, file);
@@ -181,8 +197,8 @@ export function createVenueImageViewer(context: Context) {
       if (url) URL.revokeObjectURL(url);
       url = URL.createObjectURL(value.blob);
       shownIdentity = identity;
-      zoom = 1;
-      zoomLabel.textContent = '100%';
+      zoom = undefined;
+      zoomLabel.textContent = '全体表示';
       image.alt = `会場画像${Number(slot) + 1}`;
       image.src = url;
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -353,17 +369,17 @@ export function createVenueImageViewer(context: Context) {
   });
   viewport.addEventListener('pointerdown', (event) => {
     gesture = { x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop, mouse: event.pointerType === 'mouse' };
-    if (gesture.mouse && zoom > 1) viewport.setPointerCapture(event.pointerId);
+    if (gesture.mouse && zoom !== undefined && zoom > fitScale()) viewport.setPointerCapture(event.pointerId);
   });
   viewport.addEventListener('pointermove', (event) => {
-    if (!gesture?.mouse || zoom <= 1) return;
+    if (!gesture?.mouse || zoom === undefined || zoom <= fitScale()) return;
     viewport.scrollLeft = gesture.left - (event.clientX - gesture.x);
     viewport.scrollTop = gesture.top - (event.clientY - gesture.y);
   });
   viewport.addEventListener('pointerup', (event) => {
     const start = gesture;
     gesture = undefined;
-    if (!start || zoom > 1) return;
+    if (!start || (zoom !== undefined && zoom > fitScale())) return;
     const dx = event.clientX - start.x, dy = event.clientY - start.y;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) void navigate(dx < 0 ? 1 : -1);
   });

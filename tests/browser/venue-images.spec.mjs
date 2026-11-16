@@ -214,7 +214,17 @@ test('IMG91-T06・REQ-NF-014 画像の下部操作・中央縮小と任意の区
     return values;
   });
   expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(0.1);
-  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('200%');
+  await viewer.getByRole('button', { name: '原寸', exact: true }).click();
+  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('100%');
+  const actual = await viewer.locator('img').evaluate((node) => ({ width: node.getBoundingClientRect().width, natural: node.naturalWidth }));
+  expect(actual.width).toBeCloseTo(actual.natural, 1);
+  for (let step = 0; step < 6; step++) await viewer.getByRole('button', { name: '会場画像を拡大' }).click();
+  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('400%');
+  const enlarged = await viewer.locator('img').evaluate((node) => ({ width: node.getBoundingClientRect().width, natural: node.naturalWidth }));
+  expect(enlarged.width).toBeCloseTo(enlarged.natural * 4, 1);
+  await viewer.getByRole('button', { name: '全体表示', exact: true }).click();
+  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('全体表示');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   await saveDraft(page);
   await addSection(page, '架空の第二区画');
   await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
