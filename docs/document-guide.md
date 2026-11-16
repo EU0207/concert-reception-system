@@ -206,7 +206,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 ## 実装中の認可基盤
 
-案Aによる会場構成の共有保存は[共有保存・別端末復元の実装・試験記録](development/technical-validation/shared-seat-draft-results.md)（In Review）を参照する。通常SDKでの保存・照会と全画像の一体取込みを#292で確認し、実認証画面・共有ボタンと確定保存の残条件を親#104・105へ渡す。
+案Aによる会場構成の共有保存は[共有保存・別端末復元の実装・試験記録](development/technical-validation/shared-seat-draft-results.md)（Approved、PR #293の範囲）を参照する。通常SDKでの保存・照会と全画像の一体取込みを#292で確認し、実認証画面・共有ボタンと確定保存の残条件を親#104・105へ渡す。
 
 会場画像の通常SDK保存基盤と、ローカル評価画面の画像操作は[会場画像の保存・表示　実装・試験記録](development/technical-validation/venue-image-results.md)（Approved、PR #287の範囲）を参照する。#244・105・104の確認済み範囲と残条件を分けて記録している。
 
