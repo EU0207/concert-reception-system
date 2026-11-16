@@ -51,7 +51,7 @@ test('PHOTO294-T01 1MB超の写真を端末内で調整し、確認前と取消�
   const dialog = await select(page, file);
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText('JPEG');
-  await expect(dialog.locator('.photo-information')).toHaveText(/^形式：JPEG　容量：[0-9.]+MB　サイズ：\d+×\d+px　元のサイズ：\d+×\d+px$/);
+  await expect(dialog.locator('.photo-information')).toHaveText(/^形式：JPEG　容量：[0-9.]+MB　サイズ：\d+×\d+px（元 \d+×\d+px）$/);
   await expect(dialog).not.toContainText('／1MB');
   const sizeLabel = await dialog.locator('.photo-information').innerText();
   expect(Number(sizeLabel.match(/容量：([0-9.]+)MB/)[1])).toBeLessThanOrEqual(1);
