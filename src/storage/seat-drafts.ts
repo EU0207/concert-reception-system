@@ -347,5 +347,10 @@ export function createSeatDraftStore(scope: DeviceKeyScope, assertAuthorized: ()
     return { localRevision, operationId: fixedOperation.operationId, persistence };
   }
 
-  return { loadLocalDraft, saveLocalDraft, prepareSeatOperation, readPendingSeatOperation };
+  /** 共有案の一体取込みに使う暗号文を用意する。ここではDBへ書き込まない。 */
+  async function prepareLocalDraft(input: DraftInput, expectedRevision: number) {
+    return makeDraft(structuredClone(input), expectedRevision);
+  }
+
+  return { loadLocalDraft, saveLocalDraft, prepareSeatOperation, readPendingSeatOperation, prepareLocalDraft };
 }

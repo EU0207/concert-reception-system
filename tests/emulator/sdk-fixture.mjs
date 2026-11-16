@@ -5,6 +5,16 @@ import {
   reauthenticateWithCredential,
 } from 'firebase/auth';
 import { getDatabase, goOffline } from 'firebase/database';
+export { ref, get, set } from 'firebase/database';
+
+/** ローカルdemoに接続した端末DBだけを、直接要求の試験へ渡す。 */
+export function getFictionalDeviceDatabase(principals) {
+  if (principals.deviceAuth.emulatorConfig?.host !== '127.0.0.1' || !principals.deviceApp.options.projectId.startsWith('demo-')) {
+    throw Error('EMULATOR_REQUIRED');
+  }
+
+  return getDatabase(principals.deviceApp);
+}
 
 export function disconnectFictionalDevice(principals) {
   if (principals.deviceAuth.emulatorConfig?.host !== '127.0.0.1') throw Error('EMULATOR_REQUIRED');

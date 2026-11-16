@@ -22,6 +22,7 @@ import { planReceptionControl } from '../../domain/authorization/reception-contr
 import { validatePerformanceCalendar } from '../../domain/authorization/performance-calendar.ts';
 import type { PerformanceCalendar } from '../../domain/authorization/performance-calendar.ts';
 import { createVenueImagePort } from './venue-image-port.ts';
+import { createSharedSeatPort } from './shared-seat-port.ts';
 import type {
   AuthorizationSnapshot,
   DeviceGrant,
@@ -113,6 +114,7 @@ export async function createAuthorizationPort(
     registration: ReturnType<typeof createDeviceRegistrationPort>;
     ownerDeviceLinks: ReturnType<typeof createOwnerDeviceLinkPort>;
     images: ReturnType<typeof createVenueImagePort>;
+    sharedSeats: ReturnType<typeof createSharedSeatPort>;
   }
 > {
   requireValue(
@@ -658,6 +660,7 @@ export async function createAuthorizationPort(
       serverNow,
     }),
     images: createVenueImagePort({ scope, root, deviceDatabase, fetchCurrent }),
+    sharedSeats: createSharedSeatPort({ scope, root, deviceDatabase, fetchCurrent }),
     fetchCurrent,
     initializePerformanceControl,
     initializePerformanceBusiness,

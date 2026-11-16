@@ -10,6 +10,8 @@ import { changeTemporaryPermissions } from '../../src/domain/authorization/role-
 import { cancelAuthorizationChange } from '../../src/domain/authorization/role-management.ts';
 import { createOwnerDeviceToken } from '../../src/domain/authorization/device-registration.ts';
 import { createPerformanceCalendar } from '../../src/domain/authorization/performance-calendar.ts';
+import { createLayout, createSection } from '../../src/domain/seats/layout.ts';
+import { planSharedDraft } from '../../src/domain/seats/shared-draft.ts';
 
 const project = 'demo-concert-reception-product';
 const namespace = project + '-default-rtdb';
@@ -17,6 +19,81 @@ const environmentId = '00000000-0000-4000-8000-000000000001';
 const performanceId = '00000000-0000-4000-8000-000000000002';
 const root = `environments/${environmentId}/performances/${performanceId}`;
 const scope = { environmentId, performanceId };
+
+test('SHARE104-R01 共有の予約・分割本文・編集進捗と結果の部分送信を拒否し、確定版を変えない', async () => {
+  const owner = await fixture(), reader = await fixture('receptionist');
+  for (const actor of [owner, reader]) assert.equal((await request(`${root}/sessions/${actor.device.uid}`, 'PUT', actor.session, actor.human.token)).status, 200);
+  await request(root, 'PATCH', { generations: null, references: null, sharedDrafts: null, sharedHead: null, sharedOperations: null,
+    head: null, 'control/state': 'preparing', 'control/controlRevision': 1, 'control/businessSchemaVersion': 3,
+    'control/layoutSchemaVersion': 2, 'control/calendar': createPerformanceCalendar(scope, '2099-10-10', 'UTC', 1) });
+  const token = owner.device.token, id = randomUUID();
+  const source = createSection(createLayout(scope), { name: '架空の区画', rows: 1, columns: 2,
+    axis: 'horizontal', seatOrder: 'forward', lines: [{ name: 'A' }] }).after;
+  const basis = { ...scope, expectedSharedRevision: 0, baseLayoutGeneration: '', baseLayoutRevision: 0,
+    sourceControlRevision: 1, calendarRevision: 1 };
+  const plan = planSharedDraft({ layout: source, editReasons: {}, imageBindings: {} }, basis, id, {});
+  const meta = { ...scope, schemaVersion: 1, operationId: id, generation: id, humanUid: owner.human.uid, deviceUid: owner.device.uid,
+    baseLayoutGeneration: '', baseLayoutRevision: 0, sourceControlRevision: 1, calendarRevision: 1, expectedSharedRevision: 0,
+    sectionCount: 1, reasonCount: 0, imageCount: 0, hasEditReasons: true, hasImageBindings: true,
+    inputDigest: 'a'.repeat(64), draftDigest: 'b'.repeat(64), roleRevision: 1, deviceRevision: 1 };
+  for (const invalid of [{ ...meta, performanceId: environmentId }, { ...meta, deviceUid: reader.device.uid }, { ...meta, calendarRevision: 2 }]) {
+    assert.equal((await request(`${root}/sharedDrafts/${id}/meta`, 'PUT', invalid, token)).status, 401);
+  }
+  assert.equal((await request(`${root}/sharedDrafts/${id}/meta`, 'PUT', meta, token)).status, 200);
+  const reservation = { ...basis, schemaVersion: 4, operationId: id, generation: id, deviceUid: owner.device.uid,
+    active: true, revision: 1, roleRevision: 1, deviceRevision: 1 };
+  assert.equal((await request(`${root}/references/${id}`, 'PUT', reservation, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', { [`references/${id}`]: reservation, [`generations/${id}/refs/${id}`]: true }, token)).status, 200);
+  let gm = { ...scope, schemaVersion: 2, kind: 'layout', phase: 'building', expectedSections: 1, sectionCursor: 0, expectedParts: 1,
+    cursor: 0, totalCells: 2, receivedCells: 0, sectionCellTotal: 0, revision: 1, lastSection: '', lastPart: '' };
+  assert.equal((await request(`${root}/generations/${id}/meta`, 'PUT', { ...gm, totalCells: 4097 }, token)).status, 401);
+  assert.equal((await request(`${root}/generations/${id}/meta`, 'PUT', gm, token)).status, 200);
+  const sectionId = Object.keys(plan.sections)[0], section = plan.sections[sectionId];
+  assert.equal((await request(`${root}/generations/${id}/sections/${sectionId}`, 'PUT', section, token)).status, 401);
+  gm = { ...gm, sectionCursor: 1, sectionCellTotal: 2, revision: 2, lastSection: sectionId };
+  assert.equal((await request(root, 'PATCH', { [`generations/${id}/meta`]: gm, [`generations/${id}/sections/${sectionId}`]: section,
+    [`generations/${id}/sectionOrder/s0`]: sectionId }, token)).status, 200);
+  const progress = { sections: 0, reasons: 0, lastSection: '', lastReason: '' };
+  assert.equal((await request(`${root}/sharedDrafts/${id}/progress`, 'PUT', progress, token)).status, 200);
+  const editor = plan.editor.sections[sectionId];
+  assert.equal((await request(`${root}/sharedDrafts/${id}/sections/${sectionId}`, 'PUT', editor, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', { [`sharedDrafts/${id}/sections/${sectionId}`]: editor,
+    [`sharedDrafts/${id}/progress`]: { ...progress, sections: 1, lastSection: sectionId } }, token)).status, 200);
+  const part = plan.parts[0], paths = {};
+  gm = { ...gm, cursor: 1, receivedCells: 2, revision: 3, lastPart: 'p0' };
+  paths[`generations/${id}/meta`] = gm; paths[`generations/${id}/parts/p0`] = part;
+  for (const [slot, item] of Object.entries(part.slots)) {
+    const point = { part: 'p0', slot };
+    paths[`generations/${id}/ids/${item.id}`] = point;
+    paths[`generations/${id}/indexes/cells/${item.cellId}`] = point;
+    paths[`generations/${id}/indexes/coordinates/${item.sectionId}/r${item.row}c${item.column}`] = point;
+  }
+  const incomplete = { ...paths }; delete incomplete[Object.keys(paths).find((path) => path.includes('/indexes/coordinates/'))];
+  assert.equal((await request(root, 'PATCH', incomplete, token)).status, 401);
+  const noProgress = { ...paths }; delete noProgress[`generations/${id}/meta`];
+  assert.equal((await request(root, 'PATCH', noProgress, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', paths, token)).status, 200);
+  assert.equal((await request(`${root}/generations/${id}/meta`, 'PUT', { ...gm, phase: 'ready', revision: 4 }, token)).status, 200);
+  const sharedHead = { ...scope, schemaVersion: 1, generation: id, revision: 1, operationId: id,
+    baseLayoutGeneration: '', baseLayoutRevision: 0, referenceId: id };
+  const result = { ...scope, schemaVersion: 1, generation: id, resultRevision: 1, operationId: id, baseLayoutGeneration: '',
+    baseLayoutRevision: 0, referenceId: id, inputDigest: meta.inputDigest, humanUid: owner.human.uid,
+    deviceUid: owner.device.uid, committedAt: { '.sv': 'timestamp' } };
+  assert.equal((await request(`${root}/sharedHead`, 'PUT', sharedHead, token)).status, 401);
+  assert.equal((await request(`${root}/sharedOperations/${id}`, 'PUT', result, token)).status, 401);
+  assert.equal((await request(root, 'PATCH', { sharedHead, [`sharedOperations/${id}`]: result }, token)).status, 200);
+  for (const path of ['sharedHead', `sharedOperations/${id}`, `generations/${id}/meta`, `references/${id}`, `sharedDrafts/${id}/meta`]) {
+    assert.equal((await request(`${root}/${path}`, 'GET', undefined, reader.device.token)).status, 401);
+    assert.equal((await request(`${root}/${path}`, 'PUT', null, token)).status, 401);
+  }
+  assert.equal((await request(`${root}/sharedDrafts/${id}/sections/${sectionId}`, 'PUT', { initialNumbered: true }, token)).status, 401);
+  const staleId = randomUUID();
+  assert.equal((await request(`${root}/sharedDrafts/${staleId}/meta`, 'PUT', { ...meta, operationId: staleId, generation: staleId }, token)).status, 401);
+  assert.equal((await request(`${root}/head`)).body, null);
+  assert.equal((await request(`${root}/control/controlRevision`)).body, 1);
+  await request(`${root}/roles/${owner.human.uid}/active`, 'PUT', false);
+  assert.equal((await request(`${root}/sharedHead`, 'GET', undefined, token)).status, 401);
+});
 
 /** 画像の実体検査とは別に、Rulesのバンク・版と原容量を照合する架空本文を作る。 */
 function imageInput(expectedRevision = 0, bytes = Buffer.from('fictional image bytes')) {
@@ -168,6 +245,7 @@ test('IMG244-R03 1MBの5画像を6つの独立した受付資格で取得し、�
     bankReads: reads, rawBytes, decodedJsonBytes: jsonBytes, excludes: ['authorization and head reads', 'HTTP and TLS', 'retries and backups'] }, null, 2) + '\n');
 });
 
+/** ローカルdemoへ直接要求し、検証ツールの500応答を認可の拒否と混同しない。 */
 async function request(path, method = 'GET', body, token = 'owner') {
   const url = new URL(`http://127.0.0.1:9100/${path}.json`);
   url.searchParams.set('ns', namespace);
@@ -181,7 +259,9 @@ async function request(path, method = 'GET', body, token = 'owner') {
     ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     signal: AbortSignal.timeout(10000),
   });
-  return { status: response.status, body: await response.json() };
+  const result = await response.json();
+  assert.ok(response.status < 500, `RTDB emulator error: ${JSON.stringify(result)}`);
+  return { status: response.status, body: result };
 }
 
 async function auth(provider = 'password', verified = true) {

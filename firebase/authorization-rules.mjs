@@ -1,4 +1,4 @@
-// 製品の認可境界を生成する。本人の証跡だけを書かせ、業務経路は既定で拒否する。
+// 製品の認可境界を生成し、本人証跡と実装済みの保存だけを許可して未接続の業務は拒否する。
 
 import { roleManagementRules } from './role-management-rules.mjs';
 import { deviceManagementRules } from './device-management-rules.mjs';
@@ -11,6 +11,7 @@ import { receptionStopRules } from './reception-stop-rules.mjs';
 import { performanceBusinessInitializationRules } from './performance-business-initialization-rules.mjs';
 import { performanceVenueRules } from './performance-venue-rules.mjs';
 import { venueImageRules } from './venue-image-rules.mjs';
+import { sharedSeatRules } from './shared-seat-rules.mjs';
 
 /** 指定した子キーの値を参照するRules式を作る。 */
 const field = (node, key) => `${node}.child('${key}').val()`;
@@ -198,6 +199,10 @@ export function authorizationRules() {
   const business = performanceBusinessInitializationRules({ root, manager, integer });
   const { controlWrites, receptionStopAudits } = receptionStopRules({ root, manager, integer, strictRecord });
   const venueImages = venueImageRules({ root, manager, preparedAuthorization, integer });
+  const sharedSeats = sharedSeatRules({ root, manager, integer });
+  venueImages.images.$slot.references = sharedSeats.imageReferences;
+  const imageBank = venueImages.images.$slot.banks.$bank;
+  imageBank['.read'] = `(${imageBank['.read']}) || (${sharedSeats.retainedImageRead})`;
   const controlRevisionWrite = `(${initialization.controlRevision['.write']}) || (${controlWrites.controlRevision}) || (${venueImages.controlRevisionWrite})`;
 
   return {
@@ -210,7 +215,9 @@ export function authorizationRules() {
     ...ownerLinkRules,
     performanceVenue: performanceVenueRules({ root, manager, preparedAuthorization, integer }),
     images: venueImages.images,
+    ...sharedSeats.seatRules,
     ...preparation,
+    head: { ...preparation.head, generation: { '.read': manager } },
     event: {
       ...business.event,
       commit: {
