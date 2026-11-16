@@ -125,14 +125,29 @@ export function createVenueImageViewer(context: Context) {
     refresh();
   }
 
-  /** 拡大率だけを変更し、席の設定・下書き・画像本文には書き込まない。 */
+  /** 表示枠の中心が指す画像内の位置を保ち、見ている場所から倍率を変える。 */
+  function zoomAtCurrentPosition(next: number) {
+    if (!image.naturalWidth || !viewport.clientWidth || viewport.hidden) return;
+    const frame = viewport.getBoundingClientRect(), before = image.getBoundingClientRect();
+    const current = zoom ?? fitScale();
+    const x = (frame.left + viewport.clientLeft + viewport.clientWidth / 2 - before.left) / current;
+    const y = (frame.top + viewport.clientTop + viewport.clientHeight / 2 - before.top) / current;
+    zoom = next;
+    sizeImage();
+    const after = image.getBoundingClientRect();
+    // スクロールバーが出入りしても、更新後の表示枠の中心へ同じ画素を合わせる。
+    viewport.scrollLeft += after.left + x * next - (frame.left + viewport.clientLeft + viewport.clientWidth / 2);
+    viewport.scrollTop += after.top + y * next - (frame.top + viewport.clientTop + viewport.clientHeight / 2);
+  }
+
+  /** 固定倍率の隣の段階へ移り、席の設定・下書き・画像本文には書き込まない。 */
   function changeZoom(direction: -1 | 1) {
     if (!image.naturalWidth || !viewport.clientWidth) return;
     const steps = [0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4];
     const current = zoom ?? fitScale();
-    zoom = direction === 1 ? steps.find((step) => step > current + 0.000001) ?? 4 :
+    const next = direction === 1 ? steps.find((step) => step > current + 0.000001) ?? 4 :
       steps.findLast((step) => step < current - 0.000001) ?? 0.01;
-    sizeImage(true);
+    zoomAtCurrentPosition(next);
   }
 
   const previous = button('←', () => { void navigate(-1); }, 'button secondary');
@@ -140,9 +155,7 @@ export function createVenueImageViewer(context: Context) {
   const smaller = button('－', () => changeZoom(-1), 'button secondary');
   const larger = button('＋', () => changeZoom(1), 'button secondary');
   const actualSize = button('原寸', () => {
-    if (!image.naturalWidth || !viewport.clientWidth) return;
-    zoom = 1;
-    sizeImage(true);
+    zoomAtCurrentPosition(1);
   }, 'button secondary');
   const fit = button('全体表示', () => { zoom = undefined; sizeImage(true); }, 'button secondary');
   const add = button('画像を追加', () => { replacing = false; file.click(); }, 'button secondary');
