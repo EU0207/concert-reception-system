@@ -206,18 +206,24 @@ export function createVenueImageViewer(context: Context) {
     const controller = new AbortController();
     converting = controller;
     const progress = el('div');
+    progress.setAttribute('role', 'status');
+    progress.setAttribute('aria-busy', 'true');
     progress.append(el('p', '', '写真をこの端末で調整しています。外部へ送信しません。'));
-    const pendingDialog = showDialog('会場画像を調整中', progress);
+    const pendingDialog = showDialog('会場画像を調整中', progress, [], 'キャンセル');
+    const dots = el('span', 'photo-progress-dots');
+    dots.setAttribute('aria-hidden', 'true');
+    dots.append(el('span', '', '.'), el('span', '', '.'), el('span', '', '.'));
+    pendingDialog.querySelector('h2')!.append(dots);
     photoDialog = pendingDialog;
     pendingDialog.addEventListener('close', () => controller.abort(), { once: true });
     try {
       context.assertAuthorized();
       const converted = await convertPhoto(selected, controller.signal);
-      if (controller.signal.aborted || !context.isActive()) throw Error('PHOTO_CANCELLED');
+      if (controller.signal.aborted || !pendingDialog.open || !context.isActive()) throw Error('PHOTO_CANCELLED');
       const payload = await prepareVenueImage(context.scope, new Uint8Array(await converted.blob.arrayBuffer()), converted.blob.type,
         prior?.head.revision ?? 0, crypto.randomUUID());
       context.assertAuthorized();
-      if (controller.signal.aborted || !context.isActive() || context.section() !== sectionId) throw Error('PHOTO_CANCELLED');
+      if (controller.signal.aborted || !pendingDialog.open || !context.isActive() || context.section() !== sectionId) throw Error('PHOTO_CANCELLED');
       converting = undefined;
       pendingDialog.close();
       const body = el('div');
