@@ -263,8 +263,8 @@ test('IMG91-T01・06 大きすぎる画像は読込み前に拒否し、5枠と�
   });
   const chooser = page.waitForEvent('filechooser');
   await viewer.getByRole('button', { name: '画像を差し替え', exact: true }).click();
-  await (await chooser).setFiles({ name: 'too-large.png', mimeType: 'image/png', buffer: Buffer.alloc(1_000_001) });
-  await expect(viewer.getByRole('alert')).toContainText('1枚1MB以下');
+  await (await chooser).setFiles({ name: 'too-large.png', mimeType: 'image/png', buffer: Buffer.alloc(20_000_001) });
+  await expect(viewer.getByRole('alert')).toContainText('1枚20MB以下');
   expect(await page.evaluate(() => window.imageFileReads)).toBe(0);
   await expect(viewer.locator('img')).toHaveAttribute('src', original);
   for (let i = 0; i < 4; i++) await addImage(page, file);
