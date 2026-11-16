@@ -203,7 +203,7 @@ test('IMG91-T06・REQ-NF-014 画像の下部操作・中央縮小と任意の区
   expect(placement).toMatchObject({ below: true, overflow: false });
   expect(placement.centered).toBeLessThan(2);
   await viewer.screenshot({ path: `tests/emulator/artifacts/venue-images-${info.project.name}.png` });
-  for (let step = 0; step < 6; step++) await viewer.getByRole('button', { name: '会場画像を拡大' }).click();
+  for (let step = 0; step < 8; step++) await viewer.getByRole('button', { name: '会場画像を拡大' }).click();
   const widths = await viewer.locator('img').evaluate(async (node) => {
     const values = [];
     for (let index = 0; index < 4; index++) {
@@ -214,7 +214,17 @@ test('IMG91-T06・REQ-NF-014 画像の下部操作・中央縮小と任意の区
     return values;
   });
   expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(0.1);
-  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('200%');
+  await viewer.getByRole('button', { name: '原寸', exact: true }).click();
+  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('100%');
+  const actual = await viewer.locator('img').evaluate((node) => ({ width: node.getBoundingClientRect().width, natural: node.naturalWidth }));
+  expect(actual.width).toBeCloseTo(actual.natural, 1);
+  for (let step = 0; step < 8; step++) await viewer.getByRole('button', { name: '会場画像を拡大' }).click();
+  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('400%');
+  const enlarged = await viewer.locator('img').evaluate((node) => ({ width: node.getBoundingClientRect().width, natural: node.naturalWidth }));
+  expect(enlarged.width).toBeCloseTo(enlarged.natural * 4, 1);
+  await viewer.getByRole('button', { name: '全体表示', exact: true }).click();
+  await expect(viewer.locator('.venue-image-zoom-controls > span')).toHaveText(/^\d+%$/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   await saveDraft(page);
   await addSection(page, '架空の第二区画');
   await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
@@ -263,8 +273,8 @@ test('IMG91-T01・06 大きすぎる画像は読込み前に拒否し、5枠と�
   });
   const chooser = page.waitForEvent('filechooser');
   await viewer.getByRole('button', { name: '画像を差し替え', exact: true }).click();
-  await (await chooser).setFiles({ name: 'too-large.png', mimeType: 'image/png', buffer: Buffer.alloc(1_000_001) });
-  await expect(viewer.getByRole('alert')).toContainText('1枚1MB以下');
+  await (await chooser).setFiles({ name: 'too-large.png', mimeType: 'image/png', buffer: Buffer.alloc(20_000_001) });
+  await expect(viewer.getByRole('alert')).toContainText('1枚20MB以下');
   expect(await page.evaluate(() => window.imageFileReads)).toBe(0);
   await expect(viewer.locator('img')).toHaveAttribute('src', original);
   for (let i = 0; i < 4; i++) await addImage(page, file);
@@ -373,4 +383,54 @@ test('全区画から5画像を閲覧でき、未設定や優先画像の削除�
   await expect(preferred).toHaveValue('2');
   await expect(viewer.locator('img')).toBeVisible();
   await expect(viewer.locator('img')).toHaveAttribute('alt', '会場画像1');
+});
+
+test('IMG91-T06 倍率ボタンは往復できる固定値、2本指は連続倍率で画像だけを拡大する', async ({ page, context }) => {
+  await openEditor(page);
+  await addSection(page, 'ピンチ確認区画');
+  await addImage(page, await imageFile(page));
+  await addImage(page, await imageFile(page, '#653958'));
+  const viewer = page.locator('.venue-images'), viewport = viewer.locator('.venue-image-viewport');
+  const label = viewer.locator('.venue-image-zoom-controls > span');
+  const image = viewer.locator('img');
+  await viewer.getByRole('button', { name: '原寸', exact: true }).click();
+  for (const value of [125, 150, 175, 200, 250, 300, 350, 400]) {
+    await viewer.getByRole('button', { name: '会場画像を拡大' }).click();
+    await expect(label).toHaveText(`${value}%`);
+  }
+  for (const value of [350, 300, 250, 200, 175, 150, 125, 100]) {
+    await viewer.getByRole('button', { name: '会場画像を縮小' }).click();
+    await expect(label).toHaveText(`${value}%`);
+  }
+  const client = await context.newCDPSession(page);
+  await client.send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 2 });
+  await viewport.scrollIntoViewIfNeeded();
+  const rect = await viewport.boundingBox(), x = rect.x + rect.width / 2, y = rect.y + rect.height / 2;
+  const pageScale = await page.evaluate(() => visualViewport.scale);
+  const initial = await image.evaluate((node) => ({ left: node.getBoundingClientRect().left, width: node.naturalWidth }));
+  const anchor = x - initial.left;
+  await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, x: x - 40, y }, { id: 2, x: x + 40, y }] });
+  await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, x: x - 55, y }, { id: 2, x: x + 55, y }] });
+  await expect.poll(() => image.evaluate((node) => node.getBoundingClientRect().width / node.naturalWidth)).toBeCloseTo(1.375, 1);
+  const actual = await image.evaluate((node) => ({ left: node.getBoundingClientRect().left, scale: node.getBoundingClientRect().width / node.naturalWidth }));
+  expect(Math.abs(actual.left + anchor * actual.scale - x)).toBeLessThan(2);
+  await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  await expect(image).toHaveAttribute('alt', '会場画像2');
+  expect(await page.evaluate(() => visualViewport.scale)).toBe(pageScale);
+  await viewer.getByRole('button', { name: '会場画像を拡大' }).click();
+  await expect(label).toHaveText('150%');
+  await viewer.getByRole('button', { name: '会場画像を縮小' }).click();
+  await expect(label).toHaveText('125%');
+  await viewer.getByRole('button', { name: '会場画像を縮小' }).click();
+  await expect(label).toHaveText('100%');
+  await viewport.scrollIntoViewIfNeeded();
+  const finalRect = await viewport.boundingBox(), cx = finalRect.x + finalRect.width / 2, cy = finalRect.y + finalRect.height / 2;
+  await client.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, x: cx - 20, y: cy }, { id: 2, x: cx + 20, y: cy }] });
+  await client.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1, x: cx - 120, y: cy }, { id: 2, x: cx + 120, y: cy }] });
+  await expect(label).toHaveText('400%');
+  await client.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] });
+  await viewer.getByRole('button', { name: '会場画像を縮小' }).click();
+  await expect(label).toHaveText('350%');
+  await expect(image).toHaveAttribute('alt', '会場画像2');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
 });

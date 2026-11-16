@@ -896,18 +896,31 @@ p {
 
 .venue-images { min-width: 0; width: 100%; margin-top: 16px; }
 .venue-images summary { cursor: pointer; padding: 8px 0; font-weight: 600; }
-.venue-image-viewport { width: 100%; height: clamp(180px, 24vh, 280px); overflow: auto; background: #f2eddf; border: 1px solid #d9d4c8; border-radius: 8px; margin-top: 10px; cursor: grab; }
+.venue-image-viewport { width: 100%; height: clamp(300px, 40vh, 420px); overflow: auto; background: #f2eddf; border: 1px solid #d9d4c8; border-radius: 8px; margin-top: 10px; cursor: grab; }
 .venue-image-stage { display: flex; align-items: center; justify-content: center; min-width: 100%; min-height: 100%; }
 .venue-image-stage img { display: block; flex: none; max-width: none; user-select: none; }
 .venue-image-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px; margin-top: 10px; }
 .venue-image-page-controls, .venue-image-zoom-controls { display: flex; align-items: center; justify-content: center; gap: 12px; }
 .venue-image-controls button { min-width: 44px; min-height: 44px; }
 .venue-image-controls span { min-width: 4ch; text-align: center; }
+.venue-image-zoom-controls { flex-wrap: wrap; max-width: 100%; }
 .venue-image-manage { display: flex; align-items: end; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .venue-image-manage .seat-field { flex: 1 1 140px; }
 .button.venue-image-remove { color: #973c35; }
 .venue-images select { width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid #c4d2cd; border-radius: 8px; background: #fff; font: inherit; }
 .venue-images select:focus-visible { outline: 2px solid #98aba4; outline-offset: -2px; box-shadow: none; }
+.photo-preview { width: 100%; max-height: 42vh; overflow: auto; background: #f2eddf; border: 1px solid #d9d4c8; border-radius: 8px; margin: 12px 0; }
+.photo-preview img { display: block; max-width: 100%; height: auto; margin: auto; }
+.photo-preview-actual img { max-width: none; margin: 0; }
+.photo-preview-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+/* 点の領域を固定し、透明度だけを変えて見出しの位置と読み上げを安定させる。 */
+.photo-progress-dots { display: inline-block; width: 1.2em; margin-left: .1em; white-space: nowrap; }
+.photo-progress-dots span { animation: photo-dot-one 1.6s steps(1, end) infinite; }
+.photo-progress-dots span:nth-child(2) { animation-name: photo-dot-two; }
+.photo-progress-dots span:nth-child(3) { animation-name: photo-dot-three; }
+@keyframes photo-dot-one { 0% { opacity: 0; } 25%, 100% { opacity: 1; } }
+@keyframes photo-dot-two { 0% { opacity: 0; } 50%, 100% { opacity: 1; } }
+@keyframes photo-dot-three { 0% { opacity: 0; } 75%, 100% { opacity: 1; } }
 .venue-image-viewport[hidden], .venue-image-controls[hidden] { display: none; }
 @media (max-width: 640px) {
   .venue-image-manage .seat-field { flex-basis: 100%; }
@@ -916,6 +929,7 @@ p {
 
 /* OSで動きを減らす設定が選ばれている場合は、アニメーションを止める。 */
 @media (prefers-reduced-motion: reduce) {
+  .photo-progress-dots span { animation: none !important; }
   * {
     transition: none !important;
     scroll-behavior: auto !important;

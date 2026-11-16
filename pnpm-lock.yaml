@@ -14,6 +14,9 @@ importers:
       firebase:
         specifier: 13.2.0
         version: 13.2.0
+      heic-to:
+        specifier: 1.6.7
+        version: 1.6.7
     devDependencies:
       '@playwright/test':
         specifier: 1.62.1
@@ -770,6 +773,9 @@ packages:
   get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
+
+  heic-to@1.6.7:
+    resolution: {integrity: sha512-GCPYNl86u6eZ7mr2aa+uQB+PrQOVKSBYfH8esovr8kh2c6EYQSDYIJ6uhXSmM2hPC8PdBVJ/Trn0jnfM9H9gvg==}
 
   http-parser-js@0.5.10:
     resolution: {integrity: sha512-Pysuw9XpUq5dVc/2SMHpuTY01RFl8fttgcyunjL7eEMhGM3cI4eOmiCycJDVCo/7O7ClfQD3SaI6ftDzqOXYMA==}
@@ -1785,6 +1791,8 @@ snapshots:
     optional: true
 
   get-caller-file@2.0.5: {}
+
+  heic-to@1.6.7: {}
 
   http-parser-js@0.5.10: {}
 

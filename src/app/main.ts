@@ -338,6 +338,9 @@ function renderPage() {
       ),
       el('p', 'muted', 'ローカル評価では、会場席の下書きをこの端末へ保存できます。'),
     );
+    const licenses = el('a', '', '写真変換のライセンス');
+    licenses.href = '/licenses/photo-conversion.html';
+    card.append(licenses);
     main.append(card);
     document.title = 'このアプリについて | コンサート受付';
   } else {

@@ -1,9 +1,11 @@
 // 会場画像をモックの折畳み・下部操作で表示し、端末確認用の登録と区画の対応付けを扱う。
 
 import { el, button, showDialog } from './dom.ts';
+import { createPhotoSession } from './photo-conversion.ts';
+import { createVenueImageGestures } from './venue-image-gestures.ts';
 import { createVenueImageStore } from '../storage/venue-images.ts';
 import type { DeviceKeyScope } from '../storage/device-vault.ts';
-import { IMAGE_MAX_BYTES, IMAGE_SLOTS, prepareVenueImage } from '../domain/seats/venue-image.ts';
+import { IMAGE_SLOTS, prepareVenueImage } from '../domain/seats/venue-image.ts';
 import type { ImageSlot, VenueImageHead } from '../domain/seats/venue-image.ts';
 
 interface Context {
@@ -44,11 +46,13 @@ export function createVenueImageViewer(context: Context) {
   let previousBinding: ImageSlot | undefined;
   let url: string | undefined;
   let shownIdentity = '';
-  let zoom = 1;
+  // 未指定は全体表示。数値は画像の原寸に対する倍率として保持する。
+  let zoom: number | undefined;
   let loading = true;
   let writing = false;
+  let converting: AbortController | undefined;
+  let photoDialog: HTMLDialogElement | undefined;
   let replacing = false;
-  let gesture: { x: number; y: number; left: number; top: number; mouse: boolean } | undefined;
 
   image.alt = '会場画像';
   image.draggable = false;
@@ -58,7 +62,7 @@ export function createVenueImageViewer(context: Context) {
   status.setAttribute('role', 'status');
   choice.setAttribute('aria-label', bindingName);
   file.type = 'file';
-  file.accept = 'image/png,image/jpeg,.png,.jpg,.jpeg';
+  file.accept = 'image/png,image/jpeg,image/webp,image/heic,image/heif,.png,.jpg,.jpeg,.webp,.heic,.heif';
   file.hidden = true;
   bindingLabel.append(choice);
   stage.append(image);
@@ -84,19 +88,28 @@ export function createVenueImageViewer(context: Context) {
     return IMAGE_SLOTS.filter((slot) => images.get(slot)?.blob);
   }
 
-  /** 表示領域へ収めた100%を基準にし、小さい画像も中央へ配置する。 */
+  /** 原寸を超えない範囲で、スクロールバーに影響されない全体表示倍率を計算する。 */
+  function fitScale() {
+    const frame = viewport.getBoundingClientRect();
+    const width = frame.width - viewport.clientLeft * 2, height = frame.height - viewport.clientTop * 2;
+
+    return Math.min(1, width / image.naturalWidth, height / image.naturalHeight);
+  }
+
+  /** 原寸基準の倍率を適用し、全体表示の場合だけ表示枠に合わせる。 */
   function sizeImage(center = false) {
     if (!image.naturalWidth || !viewport.clientWidth || viewport.hidden) return;
-    // スクロールバーの出入りで100%の基準が揺れないよう、表示枠の内側を基準にする。
-    const frame = viewport.getBoundingClientRect();
-    const baseWidth = frame.width - viewport.clientLeft * 2, baseHeight = frame.height - viewport.clientTop * 2;
-    const base = Math.min(baseWidth / image.naturalWidth, baseHeight / image.naturalHeight);
-    const width = image.naturalWidth * base * zoom, height = image.naturalHeight * base * zoom;
+    const base = fitScale();
+    const scale = zoom ?? base;
+    const percentage = Math.round(scale * 100);
+    zoomLabel.textContent = `${percentage}%`;
+    const width = image.naturalWidth * scale, height = image.naturalHeight * scale;
     image.style.width = `${width}px`;
     image.style.height = `${height}px`;
     stage.style.width = `${Math.max(viewport.clientWidth, width)}px`;
     stage.style.height = `${Math.max(viewport.clientHeight, height)}px`;
-    viewport.style.touchAction = zoom <= 1 ? 'pan-y' : 'pan-x pan-y';
+    // 画像枠内だけでピンチを処理する。ページ全体のタッチ操作は変更しない。
+    viewport.style.touchAction = 'none';
     if (center) {
       viewport.scrollLeft = (stage.clientWidth - viewport.clientWidth) / 2;
       viewport.scrollTop = (stage.clientHeight - viewport.clientHeight) / 2;
@@ -112,17 +125,39 @@ export function createVenueImageViewer(context: Context) {
     refresh();
   }
 
-  /** 拡大率だけを変更し、席の設定・下書き・画像本文には書き込まない。 */
-  function changeZoom(amount: number) {
-    zoom = Math.max(0.5, Math.min(2, Math.round((zoom + amount) * 100) / 100));
-    zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
-    sizeImage(true);
+  /** 表示枠の中心が指す画像内の位置を保ち、見ている場所から倍率を変える。 */
+  function zoomAtCurrentPosition(next: number) {
+    if (!image.naturalWidth || !viewport.clientWidth || viewport.hidden) return;
+    const frame = viewport.getBoundingClientRect(), before = image.getBoundingClientRect();
+    const current = zoom ?? fitScale();
+    const x = (frame.left + viewport.clientLeft + viewport.clientWidth / 2 - before.left) / current;
+    const y = (frame.top + viewport.clientTop + viewport.clientHeight / 2 - before.top) / current;
+    zoom = next;
+    sizeImage();
+    const after = image.getBoundingClientRect();
+    // スクロールバーが出入りしても、更新後の表示枠の中心へ同じ画素を合わせる。
+    viewport.scrollLeft += after.left + x * next - (frame.left + viewport.clientLeft + viewport.clientWidth / 2);
+    viewport.scrollTop += after.top + y * next - (frame.top + viewport.clientTop + viewport.clientHeight / 2);
+  }
+
+  /** 固定倍率の隣の段階へ移り、席の設定・下書き・画像本文には書き込まない。 */
+  function changeZoom(direction: -1 | 1) {
+    if (!image.naturalWidth || !viewport.clientWidth) return;
+    const steps = [0.01, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4];
+    const current = zoom ?? fitScale();
+    const next = direction === 1 ? steps.find((step) => step > current + 0.000001) ?? 4 :
+      steps.findLast((step) => step < current - 0.000001) ?? 0.01;
+    zoomAtCurrentPosition(next);
   }
 
   const previous = button('←', () => { void navigate(-1); }, 'button secondary');
   const next = button('→', () => { void navigate(1); }, 'button secondary');
-  const smaller = button('－', () => changeZoom(-0.25), 'button secondary');
-  const larger = button('＋', () => changeZoom(0.25), 'button secondary');
+  const smaller = button('－', () => changeZoom(-1), 'button secondary');
+  const larger = button('＋', () => changeZoom(1), 'button secondary');
+  const actualSize = button('原寸', () => {
+    zoomAtCurrentPosition(1);
+  }, 'button secondary');
+  const fit = button('全体表示', () => { zoom = undefined; sizeImage(true); }, 'button secondary');
   const add = button('画像を追加', () => { replacing = false; file.click(); }, 'button secondary');
   const replace = button('画像を差し替え', () => { replacing = true; file.click(); }, 'button secondary');
   const remove = button('画像を削除', () => { void removeImage(); }, 'button secondary venue-image-remove');
@@ -132,15 +167,20 @@ export function createVenueImageViewer(context: Context) {
   larger.setAttribute('aria-label', '会場画像を拡大');
   const pages = el('div', 'venue-image-page-controls'), scale = el('div', 'venue-image-zoom-controls');
   pages.append(previous, pageLabel, next);
-  scale.append(smaller, zoomLabel, larger);
+  scale.append(smaller, zoomLabel, larger, actualSize, fit);
   controls.append(pages, scale);
   const manage = el('div', 'venue-image-manage');
   manage.append(bindingLabel, add, replace, remove, file);
   root.append(summary, count, fallback, viewport, controls, manage, error, status);
+  const gestures = createVenueImageGestures(viewport, image, {
+    scale: () => zoom ?? fitScale(), fit: fitScale, navigate,
+    resize: (value) => { zoom = value; sizeImage(); },
+  });
 
   /** 確認済みのキャッシュを表示し、欠損時は座席表を使える案内を維持する。 */
   function refresh() {
     if (!context.isActive()) return;
+    if (converting) { converting.abort(); photoDialog?.close(); }
     const slot = currentSlot(), value = slot ? images.get(slot) : null;
     const section = context.section(), preferred = section ? context.bindings()[section] : undefined;
     const options = [el('option', '', '指定なし')];
@@ -166,6 +206,7 @@ export function createVenueImageViewer(context: Context) {
     fallback.textContent = loading ? '会場画像を端末で確認しています。座席表はそのまま操作できます。' :
       '表示できる会場画像はありません。座席表で確認できます。';
     if (!value?.blob) {
+      gestures.reset();
       if (url) URL.revokeObjectURL(url);
       url = undefined;
       shownIdentity = '';
@@ -174,10 +215,11 @@ export function createVenueImageViewer(context: Context) {
     }
     const identity = `${slot}/${value.head.revision}/${value.head.sha256}`;
     if (identity !== shownIdentity) {
+      gestures.reset();
       if (url) URL.revokeObjectURL(url);
       url = URL.createObjectURL(value.blob);
       shownIdentity = identity;
-      zoom = 1;
+      zoom = undefined;
       zoomLabel.textContent = '100%';
       image.alt = `会場画像${Number(slot) + 1}`;
       image.src = url;
@@ -192,22 +234,78 @@ export function createVenueImageViewer(context: Context) {
   async function chooseFile() {
     const selected = file.files?.[0];
     file.value = '';
-    if (!selected || writing) return;
+    if (!selected || writing || converting || photoDialog?.open) return;
     error.textContent = '';
     const sectionId = context.section();
     const slot = replacing ? currentSlot() : IMAGE_SLOTS.find((item) => !images.get(item)?.blob && !failed.has(item));
     if (!slot) { error.textContent = '画像は公演全体で5枚までです。表示中の画像を差し替えてください。'; return; }
     const prior = images.get(slot);
+    const isReplacing = replacing;
+    const controller = new AbortController();
+    converting = controller;
+    const progress = el('div');
+    progress.setAttribute('role', 'status');
+    progress.setAttribute('aria-busy', 'true');
+    progress.append(el('p', '', '写真をこの端末で調整しています。外部へ送信しません。'));
+    const pendingDialog = showDialog('会場画像を調整中', progress, [], 'キャンセル');
+    const dots = el('span', 'photo-progress-dots');
+    dots.setAttribute('aria-hidden', 'true');
+    dots.append(el('span', '', '.'), el('span', '', '.'), el('span', '', '.'));
+    pendingDialog.querySelector('h2')!.append(dots);
+    photoDialog = pendingDialog;
+    pendingDialog.addEventListener('close', () => { if (converting === controller) controller.abort(); }, { once: true });
+    let session: ReturnType<typeof createPhotoSession> | undefined;
     try {
       context.assertAuthorized();
-      if (selected.size > IMAGE_MAX_BYTES) throw Error('IMAGE_SIZE_EXCEEDED');
-      const payload = await prepareVenueImage(context.scope, new Uint8Array(await selected.arrayBuffer()), selected.type,
+      session = createPhotoSession(selected, controller.signal);
+      let converted = await session.original;
+      if (controller.signal.aborted || !pendingDialog.open || !context.isActive()) throw Error('PHOTO_CANCELLED');
+      let payload = await prepareVenueImage(context.scope, new Uint8Array(await converted.blob.arrayBuffer()), converted.blob.type,
         prior?.head.revision ?? 0, crypto.randomUUID());
       context.assertAuthorized();
-      if (context.section() !== sectionId) throw Error('IMAGE_SECTION_CHANGED');
+      if (controller.signal.aborted || !pendingDialog.open || !context.isActive() || context.section() !== sectionId) throw Error('PHOTO_CANCELLED');
+      converting = undefined;
+      pendingDialog.close();
       const body = el('div');
-      body.append(el('p', '', replacing ? 'この端末の確認用画像を差し替えて保存します。共有は行いません。' :
+      body.append(el('p', '', isReplacing ? 'この端末の確認用画像を差し替えて保存します。共有は行いません。' :
         'この端末に確認用画像を保存します。共有は行いません。'));
+      const rotations = new Map([[0, { converted, payload }]]);
+      let quarterTurns = 0, rotating = false;
+      const information = el('p', 'photo-information');
+
+      /** 確認中の画像に一致する形式・容量・寸法を表示する。 */
+      function updateInformation() {
+        information.textContent = [
+          ['形式：', converted.blob.type === 'image/png' ? 'PNG' : 'JPEG'],
+          ['容量：', `${(converted.blob.size / 1_000_000).toFixed(2)}MB`],
+          ['サイズ：', `${converted.width}×${converted.height}px（元 ${converted.originalWidth}×${converted.originalHeight}px）`],
+        ].map(([label, value]) => `${label}${value}`).join('　');
+      }
+
+      updateInformation();
+      body.append(information);
+      body.append(el('p', '', '「原寸で確認」で、席番号と画像の向きを確認してください。'));
+      let previewUrl = URL.createObjectURL(converted.blob);
+      const preview = el('div', 'photo-preview');
+      const previewImage = el('img');
+      previewImage.src = previewUrl;
+      previewImage.alt = '保存前の調整済み会場画像';
+      preview.append(previewImage);
+      const zoom = button('原寸で確認', () => {
+        const actual = preview.classList.toggle('photo-preview-actual');
+        zoom.textContent = actual ? '全体を表示' : '原寸で確認';
+        zoom.setAttribute('aria-pressed', String(actual));
+      }, 'button secondary');
+      zoom.setAttribute('aria-pressed', 'false');
+      const rotateLeft = button('左回り', () => { void rotate(-1); }, 'button secondary');
+      const rotateRight = button('右回り', () => { void rotate(1); }, 'button secondary');
+      rotateLeft.title = '左に90度回転';
+      rotateRight.title = '右に90度回転';
+      const rotationStatus = el('span', 'muted');
+      rotationStatus.setAttribute('role', 'status');
+      const previewControls = el('div', 'photo-preview-controls');
+      previewControls.append(zoom, rotateLeft, rotateRight, rotationStatus);
+      body.append(preview, previewControls);
       body.append(el('p', '', '区画との対応は任意です。設定した場合は「下書き保存」で保存します。'));
       const affected = context.sections().filter((section) => context.bindings()[section.id] === slot).length;
       if (affected > 1) body.append(el('p', '', `この画像を使用中の${affected}区画に反映されます。`));
@@ -215,12 +313,13 @@ export function createVenueImageViewer(context: Context) {
       message.setAttribute('role', 'alert');
       body.append(message);
       const confirm = button('端末に保存する', async () => {
-        if (writing) return;
+        if (writing || rotating) return;
         writing = true;
         confirm.disabled = true;
         let savedToDevice = false;
         try {
           context.assertAuthorized();
+          if (!context.isActive() || context.section() !== sectionId) throw Error('IMAGE_SECTION_CHANGED');
           const head: VenueImageHead = { environmentId: context.scope.environmentId, performanceId: context.scope.performanceId,
             schemaVersion: 1, revision: payload.revision, active: true, bank: prior?.head.bank === 'a' ? 'b' : 'a',
             operationId: payload.operationId, sha256: payload.sha256 };
@@ -240,9 +339,62 @@ export function createVenueImageViewer(context: Context) {
           refresh();
         }
       });
-      const dialog = showDialog(replacing ? '会場画像を差し替え' : '会場画像を追加', body, [confirm]);
-    } catch {
-      error.textContent = '画像を読み込めません。PNG・JPEGで1枚1MB以下の画像を選び、区画を変えずに確認してください。';
+      const dialog = showDialog(isReplacing ? '会場画像を差し替え' : '会場画像を追加', body, [confirm]);
+      photoDialog = dialog;
+
+      /** 初回の画素と向き別キャッシュを使い、検査済みの画像と保存予定本文を一緒に替える。 */
+      async function rotate(direction: -1 | 1) {
+        if (writing || rotating || !dialog.open) return;
+        const target = (quarterTurns + direction + 4) % 4;
+        rotating = true;
+        zoom.disabled = rotateLeft.disabled = rotateRight.disabled = confirm.disabled = true;
+        rotationStatus.textContent = '回転しています…';
+        message.textContent = '';
+        try {
+          context.assertAuthorized();
+          const cached = rotations.get(target);
+          const next = cached?.converted ?? await session!.rotate(target);
+          const nextPayload = cached?.payload ?? await prepareVenueImage(context.scope,
+            new Uint8Array(await next.blob.arrayBuffer()), next.blob.type, prior?.head.revision ?? 0, crypto.randomUUID());
+          context.assertAuthorized();
+          if (!dialog.open || controller.signal.aborted || !context.isActive() || context.section() !== sectionId) return;
+          rotations.set(target, { converted: next, payload: nextPayload });
+          const nextUrl = URL.createObjectURL(next.blob);
+          URL.revokeObjectURL(previewUrl);
+          previewUrl = nextUrl;
+          converted = next;
+          payload = nextPayload;
+          quarterTurns = target;
+          previewImage.src = previewUrl;
+          preview.scrollLeft = preview.scrollTop = 0;
+          updateInformation();
+        } catch {
+          if (dialog.open && !controller.signal.aborted) message.textContent = '回転できませんでした。確認中の画像は変更していません。';
+        } finally {
+          rotating = false;
+          rotationStatus.textContent = '';
+          zoom.disabled = rotateLeft.disabled = rotateRight.disabled = confirm.disabled = writing;
+        }
+      }
+
+      dialog.addEventListener('close', () => {
+        controller.abort();
+        session?.close();
+        rotations.clear();
+        URL.revokeObjectURL(previewUrl);
+        if (photoDialog === dialog) photoDialog = undefined;
+      }, { once: true });
+    } catch (cause) {
+      session?.close();
+      const reason = cause instanceof Error ? cause.message : '';
+      if (reason !== 'PHOTO_CANCELLED' && context.isActive()) {
+        error.textContent = reason === 'PHOTO_INPUT_SIZE' ? '元写真は1枚20MB以下で選んでください。保存後は1枚1MB以下に調整します。' :
+          reason === 'PHOTO_CANNOT_FIT' ? '画質を保ったまま1MB以下にできませんでした。必要な範囲を切り取るか、分けて撮影してください。' :
+          '画像を調整できませんでした。PNG・JPEG・WebP・HEIC／HEIFの写真を選び直してください。元の画像は保持しています。';
+      }
+    } finally {
+      if (converting === controller) converting = undefined;
+      pendingDialog.close();
     }
   }
 
@@ -300,31 +452,18 @@ export function createVenueImageViewer(context: Context) {
   image.addEventListener('load', () => sizeImage(true));
   image.addEventListener('error', () => {
     if (!url || !image.getAttribute('src')) return;
+    gestures.reset();
     error.textContent = '画像を表示できません。座席表で確認してください。';
     viewport.hidden = controls.hidden = true;
     fallback.hidden = false;
   });
-  viewport.addEventListener('pointerdown', (event) => {
-    gesture = { x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop, mouse: event.pointerType === 'mouse' };
-    if (gesture.mouse && zoom > 1) viewport.setPointerCapture(event.pointerId);
-  });
-  viewport.addEventListener('pointermove', (event) => {
-    if (!gesture?.mouse || zoom <= 1) return;
-    viewport.scrollLeft = gesture.left - (event.clientX - gesture.x);
-    viewport.scrollTop = gesture.top - (event.clientY - gesture.y);
-  });
-  viewport.addEventListener('pointerup', (event) => {
-    const start = gesture;
-    gesture = undefined;
-    if (!start || zoom > 1) return;
-    const dx = event.clientX - start.x, dy = event.clientY - start.y;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) void navigate(dx < 0 ? 1 : -1);
-  });
-  viewport.addEventListener('pointercancel', () => { gesture = undefined; });
   const resize = new ResizeObserver(() => sizeImage());
   resize.observe(viewport);
   const observer = new MutationObserver(() => {
     if (context.isActive()) return;
+    converting?.abort();
+    gestures.dispose();
+    photoDialog?.close();
     if (url) URL.revokeObjectURL(url);
     url = undefined;
     image.removeAttribute('src');
