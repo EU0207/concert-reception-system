@@ -8,3 +8,7 @@ export interface ConvertedPhoto {
   originalWidth: number;
   originalHeight: number;
 }
+
+export type PhotoRequest = { id: number; kind: 'initialize'; file: File } |
+  { id: number; kind: 'rotate'; quarterTurns: number };
+export interface PhotoResponse { id: number; value?: ConvertedPhoto; error?: string; }

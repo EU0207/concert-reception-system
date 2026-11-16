@@ -145,6 +145,9 @@ test('PHOTO294-T03 実HEICの追加デコーダーを製品CSP下で実行し、
   await expect(page.locator('.venue-images img')).toHaveJSProperty('naturalHeight', 461);
   const offline = await select(page, file);
   await expect(offline).toContainText('451×461px');
+  await offline.getByRole('button', { name: '右回り', exact: true }).click();
+  await expect(offline.locator('.photo-preview img')).toHaveJSProperty('naturalWidth', 461);
+  await expect(offline.locator('.photo-preview img')).toHaveJSProperty('naturalHeight', 451);
   await offline.getByRole('button', { name: '閉じる', exact: true }).click();
 });
 
@@ -158,10 +161,11 @@ test('PHOTO294-T04 Worker取消し・入力上限・標準復号可能なWebPを
     const cancelled = convertPhoto(file, controller.signal).catch((error) => error.message);
     controller.abort();
     const oversized = await convertPhoto(new File([new Uint8Array(20_000_001)], 'large.png'), new AbortController().signal).catch((error) => error.message);
+    const invalidTurn = await convertPhoto(file, new AbortController().signal, 99).catch((error) => error.message);
     const output = await convertPhoto(file, new AbortController().signal);
-    return { cancelled: await cancelled, oversized, type: output.blob.type, width: output.width, size: output.blob.size };
+    return { cancelled: await cancelled, oversized, invalidTurn, type: output.blob.type, width: output.width, size: output.blob.size };
   }, [...file.buffer]);
-  expect(result).toMatchObject({ cancelled: 'PHOTO_CANCELLED', oversized: 'PHOTO_INPUT_SIZE', type: 'image/png', width: 600 });
+  expect(result).toMatchObject({ cancelled: 'PHOTO_CANCELLED', oversized: 'PHOTO_INPUT_SIZE', invalidTurn: 'PHOTO_ROTATION', type: 'image/png', width: 600 });
   expect(result.size).toBeLessThanOrEqual(1_000_000);
 });
 
@@ -214,6 +218,16 @@ test('PHOTO294-T06 処理中の点表示と動きを減らす設定、キャン�
 
 test('PHOTO294-T07 保存前の左右90度回転を画素で確認し、保存・再起動後も向きを保持する', async ({ page }) => {
   await open(page);
+  await page.evaluate(() => {
+    window.photoMessages = [];
+    window.photoDigests = 0;
+    const post = Worker.prototype.postMessage, digest = SubtleCrypto.prototype.digest;
+    Worker.prototype.postMessage = function (message) {
+      window.photoMessages.push({ kind: message.kind, turn: message.quarterTurns ?? 0 });
+      return post.call(this, message);
+    };
+    SubtleCrypto.prototype.digest = function (...args) { window.photoDigests++; return digest.apply(this, args); };
+  });
   const file = await rotationFile(page);
   const dialog = await select(page, file), preview = dialog.locator('.photo-preview img');
   const red = [255, 0, 0], green = [0, 255, 0], blue = [0, 0, 255], yellow = [255, 255, 0];
@@ -237,6 +251,9 @@ test('PHOTO294-T07 保存前の左右90度回転を画素で確認し、保存�
   await expect.poll(() => imageCorners(preview)).toEqual(original);
   await dialog.getByRole('button', { name: '右回り', exact: true }).click();
   await expect.poll(() => imageCorners(preview)).toEqual(right);
+  const work = await page.evaluate(() => ({ messages: window.photoMessages, digests: window.photoDigests }));
+  expect(work).toEqual({ messages: [{ kind: 'initialize', turn: 0 }, { kind: 'rotate', turn: 1 },
+    { kind: 'rotate', turn: 3 }, { kind: 'rotate', turn: 2 }], digests: 4 });
   await dialog.getByRole('button', { name: '端末に保存する' }).click();
   await expect.poll(() => imageCorners(page.locator('.venue-images img'))).toEqual(right);
   await page.reload();
@@ -261,7 +278,7 @@ test('PHOTO294-T08 回転失敗と回転中の取消しでは確認中の画像�
   await page.evaluate(() => {
     window.rotationPostMessage = Worker.prototype.postMessage;
     Worker.prototype.postMessage = function (input) {
-      return window.rotationPostMessage.call(this, { ...input, file: new File(['broken image'], 'broken.png') });
+      return window.rotationPostMessage.call(this, { ...input, quarterTurns: 99 });
     };
   });
   await dialog.getByRole('button', { name: '右回り', exact: true }).click();
@@ -279,4 +296,44 @@ test('PHOTO294-T08 回転失敗と回転中の取消しでは確認中の画像�
   await page.reload();
   await page.locator('.venue-images summary').click();
   await expect.poll(() => imageCorners(page.locator('.venue-images img'))).toEqual(saved);
+});
+
+test('PHOTO294-T09 同じ向きの要求と結果を共有し、終了後と別の確認画面へキャッシュを持ち越さない', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4181/');
+  const file = await rotationFile(page);
+  const result = await page.evaluate(async (bytes) => {
+    const { createPhotoSession } = await import('/src/app/photo-conversion.ts');
+    const NativeWorker = Worker, messages = [];
+    let created = 0, terminated = 0;
+    window.Worker = new Proxy(NativeWorker, { construct(target, args) {
+      created++;
+      const worker = Reflect.construct(target, args), post = worker.postMessage, terminate = worker.terminate;
+      worker.postMessage = function (message) {
+        messages.push({ kind: message.kind, hasFile: Object.hasOwn(message, 'file') });
+        return post.call(this, message);
+      };
+      worker.terminate = function () { terminated++; return terminate.call(this); };
+      return worker;
+    } });
+    try {
+      const source = new File([Uint8Array.from(bytes)], 'fictional-rotation.png', { type: 'image/png' });
+      const controller = new AbortController(), session = createPhotoSession(source, controller.signal);
+      const original = await session.original;
+      const [first, duplicate] = await Promise.all([session.rotate(1), session.rotate(1)]);
+      const again = await session.rotate(1), back = await session.rotate(0);
+      await session.rotate(2); await session.rotate(3);
+      const firstMessages = [...messages];
+      session.close(); controller.abort();
+      const closed = await session.rotate(1).catch((error) => error.message);
+      const another = createPhotoSession(source, new AbortController().signal);
+      const reopened = await another.rotate(1);
+      another.close();
+      return { shared: first === duplicate && first === again, original: back === original, fresh: reopened !== first,
+        closed, created, terminated, firstMessages, bytes: first.blob.size };
+    } finally { window.Worker = NativeWorker; }
+  }, [...file.buffer]);
+  expect(result).toMatchObject({ shared: true, original: true, fresh: true, closed: 'PHOTO_CANCELLED', created: 2, terminated: 2,
+    firstMessages: [{ kind: 'initialize', hasFile: true }, { kind: 'rotate', hasFile: false },
+      { kind: 'rotate', hasFile: false }, { kind: 'rotate', hasFile: false }] });
+  expect(result.bytes).toBeLessThanOrEqual(1_000_000);
 });
