@@ -33,6 +33,7 @@ export function showDialog(
   title: string,
   body: HTMLElement,
   actions: HTMLElement[] = [],
+  closeLabel = '閉じる',
 ): HTMLDialogElement {
   const previous = document.activeElement;
   const dialog = el('dialog', 'dialog'),
@@ -41,7 +42,7 @@ export function showDialog(
   heading.id = 'dialog-title';
   dialog.setAttribute('aria-labelledby', heading.id);
 
-  const close = button('閉じる', () => dialog.close(), 'button secondary');
+  const close = button(closeLabel, () => dialog.close(), 'button secondary');
   const footer = el('div', 'dialog-actions');
 
   footer.append(...actions, close);

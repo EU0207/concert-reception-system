@@ -168,6 +168,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 [ADR-016：共有下書きの編集状態](development/decisions/ADR-016-shared-draft-editor-state.md)はApproved（案A）。#104の共有保存へ接続する前に、初回採番状態と公演全体の画像・任意の優先設定を欠落なく復元する保存契約を比較する。2026-11-16に開発者が構成形式2を維持する案Aを選択した。
 
+[ADR-017：会場写真の端末内変換](development/decisions/ADR-017-venue-photo-conversion.md)はApproved（機能方針）。#294で写真の入力上限と保存後1MBを分け、PNG／JPEGの選択と拡大確認を定める。[試験結果・実機確認手順](development/technical-validation/photo-conversion-results.md)はApproved（PR #295の範囲）。実画像の画質受入は未了。
+
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | ADR案内 | [adr-guide.md](development/decisions/adr-guide.md) | 重要な判断の記録方法を定める | 開発担当者 | 重要な判断の発生時 | 運用変更時 | Draft |
@@ -208,7 +210,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 案Aによる会場構成の共有保存は[共有保存・別端末復元の実装・試験記録](development/technical-validation/shared-seat-draft-results.md)（Approved、PR #293の範囲）を参照する。通常SDKでの保存・照会と全画像の一体取込みを#292で確認し、実認証画面・共有ボタンと確定保存の残条件を親#104・105へ渡す。
 
-会場画像の通常SDK保存基盤と、ローカル評価画面の画像操作は[会場画像の保存・表示　実装・試験記録](development/technical-validation/venue-image-results.md)（Approved、PR #287の範囲）を参照する。#244・105・104の確認済み範囲と残条件を分けて記録している。
+会場画像の通常SDK保存基盤と、ローカル評価画面の画像操作は[会場画像の保存・表示　実装・試験記録](development/technical-validation/venue-image-results.md)（Approved、PR #287・295の範囲）を参照する。#244・105・104の確認済み範囲と残条件を分けて記録している。
 
 [本人・端末認可基盤の実装・試験記録](development/technical-validation/authorization-foundation-results.md)に、#110のローカル確認と後続の結合条件を記録する。状態はIn Review。実機の認証寿命と初期主担当の実環境割当は未確認である。
 
