@@ -896,7 +896,7 @@ p {
 
 .venue-images { min-width: 0; width: 100%; margin-top: 16px; }
 .venue-images summary { cursor: pointer; padding: 8px 0; font-weight: 600; }
-.venue-image-viewport { width: 100%; height: clamp(180px, 24vh, 280px); overflow: auto; background: #f2eddf; border: 1px solid #d9d4c8; border-radius: 8px; margin-top: 10px; cursor: grab; }
+.venue-image-viewport { width: 100%; height: clamp(210px, 28vh, 320px); overflow: auto; background: #f2eddf; border: 1px solid #d9d4c8; border-radius: 8px; margin-top: 10px; cursor: grab; }
 .venue-image-stage { display: flex; align-items: center; justify-content: center; min-width: 100%; min-height: 100%; }
 .venue-image-stage img { display: block; flex: none; max-width: none; user-select: none; }
 .venue-image-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px; margin-top: 10px; }
