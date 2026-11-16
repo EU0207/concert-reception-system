@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>写真変換の第三者ソフトウェア</title>
+<h1>写真変換の第三者ソフトウェア</h1>
+<p>写真は端末内で変換します。以下のライブラリを使用しています。無保証で提供されます。</p>
+<ul>
+<li>heic-to 1.6.7 — LGPL-3.0-or-later。
+<a href="heic-to-1.6.7-LICENSE.txt">ライセンス原文</a>・
+<a href="https://github.com/hoppergee/heic-to/tree/78345a3fcdb4a1d70d513fce2646aeff0127f7ba">固定版ソースとビルド手順</a></li>
+<li>libheif 1.23.7 — <a href="libheif-LGPL-3.0.txt">ライセンス・著作権表示</a>・
+<a href="https://github.com/strukturag/libheif/tree/v1.23.7">対応ソース</a></li>
+<li>libde265 1.0.16 — <a href="libde265-LGPL-3.0.txt">ライセンス・著作権表示</a>・
+<a href="https://github.com/strukturag/libde265/tree/v1.0.16">対応ソース</a></li>
+</ul>
+<p><a href="GPL-3.0.txt">GNU GPL v3原文</a>も参照してください。
+ライブラリを改変した場合のデバッグのためのリバースエンジニアリングを禁止しません。</p>
+<p>アプリとの接続コードは
+<a href="https://github.com/EU0207/concert-reception-system">プロジェクトのソース</a>で提供します。
+package.jsonとpnpm-lock.yamlの固定版を用い、pnpm install --frozen-lockfile --ignore-scripts、pnpm buildで再ビルドできます。
+ライブラリは変更せず使用し、CSPビルドを変換用Workerへ組み込んでいます。</p>
+</html>

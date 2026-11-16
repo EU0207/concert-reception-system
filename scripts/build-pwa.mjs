@@ -24,7 +24,7 @@ async function collect(folder) {
 async function main() {
   // ビルド済みの自己配信資産だけを列挙する。環境設定・認証・業務データは含めない。
   const files = (await collect(directory)).filter(
-    (file) => /\.(?:html|js|css|svg|webmanifest)$/.test(file) && !file.endsWith('sw.js'),
+    (file) => /\.(?:html|js|css|svg|txt|webmanifest)$/.test(file) && !file.endsWith('sw.js'),
   );
   const entries = [];
 

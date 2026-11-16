@@ -1,9 +1,10 @@
 // 会場画像をモックの折畳み・下部操作で表示し、端末確認用の登録と区画の対応付けを扱う。
 
 import { el, button, showDialog } from './dom.ts';
+import { convertPhoto } from './photo-conversion.ts';
 import { createVenueImageStore } from '../storage/venue-images.ts';
 import type { DeviceKeyScope } from '../storage/device-vault.ts';
-import { IMAGE_MAX_BYTES, IMAGE_SLOTS, prepareVenueImage } from '../domain/seats/venue-image.ts';
+import { IMAGE_SLOTS, prepareVenueImage } from '../domain/seats/venue-image.ts';
 import type { ImageSlot, VenueImageHead } from '../domain/seats/venue-image.ts';
 
 interface Context {
@@ -47,6 +48,8 @@ export function createVenueImageViewer(context: Context) {
   let zoom = 1;
   let loading = true;
   let writing = false;
+  let converting: AbortController | undefined;
+  let photoDialog: HTMLDialogElement | undefined;
   let replacing = false;
   let gesture: { x: number; y: number; left: number; top: number; mouse: boolean } | undefined;
 
@@ -58,7 +61,7 @@ export function createVenueImageViewer(context: Context) {
   status.setAttribute('role', 'status');
   choice.setAttribute('aria-label', bindingName);
   file.type = 'file';
-  file.accept = 'image/png,image/jpeg,.png,.jpg,.jpeg';
+  file.accept = 'image/png,image/jpeg,image/webp,image/heic,image/heif,.png,.jpg,.jpeg,.webp,.heic,.heif';
   file.hidden = true;
   bindingLabel.append(choice);
   stage.append(image);
@@ -141,6 +144,7 @@ export function createVenueImageViewer(context: Context) {
   /** 確認済みのキャッシュを表示し、欠損時は座席表を使える案内を維持する。 */
   function refresh() {
     if (!context.isActive()) return;
+    if (converting) { converting.abort(); photoDialog?.close(); }
     const slot = currentSlot(), value = slot ? images.get(slot) : null;
     const section = context.section(), preferred = section ? context.bindings()[section] : undefined;
     const options = [el('option', '', '指定なし')];
@@ -192,22 +196,48 @@ export function createVenueImageViewer(context: Context) {
   async function chooseFile() {
     const selected = file.files?.[0];
     file.value = '';
-    if (!selected || writing) return;
+    if (!selected || writing || converting || photoDialog?.open) return;
     error.textContent = '';
     const sectionId = context.section();
     const slot = replacing ? currentSlot() : IMAGE_SLOTS.find((item) => !images.get(item)?.blob && !failed.has(item));
     if (!slot) { error.textContent = '画像は公演全体で5枚までです。表示中の画像を差し替えてください。'; return; }
     const prior = images.get(slot);
+    const isReplacing = replacing;
+    const controller = new AbortController();
+    converting = controller;
+    const progress = el('div');
+    progress.append(el('p', '', '写真をこの端末で調整しています。外部へ送信しません。'));
+    const pendingDialog = showDialog('会場画像を調整中', progress);
+    photoDialog = pendingDialog;
+    pendingDialog.addEventListener('close', () => controller.abort(), { once: true });
     try {
       context.assertAuthorized();
-      if (selected.size > IMAGE_MAX_BYTES) throw Error('IMAGE_SIZE_EXCEEDED');
-      const payload = await prepareVenueImage(context.scope, new Uint8Array(await selected.arrayBuffer()), selected.type,
+      const converted = await convertPhoto(selected, controller.signal);
+      if (controller.signal.aborted || !context.isActive()) throw Error('PHOTO_CANCELLED');
+      const payload = await prepareVenueImage(context.scope, new Uint8Array(await converted.blob.arrayBuffer()), converted.blob.type,
         prior?.head.revision ?? 0, crypto.randomUUID());
       context.assertAuthorized();
-      if (context.section() !== sectionId) throw Error('IMAGE_SECTION_CHANGED');
+      if (controller.signal.aborted || !context.isActive() || context.section() !== sectionId) throw Error('PHOTO_CANCELLED');
+      converting = undefined;
+      pendingDialog.close();
       const body = el('div');
-      body.append(el('p', '', replacing ? 'この端末の確認用画像を差し替えて保存します。共有は行いません。' :
+      body.append(el('p', '', isReplacing ? 'この端末の確認用画像を差し替えて保存します。共有は行いません。' :
         'この端末に確認用画像を保存します。共有は行いません。'));
+      body.append(el('p', '', `${converted.blob.type === 'image/png' ? 'PNG' : 'JPEG'}・${(converted.blob.size / 1_000_000).toFixed(2)}MB／1MB・${converted.width}×${converted.height}px（元：${converted.originalWidth}×${converted.originalHeight}px）`));
+      body.append(el('p', '', '「原寸で確認」で、席番号と画像の向きを確認してください。'));
+      const previewUrl = URL.createObjectURL(converted.blob);
+      const preview = el('div', 'photo-preview');
+      const previewImage = el('img');
+      previewImage.src = previewUrl;
+      previewImage.alt = '保存前の調整済み会場画像';
+      preview.append(previewImage);
+      const zoom = button('原寸で確認', () => {
+        const actual = preview.classList.toggle('photo-preview-actual');
+        zoom.textContent = actual ? '全体を表示' : '原寸で確認';
+        zoom.setAttribute('aria-pressed', String(actual));
+      }, 'button secondary');
+      zoom.setAttribute('aria-pressed', 'false');
+      body.append(preview, zoom);
       body.append(el('p', '', '区画との対応は任意です。設定した場合は「下書き保存」で保存します。'));
       const affected = context.sections().filter((section) => context.bindings()[section.id] === slot).length;
       if (affected > 1) body.append(el('p', '', `この画像を使用中の${affected}区画に反映されます。`));
@@ -221,6 +251,7 @@ export function createVenueImageViewer(context: Context) {
         let savedToDevice = false;
         try {
           context.assertAuthorized();
+          if (!context.isActive() || context.section() !== sectionId) throw Error('IMAGE_SECTION_CHANGED');
           const head: VenueImageHead = { environmentId: context.scope.environmentId, performanceId: context.scope.performanceId,
             schemaVersion: 1, revision: payload.revision, active: true, bank: prior?.head.bank === 'a' ? 'b' : 'a',
             operationId: payload.operationId, sha256: payload.sha256 };
@@ -240,9 +271,19 @@ export function createVenueImageViewer(context: Context) {
           refresh();
         }
       });
-      const dialog = showDialog(replacing ? '会場画像を差し替え' : '会場画像を追加', body, [confirm]);
-    } catch {
-      error.textContent = '画像を読み込めません。PNG・JPEGで1枚1MB以下の画像を選び、区画を変えずに確認してください。';
+      const dialog = showDialog(isReplacing ? '会場画像を差し替え' : '会場画像を追加', body, [confirm]);
+      photoDialog = dialog;
+      dialog.addEventListener('close', () => { URL.revokeObjectURL(previewUrl); if (photoDialog === dialog) photoDialog = undefined; }, { once: true });
+    } catch (cause) {
+      const reason = cause instanceof Error ? cause.message : '';
+      if (reason !== 'PHOTO_CANCELLED' && context.isActive()) {
+        error.textContent = reason === 'PHOTO_INPUT_SIZE' ? '元写真は1枚20MB以下で選んでください。保存後は1枚1MB以下に調整します。' :
+          reason === 'PHOTO_CANNOT_FIT' ? '画質を保ったまま1MB以下にできませんでした。必要な範囲を切り取るか、分けて撮影してください。' :
+          '画像を調整できませんでした。PNG・JPEG・WebP・HEIC／HEIFの写真を選び直してください。元の画像は保持しています。';
+      }
+    } finally {
+      if (converting === controller) converting = undefined;
+      pendingDialog.close();
     }
   }
 
@@ -325,6 +366,8 @@ export function createVenueImageViewer(context: Context) {
   resize.observe(viewport);
   const observer = new MutationObserver(() => {
     if (context.isActive()) return;
+    converting?.abort();
+    photoDialog?.close();
     if (url) URL.revokeObjectURL(url);
     url = undefined;
     image.removeAttribute('src');

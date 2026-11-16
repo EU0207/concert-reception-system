@@ -908,6 +908,9 @@ p {
 .button.venue-image-remove { color: #973c35; }
 .venue-images select { width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid #c4d2cd; border-radius: 8px; background: #fff; font: inherit; }
 .venue-images select:focus-visible { outline: 2px solid #98aba4; outline-offset: -2px; box-shadow: none; }
+.photo-preview { width: 100%; max-height: 42vh; overflow: auto; background: #f2eddf; border: 1px solid #d9d4c8; border-radius: 8px; margin: 12px 0; }
+.photo-preview img { display: block; max-width: 100%; height: auto; margin: auto; }
+.photo-preview-actual img { max-width: none; margin: 0; }
 .venue-image-viewport[hidden], .venue-image-controls[hidden] { display: none; }
 @media (max-width: 640px) {
   .venue-image-manage .seat-field { flex-basis: 100%; }
