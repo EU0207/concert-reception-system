@@ -1,9 +1,200 @@
+// ローカルAuth・RTDBへ通常SDKを接続し、端末認可と業務基盤の結合を確認する。
+
 import { test, expect } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { createPerformanceCalendar } from '../../src/domain/authorization/performance-calendar.ts';
 
 const project = 'demo-concert-reception-product';
 const performanceId = '00000000-0000-4000-8000-000000000002';
+
+test('SHARE104-S01 未採番と5画像を通常SDKで共有し、応答喪失・明示再開と独立端末での復元を確認する', async ({ page, browser }) => {
+  test.setTimeout(90000);
+  const f = await signedIn(page);
+  await seed(f.environmentId, f.person.uid, f.deviceUid, 'owner');
+  const rootUrl = `http://127.0.0.1:9100/environments/${f.environmentId}/performances/${performanceId}`;
+  const query = `ns=${project}-default-rtdb`;
+  const response = await fetch(`${rootUrl}/control/calendar.json?${query}`, {
+    method: 'PUT', headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+    body: JSON.stringify(createPerformanceCalendar({ environmentId: f.environmentId, performanceId }, '2099-10-10', 'UTC', 1)),
+  });
+  expect(response.status).toBe(200);
+  const result = await page.evaluate(async ({ scope, identity }) => {
+    const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+    const { linkFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
+    const { createLayout, createSection } = await import('/src/domain/seats/layout.ts');
+    const { planSharedDraft, sharedCanonical } = await import('/src/domain/seats/shared-draft.ts');
+    const { createSeatDraftStore } = await import('/src/storage/seat-drafts.ts');
+    const { createSeatDeliveryStore } = await import('/src/storage/seat-operation-delivery.ts');
+    const { createSeatOperationController, withSeatOperationOwnership } = await import('/src/storage/seat-operation-controller.ts');
+    const { ensureDeviceKey } = await import('/src/storage/device-vault.ts');
+    const { createVenueImageStore } = await import('/src/storage/venue-images.ts');
+    const { prepareVenueImage } = await import('/src/domain/seats/venue-image.ts');
+    await linkFictionalGoogle(window.testPrincipals, identity);
+    const port = await createAuthorizationPort(window.testPrincipals, scope, { emulatorDatabasePort: 9100 });
+    await port.issueSession(Date.now() + 3600000);
+    await port.initializePerformanceControl();
+    const actor = (await port.fetchCurrent()).snapshot;
+    const binding = { ...scope, humanUid: actor.role.humanUid, deviceUid: actor.deviceAuthUid, storageEpoch: actor.device.storageEpoch };
+    await ensureDeviceKey(binding, true);
+    const operations = createSeatDraftStore(binding, () => {}), delivery = createSeatDeliveryStore(binding, () => {});
+    const imageStore = createVenueImageStore(binding, () => {}), imageHeads = {};
+    const canvas = document.createElement('canvas'); canvas.width = canvas.height = 2;
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    for (let index = 0; index < 5; index++) {
+      const slot = String(index), payload = await prepareVenueImage(scope, bytes, 'image/png', 0, crypto.randomUUID());
+      await port.images.publish(slot, 'a', payload, imageStore);
+      imageHeads[slot] = (await port.images.readCurrent(slot)).head;
+    }
+    const layout = createSection(createLayout(scope), { name: '架空の未採番区画', rows: 2, columns: 17,
+      axis: 'horizontal', seatOrder: 'forward', lines: [{ name: 'A' }, { name: 'B' }] }).after;
+    const basis = await port.sharedSeats.basis(), operationId = crypto.randomUUID();
+    const plan = planSharedDraft({ layout, editReasons: {}, imageBindings: {} }, basis, operationId, imageHeads);
+    const versions = { layoutRevision: 0, assignmentRevision: 0, ticketRevision: 0, attendeeRevision: 0,
+      controlRevision: basis.sourceControlRevision, calendarRevision: basis.calendarRevision };
+    const input = { draftId: crypto.randomUUID(), baseVersions: versions, layout, editReasons: {}, imageBindings: {} };
+    await operations.prepareSeatOperation(input, 0, { operationId, kind: 'share', expectedVersions: { ...versions, roleRevision: 1, deviceRevision: 1 },
+      command: { ...scope, sharedPlan: plan } });
+    const controller = createSeatOperationController({ scope: binding, operations, delivery, transport: port.sharedSeats.transport,
+      assertAuthorized() {}, withOwnership: withSeatOperationOwnership });
+    const outcome = await controller.run(operationId, 'send');
+    const shared = await port.sharedSeats.readCurrent();
+    window.sharedTrial = { port, binding, operations, delivery, controller, operationId, input, imageStore, imageHeads, bytes };
+
+    return { outcome, unchanged: sharedCanonical(shared.source) === sharedCanonical({ layout, editReasons: {}, imageBindings: {} }),
+      initialNumbered: shared.source.layout.sections[0].initialNumbered, sharedRevision: shared.head.revision, images: shared.images.length };
+  }, { scope: { environmentId: f.environmentId, performanceId }, identity: { sub: randomUUID(), email: f.person.email } });
+  expect(result).toMatchObject({ outcome: { status: 'confirmed' }, unchanged: true, initialNumbered: false, sharedRevision: 1, images: 5 });
+  const resumed = await page.evaluate(async () => {
+    const { port, binding, operations, delivery, controller, operationId, input, imageStore, bytes, imageHeads } = window.sharedTrial;
+    const { numberInitial, editUnassignedSeat } = await import('/src/domain/seats/layout.ts');
+    const { planSharedDraft, sharedCanonical } = await import('/src/domain/seats/shared-draft.ts');
+    const { seatOperationDigest } = await import('/src/storage/seat-operation-controller.ts');
+    const { prepareVenueImage } = await import('/src/domain/seats/venue-image.ts');
+    const { createSharedDraftImporter } = await import('/src/storage/shared-draft-import.ts');
+    const { getFictionalDeviceDatabase, ref, get, set } = await import('/tests/emulator/sdk-fixture.mjs');
+    const db = getFictionalDeviceDatabase(window.testPrincipals), root = `environments/${binding.environmentId}/performances/${binding.performanceId}`;
+    const replacement = await prepareVenueImage(binding, bytes, 'image/png', 1, crypto.randomUUID());
+    await port.images.publish('0', 'b', replacement, imageStore);
+    const collected = await Promise.allSettled([port.images.collect('0', 'a')]);
+    const retained = await port.sharedSeats.readCurrent();
+    const latestImage = await port.images.readCurrent('0');
+    await imageStore.saveImage('0', latestImage.head, latestImage.payload, 0);
+    const importer = createSharedDraftImporter(binding, () => {});
+    const unconfirmed = await Promise.allSettled([importer.replace(retained, 1, false)]);
+    const put = IDBObjectStore.prototype.put;
+    let writes = 0;
+    // 3枚目の保存で失敗させ、下書きと先行する画像も同じトランザクションで戻す。
+    IDBObjectStore.prototype.put = function (...args) {
+      if (this.name === 'venueImages' && ++writes === 3) throw new DOMException('fixture quota', 'QuotaExceededError');
+      return put.apply(this, args);
+    };
+    let importFailure;
+    try { importFailure = await Promise.allSettled([importer.replace(retained, 1, true)]); }
+    finally { IDBObjectStore.prototype.put = put; }
+    const priorDraft = await operations.loadLocalDraft(), priorImage = await imageStore.readImage('0');
+    const importedOld = await importer.replace(retained, 1, true);
+    const restoredOld = await imageStore.readImage('0');
+    let layout = input.layout;
+    const section = layout.sections[0].section;
+    layout = numberInitial(layout, section.sectionId, Object.fromEntries(section.cells.map((cell) => [cell.cellId, 'seat']))).after;
+    const seatId = layout.sections[0].seats[0].seatId;
+    layout = editUnassignedSeat(layout, section.sectionId, seatId, { number: '臨時-席', reason: '架空の旧理由' }).after;
+    const current = await port.sharedSeats.basis(), nextId = crypto.randomUUID();
+    imageHeads['0'] = (await port.images.readCurrent('0')).head;
+    const source = { layout, editReasons: { [seatId]: '架空の旧理由' }, imageBindings: { [section.sectionId]: '0' } };
+    const plan = planSharedDraft(source, current, nextId, imageHeads);
+    const versions = { ...input.baseVersions, controlRevision: current.sourceControlRevision };
+    const nextInput = { ...input, ...source, baseVersions: versions };
+    await operations.prepareSeatOperation(nextInput, 2, { operationId: nextId, kind: 'share', expectedVersions: { ...versions, roleRevision: 1, deviceRevision: 1 },
+      command: { environmentId: binding.environmentId, performanceId: binding.performanceId, sharedPlan: plan } });
+    const send = port.sharedSeats.transport.send;
+    // 実際の共有確定後に応答を失った状況を、呼出し元へ渡る例外として注入する。
+    port.sharedSeats.transport.send = async (op) => { await send(op); throw Error('FICTIONAL_RESPONSE_LOST'); };
+    const failed = await Promise.allSettled([controller.run(nextId, 'send')]);
+    port.sharedSeats.transport.send = send;
+    const checked = await controller.run(nextId, 'check');
+    const partialId = crypto.randomUUID(), partialPlan = planSharedDraft(source, await port.sharedSeats.basis(), partialId, imageHeads);
+    await operations.prepareSeatOperation(nextInput, 3, { operationId: partialId, kind: 'share', expectedVersions: { ...versions, roleRevision: 1, deviceRevision: 1 },
+      command: { environmentId: binding.environmentId, performanceId: binding.performanceId, sharedPlan: partialPlan } });
+    const partial = await operations.readPendingSeatOperation(partialId);
+    const oldMeta = (await get(ref(db, `${root}/sharedDrafts/${nextId}/meta`))).val();
+    // 通常権限で本文準備の最初だけを保存し、中断後の明示再開を検査する。
+    await set(ref(db, `${root}/sharedDrafts/${partialId}/meta`), { ...oldMeta, operationId: partialId, generation: partialId,
+      expectedSharedRevision: 2, inputDigest: await seatOperationDigest(partial), draftDigest: partial.draftDigest });
+    const waiting = await controller.run(partialId, 'check');
+    const restarted = await controller.run(partialId, 'retry');
+    const first = await operations.readPendingSeatOperation(operationId);
+    const past = await port.sharedSeats.transport.lookup(first, await seatOperationDigest(first));
+    await port.sharedSeats.transport.verifyApplied(first, past.receipt);
+    const final = await port.sharedSeats.readCurrent();
+    const beforeCompeting = (await operations.loadLocalDraft()).localRevision;
+    const competing = await Promise.allSettled([importer.replace(final, beforeCompeting, true), importer.replace(final, beforeCompeting, true)]);
+    const pendingImage = await prepareVenueImage(binding, bytes, 'image/png', 1, crypto.randomUUID());
+    await imageStore.prepare('1', 'b', pendingImage);
+    const pendingImport = await Promise.allSettled([importer.replace(final, beforeCompeting + 1, true)]);
+    const afterPending = await operations.loadLocalDraft();
+    window.sharedExpected = source;
+
+    return { collect: collected[0].status, oldBank: retained.images.find((image) => image.slot === '0').head.bank,
+      oldBasis: retained.baseVersions.controlRevision,
+      unconfirmed: unconfirmed[0].status, importFailure: importFailure[0].status, priorDraftRevision: priorDraft.localRevision,
+      priorImageRevision: priorImage.head.revision, importedRevision: importedOld.localRevision, restoredOldImageRevision: restoredOld.head.revision,
+      competing: competing.map((value) => value.status).sort(), pendingImport: pendingImport[0].status,
+      beforeCompeting, afterPending: afterPending.localRevision,
+      failure: failed[0].status, checked: checked.status, waiting: waiting.status, restarted: restarted.status,
+      past: past.receipt.resultRevision, revision: final.head.revision, same: sharedCanonical(final.source) === sharedCanonical(source) };
+  });
+  expect(resumed).toMatchObject({ collect: 'rejected', oldBank: 'a', oldBasis: 6, failure: 'rejected', checked: 'confirmed',
+    waiting: 'unknown', restarted: 'confirmed', past: 1, revision: 3, same: true, unconfirmed: 'rejected', importFailure: 'rejected',
+    priorDraftRevision: 1, priorImageRevision: 2, importedRevision: 2, restoredOldImageRevision: 1 });
+  expect(resumed).toMatchObject({ competing: ['fulfilled', 'rejected'], pendingImport: 'rejected' });
+  expect(resumed.afterPending).toBe(resumed.beforeCompeting + 1);
+  const secondContext = await browser.newContext();
+  try {
+    const secondPage = await secondContext.newPage(), second = await signedIn(secondPage, f.environmentId);
+    const scope = { environmentId: f.environmentId, performanceId }, now = Date.now();
+    const added = await fetch(`${rootUrl}.json?${query}`, { method: 'PATCH',
+      headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+      body: JSON.stringify({
+        [`roles/${second.person.uid}`]: { ...scope, humanUid: second.person.uid, role: 'deputy', active: true, revision: 1,
+          startsAt: now - 10000, endsAt: now + 86400000 },
+        [`devices/${second.deviceUid}`]: { ...scope, schemaVersion: 2, deviceUid: second.deviceUid, humanUid: second.person.uid,
+          active: true, approved: true, retired: false, storageEpoch: randomUUID(), preparedRole: 'deputy', preparedRoleRevision: 1 },
+      }) });
+    expect(added.status).toBe(200);
+    const imported = await secondPage.evaluate(async ({ scope, identity }) => {
+      const { createAuthorizationPort } = await import('/src/adapters/firebase/authorization-port.ts');
+      const { linkFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
+      const { createSeatDraftStore } = await import('/src/storage/seat-drafts.ts');
+      const { createVenueImageStore } = await import('/src/storage/venue-images.ts');
+      const { ensureDeviceKey } = await import('/src/storage/device-vault.ts');
+      const { sharedCanonical } = await import('/src/domain/seats/shared-draft.ts');
+      const { createSharedDraftImporter } = await import('/src/storage/shared-draft-import.ts');
+      await linkFictionalGoogle(window.testPrincipals, identity);
+      const port = await createAuthorizationPort(window.testPrincipals, scope, { emulatorDatabasePort: 9100 });
+      await port.issueSession(Date.now() + 3600000);
+      const shared = await port.sharedSeats.readCurrent(), actor = (await port.fetchCurrent()).snapshot;
+      const binding = { ...scope, humanUid: actor.role.humanUid, deviceUid: actor.deviceAuthUid, storageEpoch: actor.device.storageEpoch };
+      await ensureDeviceKey(binding, true);
+      const store = createSeatDraftStore(binding, () => {}), images = createVenueImageStore(binding, () => {});
+      const importer = createSharedDraftImporter(binding, () => {});
+      await importer.replace(shared, 0, true);
+      const restored = await store.loadLocalDraft(), cached = [];
+      for (let index = 0; index < 5; index++) cached.push(await images.readImage(String(index)));
+      port.dispose();
+
+      return { revision: shared.head.revision, numbered: restored.layout.sections[0].initialNumbered,
+        images: cached.filter((image) => image?.blob).length, manual: restored.layout.sections[0].seats[0].manualNumber,
+        same: sharedCanonical(restored.layout) === sharedCanonical(shared.source.layout), bindings: Object.values(restored.imageBindings) };
+    }, { scope, identity: { sub: randomUUID(), email: second.person.email } });
+    expect(imported).toMatchObject({ revision: 3, numbered: true, images: 5, manual: '臨時-席', same: true, bindings: ['0'] });
+  } finally { await secondContext.close(); }
+  const control = await fetch(`${rootUrl}/control/controlRevision.json?${query}`, { headers: { authorization: 'Bearer owner' } });
+  expect(await control.json()).toBe(7);
+  const head = await fetch(`${rootUrl}/head.json?${query}`, { headers: { authorization: 'Bearer owner' } });
+  expect(await head.json()).toBe(null);
+});
 
 async function createPerson() {
   const email = `fictional-${randomUUID()}@example.invalid`,
@@ -97,9 +288,10 @@ function config(environmentId) {
   };
 }
 
-async function signedIn(page) {
+/** 独立したブラウザーの本人・端末資格を作り、指定された公演環境へ接続する。 */
+async function signedIn(page, targetEnvironmentId = randomUUID()) {
   const person = await createPerson(),
-    environmentId = randomUUID(),
+    environmentId = targetEnvironmentId,
     settings = config(environmentId);
   await page.goto('http://127.0.0.1:4181/');
   const deviceUid = await page.evaluate(
