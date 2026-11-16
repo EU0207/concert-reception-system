@@ -223,7 +223,7 @@ test('IMG91-T06・REQ-NF-014 画像の下部操作・中央縮小と任意の区
   const enlarged = await viewer.locator('img').evaluate((node) => ({ width: node.getBoundingClientRect().width, natural: node.naturalWidth }));
   expect(enlarged.width).toBeCloseTo(enlarged.natural * 4, 1);
   await viewer.getByRole('button', { name: '全体表示', exact: true }).click();
-  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('全体表示');
+  await expect(viewer.locator('.venue-image-zoom-controls > span')).toHaveText(/^\d+%$/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   await saveDraft(page);
   await addSection(page, '架空の第二区画');

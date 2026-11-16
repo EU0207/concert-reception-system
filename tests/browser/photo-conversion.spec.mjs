@@ -77,7 +77,7 @@ test('PHOTO294-T01 1MB超の写真を端末内で調整し、確認前と取消�
   await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('400%');
   expect(await viewer.locator('img').evaluate((node) => node.getBoundingClientRect().width / node.naturalWidth)).toBeCloseTo(4, 2);
   await viewer.getByRole('button', { name: '全体表示', exact: true }).click();
-  await expect(viewer.locator('.venue-image-zoom-controls')).toContainText('全体表示');
+  await expect(viewer.locator('.venue-image-zoom-controls > span')).toHaveText(/^\d+%$/);
   await page.reload();
   await page.locator('.venue-images summary').click();
   await expect(page.locator('.venue-images img')).toBeVisible();
