@@ -254,7 +254,13 @@ export function createVenueImageViewer(context: Context) {
       const body = el('div');
       body.append(el('p', '', isReplacing ? 'この端末の確認用画像を差し替えて保存します。共有は行いません。' :
         'この端末に確認用画像を保存します。共有は行いません。'));
-      body.append(el('p', '', `${converted.blob.type === 'image/png' ? 'PNG' : 'JPEG'}・${(converted.blob.size / 1_000_000).toFixed(2)}MB／1MB・${converted.width}×${converted.height}px（元：${converted.originalWidth}×${converted.originalHeight}px）`));
+      const information = [
+        ['形式：', converted.blob.type === 'image/png' ? 'PNG' : 'JPEG'],
+        ['容量：', `${(converted.blob.size / 1_000_000).toFixed(2)}MB`],
+        ['サイズ：', `${converted.width}×${converted.height}px`],
+        ['元のサイズ：', `${converted.originalWidth}×${converted.originalHeight}px`],
+      ].map(([label, value]) => `${label}${value}`).join('　');
+      body.append(el('p', 'photo-information', information));
       body.append(el('p', '', '「原寸で確認」で、席番号と画像の向きを確認してください。'));
       const previewUrl = URL.createObjectURL(converted.blob);
       const preview = el('div', 'photo-preview');
