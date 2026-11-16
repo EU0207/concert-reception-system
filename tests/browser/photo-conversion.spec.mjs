@@ -139,3 +139,33 @@ test('PHOTO294-T05 画質下限で収まらない画像を拒否し、JPEGの撮
   }, { dense: dense.buffer.toString('base64'), rotated: rotated.toString('base64') });
   expect(result).toEqual({ rejected: 'PHOTO_CANNOT_FIT', width: 300, height: 600 });
 });
+
+test('PHOTO294-T06 処理中の点表示と動きを減らす設定、キャンセルによる旧画像保全', async ({ page }) => {
+  await open(page);
+  const file = await fixture(page);
+  const confirm = await select(page, file);
+  await confirm.getByRole('button', { name: '端末に保存する' }).click();
+  await expect(page.locator('.venue-images img')).toBeVisible();
+  const original = await page.locator('.venue-images img').getAttribute('src');
+  // Workerへの投入を保留し、端末速度に依存せず処理中の取消しを確認する。
+  await page.evaluate(() => {
+    window.photoPostMessage = Worker.prototype.postMessage;
+    Worker.prototype.postMessage = function () {};
+  });
+  await select(page, file, true);
+  const pending = page.getByRole('dialog', { name: '会場画像を調整中', exact: true });
+  await expect(pending.getByRole('status')).toHaveAttribute('aria-busy', 'true');
+  await expect(pending.locator('.photo-progress-dots')).toHaveAttribute('aria-hidden', 'true');
+  const dots = pending.locator('.photo-progress-dots span');
+  await expect(dots).toHaveCount(3);
+  await expect.poll(() => dots.evaluateAll((nodes) => nodes.reduce((count, node) => count + node.getAnimations().length, 0))).toBe(3);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => dots.evaluateAll((nodes) => nodes.every((node) => getComputedStyle(node).animationName === 'none'))).toBe(true);
+  await pending.getByRole('button', { name: 'キャンセル', exact: true }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.locator('.venue-images img')).toHaveAttribute('src', original);
+  await page.evaluate(() => { Worker.prototype.postMessage = window.photoPostMessage; });
+  const retry = await select(page, file, true);
+  await expect(retry).toBeVisible();
+  await retry.getByRole('button', { name: '閉じる', exact: true }).click();
+});
