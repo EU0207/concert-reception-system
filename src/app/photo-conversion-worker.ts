@@ -25,9 +25,10 @@ async function decode(file: File): Promise<ImageBitmap> {
   }
 }
 
-/** 同じ寸法では無劣化PNGを優先し、JPEG品質を下げ過ぎず段階的に縮小する。 */
-async function convert(file: File): Promise<ConvertedPhoto> {
+/** 指定の向きで描画し、無劣化PNGまたは高品質JPEGを段階的な寸法で選ぶ。 */
+async function convert(file: File, quarterTurns: number): Promise<ConvertedPhoto> {
   if (!file.size || file.size > PHOTO_INPUT_MAX_BYTES) throw Error('PHOTO_INPUT_SIZE');
+  if (!Number.isInteger(quarterTurns) || quarterTurns < 0 || quarterTurns > 3) throw Error('PHOTO_ROTATION');
   const bitmap = await decode(file);
   const canvas = new OffscreenCanvas(1, 1);
   try {
@@ -40,14 +41,19 @@ async function convert(file: File): Promise<ConvertedPhoto> {
     const minimum = Math.min(1, 1600 / longest);
     const scales = [...new Set([1, 0.85, 0.7, 0.55, 0.4, 0.3, 0.2, minimum].map((scale) => Math.max(minimum, scale)))];
     for (const scale of scales) {
-      canvas.width = Math.max(1, Math.round(width * scale));
-      canvas.height = Math.max(1, Math.round(height * scale));
+      const targetWidth = Math.max(1, Math.round(width * scale)), targetHeight = Math.max(1, Math.round(height * scale));
+      canvas.width = quarterTurns % 2 ? targetHeight : targetWidth;
+      canvas.height = quarterTurns % 2 ? targetWidth : targetHeight;
       draw.imageSmoothingEnabled = true;
       draw.imageSmoothingQuality = 'high';
       // JPEGで透過部分が黒くならないよう、両候補を同じ白背景で比較する。
       draw.fillStyle = '#fff';
       draw.fillRect(0, 0, canvas.width, canvas.height);
-      draw.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      draw.save();
+      draw.translate(canvas.width / 2, canvas.height / 2);
+      draw.rotate(quarterTurns * Math.PI / 2);
+      draw.drawImage(bitmap, -targetWidth / 2, -targetHeight / 2, targetWidth, targetHeight);
+      draw.restore();
       let blob = await canvas.convertToBlob({ type: 'image/png' });
       if (blob.size > IMAGE_MAX_BYTES) {
         for (const quality of [0.94, 0.9, 0.85]) {
@@ -67,7 +73,7 @@ async function convert(file: File): Promise<ConvertedPhoto> {
 }
 
 // 変換要求ごとに作られるWorker。結果は親画面へ返し、保存や通信は行わない。
-self.onmessage = async (event: MessageEvent<File>) => {
-  try { self.postMessage({ value: await convert(event.data) }); }
+self.onmessage = async (event: MessageEvent<{ file: File; quarterTurns: number }>) => {
+  try { self.postMessage({ value: await convert(event.data.file, event.data.quarterTurns) }); }
   catch (error) { self.postMessage({ error: error instanceof Error ? error.message : 'PHOTO_DECODE' }); }
 };

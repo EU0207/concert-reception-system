@@ -1,12 +1,13 @@
-// 写真変換を専用Workerへ委譲し、取消し・時間超過で処理と一時データを破棄する。
+// 写真の変換・回転を専用Workerへ委譲し、取消し・時間超過で一時データを破棄する。
 
 import { PHOTO_INPUT_MAX_BYTES } from './photo-policy.ts';
 import type { ConvertedPhoto } from './photo-policy.ts';
 
-/** 保存上限とは別の入力上限を検査し、端末内の変換結果だけを受け取る。 */
-export function convertPhoto(file: File, signal: AbortSignal): Promise<ConvertedPhoto> {
+/** 入力上限と回転角を検査し、指定した向きの端末内変換結果だけを受け取る。 */
+export function convertPhoto(file: File, signal: AbortSignal, quarterTurns = 0): Promise<ConvertedPhoto> {
   if (!file.size || file.size > PHOTO_INPUT_MAX_BYTES) return Promise.reject(Error('PHOTO_INPUT_SIZE'));
   if (signal.aborted) return Promise.reject(Error('PHOTO_CANCELLED'));
+  if (!Number.isInteger(quarterTurns) || quarterTurns < 0 || quarterTurns > 3) return Promise.reject(Error('PHOTO_ROTATION'));
 
   return new Promise((resolve, reject) => {
     const worker = new Worker(new URL('./photo-conversion-worker.ts', import.meta.url), { type: 'module' });
@@ -33,6 +34,6 @@ export function convertPhoto(file: File, signal: AbortSignal): Promise<Converted
       if (event.data.error) finish(Error(event.data.error));
       else finish(undefined, event.data.value);
     };
-    worker.postMessage(file);
+    worker.postMessage({ file, quarterTurns });
   });
 }

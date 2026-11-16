@@ -27,6 +27,34 @@ async function fixture(page, noisy = false, mime = 'image/png') {
   return { name: 'fictional-photo', mimeType: mime, buffer: Buffer.from(base64, 'base64') };
 }
 
+/** 四隅の色が異なる人工画像で、回転の方向を画素から検査する。 */
+async function rotationFile(page) {
+  const base64 = await page.evaluate(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 240; canvas.height = 120;
+    const draw = canvas.getContext('2d');
+    for (const [color, x, y] of [['#ff0000', 0, 0], ['#00ff00', 120, 0], ['#0000ff', 0, 60], ['#ffff00', 120, 60]]) {
+      draw.fillStyle = color; draw.fillRect(x, y, 120, 60);
+    }
+    return canvas.toDataURL('image/png').split(',')[1];
+  });
+  return { name: 'fictional-orientation.png', mimeType: 'image/png', buffer: Buffer.from(base64, 'base64') };
+}
+
+/** 表示中の実画像の寸法と四隅の色を読み、CSSだけの回転ではないことを確認する。 */
+async function imageCorners(image) {
+  return image.evaluate((node) => {
+    if (!node.complete || !node.naturalWidth) return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = node.naturalWidth; canvas.height = node.naturalHeight;
+    const draw = canvas.getContext('2d');
+    draw.drawImage(node, 0, 0);
+    const corners = [[0.25, 0.25], [0.75, 0.25], [0.25, 0.75], [0.75, 0.75]].map(([x, y]) =>
+      [...draw.getImageData(Math.floor(canvas.width * x), Math.floor(canvas.height * y), 1, 1).data].slice(0, 3));
+    return { width: canvas.width, height: canvas.height, corners };
+  });
+}
+
 /** 製品評価画面の画像欄を開き、端末復元の完了を待つ。 */
 async function open(page) {
   await page.goto('/#/events/00000000-0000-4000-8000-000000000001/seats');
@@ -182,4 +210,73 @@ test('PHOTO294-T06 処理中の点表示と動きを減らす設定、キャン�
   const retry = await select(page, file, true);
   await expect(retry).toBeVisible();
   await retry.getByRole('button', { name: '閉じる', exact: true }).click();
+});
+
+test('PHOTO294-T07 保存前の左右90度回転を画素で確認し、保存・再起動後も向きを保持する', async ({ page }) => {
+  await open(page);
+  const file = await rotationFile(page);
+  const dialog = await select(page, file), preview = dialog.locator('.photo-preview img');
+  const red = [255, 0, 0], green = [0, 255, 0], blue = [0, 0, 255], yellow = [255, 255, 0];
+  const original = { width: 240, height: 120, corners: [red, green, blue, yellow] };
+  const right = { width: 120, height: 240, corners: [blue, red, yellow, green] };
+  const left = { width: 120, height: 240, corners: [green, yellow, red, blue] };
+  await expect(dialog.locator('.photo-preview-controls button')).toHaveText(['原寸で確認', '左回り', '右回り']);
+  await dialog.getByRole('button', { name: '右回り', exact: true }).click();
+  await expect.poll(() => imageCorners(preview)).toEqual(right);
+  await expect(dialog.locator('.photo-information')).toContainText('サイズ：120×240px（元 240×120px）');
+  await dialog.getByRole('button', { name: '左回り', exact: true }).click();
+  await expect.poll(() => imageCorners(preview)).toEqual(original);
+  await dialog.getByRole('button', { name: '左回り', exact: true }).click();
+  await expect.poll(() => imageCorners(preview)).toEqual(left);
+  await dialog.getByRole('button', { name: '右回り', exact: true }).click();
+  await expect.poll(() => imageCorners(preview)).toEqual(original);
+  for (let index = 0; index < 4; index++) {
+    await dialog.getByRole('button', { name: '右回り', exact: true }).click();
+    await expect(dialog.getByRole('button', { name: '右回り', exact: true })).toBeEnabled();
+  }
+  await expect.poll(() => imageCorners(preview)).toEqual(original);
+  await dialog.getByRole('button', { name: '右回り', exact: true }).click();
+  await expect.poll(() => imageCorners(preview)).toEqual(right);
+  await dialog.getByRole('button', { name: '端末に保存する' }).click();
+  await expect.poll(() => imageCorners(page.locator('.venue-images img'))).toEqual(right);
+  await page.reload();
+  await page.locator('.venue-images summary').click();
+  await expect.poll(() => imageCorners(page.locator('.venue-images img'))).toEqual(right);
+  const replacement = await select(page, file, true);
+  await replacement.getByRole('button', { name: '左回り', exact: true }).click();
+  await expect.poll(() => imageCorners(replacement.locator('.photo-preview img'))).toEqual(left);
+  await replacement.getByRole('button', { name: '閉じる', exact: true }).click();
+  await expect.poll(() => imageCorners(page.locator('.venue-images img'))).toEqual(right);
+});
+
+test('PHOTO294-T08 回転失敗と回転中の取消しでは確認中の画像と登録画像を保持する', async ({ page }) => {
+  await open(page);
+  const file = await rotationFile(page);
+  const initial = await select(page, file);
+  await initial.getByRole('button', { name: '端末に保存する' }).click();
+  await expect(page.locator('.venue-images img')).toBeVisible();
+  const saved = await imageCorners(page.locator('.venue-images img'));
+  const dialog = await select(page, file, true), preview = dialog.locator('.photo-preview img');
+  await expect.poll(() => imageCorners(preview)).toEqual(saved);
+  await page.evaluate(() => {
+    window.rotationPostMessage = Worker.prototype.postMessage;
+    Worker.prototype.postMessage = function (input) {
+      return window.rotationPostMessage.call(this, { ...input, file: new File(['broken image'], 'broken.png') });
+    };
+  });
+  await dialog.getByRole('button', { name: '右回り', exact: true }).click();
+  await expect(dialog.getByRole('alert')).toContainText('確認中の画像は変更していません');
+  await expect.poll(() => imageCorners(preview)).toEqual(saved);
+  await expect(dialog.getByRole('button', { name: '端末に保存する' })).toBeEnabled();
+  await page.evaluate(() => { Worker.prototype.postMessage = function () {}; });
+  await dialog.getByRole('button', { name: '左回り', exact: true }).click();
+  await expect(dialog.getByRole('status')).toHaveText('回転しています…');
+  await expect(dialog.getByRole('button', { name: '端末に保存する' })).toBeDisabled();
+  await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await page.evaluate(() => { Worker.prototype.postMessage = window.rotationPostMessage; });
+  await expect.poll(() => imageCorners(page.locator('.venue-images img'))).toEqual(saved);
+  await page.reload();
+  await page.locator('.venue-images summary').click();
+  await expect.poll(() => imageCorners(page.locator('.venue-images img'))).toEqual(saved);
 });
