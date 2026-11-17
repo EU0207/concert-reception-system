@@ -76,6 +76,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 開発者、設計担当者、テスト担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
+| PoCの案内・目的別索引 | [PoCの案内](../poc/poc-guide.md)・[全件索引](../poc/catalog.md) | 初期PoCと詳細設計中の検証を区別し、コードと結果の参照先を案内する | 開発者、評価者 | 検証記録の参照時 | 検証フォルダと参照先の追加・変更時 | In Review |
 | 座席保存の技術検証記録 | [seat-save-validation.md](development/technical-validation/seat-save-validation.md) | #101の索引と検証分担を追跡。V1完了、V2の合同結果は別記録。容量・採否はV3・V4。122-AでRTDBを初期設計採用 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残作業・承認変更時 | Approved（#101の設計検証） |
 | 座席構成の完成検証記録 | [seat-completion-validation.md](development/technical-validation/seat-completion-validation.md) | #165の全体検査・完成候補の証拠。GD91-54～59とV1の4条件は承認・統合済み | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | Approved |
 | 席・券・権限の合同検証記録 | [seat-business-integration-validation.md](development/technical-validation/seat-business-integration-validation.md) | #166の4条件と225件をPR #187で承認済み。V2完了、容量・回収は#167、採否は#168 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | Approved（機能合同検証） |
