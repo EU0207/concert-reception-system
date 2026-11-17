@@ -959,5 +959,6 @@ p {
 .authentication-screen input:focus-visible { outline: 2px solid #5e6b68; outline-offset: -2px; }
 .authentication-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
 .authentication-screen .button { min-height: 44px; white-space: normal; }
+.authentication-screen .field-error { color: #a12622; }
 .authentication-screen [role='alert']:empty,
 .authentication-screen [role='status']:empty { display: none; }
