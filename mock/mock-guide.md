@@ -11,6 +11,14 @@
 
 ## 起動方法
 
+### 公開デモ（準備中）
+
+公開予定URLは [https://eu0207.github.io/concert-reception-system/](https://eu0207.github.io/concert-reception-system/)。2026-11-17時点では未公開。公開後はログインなしで操作できる。実在する情報は入力しない。
+
+再読み込みで初期状態に戻る。QR読取りと帳票出力は模擬動作であり、Firebase接続、実認証と同期は行わない。公開・更新方法は[Pages公開手順](../docs/development/github-pages-guide.md)を参照する。
+
+### ローカルで確認する
+
 PCでは`mock/index.html`をブラウザーで開く。外部接続と依存関係の導入は不要。
 
 実際のスマートフォンで確認する場合は、PCとスマートフォンを同じ家庭内ネットワークへ接続する。PCでPowerShellを開き、リポジトリのルートから次を実行する。

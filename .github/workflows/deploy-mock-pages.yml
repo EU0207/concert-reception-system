@@ -1,0 +1,53 @@
+# 架空データのUIモックだけをGitHub Pagesへ配信する。製品ビルドと本番設定は扱わない。
+name: Deploy UI mock to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mock/index.html'
+      - 'mock/styles.css'
+      - 'mock/app.js'
+      - 'mock/scenarios.js'
+      - 'mock/scenarios.test.cjs'
+      - '.github/workflows/deploy-mock-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mock-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # 非公開の準備段階やmain以外の手動実行では配信しない。
+    if: github.event.repository.private == false && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check mock scenarios
+        run: node --test mock/scenarios.test.cjs
+      - name: Prepare static files
+        # 許可した4ファイルだけをコピーし、設定・文書・試験用サーバーを混入させない。
+        run: |
+          mkdir -p _site
+          cp mock/index.html mock/styles.css mock/app.js mock/scenarios.js _site/
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy mock
+        id: deployment
+        uses: actions/deploy-pages@v4
