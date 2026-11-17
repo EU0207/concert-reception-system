@@ -9,37 +9,11 @@
 > **開発中：現在は製品の実装・結合を進めています。本番利用はできません。**<br>
 > 操作体験用のUIモックと、開発途中の製品アプリは別のものです。
 
-[操作デモ](#操作デモ) · [主な機能](#主な機能) · [開発状況](#開発状況) · [技術構成](#技術構成) · [ローカルで動かす](#ローカルで動かす)
+[概要](#プロジェクト概要) · [操作デモ](#操作デモ) · [開発状況](#開発状況) · [技術構成](#技術構成) · [開発資料](#開発資料)
 
-## 操作デモ
+## プロジェクト概要
 
-**GitHub Pages：公開準備中**<br>
-公開予定URL：[https://eu0207.github.io/concert-reception-system/](https://eu0207.github.io/concert-reception-system/)
-
-現時点では上記URLから利用できません。公開後は、インストールやログインなしでPC・スマートフォンから試せます。
-
-### まず試してほしい操作
-
-| 見たいこと | メニューと操作 |
-|---|---|
-| 会場の座席を作る | 「会場席の編集」→「新規会場の例に切り替える」→範囲を選択→「席に」 |
-| お客様へ席を割り当てる | 「お客様の席を設定」→席未設定のお客様を選択→座席を選択 |
-| 当日の受付を体験する | 「当日受付」→「カメラを開く」→架空QRの判定を選択→「次へ」 |
-
-**デモの範囲と制限**
-
-- 架空のお客様6人と端末4台の見本を使います。実在する情報は入力しないでください。
-- 操作結果はメモリー内だけに保持し、ページの再読み込みで初期状態へ戻ります。
-- QR判定と帳票出力は模擬動作です。実カメラの使用やPDF・Excelファイルの生成は行いません。
-- Firebaseへの接続、実際の認証と端末間同期は行いません。
-
-詳しい操作は[UIモック操作手順](mock/mock-guide.md)を参照してください。公開前も[ローカルでモックを起動](#uiモック)できます。
-
-### 実機操作動画
-
-**未公開です。** 製品の完成後、架空データを使った実機操作動画をYouTubeへ掲載し、ここにリンクを追加する予定です。
-
-## 開発の背景
+### 開発の背景
 
 年に1回、個人コンサートを開催する主催者から、**「アナログな管理作業を減らし、当日の会場運営を楽にしたい」**という相談を受けて開発を始めました。
 
@@ -49,9 +23,9 @@
 - **受付状況の把握**：複数の担当者が、来場済み・未来場の状況を共有しにくい。
 - **会場の通信環境**：安定した回線を前提にできず、通信停止時の運用も必要になる。
 
-## 主な機能
+### 主な機能
 
-以下は**完成時に提供する機能の範囲**です。製品の実装状況は[次の表](#開発状況)に分けて記載しています。
+以下は**完成時に提供する機能の範囲**です。製品の実装状況は[開発状況](#開発状況)に記載しています。
 
 ```mermaid
 flowchart LR
@@ -70,28 +44,82 @@ flowchart LR
 
 チケット販売やオンライン決済は対象外です。詳細は[要件定義書](docs/client/requirements.md)を参照してください。
 
+## 操作デモ
+
+**GitHub Pages：公開準備中**<br>
+公開予定URL：[https://eu0207.github.io/concert-reception-system/](https://eu0207.github.io/concert-reception-system/)
+
+現時点では上記URLから利用できません。公開後は、インストールやログインなしでPC・スマートフォンから試せます。
+
+### 操作例
+
+| 操作内容 | メニューと操作 |
+|---|---|
+| 会場の座席を作る | 「会場席の編集」→「新規会場の例に切り替える」→範囲を選択→「席に」 |
+| お客様へ席を割り当てる | 「お客様の席を設定」→席未設定のお客様を選択→座席を選択 |
+| 当日の受付を体験する | 「当日受付」→「カメラを開く」→架空QRの判定を選択→「次へ」 |
+
+### デモの構成と利用範囲
+
+HTML・CSS・JavaScriptで作成した静的なUIモックです。GitHub Pagesでモックだけを配信し、製品アプリやFirebase設定は含めません。
+
+- 架空のお客様6人と端末4台の見本を使います。実在する情報は入力しないでください。
+- 操作結果はメモリー内だけに保持し、ページの再読み込みで初期状態へ戻ります。
+- QR判定と帳票出力は模擬動作です。実カメラの使用やPDF・Excelファイルの生成は行いません。
+- Firebaseへの接続、実際の認証と端末間同期は行いません。
+
+詳しい操作は[UIモック操作手順](mock/mock-guide.md)を参照してください。
+
+### 実機操作動画
+
+**未公開です。** 製品の完成後、架空データを使った実機操作動画をYouTubeへ掲載し、ここにリンクを追加する予定です。
+
 ## 開発状況
 
-**更新日：2026年11月17日。mainへの統合状況を基準にしています。**<br>
-工程ごとの成果を示しています。部品の試験合格は、完成アプリ全体の受入合格を意味しません。
+### 現在の開発フェーズ
+
+**製品の実装と、実装済み部品の結合・テストを進めています。** 要件定義と予定した設計は承認済みですが、製品全体のテストと受入はこれからです。本番利用はできません。
+
+更新日：2026年11月17日。mainへの統合状況を基準とし、レビュー中の変更は区別しています。
+
+### 工程別の進捗
+
+| 工程 | 状況 | 成果・残作業 |
+|---|---|---|
+| 要件定義 | 承認済み | 要件定義書と受入条件書を作成 |
+| 基本設計 | 承認済み | システム構成、画面と運用方式を設計 |
+| UIモック | 作成・確認済み | 架空データで操作確認し、結果を[引継ぎ台帳](docs/development/ui-mock/ui-mock-production-handoff.md)へ記録 |
+| 詳細設計 | 予定した設計は承認済み | 実装中に生じた変更・追補は個別に管理 |
+| 実装・単体テスト | 進行中 | 共通計算と保存基盤から順次実装・検証 |
+| 結合・システムテスト | 部品間の結合テストは一部実施 | 製品全体の結合・システム試験は未実施 |
+| 受入テスト | 未実施 | 完成版の運用検証と依頼者による最終判定が残る |
+
+### 機能別の実装状況
 
 | 範囲 | 状況 | 確認できる成果・残作業 |
 |---|---|---|
-| 要件定義・設計 | 承認済み | 要件・受入条件、基本設計と予定した詳細設計。実装中の変更は個別に管理 |
-| 技術検証・UIモック | 作成・確認済み | 主要技術のPoC、架空データでの操作確認と製品への[引継ぎ台帳](docs/development/ui-mock/ui-mock-production-handoff.md) |
 | 座席・配置の共通計算 | 実装済み | [座席計算](docs/development/technical-validation/seat-domain-unit-test-results.md)と[配置計算](docs/development/technical-validation/assignment-domain-handoff.md)の単体試験 |
 | 共通画面・PWA・座席編集 | 実装途中 | ローカルで会場席を編集可能。製品全体との結合と実機確認が残る（[#258](https://github.com/EU0207/concert-reception-system/issues/258)、[#105](https://github.com/EU0207/concert-reception-system/issues/105)） |
 | 端末保存・会場画像 | 一部実装済み | 暗号化した[下書き保存・復元](docs/development/technical-validation/seat-local-storage-results.md)、[画像の追加・回転・拡大表示](docs/development/technical-validation/venue-image-results.md)。確定保存との結合などが残る |
 | 認可・共有保存 | 基盤実装済み | 本人・端末認可と[共有保存・別端末復元](docs/development/technical-validation/shared-seat-draft-results.md)をローカルのFirebaseエミュレーターで検証。実認証画面・業務操作との結合が残る |
 | 本人認証画面 | レビュー中 | ログイン・メール確認・再認証を実装した[PR #297](https://github.com/EU0207/concert-reception-system/pull/297)。main未統合 |
 | QR受付・同期・帳票・運用画面 | 未完了 | 製品としての機能実装と機能間の結合が残る |
-| 製品全体の試験・受入 | 未実施 | [結合・システム試験](https://github.com/EU0207/concert-reception-system/issues/265)、[完成版の運用検証](https://github.com/EU0207/concert-reception-system/issues/220)、[最終受入判定](https://github.com/EU0207/concert-reception-system/issues/266)が必要 |
+
+### テストの実施状況
+
+**単体テストや部品間の結合テストは、実装と並行して行っています。** 部品の試験合格を、製品全体の合格とは扱いません。
+
+| テストの範囲 | 現在の状況 | 記録・計画 |
+|---|---|---|
+| 業務計算の単体テスト | 座席計算・配置計算の実装範囲で実施済み | [座席計算](docs/development/technical-validation/seat-domain-unit-test-results.md)・[配置計算](docs/development/technical-validation/assignment-domain-handoff.md) |
+| 実装済み画面のブラウザーテスト | 座席編集・画像操作などで実施済み。実スマートフォンの確認とは区別 | [会場画像の試験記録](docs/development/technical-validation/venue-image-results.md) |
+| 保存・認可部品の結合テスト | ローカルのFirebaseエミュレーターで一部実施済み | [共有保存・別端末復元](docs/development/technical-validation/shared-seat-draft-results.md) |
+| 製品全体の結合・システムテスト | 未実施 | [試験Issue #265](https://github.com/EU0207/concert-reception-system/issues/265) |
+| 完成版の運用・受入テスト | 未実施 | [無料運用検証 #220](https://github.com/EU0207/concert-reception-system/issues/220)・[最終受入判定 #266](https://github.com/EU0207/concert-reception-system/issues/266) |
 
 現在の作業は[未完了のIssue一覧](https://github.com/EU0207/concert-reception-system/issues?q=is%3Aissue%20is%3Aopen)、要件との対応は[トレーサビリティ表](docs/development/traceability-matrix.md)で追跡できます。
 
 ## 技術構成
-
-### 製品アプリ
 
 | 用途 | 技術 | 採用理由・現在の範囲 |
 |---|---|---|
@@ -107,10 +135,6 @@ flowchart LR
 
 技術選定の理由は[ADR-001](docs/development/decisions/ADR-001-product-platform.md)、共有DBと保存方式の変更は[ADR-007](docs/development/decisions/ADR-007-seat-edit-commit-boundary.md)に記録しています。QR読取りと帳票生成の製品ライブラリは後続実装で確定します。
 
-### 公開用UIモック
-
-**HTML・CSS・JavaScriptだけの静的サイト**です。GitHub Pagesにはモックの実行に必要な4ファイルだけを配置し、製品アプリやFirebase設定は配信しません。
-
 ## 開発の進め方
 
 - 開発者が要件整理から実装・試験まで担当し、業務要件と受入判断は依頼者が確認します。
@@ -118,50 +142,18 @@ flowchart LR
 - 重要な技術判断をADRへ記録し、要件・設計・試験をIDで対応付けます。
 - Codexを調査・文書作成と実装の支援に使い、提案の採否と検証結果を開発者が確認します。
 
-## ローカルで動かす
+## 開発資料
 
-### UIモック
+### 要件・設計・テストの資料
 
-Node.jsがあれば、依存パッケージを追加せず起動できます。
-
-```sh
-node mock/server.cjs
-```
-
-[http://localhost:8765](http://localhost:8765)を開きます。終了は `Ctrl+C` です。PCでは `mock/index.html` をブラウザーで直接開く方法も使えます。
-
-### 製品開発版
-
-Node.js **24.19.0以上**、pnpm **11.25.0**を使用します。
-
-```sh
-pnpm install --frozen-lockfile --ignore-scripts
-pnpm setup:local
-pnpm build
-pnpm preview
-```
-
-[http://127.0.0.1:4173](http://127.0.0.1:4173)を開きます。`setup:local` はGit管理外の評価設定を作成し、外部Firebaseへ接続しません。起動設定がない場合は安全停止します。
-
-操作方法と制限は[製品開発版のローカル操作手順](docs/development/local-app-guide.md)を参照してください。
-
-```sh
-pnpm typecheck
-pnpm test
-```
-
-上記は型検査と単体・回帰試験です。ブラウザー試験は `pnpm test:browser`、認可基盤のエミュレーター試験は `pnpm test:authorization` で別途実行します。これらは実機試験や本番受入の代わりにはなりません。
-
-## 設計・試験資料
-
-| 知りたいこと | 参照先 |
+| 資料の区分 | 主な内容・参照先 |
 |---|---|
-| 必要な機能と完成の判断条件 | [要件定義書](docs/client/requirements.md)・[受入条件書](docs/client/acceptance-criteria.md) |
-| 構成と環境分離 | [システム構成設計](docs/development/basic-design/system-architecture.md) |
-| 技術判断の理由 | [ADR案内](docs/development/decisions/adr-guide.md) |
-| 試験の考え方 | [テスト方針](docs/development/basic-design/test-strategy.md) |
-| 文書全体と用語 | [ドキュメント案内](docs/document-guide.md)・[用語集](docs/development/glossary.md) |
-| デモの公開・更新方法 | [GitHub Pages公開手順](docs/development/github-pages-guide.md) |
+| 要件・受入条件 | [要件定義書](docs/client/requirements.md)・[受入条件書](docs/client/acceptance-criteria.md) |
+| 基本設計 | [基本設計計画書](docs/development/basic-design/basic-design-plan.md)・[システム構成設計](docs/development/basic-design/system-architecture.md) |
+| 詳細設計 | [詳細設計一覧](docs/document-guide.md#詳細設計)。[会場席の設計](docs/development/detailed-design/seat-management-detail-design.md)・[受付の保存と中断復帰](docs/development/detailed-design/reception-recovery-detail-design.md)など |
+| 技術判断 | [ADR案内](docs/development/decisions/adr-guide.md) |
+| テスト方針・記録 | [テスト方針](docs/development/basic-design/test-strategy.md)・[実施状況](#テストの実施状況) |
+| 文書案内・用語 | [ドキュメント案内](docs/document-guide.md)・[用語集](docs/development/glossary.md) |
 
 ### リポジトリの構成
 
