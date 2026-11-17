@@ -31,12 +31,12 @@
 
 | ID | 確認したテーマ | コード・手順 | 結果と限界 |
 |---|---|---|---|
-| POC-001 | 完全オフライン受付と復旧後の統合 | [README](POC-001/README.md) | [実施結果](../docs/development/technical-validation/poc-001-result.md) |
-| POC-002 | 受付性能・同期と通信量 | [README](POC-002/README.md) | [実施結果](../docs/development/technical-validation/poc-002-result.md) |
-| POC-003 | 実機QR読取りと電子チケット | [README](POC-003/README.md) | [実施結果](../docs/development/technical-validation/poc-003-result.md) |
-| POC-004 | 個別認証・役割制御と暗号化・削除 | [README](POC-004/README.md) | [実施結果](../docs/development/technical-validation/poc-004-result.md) |
-| POC-005 | 会場席・画像のオフライン表示 | [README](POC-005/README.md) | [実施結果](../docs/development/technical-validation/poc-005-result.md) |
-| POC-006 | 端末ごとの拒否と画像保存の比較 | [README](POC-006/README.md) | [実施結果](../docs/development/technical-validation/poc-006-result.md) |
+| POC-001 | 完全オフライン受付と復旧後の統合 | [検証案内](POC-001/README.md) | [実施結果](../docs/development/technical-validation/poc-001-result.md) |
+| POC-002 | 受付性能・同期と通信量 | [検証案内](POC-002/README.md) | [実施結果](../docs/development/technical-validation/poc-002-result.md) |
+| POC-003 | 実機QR読取りと電子チケット | [検証案内](POC-003/README.md) | [実施結果](../docs/development/technical-validation/poc-003-result.md) |
+| POC-004 | 個別認証・役割制御と暗号化・削除 | [検証案内](POC-004/README.md) | [実施結果](../docs/development/technical-validation/poc-004-result.md) |
+| POC-005 | 会場席・画像のオフライン表示 | [検証案内](POC-005/README.md) | [実施結果](../docs/development/technical-validation/poc-005-result.md) |
+| POC-006 | 端末ごとの拒否と画像保存の比較 | [検証案内](POC-006/README.md) | [実施結果](../docs/development/technical-validation/poc-006-result.md) |
 
 ### 詳細設計中の代表例
 
@@ -47,7 +47,7 @@
 | 通常業務の通信量と無料運用予算 | [GD91-121](GD91-121/README.md) |
 | 削除後の訂正を含む実績復旧の限定モデル | [GD91-163](GD91-163/README.md) |
 
-他の検証も[全件索引](catalog.md)から参照できます。各検証の合否や残条件は、個別READMEと正式な検証記録で確認してください。
+他の検証も[全件索引](catalog.md)から参照できます。各検証の合否や残条件は、個別の案内文書と正式な検証記録で確認してください。
 
 ## 読み方と適用範囲
 
@@ -58,6 +58,6 @@
 
 ## 再実行する場合
 
-各READMEの前提とコマンドを確認してください。外部接続や環境変更を含む検証があります。過去の試行の承認を、新しい試行への承認として扱わず、必要な範囲と影響を確認します。
+各案内文書の前提とコマンドを確認してください。外部接続や環境変更を含む検証があります。過去の試行の承認を、新しい試行への承認として扱わず、必要な範囲と影響を確認します。
 
 この整理では既存コード・成果物を変更しておらず、追加の技術検証も実施していません。
