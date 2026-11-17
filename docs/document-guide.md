@@ -58,6 +58,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 ## 開発者向け文書
 
+公開準備では[公開前の追加検査](development/publication-review.md)（In Review）で結果と未解決事項を確認し、公開後は[公開リポジトリで変更を続ける手順](development/public-repository-workflow.md)（In Review）を使用する。
+
 [開発文書のフォルダ案内](development/index.md)から工程ごとに探せます。
 
 工程の状態・承認日・承認PR・タグは、[開発計画書の工程一覧](development/project-plan.md#工程の状態と承認地点)を参照してください。[タグの対象と見方](development/project-plan.md#タグの対象と見方)から、初回承認と変更承認の基準版を確認できます。

@@ -37,6 +37,7 @@
 
 ## GitHubでの作業
 
+- 公開後の変更は[公開リポジトリで変更を続ける手順](docs/development/public-repository-workflow.md)に従い、push前に送信対象の全コミットを検査してください。push後のCIだけを公開前確認の代わりにしないでください。
 - 大きすぎるタスクは、目的と完了条件を保ったまま、レビュー可能な小さなIssueへ分割してください。
 - GitHub Flowを使用し、Issue単位で短いブランチを作成してください。
 - Pull Requestには関連Issue、変更内容、確認結果、文書への影響を記載してください。
