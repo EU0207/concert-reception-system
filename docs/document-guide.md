@@ -208,11 +208,13 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 ## 実装中の認可基盤
 
+[本人認証画面の実装・試験記録](development/technical-validation/authentication-ui-results.md)（In Review）に、#296のログイン・メール確認・再認証とログアウトを記録する。ローカル見本、通常SDK試験と実認証後の業務画面への未接続を区別する。
+
 案Aによる会場構成の共有保存は[共有保存・別端末復元の実装・試験記録](development/technical-validation/shared-seat-draft-results.md)（Approved、PR #293の範囲）を参照する。通常SDKでの保存・照会と全画像の一体取込みを#292で確認し、実認証画面・共有ボタンと確定保存の残条件を親#104・105へ渡す。
 
 会場画像の通常SDK保存基盤と、ローカル評価画面の画像操作は[会場画像の保存・表示　実装・試験記録](development/technical-validation/venue-image-results.md)（Approved、PR #287・295の範囲）を参照する。#244・105・104の確認済み範囲と残条件を分けて記録している。
 
-[本人・端末認可基盤の実装・試験記録](development/technical-validation/authorization-foundation-results.md)に、#110のローカル確認と後続の結合条件を記録する。状態はIn Review。実機の認証寿命と初期主担当の実環境割当は未確認である。
+[本人・端末認可基盤の実装・試験記録](development/technical-validation/authorization-foundation-results.md)に、#110のローカル確認と後続の結合条件を記録する。状態はApproved（PR #268の範囲）。実機の認証寿命と初期主担当の実環境割当は未確認である。
 
 [公演保存基盤の実装・試験記録](development/technical-validation/performance-foundation-results.md)に、#111段階Aの受付状態の計算とRTDB接続に必要な残条件を記録する。
 

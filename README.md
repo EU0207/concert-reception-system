@@ -132,12 +132,14 @@ pnpm test
 
 席の共通計算61件・配置計算60件と既存モック回帰24件を実行します。Firebase接続・画面起動と配備は含みません。[共通計算の試験結果](docs/development/technical-validation/seat-domain-unit-test-results.md)と[#103の実装・試験記録](docs/development/technical-validation/assignment-domain-handoff.md)を参照してください。GitHub Pagesとリポジトリ公開は別の明示依頼まで行いません。
 
-本人・端末の認可と暗号化保存は、#110で実装中です。
+本人・端末の認可と暗号化保存の基盤は、#110でmainへ統合済みです。業務画面への接続は後続作業です。
 `pnpm test:authorization`は、ローカルのAuth・RTDBで製品SDKとRulesを確認します。
 実Googleのログインや配備は行いません。
 [実行手順と未完了の条件](docs/development/technical-validation/authorization-foundation-results.md)を参照してください。
 
 ## 主なドキュメント
+
+本人認証画面の見本は、製品のローカル確認サーバーで `http://127.0.0.1:4173/#/login` を開きます。実際のGoogleログインやメール送信は行いません。通常SDKの試験範囲と後続作業は[本人認証画面の実装・試験記録](docs/development/technical-validation/authentication-ui-results.md)を参照してください。
 
 - [開発文書のフォルダ案内](docs/development/index.md)
 - [要件定義書](docs/client/requirements.md)

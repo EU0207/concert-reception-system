@@ -9,6 +9,8 @@ import { NavigationGate } from './navigation.ts';
 import type { LeaveChoice } from './navigation.ts';
 import { registerPwa } from './pwa.ts';
 import { openSeatEditor } from './seat-editor.ts';
+import { createAuthenticationScreen } from './authentication-screen.ts';
+import { createAuthenticationPreview } from './authentication-preview.ts';
 
 // 設定・共有状態：起動処理で設定し、画面と操作の各関数から参照する。
 let root: HTMLElement;
@@ -37,6 +39,7 @@ let startup: StartupResult;
 let currentRoute: string;
 let main: HTMLElement, statusButton: HTMLButtonElement, updateBanner: HTMLElement;
 let pwaReady = false;
+let authenticationScreen: ReturnType<typeof createAuthenticationScreen> | undefined;
 
 // 関数の定義：処理内容を定義し、下部の起動処理や画面操作から使用する。
 
@@ -271,6 +274,8 @@ async function mountSeatEditor(panel: HTMLElement, performanceId: string) {
 
 /** 現在のURLに対応する本文を描画し、選択中のメニューとページ名を更新する。 */
 function renderPage() {
+  authenticationScreen?.dispose();
+  authenticationScreen = undefined;
   gate.editor = undefined;
   main.classList.remove('seat-editor-page');
   main.replaceChildren();
@@ -317,6 +322,10 @@ function renderPage() {
       el('p', 'footnote', '公演と会場はすべて架空です。実際の公演情報は登録されていません。'),
     );
     document.title = '公演一覧 | コンサート受付';
+  } else if (currentRoute === '/login' && startup.config.environmentType === 'evaluation-local') {
+    authenticationScreen = createAuthenticationScreen(createAuthenticationPreview(), true);
+    main.append(routeLink('← 公演一覧へ', '/events', 'back-link'), authenticationScreen.element);
+    document.title = 'ログイン画面の確認 | コンサート受付';
   } else if (currentRoute === '/about') {
     main.append(
       routeLink('← 公演一覧へ', '/events', 'back-link'),
@@ -341,6 +350,10 @@ function renderPage() {
     const licenses = el('a', '', '写真変換のライセンス');
     licenses.href = '/licenses/photo-conversion.html';
     card.append(licenses);
+    if (startup.config.environmentType === 'evaluation-local') {
+      card.append(el('p', '', '本人認証画面は、通信しない見本として確認できます。'),
+        routeLink('ログイン画面を確認', '/login'));
+    }
     main.append(card);
     document.title = 'このアプリについて | コンサート受付';
   } else {
