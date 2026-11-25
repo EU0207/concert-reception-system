@@ -967,6 +967,20 @@ p {
 .device-cards { display: grid; gap: 16px; margin-top: 20px; }
 .device-card { overflow-wrap: anywhere; }
 .device-error { color: #a12622; }
+
+/* 主担当停止の最終確認だけに警告色を使い、通常確認と区別する。 */
+.device-stop-dialog { border: 2px solid #a12622; border-top-width: 6px; }
+.device-stop-dialog h2 { color: #8f211d; }
+.device-stop-dialog .device-stop-warning {
+  padding: 12px 16px;
+  border-left: 4px solid #a12622;
+  border-radius: 4px;
+  background: #fceeed;
+  color: #8f211d;
+  font-weight: 700;
+}
+.device-stop-dialog .device-stop-confirm { background: #a12622; border-color: #a12622; color: #fff; }
+.device-stop-dialog .device-stop-confirm:hover { background: #811d19; border-color: #811d19; }
 .device-error:empty, .device-management-screen [role='status']:empty { display: none; }
 .device-management-screen .button { min-height: 44px; white-space: normal; }
 .device-status-legend { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 20px 0 8px; font-size: .9rem; }

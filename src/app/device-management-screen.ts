@@ -143,13 +143,15 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
       dialog?.close();
       if (needsFinalConfirmation) {
         const finalBody = el('div');
-        finalBody.append(el('p', '', `${label(device, basis)}を本当に停止しますか？`),
+        finalBody.append(el('p', 'device-stop-warning', '重要：主担当端末の業務を停止します'),
+          el('p', '', `${label(device, basis)}を本当に停止しますか？`),
           el('p', '', '停止すると、この主担当端末では管理操作や受付ができなくなります。対象端末をもう一度確認してください。'),
           el('p', '', '主担当の役割や他の端末は停止しません。保存済みの記録は保持します。'));
         dialog = showDialog('主担当端末の停止・最終確認', finalBody, [button('主担当の端末を停止する', () => {
           if (locked || disposed || busy) return;
           dialog?.close(); void perform(input);
-        })], 'キャンセル');
+        }, 'button device-stop-confirm')], 'キャンセル');
+        dialog.classList.add('device-stop-dialog');
         // 最終確認の初期フォーカスは取消しにし、Enterの連続入力で停止しない。
         dialog.querySelector<HTMLButtonElement>('.dialog-actions button:last-child')?.focus();
       } else void perform(input);
