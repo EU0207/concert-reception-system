@@ -143,7 +143,11 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
       dialog?.close();
       if (needsFinalConfirmation) {
         const finalBody = el('div');
-        finalBody.append(el('p', 'device-stop-warning', '重要：主担当端末の業務を停止します'),
+        const warning = el('p', 'device-stop-warning');
+        const warningIcon = el('span', 'device-stop-warning-icon', '⚠');
+        warningIcon.setAttribute('aria-hidden', 'true');
+        warning.append(warningIcon, el('span', '', '重要：主担当端末の業務を停止します'));
+        finalBody.append(warning,
           el('p', '', `${label(device, basis)}を本当に停止しますか？`),
           el('p', '', '停止すると、この主担当端末では管理操作や受付ができなくなります。対象端末をもう一度確認してください。'),
           el('p', '', '主担当の役割や他の端末は停止しません。保存済みの記録は保持します。'));

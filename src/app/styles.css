@@ -972,6 +972,9 @@ p {
 .device-stop-dialog { border: 2px solid #a12622; border-top-width: 6px; }
 .device-stop-dialog h2 { color: #8f211d; }
 .device-stop-dialog .device-stop-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   padding: 12px 16px;
   border-left: 4px solid #a12622;
   border-radius: 4px;
@@ -979,6 +982,7 @@ p {
   color: #8f211d;
   font-weight: 700;
 }
+.device-stop-warning-icon { flex: 0 0 auto; font-size: 1.5rem; line-height: 1.2; }
 .device-stop-dialog .device-stop-confirm { background: #a12622; border-color: #a12622; color: #fff; }
 .device-stop-dialog .device-stop-confirm:hover { background: #811d19; border-color: #811d19; }
 .device-error:empty, .device-management-screen [role='status']:empty { display: none; }
