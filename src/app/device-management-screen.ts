@@ -134,15 +134,24 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     const targetRole = basis.inventory.roles.find(role => role.humanUid === device.humanUid)?.role;
     const needsReplacement = kind === 'retire' && ['owner', 'deputy'].includes(targetRole ?? '');
     if (needsReplacement) {
+      const eligible: DeviceGrant[] = [];
       const empty = el('option', '', '選択してください'); empty.value = ''; select.append(empty);
       for (const candidate of basis.inventory.devices.filter(item => item.deviceUid !== device.deviceUid && item.active && item.approved && !item.retired)) {
         const role = basis.inventory.roles.find(item => item.humanUid === candidate.humanUid);
         if (!role || !['owner', 'deputy'].includes(role.role) || !role.active || role.startsAt > basis.serverNow ||
           role.endsAt <= basis.serverNow || candidate.preparedRole !== role.role || candidate.preparedRoleRevision !== role.revision ||
           (targetRole === 'owner' && (role.role !== 'owner' || role.humanUid !== device.humanUid))) continue;
+        eligible.push(candidate);
         const option = el('option', '', label(candidate, basis)); option.value = candidate.deviceUid; select.append(option);
       }
-      wrapper.append(select); body.append(wrapper);
+      if (targetRole === 'deputy') {
+        // 引継ぎ先の指定ではなく管理端末が残ることの保護なので、手動選択を求めない。
+        const replacement = eligible.find(candidate => basis.inventory.roles.some(role => role.humanUid === candidate.humanUid && role.role === 'owner')) ?? eligible[0];
+        select.value = replacement?.deviceUid ?? '';
+        body.append(el('p', '', replacement ? `廃止後も利用できる管理端末：${label(replacement, basis)}（自動確認）` : '廃止後も利用できる、準備済みの管理端末が確認できません。'));
+      } else {
+        wrapper.append(select); body.append(wrapper);
+      }
     }
     const validation = el('p', 'device-error'); validation.setAttribute('role', 'alert'); body.append(validation);
     const input: DeviceChangeInput = { operationId: crypto.randomUUID(), targetDeviceUid: device.deviceUid,

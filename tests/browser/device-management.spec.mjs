@@ -216,3 +216,47 @@ test('DEVICE308-B07 確定後の再取得中に失効したら、遅い応答で
   await expect(page.getByRole('dialog')).toHaveCount(0);
   expect(await page.evaluate(() => window.refreshTrial.commits)).toBe(1);
 });
+
+test('DEVICE308-B08 代理端末の廃止では主担当端末を自動確認し、選択なしで廃止できる', async ({ page }) => {
+  await page.goto(route);
+  const deputy = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /代理管理者/ }) });
+  await deputy.getByRole('button', { name: '廃止', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('廃止後も利用できる管理端末：主担当の端末');
+  await expect(page.getByRole('dialog').locator('select')).toHaveCount(0);
+  await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
+  await expect(deputy).toBeVisible();
+  await change(page, deputy, '廃止');
+  await closeConfirmation(page);
+  await page.locator('.device-retired summary').click();
+  await expect(deputy).toContainText('廃止済み');
+});
+
+test('DEVICE308-B09 準備済みの代替管理端末がなければ代理端末も廃止させない', async ({ page }) => {
+  await fixture(page, false);
+  await page.evaluate(async () => {
+    const { createDeviceManagementScreen } = await import('/src/app/device-management-screen.ts');
+    const trial = window.deviceTrial;
+    trial.screen.dispose();
+    trial.port.load = async () => {
+      const data = await trial.backend.load();
+      for (const device of data.inventory.devices) {
+        if (device.humanUid === 'preview-owner') device.preparedRoleRevision = 0;
+      }
+      // 準備済みなのは廃止対象の代理端末だけ、という実際に保護が必要な状態を作る。
+      const device = data.inventory.devices.find(item => item.humanUid === 'preview-deputy');
+      const role = data.inventory.roles.find(item => item.humanUid === device.humanUid);
+      data.snapshot = { ...data.snapshot, deviceAuthUid: device.deviceUid, device, role,
+        session: { ...data.snapshot.session, humanUid: role.humanUid, deviceUid: device.deviceUid } };
+      return data;
+    };
+    trial.screen = createDeviceManagementScreen(trial.port, true);
+    document.body.replaceChildren(trial.screen.element);
+  });
+  const deputy = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /代理管理者/ }) });
+  await deputy.getByRole('button', { name: '廃止', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('準備済みの管理端末が確認できません');
+  await page.getByRole('dialog').getByRole('button', { name: '廃止する', exact: true }).click();
+  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('準備済みの管理端末');
+  expect(await page.evaluate(() => window.deviceTrial.getSaved())).toBe(null);
+  expect(await page.evaluate(() => window.deviceTrial.getCalls())).toBe(0);
+});
