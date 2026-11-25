@@ -104,7 +104,7 @@ export function createDeviceManagementPort(context: Context) {
       'OPERATION_RESULT_MISMATCH',
     );
 
-    // 自端末の停止・廃止は通常認可を失効する。業務へ戻さず確定結果だけを返す。
+    // 自端末の廃止は通常認可を失効する。業務へ戻さず確定結果だけを返す。
     return stored;
   }
 

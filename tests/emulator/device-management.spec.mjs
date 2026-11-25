@@ -173,14 +173,20 @@ test('DEVICE308-S01 通常登録した端末を画面から承認・停止・解
     await page.getByRole('dialog').getByRole('button', { name: '廃止する', exact: true }).click();
     await expect(page.getByRole('dialog').getByRole('alert')).toContainText('同じ主担当の別端末');
     await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
-    await own.getByRole('button', { name: '停止', exact: true }).click();
-    await page.getByRole('dialog').getByRole('button', { name: '停止する', exact: true }).click();
-    await expect(page.locator('.device-card')).toHaveCount(0);
-    const query = page.getByRole('button', { name: '結果を確認', exact: true });
-    if (await query.count()) {
-      await query.click();
-      await expect(page.getByRole('status')).toContainText('確定');
-    }
+    await expect(own.getByRole('button', { name: '停止', exact: true })).toHaveCount(0);
+    const selfStop = await page.evaluate(async (binding) => {
+      let saved = false;
+      try {
+        await window.managementPort.devices.prepare({ operationId: crypto.randomUUID(),
+          targetDeviceUid: binding.deviceUid, expectedRevision: 1, kind: 'stop', replacementDeviceUid: '' },
+        { save: async () => { saved = true; } }, () => {});
+        return { code: 'UNEXPECTED_SUCCESS', saved };
+      } catch (cause) { return { code: cause.code, saved }; }
+    }, f.binding);
+    expect(selfStop).toEqual({ code: 'SELF_DEVICE_STOP_FORBIDDEN', saved: false });
+    const unchanged = await (await fetch(f.root, { headers: { authorization: 'Bearer owner' } })).json();
+    expect(unchanged.devices[f.binding.deviceUid]).toMatchObject({ active: true, revision: 1 });
+    expect(Object.keys(unchanged.deviceAuthorizationOperations)).toHaveLength(4);
     const denied = await f.target.evaluate(async (scope) => {
       const { getFictionalDeviceDatabase, get, ref } = await import('/tests/emulator/sdk-fixture.mjs');
       const db = getFictionalDeviceDatabase(window.devicePrincipals);

@@ -41,6 +41,8 @@ test('DEVICE308-B01 承認・停止・解除・廃止を確認し、管理端末
   await expect(pending.getByRole('button')).toHaveCount(0);
   await expect(pending).toContainText('未送信件数：未取得');
   const owner = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /主担当の端末/ }) });
+  await expect(owner.getByRole('button', { name: '停止', exact: true })).toHaveCount(0);
+  await expect(owner).toContainText('使用中のこの端末は停止できません');
   await change(page, owner, '廃止');
   await expect(page.getByRole('dialog').getByRole('alert')).toContainText('同じ主担当の別端末');
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();

@@ -15,6 +15,8 @@
 
 ## 記載の分担
 
+[ADR-018：使用中の自端末の停止禁止](development/decisions/ADR-018-current-device-stop.md)はApproved。変更#310の依頼者了承と、画面・保存側の共通条件を記録する。
+
 初めて閲覧する第三者向けの概要は[README](../README.md)に集約する。詳しい操作と公開手順は以下を参照する。
 
 | 文書 | 読者・目的 | 更新時期 | 状態 |

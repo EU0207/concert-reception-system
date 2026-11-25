@@ -189,7 +189,8 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
         const controls = el('div', 'authentication-actions');
         if (!device.retired && !pending.length) {
           if (!device.approved && role?.role !== 'owner') controls.append(button('承認', () => choose(device, 'approve')));
-          if (device.approved) controls.append(button(device.active ? '停止' : '停止解除', () => choose(device, device.active ? 'stop' : 'resume'), 'button secondary'));
+          if (device.approved && device.deviceUid !== view.snapshot.deviceAuthUid) controls.append(button(device.active ? '停止' : '停止解除', () => choose(device, device.active ? 'stop' : 'resume'), 'button secondary'));
+          if (device.deviceUid === view.snapshot.deviceAuthUid) card.append(el('p', 'muted', '使用中のこの端末は停止できません。停止は別の管理端末から行ってください。'));
           controls.append(button('廃止', () => choose(device, 'retire'), 'button secondary'));
         }
         card.append(controls); cards.append(card);
