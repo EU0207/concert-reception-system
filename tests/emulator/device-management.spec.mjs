@@ -159,7 +159,7 @@ test('DEVICE308-S01 通常登録した端末を画面から承認・停止・解
     for (const kind of ['承認', '停止', '停止解除', '廃止']) {
       await change(page, kind);
       await expect(page.getByRole('status')).toContainText('確定');
-      await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
+      await page.getByRole('dialog', { name: '変更しました', exact: true }).getByRole('button', { name: '閉じる', exact: true }).click();
     }
     await expect(page.locator('.device-card').filter({ hasText: '一般受付担当者' })).toContainText('廃止済み');
     const response = await fetch(f.root, { headers: { authorization: 'Bearer owner' } });

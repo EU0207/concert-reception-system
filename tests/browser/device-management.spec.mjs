@@ -10,6 +10,13 @@ async function change(page, card, kind) {
   await page.getByRole('dialog').getByRole('button', { name: `${kind}する`, exact: true }).click();
 }
 
+/** 完了案内を閉じ、自動取得された一覧へ戻る。 */
+async function closeConfirmation(page) {
+  const dialog = page.getByRole('dialog', { name: '変更しました', exact: true });
+  await expect(dialog).toContainText('最新の端末一覧を表示します');
+  await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
+}
+
 test('DEVICE308-B01 承認・停止・解除・廃止を確認し、管理端末の代替保護を維持する', async ({ page }) => {
   await page.goto(route);
   const pending = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /pending/ }) });
@@ -24,22 +31,22 @@ test('DEVICE308-B01 承認・停止・解除・廃止を確認し、管理端末
   await expect(pending).toContainText('承認待ち');
   await change(page, pending, '承認');
   await expect(page.getByRole('status')).toContainText('確定');
-  await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
+  await closeConfirmation(page);
   await expect(pending).toContainText('承認済み');
   await expect(pending.locator('[data-device-status="approval"] .device-status-mark')).toHaveText('○');
   await expect(pending.locator('[data-device-status="approval"] .device-status-description')).toHaveText('承認済み');
   await expect(pending.locator('[data-device-status="preparation"]')).toContainText('未確認');
   await expect(pending.locator('[data-device-status="preparation"] .device-status-mark')).toHaveText('—');
   await change(page, pending, '停止');
-  await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
+  await closeConfirmation(page);
   await expect(pending).toContainText('停止中');
   await expect(pending.locator('[data-device-status="state"] .device-status-mark')).toHaveText('×');
   await change(page, pending, '停止解除');
-  await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
+  await closeConfirmation(page);
   await expect(pending.locator('[data-device-status="state"]')).toContainText('通常');
   await expect(pending.locator('[data-device-status="state"] .device-status-mark')).toHaveText('○');
   await change(page, pending, '廃止');
-  await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
+  await closeConfirmation(page);
   const retired = page.locator('.device-retired');
   await expect(retired).not.toHaveAttribute('open', '');
   await expect(retired.locator('.device-card')).toHaveCount(1);
@@ -158,4 +165,54 @@ test('DEVICE308-B05 主担当端末の停止は2段階確認し、途中取消�
   await expect(page.getByRole('alert')).toContainText('結果を確認');
   expect(await page.evaluate(() => window.deviceTrial.getSaved().targetDeviceUid)).toBe('preview-owner-second');
   expect(await page.evaluate(() => window.deviceTrial.getCalls())).toBe(1);
+});
+
+/** 変更確定後の再取得だけを失敗・遅延させる見本を作る。 */
+async function refreshFixture(page, mode) {
+  await page.goto('http://127.0.0.1:4181/');
+  await page.evaluate(async (mode) => {
+    const { createDeviceManagementPreview } = await import('/src/app/device-management-preview.ts');
+    const { createDeviceManagementScreen } = await import('/src/app/device-management-screen.ts');
+    const backend = createDeviceManagementPreview({ environmentId: crypto.randomUUID(), performanceId: crypto.randomUUID() });
+    const trial = { loads: 0, commits: 0, release: null, invalidate: null };
+    const port = { ...backend,
+      async load() {
+        trial.loads++;
+        if (trial.loads === 2 && mode === 'fail') throw Error('FICTIONAL_REFRESH_FAILURE');
+        const result = await backend.load();
+        if (trial.loads === 2 && mode === 'delay') await new Promise(resolve => { trial.release = resolve; });
+        return result;
+      },
+      async commit(id) { trial.commits++; await backend.commit(id); },
+      onInvalidate(listener) { trial.invalidate = listener; return backend.onInvalidate(listener); },
+    };
+    trial.screen = createDeviceManagementScreen(port, true);
+    document.body.replaceChildren(trial.screen.element);
+    window.refreshTrial = trial;
+  }, mode);
+}
+
+test('DEVICE308-B06 確定後の再取得失敗を変更失敗と混同せず、再取得だけを試せる', async ({ page }) => {
+  await refreshFixture(page, 'fail');
+  const card = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /pending/ }) });
+  await change(page, card, '承認');
+  const dialog = page.getByRole('dialog', { name: '変更しました', exact: true });
+  await expect(dialog).toContainText('変更は確定しましたが、最新の端末一覧を取得できませんでした');
+  await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
+  await expect(page.locator('.device-card')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '結果を確認', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
+  await expect(card).toContainText('承認済み');
+  expect(await page.evaluate(() => window.refreshTrial.commits)).toBe(1);
+});
+
+test('DEVICE308-B07 確定後の再取得中に失効したら、遅い応答で台帳を復活させない', async ({ page }) => {
+  await refreshFixture(page, 'delay');
+  const card = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /pending/ }) });
+  await change(page, card, '承認');
+  await page.waitForFunction(() => typeof window.refreshTrial.release === 'function');
+  await page.evaluate(() => { window.refreshTrial.invalidate(); window.refreshTrial.release(); });
+  await expect(page.locator('.device-card')).toHaveCount(0);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect(await page.evaluate(() => window.refreshTrial.commits)).toBe(1);
 });

@@ -59,11 +59,24 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     }
   }
 
-  /** 確定した操作だけを待ち一覧から除き、他の変更には改めて最新確認を要求する。 */
-  function confirmed(id: string) {
+  /** 確定結果を保持し、最新認可・台帳を再取得して完了を案内する。 */
+  async function confirmed(id: string, current: number) {
     pending = pending.filter(item => item.operationId !== id);
-    notice = '端末の変更が確定しました。最新の状態を確認してください。';
+    notice = '端末の変更が確定しました。';
     view = undefined; locked = true;
+    render();
+    try {
+      const result = await port.load();
+      if (disposed || current !== version) return;
+      view = result; pending = result.pending; locked = false;
+    } catch {
+      if (disposed || current !== version) return;
+      error = '変更は確定しましたが、最新の端末一覧を取得できませんでした。接続・権限を確認して「最新の状態を確認」を押してください。';
+    }
+    if (disposed || current !== version) return;
+    const body = el('div');
+    body.append(el('p', '', locked ? error : '端末の変更が確定しました。最新の端末一覧を表示します。'));
+    dialog = showDialog('変更しました', body);
   }
 
   /** 保存が完了するまで送信せず、失敗後も同じ固定入力を保持する。 */
@@ -81,7 +94,7 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
       }
       if (disposed || locked || current !== version) return;
       if (!retry || !(await port.receipt(input.operationId))) await port.commit(input.operationId);
-      if (!disposed && current === version) confirmed(input.operationId);
+      if (!disposed && current === version) await confirmed(input.operationId, current);
     } catch (cause) {
       if (!disposed && current === version) error = prepared ? '変更の結果を確認できません。「結果を確認」で確認してください。自動再送は行いません。' : errorMessage(cause);
     } finally {
@@ -97,7 +110,7 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     try {
       const done = await port.receipt(input.operationId);
       if (disposed || current !== version) return;
-      if (done) confirmed(input.operationId);
+      if (done) await confirmed(input.operationId, current);
       else notice = '確定結果はまだ確認できません。最新状態の確認、または同じ操作の再試行ができます。';
     } catch { if (!disposed && current === version) error = '結果を確認できませんでした。接続を確認して、もう一度お試しください。'; }
     finally { if (!disposed && current === version) { busy = false; render(); } }
