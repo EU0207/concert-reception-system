@@ -11,6 +11,8 @@ import { registerPwa } from './pwa.ts';
 import { openSeatEditor } from './seat-editor.ts';
 import { createAuthenticationScreen } from './authentication-screen.ts';
 import { createAuthenticationPreview } from './authentication-preview.ts';
+import { createDeviceManagementScreen } from './device-management-screen.ts';
+import { createDeviceManagementPreview } from './device-management-preview.ts';
 
 // 設定・共有状態：起動処理で設定し、画面と操作の各関数から参照する。
 let root: HTMLElement;
@@ -40,6 +42,7 @@ let currentRoute: string;
 let main: HTMLElement, statusButton: HTMLButtonElement, updateBanner: HTMLElement;
 let pwaReady = false;
 let authenticationScreen: ReturnType<typeof createAuthenticationScreen> | undefined;
+let deviceManagementScreen: ReturnType<typeof createDeviceManagementScreen> | undefined;
 
 // 関数の定義：処理内容を定義し、下部の起動処理や画面操作から使用する。
 
@@ -274,6 +277,8 @@ async function mountSeatEditor(panel: HTMLElement, performanceId: string) {
 
 /** 現在のURLに対応する本文を描画し、選択中のメニューとページ名を更新する。 */
 function renderPage() {
+  deviceManagementScreen?.dispose();
+  deviceManagementScreen = undefined;
   authenticationScreen?.dispose();
   authenticationScreen = undefined;
   gate.editor = undefined;
@@ -322,6 +327,14 @@ function renderPage() {
       el('p', 'footnote', '公演と会場はすべて架空です。実際の公演情報は登録されていません。'),
     );
     document.title = '公演一覧 | コンサート受付';
+  } else if (startup.config.environmentType === 'evaluation-local' && events.some(event => currentRoute === `/events/${event.id}/devices`)) {
+    const event = events.find(item => currentRoute === `/events/${item.id}/devices`)!;
+    deviceManagementScreen = createDeviceManagementScreen(createDeviceManagementPreview({
+      environmentId: startup.config.environmentId, performanceId: event.id,
+    }), true);
+    main.append(routeLink('← 公演の準備へ', `/events/${event.id}`, 'back-link'),
+      el('p', 'muted', event.name), deviceManagementScreen.element);
+    document.title = 'スタッフ・端末 | コンサート受付';
   } else if (currentRoute === '/login' && startup.config.environmentType === 'evaluation-local') {
     authenticationScreen = createAuthenticationScreen(createAuthenticationPreview(), true);
     main.append(routeLink('← 公演一覧へ', '/events', 'back-link'), authenticationScreen.element);
@@ -404,11 +417,14 @@ function renderPage() {
         '会場席の編集',
         'お客様の席を設定',
         'チケットデータ出力',
+        'スタッフ・端末',
       ]) {
         const item = el('div', 'feature');
 
         if (localEvaluation && label === '会場席の編集') {
           item.append(routeLink(label, `/events/${event.id}/seats`, 'button secondary feature-link'));
+        } else if (localEvaluation && label === 'スタッフ・端末') {
+          item.append(routeLink(label, `/events/${event.id}/devices`, 'button secondary feature-link'));
         } else {
           const b = button(label, () => {}, 'button secondary');
           b.disabled = true;

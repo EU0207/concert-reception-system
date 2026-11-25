@@ -962,3 +962,10 @@ p {
 .authentication-screen .field-error { color: #a12622; }
 .authentication-screen [role='alert']:empty,
 .authentication-screen [role='status']:empty { display: none; }
+
+/* 端末台帳はモックと同じカード配置で、状態・準備と未取得の件数を区別する。 */
+.device-cards { display: grid; gap: 16px; margin-top: 20px; }
+.device-card { overflow-wrap: anywhere; }
+.device-error { color: #a12622; }
+.device-error:empty, .device-management-screen [role='status']:empty { display: none; }
+.device-management-screen .button { min-height: 44px; white-space: normal; }
