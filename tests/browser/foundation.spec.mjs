@@ -142,7 +142,12 @@ test('APP258-B07 PWA完全オフライン再起動で公演移動ができ、未
     return (await Promise.all(keys.map(async key => (await (await caches.open(key)).keys()).map(r => new URL(r.url).pathname)))).flat();
   });
   expect(cached).toContain('/index.html'); expect(cached).not.toContain('/app-config.json');
-  expect(cached.every(url => url === '/index.html' || url.startsWith('/assets/') || ['/icon.svg', '/manifest.webmanifest'].includes(url))).toBe(true);
+  // 写真変換で追加した配布ライセンスも、オフラインで読める静的資産に含める。
+  const staticFiles = ['/index.html', '/icon.svg', '/manifest.webmanifest',
+    '/licenses/photo-conversion.html', '/licenses/GPL-3.0.txt', '/licenses/heic-to-1.6.7-LICENSE.txt',
+    '/licenses/libde265-LGPL-3.0.txt', '/licenses/libheif-LGPL-3.0.txt'];
+  expect(cached).toEqual(expect.arrayContaining(staticFiles));
+  expect(cached.every(url => url.startsWith('/assets/') || staticFiles.includes(url))).toBe(true);
 });
 test('APP258-B08 古い設定の指紋が壊れていればオフライン起動を止める', async ({ page, context }) => {
   await ready(page); await page.evaluate(() => navigator.serviceWorker.ready.then(() => true)); await page.reload();

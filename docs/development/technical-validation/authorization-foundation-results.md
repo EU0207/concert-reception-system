@@ -2,13 +2,15 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review。#110の基盤をレビュー対象とする。実機合格ではない |
+| 状態 | Approved（PR #268の基盤範囲）。実機合格ではない |
 | 読者・目的 | 実装・試験担当者が、共通部品と未接続の業務を区別する |
 | 確認日 | 2026-11-06 |
-| 対象 | `codex/issue-110-device-authorization`。main未統合 |
+| 対象 | #110。PR #268を2026-11-09（日本時間）にmainへ統合済み |
 | 根拠 | [BD-04](../basic-design/authentication-authorization-design.md)、[ADR-005](../decisions/ADR-005-device-principal-authorization.md)、[DD-96](../detailed-design/staff-role-change-detail-design.md)、[DD-98](../detailed-design/temporary-admin-permissions-detail-design.md) |
 
 ## 結論と境界
+
+2026-11-17の後続: #296で本人認証画面をSDKへ接続する。[本人認証画面の記録](authentication-ui-results.md)でローカル見本とSDK試験を区別する。実認証後の業務画面・端末準備への接続は親#263に残る。
 
 本人・端末の認証と、現在の認可を分けて実装している。
 同じ本人の端末Aを停止しても、端末Bを止めないためである。

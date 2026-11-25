@@ -26,6 +26,14 @@ pnpm preview
 
 設定の境界と実機確認の残条件は[共通アプリ基盤の詳細設計](detailed-design/app-foundation-detail-design.md)を参照する。
 
+## 本人認証画面の見本
+
+`http://127.0.0.1:4173/#/login`、または「このアプリについて」→「ログイン画面を確認」から開く。実際のGoogleログイン・メール送信は行わない。
+
+Googleボタン、または架空の `fictional@example.invalid` と `Fictional123` で表示を確認する。メール確認・再認証とログアウトを試せる。「確認状況を更新」は見本では確認済み表示へ進む簡略動作であり、実認証の完了を意味しない。入力画面へ戻るにはログアウトする。
+
+通常SDKとの結合確認と残条件は[本人認証画面の記録](technical-validation/authentication-ui-results.md)を参照する。実認証後の業務認可と端末準備への接続は後続作業である。
+
 ## 会場席の作成・編集
 
 「会場席の編集」から操作する。

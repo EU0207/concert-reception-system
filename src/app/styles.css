@@ -935,3 +935,30 @@ p {
     scroll-behavior: auto !important;
   }
 }
+.authentication-screen {
+  max-width: 640px;
+  margin: 24px auto;
+}
+.authentication-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+.authentication-screen .seat-field { display: grid; gap: 8px; font-weight: 700; font-size: .9rem; }
+.authentication-screen input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid #b9cac2;
+  border-radius: 8px;
+  background: #fff;
+  color: #173b39;
+  font-weight: 400;
+}
+.authentication-screen input:focus-visible { outline: 2px solid #5e6b68; outline-offset: -2px; }
+.authentication-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.authentication-screen .button { min-height: 44px; white-space: normal; }
+.authentication-screen .field-error { color: #a12622; }
+.authentication-screen [role='alert']:empty,
+.authentication-screen [role='status']:empty { display: none; }
