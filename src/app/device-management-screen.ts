@@ -96,7 +96,11 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     if (busy || locked || !view || pending.length) return;
     const basis = structuredClone(view);
     const body = el('div');
+    const beforeState = device.retired ? '廃止済み' : !device.approved ? '承認待ち' : device.active ? '有効' : '停止中';
+    const afterState = kind === 'retire' ? '廃止済み' : kind === 'stop' ? '停止中' : '有効';
     body.append(el('p', '', `${label(device, basis)}を${operations[kind]}します。`),
+      el('p', '', `承認：${device.approved ? '承認済み' : '承認待ち'} → ${kind === 'approve' || device.approved ? '承認済み' : '承認待ち'}`),
+      el('p', '', `状態：${beforeState} → ${afterState}`),
       el('p', '', kind === 'approve' ? '承認しても、端末ごとの事前準備が完了するまで業務には使えません。' :
         kind === 'retire' ? '廃止は元に戻せません。端末内の記録や暗号鍵は、この操作では削除しません。' :
         kind === 'stop' ? '端末の業務操作を止めます。保存済みの記録は保持します。' : '停止を解除します。準備状態と現在の権限は別途確認されます。'));
