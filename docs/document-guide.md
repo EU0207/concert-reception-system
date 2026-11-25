@@ -220,6 +220,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 ## 実装中の認可基盤
 
+[端末管理画面の実装・試験記録](development/technical-validation/device-management-ui-results.md)（In Review）に、#308の台帳・承認・停止・停止解除と廃止、応答不明後の同一ID照会を記録する。実環境の端末準備・業務画面の接続は親#263の後続とする。
+
 [本人認証画面の実装・試験記録](development/technical-validation/authentication-ui-results.md)（Approved、PR #297の範囲）に、#296のログイン・メール確認・再認証とログアウトを記録する。ローカル見本、通常SDK試験と実認証後の業務画面への未接続を区別する。
 
 案Aによる会場構成の共有保存は[共有保存・別端末復元の実装・試験記録](development/technical-validation/shared-seat-draft-results.md)（Approved、PR #293の範囲）を参照する。通常SDKでの保存・照会と全画像の一体取込みを#292で確認し、実認証画面・共有ボタンと確定保存の残条件を親#104・105へ渡す。
