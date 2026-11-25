@@ -15,6 +15,15 @@
 
 ## 記載の分担
 
+初めて閲覧する第三者向けの概要は[README](../README.md)に集約する。詳しい操作と公開手順は以下を参照する。
+
+| 文書 | 読者・目的 | 更新時期 | 状態 |
+|---|---|---|---|
+| [開発状況](status.md) | 開発者・評価者が工程別・機能別の進捗とテストの実施範囲を確認する | 実装・試験と承認状態の変更時 | In Review |
+| [提供範囲と権利](project-scope.md) | 開発者・評価者が対象外範囲と権利・利用方針を確認する | 対象範囲と利用方針の変更時 | In Review |
+| [製品開発版のローカル操作手順](development/local-app-guide.md) | 開発者・評価者が起動方法と確認できる操作を把握する | 操作方法と評価範囲の変更時 | In Review |
+| [静的UIモックのGitHub Pages公開手順](development/github-pages-guide.md) | 開発者が公開範囲を確認し、モックを公開・更新する | 公開設定と配信方法の変更時 | In Review |
+
 | 場所 | 記載する内容 |
 |---|---|
 | 詳細設計 | 冒頭に要点と未決定事項。本文に仕様・判断理由と主要試験ケースを集約する |
@@ -58,6 +67,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 ## 開発者向け文書
 
+公開準備では[公開前の追加検査](development/publication-review.md)（In Review）で結果と未解決事項を確認し、公開後は[公開リポジトリで変更を続ける手順](development/public-repository-workflow.md)（In Review）を使用する。
+
 [開発文書のフォルダ案内](development/index.md)から工程ごとに探せます。
 
 工程の状態・承認日・承認PR・タグは、[開発計画書の工程一覧](development/project-plan.md#工程の状態と承認地点)を参照してください。[タグの対象と見方](development/project-plan.md#タグの対象と見方)から、初回承認と変更承認の基準版を確認できます。
@@ -76,6 +87,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | 文書名 | ファイル | 目的 | 主な読者 | 作成時期 | 更新時期 | 状態 |
 |---|---|---|---|---|---|---|
 | 技術検証計画書 | [technical-validation-plan.md](development/technical-validation/technical-validation-plan.md) | 技術調査・PoCの範囲、順序、評価方法、合格基準を合意する | 開発者、設計担当者、テスト担当者 | 暫定要件レビュー時 | 検証条件または承認状態の変更時 | Approved |
+| PoCの案内・目的別索引 | [PoCの案内](../poc/poc-guide.md)・[全件索引](../poc/catalog.md) | 初期PoCと詳細設計中の検証を区別し、コードと結果の参照先を案内する | 開発者、評価者 | 検証記録の参照時 | 検証フォルダと参照先の追加・変更時 | In Review |
 | 座席保存の技術検証記録 | [seat-save-validation.md](development/technical-validation/seat-save-validation.md) | #101の索引と検証分担を追跡。V1完了、V2の合同結果は別記録。容量・採否はV3・V4。122-AでRTDBを初期設計採用 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残作業・承認変更時 | Approved（#101の設計検証） |
 | 座席構成の完成検証記録 | [seat-completion-validation.md](development/technical-validation/seat-completion-validation.md) | #165の全体検査・完成候補の証拠。GD91-54～59とV1の4条件は承認・統合済み | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | Approved |
 | 席・券・権限の合同検証記録 | [seat-business-integration-validation.md](development/technical-validation/seat-business-integration-validation.md) | #166の4条件と225件をPR #187で承認済み。V2完了、容量・回収は#167、採否は#168 | 開発者、設計担当者、テスト担当者 | 詳細設計の技術検証 | 結果・残条件・承認変更時 | Approved（機能合同検証） |
@@ -208,7 +220,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 ## 実装中の認可基盤
 
-[本人認証画面の実装・試験記録](development/technical-validation/authentication-ui-results.md)（In Review）に、#296のログイン・メール確認・再認証とログアウトを記録する。ローカル見本、通常SDK試験と実認証後の業務画面への未接続を区別する。
+[本人認証画面の実装・試験記録](development/technical-validation/authentication-ui-results.md)（Approved、PR #297の範囲）に、#296のログイン・メール確認・再認証とログアウトを記録する。ローカル見本、通常SDK試験と実認証後の業務画面への未接続を区別する。
 
 案Aによる会場構成の共有保存は[共有保存・別端末復元の実装・試験記録](development/technical-validation/shared-seat-draft-results.md)（Approved、PR #293の範囲）を参照する。通常SDKでの保存・照会と全画像の一体取込みを#292で確認し、実認証画面・共有ボタンと確定保存の残条件を親#104・105へ渡す。
 
