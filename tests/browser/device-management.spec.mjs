@@ -14,6 +14,8 @@ test('DEVICE308-B01 承認・停止・解除・廃止を確認し、管理端末
   await page.goto(route);
   const pending = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /pending/ }) });
   await expect(pending).toContainText('承認待ち');
+  await expect(pending.locator('[data-device-status="approval"] .device-status-mark')).toHaveText('△');
+  await expect(pending.locator('[data-device-status="preparation"] .device-status-mark')).toHaveText('△');
   await pending.getByRole('button', { name: '承認', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('事前準備が完了するまで');
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
@@ -22,13 +24,17 @@ test('DEVICE308-B01 承認・停止・解除・廃止を確認し、管理端末
   await expect(page.getByRole('status')).toContainText('確定');
   await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
   await expect(pending).toContainText('承認済み');
+  await expect(pending.locator('[data-device-status="approval"] .device-status-mark')).toHaveText('○');
+  await expect(pending.locator('[data-device-status="approval"] .device-status-description')).toHaveCount(0);
   await expect(pending).toContainText('未準備・再準備が必要');
   await change(page, pending, '停止');
   await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
   await expect(pending).toContainText('停止中');
+  await expect(pending.locator('[data-device-status="state"] .device-status-mark')).toHaveText('×');
   await change(page, pending, '停止解除');
   await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
-  await expect(pending).toContainText('状態：有効');
+  await expect(pending.locator('[data-device-status="state"]')).toContainText('有効');
+  await expect(pending.locator('[data-device-status="state"] .device-status-mark')).toHaveText('○');
   await change(page, pending, '廃止');
   await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
   await expect(pending).toContainText('廃止済み');

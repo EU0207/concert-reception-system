@@ -969,3 +969,17 @@ p {
 .device-error { color: #a12622; }
 .device-error:empty, .device-management-screen [role='status']:empty { display: none; }
 .device-management-screen .button { min-height: 44px; white-space: normal; }
+.device-status-legend { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 20px 0 8px; font-size: .9rem; }
+.device-legend-ok { color: #24594c; }
+.device-legend-attention { color: #805500; }
+.device-legend-blocked { color: #a12622; }
+.device-status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 18px 0; }
+.device-status-item { position: relative; display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px 10px; border-radius: 8px; }
+.device-status-item dt { flex: 0 0 auto; font-size: .85rem; font-weight: 700; }
+.device-status-item dd { display: flex; align-items: center; gap: 8px; margin: 0; min-width: 0; }
+.device-status-mark { flex: 0 0 auto; font-size: 1.65rem; font-weight: 700; line-height: 1.2; }
+.device-status-description { font-size: .85rem; }
+.device-status-ok { color: #24594c; background: #edf5ef; }
+.device-status-attention { color: #805500; background: #fff5df; }
+.device-status-blocked { color: #a12622; background: #fceeed; }
+.device-status-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
