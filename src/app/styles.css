@@ -997,7 +997,9 @@ p {
 .device-status-item dd { display: flex; align-items: center; gap: 8px; margin: 0; min-width: 0; }
 .device-status-mark { flex: 0 0 auto; font-size: 1.65rem; font-weight: 700; line-height: 1.2; }
 .device-status-description { font-size: .85rem; }
+.device-status-unknown { color: #53615f; background: #f1f3f2; }
+.device-retired { margin-top: 24px; }
+.device-retired summary { padding: 12px 0; cursor: pointer; font-weight: 700; }
 .device-status-ok { color: #24594c; background: #edf5ef; }
 .device-status-attention { color: #805500; background: #fff5df; }
 .device-status-blocked { color: #a12622; background: #fceeed; }
-.device-status-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

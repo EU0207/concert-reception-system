@@ -25,14 +25,14 @@ function errorMessage(cause: unknown): string {
   return '操作を完了できませんでした。接続・権限と最新の端末状態を確認してください。';
 }
 
-/** 正常は印だけを表示し、対応が必要な状態には説明を添える。読み上げ用の意味は常に残す。 */
-function statusMark(field: string, title: string, tone: 'ok' | 'attention' | 'blocked', description: string) {
+/** 状態を記号と短い説明で示し、未確認を正常・失敗と区別する。 */
+function statusMark(field: string, title: string, tone: 'ok' | 'attention' | 'blocked' | 'unknown', description: string) {
   const item = el('div', `device-status-item device-status-${tone}`);
   item.dataset.deviceStatus = field;
-  const value = el('dd'), mark = el('span', 'device-status-mark', tone === 'ok' ? '○' : tone === 'attention' ? '△' : '×');
+  const value = el('dd'), mark = el('span', 'device-status-mark', tone === 'ok' ? '○' : tone === 'attention' ? '△' : tone === 'blocked' ? '×' : '—');
   mark.setAttribute('aria-hidden', 'true');
   item.title = `${title}：${description}`;
-  value.append(mark, el('span', tone === 'ok' ? 'device-status-hidden' : 'device-status-description', description));
+  value.append(mark, el('span', 'device-status-description', description));
   item.append(el('dt', '', title), value);
   return item;
 }
@@ -182,8 +182,9 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     if (view && !locked) {
       const legend = el('p', 'device-status-legend');
       legend.append(el('span', 'device-legend-ok', '○ 確認済み'),
-        el('span', 'device-legend-attention', '△ 要対応'), el('span', 'device-legend-blocked', '× 停止・廃止'));
-      root.append(legend, el('p', 'muted', '公演データの準備状況：未確認'));
+        el('span', 'device-legend-attention', '△ 要対応'), el('span', 'device-legend-blocked', '× 停止・廃止'),
+        el('span', '', '— 未確認・対象外'));
+      root.append(legend, el('p', 'muted', '「通常」は停止されていない状態です。受付には承認と受付準備が必要です。'));
       if (view.obsolete.length) {
         const previous = el('details', 'notice');
         previous.append(el('summary', '', `以前の未確定操作${view.obsolete.length}件は端末の版が変わったため再送しません。`),
@@ -192,19 +193,22 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
         root.append(previous);
       }
       const cards = el('div', 'device-cards');
+      const retired = el('details', 'device-retired');
+      const retiredCards = el('div', 'device-cards');
+      retired.append(el('summary', '', `廃止済み端末一覧（${view.inventory.devices.filter(device => device.retired).length}台）`),
+        el('p', 'muted', '廃止済みの端末も、未送信記録の回収確認のため残しています。'), retiredCards);
       for (const device of view.inventory.devices) {
         const role = view.inventory.roles.find(item => item.humanUid === device.humanUid);
-        const prepared = role?.active === true && role.startsAt <= view.serverNow && view.serverNow < role.endsAt &&
-          device.preparedRole === role.role && device.preparedRoleRevision === role.revision;
         const card = el('section', 'panel device-card');
         const indicators = el('dl', 'device-status-grid');
         indicators.append(statusMark('approval', '承認', device.approved ? 'ok' : 'attention', device.approved ? '承認済み' : '承認待ち'),
-          statusMark('preparation', '役割準備', prepared ? 'ok' : 'attention', prepared ? '現在役割の準備済み' : '未準備・再準備が必要'),
-          statusMark('state', '端末状態', device.retired || (device.approved && !device.active) ? 'blocked' : !device.approved ? 'attention' : 'ok',
-            device.retired ? '廃止済み' : !device.approved ? '承認待ち' : device.active ? '有効' : '停止中'));
+          // 役割準備版だけではデータ・カメラ等の準備完了を証明できない。接続までは未確認とする。
+          statusMark('preparation', '受付準備', 'unknown', device.retired ? '利用終了' : !device.approved ? '承認後に準備' : '未確認'),
+          statusMark('state', '端末の利用設定', device.retired || (device.approved && !device.active) ? 'blocked' : 'ok',
+            device.retired ? '廃止済み' : device.approved && !device.active ? '停止中' : '通常'));
         card.append(el('h3', '', label(device, view) + (device.deviceUid === view.snapshot.deviceAuthUid ? ' この端末' : '')),
           indicators,
-          el('p', 'muted', '端末内データ・未送信件数：未取得。停止・廃止では削除しません。'));
+          el('p', 'muted', '受付記録の送信状況：未確認（未送信件数は未取得）。停止・廃止でも記録は保持します。'));
         const controls = el('div', 'authentication-actions');
         if (!device.retired && !pending.length) {
           if (!device.approved && role?.role !== 'owner') controls.append(button('承認', () => choose(device, 'approve')));
@@ -212,9 +216,9 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
           if (device.deviceUid === view.snapshot.deviceAuthUid) card.append(el('p', 'muted', '使用中のこの端末は停止できません。停止は別の管理端末から行ってください。'));
           controls.append(button('廃止', () => choose(device, 'retire'), 'button secondary'));
         }
-        card.append(controls); cards.append(card);
+        card.append(controls); (device.retired ? retiredCards : cards).append(card);
       }
-      root.append(cards);
+      root.append(cards, retired);
     }
     for (const control of root.querySelectorAll<HTMLButtonElement>('button')) control.disabled = busy;
   }
