@@ -103,7 +103,7 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     finally { if (!disposed && current === version) { busy = false; render(); } }
   }
 
-  /** 変更前後と廃止時の代替端末を確認し、取消しでは何も保存しない。 */
+  /** 変更前後と代替端末を確認する。主担当の停止は最終確認まで保存しない。 */
   function choose(device: DeviceGrant, kind: DeviceChangeInput['kind']) {
     if (busy || locked || !view || pending.length) return;
     const basis = structuredClone(view);
@@ -134,12 +134,25 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     const validation = el('p', 'device-error'); validation.setAttribute('role', 'alert'); body.append(validation);
     const input: DeviceChangeInput = { operationId: crypto.randomUUID(), targetDeviceUid: device.deviceUid,
       expectedRevision: device.revision ?? 1, kind, replacementDeviceUid: '' };
-    dialog = showDialog(`端末の${operations[kind]}`, body, [button(`${operations[kind]}する`, () => {
+    const needsFinalConfirmation = kind === 'stop' && targetRole === 'owner';
+    dialog = showDialog(`端末の${operations[kind]}`, body, [button(needsFinalConfirmation ? '最終確認へ' : `${operations[kind]}する`, () => {
       if (locked || disposed) return;
       input.replacementDeviceUid = select.value;
       try { createDeviceChangePlan(basis.snapshot, basis.inventory, input, basis.serverNow); }
       catch (cause) { validation.textContent = errorMessage(cause); return; }
-      dialog?.close(); void perform(input);
+      dialog?.close();
+      if (needsFinalConfirmation) {
+        const finalBody = el('div');
+        finalBody.append(el('p', '', `${label(device, basis)}を本当に停止しますか？`),
+          el('p', '', '停止すると、この主担当端末では管理操作や受付ができなくなります。対象端末をもう一度確認してください。'),
+          el('p', '', '主担当の役割や他の端末は停止しません。保存済みの記録は保持します。'));
+        dialog = showDialog('主担当端末の停止・最終確認', finalBody, [button('主担当の端末を停止する', () => {
+          if (locked || disposed || busy) return;
+          dialog?.close(); void perform(input);
+        })], 'キャンセル');
+        // 最終確認の初期フォーカスは取消しにし、Enterの連続入力で停止しない。
+        dialog.querySelector<HTMLButtonElement>('.dialog-actions button:last-child')?.focus();
+      } else void perform(input);
     })], 'キャンセル');
   }
 

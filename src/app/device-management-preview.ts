@@ -15,6 +15,7 @@ export function createDeviceManagementPreview(scope: Scope): DeviceManagementUiP
   const devices: DeviceGrant[] = [
     ['preview-current', 'preview-owner', 'owner', true], ['preview-deputy-device', 'preview-deputy', 'deputy', true],
     ['preview-pending', 'preview-staff', 'receptionist', false], ['preview-reception', 'preview-staff', 'receptionist', true],
+    ['preview-owner-second', 'preview-owner', 'owner', true],
   ].map(([uid, human, role, approved]) => ({ ...scope, schemaVersion: 2, deviceUid: uid as string,
     humanUid: human as string, storageEpoch: crypto.randomUUID(), active: approved as boolean, approved: approved as boolean,
     retired: false, preparedRole: approved ? role as DeviceGrant['preparedRole'] : null, preparedRoleRevision: approved ? 1 : 0, revision: 1 }));
@@ -39,7 +40,7 @@ export function createDeviceManagementPreview(scope: Scope): DeviceManagementUiP
     /** 共通の業務判定を使い、見本の固定入力だけをメモリーへ保持する。 */
     async prepare(input) { createDeviceChangePlan(actor, { roles, devices }, input, Date.now()); saved.set(input.operationId, structuredClone(input)); },
 
-    /** 見本の台帳だけを更新する。自端末の停止・廃止では画面へ失効を通知する。 */
+    /** 見本の台帳だけを更新する。自端末の廃止では画面へ失効を通知する。 */
     async commit(id) {
       if (results.has(id)) return;
       const input = saved.get(id);
