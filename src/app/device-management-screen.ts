@@ -6,7 +6,7 @@ import type { DeviceGrant, StaffRole } from '../domain/authorization/types.ts';
 import { createDeviceChangePlan } from '../domain/authorization/device-safety.ts';
 import type { DeviceChangeInput } from '../domain/authorization/device-safety.ts';
 
-const roles: Record<StaffRole, string> = { owner: '主担当', deputy: '代理管理者', temporary: '臨時管理者', receptionist: '一般受付担当者' };
+const roles: Record<StaffRole, string> = { owner: '管理者', deputy: '代理管理者', temporary: '臨時管理者', receptionist: '一般受付担当者' };
 const operations = { approve: '承認', stop: '停止', resume: '停止解除', retire: '廃止' } as const;
 
 /** 操作対象を取り違えないよう、役割と端末UIDの末尾を併記する。 */
@@ -20,8 +20,8 @@ function errorMessage(cause: unknown): string {
   const code = cause && typeof cause === 'object' && 'code' in cause ? String(cause.code) : '';
   if (code === 'RECENT_AUTH_REQUIRED') return '本人確認の更新が必要です。再認証してから開き直してください。';
   if (['REPLACEMENT_OWNER_DEVICE_REQUIRED', 'LAST_MANAGEMENT_DEVICE', 'REPLACEMENT_DEVICE_REQUIRED'].includes(code))
-    return '廃止後も使える、準備済みの管理端末を確認してください。主担当には同じ主担当の別端末が必要です。';
-  if (code === 'OWNER_DEVICE_PAIRING_REQUIRED') return '主担当の追加端末は、専用の関連付け手順で登録してください。';
+    return '廃止後も使える、準備済みの管理端末を確認してください。管理者には同じ管理者の別端末が必要です。';
+  if (code === 'OWNER_DEVICE_PAIRING_REQUIRED') return '管理者の追加端末は、専用の関連付け手順で登録してください。';
   return '操作を完了できませんでした。接続・権限と最新の端末状態を確認してください。';
 }
 
@@ -116,7 +116,7 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     finally { if (!disposed && current === version) { busy = false; render(); } }
   }
 
-  /** 変更前後と代替端末を確認する。主担当の停止は最終確認まで保存しない。 */
+  /** 変更前後と代替端末を確認する。管理者の停止は最終確認まで保存しない。 */
   function choose(device: DeviceGrant, kind: DeviceChangeInput['kind']) {
     if (busy || locked || !view || pending.length) return;
     const basis = structuredClone(view);
@@ -168,12 +168,12 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
         const warning = el('p', 'device-stop-warning');
         const warningIcon = el('span', 'device-stop-warning-icon', '⚠');
         warningIcon.setAttribute('aria-hidden', 'true');
-        warning.append(warningIcon, el('span', '', '重要：主担当端末の業務を停止します'));
+        warning.append(warningIcon, el('span', '', '重要：管理者端末の業務を停止します'));
         finalBody.append(warning,
           el('p', '', `${label(device, basis)}を本当に停止しますか？`),
-          el('p', '', '停止すると、この主担当端末では管理操作や受付ができなくなります。対象端末をもう一度確認してください。'),
-          el('p', '', '主担当の役割や他の端末は停止しません。保存済みの記録は保持します。'));
-        dialog = showDialog('主担当端末の停止・最終確認', finalBody, [button('主担当の端末を停止する', () => {
+          el('p', '', '停止すると、この管理者端末では管理操作や受付ができなくなります。対象端末をもう一度確認してください。'),
+          el('p', '', '管理者の役割や他の端末は停止しません。保存済みの記録は保持します。'));
+        dialog = showDialog('管理者端末の停止・最終確認', finalBody, [button('管理者の端末を停止する', () => {
           if (locked || disposed || busy) return;
           dialog?.close(); void perform(input);
         }, 'button device-stop-confirm')], 'キャンセル');

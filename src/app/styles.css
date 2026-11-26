@@ -968,7 +968,7 @@ p {
 .device-card { overflow-wrap: anywhere; }
 .device-error { color: #a12622; }
 
-/* 主担当停止の最終確認だけに警告色を使い、通常確認と区別する。 */
+/* 管理者停止の最終確認だけに警告色を使い、通常確認と区別する。 */
 .device-stop-dialog { border: 2px solid #a12622; border-top-width: 6px; }
 .device-stop-dialog h2 { color: #8f211d; }
 .device-stop-dialog .device-stop-warning {

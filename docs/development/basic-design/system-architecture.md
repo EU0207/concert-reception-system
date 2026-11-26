@@ -38,7 +38,7 @@
 flowchart LR
     visitor[来場者\n紙・電子チケットを提示]
     reception[一般受付担当者]
-    manager[主担当・代理管理者・臨時管理者]
+    manager[管理者・代理管理者・臨時管理者]
     owner[環境所有者]
     browser[受付システムPWA\nスマートフォン・PC]
     files[Excel・PDF・ZIP・CSV・当日運営表]

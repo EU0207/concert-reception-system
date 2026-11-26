@@ -56,11 +56,11 @@ test('DEVICE308-B01 承認・停止・解除・廃止を確認し、管理端末
   await expect(pending.getByRole('button')).toHaveCount(0);
   await expect(pending).toContainText('未送信件数は未取得');
   await expect(pending).not.toContainText('同期済み');
-  const owner = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /主担当の端末.*この端末/ }) });
+  const owner = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /管理者の端末.*この端末/ }) });
   await expect(owner.getByRole('button', { name: '停止', exact: true })).toHaveCount(0);
   await expect(owner).toContainText('使用中のこの端末は停止できません');
   await change(page, owner, '廃止');
-  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('同じ主担当の別端末');
+  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('同じ管理者の別端末');
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
@@ -143,7 +143,7 @@ test('DEVICE308-B04 セッション期限で台帳を隠し、古い認可のま
   await expect(page.getByText('端末管理は最新の認可確認が必要です。', { exact: false })).toBeVisible();
 });
 
-test('DEVICE308-B05 主担当端末の停止は2段階確認し、途中取消しとEscapeでは保存・送信しない', async ({ page }) => {
+test('DEVICE308-B05 管理者端末の停止は2段階確認し、途中取消しとEscapeでは保存・送信しない', async ({ page }) => {
   await fixture(page, false);
   const owner = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /r-second/ }) });
   await owner.getByRole('button', { name: '停止', exact: true }).click();
@@ -152,7 +152,7 @@ test('DEVICE308-B05 主担当端末の停止は2段階確認し、途中取消�
   expect(await page.evaluate(() => window.deviceTrial.getSaved())).toBe(null);
   await owner.getByRole('button', { name: '停止', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: '最終確認へ', exact: true }).click();
-  await expect(page.getByRole('dialog')).toContainText('この主担当端末では管理操作や受付ができなくなります');
+  await expect(page.getByRole('dialog')).toContainText('この管理者端末では管理操作や受付ができなくなります');
   await expect(page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true })).toBeFocused();
   expect(await page.evaluate(() => window.deviceTrial.getSaved())).toBe(null);
   expect(await page.evaluate(() => window.deviceTrial.getCalls())).toBe(0);
@@ -161,7 +161,7 @@ test('DEVICE308-B05 主担当端末の停止は2段階確認し、途中取消�
   expect(await page.evaluate(() => window.deviceTrial.getSaved())).toBe(null);
   await owner.getByRole('button', { name: '停止', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: '最終確認へ', exact: true }).click();
-  await page.getByRole('dialog').getByRole('button', { name: '主担当の端末を停止する', exact: true }).click();
+  await page.getByRole('dialog').getByRole('button', { name: '管理者の端末を停止する', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('結果を確認');
   expect(await page.evaluate(() => window.deviceTrial.getSaved().targetDeviceUid)).toBe('preview-owner-second');
   expect(await page.evaluate(() => window.deviceTrial.getCalls())).toBe(1);
@@ -217,11 +217,11 @@ test('DEVICE308-B07 確定後の再取得中に失効したら、遅い応答で
   expect(await page.evaluate(() => window.refreshTrial.commits)).toBe(1);
 });
 
-test('DEVICE308-B08 代理端末の廃止では主担当端末を自動確認し、選択なしで廃止できる', async ({ page }) => {
+test('DEVICE308-B08 代理端末の廃止では管理者端末を自動確認し、選択なしで廃止できる', async ({ page }) => {
   await page.goto(route);
   const deputy = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /代理管理者/ }) });
   await deputy.getByRole('button', { name: '廃止', exact: true }).click();
-  await expect(page.getByRole('dialog')).toContainText('廃止後も利用できる管理端末：主担当の端末');
+  await expect(page.getByRole('dialog')).toContainText('廃止後も利用できる管理端末：管理者の端末');
   await expect(page.getByRole('dialog').locator('select')).toHaveCount(0);
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
   await expect(deputy).toBeVisible();

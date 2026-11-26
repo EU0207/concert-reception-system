@@ -10,7 +10,7 @@ import {
 } from '../../../src/domain/authorization/index.ts';
 import { snapshot, now } from './fixtures.mjs';
 
-/** 主担当の2端末と代理管理者の端末を持つ架空台帳を作る。 */
+/** 管理者の2端末と代理管理者の端末を持つ架空台帳を作る。 */
 function inventory() {
   const actor = snapshot();
   const deputyRole = { ...actor.role, humanUid: 'fictional-deputy', role: 'deputy' };
@@ -57,7 +57,7 @@ test('AUTH110-T07 端末の停止・解除・廃止は期待版を守り、鍵�
   assert.equal(retired.device.retired, true);
 });
 
-test('DEVICE310-T01 主担当と代理管理者の自己停止を拒否し、別端末の停止は許可する', () => {
+test('DEVICE310-T01 管理者と代理管理者の自己停止を拒否し、別端末の停止は許可する', () => {
   const f = inventory();
   for (const role of ['owner', 'deputy']) {
     const actor = snapshot(role);
@@ -76,7 +76,7 @@ test('DEVICE310-T01 主担当と代理管理者の自己停止を拒否し、別
   assert.equal(stopped.device.active, false);
 });
 
-test('CONF066・069-T01 主担当には別の主担当端末が必要。代理の端末で代用しない', () => {
+test('CONF066・069-T01 管理者には別の管理者端末が必要。代理の端末で代用しない', () => {
   const f = inventory();
   assert.equal(
     requireReplacementDevice(f.actor, f.data, f.actor.deviceAuthUid, now).deviceUid,
@@ -106,7 +106,7 @@ test('CONF066・069-T01 主担当には別の主担当端末が必要。代理�
   );
 });
 
-test('CONF069-T02 引継ぎは現主担当と後任のGoogle本人確認・受諾・有効端末を必要とする', () => {
+test('CONF069-T02 引継ぎは現管理者と後任のGoogle本人確認・受諾・有効端末を必要とする', () => {
   const f = inventory(),
     acceptance = {
       humanUid: 'fictional-deputy',

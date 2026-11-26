@@ -308,7 +308,7 @@ async function signedIn(page, targetEnvironmentId = randomUUID()) {
   return { person, environmentId, settings, deviceUid };
 }
 
-test('PERF111-S01 主担当が製品SDKで公演を初期化し、最新データ版で準備確認を保存する', async ({ page }) => {
+test('PERF111-S01 管理者が製品SDKで公演を初期化し、最新データ版で準備確認を保存する', async ({ page }) => {
   const f = await signedIn(page);
   await seed(f.environmentId, f.person.uid, f.deviceUid, 'owner');
   await page.evaluate(
@@ -842,7 +842,7 @@ test('DD96-S01 同じ本人UIDのGoogle連携後、固定入力を暗号化し�
   expect(result.stopped).toBe(true);
 });
 
-test('CONF069-S01 SDKの主担当引継ぎで旧画面をロックし、新主担当の追加準備前は管理を拒否する', async ({
+test('CONF069-S01 SDKの管理者引継ぎで旧画面をロックし、新管理者の追加準備前は管理を拒否する', async ({
   page,
   context,
 }) => {
@@ -1065,7 +1065,7 @@ test('AUTH110-S05 セッション保存が使えなければ、未準備のま�
   expect(code).toBe('SESSION_PERSISTENCE_UNAVAILABLE');
 });
 
-test('AUTH110-S06 製品SDKで通常登録を承認し、主担当の追加端末は一回リンクでだけ承認する', async ({
+test('AUTH110-S06 製品SDKで通常登録を承認し、管理者の追加端末は一回リンクでだけ承認する', async ({
   page,
   context,
 }) => {

@@ -1,4 +1,4 @@
-// 主担当引継ぎの案と受諾を検査し、主担当UID・役割と結果を一体保存する規則を生成する。
+// 管理者引継ぎの案と受諾を検査し、管理者UID・役割と結果を一体保存する規則を生成する。
 
 /** 指定した子キーの値を参照するRules式を作る。 */
 const f = (node, key) => `${node}.child('${key}').val()`;
@@ -52,7 +52,7 @@ function record(keys, read, write) {
   };
 }
 
-/** 現主担当の引継ぎ開始・後任の受諾と一体確定の規則を作る。 */
+/** 現管理者の引継ぎ開始・後任の受諾と一体確定の規則を作る。 */
 export function ownerHandoverRules({ root, preparedAuthorization, manager }) {
   const ownDevice = `${root}.child('devices').child(auth.uid)`;
   const ownRole = `${root}.child('roles').child(${f(ownDevice, 'humanUid')})`;
@@ -75,7 +75,7 @@ export function ownerHandoverRules({ root, preparedAuthorization, manager }) {
       && (${f(request, 'previousOwnerDisposition')} === 'deputy' || ${f(request, 'previousOwnerDisposition')} === 'inactive')`;
   }
 
-  /** 主担当UIDと役割2件・結果と監査の一体更新を検査する。 */
+  /** 管理者UIDと役割2件・結果と監査の一体更新を検査する。 */
   function commit(post, id) {
     const request = `${root}.child('ownerHandoverRequests').child(${id})`;
     const acceptance = `${root}.child('ownerHandoverAcceptances').child(${id})`;

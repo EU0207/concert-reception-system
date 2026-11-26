@@ -55,7 +55,7 @@ test('AUTH110-T08 仮登録は権限を付けず、同じ本人・端末・保�
   assert.throws(() => bindRegisteredHuman(first, identity, current.role, first.expiresAt));
 });
 
-test('AUTH110-T09 主担当の登録にはGoogleの最近の本人確認を必要とする', () => {
+test('AUTH110-T09 管理者の登録にはGoogleの最近の本人確認を必要とする', () => {
   const current = snapshot();
   const request = createDeviceRegistrationRequest(
     scope,

@@ -381,7 +381,7 @@ function changeableRoles(device) {
   if (!S.online || device.current || device.retired || device.erased) return [];
   const sameUser = S.devices.filter(other => other.accountId === device.accountId);
   if (sameUser.some(other => other.current || other.role !== device.role)) return [];
-  const allowed = S.role === '主担当' ? ['代理管理者', '臨時管理者', '一般受付担当者'] : S.role === '代理管理者' ? ['臨時管理者', '一般受付担当者'] : [];
+  const allowed = S.role === '管理者' ? ['代理管理者', '臨時管理者', '一般受付担当者'] : S.role === '代理管理者' ? ['臨時管理者', '一般受付担当者'] : [];
   return allowed.includes(device.role) ? allowed.filter(role => role !== device.role) : [];
 }
 
@@ -390,40 +390,40 @@ function roleChangeDeadline() {
 }
 
 function needsManagerReplacement(device) {
-  if (!['主担当', '代理管理者'].includes(device.role) || device.approval !== 'approved' || device.erased) return false;
+  if (!['管理者', '代理管理者'].includes(device.role) || device.approval !== 'approved' || device.erased) return false;
   return !S.devices.some(other =>
-    other.id !== device.id && ['主担当', '代理管理者'].includes(other.role) &&
+    other.id !== device.id && ['管理者', '代理管理者'].includes(other.role) &&
     other.approval === 'approved' && other.prepared &&
     !other.stopped && !other.retired && !other.erased
   );
 }
 
 function needsRetirementReplacement(device) {
-  if (device.role !== '主担当') return needsManagerReplacement(device);
+  if (device.role !== '管理者') return needsManagerReplacement(device);
   return !S.devices.some(other =>
-    other.id !== device.id && other.role === '主担当' &&
+    other.id !== device.id && other.role === '管理者' &&
     other.approval === 'approved' && other.prepared &&
     !other.stopped && !other.retired && !other.erased
   );
 }
 
 function retirementBlockMessage(device) {
-  if (device.role !== '主担当') return '利用可能な代替管理端末を先に準備してください。端末を失った場合は、環境所有者による復旧手順を使用します。';
+  if (device.role !== '管理者') return '利用可能な代替管理端末を先に準備してください。端末を失った場合は、環境所有者による復旧手順を使用します。';
   const waiting = S.devices.find(other =>
-    other.id !== device.id && other.role === '主担当' &&
+    other.id !== device.id && other.role === '管理者' &&
     other.approval === 'approved' && !other.prepared &&
     !other.stopped && !other.retired && !other.erased
   );
-  if (!waiting) return 'この主担当端末を廃止するには、別の主担当端末を追加して準備を完了してください。端末を失った場合は、環境所有者による復旧手順を使用します。';
+  if (!waiting) return 'この管理者端末を廃止するには、別の管理者端末を追加して準備を完了してください。端末を失った場合は、環境所有者による復旧手順を使用します。';
   const current = S.devices.find(other => other.current);
   const next = waiting.current ? 'この端末の「その他」で準備を完了してください。' : current?.accountId === waiting.accountId ? '「この端末として操作を試す」で切り替え、「その他」で準備を完了してください。' : 'その端末自身で準備を完了してください。';
-  return `主担当の追加端末「${esc(waiting.name)}」は準備が完了していません。${next}`;
+  return `管理者の追加端末「${esc(waiting.name)}」は準備が完了していません。${next}`;
 }
 
 // 既存の端末画面を、役割と端末状態を分けた管理カードに差し替える。
 staff = function () {
   if (S.role === '一般受付担当者') return other();
-  const canManage = ['主担当', '代理管理者'].includes(S.role);
+  const canManage = ['管理者', '代理管理者'].includes(S.role);
   const cards = S.devices.map(d => {
     const state = d.retired
       ? (d.erased ? '廃止・削除済み' : '廃止・削除未確認')
@@ -435,7 +435,7 @@ staff = function () {
     const registration = d.registration === 'staff'
       ? '<p class="small muted">一般受付担当者の新端末申請</p>'
       : d.registration === 'linked'
-        ? '<p class="small muted">主担当本人の追加端末・関連付け済み</p>' : '';
+        ? '<p class="small muted">管理者本人の追加端末・関連付け済み</p>' : '';
     const current = S.devices.find(other => other.current);
     const canSwitch = canManage && !d.current &&
       current?.accountId === d.accountId && current.role === d.role &&
@@ -454,11 +454,11 @@ staff = function () {
   }).join('');
   const registrationActions = canManage
     ? `<div class="row device-registration-actions">${btn('一般受付担当者の新端末を申請', 'registerDevice', 'primary')}` +
-      `${S.role === '主担当' ? btn('主担当本人の追加端末', 'linkDevice') : ''}</div>` : '';
+      `${S.role === '管理者' ? btn('管理者本人の追加端末', 'linkDevice') : ''}</div>` : '';
   return page('スタッフ・端末',
-    '<div class="notice">架空の端末だけを操作します。主担当・代理管理者は承認・停止・廃止を行います。役割変更はオンライン時に利用者単位で行い、同じ利用者の端末にも反映します。準備完了は各端末で準備した結果です。端末内データの削除は、対象端末の操作か廃止時の削除要求として扱います。</div>' +
+    '<div class="notice">架空の端末だけを操作します。管理者・代理管理者は承認・停止・廃止を行います。役割変更はオンライン時に利用者単位で行い、同じ利用者の端末にも反映します。準備完了は各端末で準備した結果です。端末内データの削除は、対象端末の操作か廃止時の削除要求として扱います。</div>' +
     `${registrationActions}<div class="stack">${cards}</div>`,
-  '登録申請と主担当本人の追加端末は別の操作です。');
+  '登録申請と管理者本人の追加端末は別の操作です。');
 };
 device = function () {
   return staff();
@@ -480,11 +480,11 @@ function other() {
   const canErase = conditions.length && conditions.every(condition => condition.met);
   const conditionList = d && !d.erased
     ? `<h3>データ削除の条件</h3><ul class="deletion-conditions">${conditions.map(condition => `<li><span class="pill ${condition.met ? '' : 'warn'}">${condition.met ? '確認済み' : '未達'}</span> ${condition.label}</li>`).join('')}</ul>` +
-      '<p class="small muted">締め・端末廃止は主担当または代理管理者の操作です。公演翌日23:59は受付権限の期限であり、削除許可にはなりません。モックではサーバーへの確認を行いません。</p>'
+      '<p class="small muted">締め・端末廃止は管理者または代理管理者の操作です。公演翌日23:59は受付権限の期限であり、削除許可にはなりません。モックではサーバーへの確認を行いません。</p>'
     : '';
   const actions = (d && d.approval === 'approved' && !d.prepared && !d.retired && !d.erased
     ? btn('この端末を準備する', `device:prepare:${d.id}`, 'primary') : '') +
-    (d && !d.erased && !d.mockReceiptConfirmed && !d.mockClosed && ['主担当', '代理管理者'].includes(S.role)
+    (d && !d.erased && !d.mockReceiptConfirmed && !d.mockClosed && ['管理者', '代理管理者'].includes(S.role)
       ? btn('管理者の受領・締め確認を再現', 'deleteReadyDemo', 'secondary', d.unsent || d.isolated || !S.online ? 'disabled' : '') : '') +
     (d && !d.erased ? btn('この端末のデータを削除', `device:erase:${d.id}`, 'dangerbtn', canErase ? '' : 'disabled') : '') +
     (d?.registration === 'linked' ? btn('スタッフ・端末へ戻る', 'staff') : '');
@@ -515,14 +515,14 @@ venue = function () {
 
 // 当日管理の締め導線は、表示時にも役割で絞る。
 management = function () {
-  const canClose = ['主担当', '代理管理者'].includes(S.role);
-  return page('当日管理', `<div class="stack"><section class="card stack"><h3>端末の確認</h3><p>承認・停止・廃止は「スタッフ・端末」で行います。</p><div class="row">${btn('スタッフ・端末へ', 'staff')}</div></section><section class="card stack"><h3>公演終了</h3>${canClose ? `<div class="row">${btn('締め画面へ', 'close')}${btn('公演後の再ログイン表示', 'relogin')}</div>` : '<p>公演終了・締めは主担当または代理管理者が行います。</p>'}</section></div>`, '端末操作と公演の締めを確認します。');
+  const canClose = ['管理者', '代理管理者'].includes(S.role);
+  return page('当日管理', `<div class="stack"><section class="card stack"><h3>端末の確認</h3><p>承認・停止・廃止は「スタッフ・端末」で行います。</p><div class="row">${btn('スタッフ・端末へ', 'staff')}</div></section><section class="card stack"><h3>公演終了</h3>${canClose ? `<div class="row">${btn('締め画面へ', 'close')}${btn('公演後の再ログイン表示', 'relogin')}</div>` : '<p>公演終了・締めは管理者または代理管理者が行います。</p>'}</section></div>`, '端末操作と公演の締めを確認します。');
 };
 
 // 画面への直接移動時も、既存の締め画面を権限で保護する。
 const baseClose = close;
 close = function () {
-  if (!['主担当', '代理管理者'].includes(S.role)) return management();
+  if (!['管理者', '代理管理者'].includes(S.role)) return management();
   return baseClose();
 };
 
@@ -532,7 +532,7 @@ function deviceAction(op, id, confirmed = false) {
   // 確認画面の後も対象端末と操作権限を再検証する。
   if (op === 'erase' && (!d.current || S.screen !== 'other')) return toast('端末内データは対象端末の「その他」で削除します');
   if (op === 'prepare' && (!d.current || S.screen !== 'other')) return toast('準備は対象端末で行います');
-  if (!['erase', 'prepare'].includes(op) && !['主担当', '代理管理者'].includes(S.role)) return toast('この操作は管理者が行います');
+  if (!['erase', 'prepare'].includes(op) && !['管理者', '代理管理者'].includes(S.role)) return toast('この操作は管理者が行います');
   if (d.retired && op !== 'erase') return toast('廃止した端末は操作できません');
   if (op === 'prepare' && (d.approval !== 'approved' || d.erased)) return toast('承認済みの端末だけ準備できます');
   if (op === 'retire' && needsRetirementReplacement(d)) return openModal('この端末は廃止できません', `<p>${retirementBlockMessage(d)}</p>`, [{ label: '閉じる', action: 'modalClose' }]);
@@ -586,7 +586,7 @@ const baseGo = go;
 go = function (target, ...args) {
   if (target === 'device') target = 'staff';
   if (target === 'staff' && S.role === '一般受付担当者') target = 'other';
-  if (target === 'close' && !['主担当', '代理管理者'].includes(S.role)) target = 'management';
+  if (target === 'close' && !['管理者', '代理管理者'].includes(S.role)) target = 'management';
   if (S.screen === 'camera' && target !== 'camera') stopCamera();
   return baseGo(target, ...args);
 };
@@ -604,7 +604,7 @@ camera = function () {
 const baseRender = render;
 render = function () {
   if (S.role === '一般受付担当者' && ['staff', 'device'].includes(S.screen)) S.screen = 'other';
-  if (S.screen === 'close' && !['主担当', '代理管理者'].includes(S.role)) {
+  if (S.screen === 'close' && !['管理者', '代理管理者'].includes(S.role)) {
     S.screen = 'management';
     S.modal = null;
   }
@@ -635,13 +635,13 @@ render = function () {
 // 追加シナリオだけ先に受け、既存操作は app.js の処理へ渡す。
 const baseHandle = handle;
 handle = function (action) {
-  if (['exceptionClose', 'closeDo'].includes(action) && (S.screen !== 'close' || !['主担当', '代理管理者'].includes(S.role))) {
+  if (['exceptionClose', 'closeDo'].includes(action) && (S.screen !== 'close' || !['管理者', '代理管理者'].includes(S.role))) {
     S.modal = null;
-    return toast('公演終了・締めは主担当または代理管理者が行います');
+    return toast('公演終了・締めは管理者または代理管理者が行います');
   }
   if (action === 'deleteReadyDemo') {
     const d = S.devices.find(device => device.current);
-    if (S.screen !== 'other' || !d || d.erased || !['主担当', '代理管理者'].includes(S.role) || !S.online || d.unsent || d.isolated) return toast('管理者確認または未送信・隔離記録の条件を満たしていません');
+    if (S.screen !== 'other' || !d || d.erased || !['管理者', '代理管理者'].includes(S.role) || !S.online || d.unsent || d.isolated) return toast('管理者確認または未送信・隔離記録の条件を満たしていません');
     d.mockReceiptConfirmed = true;
     d.mockClosed = true;
     return render();
@@ -745,31 +745,31 @@ handle = function (action) {
     if (!d || !['erase', 'retire'].includes(op)) return;
     if (op === 'erase' && (!d.current || S.screen !== 'other')) return toast('端末内データは対象端末の「その他」で削除します');
     if (op === 'erase' && selfEraseConditions(d).some(condition => !condition.met)) return toast('端末内データの削除条件が未達です');
-    if (op === 'retire' && needsRetirementReplacement(d)) return toast('利用可能な代替の主担当端末がありません');
-    if (op === 'retire' && !['主担当', '代理管理者'].includes(S.role)) return toast('この操作は管理者が行います');
+    if (op === 'retire' && needsRetirementReplacement(d)) return toast('利用可能な代替の管理者端末がありません');
+    if (op === 'retire' && !['管理者', '代理管理者'].includes(S.role)) return toast('この操作は管理者が行います');
     return confirmAction('重大操作：最終確認（2/2）', `${esc(d.name)}の${op === 'erase' ? 'データ削除' : '廃止'}を実行します。${op === 'retire' ? '廃止後は利用できず、端末内データの削除は未確認として残ります。' : 'この操作は復元できません。'}`, `deviceCommit:${op}:${id}`, true);
   }
   if (action.startsWith('switchMockDevice:')) {
     const current = S.devices.find(d => d.current);
     const target = S.devices.find(d => d.id === +action.split(':')[1]);
-    if (S.screen !== 'staff' || !['主担当', '代理管理者'].includes(S.role) || !current || !target || target.current || S.role !== current.role || current.accountId !== target.accountId || current.role !== target.role || target.approval !== 'approved' || target.stopped || target.retired || target.erased) return;
+    if (S.screen !== 'staff' || !['管理者', '代理管理者'].includes(S.role) || !current || !target || target.current || S.role !== current.role || current.accountId !== target.accountId || current.role !== target.role || target.approval !== 'approved' || target.stopped || target.retired || target.erased) return;
     S.devices.forEach(d => { d.current = d.id === target.id; });
     return go('other');
   }
   if (action === 'registerDevice') {
-    if (!['主担当', '代理管理者'].includes(S.role)) return toast('この操作は管理者が行います');
+    if (!['管理者', '代理管理者'].includes(S.role)) return toast('この操作は管理者が行います');
     S.modal = null;
     S.devices.push({ id: Math.max(...S.devices.map(d => d.id)) + 1, name: `見本の申請端末 ${S.devices.length + 1}`, role: '一般受付担当者', accountId: `staff-${Math.max(...S.devices.map(d => d.id)) + 1}`, registration: 'staff', current: false, approval: 'pending', prepared: false, stopped: false, retired: false, erased: false, unsent: 0, isolated: 0, mockReceiptConfirmed: false, mockClosed: false });
     return render();
   }
   if (action === 'linkDevice') {
-    if (S.role !== '主担当') return toast('主担当本人の端末で行います');
-    return openModal('主担当本人の追加端末', '<ol><li>既存の承認済み主担当端末で関連付けを始めます。</li><li>新端末で同じ本人として再認証し、1回限りの照合情報を確認します。</li><li>関連付け後、新端末自身で準備を完了します。</li></ol><p>モックでは本人確認と端末間照合を行わず、主担当・承認済み・未準備の架空端末を追加します。</p>', [{ label: '関連付けを再現', action: 'linkDeviceDo', style: 'primary' }, { label: '閉じる', action: 'modalClose' }]);
+    if (S.role !== '管理者') return toast('管理者本人の端末で行います');
+    return openModal('管理者本人の追加端末', '<ol><li>既存の承認済み管理者端末で関連付けを始めます。</li><li>新端末で同じ本人として再認証し、1回限りの照合情報を確認します。</li><li>関連付け後、新端末自身で準備を完了します。</li></ol><p>モックでは本人確認と端末間照合を行わず、管理者・承認済み・未準備の架空端末を追加します。</p>', [{ label: '関連付けを再現', action: 'linkDeviceDo', style: 'primary' }, { label: '閉じる', action: 'modalClose' }]);
   }
   if (action === 'linkDeviceDo') {
-    if (S.role !== '主担当' || !S.devices.some(d => d.current && d.role === '主担当' && d.approval === 'approved' && !d.retired && !d.stopped && !d.erased)) return toast('承認済みの主担当端末から操作してください');
+    if (S.role !== '管理者' || !S.devices.some(d => d.current && d.role === '管理者' && d.approval === 'approved' && !d.retired && !d.stopped && !d.erased)) return toast('承認済みの管理者端末から操作してください');
     S.modal = null;
-    S.devices.push({ id: Math.max(...S.devices.map(d => d.id)) + 1, name: `主担当の追加端末 ${S.devices.length + 1}`, role: '主担当', accountId: S.devices.find(d => d.current).accountId, registration: 'linked', current: false, approval: 'approved', prepared: false, stopped: false, retired: false, erased: false, unsent: 0, isolated: 0, mockReceiptConfirmed: false, mockClosed: false });
+    S.devices.push({ id: Math.max(...S.devices.map(d => d.id)) + 1, name: `管理者の追加端末 ${S.devices.length + 1}`, role: '管理者', accountId: S.devices.find(d => d.current).accountId, registration: 'linked', current: false, approval: 'approved', prepared: false, stopped: false, retired: false, erased: false, unsent: 0, isolated: 0, mockReceiptConfirmed: false, mockClosed: false });
     return render();
   }
   if (action === 'focusSeat') {
