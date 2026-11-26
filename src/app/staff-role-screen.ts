@@ -168,10 +168,10 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
   function release(role: RoleGrant) {
     if (busy || locked || !view || pending.length) return;
     const basis = structuredClone(view), basisAt = loadedAt, summary = el('div');
-    summary.append(el('p', '', `対象：${role.humanUid.slice(-8)}`), el('p', '', '臨時管理者 → 一般受付'),
-      el('p', '', '保存が確定すると、今すぐ臨時管理者の管理権限を解除します。有効期間の編集ではありません。'),
+    summary.append(el('p', '', `対象：${role.humanUid.slice(-8)}`),
+      el('p', '', '臨時管理者を解除し、一般受付に戻します。'),
       el('p', '', `一般受付の利用期限：${new Date(basis.snapshot.staffDeadline).toLocaleString('ja-JP')}`),
-      el('p', '', '同じ本人のすべての端末に反映します。受付の利用には現在の本人・端末と準備確認が必要です。保存済み受付記録と監査は保持し、停止端末は復帰させません。'));
+      el('p', '', 'このスタッフの全ての端末に反映します。'));
     const id = crypto.randomUUID(), validation = el('p', 'device-error permission-validation'); validation.setAttribute('role', 'alert');
 
     /** 解除時点の開始時刻を使い、現在の期限・認可を再検査する。 */

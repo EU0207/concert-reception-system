@@ -61,7 +61,7 @@ test('ROLE315-B01 任命と解除の確認・キャンセル・確定後の自�
   await expect(page.locator('.staff-role-card')).toContainText('臨時管理者');
   await page.getByRole('button', { name: '臨時管理者を解除', exact: true }).click();
   await expect(page.getByRole('dialog').locator('input')).toHaveCount(0);
-  await expect(page.getByRole('dialog')).toContainText('今すぐ');
+  await expect(page.getByRole('dialog')).toContainText('臨時管理者を解除し、一般受付に戻します。');
   await save(page); await closeResult(page);
   await expect(page.locator('.staff-role-card')).toContainText('一般受付');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
