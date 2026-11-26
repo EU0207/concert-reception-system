@@ -693,6 +693,32 @@ test('DD96-R00 許可表64通りを直接要求し、許可された8方向だ�
   assert.equal(allowed, 8);
 });
 
+test('DD98-R04 任期終了後の再任命・解除だけ許可し、停止と公演期限の迂回を拒否する', async () => {
+  for (const next of ['temporary', 'receptionist']) {
+    const f = await roleChangeFixture(next, 'deputy', 'temporary');
+    const oldProfile = (await request(`${root}/temporaryPermissionProfiles/${f.target.human.uid}/1`, 'GET')).body;
+    f.target.grant.endsAt = Date.now() - 1;
+    oldProfile.validUntil = f.target.grant.endsAt;
+    await request(`${root}/roles/${f.target.human.uid}`, 'PUT', f.target.grant);
+    await request(`${root}/temporaryPermissionProfiles/${f.target.human.uid}/1`, 'PUT', oldProfile);
+    const profile = next === 'temporary' ? f.updates[`temporaryPermissionProfiles/${f.target.human.uid}/2`] : null;
+    if (profile) for (const key of TEMPORARY_PERMISSIONS) profile.permissions[key] = key === 'manualReception';
+    f.updates[`authorizationAudit/${f.operationId}`] = createAuthorizationAudit({ role: f.after, profile, result: f.result }, f.target.grant, oldProfile);
+    assert.equal((await request(`${root}/roleChangeRequests/${f.operationId}`, 'PUT', f.change, f.actor.device.token)).status, 200);
+    assert.equal((await request(root, 'PATCH', f.updates, f.actor.device.token)).status, 200);
+    assert.equal((await request(`${root}/roles/${f.target.human.uid}`, 'GET')).body.revision, 2);
+  }
+  for (const restriction of ['inactive', 'deadline', 'receptionist', 'deputy']) {
+    const f = await roleChangeFixture(restriction === 'deputy' ? 'deputy' : 'temporary', 'owner', 'temporary');
+    const expired = { ...f.target.grant, endsAt: Date.now() - 1 };
+    if (restriction === 'inactive') expired.active = false;
+    if (restriction === 'receptionist') { expired.role = 'receptionist'; f.change.previousRole = 'receptionist'; }
+    await request(`${root}/roles/${f.target.human.uid}`, 'PUT', expired);
+    if (restriction === 'deadline') await request(`${root}/control/staffDeadline`, 'PUT', Date.now() - 1);
+    assert.equal((await request(`${root}/roleChangeRequests/${f.operationId}`, 'PUT', f.change, f.actor.device.token)).status, 401, restriction);
+  }
+});
+
 test('DD96-R01・DD98-R01 役割・初回設定・結果・監査を一体確定し、部分送信を拒否する', async () => {
   const f = await roleChangeFixture();
   assert.equal(

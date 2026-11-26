@@ -6,7 +6,7 @@ import { ensureDeviceKey } from '../../storage/device-vault.ts';
 import { createAuthorizationOperationJournal } from '../../storage/authorization-operations.ts';
 import { authorizeOnline, RECENT_AUTH_WINDOW } from '../../domain/authorization/policy.ts';
 import { requireValue } from '../../domain/seats/validation.ts';
-import { createRoleChangeRequest } from '../../domain/authorization/role-management.ts';
+import { createRoleChangeRequest, validateTemporaryPermissions } from '../../domain/authorization/role-management.ts';
 import type { RoleChangeRequest } from '../../domain/authorization/role-management.ts';
 import type { StaffRoleUiPort, StaffRoleView, PendingStaffRole } from '../../app/staff-role-types.ts';
 
@@ -47,7 +47,7 @@ export function createStaffRoleUiPort(
     current = { ...result, pending: [], obsolete: [] }; loadedAt = performance.now(); locked = false;
     try {
       for (const id of await journal.list(assertAuthorized)) {
-        const saved = await journal.read(id, assertAuthorized) as { kind?: string; request?: RoleChangeRequest } | null;
+        const saved = await journal.read(id, assertAuthorized) as { kind?: string; request?: RoleChangeRequest; initialPermissions?: PendingStaffRole['input']['initialPermissions'] } | null;
         if (saved?.kind !== 'roleChange') continue;
         const request = saved.request;
         requireValue(request?.operationId === id, 'FIXED_OPERATION_REQUIRED');
@@ -58,9 +58,9 @@ export function createStaffRoleUiPort(
         assertAuthorized();
         if (outcome) continue;
         const pending = { targetUid: request.targetUid, input: { operationId: id, expectedRevision: request.expectedRevision,
-          nextRole: request.nextRole, startsAt: request.startsAt, endsAt: request.endsAt } };
+          nextRole: request.nextRole, startsAt: request.startsAt, endsAt: request.endsAt, initialPermissions: saved.initialPermissions } };
         const role = current.targets.find(item => item.role.humanUid === request.targetUid)?.role;
-        (role?.revision === request.expectedRevision ? current.pending : current.obsolete).push(pending);
+        (role?.revision === request.expectedRevision && (request.nextRole !== 'temporary' || saved.initialPermissions) ? current.pending : current.obsolete).push(pending);
       }
       assertAuthorized();
       const boundaries = result.targets.flatMap(({ role, profile }) => [role.startsAt, role.endsAt, profile?.validFrom, profile?.validUntil])
@@ -81,6 +81,7 @@ export function createStaffRoleUiPort(
       assertAuthorized(); await ensureDeviceKey(binding, false); assertAuthorized();
       const role = current!.targets.find(item => item.role.humanUid === change.targetUid)?.role;
       requireValue(role && ['temporary', 'receptionist'].includes(role.role) && ['temporary', 'receptionist'].includes(change.input.nextRole), 'ROLE_CHANGE_FORBIDDEN');
+      if (change.input.nextRole === 'temporary') validateTemporaryPermissions(change.input.initialPermissions!);
       createRoleChangeRequest(current!.snapshot, role, change.input, current!.serverNow + Math.max(0, Math.floor(performance.now() - loadedAt)));
       await authorization.roles.saveRoleInput(change.targetUid, change.input, journal, assertAuthorized);
       known.add(change.input.operationId);

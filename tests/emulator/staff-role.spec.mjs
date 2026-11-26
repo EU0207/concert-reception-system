@@ -58,8 +58,9 @@ async function reopen(page, f) {
 
 /** 入力の確認と保存を行う。 */
 async function save(page) {
-  await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
-  await page.getByRole('button', { name: 'この内容で保存', exact: true }).click();
+  const confirm = page.getByRole('button', { name: '変更内容を確認', exact: true });
+  if (await confirm.count()) await confirm.click();
+  await page.getByRole('dialog').getByRole('button', { name: /^(任命する|再任命する|解除して一般受付へ戻す)$/ }).click();
 }
 
 /** 確定案内を閉じる。 */
@@ -81,13 +82,16 @@ test('ROLE315-S01 任命・解除を一体確定し、保存失敗時は送信�
         return window.originalRoleAdd.apply(this, args);
       };
     });
+    await page.getByRole('checkbox', { name: '手動受付', exact: true }).uncheck();
     await save(page); await expect(page.getByRole('alert')).toContainText('設定を変更できません');
     expect((await data(f)).roleChangeRequests).toBeUndefined();
     await page.evaluate(() => { IDBObjectStore.prototype.add = window.originalRoleAdd; });
-    await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click(); await save(page); await closeResult(page);
+    await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click();
+    await page.getByRole('checkbox', { name: '手動受付', exact: true }).uncheck(); await save(page); await closeResult(page);
     let current = await data(f);
     expect(current.roles[uid]).toMatchObject({ role: 'temporary', revision: 2, humanUid: uid });
-    expect(Object.values(current.temporaryPermissionProfiles[uid]['2'].permissions)).toEqual(Array(9).fill(true));
+    expect(current.temporaryPermissionProfiles[uid]['2'].permissions.manualReception).toBe(false);
+    expect(Object.values(current.temporaryPermissionProfiles[uid]['2'].permissions).filter(Boolean)).toHaveLength(8);
     expect(current.devices[f.staffDevice]).toEqual(before.devices[f.staffDevice]);
     expect(Object.values(current.roleChangeResults)).toHaveLength(1); expect(Object.values(current.authorizationAudit)).toHaveLength(1);
     // 対象が直接、自分の役割だけを書き換える経路はRulesで拒否する。
@@ -183,7 +187,7 @@ test('ROLE315-S04 登録済み変更案を再起動後に同じIDで確定し、
     expect((await fetch(f.root, { method: 'PATCH', headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
       body: JSON.stringify({ [`roles/${uid}`]: { ...current.roles[uid], revision: 3 }, [`temporaryPermissionProfiles/${uid}/3`]: profile }) })).status).toBe(200);
     await reopen(page, f);
-    await expect(page.getByText(/版が変わった未確定入力1件/)).toBeVisible();
+    await expect(page.getByText(/再確認が必要な未確定入力1件/)).toBeVisible();
     await expect(page.getByRole('button', { name: '同じ操作を再試行', exact: true })).toHaveCount(0);
     const result = await page.evaluate(async binding => {
       const { createAuthorizationOperationJournal } = await import('/src/storage/authorization-operations.ts');
@@ -199,5 +203,56 @@ test('ROLE315-S04 登録済み変更案を再起動後に同じIDで確定し、
     }, f.binding);
     expect(result).toBe('STALE_OR_INACTIVE_TARGET');
     expect(Object.keys((await data(f)).roleChangeRequests)).toHaveLength(1);
+  } finally { await f.other.close(); }
+});
+
+test('ROLE315-S05 終了した臨時任期を選択した権限で再任命し、再起動後も固定入力と停止端末を保つ', async ({ page, browser }) => {
+  const f = await setup(page, browser);
+  try {
+    const before = await data(f), device = before.devices[f.staffDevice], uid = device.humanUid, now = Date.now();
+    const { TEMPORARY_PERMISSIONS } = await import('../../src/domain/authorization/types.ts');
+    const role = { ...before.roles[uid], role: 'temporary', startsAt: now - 10000, endsAt: now - 1 };
+    const profile = { schemaVersion: 1, humanUid: uid, roleVersion: 1, status: 'active', validFrom: role.startsAt, validUntil: role.endsAt,
+      permissions: Object.fromEntries(TEMPORARY_PERMISSIONS.map(key => [key, true])) };
+    const stopped = { ...device, active: false, approved: true, preparedRole: 'temporary', preparedRoleRevision: 1 };
+    expect((await fetch(f.root, { method: 'PATCH', headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+      body: JSON.stringify({ [`roles/${uid}`]: role, [`temporaryPermissionProfiles/${uid}/1`]: profile, [`devices/${f.staffDevice}`]: stopped }) })).status).toBe(200);
+    await mount(page, f.binding, 'before');
+    await page.getByRole('button', { name: '臨時管理者に再任命', exact: true }).click();
+    await page.getByRole('checkbox', { name: 'すべて選択／解除', exact: true }).uncheck();
+    await page.getByRole('checkbox', { name: '手動受付', exact: true }).check();
+    await save(page); await expect(page.getByRole('alert')).toContainText('結果を確認');
+    expect((await data(f)).roleChangeRequests).toBeUndefined();
+    await reopen(page, f);
+    await page.getByRole('button', { name: '同じ操作を再試行', exact: true }).click(); await closeResult(page);
+    const current = await data(f), selected = current.temporaryPermissionProfiles[uid]['2'].permissions;
+    expect(selected.manualReception).toBe(true); expect(Object.values(selected).filter(Boolean)).toHaveLength(1);
+    expect(current.temporaryPermissionProfiles[uid]['1']).toEqual(profile);
+    expect(current.devices[f.staffDevice]).toEqual(stopped);
+    expect(current.roles[uid].revision).toBe(2);
+    expect(Object.values(current.authorizationAudit)).toHaveLength(1);
+  } finally { await f.other.close(); }
+});
+
+test('ROLE315-S06 保存済みの初期設定が欠けた案は全ONに補充せず送信前に拒否する', async ({ page, browser }) => {
+  const f = await setup(page, browser);
+  try {
+    const result = await page.evaluate(async binding => {
+      const { createAuthorizationOperationJournal } = await import('/src/storage/authorization-operations.ts');
+      const { createRoleChangeRequest } = await import('/src/domain/authorization/role-management.ts');
+      const { snapshot, serverNow } = await window.managementPort.fetchCurrent();
+      const inventory = await window.managementPort.roles.listStaffRoles(), target = inventory.targets[0].role;
+      const id = crypto.randomUUID(), request = createRoleChangeRequest(snapshot, target, { operationId: id, expectedRevision: target.revision,
+        nextRole: 'temporary', startsAt: serverNow, endsAt: snapshot.staffDeadline }, serverNow);
+      const journal = createAuthorizationOperationJournal(binding);
+      await journal.save(id, { kind: 'roleChange', request }, () => {});
+      try { await window.managementPort.roles.commit(id, journal, () => {}); return 'UNEXPECTED_SUCCESS'; }
+      catch (cause) { return cause.code; }
+    }, f.binding);
+    expect(result).toBe('INITIAL_PERMISSIONS_REQUIRED');
+    expect((await data(f)).roleChangeRequests).toBeUndefined();
+    await mount(page, f.binding);
+    await expect(page.getByText(/再確認が必要な未確定入力1件/)).toBeVisible();
+    await expect(page.getByRole('button', { name: '同じ操作を再試行', exact: true })).toHaveCount(0);
   } finally { await f.other.close(); }
 });

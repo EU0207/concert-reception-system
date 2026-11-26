@@ -156,7 +156,7 @@ export function roleManagementRules({ root, preparedAuthorization, roleRead, pro
   function allowedRoles(target, next) {
     const old = f(target, 'role');
 
-    return `(${old} !== ${next} && ${old} !== 'owner' && ${next} !== 'owner'
+    return `((${old} !== ${next} || (${old} === 'temporary' && ${next} === 'temporary' && ${f(target, 'endsAt')} <= now)) && ${old} !== 'owner' && ${next} !== 'owner'
       && (${['deputy', 'temporary', 'receptionist'].map((value) => `${next} === '${value}'`).join(' || ')})
       && (${f(ownRole, 'role')} === 'owner' || ((${old} === 'temporary' || ${old} === 'receptionist')
         && (${next} === 'temporary' || ${next} === 'receptionist'))))`;
@@ -164,10 +164,15 @@ export function roleManagementRules({ root, preparedAuthorization, roleRead, pro
 
   /** 役割変更案の所属・現在版と固定入力を検査する。 */
   function requestValid(request, operationId, target = role(root, f(request, 'targetUid'))) {
+    // 任期終了だけを再任命・一般受付への復帰に使い、停止・他役割の期限切れは迂回させない。
+    const expiredTemporary = `(${scope(target)} && ${f(target, 'active')} === true
+      && ${f(target, 'role')} === 'temporary' && ${f(target, 'startsAt')} <= now && ${f(target, 'endsAt')} <= now
+      && now < ${f(`${root}.child('control')`, 'staffDeadline')}
+      && (${f(request, 'nextRole')} === 'temporary' || ${f(request, 'nextRole')} === 'receptionist'))`;
     return `${recent} && ${scope(request)} && ${f(request, 'schemaVersion')} === 1
       && ${f(request, 'operationId')} === ${operationId}
       && ${f(request, 'actorUid')} === ${f(ownRole, 'humanUid')} && ${f(request, 'actorDeviceUid')} === auth.uid
-      && ${targetActive(target)} && ${f(target, 'humanUid')} === ${f(request, 'targetUid')}
+      && (${targetActive(target)} || ${expiredTemporary}) && ${f(target, 'humanUid')} === ${f(request, 'targetUid')}
       && ${f(request, 'expectedRevision')} === ${f(target, 'revision')}
       && ${f(request, 'previousRole')} === ${f(target, 'role')}
       && ${allowedRoles(target, f(request, 'nextRole'))}

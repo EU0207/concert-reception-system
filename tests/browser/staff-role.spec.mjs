@@ -8,8 +8,9 @@ const route = '/#/events/00000000-0000-4000-8000-000000000001/roles';
 
 /** 入力確認を経て、同じ案の保存へ進む。 */
 async function save(page) {
-  await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
-  await page.getByRole('button', { name: 'この内容で保存', exact: true }).click();
+  const confirm = page.getByRole('button', { name: '変更内容を確認', exact: true });
+  if (await confirm.count()) await confirm.click();
+  await page.getByRole('dialog').getByRole('button', { name: /^(任命する|再任命する|解除して一般受付へ戻す)$/ }).click();
 }
 
 /** 結果案内を閉じ、自動取得された一覧へ戻る。 */
@@ -48,16 +49,20 @@ async function remount(page) {
 test('ROLE315-B01 任命と解除の確認・キャンセル・確定後の自動表示を確認する', async ({ page }) => {
   await page.goto(route);
   await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click();
-  await expect(page.getByRole('dialog').getByRole('listitem')).toHaveCount(9);
+  await expect(page.getByRole('dialog').getByRole('checkbox')).toHaveCount(10);
+  await page.getByRole('checkbox', { name: '手動受付', exact: true }).uncheck();
   await expect(page.getByRole('dialog').getByRole('button')).toHaveText(['変更内容を確認', 'キャンセル']);
   await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('同じ本人のすべての端末');
-  await expect(page.getByRole('dialog')).toContainText('9項目すべて○');
+  await expect(page.getByRole('dialog')).toContainText('× 手動受付');
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
   await expect(page.locator('.staff-role-card')).toContainText('一般受付');
   await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click(); await save(page); await closeResult(page);
   await expect(page.locator('.staff-role-card')).toContainText('臨時管理者');
-  await page.getByRole('button', { name: '臨時管理者を解除', exact: true }).click(); await save(page); await closeResult(page);
+  await page.getByRole('button', { name: '臨時管理者を解除', exact: true }).click();
+  await expect(page.getByRole('dialog').locator('input')).toHaveCount(0);
+  await expect(page.getByRole('dialog')).toContainText('今すぐ');
+  await save(page); await closeResult(page);
   await expect(page.locator('.staff-role-card')).toContainText('一般受付');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
@@ -65,7 +70,7 @@ test('ROLE315-B01 任命と解除の確認・キャンセル・確定後の自�
 test('ROLE315-B02 不正な期間は赤いエラーで拒否し、保存しない', async ({ page }) => {
   await page.goto(route); await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click();
   await page.getByLabel('有効終了', { exact: true }).fill('2000-01-01T00:00');
-  await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
+  await expect(page.getByRole('button', { name: '変更内容を確認', exact: true })).toBeDisabled();
   await expect(page.getByRole('dialog').getByRole('alert')).toContainText('有効開始より後');
   await expect(page.getByRole('dialog').getByRole('alert')).toBeInViewport();
   await expect(page.getByRole('dialog').getByRole('alert')).toHaveCSS('color', 'rgb(161, 38, 34)');
@@ -106,7 +111,7 @@ test('ROLE315-B05 未確定案の取消しは一般受付のまま、版変更�
     await trial.backend.prepare(change); await trial.backend.commit(change.input.operationId);
   });
   await page.getByRole('button', { name: '最新の役割を確認', exact: true }).click();
-  await expect(page.getByText(/版が変わった未確定入力1件/)).toBeVisible();
+  await expect(page.getByText(/再確認が必要な未確定入力1件/)).toBeVisible();
   await expect(page.getByRole('button', { name: '同じ操作を再試行', exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => window.roleTrial.calls)).toBe(1);
 });
@@ -149,14 +154,44 @@ test('ROLE315-B08 日付を変えて上限を越えた理由と、開いたま�
   await page.clock.install({ time }); await page.clock.setFixedTime(time);
   await page.goto(route); await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click();
   await page.getByLabel('有効終了', { exact: true }).fill('2026-11-28T12:00');
-  await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
+  await expect(page.getByRole('button', { name: '変更内容を確認', exact: true })).toBeDisabled();
   await expect(page.getByRole('dialog').getByRole('alert')).toContainText('スタッフ利用期限');
   await expect(page.getByRole('dialog').getByRole('alert')).toBeInViewport();
   await page.clock.setFixedTime(new Date(time.getTime() + 16 * 60_000));
-  await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
+  await page.clock.runFor(1100);
   await expect(page.getByRole('dialog').getByRole('alert')).toContainText('ページを再読み込み');
   await expect(page.getByRole('dialog').getByRole('alert')).toBeInViewport();
-  await expect(page.getByRole('button', { name: 'この内容で保存', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '任命する', exact: true })).toHaveCount(0);
+});
+
+test('ROLE315-B10 任期終了後は新しい権限で再任命し、公演の利用期限後は許可しない', async ({ page }) => {
+  await page.clock.install(); await fixture(page, 'before');
+  await page.evaluate(async () => {
+    const trial = window.roleTrial, data = await trial.backend.load(), role = data.targets[0].role;
+    const flags = Object.fromEntries(Object.keys(data.snapshot.temporaryProfile?.permissions ?? {}).map(key => [key, false]));
+    const { TEMPORARY_PERMISSIONS } = await import('/src/domain/authorization/types.ts');
+    const change = { targetUid: role.humanUid, input: { operationId: crypto.randomUUID(), expectedRevision: 1, nextRole: 'temporary',
+      startsAt: data.serverNow - 1, endsAt: data.serverNow + 5000, initialPermissions: Object.fromEntries(TEMPORARY_PERMISSIONS.map(key => [key, false])) } };
+    await trial.backend.prepare(change); await trial.backend.commit(change.input.operationId);
+    trial.port.commit = id => trial.backend.commit(id);
+  });
+  await page.clock.fastForward(6000);
+  await page.getByRole('button', { name: '最新の役割を確認', exact: true }).click();
+  await page.getByRole('button', { name: '臨時管理者に再任命', exact: true }).click();
+  await expect(page.getByRole('checkbox', { name: '手動受付', exact: true })).toBeChecked();
+  await page.getByRole('checkbox', { name: 'すべて選択／解除', exact: true }).uncheck();
+  await page.getByRole('checkbox', { name: '手動受付', exact: true }).check();
+  await save(page); await closeResult(page);
+  const profile = await page.evaluate(async () => (await window.roleTrial.backend.load()).targets[0].profile);
+  expect(profile.roleVersion).toBe(3); expect(profile.permissions.manualReception).toBe(true);
+  expect(Object.values(profile.permissions).filter(Boolean)).toHaveLength(1);
+  await page.evaluate(() => {
+    const trial = window.roleTrial;
+    trial.port.load = async () => { const data = await trial.backend.load(); data.snapshot.staffDeadline = data.serverNow - 1; return data; };
+  });
+  await page.getByRole('button', { name: '最新の役割を確認', exact: true }).click();
+  await expect(page.getByText('公演のスタッフ利用期限を過ぎています。この公演では任命できません。')).toBeVisible();
+  await expect(page.getByRole('button', { name: '臨時管理者に再任命', exact: true })).toHaveCount(0);
 });
 
 test('ROLE315-B09 今日の日時を期限内で変更すると確認・保存できる', async ({ page }) => {

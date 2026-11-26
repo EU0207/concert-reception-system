@@ -1013,6 +1013,7 @@ p {
 .permission-edit-dialog > h2, .permission-edit-dialog > .dialog-actions { flex-shrink: 0; }
 .permission-edit-dialog > .device-error { flex-shrink: 0; margin: 12px 0 0; }
 .permission-edit-dialog > .device-error:empty { display: none; }
+.permission-validation:not(:empty) { padding: 10px 12px; background: #fff1f0; border: 1px solid #d99794; border-radius: 8px; font-weight: 600; }
 .permission-edit-body { min-height: 0; overflow-y: auto; }
 .permission-period { display: grid; gap: 12px; margin-top: 16px; }
 .permission-period .seat-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }

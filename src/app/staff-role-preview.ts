@@ -2,8 +2,8 @@
 
 import { createDeviceManagementPreview } from './device-management-preview.ts';
 import type { Scope } from '../domain/seats/types.ts';
-import type { RoleGrant, TemporaryProfile } from '../domain/authorization/types.ts';
-import { createRoleChangeRequest, commitRoleChange, createAuthorizationAudit, cancelAuthorizationChange } from '../domain/authorization/role-management.ts';
+import type { RoleGrant, TemporaryProfile, TemporaryPermission } from '../domain/authorization/types.ts';
+import { createRoleChangeRequest, commitRoleChange, createAuthorizationAudit, cancelAuthorizationChange, validateTemporaryPermissions } from '../domain/authorization/role-management.ts';
 import type { RoleChangeRequest } from '../domain/authorization/role-management.ts';
 import type { StaffRoleUiPort, StaffRoleOutcome } from './staff-role-types.ts';
 
@@ -12,14 +12,14 @@ export function createStaffRolePreview(scope: Scope): StaffRoleUiPort {
   const source = createDeviceManagementPreview(scope), now = Date.now();
   let role: RoleGrant = { ...scope, humanUid: 'preview-reception-staff', role: 'receptionist', active: true, revision: 1, startsAt: now - 1000, endsAt: now + 3 * 3600_000 };
   let profile: TemporaryProfile | null = null;
-  const saved = new Map<string, RoleChangeRequest>(), results = new Map<string, StaffRoleOutcome>();
+  const saved = new Map<string, { request: RoleChangeRequest; initialPermissions?: Record<TemporaryPermission, boolean> | undefined }>(), results = new Map<string, StaffRoleOutcome>();
 
   return {
     /** 未確定案は再送せず、現在版と照合して返す。 */
     async load() {
       const current = await source.load();
-      const changes = [...saved.values()].filter(item => !results.has(item.operationId)).map(request => ({ targetUid: request.targetUid,
-        input: { operationId: request.operationId, expectedRevision: request.expectedRevision, nextRole: request.nextRole, startsAt: request.startsAt, endsAt: request.endsAt } }));
+      const changes = [...saved.values()].filter(item => !results.has(item.request.operationId)).map(({ request, initialPermissions }) => ({ targetUid: request.targetUid,
+        input: { operationId: request.operationId, expectedRevision: request.expectedRevision, nextRole: request.nextRole, startsAt: request.startsAt, endsAt: request.endsAt, initialPermissions } }));
       return structuredClone({ snapshot: current.snapshot, serverNow: Date.now(), targets: [{ role, profile }],
         pending: changes.filter(item => item.input.expectedRevision === role.revision), obsolete: changes.filter(item => item.input.expectedRevision !== role.revision) });
     },
@@ -30,14 +30,15 @@ export function createStaffRolePreview(scope: Scope): StaffRoleUiPort {
       const current = await source.load();
       const request = createRoleChangeRequest(current.snapshot, role, change.input, Date.now());
       if (saved.has(request.operationId)) throw Error('FIXED_OPERATION_REQUIRED');
-      saved.set(request.operationId, request);
+      const initialPermissions = request.nextRole === 'temporary' ? validateTemporaryPermissions(change.input.initialPermissions!) : undefined;
+      saved.set(request.operationId, { request, initialPermissions });
     },
 
     /** 役割・初期設定と監査の計算結果を、同じIDで一度だけ反映する。 */
     async commit(id) {
       const prior = results.get(id); if (prior) return prior;
-      const request = saved.get(id); if (!request) throw Error('FIXED_OPERATION_REQUIRED');
-      const current = await source.load(), plan = commitRoleChange(current.snapshot, role, request, null, Date.now());
+      const change = saved.get(id); if (!change) throw Error('FIXED_OPERATION_REQUIRED');
+      const current = await source.load(), plan = commitRoleChange(current.snapshot, role, change.request, null, Date.now(), change.initialPermissions);
       createAuthorizationAudit(plan, role, profile);
       role = plan.role; profile = plan.profile; results.set(id, 'committed'); return 'committed';
     },
@@ -45,7 +46,7 @@ export function createStaffRolePreview(scope: Scope): StaffRoleUiPort {
     /** 未確定案の取消しでは現在の役割・設定を変更しない。 */
     async cancel(id) {
       const prior = results.get(id); if (prior) return prior;
-      const request = saved.get(id); if (!request) throw Error('FIXED_OPERATION_REQUIRED');
+      const request = saved.get(id)?.request; if (!request) throw Error('FIXED_OPERATION_REQUIRED');
       const current = await source.load();
       cancelAuthorizationChange(current.snapshot, role, id, request.expectedRevision, 'roleChange', profile, Date.now());
       results.set(id, 'cancelled'); return 'cancelled';

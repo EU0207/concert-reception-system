@@ -9,6 +9,7 @@ import {
   changeTemporaryPermissions,
   createAuthorizationAudit,
   cancelAuthorizationChange,
+  validateTemporaryPermissions,
 } from '../../domain/authorization/role-management.ts';
 import type {
   RoleChangeRequest,
@@ -20,7 +21,9 @@ import type {
   HumanIdentity,
   RoleGrant,
   TemporaryProfile,
+  TemporaryPermission,
 } from '../../domain/authorization/types.ts';
+import { TEMPORARY_PERMISSIONS } from '../../domain/authorization/types.ts';
 import type { AuthorizationOperationJournal } from '../../storage/authorization-operations.ts';
 import { isId, requireValue } from '../../domain/seats/validation.ts';
 import { authorizeOnline, validUid } from '../../domain/authorization/policy.ts';
@@ -35,9 +38,9 @@ interface Context {
 }
 
 type PermissionInput = Parameters<typeof changeTemporaryPermissions>[2];
-type RoleInput = Parameters<typeof createRoleChangeRequest>[2];
+type RoleInput = Parameters<typeof createRoleChangeRequest>[2] & { initialPermissions?: Record<TemporaryPermission, boolean> | undefined };
 type SavedOperation =
-  | { kind: 'roleChange'; request: RoleChangeRequest }
+  | { kind: 'roleChange'; request: RoleChangeRequest; initialPermissions?: Record<TemporaryPermission, boolean> | undefined }
   | { kind: 'permissionChange'; targetUid: string; input: PermissionInput; requestedAt: number };
 
 /** 役割変更と臨時権限の固定入力・確定・取消しを扱う窓口を作る。 */
@@ -92,7 +95,9 @@ export function createRoleManagementPort(context: Context) {
   async function saveRoleInput(uid: string, input: RoleInput, journal: AuthorizationOperationJournal, assertAuthorized: () => void) {
     const { snapshot, serverNow } = await context.fetchCurrent();
     const request = createRoleChangeRequest(snapshot, await target(uid), input, serverNow);
-    await journal.save(request.operationId, { kind: 'roleChange', request }, assertAuthorized);
+    const initial = request.nextRole === 'temporary' ? { initialPermissions: validateTemporaryPermissions(input.initialPermissions ??
+      Object.fromEntries(TEMPORARY_PERMISSIONS.map(key => [key, true])) as Record<TemporaryPermission, boolean>) } : {};
+    await journal.save(request.operationId, { kind: 'roleChange', request, ...initial }, assertAuthorized);
     assertAuthorized();
     return request;
   }
@@ -185,6 +190,10 @@ export function createRoleManagementPort(context: Context) {
       return current;
     }
 
+    if (saved.kind === 'roleChange' && saved.request.nextRole === 'temporary') {
+      requireValue(saved.initialPermissions, 'INITIAL_PERMISSIONS_REQUIRED');
+      validateTemporaryPermissions(saved.initialPermissions);
+    }
     // 初回送信では案のサーバー時刻が新しくなるため、確定判定の現在時刻は登録後に取得する。
     const published = saved.kind === 'roleChange' ? await publishRoleRequest(saved.request, assertAuthorized) : null;
     const { snapshot, serverNow } = await context.fetchCurrent();
@@ -203,7 +212,10 @@ export function createRoleManagementPort(context: Context) {
             )) as GoogleAcceptance | null)
           : null;
 
-      plan = commitRoleChange(snapshot, before, request, acceptance, serverNow);
+      // 新しい初期設定は保全済み入力だけを使用し、欠損を全ONへ補わない。
+      if (request.nextRole === 'temporary') requireValue(saved.initialPermissions, 'INITIAL_PERMISSIONS_REQUIRED');
+      plan = commitRoleChange(snapshot, before, request, acceptance, serverNow,
+        request.nextRole === 'temporary' ? validateTemporaryPermissions(saved.initialPermissions!) : undefined);
     } else plan = changeTemporaryPermissions(snapshot, before, saved.input, serverNow);
 
     const audit = createAuthorizationAudit(plan, before, oldProfile);

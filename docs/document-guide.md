@@ -15,6 +15,8 @@
 
 ## 記載の分担
 
+[ADR-020：任命時権限と任期終了後の再任命](development/decisions/ADR-020-temporary-role-reappointment.md)はIn Review。DD-98の一体確定と再任命を#315・PR #316へ接続する方式を記録する。
+
 [ADR-019：役割名を管理者へ統一](development/decisions/ADR-019-administrator-role-name.md)はApproved。現行表記は管理者とし、過去の原文に残る主担当も同じ役割を指す。内部識別子・権限と保存契約は維持する。
 
 [名称統一の確認記録](development/technical-validation/administrator-role-name-results.md)はApproved。表示名の適用範囲、旧リンクと内部識別子の維持を確認する。
