@@ -64,7 +64,7 @@ async function closeResult(page) {
   await page.getByRole('dialog', { name: '結果を確認しました', exact: true }).getByRole('button', { name: '閉じる', exact: true }).click();
 }
 
-test('TEMP313-S01 通常SDKで保存・取消し・復元を一体確定し、保存失敗と受付側の直接取得を拒否する', async ({ page, browser }) => {
+test('TEMP313-S01 通常SDKで変更・全解除・全選択を一体確定し、保存失敗と受付側の直接取得を拒否する', async ({ page, browser }) => {
   const f = await prepare(page, browser);
   try {
     await mount(page, f.binding);
@@ -85,15 +85,15 @@ test('TEMP313-S01 通常SDKで保存・取消し・復元を一体確定し、�
     await page.getByRole('checkbox', { name: '手動受付', exact: true }).uncheck(); await save(page); await closeResult(page);
     await expect(page.locator('.permission-card')).toContainText('手動受付：×');
     await page.getByRole('button', { name: '権限を設定', exact: true }).click();
-    await page.getByRole('button', { name: '設定を取り消す', exact: true }).click();
-    await page.getByRole('button', { name: 'この内容で保存', exact: true }).click(); await closeResult(page);
-    await expect(page.locator('.permission-card')).toContainText('設定取消済み');
+    const all = page.getByRole('checkbox', { name: 'すべて選択／解除', exact: true });
+    await all.check(); await all.uncheck(); await save(page); await closeResult(page);
+    await expect(page.locator('.permission-card')).toContainText('許可する項目：0／9');
     await page.getByRole('button', { name: '権限を設定', exact: true }).click();
-    await page.getByRole('button', { name: '既定値（すべて○）に戻す', exact: true }).click(); await save(page); await closeResult(page);
+    await all.check(); await save(page); await closeResult(page);
     data = await (await fetch(f.root, { headers: { authorization: 'Bearer owner' } })).json();
     expect(data.roles[f.uid]).toMatchObject({ role: 'temporary', revision: 4 });
     expect(data.temporaryPermissionProfiles[f.uid]['2'].permissions.manualReception).toBe(false);
-    expect(data.temporaryPermissionProfiles[f.uid]['3'].status).toBe('revoked');
+    expect(data.temporaryPermissionProfiles[f.uid]['3'].status).toBe('active');
     expect(Object.values(data.temporaryPermissionProfiles[f.uid]['3'].permissions).every(value => value === false)).toBe(true);
     expect(Object.values(data.temporaryPermissionProfiles[f.uid]['4'].permissions).every(value => value === true)).toBe(true);
     expect(Object.keys(data.temporaryPermissionOperations)).toHaveLength(3);

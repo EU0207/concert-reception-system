@@ -19,7 +19,8 @@ test('TEMP313-B01 固定9項目を確認・取消し後に変更し、最新設�
   await page.goto(route);
   await expect(page.locator('.permission-row')).toHaveCount(9);
   await page.getByRole('button', { name: '権限を設定', exact: true }).click();
-  await expect(page.getByRole('checkbox')).toHaveCount(9);
+  await expect(page.getByRole('dialog').locator('.permission-option input')).toHaveCount(9);
+  await expect(page.getByRole('checkbox')).toHaveCount(10);
   await page.getByRole('checkbox', { name: '手動受付', exact: true }).uncheck();
   await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('手動受付：○ → ×');
@@ -36,17 +37,28 @@ test('TEMP313-B01 固定9項目を確認・取消し後に変更し、最新設�
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('TEMP313-B02 設定取消しは全OFFの新しい版で、全ONへの復元も明示確認する', async ({ page }) => {
+test('TEMP313-B02 一括選択は三状態を反映し、全解除・全選択も確認後に保存する', async ({ page }) => {
   await page.goto(route);
   await page.getByRole('button', { name: '権限を設定', exact: true }).click();
-  await page.getByRole('button', { name: '設定を取り消す', exact: true }).click();
+  const all = page.getByRole('checkbox', { name: 'すべて選択／解除', exact: true });
+  await expect(all).toBeChecked();
+  await page.getByRole('checkbox', { name: '手動受付', exact: true }).uncheck();
+  await expect(all).toHaveJSProperty('indeterminate', true);
+  await all.check(); await all.uncheck();
+  await expect(page.getByRole('dialog').locator('input[type="checkbox"]:checked')).toHaveCount(0);
+  await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
+  await expect(page.locator('.permission-card')).toContainText('許可する項目：9／9');
+  await page.getByRole('button', { name: '権限を設定', exact: true }).click();
+  await all.uncheck();
+  await expect(page.getByRole('dialog').getByRole('button')).toHaveText(['変更内容を確認', 'キャンセル']);
+  await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('全項目×の新しい版');
   await page.getByRole('button', { name: 'この内容で保存', exact: true }).click(); await closeResult(page);
-  await expect(page.locator('.permission-card')).toContainText('設定取消済み');
+  await expect(page.locator('.permission-card')).toContainText('許可する項目：0／9');
   await expect(page.locator('.permission-card')).toContainText('一般受付の共通操作');
   await page.getByRole('button', { name: '権限を設定', exact: true }).click();
   await expect(page.getByRole('dialog').locator('input[type="checkbox"]:checked')).toHaveCount(0);
-  await page.getByRole('button', { name: '既定値（すべて○）に戻す', exact: true }).click();
+  await all.check();
   await save(page); await closeResult(page);
   await expect(page.locator('.permission-card')).toContainText('許可する項目：9／9');
 });

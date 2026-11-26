@@ -1006,8 +1006,12 @@ p {
 
 /* 権限設定も端末管理と同じカード・余白を使い、固定9項目を読みやすく並べる。 */
 .permission-card { margin-top: 20px; }
-.permission-option { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; }
-.permission-option input { flex: 0 0 auto; width: 20px; height: 20px; margin: 2px 0; accent-color: #326560; }
+.permission-option, .permission-all { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; }
+.permission-option input, .permission-all input { flex: 0 0 auto; width: 20px; height: 20px; margin: 2px 0; accent-color: #326560; }
+.permission-all { padding-bottom: 14px; margin-bottom: 4px; border-bottom: 1px solid #dce2d8; font-weight: 700; }
+.permission-edit-dialog[open] { display: flex; flex-direction: column; overflow: hidden; }
+.permission-edit-dialog > h2, .permission-edit-dialog > .dialog-actions { flex-shrink: 0; }
+.permission-edit-body { min-height: 0; overflow-y: auto; }
 .permission-period { display: grid; gap: 12px; margin-top: 16px; }
 .permission-period .seat-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .permission-period input { width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid #c8d5cd; border-radius: 8px; font: inherit; }

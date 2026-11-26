@@ -103,14 +103,30 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
   /** 9項目と期間を編集し、変更前後を確認してから固定入力へ渡す。 */
   function edit(role: RoleGrant, profile: TemporaryProfile) {
     if (busy || locked || !view || pending.length) return;
-    const basis = structuredClone(view), values = structuredClone(profile.permissions), body = el('div');
+    const basis = structuredClone(view), values = structuredClone(profile.permissions), body = el('div', 'permission-edit-body');
     const checks = new Map<TemporaryPermission, HTMLInputElement>();
+    const allLabel = el('label', 'permission-all'), all = el('input'); all.type = 'checkbox';
+    allLabel.append(all, el('span', '', 'すべて選択／解除'));
+
+    /** 全選択・未選択・一部選択を、個別項目の現在値へ揃える。 */
+    function updateSelection() {
+      const count = TEMPORARY_PERMISSIONS.filter(key => values[key]).length;
+      all.checked = count === TEMPORARY_PERMISSIONS.length;
+      all.indeterminate = count > 0 && count < TEMPORARY_PERMISSIONS.length;
+    }
+
     body.append(el('p', '', `対象：臨時管理者（${role.humanUid.slice(-8)}）`),
-      el('p', 'muted', '受付開始・停止、端末管理、役割変更などの禁止操作は、この設定では許可できません。'));
+      el('p', 'muted', '受付開始・停止、端末管理、役割変更などの禁止操作は、この設定では許可できません。'), allLabel);
     for (const key of TEMPORARY_PERMISSIONS) {
       const label = el('label', 'permission-option'), input = el('input'); input.type = 'checkbox'; input.checked = values[key];
-      input.addEventListener('change', () => { values[key] = input.checked; }); checks.set(key, input); label.append(input, el('span', '', labels[key])); body.append(label);
+      input.addEventListener('change', () => { values[key] = input.checked; updateSelection(); }); checks.set(key, input); label.append(input, el('span', '', labels[key])); body.append(label);
     }
+    // 一括変更は編集中の値だけに反映し、確認・保存までは送信しない。
+    all.addEventListener('change', () => {
+      for (const key of TEMPORARY_PERMISSIONS) { values[key] = all.checked; checks.get(key)!.checked = all.checked; }
+      updateSelection();
+    });
+    updateSelection();
     const start = el('input'), end = el('input');
     for (const input of [start, end]) { input.type = 'datetime-local'; input.step = '1'; }
     start.value = localDate(profile.validFrom); end.value = localDate(profile.validUntil);
@@ -124,28 +140,28 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
     const validation = el('p', 'device-error'); validation.setAttribute('role', 'alert'); body.append(validation);
 
     /** 編集値を検証し、変更前後の確認を開く。取消しでは保存しない。 */
-    function confirm(revoke: boolean) {
+    function confirm() {
       if (locked || disposed) return;
       const from = start.value === initialStart ? profile.validFrom : Date.parse(start.value);
       const until = end.value === initialEnd ? profile.validUntil : Date.parse(end.value);
       const change: PendingPermission = { targetUid: role.humanUid, input: { operationId: crypto.randomUUID(), expectedRevision: role.revision,
-        revoke, validFrom: from, validUntil: until, permissions: structuredClone(values) } };
+        revoke: false, validFrom: from, validUntil: until, permissions: structuredClone(values) } };
       try { changeTemporaryPermissions(basis.snapshot, role, change.input, basis.serverNow); }
       catch (cause) { validation.textContent = message(cause); return; }
       const summary = el('div'); summary.append(el('p', '', `対象：臨時管理者（${role.humanUid.slice(-8)}）`));
       for (const key of TEMPORARY_PERMISSIONS) {
         const row = el('p', 'permission-row');
-        row.append(el('span', '', `${labels[key]}：`), permissionMark(profile.permissions[key]), el('span', '', ' → '), permissionMark(!revoke && values[key]));
+        row.append(el('span', '', `${labels[key]}：`), permissionMark(profile.permissions[key]), el('span', '', ' → '), permissionMark(values[key]));
         summary.append(row);
       }
       summary.append(el('p', '', `有効期間：${new Date(from).toLocaleString('ja-JP')} ～ ${new Date(until).toLocaleString('ja-JP')}`),
-        el('p', '', revoke ? '設定を取り消し、全項目×の新しい版として保存します。一般受付の共通操作と保存済みの記録は保持します。' : '変更後は端末ごとの追加準備が必要です。準備前に新しい管理権限は使えません。'));
+        el('p', '', TEMPORARY_PERMISSIONS.every(key => !values[key]) ? '全項目×の新しい版として保存します。一般受付の共通操作と保存済みの記録は保持します。' : '変更後は端末ごとの追加準備が必要です。準備前に新しい管理権限は使えません。'));
       dialog?.close(); dialog = showDialog('権限設定の確認', summary, [button('この内容で保存', () => { dialog?.close(); void act(change, 'save'); })], 'キャンセル');
     }
 
-    body.append(button('既定値（すべて○）に戻す', () => { for (const key of TEMPORARY_PERMISSIONS) { values[key] = true; checks.get(key)!.checked = true; } }, 'button secondary'));
     dialog = showDialog('臨時管理者の権限設定', body,
-      [button('変更内容を確認', () => confirm(false)), button('設定を取り消す', () => confirm(true), 'button secondary')], 'キャンセル');
+      [button('変更内容を確認', confirm)], 'キャンセル');
+    dialog.classList.add('permission-edit-dialog');
   }
 
   /** 現在の設定と未確認結果を分離し、未取得を既定の全ONで表示しない。 */
