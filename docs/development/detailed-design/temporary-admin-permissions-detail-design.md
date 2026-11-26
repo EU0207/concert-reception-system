@@ -2,14 +2,14 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | Approved（PR #247）。権限設定の製品実装・試験は未実施 |
+| 状態 | Approved（PR #247）。設定画面#313・PR #314は開発者レビュー承認済み。業務別結合と対象実機の受入は未完了 |
 | 読者・目的 | 開発者・実装担当者・テスト担当者が、許可操作の設定と端末への反映を実装する |
 | 根拠 | [CONF-068](../ui-mock/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)、[BD-04の権限表](../basic-design/authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[DD-91の権限表](seat-management-detail-design.md#権限表) |
 | 関連 | [DD-96](staff-role-change-detail-design.md)、[ADR-012](../decisions/ADR-012-temporary-admin-permission-profiles.md)、[正式RTDB契約](rtdb-storage-contract.md)。実装・担当試験#110、全体無料受入#220 |
 
 ## DD-98-01 範囲・設定者と既定値
 
-2026-10-20、開発者がPR #247の先頭`621265ebd6b1ddb394497ae8d28f19cc40b83415`をレビュー承認し、mainへ統合した（`64f402cf46844e0608fc489de21c2b872f6024bf`）。DD-98とADR-012の案Aを承認済み。21ケースの製品試験は未実施。
+2026-10-20、開発者がPR #247の先頭`621265ebd6b1ddb394497ae8d28f19cc40b83415`をレビュー承認し、mainへ統合した（`64f402cf46844e0608fc489de21c2b872f6024bf`）。DD-98とADR-012の案Aを承認済み。21ケースの製品試験全体は未完了。設定画面と通常SDKの接続は[#313の確認記録](../technical-validation/temporary-permissions-ui-results.md)で範囲を区別する。
 
 臨時管理者へ既に許可された当日管理操作を、公演と本人UIDごとにON/OFFする。既存の禁止操作を設定で許可する機能にはしない。一般受付・管理者と代理管理者の権限表を変更せず、管理者引継ぎと役割変更はDD-96の別操作とする。
 

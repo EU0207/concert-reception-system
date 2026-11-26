@@ -23,7 +23,7 @@ import type {
 } from '../../domain/authorization/types.ts';
 import type { AuthorizationOperationJournal } from '../../storage/authorization-operations.ts';
 import { isId, requireValue } from '../../domain/seats/validation.ts';
-import { validUid } from '../../domain/authorization/policy.ts';
+import { authorizeOnline, validUid } from '../../domain/authorization/policy.ts';
 
 interface Context {
   humanDatabase: Database;
@@ -349,7 +349,18 @@ export function createRoleManagementPort(context: Context) {
     return stored;
   }
 
-  return { target, saveRoleRequest, acceptGoogle, savePermissionInput, commit, cancel, receipt };
+  /** 現在認可を確認し、臨時管理者と現在版の設定だけを一覧取得する。 */
+  async function listTemporaryPermissions() {
+    const current = await context.fetchCurrent();
+    authorizeOnline(current.snapshot, 'manageTemporaryPermissions', current.serverNow);
+    const roles = await read(context.deviceDatabase, 'roles') as Record<string, RoleGrant> | null;
+    requireValue(roles, 'ROLE_INVENTORY_REQUIRED');
+    const targets = await Promise.all(Object.values(roles).filter(role => role.role === 'temporary').map(async role =>
+      ({ role, profile: await previousProfile(role) })));
+    return { ...current, targets };
+  }
+
+  return { target, saveRoleRequest, acceptGoogle, savePermissionInput, commit, cancel, receipt, listTemporaryPermissions };
 }
 
 /** 認可の現在値から、環境IDと公演IDを取り出す。 */

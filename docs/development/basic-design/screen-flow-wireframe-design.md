@@ -26,7 +26,7 @@ CONF-071の[業務回答と変更設計](../detailed-design/seat-management-deta
 
 ## CONF-068による承認済み追補
 
-当日管理の公演終了・締めへの導線は管理者と代理管理者だけに表示する。臨時管理者と一般受付担当者が直接画面へ移動しても操作を許可しない。臨時管理者の公演・利用者別権限設定画面と操作範囲は[変更Issue #98](https://github.com/EU0207/concert-reception-system/issues/98)で設計する。[CONF-068](../ui-mock/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)を適用する。
+当日管理の公演終了・締めへの導線は管理者と代理管理者だけに表示する。臨時管理者と一般受付担当者が直接画面へ移動しても操作を許可しない。臨時管理者の公演・利用者別権限設定は[#98・DD-98](../detailed-design/temporary-admin-permissions-detail-design.md)で設計・承認済みであり、設定画面は[#313の確認記録](../technical-validation/temporary-permissions-ui-results.md)で実装範囲を区別する。[CONF-068](../ui-mock/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)を適用する。
 
 ## CONF-067による承認済み追補
 
