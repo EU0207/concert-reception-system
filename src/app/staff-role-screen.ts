@@ -153,8 +153,7 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
         row.append(mark, el('span', '', labels[key])); permissions.append(row);
       }
       summary.append(permissions);
-      summary.append(el('p', '', '同じ本人のすべての端末に反映します。選んだ権限だけを任命と同時に保存します。端末ごとの追加準備前に新しい管理権限は使えません。'),
-        el('p', '', '停止・廃止された端末は復帰しません。旧設定は今回の任命へ流用しません。'));
+      summary.append(el('p', '', 'このスタッフのすべての端末に反映します。利用する端末でデータ準備を行ってください。'));
       dialog?.close(); dialog = showDialog(reappointment ? '再任命の確認' : '任命の確認', summary,
         [button(reappointment ? '再任命する' : '任命する', () => { dialog?.close(); void act(pending, 'save'); })], 'キャンセル');
     }
