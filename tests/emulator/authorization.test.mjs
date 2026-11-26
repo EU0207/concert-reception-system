@@ -1034,6 +1034,7 @@ test('DD98-R03 設定取消しは全OFFの新しい版で、旧版の復活と�
   );
 });
 
+/** 直接API試験用に、端末状態と操作結果の一体更新を作る。 */
 function deviceUpdates(actor, target, kind, replacementDeviceUid = '') {
   const operationId = randomUUID(),
     previous = target.registration;
@@ -1082,13 +1083,18 @@ test('AUTH110-R07 停止は端末Aだけを失効し、同じ本人Bの認可と
     { ...a.session, deviceUid: b.uid },
     a.human.token,
   );
-  const updates = deviceUpdates(a, a, 'stop');
+  const selfStop = deviceUpdates(a, a, 'stop');
+  assert.equal((await request(root, 'PATCH', selfStop, a.device.token)).status, 401);
+  assert.equal((await request(`${root}/devices/${a.device.uid}`)).body.active, true);
+  assert.equal((await request(`${root}/devices/${a.device.uid}`)).body.revision, a.registration.revision);
+  assert.equal((await request(`${root}/deviceAuthorizationOperations/${Object.values(selfStop)[1].operationId}`)).body, null);
+  const updates = deviceUpdates({ ...a, device: b }, a, 'stop');
   for (const omitted of Object.keys(updates)) {
     const partial = { ...updates };
     delete partial[omitted];
-    assert.equal((await request(root, 'PATCH', partial, a.device.token)).status, 401);
+    assert.equal((await request(root, 'PATCH', partial, b.token)).status, 401);
   }
-  assert.equal((await request(root, 'PATCH', updates, a.device.token)).status, 200);
+  assert.equal((await request(root, 'PATCH', updates, b.token)).status, 200);
   assert.equal((await request(`${root}/control`, 'GET', undefined, a.device.token)).status, 401);
   assert.equal((await request(`${root}/control`, 'GET', undefined, b.token)).status, 200);
   assert.equal(

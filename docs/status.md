@@ -4,13 +4,13 @@
 |---|---|
 | 状態 | In Review |
 | 読者・目的 | 開発者・評価者が、READMEで要約した内容の詳細と根拠を確認する |
-| 更新日・関連 | 2026-11-17、[#298](https://github.com/EU0207/concert-reception-system/issues/298) |
+| 更新日・関連 | 2026-11-25、#296・308の本人認証・端末管理を部分更新。ほかの機能の確認範囲は既存記録を維持 |
 
 ## 現在の開発フェーズ
 
 **製品の実装と、実装済み部品の結合・テストを進めています。** 要件定義と予定した設計は承認済みですが、製品全体のテストと受入はこれからです。本番利用はできません。
 
-更新日：2026年11月17日。mainへの統合状況を基準とし、レビュー中の変更は区別しています。
+更新日：2026年11月25日。mainへの統合状況を基準とし、レビュー中の変更は区別しています。
 
 ## 工程別の進捗
 
@@ -32,7 +32,8 @@
 | 共通画面・PWA・座席編集 | 実装途中 | ローカルで会場席を編集可能。製品全体との結合と実機確認が残る（[#258](https://github.com/EU0207/concert-reception-system/issues/258)、[#105](https://github.com/EU0207/concert-reception-system/issues/105)） |
 | 端末保存・会場画像 | 一部実装済み | 暗号化した[下書き保存・復元](development/technical-validation/seat-local-storage-results.md)、[画像の追加・回転・拡大表示](development/technical-validation/venue-image-results.md)。確定保存との結合などが残る |
 | 認可・共有保存 | 基盤実装済み | 本人・端末認可と[共有保存・別端末復元](development/technical-validation/shared-seat-draft-results.md)をローカルのFirebaseエミュレーターで検証。実認証画面・業務操作との結合が残る |
-| 本人認証画面 | レビュー中 | ログイン・メール確認・再認証を実装した[PR #297](https://github.com/EU0207/concert-reception-system/pull/297)。main未統合 |
+| 本人認証画面 | main統合済み | [PR #297](https://github.com/EU0207/concert-reception-system/pull/297)を承認・統合。ローカル見本と通常SDKを確認。実認証後の業務接続は後続 |
+| 端末管理画面 | レビュー対象 | [台帳・承認・停止・解除・廃止](development/technical-validation/device-management-ui-results.md)を#308で実装。親#263の端末準備とスタッフ管理全体は進行中 |
 | QR受付・同期・帳票・運用画面 | 未完了 | 製品としての機能実装と機能間の結合が残る |
 
 ## テストの実施状況

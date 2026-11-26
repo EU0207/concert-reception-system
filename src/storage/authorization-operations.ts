@@ -8,6 +8,7 @@ import { isId, requireValue } from '../domain/seats/validation.ts';
 export interface AuthorizationOperationJournal {
   save(operationId: string, input: unknown, assertAuthorized: () => void): Promise<void>;
   read(operationId: string, assertAuthorized: () => void): Promise<unknown | null>;
+  list(assertAuthorized: () => void): Promise<string[]>;
 }
 
 /** 認可変更の固定入力を暗号化保存・読取りする窓口を作る。 */
@@ -135,5 +136,36 @@ export function createAuthorizationOperationJournal(
     }
   }
 
-  return { save, read };
+  /** 同じ環境・公演・端末の操作IDだけを列挙し、本文は個別の復号確認へ渡す。 */
+  async function list(assertAuthorized: () => void): Promise<string[]> {
+    assertAuthorized();
+    const database = await openDeviceDatabase();
+
+    try {
+      const ids = await new Promise<string[]>((resolve, reject) => {
+        const result: string[] = [];
+        const transaction = database.transaction('authorizationOperations', 'readonly');
+        const cursor = transaction.objectStore('authorizationOperations').openKeyCursor();
+        cursor.onsuccess = () => {
+          const item = cursor.result;
+          if (!item) return;
+          try {
+            const values: unknown = JSON.parse(String(item.key));
+            if (Array.isArray(values) && values.length === 4 && values[0] === scope.environmentId &&
+              values[1] === scope.performanceId && values[2] === scope.deviceUid && isId(values[3])) result.push(values[3]);
+            item.continue();
+          } catch { transaction.abort(); }
+        };
+        transaction.oncomplete = () => resolve(result);
+        transaction.onabort = () => reject(new Error('AUTHORIZATION_OPERATION_READ_FAILED'));
+        transaction.onerror = () => reject(new Error('AUTHORIZATION_OPERATION_READ_FAILED'));
+      });
+      assertAuthorized();
+      return ids;
+    } finally {
+      database.close();
+    }
+  }
+
+  return { save, read, list };
 }

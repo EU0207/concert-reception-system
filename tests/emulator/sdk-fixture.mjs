@@ -5,7 +5,7 @@ import {
   reauthenticateWithCredential,
 } from 'firebase/auth';
 import { getDatabase, goOffline } from 'firebase/database';
-export { ref, get, set } from 'firebase/database';
+export { ref, get, set, onValue } from 'firebase/database';
 
 /** ローカルdemoに接続した端末DBだけを、直接要求の試験へ渡す。 */
 export function getFictionalDeviceDatabase(principals) {

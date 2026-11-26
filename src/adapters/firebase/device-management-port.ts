@@ -12,6 +12,7 @@ import { createDeviceChangePlan } from '../../domain/authorization/device-safety
 import type { DeviceChangeInput } from '../../domain/authorization/device-safety.ts';
 import type { AuthorizationOperationJournal } from '../../storage/authorization-operations.ts';
 import { isId, requireValue } from '../../domain/seats/validation.ts';
+import { authorizeOnline } from '../../domain/authorization/policy.ts';
 
 interface Context {
   root: string;
@@ -103,9 +104,17 @@ export function createDeviceManagementPort(context: Context) {
       'OPERATION_RESULT_MISMATCH',
     );
 
-    // 自端末の停止・廃止は通常認可を失効する。業務へ戻さず確定結果だけを返す。
+    // 自端末の廃止は通常認可を失効する。業務へ戻さず確定結果だけを返す。
     return stored;
   }
 
-  return { prepare, commit, receipt };
+  /** 現在認可を検査し、管理者にだけ対象公演の台帳を返す。 */
+  async function list() {
+    const current = await context.fetchCurrent();
+    authorizeOnline(current.snapshot, 'manageDevices', current.serverNow);
+    const devices = await inventory();
+    return { ...current, inventory: devices };
+  }
+
+  return { prepare, commit, receipt, list };
 }

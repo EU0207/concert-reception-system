@@ -15,6 +15,8 @@
 
 ## 記載の分担
 
+[ADR-018：使用中の自端末の停止禁止](development/decisions/ADR-018-current-device-stop.md)はApproved。変更#310の依頼者了承と、画面・保存側の共通条件を記録する。
+
 初めて閲覧する第三者向けの概要は[README](../README.md)に集約する。詳しい操作と公開手順は以下を参照する。
 
 | 文書 | 読者・目的 | 更新時期 | 状態 |
@@ -219,6 +221,8 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 5. 重要な技術判断が必要になった場合はADRを確認する。
 
 ## 実装中の認可基盤
+
+[端末管理画面の実装・試験記録](development/technical-validation/device-management-ui-results.md)（In Review）に、#308の台帳・承認・停止・停止解除と廃止、応答不明後の同一ID照会を記録する。実環境の端末準備・業務画面の接続は親#263の後続とする。
 
 [本人認証画面の実装・試験記録](development/technical-validation/authentication-ui-results.md)（Approved、PR #297の範囲）に、#296のログイン・メール確認・再認証とログアウトを記録する。ローカル見本、通常SDK試験と実認証後の業務画面への未接続を区別する。
 

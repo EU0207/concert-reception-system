@@ -1,3 +1,5 @@
+// 端末の変更・代替保護と自己停止の拒否を、業務計算で確認する。
+
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
@@ -8,6 +10,7 @@ import {
 } from '../../../src/domain/authorization/index.ts';
 import { snapshot, now } from './fixtures.mjs';
 
+/** 主担当の2端末と代理管理者の端末を持つ架空台帳を作る。 */
 function inventory() {
   const actor = snapshot();
   const deputyRole = { ...actor.role, humanUid: 'fictional-deputy', role: 'deputy' };
@@ -52,6 +55,25 @@ test('AUTH110-T07 端末の停止・解除・廃止は期待版を守り、鍵�
     now,
   );
   assert.equal(retired.device.retired, true);
+});
+
+test('DEVICE310-T01 主担当と代理管理者の自己停止を拒否し、別端末の停止は許可する', () => {
+  const f = inventory();
+  for (const role of ['owner', 'deputy']) {
+    const actor = snapshot(role);
+    const before = structuredClone(actor.device);
+    const input = { operationId: '00000000-0000-4000-8000-000000000010',
+      targetDeviceUid: actor.deviceAuthUid, expectedRevision: actor.device.revision ?? 1,
+      kind: 'stop', replacementDeviceUid: '' };
+    assert.throws(() => createDeviceChangePlan(actor,
+      { roles: [actor.role], devices: [actor.device] }, input, now),
+    { code: 'SELF_DEVICE_STOP_FORBIDDEN' });
+    assert.deepEqual(actor.device, before);
+  }
+  const stopped = createDeviceChangePlan(f.actor, f.data,
+    { operationId: '00000000-0000-4000-8000-000000000011', targetDeviceUid: f.ownerB.deviceUid,
+      expectedRevision: 1, kind: 'stop', replacementDeviceUid: '' }, now);
+  assert.equal(stopped.device.active, false);
 });
 
 test('CONF066・069-T01 主担当には別の主担当端末が必要。代理の端末で代用しない', () => {

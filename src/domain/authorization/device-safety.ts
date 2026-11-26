@@ -190,8 +190,10 @@ export function createDeviceChangePlan(
     // 主担当の追加端末は一回限りの所持確認を要するため、通常の承認へ混ぜない。
     requireValue(targetRole.role !== 'owner', 'OWNER_DEVICE_PAIRING_REQUIRED');
   }
-  if (input.kind === 'stop')
+  if (input.kind === 'stop') {
+    requireValue(input.targetDeviceUid !== actor.deviceAuthUid, 'SELF_DEVICE_STOP_FORBIDDEN');
     requireValue(before.approved === true && before.active === true, 'DEVICE_NOT_ACTIVE');
+  }
   if (input.kind === 'resume')
     requireValue(before.approved === true && before.active === false, 'DEVICE_NOT_STOPPED');
   if (input.kind === 'retire' && ['owner', 'deputy'].includes(targetRole.role)) {

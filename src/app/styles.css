@@ -962,3 +962,44 @@ p {
 .authentication-screen .field-error { color: #a12622; }
 .authentication-screen [role='alert']:empty,
 .authentication-screen [role='status']:empty { display: none; }
+
+/* 端末台帳はモックと同じカード配置で、状態・準備と未取得の件数を区別する。 */
+.device-cards { display: grid; gap: 16px; margin-top: 20px; }
+.device-card { overflow-wrap: anywhere; }
+.device-error { color: #a12622; }
+
+/* 主担当停止の最終確認だけに警告色を使い、通常確認と区別する。 */
+.device-stop-dialog { border: 2px solid #a12622; border-top-width: 6px; }
+.device-stop-dialog h2 { color: #8f211d; }
+.device-stop-dialog .device-stop-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-left: 4px solid #a12622;
+  border-radius: 4px;
+  background: #fceeed;
+  color: #8f211d;
+  font-weight: 700;
+}
+.device-stop-warning-icon { flex: 0 0 auto; font-size: 1.5rem; line-height: 1.2; }
+.device-stop-dialog .device-stop-confirm { background: #a12622; border-color: #a12622; color: #fff; }
+.device-stop-dialog .device-stop-confirm:hover { background: #811d19; border-color: #811d19; }
+.device-error:empty, .device-management-screen [role='status']:empty { display: none; }
+.device-management-screen .button { min-height: 44px; white-space: normal; }
+.device-status-legend { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 20px 0 8px; font-size: .9rem; }
+.device-legend-ok { color: #24594c; }
+.device-legend-attention { color: #805500; }
+.device-legend-blocked { color: #a12622; }
+.device-status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 18px 0; }
+.device-status-item { position: relative; display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px 10px; border-radius: 8px; }
+.device-status-item dt { flex: 0 0 auto; font-size: .85rem; font-weight: 700; }
+.device-status-item dd { display: flex; align-items: center; gap: 8px; margin: 0; min-width: 0; }
+.device-status-mark { flex: 0 0 auto; font-size: 1.65rem; font-weight: 700; line-height: 1.2; }
+.device-status-description { font-size: .85rem; }
+.device-status-unknown { color: #53615f; background: #f1f3f2; }
+.device-retired { margin-top: 24px; }
+.device-retired summary { padding: 12px 0; cursor: pointer; font-weight: 700; }
+.device-status-ok { color: #24594c; background: #edf5ef; }
+.device-status-attention { color: #805500; background: #fff5df; }
+.device-status-blocked { color: #a12622; background: #fceeed; }
