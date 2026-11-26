@@ -74,7 +74,7 @@ const initialPeople = [{
 }];
 
 const sampleDevices = [
-  { id: 1, name: '見本端末 01', role: '主担当', current: true },
+  { id: 1, name: '見本端末 01', role: '管理者', current: true },
   { id: 2, name: '見本端末 02', role: '代理管理者', current: false },
   { id: 3, name: '見本端末 03', role: '臨時管理者', current: false },
   { id: 4, name: '見本端末 04', role: '一般受付担当者', current: false }
@@ -85,7 +85,7 @@ const S = {
   screen: 'home',
   history: [],
   drawerOpen: false,
-  role: '主担当',
+  role: '管理者',
   online: true,
   unread: 3,
   unsent: 0,
@@ -202,7 +202,7 @@ function header() {
 }
 
 function nav() {
-  const admin = ['主担当', '代理管理者'].includes(S.role);
+  const admin = ['管理者', '代理管理者'].includes(S.role);
   const groups = admin
     ? [['公演準備', ['home', 'prep', 'people', 'tickets', 'seats', 'placement', 'output']],
       ['当日・端末', ['staff', 'device', 'day', 'venue', 'management']]]
@@ -243,7 +243,7 @@ function selectedCellState() {
 }
 
 function home() {
-  let admin = ['主担当', '代理管理者'].includes(S.role);
+  let admin = ['管理者', '代理管理者'].includes(S.role);
   const currentShow = `<section class="card"><div class="eyebrow">現在の公演</div><h2>${esc(S.form.title)}</h2>` +
     `<p>2027年10月10日 · ${esc(S.form.venue)}</p>${status()}` +
     `<p style="margin-top:18px">${btn(admin ? '現在の公演を開く' : '担当公演を開く', admin ? 'prep' : 'day', 'primary')}</p></section>`;
@@ -320,7 +320,7 @@ function people() {
         </table>
       </div>
       <small class="muted">表は左右にスクロールできます。</small>
-    </div>`, '購入者名と座席表示名を分けて確認します。', ['主担当', '代理管理者'].includes(S.role) ? btn('お客様を追加', 'addPerson', 'primary') : '');
+    </div>`, '購入者名と座席表示名を分けて確認します。', ['管理者', '代理管理者'].includes(S.role) ? btn('お客様を追加', 'addPerson', 'primary') : '');
 }
 
 function seatDisplayName(label) {
@@ -444,7 +444,7 @@ function outputPeople(method) {
 }
 
 function output() {
-  if (!['主担当', '代理管理者'].includes(S.role)) return page('チケットデータ出力', '<div class="notice warn">出力は主担当・代理管理者の操作です。</div>');
+  if (!['管理者', '代理管理者'].includes(S.role)) return page('チケットデータ出力', '<div class="notice warn">出力は管理者・代理管理者の操作です。</div>');
   const electronic = outputPeople('電子チケット');
   const paper = outputPeople('紙チケット');
   const waiting = S.people.filter(person => !person.inactive && person.method !== '未選択' && !person.seat);
@@ -748,7 +748,7 @@ function handle(action) {
   if (!action) return;
   if (screens[action] && action !== 'messages') return go(action);
   if (action.startsWith('previewPdf:') || action.startsWith('completePdf:')) {
-    if (!['主担当', '代理管理者'].includes(S.role)) return toast('出力は管理者が行います');
+    if (!['管理者', '代理管理者'].includes(S.role)) return toast('出力は管理者が行います');
     const person = S.people.find(p => p.id === +action.split(':')[1]);
     if (!person || person.inactive || !person.seat || person.method !== '電子チケット') return toast('対象のお客様と交付方法を確認してください');
     if (action.startsWith('completePdf:')) { S.modal = null; return toast('PDFを出力しました（モックのため実ファイルは作成されません）'); }
@@ -757,7 +757,7 @@ function handle(action) {
     ]);
   }
   if (action === 'previewPaperExcel' || action === 'completePaperExcel') {
-    if (!['主担当', '代理管理者'].includes(S.role)) return toast('出力は管理者が行います');
+    if (!['管理者', '代理管理者'].includes(S.role)) return toast('出力は管理者が行います');
     const count = outputPeople('紙チケット').length;
     if (!count) return toast('紙チケットの出力対象はありません');
     if (action === 'completePaperExcel') { S.modal = null; return toast('Excel一覧を出力しました（モックのため実ファイルは作成されません）'); }
@@ -824,14 +824,14 @@ function handle(action) {
     return openModal('お客様対応状況の詳細', body, [{ label: '閉じる', action: 'modalClose' }]);
   }
   if (action === 'addPerson') {
-    if (S.screen !== 'people' || !['主担当', '代理管理者'].includes(S.role)) return;
+    if (S.screen !== 'people' || !['管理者', '代理管理者'].includes(S.role)) return;
     return openModal('お客様を追加', '<label class="field">購入者名（必須・50文字以内）<input id="new-person-name" maxlength="50" autocomplete="off"></label><label class="field">座席表示名（任意・6文字以内）<input id="new-person-label" maxlength="6" autocomplete="off"></label><p class="small muted">席未設定・各チェック未済で追加します。追加後に「保存」を押してください。</p><p id="add-person-error" class="notice warn" role="alert" hidden></p>', [
       { label: 'キャンセル', action: 'modalClose' },
       { label: '追加する', action: 'addPersonDo', style: 'primary' }
     ]);
   }
   if (action === 'addPersonDo') {
-    if (S.screen !== 'people' || !['主担当', '代理管理者'].includes(S.role) || S.modal?.title !== 'お客様を追加') return;
+    if (S.screen !== 'people' || !['管理者', '代理管理者'].includes(S.role) || S.modal?.title !== 'お客様を追加') return;
     const name = $('new-person-name')?.value.trim() || '';
     const label = $('new-person-label')?.value.trim() || '';
     if (!name || name.length > 50 || label.length > 6) {

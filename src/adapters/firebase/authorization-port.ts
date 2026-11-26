@@ -449,7 +449,7 @@ export async function createAuthorizationPort(
     invalidate();
   }
 
-  /** 明示割当済みの主担当として、公演の管理版と形式版を一体で初期化する。 */
+  /** 明示割当済みの管理者として、公演の管理版と形式版を一体で初期化する。 */
   async function initializePerformanceControl(): Promise<void> {
     const { snapshot, serverNow: confirmedTime } = await fetchCurrent();
     authorizeOnline(snapshot, 'controlReception', confirmedTime);

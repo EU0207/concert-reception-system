@@ -168,10 +168,10 @@ test('DEVICE308-S01 通常登録した端末を画面から承認・停止・解
     // RTDBはnull値の子を保持しないため、未準備の役割は未存在として返る。
     expect(data.devices[f.staffDevice].preparedRole ?? null).toBe(null);
     expect(Object.keys(data.deviceAuthorizationOperations)).toHaveLength(4);
-    const own = page.locator('.device-card').filter({ hasText: '主担当の端末' });
+    const own = page.locator('.device-card').filter({ hasText: '管理者の端末' });
     await own.getByRole('button', { name: '廃止', exact: true }).click();
     await page.getByRole('dialog').getByRole('button', { name: '廃止する', exact: true }).click();
-    await expect(page.getByRole('dialog').getByRole('alert')).toContainText('同じ主担当の別端末');
+    await expect(page.getByRole('dialog').getByRole('alert')).toContainText('同じ管理者の別端末');
     await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
     await expect(own.getByRole('button', { name: '停止', exact: true })).toHaveCount(0);
     const selfStop = await page.evaluate(async (binding) => {

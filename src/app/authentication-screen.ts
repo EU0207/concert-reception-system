@@ -106,7 +106,7 @@ export function createAuthenticationScreen(port: AuthenticationUiPort, preview =
     const actions = el('div', 'authentication-actions');
     if (!identity) {
       const google = button('Googleでログイン', () => { void act(() => port.google()); });
-      root.append(el('p', '', '主担当・代理管理者はGoogle、公演限定スタッフはメールとパスワードでログインします。'), google);
+      root.append(el('p', '', '管理者・代理管理者はGoogle、公演限定スタッフはメールとパスワードでログインします。'), google);
       const form = el('form', 'authentication-form');
       form.noValidate = true;
       form.append(field('メールアドレス', 'email', email, (value) => { email = value; }),

@@ -1,4 +1,4 @@
-// 明示割当済みの主担当による、公演管理情報の一度限りの初期化を検査する。
+// 明示割当済みの管理者による、公演管理情報の一度限りの初期化を検査する。
 
 import { validPerformanceCalendar } from './performance-calendar-rules.mjs';
 

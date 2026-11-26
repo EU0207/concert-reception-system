@@ -1,4 +1,4 @@
-// 主担当の追加端末リンクと所持確認、承認と監査のRTDB規則を生成する。
+// 管理者の追加端末リンクと所持確認、承認と監査のRTDB規則を生成する。
 
 /** 指定した子キーの値を参照するRules式を作る。 */
 const f = (node, key) => `${node}.child('${key}').val()`;
@@ -79,7 +79,7 @@ function record(fields, read, write, optional = []) {
   };
 }
 
-/** 主担当の追加端末リンク・読取り証跡と承認の規則を作る。 */
+/** 管理者の追加端末リンク・読取り証跡と承認の規則を作る。 */
 export function ownerDeviceLinkRules({ root, preparedAuthorization, registrationProof }) {
   const ownDevice = `${root}.child('devices').child(auth.uid)`;
   const owner = `${root}.child('roles').child(${f(`${root}.child('control')`, 'ownerUid')})`;
@@ -131,7 +131,7 @@ export function ownerDeviceLinkRules({ root, preparedAuthorization, registration
       && ${f(session, 'roleRevision')} === ${f(owner, 'revision')} && ${f(session, 'issuedAt')} <= now && now < ${f(session, 'expiresAt')}`;
   }
 
-  /** リンクの所属・対象主担当と期限・未使用状態を検査する。 */
+  /** リンクの所属・対象管理者と期限・未使用状態を検査する。 */
   function validLink(link) {
     return `${scope(link)} && ${f(link, 'schemaVersion')} === 1 && ${f(link, 'purpose')} === 'owner-device'
       && ${f(link, 'status')} === 'pending' && ${f(link, 'revision')} === 1 && ${f(link, 'issuedAt')} <= now && now < ${f(link, 'expiresAt')}

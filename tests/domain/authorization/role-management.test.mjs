@@ -22,7 +22,7 @@ const target = (role) => ({
   humanUid: 'fictional-target',
 });
 
-test('DD96-T01・02 主担当の6方向と代理の2方向だけを許可する', () => {
+test('DD96-T01・02 管理者の6方向と代理の2方向だけを許可する', () => {
   const roles = ['owner', 'deputy', 'temporary', 'receptionist'];
   let allowed = 0;
   for (const actorRole of roles)

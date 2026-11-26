@@ -1,4 +1,4 @@
-// 最後の管理端末と主担当の引継ぎを検証し、端末状態の変更案と削除前の保護を扱う。
+// 最後の管理端末と管理者の引継ぎを検証し、端末状態の変更案と削除前の保護を扱う。
 
 import type { AuthorizationSnapshot, DeviceGrant, RoleGrant } from './types.ts';
 import { authorizeOnline, validUid } from './policy.ts';
@@ -9,7 +9,7 @@ export interface DeviceInventory {
   devices: DeviceGrant[];
 }
 
-/** 台帳を検証し、公演内の唯一の有効な主担当を取得する。 */
+/** 台帳を検証し、公演内の唯一の有効な管理者を取得する。 */
 function owner(inventory: DeviceInventory, snapshot: AuthorizationSnapshot): RoleGrant {
   for (const item of [...inventory.roles, ...inventory.devices]) checkScope(item, snapshot);
 
@@ -81,7 +81,7 @@ export function requireReplacementDevice(
   return replacement;
 }
 
-/** 現主担当・後任の資格と受諾を確認し、引継ぎの可否を検証する。 */
+/** 現管理者・後任の資格と受諾を確認し、引継ぎの可否を検証する。 */
 export function requireOwnerHandover(
   actor: AuthorizationSnapshot,
   inventory: DeviceInventory,
@@ -187,7 +187,7 @@ export function createDeviceChangePlan(
 
   if (input.kind === 'approve') {
     requireValue(before.approved === false, 'DEVICE_ALREADY_APPROVED');
-    // 主担当の追加端末は一回限りの所持確認を要するため、通常の承認へ混ぜない。
+    // 管理者の追加端末は一回限りの所持確認を要するため、通常の承認へ混ぜない。
     requireValue(targetRole.role !== 'owner', 'OWNER_DEVICE_PAIRING_REQUIRED');
   }
   if (input.kind === 'stop') {

@@ -1,4 +1,4 @@
-// 主担当の追加端末リンクを扱う。発行・読取りと承認、取消しと監査を保存する。
+// 管理者の追加端末リンクを扱う。発行・読取りと承認、取消しと監査を保存する。
 
 import { get, ref, update, serverTimestamp } from 'firebase/database';
 import type { Database } from 'firebase/database';
@@ -76,7 +76,7 @@ const audit = (link: OwnerDeviceLink, event: string, reporterDeviceUid: string) 
   reporterDeviceUid,
 });
 
-/** 主担当の追加端末リンクを発行・読取り・承認する窓口を作る。 */
+/** 管理者の追加端末リンクを発行・読取り・承認する窓口を作る。 */
 export function createOwnerDeviceLinkPort(context: Context) {
   /** 現在の端末を記録者とする監査情報を作る。 */
   const makeAudit = (link: OwnerDeviceLink, event: string) => audit(link, event, context.deviceUid);
@@ -93,7 +93,7 @@ export function createOwnerDeviceLinkPort(context: Context) {
     return read(`ownerDeviceLinkResults/${operationId}`);
   }
 
-  /** 既存主担当端末から、一回限りの追加端末リンクを発行する。 */
+  /** 既存管理者端末から、一回限りの追加端末リンクを発行する。 */
   async function issue(
     targetDeviceUid: string,
     operationId: string,

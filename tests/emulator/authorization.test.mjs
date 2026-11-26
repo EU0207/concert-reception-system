@@ -1108,7 +1108,7 @@ test('AUTH110-R07 停止は端末Aだけを失効し、同じ本人Bの認可と
   assert.equal((await request(`${root}/control`, 'GET', undefined, a.device.token)).status, 200);
 });
 
-test('CONF066・069-R01 主担当端末の廃止は別の準備済み主担当端末を要求し、代理では代用しない', async () => {
+test('CONF066・069-R01 管理者端末の廃止は別の準備済み管理者端末を要求し、代理では代用しない', async () => {
   const a = await fixture('owner'),
     deputy = await fixture('deputy');
   await request(`${root}/sessions/${a.device.uid}`, 'PUT', a.session, a.human.token);
@@ -1187,7 +1187,7 @@ test('DD96・98-R04 取消しは役割を変えず、同じIDの確定との競�
   assert.equal((await request(`${root}/roles/${f.target.human.uid}`)).body.revision, 1);
 });
 
-test('CONF069-R02 現主担当の開始と後任のGoogle受諾後だけ、主担当を1人に保って引き継ぐ', async () => {
+test('CONF069-R02 現管理者の開始と後任のGoogle受諾後だけ、管理者を1人に保って引き継ぐ', async () => {
   const actor = await fixture('owner'),
     successor = await fixture('deputy');
   await request(`${root}/roles`, 'PUT', {
@@ -1616,7 +1616,7 @@ function ownerLinkApproval(f, link) {
   };
 }
 
-test('AUTH110-Q01 主担当追加端末は既存端末のリンクと本人確認を一回だけ使い、部分承認を拒否する', async () => {
+test('AUTH110-Q01 管理者追加端末は既存端末のリンクと本人確認を一回だけ使い、部分承認を拒否する', async () => {
   const f = await ownerLinkFixture();
   for (const token of [f.target.token, f.issuer.human.token, f.deputy.device.token]) {
     assert.equal((await request(root, 'PATCH', f.issueUpdates, token)).status, 401);
@@ -1719,7 +1719,7 @@ test('AUTH110-Q02 発行元停止・期限切れ・取消し後は、保存済�
   assert.equal((await request(root, 'PATCH', report, expired.target.token)).status, 200);
 });
 
-test('AUTH110-Q03 同じ主担当の別端末への転用・操作ID再利用と平文の混入を拒否する', async () => {
+test('AUTH110-Q03 同じ管理者の別端末への転用・操作ID再利用と平文の混入を拒否する', async () => {
   const f = await ownerLinkFixture();
   const leaked = structuredClone(f.issueUpdates);
   leaked[`ownerDeviceLinks/${f.digest}`].token = f.token;
@@ -1780,7 +1780,7 @@ test('AUTH110-Q03 同じ主担当の別端末への転用・操作ID再利用と
   assert.equal((await request(root, 'PATCH', approval, f.target.token)).status, 200);
 });
 
-test('PERF111-R01 保存契約の接続前は、認可済み主担当でも受付開始を直接書き込めない', async () => {
+test('PERF111-R01 保存契約の接続前は、認可済み管理者でも受付開始を直接書き込めない', async () => {
   const { human, device, session } = await fixture();
   assert.equal((await request(`${root}/sessions/${device.uid}`, 'PUT', session, human.token)).status, 200);
 
@@ -1805,7 +1805,7 @@ test('PERF111-R01 保存契約の接続前は、認可済み主担当でも受�
   assert.deepEqual((await request(`${root}/control`, 'GET', undefined, device.token)).body, control);
 });
 
-test('PERF111-R02 明示割当済み主担当の一体初期化だけを許可する', async () => {
+test('PERF111-R02 明示割当済み管理者の一体初期化だけを許可する', async () => {
   const { human, device, session } = await fixture();
   const deputy = await fixture('deputy');
   for (const actor of [{ human, device, session }, deputy]) {

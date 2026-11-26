@@ -1,4 +1,4 @@
-// 主担当の引継ぎを扱う。現主担当の開始と後任の受諾を照合し、役割と結果を保存する。
+// 管理者の引継ぎを扱う。現管理者の開始と後任の受諾を照合し、役割と結果を保存する。
 
 import { get, ref, set, update, serverTimestamp } from 'firebase/database';
 import type { Database } from 'firebase/database';
@@ -58,7 +58,7 @@ interface Context {
   fetchCurrent(): Promise<{ snapshot: AuthorizationSnapshot; serverNow: number }>;
 }
 
-/** 主担当引継ぎの案・後任の受諾と一体確定を扱う窓口を作る。 */
+/** 管理者引継ぎの案・後任の受諾と一体確定を扱う窓口を作る。 */
 export function createOwnerHandoverPort(context: Context) {
   /** 指定したDBから、公演内の引継ぎ情報を取得する。 */
   const read = async (database: Database, path: string) =>
@@ -67,7 +67,7 @@ export function createOwnerHandoverPort(context: Context) {
   /** 操作IDが対応するUUID形式か検証する。 */
   const checkedId = (id: string) => requireValue(isId(id), 'INVALID_OPERATION_ID');
 
-  /** 同じ操作IDの主担当引継ぎ結果を照会する。 */
+  /** 同じ操作IDの管理者引継ぎ結果を照会する。 */
   async function receipt(id: string): Promise<HandoverResult | null> {
     checkedId(id);
     await context.verify();
@@ -190,7 +190,7 @@ export function createOwnerHandoverPort(context: Context) {
     return acceptance;
   }
 
-  /** 現在認可と受諾を照合し、主担当UIDと役割・結果を一体保存する。 */
+  /** 現在認可と受諾を照合し、管理者UIDと役割・結果を一体保存する。 */
   async function commit(
     id: string,
     journal: AuthorizationOperationJournal,

@@ -15,6 +15,10 @@
 
 ## 記載の分担
 
+[ADR-019：役割名を管理者へ統一](development/decisions/ADR-019-administrator-role-name.md)はApproved。現行表記は管理者とし、過去の原文に残る主担当も同じ役割を指す。内部識別子・権限と保存契約は維持する。
+
+[名称統一の確認記録](development/technical-validation/administrator-role-name-results.md)はApproved。表示名の適用範囲、旧リンクと内部識別子の維持を確認する。
+
 [ADR-018：使用中の自端末の停止禁止](development/decisions/ADR-018-current-device-stop.md)はApproved。変更#310の依頼者了承と、画面・保存側の共通条件を記録する。
 
 初めて閲覧する第三者向けの概要は[README](../README.md)に集約する。詳しい操作と公開手順は以下を参照する。
@@ -134,11 +138,11 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 | システム構成・環境分離設計 | [system-architecture.md](development/basic-design/system-architecture.md) | PWA、端末保存、Firebase、ファイル、環境、設定、配布の責務と境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 構成、環境、接続、外部サービス、配布方式の変更時 | Approved |
 | 論理データモデル・データフロー・ライフサイクル設計 | [logical-data-model.md](development/basic-design/logical-data-model.md) | 公演シリーズと独立した公演を定める。座席、購入者名、座席表示名、チケット準備を含む業務データの意味、関係、正本、生成・共有・出力・削除経路を扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | データ項目、関係、配布範囲、保存・削除方針の変更時 | Approved |
 | オフライン同期・競合設計 | [offline-sync-conflict-design.md](development/basic-design/offline-sync-conflict-design.md) | 端末先行保存、差分同期、再送、冪等性、状態導出を定める。公演前編集の明示保存、版競合、読取り再利用、公演・端末ごとの同期分離、紙照合、締めの境界を扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 同期、競合、編集保存、紙照合、締め境界、外部サービス交換方式の変更時 | Approved |
-| 認証・役割・権限設計 | [authentication-authorization-design.md](development/basic-design/authentication-authorization-design.md) | 初期主担当Google UID、UID・公演単位の役割、複数端末と追加端末関連付け、1回限りの招待、公演限定スタッフの短期パスワード、端末単位の事前準備・オフライン許可、4役割、セッション、端末停止・廃止、隔離送信、Security Rulesへ渡す権限境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 認証方式、役割、権限、端末、セッション、外部サービス交換方式の変更時 | Approved |
+| 認証・役割・権限設計 | [authentication-authorization-design.md](development/basic-design/authentication-authorization-design.md) | 初期管理者Google UID、UID・公演単位の役割、複数端末と追加端末関連付け、1回限りの招待、公演限定スタッフの短期パスワード、端末単位の事前準備・オフライン許可、4役割、セッション、端末停止・廃止、隔離送信、Security Rulesへ渡す権限境界を定める | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 認証方式、役割、権限、端末、セッション、外部サービス交換方式の変更時 | Approved |
 | セキュリティ・プライバシー設計 | [security-privacy-design.md](development/basic-design/security-privacy-design.md) | 信頼境界、Security Rules、App Check、公開画面のFirestore非接続を定める。1回限りリンク、端末暗号化と鍵、Web保護を扱う。秘密情報・ログ、公開物、依存関係、インシデント対応も扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 脅威、認可、暗号化、鍵、外部サービス、公開・依存ゲートの変更時 | Approved |
 | 画面・画面遷移・操作見本設計 | [screen-flow-wireframe-design.md](development/basic-design/screen-flow-wireframe-design.md) | 公演準備と当日運用の画面を定める。座席キャンバス、下書き保存・確定、未保存変更の離脱確認、端末・終了処理の情報構造を扱う。主要操作見本と非技術的なエラー案内も定める | 依頼者、画面設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 業務フロー、画面、権限、状態、利用者向け文言の変更時 | Approved |
 | Excel・QR・PDF・CSV・帳票設計 | [file-output-report-design.md](development/basic-design/file-output-report-design.md) | 名簿取込、QR、電子チケット、PDF・Excelの主要出力、CSVの補助出力、当日運営表、座席表の形式を定める。取得済みデータからの端末内生成、安全な入出力、バックアップ・復旧・移行形式の後続設計境界も扱う | 依頼者、設計担当者、開発担当者、テスト担当者、運用担当者 | 基本設計時 | 入出力項目、形式、権限、印刷条件、安全対策の変更時 | Approved |
-| 運用・監視・締め・削除・復旧設計 | [operations-recovery-design.md](development/basic-design/operations-recovery-design.md) | 公演準備、利用量・App Check監視、障害・紙切替、復旧、締め、端末削除、削除希望、暗号化JSONバックアップ、引継ぎを定める | 依頼者、主担当、代理管理者、環境所有者、開発担当者、テスト担当者、運用担当者 | 基本設計時、公演準備時、障害・復旧時 | 運用役割、監視、費用、復旧、削除、外部サービス、引継ぎの変更時 | Approved |
+| 運用・監視・締め・削除・復旧設計 | [operations-recovery-design.md](development/basic-design/operations-recovery-design.md) | 公演準備、利用量・App Check監視、障害・紙切替、復旧、締め、端末削除、削除希望、暗号化JSONバックアップ、引継ぎを定める | 依頼者、管理者、代理管理者、環境所有者、開発担当者、テスト担当者、運用担当者 | 基本設計時、公演準備時、障害・復旧時 | 運用役割、監視、費用、復旧、削除、外部サービス、引継ぎの変更時 | Approved |
 | テスト方針 | [test-strategy.md](development/basic-design/test-strategy.md) | 受入条件39件の試験レベル、環境、架空データ、証跡、判定、PoC証跡との境界を定める | 依頼者、開発者、テスト担当者、運用担当者 | 基本設計時、個別ケース作成時 | 要件、受入条件、試験環境、判定方法の変更時 | Approved |
 | 基本設計一式レビュー・承認依頼書 | [basic-design-final-review.md](development/basic-design/basic-design-final-review.md) | BD-01～BD-09の整合、操作見本、Firebase交換境界、未決定事項、承認条件を一式で確認する | 依頼者、開発者、設計担当者、テスト担当者、運用担当者 | BD-10の一括レビュー時 | 指摘、依頼者回答、ADR、承認対象コミットの変更時 | In Review |
 | 第三者資産・依存関係の候補台帳 | [third-party-dependency-candidates.md](development/basic-design/third-party-dependency-candidates.md) | PoC由来の候補とTBD-011の採用前確認事項を記録する | 開発者、設計担当者、レビュー担当者 | BD-10と依存採用前 | 候補、版、権利、安全性、費用の確認時 | Approved |
@@ -222,7 +226,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 ## 実装中の認可基盤
 
-[端末管理画面の実装・試験記録](development/technical-validation/device-management-ui-results.md)（In Review）に、#308の台帳・承認・停止・停止解除と廃止、応答不明後の同一ID照会を記録する。実環境の端末準備・業務画面の接続は親#263の後続とする。
+[端末管理画面の実装・試験記録](development/technical-validation/device-management-ui-results.md)（Approved）に、#308の台帳・承認・停止・停止解除と廃止、応答不明後の同一ID照会を記録する。実環境の端末準備・業務画面の接続は親#263の後続とする。
 
 [本人認証画面の実装・試験記録](development/technical-validation/authentication-ui-results.md)（Approved、PR #297の範囲）に、#296のログイン・メール確認・再認証とログアウトを記録する。ローカル見本、通常SDK試験と実認証後の業務画面への未接続を区別する。
 
@@ -230,7 +234,7 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 会場画像の通常SDK保存基盤と、ローカル評価画面の画像操作は[会場画像の保存・表示　実装・試験記録](development/technical-validation/venue-image-results.md)（Approved、PR #287・295の範囲）を参照する。#244・105・104の確認済み範囲と残条件を分けて記録している。
 
-[本人・端末認可基盤の実装・試験記録](development/technical-validation/authorization-foundation-results.md)に、#110のローカル確認と後続の結合条件を記録する。状態はApproved（PR #268の範囲）。実機の認証寿命と初期主担当の実環境割当は未確認である。
+[本人・端末認可基盤の実装・試験記録](development/technical-validation/authorization-foundation-results.md)に、#110のローカル確認と後続の結合条件を記録する。状態はApproved（PR #268の範囲）。実機の認証寿命と初期管理者の実環境割当は未確認である。
 
 [公演保存基盤の実装・試験記録](development/technical-validation/performance-foundation-results.md)に、#111段階Aの受付状態の計算とRTDB接続に必要な残条件を記録する。
 

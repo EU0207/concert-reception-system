@@ -44,6 +44,7 @@ ADRは、重要な判断について「なぜその方法を選んだか」を�
 
 | ADR | 判断対象 | 状態 | 関連Issue |
 |---|---|---|---|
+| [ADR-019](ADR-019-administrator-role-name.md) | 公演内の最上位役割の表示名を管理者へ統一する | Accepted | #311・263・308 |
 | [ADR-018](ADR-018-current-device-stop.md) | 使用中の自端末の停止を画面・保存側で拒否する | Accepted | #310・308・263 |
 | [ADR-016](ADR-016-shared-draft-editor-state.md) | 共有下書きの初回採番状態と任意画像設定を欠落なく復元する契約 | Accepted（案A） | #290・104・105・244 |
 | [ADR-015](ADR-015-performance-calendar-authority.md) | 公演日のサーバー判定に使う暦の登録責任 | Accepted（案A） | #285・111・104・283 |
