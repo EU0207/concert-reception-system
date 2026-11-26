@@ -2,12 +2,14 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review |
+| 状態 | Approved（開発者レビュー。実機・業務別の結合は後続） |
 | 読者・目的 | 開発者・実装担当者が、9項目の設定画面と通常SDK接続、後続条件を確認する |
 | 更新日・関連 | 2026-11-26、子#313、親#263。端末管理PR #309と名称変更PR #312はmain統合済み |
 | 根拠 | [DD-98](../detailed-design/temporary-admin-permissions-detail-design.md)、[DD-96](../detailed-design/staff-role-change-detail-design.md)、[ADR-012](../decisions/ADR-012-temporary-admin-permission-profiles.md) |
 
 ## 結論と対象範囲
+
+2026-11-26、開発者からレビューOKとmain統合の指示を受領した。今回の承認は設定画面と記載した通常SDKの確認範囲であり、実際の任命・端末追加準備と各業務の受入を代替しない。
 
 既に臨時管理者として任命された本人の現在設定を表示し、固定9項目のON/OFFと有効期間を編集できる。変更前後を確認し、固定入力を暗号化保存してから、既存の通常SDKで役割版・プロファイルと結果・監査を一体確定する。権限範囲や保存形式を変更しない。
 

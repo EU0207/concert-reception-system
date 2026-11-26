@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | Approved（PR #247）。設定画面は#313でレビュー中。業務別結合と対象実機の受入は未完了 |
+| 状態 | Approved（PR #247）。設定画面#313・PR #314は開発者レビュー承認済み。業務別結合と対象実機の受入は未完了 |
 | 読者・目的 | 開発者・実装担当者・テスト担当者が、許可操作の設定と端末への反映を実装する |
 | 根拠 | [CONF-068](../ui-mock/ui-mock-client-response.md#conf-068-公演終了権限と臨時管理者の権限設定)、[BD-04の権限表](../basic-design/authentication-authorization-design.md#bd-04-04-主要操作の権限表)、[DD-91の権限表](seat-management-detail-design.md#権限表) |
 | 関連 | [DD-96](staff-role-change-detail-design.md)、[ADR-012](../decisions/ADR-012-temporary-admin-permission-profiles.md)、[正式RTDB契約](rtdb-storage-contract.md)。実装・担当試験#110、全体無料受入#220 |
