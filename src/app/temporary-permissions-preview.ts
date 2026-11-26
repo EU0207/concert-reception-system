@@ -26,6 +26,7 @@ export function createTemporaryPermissionsPreview(scope: Scope): TemporaryPermis
         pending: pending.filter(item => item.input.expectedRevision === role.revision),
         obsolete: pending.filter(item => item.input.expectedRevision !== role.revision) });
     },
+
     /** 見本の固定入力を、現在の役割条件で検査して保持する。 */
     async prepare(change) {
       const current = await source.load();
@@ -33,6 +34,7 @@ export function createTemporaryPermissionsPreview(scope: Scope): TemporaryPermis
       changeTemporaryPermissions(current.snapshot, role, change.input, Date.now());
       saved.set(change.input.operationId, structuredClone(change));
     },
+
     /** 共通計算と監査形式を使い、見本の役割版・設定を一度だけ更新する。 */
     async commit(id) {
       const prior = results.get(id); if (prior) return prior;
@@ -43,6 +45,7 @@ export function createTemporaryPermissionsPreview(scope: Scope): TemporaryPermis
       role = plan.role; profile = plan.profile!; results.set(id, 'committed');
       return 'committed';
     },
+
     /** 未確定の見本入力だけを取り消し、現在設定を変更しない。 */
     async cancel(id) {
       const prior = results.get(id); if (prior) return prior;
@@ -51,6 +54,7 @@ export function createTemporaryPermissionsPreview(scope: Scope): TemporaryPermis
       cancelAuthorizationChange(current.snapshot, role, id, change.input.expectedRevision, 'permissionChange', profile, Date.now());
       results.set(id, 'cancelled'); return 'cancelled';
     },
+
     /** 見本の既知結果だけを返し、照会では送信しない。 */
     receipt: async id => results.get(id) ?? null,
 

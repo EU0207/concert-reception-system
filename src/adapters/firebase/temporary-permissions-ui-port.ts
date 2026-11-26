@@ -69,27 +69,32 @@ export function createTemporaryPermissionsUiPort(
 
   return {
     load,
+
     /** 既存鍵を確認し、固定入力の保存が成功してから送信を許す。 */
     async prepare(change) {
       assertAuthorized(); await ensureDeviceKey(binding, false); assertAuthorized();
       await authorization.roles.savePermissionInput(change.targetUid, change.input, journal, assertAuthorized);
       known.add(change.input.operationId);
     },
+
     /** 同じIDの入力だけを現在の認可・版で再検査して確定する。 */
     async commit(id) {
       assertAuthorized(); requireValue(known.has(id), 'FIXED_OPERATION_REQUIRED');
       return (await authorization.roles.commit(id, journal, assertAuthorized)).status;
     },
+
     /** 保存済みの未確定案を、既存の結果・監査の一体更新で取り消す。 */
     async cancel(id) {
       assertAuthorized(); requireValue(known.has(id), 'FIXED_OPERATION_REQUIRED');
       return (await authorization.roles.cancel(id, journal, assertAuthorized)).status;
     },
+
     /** 既知のIDを照会し、結果照会から変更を送信しない。 */
     async receipt(id) {
       requireValue(!disposed && known.has(id), 'FIXED_OPERATION_REQUIRED');
       return (await authorization.roles.receipt('permissionChange', id))?.status ?? null;
     },
+
     /** 現在の認可が失効したことを画面へ通知する。 */
     onInvalidate: listener => { listeners.add(listener); return () => { listeners.delete(listener); }; },
 
