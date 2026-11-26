@@ -131,7 +131,7 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
     startLabel.append(start); endLabel.append(end); period.append(startLabel, endLabel); body.append(period,
       el('p', 'muted', `日時はこの端末の時刻（${Intl.DateTimeFormat().resolvedOptions().timeZone}）で入力します。`),
       el('p', 'muted', `設定できる期間：${new Date(role.startsAt).toLocaleString('ja-JP')} ～ ${new Date(Math.min(role.endsAt, basis.snapshot.staffDeadline)).toLocaleString('ja-JP')}`));
-    const validation = el('p', 'device-error'); validation.setAttribute('role', 'alert'); body.append(validation);
+    const validation = el('p', 'device-error'); validation.setAttribute('role', 'alert');
 
     /** 編集値を検証し、変更前後の確認を開く。取消しでは保存しない。 */
     function confirm() {
@@ -156,6 +156,8 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
     dialog = showDialog('臨時管理者の権限設定', body,
       [button('変更内容を確認', confirm)], 'キャンセル');
     dialog.classList.add('permission-edit-dialog');
+    // 9項目の下へエラーを隠さず、確認ボタンの直前へ固定する。
+    dialog.querySelector('.dialog-actions')!.before(validation);
   }
 
   /** 現在の設定と未確認結果を分離し、未取得を既定の全ONで表示しない。 */

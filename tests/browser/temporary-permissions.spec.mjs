@@ -69,6 +69,7 @@ test('TEMP313-B03 不正な期間を拒否し、編集をキャンセルした�
   await page.getByLabel('有効終了', { exact: true }).fill('2000-01-01T00:00');
   await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
   await expect(page.getByRole('dialog').getByRole('alert')).toContainText('有効期間');
+  await expect(page.getByRole('dialog').getByRole('alert')).toBeInViewport();
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
   await expect(page.locator('.permission-card')).toContainText('許可する項目：9／9');
 });

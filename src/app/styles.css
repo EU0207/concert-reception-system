@@ -1011,6 +1011,8 @@ p {
 .permission-all { padding-bottom: 14px; margin-bottom: 4px; border-bottom: 1px solid #dce2d8; font-weight: 700; }
 .permission-edit-dialog[open] { display: flex; flex-direction: column; overflow: hidden; }
 .permission-edit-dialog > h2, .permission-edit-dialog > .dialog-actions { flex-shrink: 0; }
+.permission-edit-dialog > .device-error { flex-shrink: 0; margin: 12px 0 0; }
+.permission-edit-dialog > .device-error:empty { display: none; }
 .permission-edit-body { min-height: 0; overflow-y: auto; }
 .permission-period { display: grid; gap: 12px; margin-top: 16px; }
 .permission-period .seat-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }

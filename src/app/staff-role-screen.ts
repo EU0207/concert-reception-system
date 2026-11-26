@@ -5,6 +5,7 @@ import { TEMPORARY_PERMISSIONS } from '../domain/authorization/types.ts';
 import { temporaryPermissionLabels as labels } from './temporary-permission-labels.ts';
 import type { RoleGrant } from '../domain/authorization/types.ts';
 import { createRoleChangeRequest } from '../domain/authorization/role-management.ts';
+import { RECENT_AUTH_WINDOW } from '../domain/authorization/policy.ts';
 import type { StaffRoleView, PendingStaffRole, StaffRoleOutcome, StaffRoleUiPort } from './staff-role-types.ts';
 
 /** 端末のタイムゾーンで、秒単位の日時入力値を作る。保存時は元のミリ秒を維持する。 */
@@ -99,16 +100,28 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
       body.append(el('p', '', '任命時は次の9項目すべて○で保存します。個別の変更は任命後の「臨時管理者の権限設定」で行えます。'));
       const list = el('ul'); for (const key of TEMPORARY_PERMISSIONS) list.append(el('li', '', labels[key])); body.append(list);
     } else body.append(el('p', '', '臨時管理者の管理権限を解除します。本人のアカウントや端末、保存済みの受付記録は削除しません。'));
-    const validation = el('p', 'device-error'); validation.setAttribute('role', 'alert'); body.append(validation);
+    const validation = el('p', 'device-error'); validation.setAttribute('role', 'alert');
 
     /** 入力を業務条件で検証し、確認が済んだ同じ内容だけを保存へ渡す。 */
     function confirm() {
       if (locked || disposed) return;
+      if (preview && Date.now() > basis.serverNow + RECENT_AUTH_WINDOW) {
+        validation.textContent = 'この見本の確認期限が過ぎています。ページを再読み込みして、開き直してください。';
+        return;
+      }
       const change: PendingStaffRole = { targetUid: role.humanUid, input: { operationId: crypto.randomUUID(), expectedRevision: role.revision, nextRole,
         startsAt: start.value === initialStart ? originalStart : Date.parse(start.value),
         endsAt: end.value === initialEnd ? originalEnd : Date.parse(end.value) } };
       try { createRoleChangeRequest(basis.snapshot, role, change.input, basis.serverNow); }
-      catch (cause) { validation.textContent = message(cause); return; }
+      catch (cause) {
+        const invalidPeriod = cause && typeof cause === 'object' && 'code' in cause && cause.code === 'INVALID_ROLE_PERIOD';
+        validation.textContent = invalidPeriod && change.input.startsAt >= change.input.endsAt
+          ? '有効終了は、有効開始より後の日時にしてください。'
+          : invalidPeriod && change.input.endsAt > basis.snapshot.staffDeadline
+            ? `有効終了がスタッフ利用期限（${new Date(basis.snapshot.staffDeadline).toLocaleString('ja-JP')}）を超えています。期限以内の日時にしてください。`
+            : message(cause);
+        return;
+      }
       const summary = el('div'); summary.append(el('p', '', '対象：' + role.humanUid.slice(-8)),
         el('p', '', (role.role === 'temporary' ? '臨時管理者' : '一般受付') + ' → ' + name),
         el('p', '', '有効期間：' + new Date(change.input.startsAt).toLocaleString('ja-JP') + ' ～ ' + new Date(change.input.endsAt).toLocaleString('ja-JP')),
@@ -119,6 +132,8 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
 
     dialog = showDialog(nextRole === 'temporary' ? '臨時管理者に任命' : '臨時管理者を解除', body, [button('変更内容を確認', confirm)], 'キャンセル');
     dialog.classList.add('permission-edit-dialog');
+    // 入力本文をスクロールしていても、操作を拒否した理由をボタンの直前に表示する。
+    dialog.querySelector('.dialog-actions')!.before(validation);
   }
 
   /** 現在役割と結果未確認の案を分離し、新規変更の重ね送りを防ぐ。 */

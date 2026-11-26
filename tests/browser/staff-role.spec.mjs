@@ -2,6 +2,8 @@
 
 import { test, expect } from '@playwright/test';
 
+test.use({ timezoneId: 'Asia/Tokyo' });
+
 const route = '/#/events/00000000-0000-4000-8000-000000000001/roles';
 
 /** 入力確認を経て、同じ案の保存へ進む。 */
@@ -64,7 +66,8 @@ test('ROLE315-B02 不正な期間は赤いエラーで拒否し、保存しな�
   await page.goto(route); await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click();
   await page.getByLabel('有効終了', { exact: true }).fill('2000-01-01T00:00');
   await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
-  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('終了を開始より後');
+  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('有効開始より後');
+  await expect(page.getByRole('dialog').getByRole('alert')).toBeInViewport();
   await expect(page.getByRole('dialog').getByRole('alert')).toHaveCSS('color', 'rgb(161, 38, 34)');
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
   await expect(page.locator('.staff-role-card')).toContainText('一般受付');
@@ -139,4 +142,30 @@ test('ROLE315-B07 確定後の再取得失敗は確定結果と区別し、再�
   await page.getByRole('button', { name: '最新の役割を確認', exact: true }).click();
   await expect(page.locator('.staff-role-card')).toContainText('臨時管理者');
   expect(await page.evaluate(() => window.roleTrial.calls)).toBe(1);
+});
+
+test('ROLE315-B08 日付を変えて上限を越えた理由と、開いたまま期限切れになった見本の案内が見える', async ({ page }) => {
+  const time = new Date('2026-11-27T00:00:00Z');
+  await page.clock.install({ time }); await page.clock.setFixedTime(time);
+  await page.goto(route); await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click();
+  await page.getByLabel('有効終了', { exact: true }).fill('2026-11-28T12:00');
+  await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
+  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('スタッフ利用期限');
+  await expect(page.getByRole('dialog').getByRole('alert')).toBeInViewport();
+  await page.clock.setFixedTime(new Date(time.getTime() + 16 * 60_000));
+  await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
+  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('ページを再読み込み');
+  await expect(page.getByRole('dialog').getByRole('alert')).toBeInViewport();
+  await expect(page.getByRole('button', { name: 'この内容で保存', exact: true })).toHaveCount(0);
+});
+
+test('ROLE315-B09 今日の日時を期限内で変更すると確認・保存できる', async ({ page }) => {
+  const time = new Date('2026-11-27T00:00:00Z');
+  await page.clock.install({ time }); await page.clock.setFixedTime(time);
+  await page.goto(route); await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click();
+  await page.getByLabel('有効開始', { exact: true }).fill('2026-11-27T08:59');
+  await page.getByLabel('有効終了', { exact: true }).fill('2026-11-27T12:30');
+  await save(page); await closeResult(page);
+  await expect(page.locator('.staff-role-card')).toContainText('臨時管理者');
+  await expect(page.locator('.staff-role-card')).toContainText('12:30');
 });
