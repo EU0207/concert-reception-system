@@ -256,3 +256,25 @@ test('ROLE315-S06 保存済みの初期設定が欠けた案は全ONに補充せ
     await expect(page.getByRole('button', { name: '同じ操作を再試行', exact: true })).toHaveCount(0);
   } finally { await f.other.close(); }
 });
+
+test('ROLE315-S07 対象の任期終了では操作者を失効させず、表示だけを一般受付へ戻す', async ({ page, browser }) => {
+  const f = await setup(page, browser);
+  try {
+    const before = await data(f), uid = before.devices[f.staffDevice].humanUid;
+    const { TEMPORARY_PERMISSIONS } = await import('../../src/domain/authorization/types.ts');
+    const role = { ...before.roles[uid], role: 'temporary', endsAt: Date.now() + 4000 };
+    const profile = { schemaVersion: 1, humanUid: uid, roleVersion: 1, status: 'active', validFrom: role.startsAt, validUntil: role.endsAt,
+      permissions: Object.fromEntries(TEMPORARY_PERMISSIONS.map(key => [key, true])) };
+    expect((await fetch(f.root, { method: 'PATCH', headers: { 'content-type': 'application/json', authorization: 'Bearer owner' },
+      body: JSON.stringify({ [`roles/${uid}`]: role, [`temporaryPermissionProfiles/${uid}/1`]: profile }) })).status).toBe(200);
+    await mount(page, f.binding);
+    await expect(page.locator('.staff-role-card').getByRole('heading')).toContainText('臨時管理者');
+    await expect(page.locator('.staff-role-card').getByRole('heading')).toContainText('一般受付担当者');
+    await expect(page.getByRole('button', { name: '臨時管理者を解除', exact: true })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: '臨時管理者に再任命', exact: true })).toBeVisible();
+    const current = await data(f);
+    expect(current.roles[uid]).toEqual(role); expect(current.temporaryPermissionProfiles[uid]['1']).toEqual(profile);
+    expect(current.roleChangeResults).toBeUndefined(); expect(current.authorizationAudit).toBeUndefined();
+    expect(current.devices[f.staffDevice]).toEqual(before.devices[f.staffDevice]);
+  } finally { await f.other.close(); }
+});

@@ -63,13 +63,12 @@ export function createStaffRoleUiPort(
         (role?.revision === request.expectedRevision && (request.nextRole !== 'temporary' || saved.initialPermissions) ? current.pending : current.obsolete).push(pending);
       }
       assertAuthorized();
-      const boundaries = result.targets.flatMap(({ role, profile }) => [role.startsAt, role.endsAt, profile?.validFrom, profile?.validUntil])
-        .filter((value): value is number => typeof value === 'number' && value > current!.serverNow);
-      const until = Math.min(actor.role.endsAt, actor.session.expiresAt, actor.session.humanAuthTime + RECENT_AUTH_WINDOW + 1, ...boundaries);
+      // 対象者の任期終了は表示で反映し、操作者自身の認可失効とは分ける。
+      const until = Math.min(actor.role.endsAt, actor.session.expiresAt, actor.session.humanAuthTime + RECENT_AUTH_WINDOW + 1);
       const remaining = until - current.serverNow - Math.max(0, Math.floor(performance.now() - loadedAt));
       requireValue(remaining > 0, 'AUTHORIZATION_EXPIRED');
       expiry = setTimeout(invalidate, remaining);
-      return structuredClone(current);
+      return structuredClone({ ...current, serverNow: current.serverNow + Math.max(0, Math.floor(performance.now() - loadedAt)) });
     } catch (cause) { locked = true; current = undefined; throw cause; }
   }
 

@@ -2,6 +2,7 @@
 
 import { actionGroup, button, el, showDialog } from './dom.ts';
 import { watchDialogValidity } from './dialog-validation.ts';
+import { createRoleDisplayClock, staffRoleDisplayName, temporaryTermEnded } from './staff-role-display.ts';
 import { TEMPORARY_PERMISSIONS } from '../domain/authorization/types.ts';
 import { temporaryPermissionLabels as labels } from './temporary-permission-labels.ts';
 import type { RoleGrant, TemporaryPermission } from '../domain/authorization/types.ts';
@@ -28,29 +29,38 @@ function message(cause: unknown): string {
 export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
   const root = el('section', 'temporary-permissions-screen');
   let view: StaffRoleView | undefined, pending: PendingStaffRole[] = [], busy = false, locked = true, disposed = false, version = 0;
-  let loadedAt = 0;
+  let displayClock: ReturnType<typeof createRoleDisplayClock> | undefined;
   let error = '', notice = '', dialog: HTMLDialogElement | undefined;
+
+  /** 現在の一覧を採用し、任期境界で表示だけを更新する。 */
+  function applyView(result: StaffRoleView) {
+    displayClock?.dispose(); view = result; pending = result.pending; locked = false;
+    displayClock = createRoleDisplayClock(result.targets.map(item => item.role), result.snapshot.staffDeadline, result.serverNow,
+      () => { if (!disposed && !locked && !busy) render(); });
+  }
 
   /** 最新の認可・設定を取得し、失敗や古い応答では一覧を表示しない。 */
   async function load() {
     if (disposed || busy) return;
+    displayClock?.dispose(); displayClock = undefined;
     const current = ++version; busy = true; locked = true; error = ''; render();
     try {
       const result = await port.load();
       if (disposed || current !== version) return;
-      view = result; pending = result.pending; loadedAt = performance.now(); locked = false;
+      applyView(result);
     } catch (cause) { if (!disposed && current === version) { view = undefined; error = message(cause); } }
     finally { if (!disposed && current === version) { busy = false; render(); } }
   }
 
   /** 確定・取消しの結果を案内し、最新設定の取得失敗とは区別する。 */
   async function completed(id: string, outcome: StaffRoleOutcome, current: number) {
+    displayClock?.dispose(); displayClock = undefined;
     pending = pending.filter(item => item.input.operationId !== id); locked = true; view = undefined;
     notice = outcome === 'committed' ? '役割の変更が確定しました。' : '未確定の変更案を取り消しました。現在の役割は変更していません。';
     try {
       const result = await port.load();
       if (disposed || current !== version) return;
-      view = result; pending = result.pending; loadedAt = performance.now(); locked = false;
+      applyView(result);
     } catch { if (!disposed && current === version) error = '結果は確定しましたが、最新設定を取得できません。接続・権限を確認して再取得してください。'; }
     if (disposed || current !== version) return;
     const body = el('div'); body.append(el('p', '', notice), el('p', '', error || '最新の役割を表示します。'));
@@ -84,7 +94,8 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
   /** 任命・再任命時の期間と9項目を編集し、選んだ設定だけを一体保存する。 */
   function edit(role: RoleGrant) {
     if (busy || locked || !view || pending.length) return;
-    const basis = structuredClone(view), basisAt = loadedAt, body = el('div', 'permission-edit-body');
+    const basis = structuredClone(view), basisAt = performance.now(), body = el('div', 'permission-edit-body');
+    basis.serverNow = displayClock?.now() ?? basis.serverNow;
     const operationId = crypto.randomUUID(), originalStart = basis.serverNow, originalEnd = basis.snapshot.staffDeadline;
     const values = Object.fromEntries(TEMPORARY_PERMISSIONS.map(key => [key, true])) as Record<TemporaryPermission, boolean>;
     const reappointment = role.role === 'temporary';
@@ -130,7 +141,7 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
     /** 不正な日時と期限を入力中に検出し、確認ボタンの隣に理由を示す。 */
     function validate() {
       const now = basis.serverNow + Math.max(0, Math.floor(performance.now() - basisAt)), input = change().input;
-      if (preview && Date.now() > basis.serverNow + RECENT_AUTH_WINDOW) return 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。';
+      if (preview && Date.now() > basis.snapshot.session.humanAuthTime + RECENT_AUTH_WINDOW) return 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。';
       if (!Number.isFinite(input.startsAt) || !Number.isFinite(input.endsAt)) return '有効開始と有効終了を入力してください。';
       if (input.startsAt >= input.endsAt) return '有効終了は、有効開始より後の日時にしてください。';
       if (input.endsAt <= now) return '有効終了が過去になっています。現在より後の日時にしてください。';
@@ -167,7 +178,8 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
   /** 解除は期間編集を出さず、直ちに一般受付へ戻す一つの確認操作とする。 */
   function release(role: RoleGrant) {
     if (busy || locked || !view || pending.length) return;
-    const basis = structuredClone(view), basisAt = loadedAt, summary = el('div');
+    const basis = structuredClone(view), basisAt = performance.now(), summary = el('div');
+    basis.serverNow = displayClock?.now() ?? basis.serverNow;
     summary.append(el('p', '', `対象：${role.humanUid.slice(-8)}`),
       el('p', '', '臨時管理者を解除し、一般受付に戻します。'),
       el('p', '', `一般受付の利用期限：${new Date(basis.snapshot.staffDeadline).toLocaleString('ja-JP')}`),
@@ -183,7 +195,8 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
     /** 解除できない理由を表示し、確定操作も無効にする。 */
     function validate() {
       const pending = change();
-      if (preview && Date.now() > basis.serverNow + RECENT_AUTH_WINDOW) return 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。';
+      if (preview && Date.now() > basis.snapshot.session.humanAuthTime + RECENT_AUTH_WINDOW) return 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。';
+      if (role.endsAt <= pending.input.startsAt) return '臨時任期は終了しました。解除は不要です。';
       try { createRoleChangeRequest(basis.snapshot, role, pending.input, pending.input.startsAt); return ''; }
       catch (cause) { return message(cause); }
     }
@@ -213,24 +226,24 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
       root.append(box);
     }
     if (view && !locked) {
+      const now = displayClock?.now() ?? view.serverNow;
       if (view.obsolete.length) root.append(el('p', 'notice', `再確認が必要な未確定入力${view.obsolete.length}件は保持しています。再送せず、現在の役割を確認してください。`));
       if (!view.targets.length) root.append(el('p', '', '変更できる一般受付・臨時管理者は登録されていません。'));
       for (const { role } of view.targets) {
         const card = el('section', 'panel staff-role-card');
         const actions = actionGroup();
-        card.append(el('h3', '', (role.role === 'temporary' ? '臨時管理者' : '一般受付') + '（' + role.humanUid.slice(-8) + '）'),
-          el('p', 'muted', '有効期間：' + new Date(role.startsAt).toLocaleString('ja-JP') + ' ～ ' + new Date(role.endsAt).toLocaleString('ja-JP')));
-        const expired = role.role === 'temporary' && role.endsAt <= view.serverNow && view.serverNow < view.snapshot.staffDeadline;
+        const expired = temporaryTermEnded(role, now, view.snapshot.staffDeadline);
+        card.append(el('h3', '', staffRoleDisplayName(role, now, view.snapshot.staffDeadline) + '（' + role.humanUid.slice(-8) + '）'),
+          el('p', 'muted', expired ? '臨時任期は終了しました。' : '有効期間：' + new Date(role.startsAt).toLocaleString('ja-JP') + ' ～ ' + new Date(role.endsAt).toLocaleString('ja-JP')));
         if (!role.active) card.append(el('p', 'notice', 'この本人の役割は無効です。任命で停止解除はできません。'));
-        else if (view.serverNow >= view.snapshot.staffDeadline) card.append(el('p', 'notice', '公演のスタッフ利用期限を過ぎています。この公演では任命できません。'));
-        else if (role.startsAt > view.serverNow) card.append(el('p', 'notice', '役割の有効開始前です。'));
-        else if (role.endsAt <= view.serverNow && !expired) card.append(el('p', 'notice', '一般受付の利用期限が過ぎています。再招待の手続きが必要です。'));
+        else if (now >= view.snapshot.staffDeadline) card.append(el('p', 'notice', '公演のスタッフ利用期限を過ぎています。この公演では任命できません。'));
+        else if (role.startsAt > now) card.append(el('p', 'notice', '役割の有効開始前です。'));
+        else if (role.endsAt <= now && !expired) card.append(el('p', 'notice', '一般受付の利用期限が過ぎています。再招待の手続きが必要です。'));
         else if (!pending.length) {
           if (expired) {
-            card.append(el('p', 'notice', '臨時任期は終了しています。新しい期間と権限を確認して再任命できます。'));
             actions.append(button('臨時管理者に再任命', () => edit(role)));
           } else if (role.role === 'receptionist') actions.append(button('臨時管理者に任命', () => edit(role)));
-          if (role.role === 'temporary') actions.append(button('臨時管理者を解除', () => release(role), 'button secondary'));
+          if (role.role === 'temporary' && !expired) actions.append(button('臨時管理者を解除', () => release(role), 'button secondary'));
         }
         card.append(actions);
         root.append(card);
@@ -240,10 +253,10 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
   }
 
   // 失効通知では編集中のダイアログも閉じ、保存済み入力と鍵は保持する。
-  const unsubscribe = port.onInvalidate(() => { version++; locked = true; busy = false; view = undefined; dialog?.close(); render(); });
+  const unsubscribe = port.onInvalidate(() => { displayClock?.dispose(); displayClock = undefined; version++; locked = true; busy = false; view = undefined; dialog?.close(); render(); });
 
   /** 表示と購読を終了し、保存済みの固定入力・鍵を削除しない。 */
-  function dispose() { disposed = true; version++; dialog?.close(); unsubscribe(); port.dispose(); view = undefined; pending = []; root.replaceChildren(); }
+  function dispose() { disposed = true; displayClock?.dispose(); version++; dialog?.close(); unsubscribe(); port.dispose(); view = undefined; pending = []; root.replaceChildren(); }
 
   render(); void load();
   return { element: root, dispose };

@@ -175,8 +175,12 @@ test('ROLE315-B10 任期終了後は新しい権限で再任命し、公演の�
     await trial.backend.prepare(change); await trial.backend.commit(change.input.operationId);
     trial.port.commit = id => trial.backend.commit(id);
   });
-  await page.clock.fastForward(6000);
   await page.getByRole('button', { name: '最新の役割を確認', exact: true }).click();
+  await expect(page.locator('.staff-role-card').getByRole('heading')).toContainText('臨時管理者');
+  await page.clock.fastForward(6000);
+  await expect(page.locator('.staff-role-card').getByRole('heading')).toContainText('一般受付担当者');
+  await expect(page.getByRole('button', { name: '臨時管理者を解除', exact: true })).toHaveCount(0);
+  expect(await page.evaluate(async () => (await window.roleTrial.backend.load()).targets[0].role.role)).toBe('temporary');
   await page.getByRole('button', { name: '臨時管理者に再任命', exact: true }).click();
   await expect(page.getByRole('checkbox', { name: '手動受付', exact: true })).toBeChecked();
   await page.getByRole('checkbox', { name: 'すべて選択／解除', exact: true }).uncheck();

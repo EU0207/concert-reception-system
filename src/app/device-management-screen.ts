@@ -1,18 +1,18 @@
 // 端末台帳と確認ダイアログを表示し、固定入力の保全・結果照会と明示操作を接続する。
 
 import { actionGroup, button, el, showDialog } from './dom.ts';
+import { createRoleDisplayClock, staffRoleDisplayName } from './staff-role-display.ts';
 import type { DeviceManagementUiPort, DeviceManagementView } from './device-management-types.ts';
-import type { DeviceGrant, StaffRole } from '../domain/authorization/types.ts';
+import type { DeviceGrant } from '../domain/authorization/types.ts';
 import { createDeviceChangePlan } from '../domain/authorization/device-safety.ts';
 import type { DeviceChangeInput } from '../domain/authorization/device-safety.ts';
 
-const roles: Record<StaffRole, string> = { owner: '管理者', deputy: '代理管理者', temporary: '臨時管理者', receptionist: '一般受付担当者' };
 const operations = { approve: '承認', stop: '停止', resume: '停止解除', retire: '廃止' } as const;
 
 /** 操作対象を取り違えないよう、役割と端末UIDの末尾を併記する。 */
-function label(device: DeviceGrant, view: DeviceManagementView): string {
+function label(device: DeviceGrant, view: DeviceManagementView, now = view.serverNow): string {
   const role = view.inventory.roles.find(item => item.humanUid === device.humanUid);
-  return `${role ? roles[role.role] : '役割未確認'}の端末（${device.deviceUid.slice(-8)}）`;
+  return `${role ? staffRoleDisplayName(role, now, view.snapshot.staffDeadline) : '役割未確認'}の端末（${device.deviceUid.slice(-8)}）`;
 }
 
 /** 内部値を表示せず、確認や再認証につながるエラー文へ変換する。 */
@@ -42,16 +42,25 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
   const root = el('section', 'device-management-screen');
   let view: DeviceManagementView | undefined, busy = false, locked = true, disposed = false, version = 0;
   let pending: DeviceChangeInput[] = [], notice = '', error = '', dialog: HTMLDialogElement | undefined;
+  let displayClock: ReturnType<typeof createRoleDisplayClock> | undefined;
+
+  /** 台帳を採用し、任期境界では役割名の表示だけを更新する。 */
+  function applyView(result: DeviceManagementView) {
+    displayClock?.dispose(); view = result; pending = result.pending; locked = false;
+    displayClock = createRoleDisplayClock(result.inventory.roles, result.snapshot.staffDeadline, result.serverNow,
+      () => { if (!disposed && !locked && !busy) render(); });
+  }
 
   /** 最新認可と台帳を読み、未完了操作がある場合は通常変更より結果確認を優先する。 */
   async function load() {
     if (disposed || busy) return;
+    displayClock?.dispose(); displayClock = undefined;
     const current = ++version;
     busy = true; locked = true; error = ''; render();
     try {
       const result = await port.load();
       if (disposed || current !== version) return;
-      view = result; pending = result.pending; locked = false;
+      applyView(result);
     } catch (cause) {
       if (!disposed && current === version) { view = undefined; error = errorMessage(cause); }
     } finally {
@@ -61,6 +70,7 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
 
   /** 確定結果を保持し、最新認可・台帳を再取得して完了を案内する。 */
   async function confirmed(id: string, current: number) {
+    displayClock?.dispose(); displayClock = undefined;
     pending = pending.filter(item => item.operationId !== id);
     notice = '端末の変更が確定しました。';
     view = undefined; locked = true;
@@ -68,7 +78,7 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     try {
       const result = await port.load();
       if (disposed || current !== version) return;
-      view = result; pending = result.pending; locked = false;
+      applyView(result);
     } catch {
       if (disposed || current !== version) return;
       error = '変更は確定しましたが、最新の端末一覧を取得できませんでした。接続・権限を確認して「最新の状態を確認」を押してください。';
@@ -120,6 +130,7 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
   function choose(device: DeviceGrant, kind: DeviceChangeInput['kind']) {
     if (busy || locked || !view || pending.length) return;
     const basis = structuredClone(view);
+    basis.serverNow = displayClock?.now() ?? basis.serverNow;
     const body = el('div');
     const beforeState = device.retired ? '廃止済み' : !device.approved ? '承認待ち' : device.active ? '有効' : '停止中';
     const afterState = kind === 'retire' ? '廃止済み' : kind === 'stop' ? '停止中' : '有効';
@@ -229,7 +240,7 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
           statusMark('preparation', '受付準備', 'unknown', device.retired ? '利用終了' : !device.approved ? '承認後に準備' : '未確認'),
           statusMark('state', '端末の利用設定', device.retired || (device.approved && !device.active) ? 'blocked' : 'ok',
             device.retired ? '廃止済み' : device.approved && !device.active ? '停止中' : '通常'));
-        card.append(el('h3', '', label(device, view) + (device.deviceUid === view.snapshot.deviceAuthUid ? ' この端末' : '')),
+        card.append(el('h3', '', label(device, view, displayClock?.now() ?? view.serverNow) + (device.deviceUid === view.snapshot.deviceAuthUid ? ' この端末' : '')),
           indicators,
           el('p', 'muted', '受付記録の送信状況：未確認（未送信件数は未取得）。停止・廃止でも記録は保持します。'));
         const controls = el('div', 'authentication-actions');
@@ -248,11 +259,12 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
 
   // 失効通知では平文の台帳表示を外し、保存済みの未完了入力は削除しない。
   const unsubscribe = port.onInvalidate(() => {
+    displayClock?.dispose(); displayClock = undefined;
     version++; locked = true; busy = false; view = undefined; dialog?.close(); render();
   });
 
   /** 画面と購読を終了し、端末内の鍵・記録は保持する。 */
-  function dispose() { disposed = true; version++; dialog?.close(); unsubscribe(); port.dispose(); view = undefined; pending = []; root.replaceChildren(); }
+  function dispose() { disposed = true; displayClock?.dispose(); version++; dialog?.close(); unsubscribe(); port.dispose(); view = undefined; pending = []; root.replaceChildren(); }
 
   render(); void load();
   return { element: root, dispose };
