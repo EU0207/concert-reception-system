@@ -83,13 +83,13 @@ test('TEMP313-S01 通常SDKで保存・取消し・復元を一体確定し、�
     await page.evaluate(() => { IDBObjectStore.prototype.add = window.permissionOriginalAdd; });
     await page.getByRole('button', { name: '権限を設定', exact: true }).click();
     await page.getByRole('checkbox', { name: '手動受付', exact: true }).uncheck(); await save(page); await closeResult(page);
-    await expect(page.locator('.permission-card')).toContainText('手動受付：OFF');
+    await expect(page.locator('.permission-card')).toContainText('手動受付：×');
     await page.getByRole('button', { name: '権限を設定', exact: true }).click();
     await page.getByRole('button', { name: '設定を取り消す', exact: true }).click();
     await page.getByRole('button', { name: 'この内容で保存', exact: true }).click(); await closeResult(page);
     await expect(page.locator('.permission-card')).toContainText('設定取消済み');
     await page.getByRole('button', { name: '権限を設定', exact: true }).click();
-    await page.getByRole('button', { name: '既定値（すべてON）に戻す', exact: true }).click(); await save(page); await closeResult(page);
+    await page.getByRole('button', { name: '既定値（すべて○）に戻す', exact: true }).click(); await save(page); await closeResult(page);
     data = await (await fetch(f.root, { headers: { authorization: 'Bearer owner' } })).json();
     expect(data.roles[f.uid]).toMatchObject({ role: 'temporary', revision: 4 });
     expect(data.temporaryPermissionProfiles[f.uid]['2'].permissions.manualReception).toBe(false);

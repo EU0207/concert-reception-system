@@ -13,6 +13,13 @@ const labels: Record<TemporaryPermission, string> = {
   staffNoticeManage: 'スタッフ連絡の投稿・訂正・取消し', dayAuditRead: '当日業務の履歴閲覧',
 };
 
+/** 設定値を色付きの記号だけで示し、読み上げ用の意味を保持する。 */
+function permissionMark(enabled: boolean) {
+  const mark = el('span', `permission-mark ${enabled ? 'permission-mark-on' : 'permission-mark-off'}`, enabled ? '○' : '×');
+  mark.setAttribute('role', 'img'); mark.setAttribute('aria-label', enabled ? 'ON' : 'OFF');
+  return mark;
+}
+
 /** 保存値が固定9項目の現在版に一致するか判定し、欠損を全ONで補わない。 */
 function validProfile(role: RoleGrant, profile: TemporaryProfile | null): profile is TemporaryProfile {
   return role.role === 'temporary' && !!profile && profile.schemaVersion === 1 && profile.humanUid === role.humanUid && profile.roleVersion === role.revision &&
@@ -126,13 +133,17 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
       try { changeTemporaryPermissions(basis.snapshot, role, change.input, basis.serverNow); }
       catch (cause) { validation.textContent = message(cause); return; }
       const summary = el('div'); summary.append(el('p', '', `対象：臨時管理者（${role.humanUid.slice(-8)}）`));
-      for (const key of TEMPORARY_PERMISSIONS) summary.append(el('p', '', `${labels[key]}：${profile.permissions[key] ? 'ON' : 'OFF'} → ${!revoke && values[key] ? 'ON' : 'OFF'}`));
+      for (const key of TEMPORARY_PERMISSIONS) {
+        const row = el('p', 'permission-row');
+        row.append(el('span', '', `${labels[key]}：`), permissionMark(profile.permissions[key]), el('span', '', ' → '), permissionMark(!revoke && values[key]));
+        summary.append(row);
+      }
       summary.append(el('p', '', `有効期間：${new Date(from).toLocaleString('ja-JP')} ～ ${new Date(until).toLocaleString('ja-JP')}`),
-        el('p', '', revoke ? '設定を取り消し、全項目OFFの新しい版として保存します。一般受付の共通操作と保存済みの記録は保持します。' : '変更後は端末ごとの追加準備が必要です。準備前に新しい管理権限は使えません。'));
+        el('p', '', revoke ? '設定を取り消し、全項目×の新しい版として保存します。一般受付の共通操作と保存済みの記録は保持します。' : '変更後は端末ごとの追加準備が必要です。準備前に新しい管理権限は使えません。'));
       dialog?.close(); dialog = showDialog('権限設定の確認', summary, [button('この内容で保存', () => { dialog?.close(); void act(change, 'save'); })], 'キャンセル');
     }
 
-    body.append(button('既定値（すべてON）に戻す', () => { for (const key of TEMPORARY_PERMISSIONS) { values[key] = true; checks.get(key)!.checked = true; } }, 'button secondary'));
+    body.append(button('既定値（すべて○）に戻す', () => { for (const key of TEMPORARY_PERMISSIONS) { values[key] = true; checks.get(key)!.checked = true; } }, 'button secondary'));
     dialog = showDialog('臨時管理者の権限設定', body,
       [button('変更内容を確認', () => confirm(false)), button('設定を取り消す', () => confirm(true), 'button secondary')], 'キャンセル');
   }
@@ -159,11 +170,13 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
         else {
           const active = profile.status === 'active' && profile.validFrom <= view.serverNow && view.serverNow < profile.validUntil;
           const count = TEMPORARY_PERMISSIONS.filter(key => profile.permissions[key]).length;
-          card.append(el('p', '', profile.status === 'revoked' ? '設定取消済み（全項目OFF）' : active ? `許可する項目：${count}／9` : '有効期間外'),
+          card.append(el('p', '', profile.status === 'revoked' ? '設定取消済み（全項目×）' : active ? `許可する項目：${count}／9` : '有効期間外'),
             el('p', 'muted', `有効期間：${new Date(profile.validFrom).toLocaleString('ja-JP')} ～ ${new Date(profile.validUntil).toLocaleString('ja-JP')}`));
-          for (const key of TEMPORARY_PERMISSIONS) card.append(el('p', 'permission-row', `${labels[key]}：${profile.permissions[key] ? 'ON' : 'OFF'}`));
-          card.append(el('p', 'muted', '設定のONだけで業務は許可されません。現在の本人・端末と追加準備も確認されます。'));
-          if (count === 0) card.append(el('p', 'notice', '管理操作はすべてOFFです。一般受付の共通操作と保存済みの記録は保持します。'));
+          for (const key of TEMPORARY_PERMISSIONS) {
+            const row = el('p', 'permission-row'); row.append(el('span', '', `${labels[key]}：`), permissionMark(profile.permissions[key])); card.append(row);
+          }
+          card.append(el('p', 'muted', 'この設定だけで業務は許可されません。現在の本人・端末と追加準備も確認されます。'));
+          if (count === 0) card.append(el('p', 'notice', '管理操作はすべて×です。一般受付の共通操作と保存済みの記録は保持します。'));
           if (!pending.length && role.active && role.startsAt <= view.serverNow && view.serverNow < Math.min(role.endsAt, view.snapshot.staffDeadline)) card.append(button('権限を設定', () => edit(role, profile)));
         }
         root.append(card);
