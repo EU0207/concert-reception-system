@@ -1003,3 +1003,15 @@ p {
 .device-status-ok { color: #24594c; background: #edf5ef; }
 .device-status-attention { color: #805500; background: #fff5df; }
 .device-status-blocked { color: #a12622; background: #fceeed; }
+
+/* 権限設定も端末管理と同じカード・余白を使い、固定9項目を読みやすく並べる。 */
+.permission-card { margin-top: 20px; }
+.permission-option { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; }
+.permission-option input { flex: 0 0 auto; width: 20px; height: 20px; margin: 2px 0; accent-color: #326560; }
+.permission-period { display: grid; gap: 12px; margin-top: 16px; }
+.permission-period .seat-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.permission-period input { width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid #c8d5cd; border-radius: 8px; font: inherit; }
+.permission-period input:focus-visible { outline: 2px solid #98aba4; outline-offset: -2px; }
+.permission-row { margin: 8px 0; }
+.temporary-permissions-screen .device-error:empty,
+.temporary-permissions-screen [role='status']:empty { display: none; }

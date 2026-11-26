@@ -19,6 +19,8 @@
 
 [名称統一の確認記録](development/technical-validation/administrator-role-name-results.md)はApproved。表示名の適用範囲、旧リンクと内部識別子の維持を確認する。
 
+[臨時管理者の権限設定画面の確認記録](development/technical-validation/temporary-permissions-ui-results.md)はIn Review。#313の固定9項目と期間、保存・再起動回収、対象実機と各業務の残条件を記録する。
+
 [ADR-018：使用中の自端末の停止禁止](development/decisions/ADR-018-current-device-stop.md)はApproved。変更#310の依頼者了承と、画面・保存側の共通条件を記録する。
 
 初めて閲覧する第三者向けの概要は[README](../README.md)に集約する。詳しい操作と公開手順は以下を参照する。
