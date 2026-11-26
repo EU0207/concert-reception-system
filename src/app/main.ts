@@ -13,6 +13,8 @@ import { createAuthenticationScreen } from './authentication-screen.ts';
 import { createAuthenticationPreview } from './authentication-preview.ts';
 import { createDeviceManagementScreen } from './device-management-screen.ts';
 import { createDeviceManagementPreview } from './device-management-preview.ts';
+import { createStaffRoleScreen } from './staff-role-screen.ts';
+import { createStaffRolePreview } from './staff-role-preview.ts';
 import { createTemporaryPermissionsScreen } from './temporary-permissions-screen.ts';
 import { createTemporaryPermissionsPreview } from './temporary-permissions-preview.ts';
 
@@ -45,6 +47,7 @@ let main: HTMLElement, statusButton: HTMLButtonElement, updateBanner: HTMLElemen
 let pwaReady = false;
 let authenticationScreen: ReturnType<typeof createAuthenticationScreen> | undefined;
 let deviceManagementScreen: ReturnType<typeof createDeviceManagementScreen> | undefined;
+let staffRoleScreen: ReturnType<typeof createStaffRoleScreen> | undefined;
 let temporaryPermissionsScreen: ReturnType<typeof createTemporaryPermissionsScreen> | undefined;
 
 // 関数の定義：処理内容を定義し、下部の起動処理や画面操作から使用する。
@@ -280,6 +283,8 @@ async function mountSeatEditor(panel: HTMLElement, performanceId: string) {
 
 /** 現在のURLに対応する本文を描画し、選択中のメニューとページ名を更新する。 */
 function renderPage() {
+  staffRoleScreen?.dispose();
+  staffRoleScreen = undefined;
   temporaryPermissionsScreen?.dispose();
   temporaryPermissionsScreen = undefined;
   deviceManagementScreen?.dispose();
@@ -332,6 +337,11 @@ function renderPage() {
       el('p', 'footnote', '公演と会場はすべて架空です。実際の公演情報は登録されていません。'),
     );
     document.title = '公演一覧 | コンサート受付';
+  } else if (startup.config.environmentType === 'evaluation-local' && events.some(event => currentRoute === `/events/${event.id}/roles`)) {
+    const event = events.find(item => currentRoute === `/events/${item.id}/roles`)!;
+    staffRoleScreen = createStaffRoleScreen(createStaffRolePreview({ environmentId: startup.config.environmentId, performanceId: event.id }), true);
+    main.append(routeLink('← スタッフ・端末へ', `/events/${event.id}/devices`, 'back-link'), el('p', 'muted', event.name), staffRoleScreen.element);
+    document.title = 'スタッフの役割変更 | コンサート受付';
   } else if (startup.config.environmentType === 'evaluation-local' && events.some(event => currentRoute === `/events/${event.id}/permissions`)) {
     const event = events.find(item => currentRoute === `/events/${item.id}/permissions`)!;
     temporaryPermissionsScreen = createTemporaryPermissionsScreen(createTemporaryPermissionsPreview({ environmentId: startup.config.environmentId, performanceId: event.id }), true);
@@ -345,6 +355,7 @@ function renderPage() {
     main.append(routeLink('← 公演の準備へ', `/events/${event.id}`, 'back-link'),
       el('p', 'muted', event.name), deviceManagementScreen.element);
     document.title = 'スタッフ・端末 | コンサート受付';
+    main.append(routeLink('スタッフの役割変更', `/events/${event.id}/roles`, 'button secondary'));
     main.append(routeLink('臨時管理者の権限設定', `/events/${event.id}/permissions`, 'button secondary'));
   } else if (currentRoute === '/login' && startup.config.environmentType === 'evaluation-local') {
     authenticationScreen = createAuthenticationScreen(createAuthenticationPreview(), true);

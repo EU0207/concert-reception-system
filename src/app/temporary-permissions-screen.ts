@@ -1,17 +1,11 @@
 // 臨時管理者の固定9項目と有効期間を表示し、確認・暗号化保存・結果回収へ接続する。
 
 import { button, el, showDialog } from './dom.ts';
+import { temporaryPermissionLabels as labels } from './temporary-permission-labels.ts';
 import { TEMPORARY_PERMISSIONS } from '../domain/authorization/types.ts';
 import type { RoleGrant, TemporaryProfile, TemporaryPermission } from '../domain/authorization/types.ts';
 import { changeTemporaryPermissions } from '../domain/authorization/role-management.ts';
 import type { PermissionView, PendingPermission, PermissionOutcome, TemporaryPermissionsUiPort } from './temporary-permissions-types.ts';
-
-const labels: Record<TemporaryPermission, string> = {
-  exceptionManage: '例外の正式追加・編集・削除', manualReception: '手動受付', arrivalCorrection: '当日の来場状態訂正',
-  seatDisplayNameEdit: '当日の座席表示名変更', receptionConflictResolve: '当日の受付競合の確認・解消',
-  rereadManagementMemo: '管理用の再読取り理由・メモ', dayManagementRead: '当日の来場状況・管理画面の閲覧',
-  staffNoticeManage: 'スタッフ連絡の投稿・訂正・取消し', dayAuditRead: '当日業務の履歴閲覧',
-};
 
 /** 設定値を色付きの記号だけで示し、読み上げ用の意味を保持する。 */
 function permissionMark(enabled: boolean) {
