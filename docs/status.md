@@ -36,6 +36,7 @@
 | 端末管理画面 | main統合済み | [台帳・承認・停止・解除・廃止](development/technical-validation/device-management-ui-results.md)を#308・310で実装し、PR #309を統合。親#263の端末準備とスタッフ管理全体は進行中 |
 | 役割の表示名 | main統合済み | [ADR-019](development/decisions/ADR-019-administrator-role-name.md)により管理者へ統一。#311・PR #312で表示・現行文書を変更し、内部役割値と権限は維持する |
 | 臨時管理者の権限設定 | main統合済み | [固定9項目と期間の設定画面](development/technical-validation/temporary-permissions-ui-results.md)を#313・PR #314で接続。任命・端末の追加準備と各業務の実行は後続 |
+| 公演限定スタッフの任命・解除 | レビュー中 | [一般受付と臨時管理者の役割変更画面](development/technical-validation/staff-role-ui-results.md)を#315で接続。代理への昇格・降格と端末追加準備は後続 |
 | QR受付・同期・帳票・運用画面 | 未完了 | 製品としての機能実装と機能間の結合が残る |
 
 ## テストの実施状況
