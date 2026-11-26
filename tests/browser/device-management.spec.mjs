@@ -67,7 +67,8 @@ test('DEVICE308-B01 承認・停止・解除・廃止を確認し、管理端末
 
 /** 固定入力と応答喪失を操作できる、通信しない画面用fixtureを作る。 */
 async function fixture(page, committed) {
-  await page.goto('http://127.0.0.1:4181/');
+  await page.goto('http://127.0.0.1:4181/tests/emulator/device-management-fixture.html');
+  await page.waitForFunction(() => window.deviceFixtureReady === true);
   await page.evaluate(async (committed) => {
     const { createDeviceManagementPreview } = await import('/src/app/device-management-preview.ts');
     const { createDeviceManagementScreen } = await import('/src/app/device-management-screen.ts');

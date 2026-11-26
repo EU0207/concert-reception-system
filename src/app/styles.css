@@ -1005,6 +1005,13 @@ p {
 .device-status-blocked { color: #a12622; background: #fceeed; }
 
 /* 権限設定も端末管理と同じカード・余白を使い、固定9項目を読みやすく並べる。 */
+.action-group { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.action-group:empty { display: none; }
+.management-toolbar { margin: 16px 0 20px; }
+.notice > .action-group { margin-top: 12px; }
+.management-links { margin-top: 24px; }
+.staff-role-card + .staff-role-card { margin-top: 16px; }
+.device-operation-pending { margin-bottom: 16px; }
 .permission-card { margin-top: 20px; }
 .permission-option, .permission-all { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; }
 .permission-option input, .permission-all input { flex: 0 0 auto; width: 20px; height: 20px; margin: 2px 0; accent-color: #326560; }

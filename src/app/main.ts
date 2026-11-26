@@ -4,7 +4,7 @@ import './styles.css';
 import { startApplication } from './bootstrap.ts';
 import type { StartupResult } from './bootstrap.ts';
 import { APP_VERSION, StartupError } from './config.ts';
-import { button, el, showDialog } from './dom.ts';
+import { actionGroup, button, el, showDialog } from './dom.ts';
 import { NavigationGate } from './navigation.ts';
 import type { LeaveChoice } from './navigation.ts';
 import { registerPwa } from './pwa.ts';
@@ -355,8 +355,9 @@ function renderPage() {
     main.append(routeLink('← 公演の準備へ', `/events/${event.id}`, 'back-link'),
       el('p', 'muted', event.name), deviceManagementScreen.element);
     document.title = 'スタッフ・端末 | コンサート受付';
-    main.append(routeLink('スタッフの役割変更', `/events/${event.id}/roles`, 'button secondary'));
-    main.append(routeLink('臨時管理者の権限設定', `/events/${event.id}/permissions`, 'button secondary'));
+    const staffLinks = actionGroup(routeLink('スタッフの役割変更', `/events/${event.id}/roles`, 'button secondary'),
+      routeLink('臨時管理者の権限設定', `/events/${event.id}/permissions`, 'button secondary'));
+    staffLinks.classList.add('management-links'); main.append(staffLinks);
   } else if (currentRoute === '/login' && startup.config.environmentType === 'evaluation-local') {
     authenticationScreen = createAuthenticationScreen(createAuthenticationPreview(), true);
     main.append(routeLink('← 公演一覧へ', '/events', 'back-link'), authenticationScreen.element);

@@ -1,6 +1,6 @@
 // 一般受付と臨時管理者の任命・解除を表示し、固定入力の保存と結果回収へ接続する。
 
-import { button, el, showDialog } from './dom.ts';
+import { actionGroup, button, el, showDialog } from './dom.ts';
 import { watchDialogValidity } from './dialog-validation.ts';
 import { TEMPORARY_PERMISSIONS } from '../domain/authorization/types.ts';
 import { temporaryPermissionLabels as labels } from './temporary-permission-labels.ts';
@@ -202,12 +202,14 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
     if (preview) root.append(el('p', 'notice', '画面確認用の見本です。実際の権限やスタッフ登録は変更しません。'));
     const alert = el('p', 'device-error', error), status = el('p', 'muted', busy ? '確認しています…' : notice);
     alert.setAttribute('role', 'alert'); status.setAttribute('role', 'status');
-    root.append(alert, status, button('最新の役割を確認', () => { void load(); }, 'button secondary'));
+    const toolbar = actionGroup(button('最新の役割を確認', () => { void load(); }, 'button secondary'));
+    toolbar.classList.add('management-toolbar'); root.append(alert, status, toolbar);
     if (locked) root.append(el('p', 'notice', '役割変更には最新の認可確認が必要です。'));
     for (const change of pending) {
       const box = el('div', 'notice');
-      box.append(el('p', '', `結果未確認：スタッフ（${change.targetUid.slice(-8)}）`), button('結果を確認', () => { void act(change, 'query'); }, 'button secondary'));
-      if (!locked) box.append(button('同じ操作を再試行', () => { void act(change, 'retry'); }, 'button secondary'), button('未確定案を取り消す', () => { void act(change, 'cancel'); }, 'button secondary'));
+      const actions = actionGroup(button('結果を確認', () => { void act(change, 'query'); }, 'button secondary'));
+      box.append(el('p', '', `結果未確認：スタッフ（${change.targetUid.slice(-8)}）`), actions);
+      if (!locked) actions.append(button('同じ操作を再試行', () => { void act(change, 'retry'); }, 'button secondary'), button('未確定案を取り消す', () => { void act(change, 'cancel'); }, 'button secondary'));
       root.append(box);
     }
     if (view && !locked) {
@@ -215,6 +217,7 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
       if (!view.targets.length) root.append(el('p', '', '変更できる一般受付・臨時管理者は登録されていません。'));
       for (const { role } of view.targets) {
         const card = el('section', 'panel staff-role-card');
+        const actions = actionGroup();
         card.append(el('h3', '', (role.role === 'temporary' ? '臨時管理者' : '一般受付') + '（' + role.humanUid.slice(-8) + '）'),
           el('p', 'muted', '有効期間：' + new Date(role.startsAt).toLocaleString('ja-JP') + ' ～ ' + new Date(role.endsAt).toLocaleString('ja-JP')));
         const expired = role.role === 'temporary' && role.endsAt <= view.serverNow && view.serverNow < view.snapshot.staffDeadline;
@@ -223,10 +226,13 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
         else if (role.startsAt > view.serverNow) card.append(el('p', 'notice', '役割の有効開始前です。'));
         else if (role.endsAt <= view.serverNow && !expired) card.append(el('p', 'notice', '一般受付の利用期限が過ぎています。再招待の手続きが必要です。'));
         else if (!pending.length) {
-          if (expired) card.append(el('p', 'notice', '臨時任期は終了しています。新しい期間と権限を確認して再任命できます。'), button('臨時管理者に再任命', () => edit(role)));
-          else if (role.role === 'receptionist') card.append(button('臨時管理者に任命', () => edit(role)));
-          if (role.role === 'temporary') card.append(button('臨時管理者を解除', () => release(role), 'button secondary'));
+          if (expired) {
+            card.append(el('p', 'notice', '臨時任期は終了しています。新しい期間と権限を確認して再任命できます。'));
+            actions.append(button('臨時管理者に再任命', () => edit(role)));
+          } else if (role.role === 'receptionist') actions.append(button('臨時管理者に任命', () => edit(role)));
+          if (role.role === 'temporary') actions.append(button('臨時管理者を解除', () => release(role), 'button secondary'));
         }
+        card.append(actions);
         root.append(card);
       }
     }

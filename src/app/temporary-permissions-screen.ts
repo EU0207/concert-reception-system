@@ -1,6 +1,6 @@
 // 臨時管理者の固定9項目と有効期間を表示し、確認・暗号化保存・結果回収へ接続する。
 
-import { button, el, showDialog } from './dom.ts';
+import { actionGroup, button, el, showDialog } from './dom.ts';
 import { watchDialogValidity } from './dialog-validation.ts';
 import { RECENT_AUTH_WINDOW } from '../domain/authorization/policy.ts';
 import { temporaryPermissionLabels as labels } from './temporary-permission-labels.ts';
@@ -180,11 +180,14 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
     root.replaceChildren(el('h2', '', '臨時管理者の権限設定'));
     if (preview) root.append(el('p', 'notice', '画面確認用の見本です。実際の権限やスタッフ登録は変更しません。'));
     const alert = el('p', 'device-error', error), status = el('p', 'muted', busy ? '確認しています…' : notice);
-    alert.setAttribute('role', 'alert'); status.setAttribute('role', 'status'); root.append(alert, status, button('最新の設定を確認', () => { void load(); }, 'button secondary'));
+    alert.setAttribute('role', 'alert'); status.setAttribute('role', 'status');
+    const toolbar = actionGroup(button('最新の設定を確認', () => { void load(); }, 'button secondary'));
+    toolbar.classList.add('management-toolbar'); root.append(alert, status, toolbar);
     if (locked) root.append(el('p', 'notice', '権限設定は最新の認可確認が必要です。'));
     for (const change of pending) {
-      const box = el('div', 'notice'); box.append(el('p', '', `結果未確認：臨時管理者（${change.targetUid.slice(-8)}）`), button('結果を確認', () => { void act(change, 'query'); }, 'button secondary'));
-      if (!locked) box.append(button('同じ操作を再試行', () => { void act(change, 'retry'); }, 'button secondary'), button('未確定案を取り消す', () => { void act(change, 'cancel'); }, 'button secondary'));
+      const box = el('div', 'notice'), actions = actionGroup(button('結果を確認', () => { void act(change, 'query'); }, 'button secondary'));
+      box.append(el('p', '', `結果未確認：臨時管理者（${change.targetUid.slice(-8)}）`), actions);
+      if (!locked) actions.append(button('同じ操作を再試行', () => { void act(change, 'retry'); }, 'button secondary'), button('未確定案を取り消す', () => { void act(change, 'cancel'); }, 'button secondary'));
       root.append(box);
     }
     if (view && !locked) {

@@ -1,6 +1,6 @@
 // 端末台帳と確認ダイアログを表示し、固定入力の保全・結果照会と明示操作を接続する。
 
-import { button, el, showDialog } from './dom.ts';
+import { actionGroup, button, el, showDialog } from './dom.ts';
 import type { DeviceManagementUiPort, DeviceManagementView } from './device-management-types.ts';
 import type { DeviceGrant, StaffRole } from '../domain/authorization/types.ts';
 import { createDeviceChangePlan } from '../domain/authorization/device-safety.ts';
@@ -191,14 +191,15 @@ export function createDeviceManagementScreen(port: DeviceManagementUiPort, previ
     if (preview) root.append(el('p', 'notice', '画面確認用の見本です。実際の端末登録や権限は変更しません。'));
     const alert = el('p', 'device-error', error), status = el('p', 'muted', busy ? '確認しています…' : notice);
     alert.setAttribute('role', 'alert'); status.setAttribute('role', 'status'); root.append(alert, status);
-    root.append(button('最新の状態を確認', () => { void load(); }, 'button secondary'));
+    const toolbar = actionGroup(button('最新の状態を確認', () => { void load(); }, 'button secondary'));
+    toolbar.classList.add('management-toolbar'); root.append(toolbar);
     if (locked) root.append(el('p', 'notice', '端末管理は最新の認可確認が必要です。確認が終わるまで変更できません。'));
     for (const item of pending) {
-      const box = el('section', 'panel');
+      const box = el('section', 'panel device-operation-pending'), actions = actionGroup(button('結果を確認', () => { void query(item); }, 'button secondary'));
       box.append(el('h3', '', `未完了の${operations[item.kind]}（端末 ${item.targetDeviceUid.slice(-8)}）`),
         el('p', '', '保存した入力を保持しています。結果照会では再送しません。'),
-        button('結果を確認', () => { void query(item); }, 'button secondary'));
-      if (!locked) box.append(button('同じ操作を再試行', () => { void perform(item, true); }, 'button secondary'));
+        actions);
+      if (!locked) actions.append(button('同じ操作を再試行', () => { void perform(item, true); }, 'button secondary'));
       root.append(box);
     }
     if (view && !locked) {

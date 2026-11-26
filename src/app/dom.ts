@@ -28,6 +28,13 @@ export function button(
   return node;
 }
 
+/** ボタンや操作リンクをまとめ、折り返しても共通の間隔を維持する。 */
+export function actionGroup(...actions: HTMLElement[]): HTMLDivElement {
+  const group = el('div', 'action-group');
+  group.append(...actions);
+  return group;
+}
+
 /** 確認用のダイアログを開く。閉じた後は部品を片付け、元の要素へフォーカスを戻す。 */
 export function showDialog(
   title: string,
