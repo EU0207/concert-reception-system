@@ -54,7 +54,7 @@ test('ROLE315-B01 任命と解除の確認・キャンセル・確定後の自�
   await expect(page.getByRole('dialog').getByRole('button')).toHaveText(['変更内容を確認', 'キャンセル']);
   await page.getByRole('button', { name: '変更内容を確認', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('同じ本人のすべての端末');
-  await expect(page.getByRole('dialog')).toContainText('× 手動受付');
+  await expect(page.getByRole('list', { name: '任命する権限' }).getByRole('listitem').filter({ hasText: '手動受付' }).getByRole('img', { name: 'OFF', exact: true })).toBeVisible();
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
   await expect(page.locator('.staff-role-card')).toContainText('一般受付');
   await page.getByRole('button', { name: '臨時管理者に任命', exact: true }).click(); await save(page); await closeResult(page);

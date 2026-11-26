@@ -145,7 +145,14 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
       const pending = change(), summary = el('div');
       summary.append(el('p', '', `対象：${role.humanUid.slice(-8)}`), el('p', '', reappointment ? '臨時管理者に再任命' : '一般受付 → 臨時管理者'),
         el('p', '', `有効期間：${new Date(pending.input.startsAt).toLocaleString('ja-JP')} ～ ${new Date(pending.input.endsAt).toLocaleString('ja-JP')}`));
-      for (const key of TEMPORARY_PERMISSIONS) summary.append(el('p', '', `${values[key] ? '○' : '×'} ${labels[key]}`));
+      const permissions = el('ul', 'appointment-permission-summary'); permissions.setAttribute('aria-label', '任命する権限');
+      for (const key of TEMPORARY_PERMISSIONS) {
+        const row = el('li', values[key] ? '' : 'permission-summary-off');
+        const mark = el('span', `permission-mark ${values[key] ? 'permission-mark-on' : 'permission-mark-off'}`, values[key] ? '○' : '×');
+        mark.setAttribute('role', 'img'); mark.setAttribute('aria-label', values[key] ? 'ON' : 'OFF');
+        row.append(mark, el('span', '', labels[key])); permissions.append(row);
+      }
+      summary.append(permissions);
       summary.append(el('p', '', '同じ本人のすべての端末に反映します。選んだ権限だけを任命と同時に保存します。端末ごとの追加準備前に新しい管理権限は使えません。'),
         el('p', '', '停止・廃止された端末は復帰しません。旧設定は今回の任命へ流用しません。'));
       dialog?.close(); dialog = showDialog(reappointment ? '再任命の確認' : '任命の確認', summary,

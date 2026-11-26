@@ -1023,5 +1023,11 @@ p {
 .permission-mark { display: inline-block; font-size: 1.3rem; font-weight: 700; vertical-align: middle; line-height: 1; }
 .permission-mark-on { color: #24594c; }
 .permission-mark-off { color: #a12622; }
+/* 任命確認の権限は段落の余白をなくし、記号と項目名を揃えて見比べる。 */
+.appointment-permission-summary { list-style: none; padding: 0; margin: 14px 0; border: 1px solid #dce2d8; border-radius: 8px; overflow: hidden; }
+.appointment-permission-summary > li { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: center; gap: 8px; padding: 5px 10px; font-size: .9rem; line-height: 1.4; }
+.appointment-permission-summary > li:nth-child(even) { background: #f2f5f2; }
+.appointment-permission-summary > li.permission-summary-off { background: #fff1f0; }
+.appointment-permission-summary .permission-mark { font-size: 1.2em; text-align: center; }
 .temporary-permissions-screen .device-error:empty,
 .temporary-permissions-screen [role='status']:empty { display: none; }
