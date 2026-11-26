@@ -2,12 +2,14 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review |
+| 状態 | Approved（開発者レビュー。実業務・対象実機の受入は別途） |
 | 読者・目的 | 開発者・実装担当者が、端末管理の画面と通常SDK接続、残条件を確認する |
 | 更新日・関連 | 2026-11-25、子#308、親#263。認証画面は承認済みPR #297を使用 |
 | 根拠 | [BD-04](../basic-design/authentication-authorization-design.md)、[BD-06](../basic-design/screen-flow-wireframe-design.md)、[ADR-005](../decisions/ADR-005-device-principal-authorization.md) |
 
 ## 結論と対象範囲
+
+2026-11-26、開発者からレビューOKとmain統合の指示を受領した。PR #309はmain統合済み。停止・廃止の実業務での使用感は、端末準備と受付同期の接続後に改めて確認する。
 
 同じ公演の端末台帳を表示し、承認・停止・停止解除と廃止を確認ダイアログから実行する。変更を暗号化して端末内に固定し、通常SDKの最新認可・期待版検査と一体更新へ渡す。変更#310・[ADR-018](../decisions/ADR-018-current-device-stop.md)の依頼者了承により、使用中の自端末の停止は画面・業務計算とRulesで拒否する。
 
