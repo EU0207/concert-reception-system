@@ -4,19 +4,31 @@ import { actionGroup, button, el, showDialog } from './dom.ts';
 import { ownerDeviceUrl, parseOwnerDeviceUrl } from './owner-device-url.ts';
 import type { OwnerDeviceIssue, OwnerDeviceUiPort, OwnerDeviceView } from './owner-device-types.ts';
 
+/** 例外から画面表示に使う固定コードだけを取得する。 */
+function errorCode(cause: unknown): string {
+  return cause && typeof cause === 'object' && 'code' in cause ? String(cause.code) : '';
+}
+
+/** URLを差し替えることで解消できるエラーの案内を返す。 */
+function linkErrorMessage(cause: unknown): string | undefined {
+  const code = errorCode(cause);
+  if (code === 'INVALID_OWNER_DEVICE_TOKEN') return '有効な追加端末リンクを貼り付けてください。';
+  if (code === 'OWNER_LINK_BINDING_MISMATCH') return 'この端末・公演で使えるリンクを確認してください。';
+  if (code === 'OWNER_LINK_UNAVAILABLE') return 'このリンクは利用できません。有効期限や取消し状況を確認してください。';
+}
+
 /** 内部情報やリンクをエラーへ含めず、再確認する方法を短く案内する。 */
 function message(cause: unknown): string {
-  const code = cause && typeof cause === 'object' && 'code' in cause ? String(cause.code) : '';
+  const code = errorCode(cause);
   if (code === 'RECENT_AUTH_REQUIRED' || code === 'GOOGLE_AUTH_REQUIRED') return 'Googleで本人確認をやり直してください。';
-  if (code === 'INVALID_OWNER_DEVICE_TOKEN' || code === 'OWNER_LINK_BINDING_MISMATCH') return 'この端末・公演で使えるリンクを確認してください。';
-  if (code === 'OWNER_LINK_UNAVAILABLE') return 'このリンクは利用できません。有効期限や取消し状況を確認してください。';
-  return '操作結果を確認できませんでした。最新の状態を確認してください。';
+  return linkErrorMessage(cause) ?? '操作結果を確認できませんでした。最新の状態を確認してください。';
 }
 
 /** 既存端末と新端末を分け、同じ操作IDの照会と明示操作だけを行う画面を作る。 */
 export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false, receivedToken?: string) {
   const root = el('section', 'owner-device-screen');
   let view: OwnerDeviceView | undefined, busy = false, disposed = false, approving = false, error = '', notice = '', version = 0;
+  let linkError = '';
   let dialog: HTMLDialogElement | undefined, token = receivedToken;
   let timeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -26,23 +38,24 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
   /** 最新の状態を取得し、承認・発行を自動で実行しない。 */
   async function load() {
     if (busy || disposed) return;
-    const operation = ++version; busy = true; error = ''; closeShare(); render();
+    const operation = ++version; busy = true; error = linkError = ''; closeShare(); render();
     try { const result = await port.load(); if (operation === version && !disposed) view = result; }
     catch (cause) { if (operation === version && !disposed) { view = undefined; error = message(cause); } }
     finally { if (operation === version && !disposed) { busy = false; render(); } }
   }
 
   /** 明示操作を一度だけ実行し、失敗時は再送せず結果の再確認を案内する。 */
-  async function act(work: () => Promise<void>, success: string) {
+  async function act(work: () => Promise<void>, success: string, action?: 'check-link') {
     if (busy || disposed) return;
-    const operation = ++version; busy = true; error = notice = ''; render();
+    const operation = ++version; busy = true; error = linkError = notice = ''; render();
     try {
       await work();
       if (disposed || operation !== version) return;
       notice = success;
     } catch (cause) {
       if (disposed || operation !== version) return;
-      error = message(cause);
+      if (action === 'check-link') linkError = linkErrorMessage(cause) ?? '';
+      if (!linkError) error = message(cause);
     } finally {
       if (!disposed && operation === version) { busy = false; render(); }
     }
@@ -94,7 +107,7 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
   /** 自端末の承認による旧認可の失効後も、専用の読取り証跡・結果だけを取り直す。 */
   async function completeApproval(id: string) {
     if (busy || disposed) return;
-    approving = busy = true; error = notice = ''; render();
+    approving = busy = true; error = linkError = notice = ''; render();
     try {
       await port.approve(id);
       const result = await port.load();
@@ -174,7 +187,12 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
         const read = button(token ? '受け取ったリンクを確認' : 'リンクを確認', () => {
           let secret = token;
           try { secret ??= parseOwnerDeviceUrl(input.value.trim(), location.href, view!); }
-          catch (cause) { input.value = ''; error = message(cause); render(); return; }
+          catch (cause) {
+            input.value = ''; error = notice = '';
+            linkError = linkErrorMessage(cause) ?? '有効な追加端末リンクを貼り付けてください。';
+            render();
+            return;
+          }
           input.value = ''; token = undefined;
           void act(async () => {
             const requestVersion = version;
@@ -186,12 +204,24 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
 
             view = result;
             if (result.readers.some(reader => reader.operationId === id && !reader.approved)) approve(id);
-          }, 'リンクを確認しました。');
+          }, 'リンクを確認しました。', 'check-link');
         });
         read.disabled = !token;
-        input.addEventListener('input', () => { read.disabled = busy || !input.value.trim(); });
+        const inlineAlert = el('p', 'device-error owner-device-link-error', linkError);
+        inlineAlert.id = 'owner-device-link-error';
+        inlineAlert.setAttribute('role', 'alert');
+        if (linkError) {
+          input.setAttribute('aria-invalid', 'true');
+          input.setAttribute('aria-describedby', inlineAlert.id);
+        }
+        input.addEventListener('input', () => {
+          read.disabled = busy || !input.value.trim();
+          linkError = inlineAlert.textContent = '';
+          input.removeAttribute('aria-invalid');
+          input.removeAttribute('aria-describedby');
+        });
         if (!token) root.append(input);
-        root.append(actionGroup(read));
+        root.append(inlineAlert, actionGroup(read));
       }
       for (const reader of view.readers.filter(item => !approved || item.approved)) {
         const panel = el('section', 'panel owner-device-card');
@@ -204,7 +234,7 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
     if (busy) for (const control of root.querySelectorAll<HTMLButtonElement | HTMLTextAreaElement>('button, textarea')) control.disabled = true;
   }
 
-  const unsubscribe = port.onInvalidate(() => { version++; busy = approving; view = undefined; token = undefined; closeShare(); error = '現在の本人・端末を確認し直してください。'; render(); });
+  const unsubscribe = port.onInvalidate(() => { version++; busy = approving; view = undefined; token = undefined; closeShare(); linkError = ''; error = '現在の本人・端末を確認し直してください。'; render(); });
 
   /** 古い応答と平文リンクの表示を破棄し、保存済みの操作結果は保持する。 */
   function dispose() { disposed = true; version++; token = undefined; closeShare(); unsubscribe(); port.dispose(); view = undefined; root.replaceChildren(); }

@@ -30,7 +30,7 @@ test('OWNER317-B01 発行・確認・関連付けし、承認をデータ準備�
   await expect(page.getByRole('heading',{name:/関連付け済み/})).toBeVisible();
 });
 
-test('OWNER317-B02 取消し確認後のリンクと、他公演のリンクを新端末で拒否する',async({page})=>{
+test('OWNER317-B02 無効なリンクを拒否し、入力欄と確認ボタンの間に理由を表示する',async({page})=>{
   await page.goto(route); const link=await issue(page);
   await page.getByRole('button',{name:'リンクを取り消す',exact:true}).click();
   await page.getByRole('dialog').getByRole('button',{name:'取り消す',exact:true}).click();
@@ -40,12 +40,25 @@ test('OWNER317-B02 取消し確認後のリンクと、他公演のリンクを�
   await expect(page.getByRole('heading',{name:/：スマートフォン（2台目）$/})).toHaveCount(1);
   await expect(page.getByRole('button',{name:'リンクを発行',exact:true}).first()).toBeEnabled();
   await page.getByRole('button',{name:'スマートフォン（2台目）',exact:true}).click();
-  for(const value of [link.replace('00000000-0000-4000-8000-000000000001','00000000-0000-4000-8000-000000000002'),link]){
-    await page.getByLabel('受け取った追加端末リンク').fill(value);
-    await page.getByRole('button',{name:'リンクを確認',exact:true}).click();
-    await expect(page.getByRole('alert')).not.toBeEmpty();
-    await expect(page.getByRole('alert')).toHaveCSS('color','rgb(161, 38, 34)');
-    await expect(page.getByLabel('受け取った追加端末リンク')).toHaveValue('');
+  const input = page.getByLabel('受け取った追加端末リンク');
+  const alert = page.locator('textarea + [role="alert"]');
+  const confirm = page.getByRole('button', { name: 'リンクを確認', exact: true });
+  const otherPerformance = link.replace('00000000-0000-4000-8000-000000000001', '00000000-0000-4000-8000-000000000002');
+  for (const [value, reason] of [
+    ['URLではない文字列', '有効な追加端末リンクを貼り付けてください。'],
+    [otherPerformance, 'この端末・公演で使えるリンクを確認してください。'],
+    [link, 'このリンクは利用できません。'],
+  ]) {
+    await input.fill(value);
+    await expect(alert).toBeHidden();
+    await expect(input).not.toHaveAttribute('aria-invalid');
+    await confirm.click();
+    await expect(alert).toContainText(reason);
+    await expect(alert).toHaveCSS('color','rgb(161, 38, 34)');
+    await expect(input).toHaveAccessibleDescription(new RegExp(reason));
+    await expect(input).toHaveAttribute('aria-invalid', 'true');
+    await expect(input).toHaveValue('');
+    await expect(page.locator('textarea + [role="alert"] + div').getByRole('button', { name: 'リンクを確認' })).toBeVisible();
     await expect(page.getByRole('button',{name:'この端末を関連付ける',exact:true})).toHaveCount(0);
     await expect(page.getByRole('dialog')).toHaveCount(0);
   }
