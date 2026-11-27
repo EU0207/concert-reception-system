@@ -1,17 +1,13 @@
 // 臨時管理者の固定9項目と有効期間を表示し、確認・暗号化保存・結果回収へ接続する。
 
-import { button, el, showDialog } from './dom.ts';
+import { actionGroup, button, el, showDialog } from './dom.ts';
+import { watchDialogValidity } from './dialog-validation.ts';
+import { RECENT_AUTH_WINDOW } from '../domain/authorization/policy.ts';
+import { temporaryPermissionLabels as labels } from './temporary-permission-labels.ts';
 import { TEMPORARY_PERMISSIONS } from '../domain/authorization/types.ts';
 import type { RoleGrant, TemporaryProfile, TemporaryPermission } from '../domain/authorization/types.ts';
 import { changeTemporaryPermissions } from '../domain/authorization/role-management.ts';
 import type { PermissionView, PendingPermission, PermissionOutcome, TemporaryPermissionsUiPort } from './temporary-permissions-types.ts';
-
-const labels: Record<TemporaryPermission, string> = {
-  exceptionManage: '例外の正式追加・編集・削除', manualReception: '手動受付', arrivalCorrection: '当日の来場状態訂正',
-  seatDisplayNameEdit: '当日の座席表示名変更', receptionConflictResolve: '当日の受付競合の確認・解消',
-  rereadManagementMemo: '管理用の再読取り理由・メモ', dayManagementRead: '当日の来場状況・管理画面の閲覧',
-  staffNoticeManage: 'スタッフ連絡の投稿・訂正・取消し', dayAuditRead: '当日業務の履歴閲覧',
-};
 
 /** 設定値を色付きの記号だけで示し、読み上げ用の意味を保持する。 */
 function permissionMark(enabled: boolean) {
@@ -103,7 +99,7 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
   /** 9項目と期間を編集し、変更前後を確認してから固定入力へ渡す。 */
   function edit(role: RoleGrant, profile: TemporaryProfile) {
     if (busy || locked || !view || pending.length) return;
-    const basis = structuredClone(view), values = structuredClone(profile.permissions), body = el('div', 'permission-edit-body');
+    const basis = structuredClone(view), basisAt = performance.now(), values = structuredClone(profile.permissions), body = el('div', 'permission-edit-body');
     const checks = new Map<TemporaryPermission, HTMLInputElement>();
     const allLabel = el('label', 'permission-all'), all = el('input'); all.type = 'checkbox';
     allLabel.append(all, el('span', '', 'すべて選択／解除'));
@@ -137,17 +133,28 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
     startLabel.append(start); endLabel.append(end); period.append(startLabel, endLabel); body.append(period,
       el('p', 'muted', `日時はこの端末の時刻（${Intl.DateTimeFormat().resolvedOptions().timeZone}）で入力します。`),
       el('p', 'muted', `設定できる期間：${new Date(role.startsAt).toLocaleString('ja-JP')} ～ ${new Date(Math.min(role.endsAt, basis.snapshot.staffDeadline)).toLocaleString('ja-JP')}`));
-    const validation = el('p', 'device-error'); validation.setAttribute('role', 'alert'); body.append(validation);
+    const validation = el('p', 'device-error permission-validation'); validation.setAttribute('role', 'alert');
+    const operationId = crypto.randomUUID();
+
+    /** 選択中の項目と日時を、固定する入力へコピーする。 */
+    function changeInput(): PendingPermission {
+      const from = start.value === initialStart ? profile.validFrom : Date.parse(start.value);
+      const until = end.value === initialEnd ? profile.validUntil : Date.parse(end.value);
+      return { targetUid: role.humanUid, input: { operationId, expectedRevision: role.revision,
+        revoke: false, validFrom: from, validUntil: until, permissions: structuredClone(values) } };
+    }
+
+    /** 入力時点で検査し、不正な期間の確認操作を無効にする。 */
+    function validate() {
+      if (preview && Date.now() > basis.serverNow + RECENT_AUTH_WINDOW) return 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。';
+      try { changeTemporaryPermissions(basis.snapshot, role, changeInput().input, basis.serverNow + Math.max(0, Math.floor(performance.now() - basisAt))); return ''; }
+      catch (cause) { return message(cause); }
+    }
 
     /** 編集値を検証し、変更前後の確認を開く。取消しでは保存しない。 */
     function confirm() {
-      if (locked || disposed) return;
-      const from = start.value === initialStart ? profile.validFrom : Date.parse(start.value);
-      const until = end.value === initialEnd ? profile.validUntil : Date.parse(end.value);
-      const change: PendingPermission = { targetUid: role.humanUid, input: { operationId: crypto.randomUUID(), expectedRevision: role.revision,
-        revoke: false, validFrom: from, validUntil: until, permissions: structuredClone(values) } };
-      try { changeTemporaryPermissions(basis.snapshot, role, change.input, basis.serverNow); }
-      catch (cause) { validation.textContent = message(cause); return; }
+      if (locked || disposed || !refresh()) return;
+      const change = changeInput(), from = change.input.validFrom, until = change.input.validUntil;
       const summary = el('div'); summary.append(el('p', '', `対象：臨時管理者（${role.humanUid.slice(-8)}）`));
       for (const key of TEMPORARY_PERMISSIONS) {
         const row = el('p', 'permission-row');
@@ -159,9 +166,12 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
       dialog?.close(); dialog = showDialog('権限設定の確認', summary, [button('この内容で保存', () => { dialog?.close(); void act(change, 'save'); })], 'キャンセル');
     }
 
-    dialog = showDialog('臨時管理者の権限設定', body,
-      [button('変更内容を確認', confirm)], 'キャンセル');
+    const action = button('変更内容を確認', confirm);
+    dialog = showDialog('臨時管理者の権限設定', body, [action], 'キャンセル');
     dialog.classList.add('permission-edit-dialog');
+    // 9項目の下へエラーを隠さず、確認ボタンの直前へ固定する。
+    dialog.querySelector('.dialog-actions')!.before(validation);
+    const refresh = watchDialogValidity(dialog, [start, end], action, validation, validate);
   }
 
   /** 現在の設定と未確認結果を分離し、未取得を既定の全ONで表示しない。 */
@@ -170,11 +180,14 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
     root.replaceChildren(el('h2', '', '臨時管理者の権限設定'));
     if (preview) root.append(el('p', 'notice', '画面確認用の見本です。実際の権限やスタッフ登録は変更しません。'));
     const alert = el('p', 'device-error', error), status = el('p', 'muted', busy ? '確認しています…' : notice);
-    alert.setAttribute('role', 'alert'); status.setAttribute('role', 'status'); root.append(alert, status, button('最新の設定を確認', () => { void load(); }, 'button secondary'));
+    alert.setAttribute('role', 'alert'); status.setAttribute('role', 'status');
+    const toolbar = actionGroup(button('最新の設定を確認', () => { void load(); }, 'button secondary'));
+    toolbar.classList.add('management-toolbar'); root.append(alert, status, toolbar);
     if (locked) root.append(el('p', 'notice', '権限設定は最新の認可確認が必要です。'));
     for (const change of pending) {
-      const box = el('div', 'notice'); box.append(el('p', '', `結果未確認：臨時管理者（${change.targetUid.slice(-8)}）`), button('結果を確認', () => { void act(change, 'query'); }, 'button secondary'));
-      if (!locked) box.append(button('同じ操作を再試行', () => { void act(change, 'retry'); }, 'button secondary'), button('未確定案を取り消す', () => { void act(change, 'cancel'); }, 'button secondary'));
+      const box = el('div', 'notice'), actions = actionGroup(button('結果を確認', () => { void act(change, 'query'); }, 'button secondary'));
+      box.append(el('p', '', `結果未確認：臨時管理者（${change.targetUid.slice(-8)}）`), actions);
+      if (!locked) actions.append(button('同じ操作を再試行', () => { void act(change, 'retry'); }, 'button secondary'), button('未確定案を取り消す', () => { void act(change, 'cancel'); }, 'button secondary'));
       root.append(box);
     }
     if (view && !locked) {

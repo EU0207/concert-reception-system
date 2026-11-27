@@ -9,6 +9,7 @@ import {
   changeTemporaryPermissions,
   createAuthorizationAudit,
   cancelAuthorizationChange,
+  validateTemporaryPermissions,
 } from '../../domain/authorization/role-management.ts';
 import type {
   RoleChangeRequest,
@@ -20,7 +21,9 @@ import type {
   HumanIdentity,
   RoleGrant,
   TemporaryProfile,
+  TemporaryPermission,
 } from '../../domain/authorization/types.ts';
+import { TEMPORARY_PERMISSIONS } from '../../domain/authorization/types.ts';
 import type { AuthorizationOperationJournal } from '../../storage/authorization-operations.ts';
 import { isId, requireValue } from '../../domain/seats/validation.ts';
 import { authorizeOnline, validUid } from '../../domain/authorization/policy.ts';
@@ -35,9 +38,9 @@ interface Context {
 }
 
 type PermissionInput = Parameters<typeof changeTemporaryPermissions>[2];
-type RoleInput = Parameters<typeof createRoleChangeRequest>[2];
+type RoleInput = Parameters<typeof createRoleChangeRequest>[2] & { initialPermissions?: Record<TemporaryPermission, boolean> | undefined };
 type SavedOperation =
-  | { kind: 'roleChange'; request: RoleChangeRequest }
+  | { kind: 'roleChange'; request: RoleChangeRequest; initialPermissions?: Record<TemporaryPermission, boolean> | undefined }
   | { kind: 'permissionChange'; targetUid: string; input: PermissionInput; requestedAt: number };
 
 /** 役割変更と臨時権限の固定入力・確定・取消しを扱う窓口を作る。 */
@@ -88,43 +91,34 @@ export function createRoleManagementPort(context: Context) {
     return kind === 'roleChange' ? stored : (stored?.result ?? null);
   }
 
-  /** 役割変更案を暗号化保全してから、サーバーへ固定入力を登録する。 */
-  async function saveRoleRequest(
-    uid: string,
-    input: RoleInput,
-    journal: AuthorizationOperationJournal,
-    assertAuthorized: () => void,
-  ): Promise<RoleChangeRequest> {
+  /** 現在値で検査した役割変更案を暗号化保全し、通信前に固定する。 */
+  async function saveRoleInput(uid: string, input: RoleInput, journal: AuthorizationOperationJournal, assertAuthorized: () => void) {
     const { snapshot, serverNow } = await context.fetchCurrent();
     const request = createRoleChangeRequest(snapshot, await target(uid), input, serverNow);
-
-    await journal.save(request.operationId, { kind: 'roleChange', request }, assertAuthorized);
+    const initial = request.nextRole === 'temporary' ? { initialPermissions: validateTemporaryPermissions(input.initialPermissions ??
+      Object.fromEntries(TEMPORARY_PERMISSIONS.map(key => [key, true])) as Record<TemporaryPermission, boolean>) } : {};
+    await journal.save(request.operationId, { kind: 'roleChange', request, ...initial }, assertAuthorized);
     assertAuthorized();
+    return request;
+  }
 
-    // 本文の固定後に初めて要求する。応答不明でもjournalを消さず同じIDを照会する。
-    const prior = await read(context.deviceDatabase, `roleChangeRequests/${request.operationId}`);
-
-    if (!prior)
-      await set(
-        ref(context.deviceDatabase, `${context.root}/roleChangeRequests/${request.operationId}`),
-        { ...request, requestedAt: serverTimestamp() },
-      );
-
-    const stored = (await read(
-      context.deviceDatabase,
-      `roleChangeRequests/${request.operationId}`,
-    )) as RoleChangeRequest;
-
-    requireValue(
-      stored &&
-        Object.entries(request).every(
-          ([key, value]) =>
-            key === 'requestedAt' || stored[key as keyof RoleChangeRequest] === value,
-        ),
-      'ROLE_REQUEST_MISMATCH',
-    );
-
+  /** 保全済みの同じ案だけを登録する。通信前の失敗も新しいIDへ置き換えない。 */
+  async function publishRoleRequest(request: RoleChangeRequest, assertAuthorized: () => void) {
+    const { snapshot, serverNow } = await context.fetchCurrent();
+    createRoleChangeRequest(snapshot, await target(request.targetUid), request, serverNow);
+    assertAuthorized();
+    const path = 'roleChangeRequests/' + request.operationId;
+    const prior = await read(context.deviceDatabase, path);
+    if (!prior) await set(ref(context.deviceDatabase, context.root + '/' + path), { ...request, requestedAt: serverTimestamp() });
+    const stored = await read(context.deviceDatabase, path) as RoleChangeRequest;
+    requireValue(stored && Object.entries(request).every(([key, value]) => key === 'requestedAt' || stored[key as keyof RoleChangeRequest] === value), 'ROLE_REQUEST_MISMATCH');
+    assertAuthorized();
     return stored;
+  }
+
+  /** 既存利用者向けに、案の保全とサーバー登録を順に行う。 */
+  async function saveRoleRequest(uid: string, input: RoleInput, journal: AuthorizationOperationJournal, assertAuthorized: () => void): Promise<RoleChangeRequest> {
+    return publishRoleRequest(await saveRoleInput(uid, input, journal, assertAuthorized), assertAuthorized);
   }
 
   /** 対象本人のGoogle認証で、役割変更の本人確認証跡を保存する。 */
@@ -196,26 +190,19 @@ export function createRoleManagementPort(context: Context) {
       return current;
     }
 
+    if (saved.kind === 'roleChange' && saved.request.nextRole === 'temporary') {
+      requireValue(saved.initialPermissions, 'INITIAL_PERMISSIONS_REQUIRED');
+      validateTemporaryPermissions(saved.initialPermissions);
+    }
+    // 初回送信では案のサーバー時刻が新しくなるため、確定判定の現在時刻は登録後に取得する。
+    const published = saved.kind === 'roleChange' ? await publishRoleRequest(saved.request, assertAuthorized) : null;
     const { snapshot, serverNow } = await context.fetchCurrent();
     const uid = saved.kind === 'roleChange' ? saved.request.targetUid : saved.targetUid;
     const before = await target(uid),
       oldProfile = await previousProfile(before);
     let plan: RoleManagementPlan;
-    let request: RoleChangeRequest | null = null;
-
     if (saved.kind === 'roleChange') {
-      request = (await read(
-        context.deviceDatabase,
-        `roleChangeRequests/${id}`,
-      )) as RoleChangeRequest;
-      requireValue(
-        request &&
-          Object.entries(saved.request).every(
-            ([key, value]) =>
-              key === 'requestedAt' || request![key as keyof RoleChangeRequest] === value,
-          ),
-        'ROLE_REQUEST_MISMATCH',
-      );
+      const request = published!;
 
       const acceptance =
         request.nextRole === 'deputy'
@@ -225,7 +212,10 @@ export function createRoleManagementPort(context: Context) {
             )) as GoogleAcceptance | null)
           : null;
 
-      plan = commitRoleChange(snapshot, before, request, acceptance, serverNow);
+      // 新しい初期設定は保全済み入力だけを使用し、欠損を全ONへ補わない。
+      if (request.nextRole === 'temporary') requireValue(saved.initialPermissions, 'INITIAL_PERMISSIONS_REQUIRED');
+      plan = commitRoleChange(snapshot, before, request, acceptance, serverNow,
+        request.nextRole === 'temporary' ? validateTemporaryPermissions(saved.initialPermissions!) : undefined);
     } else plan = changeTemporaryPermissions(snapshot, before, saved.input, serverNow);
 
     const audit = createAuthorizationAudit(plan, before, oldProfile);
@@ -300,6 +290,8 @@ export function createRoleManagementPort(context: Context) {
       oldProfile = await previousProfile(before);
     const expectedRevision =
       saved.kind === 'roleChange' ? saved.request.expectedRevision : saved.input.expectedRevision;
+    if (saved.kind === 'roleChange') await publishRoleRequest(saved.request, assertAuthorized);
+
     const plan = cancelAuthorizationChange(
       snapshot,
       before,
@@ -360,7 +352,18 @@ export function createRoleManagementPort(context: Context) {
     return { ...current, targets };
   }
 
-  return { target, saveRoleRequest, acceptGoogle, savePermissionInput, commit, cancel, receipt, listTemporaryPermissions };
+  /** 管理者の現在認可で、任命・解除の対象となる公演限定スタッフだけを取得する。 */
+  async function listStaffRoles() {
+    const current = await context.fetchCurrent();
+    authorizeOnline(current.snapshot, 'manageRoles', current.serverNow);
+    const roles = await read(context.deviceDatabase, 'roles') as Record<string, RoleGrant> | null;
+    requireValue(roles, 'ROLE_INVENTORY_REQUIRED');
+    const targets = await Promise.all(Object.values(roles).filter(role => role.role === 'temporary' || role.role === 'receptionist')
+      .map(async role => ({ role, profile: await previousProfile(role) })));
+    return { ...current, targets };
+  }
+
+  return { target, saveRoleRequest, saveRoleInput, acceptGoogle, savePermissionInput, commit, cancel, receipt, listTemporaryPermissions, listStaffRoles };
 }
 
 /** 認可の現在値から、環境IDと公演IDを取り出す。 */

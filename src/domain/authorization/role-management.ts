@@ -100,8 +100,8 @@ export function createAuthorizationAudit(
     previousProfileVersion: previousRole.role === 'temporary' ? previousRole.revision : 0,
     nextProfileVersion: plan.profile?.roleVersion ?? 0,
     previousPermissions:
-      previousRole.role === 'temporary' ? permissions(previousProfile!.permissions) : off(),
-    nextPermissions: plan.profile ? permissions(plan.profile.permissions) : off(),
+      previousRole.role === 'temporary' ? validateTemporaryPermissions(previousProfile!.permissions) : off(),
+    nextPermissions: plan.profile ? validateTemporaryPermissions(plan.profile.permissions) : off(),
   };
 }
 
@@ -111,6 +111,7 @@ function requireTarget(
   target: RoleGrant,
   expectedRevision: number,
   now: number,
+  allowExpiredTemporary = false,
 ): void {
   checkScope(target, actor);
   requireValue(
@@ -118,7 +119,7 @@ function requireTarget(
       positive(target.revision) &&
       target.revision === expectedRevision &&
       target.startsAt <= now &&
-      now < target.endsAt,
+      (now < target.endsAt || (allowExpiredTemporary && target.role === 'temporary' && now < actor.staffDeadline)),
     'STALE_OR_INACTIVE_TARGET',
   );
 }
@@ -137,13 +138,15 @@ export function createRoleChangeRequest(
   now: number,
 ): RoleChangeRequest {
   authorizeOnline(actor, 'manageRoles', now);
-  requireTarget(actor, target, input.expectedRevision, now);
+  const reappointment = target.role === 'temporary' && target.endsAt <= now && now < actor.staffDeadline &&
+    (input.nextRole === 'temporary' || input.nextRole === 'receptionist');
+  requireTarget(actor, target, input.expectedRevision, now, reappointment);
   requireValue(
     isId(input.operationId) &&
       input.nextRole !== 'owner' &&
       target.role !== 'owner' &&
       ['deputy', 'temporary', 'receptionist'].includes(input.nextRole) &&
-      input.nextRole !== target.role,
+      (input.nextRole !== target.role || reappointment),
     'ROLE_CHANGE_FORBIDDEN',
   );
   requireValue(
@@ -208,7 +211,7 @@ export function createGoogleAcceptance(
 }
 
 /** 臨時権限が固定9項目の真偽値か確認し、コピーを返す。 */
-function permissions(
+export function validateTemporaryPermissions(
   input: Record<TemporaryPermission, boolean>,
 ): Record<TemporaryPermission, boolean> {
   requireValue(
@@ -324,7 +327,7 @@ export function commitRoleChange(
           status: 'active',
           validFrom: role.startsAt,
           validUntil: role.endsAt,
-          permissions: permissions(initialPermissions),
+          permissions: validateTemporaryPermissions(initialPermissions),
         }
       : null;
 
@@ -366,7 +369,7 @@ export function changeTemporaryPermissions(
     'INVALID_PROFILE_PERIOD',
   );
 
-  const configured = permissions(input.permissions);
+  const configured = validateTemporaryPermissions(input.permissions);
   const role = {
     ...target,
     revision: target.revision + 1,
@@ -405,7 +408,7 @@ export function cancelAuthorizationChange(
   now: number,
 ): RoleManagementPlan {
   authorizeOnline(actor, kind === 'roleChange' ? 'manageRoles' : 'manageTemporaryPermissions', now);
-  requireTarget(actor, target, expectedRevision, now);
+  requireTarget(actor, target, expectedRevision, now, kind === 'roleChange');
   requireValue(
     isId(operationId) && (kind === 'roleChange' || target.role === 'temporary'),
     'INVALID_OPERATION',

@@ -67,7 +67,8 @@ test('DEVICE308-B01 承認・停止・解除・廃止を確認し、管理端末
 
 /** 固定入力と応答喪失を操作できる、通信しない画面用fixtureを作る。 */
 async function fixture(page, committed) {
-  await page.goto('http://127.0.0.1:4181/');
+  await page.goto('http://127.0.0.1:4181/tests/emulator/device-management-fixture.html');
+  await page.waitForFunction(() => window.deviceFixtureReady === true);
   await page.evaluate(async (committed) => {
     const { createDeviceManagementPreview } = await import('/src/app/device-management-preview.ts');
     const { createDeviceManagementScreen } = await import('/src/app/device-management-screen.ts');
@@ -258,5 +259,24 @@ test('DEVICE308-B09 準備済みの代替管理端末がなければ代理端末
   await page.getByRole('dialog').getByRole('button', { name: '廃止する', exact: true }).click();
   await expect(page.getByRole('dialog').getByRole('alert')).toContainText('準備済みの管理端末');
   expect(await page.evaluate(() => window.deviceTrial.getSaved())).toBe(null);
+  expect(await page.evaluate(() => window.deviceTrial.getCalls())).toBe(0);
+});
+
+test('DEVICE308-B10 臨時任期の終了で端末一覧の役割名が自動で一般受付に戻る', async ({ page }) => {
+  await page.clock.install(); await fixture(page, false);
+  await page.evaluate(() => {
+    const trial = window.deviceTrial;
+    trial.port.load = async () => {
+      const data = await trial.backend.load();
+      const role = data.inventory.roles.find(item => item.humanUid === 'preview-staff');
+      role.role = 'temporary'; role.endsAt = data.serverNow + 5000;
+      return data;
+    };
+  });
+  await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
+  const card = page.locator('.device-card').filter({ has: page.getByRole('heading', { name: /pending/ }) });
+  await expect(card.getByRole('heading')).toContainText('臨時管理者');
+  await page.clock.fastForward(5100);
+  await expect(card.getByRole('heading')).toContainText('一般受付担当者');
   expect(await page.evaluate(() => window.deviceTrial.getCalls())).toBe(0);
 });

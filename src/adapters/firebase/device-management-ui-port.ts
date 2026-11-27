@@ -76,7 +76,7 @@ export function createDeviceManagementUiPort(
       const remaining = until - current.serverNow - Math.max(0, Math.floor(performance.now() - loadedAt));
       requireValue(remaining > 0, 'AUTHORIZATION_EXPIRED');
       expiry = setTimeout(invalidate, remaining);
-      return structuredClone(current);
+      return structuredClone({ ...current, serverNow: current.serverNow + Math.max(0, Math.floor(performance.now() - loadedAt)) });
     } catch (error) {
       locked = true;
       throw error;
