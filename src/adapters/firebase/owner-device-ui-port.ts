@@ -111,13 +111,14 @@ export function createOwnerDeviceUiPort(authorization: Awaited<ReturnType<typeof
       assertIssuer(); await authorization.ownerDeviceLinks.cancel(id, journal, assertIssuer); assertIssuer();
     },
 
-    /** 新端末で明示操作されたリンクだけを照合し、平文を保存しない。 */
+    /** 新端末でリンクを照合して操作IDを返し、平文を保存しない。 */
     async read(token) {
       requireValue(mode === 'receiver', 'OWNER_LINK_BINDING_MISMATCH'); assertIdentity();
       const digest = await ownerDeviceLinkDigest(token);
       try {
         const reader = await authorization.ownerDeviceLinks.readToken(token);
         assertIdentity(); readers.add(reader.operationId);
+        return reader.operationId;
       } catch (cause) { await recordRejection(digest); throw cause; }
     },
 

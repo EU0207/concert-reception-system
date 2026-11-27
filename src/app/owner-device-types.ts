@@ -17,7 +17,7 @@ export interface OwnerDeviceUiPort {
   load(): Promise<OwnerDeviceView>;
   issue(target: string, operationId: string): Promise<{ token: string; link: OwnerDeviceLink }>;
   cancel(operationId: string): Promise<void>;
-  read(token: string): Promise<void>;
+  read(token: string): Promise<string>;
   approve(operationId: string): Promise<void>;
   onInvalidate(listener: () => void): () => void;
   dispose(): void;

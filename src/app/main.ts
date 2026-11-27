@@ -372,18 +372,18 @@ function renderPage() {
     const panel = el('div'), incoming = incomingOwnerLink;
     incomingOwnerLink = undefined;
     /** 見本だけで端末側を切り替え、実認証や承認済み状態を変更しない。 */
-    function show(mode: 'issuer' | 'receiver', token?: string) {
+    function show(port: typeof preview.issuer, token?: string) {
       ownerDeviceScreen?.dispose();
-      ownerDeviceScreen = createOwnerDeviceScreen(preview[mode], true, token);
+      ownerDeviceScreen = createOwnerDeviceScreen(port, true, token);
       panel.replaceChildren(ownerDeviceScreen.element);
     }
 
-    const controls = actionGroup(button('既存端末の見本', () => show('issuer'), 'button secondary'),
-      button('新しい端末の見本', () => show('receiver'), 'button secondary'));
+    const controls = actionGroup(button('既存端末の見本', () => show(preview.issuer), 'button secondary'),
+      ...preview.receivers.map(({ name, port }) => button(name, () => show(port), 'button secondary')));
     controls.classList.add('management-toolbar');
     main.append(routeLink('← スタッフ・端末へ', `/events/${event.id}/devices`, 'back-link'),
       el('p', 'muted', '見本で操作する端末を選択：'), controls, panel);
-    show(incoming ? 'receiver' : 'issuer', incoming?.token);
+    show(incoming ? preview.receivers[0]!.port : preview.issuer, incoming?.token);
     document.title = '管理者の追加端末 | コンサート受付';
   } else if (currentRoute === '/login' && startup.config.environmentType === 'evaluation-local') {
     authenticationScreen = createAuthenticationScreen(createAuthenticationPreview(), true);

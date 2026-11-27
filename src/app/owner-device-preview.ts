@@ -6,27 +6,33 @@ import type { Scope } from '../domain/seats/types.ts';
 import { requireValue } from '../domain/seats/validation.ts';
 import type { OwnerDeviceUiPort, OwnerDeviceView } from './owner-device-types.ts';
 
-/** 同じメモリー台帳を使う二つの架空端末を作り、実際の権限は発行しない。 */
+/** 既存端末と二つの追加端末が、架空の台帳を共有する。 */
 export function createOwnerDevicePreview(scope: Scope) {
-  const links = new Map<string, { digest: string; link: OwnerDeviceLink }>(), readers = new Set<string>(), approved = new Set<string>();
+  const currentDevice = 'preview-owner-current';
+  const newDevices = ['スマートフォン（2台目）', 'タブレット（3台目）'] as const;
+  const links = new Map<string, { digest: string; link: OwnerDeviceLink }>();
+  const readers = new Set<string>(), approvedDevices = new Set<string>();
   const started = Date.now();
 
   /** 発行元または新端末の操作を、同じ架空台帳へ接続する。 */
-  function port(mode: OwnerDeviceView['mode']): OwnerDeviceUiPort {
+  function port(mode: OwnerDeviceView['mode'], deviceUid: string): OwnerDeviceUiPort {
     const listeners = new Set<() => void>();
     return {
       /** 架空の台帳と結果だけを返し、追加承認や端末準備を自動実行しない。 */
       async load() {
-        return structuredClone({ ...scope, mode, deviceUid: mode === 'issuer' ? 'preview-owner-current' : 'preview-owner-new',
+        return structuredClone({ ...scope, mode, deviceUid,
           serverNow: Date.now(), validUntil: started + OWNER_DEVICE_LINK_LIFETIME,
-          targets: approved.size ? [] : ['preview-owner-new'],
-          issues: [...links.values()].map(({ link }) => ({ ...link })),
-          readers: [...readers].map(operationId => ({ operationId, approved: approved.has(operationId) })) });
+          targets: mode === 'issuer' ? newDevices.filter(target => !approvedDevices.has(target)) : [],
+          issues: mode === 'issuer' ? [...links.values()].map(({ link }) => ({ ...link })) : [],
+          readers: [...links.values()].filter(({ link }) => link.targetDeviceUid === deviceUid && readers.has(link.operationId) &&
+            (link.status === 'consumed' || (link.status === 'pending' && Date.now() < link.expiresAt)))
+            .map(({ link }) => ({ operationId: link.operationId, approved: link.status === 'consumed' })) });
       },
 
       /** トークンは返すだけにし、台帳には照合値だけを保持する。 */
       async issue(target, operationId) {
-        requireValue(mode === 'issuer' && target === 'preview-owner-new' && !approved.size && !links.has(operationId), 'PENDING_OWNER_DEVICE_REQUIRED');
+        requireValue(mode === 'issuer' && newDevices.some(device => device === target) && !approvedDevices.has(target) &&
+          !links.has(operationId), 'PENDING_OWNER_DEVICE_REQUIRED');
         const { token, digest } = await createOwnerDeviceToken(), now = Date.now();
         const link: OwnerDeviceLink = { ...scope, schemaVersion: 1, operationId, purpose: 'owner-device', ownerUid: 'preview-owner',
           ownerRoleRevision: 1, issuerDeviceUid: 'preview-owner-current', targetDeviceUid: target, storageEpoch: crypto.randomUUID(),
@@ -44,15 +50,17 @@ export function createOwnerDevicePreview(scope: Scope) {
       async read(token) {
         const digest = await ownerDeviceLinkDigest(token), entry = [...links.values()].find(item => item.digest === digest);
         requireValue(mode === 'receiver' && entry?.link.status === 'pending' && Date.now() < entry.link.expiresAt, 'OWNER_LINK_UNAVAILABLE');
-        readers.add(entry!.link.operationId);
+        requireValue(entry.link.targetDeviceUid === deviceUid, 'OWNER_LINK_BINDING_MISMATCH');
+        readers.add(entry.link.operationId);
+        return entry.link.operationId;
       },
 
       /** 読取り済みの同じ案だけを一度確定する。 */
       async approve(id) {
-        if (approved.has(id)) return;
         const entry = links.get(id); requireValue(mode === 'receiver' && readers.has(id) && entry?.link.status === 'pending' &&
-          Date.now() < entry.link.expiresAt, 'OWNER_LINK_UNAVAILABLE');
-        entry!.link.status = 'consumed'; entry!.link.revision++; approved.add(id);
+          Date.now() < entry.link.expiresAt && entry.link.targetDeviceUid === deviceUid &&
+          !approvedDevices.has(deviceUid), 'OWNER_LINK_UNAVAILABLE');
+        entry.link.status = 'consumed'; entry.link.revision++; approvedDevices.add(deviceUid);
       },
 
       onInvalidate: listener => { listeners.add(listener); return () => { listeners.delete(listener); }; },
@@ -61,5 +69,5 @@ export function createOwnerDevicePreview(scope: Scope) {
     };
   }
 
-  return { issuer: port('issuer'), receiver: port('receiver') };
+  return { issuer: port('issuer', currentDevice), receivers: newDevices.map(name => ({ name, port: port('receiver', name) })) };
 }

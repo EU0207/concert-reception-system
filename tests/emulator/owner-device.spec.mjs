@@ -83,7 +83,7 @@ test('OWNER317-S01 発行・読取り後に再起動して同じIDで承認し�
     targetUrl.search=original.search;targetUrl.hash=original.hash;
     await receiver.page.getByLabel('受け取った追加端末リンク').fill(targetUrl.href);
     await receiver.page.getByRole('button',{name:'リンクを確認',exact:true}).click();
-    await expect(receiver.page.getByRole('button',{name:'この端末を関連付ける',exact:true})).toBeVisible();
+    await expect(receiver.page.getByRole('dialog',{name:'この端末を関連付けますか？'})).toBeVisible();
     await reopen(f,receiver,'approve');
     await expect(receiver.page.getByRole('button',{name:'この端末を関連付ける',exact:true})).toBeVisible();
     await receiver.page.getByRole('button',{name:'この端末を関連付ける',exact:true}).click();

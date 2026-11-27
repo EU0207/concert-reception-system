@@ -154,7 +154,17 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
           try { secret ??= parseOwnerDeviceUrl(input.value.trim(), location.href, view!); }
           catch (cause) { input.value = ''; error = message(cause); render(); return; }
           input.value = ''; token = undefined;
-          void act(async () => { await port.read(secret!); view = await port.load(); }, 'リンクを確認しました。');
+          void act(async () => {
+            const requestVersion = version;
+            const id = await port.read(secret!);
+            if (disposed || requestVersion !== version) return;
+
+            const result = await port.load();
+            if (disposed || requestVersion !== version) return;
+
+            view = result;
+            if (result.readers.some(reader => reader.operationId === id && !reader.approved)) approve(id);
+          }, 'リンクを確認しました。');
         });
         read.disabled = !token;
         input.addEventListener('input', () => { read.disabled = busy || !input.value.trim(); });
