@@ -9,19 +9,20 @@ function errorCode(cause: unknown): string {
   return cause && typeof cause === 'object' && 'code' in cause ? String(cause.code) : '';
 }
 
-/** URLを差し替えることで解消できるエラーの案内を返す。 */
-function linkErrorMessage(cause: unknown): string | undefined {
+/** リンクを差し替える方法を、確認に失敗した理由に応じて案内する。 */
+function linkRecoveryMessage(cause: unknown): string | undefined {
   const code = errorCode(cause);
   if (code === 'INVALID_OWNER_DEVICE_TOKEN') return '有効な追加端末リンクを貼り付けてください。';
-  if (code === 'OWNER_LINK_BINDING_MISMATCH') return 'この端末・公演で使えるリンクを確認してください。';
-  if (code === 'OWNER_LINK_UNAVAILABLE') return 'このリンクは利用できません。有効期限や取消し状況を確認してください。';
+  if (code === 'OWNER_LINK_BINDING_MISMATCH') return 'この端末・公演で使えるリンクを貼り付けてください。';
+  if (code === 'OWNER_LINK_UNAVAILABLE') return '既存の管理者端末で新しいリンクを発行し、ここに貼り付けてください。';
 }
 
 /** 内部情報やリンクをエラーへ含めず、再確認する方法を短く案内する。 */
 function message(cause: unknown): string {
   const code = errorCode(cause);
   if (code === 'RECENT_AUTH_REQUIRED' || code === 'GOOGLE_AUTH_REQUIRED') return 'Googleで本人確認をやり直してください。';
-  return linkErrorMessage(cause) ?? '操作結果を確認できませんでした。最新の状態を確認してください。';
+  const recovery = linkRecoveryMessage(cause);
+  return recovery ? `このリンクは使えません。${recovery}` : '操作結果を確認できませんでした。最新の状態を確認してください。';
 }
 
 /** 既存端末と新端末を分け、同じ操作IDの照会と明示操作だけを行う画面を作る。 */
@@ -54,7 +55,7 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
       notice = success;
     } catch (cause) {
       if (disposed || operation !== version) return;
-      if (action === 'check-link') linkError = linkErrorMessage(cause) ?? '';
+      if (action === 'check-link') linkError = linkRecoveryMessage(cause) ?? '';
       if (!linkError) error = message(cause);
     } finally {
       if (!disposed && operation === version) { busy = false; render(); }
@@ -189,7 +190,7 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
           try { secret ??= parseOwnerDeviceUrl(input.value.trim(), location.href, view!); }
           catch (cause) {
             input.value = ''; error = notice = '';
-            linkError = linkErrorMessage(cause) ?? '有効な追加端末リンクを貼り付けてください。';
+            linkError = linkRecoveryMessage(cause) ?? '有効な追加端末リンクを貼り付けてください。';
             render();
             return;
           }
@@ -207,16 +208,22 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
           }, 'リンクを確認しました。', 'check-link');
         });
         read.disabled = !token;
-        const inlineAlert = el('p', 'device-error owner-device-link-error', linkError);
+        const inlineAlert = el('div', 'device-error owner-device-link-error');
         inlineAlert.id = 'owner-device-link-error';
         inlineAlert.setAttribute('role', 'alert');
         if (linkError) {
+          const icon = el('span', 'owner-device-error-icon', '！');
+          icon.setAttribute('aria-hidden', 'true');
+          const detail = el('div');
+          detail.append(el('strong', '', 'このリンクは使えません'), el('span', '', linkError));
+          inlineAlert.append(icon, detail);
           input.setAttribute('aria-invalid', 'true');
           input.setAttribute('aria-describedby', inlineAlert.id);
         }
         input.addEventListener('input', () => {
           read.disabled = busy || !input.value.trim();
-          linkError = inlineAlert.textContent = '';
+          linkError = '';
+          inlineAlert.replaceChildren();
           input.removeAttribute('aria-invalid');
           input.removeAttribute('aria-describedby');
         });

@@ -46,15 +46,18 @@ test('OWNER317-B02 無効なリンクを拒否し、入力欄と確認ボタン�
   const otherPerformance = link.replace('00000000-0000-4000-8000-000000000001', '00000000-0000-4000-8000-000000000002');
   for (const [value, reason] of [
     ['URLではない文字列', '有効な追加端末リンクを貼り付けてください。'],
-    [otherPerformance, 'この端末・公演で使えるリンクを確認してください。'],
-    [link, 'このリンクは利用できません。'],
+    [otherPerformance, 'この端末・公演で使えるリンクを貼り付けてください。'],
+    [link, '既存の管理者端末で新しいリンクを発行し、ここに貼り付けてください。'],
   ]) {
     await input.fill(value);
     await expect(alert).toBeHidden();
     await expect(input).not.toHaveAttribute('aria-invalid');
     await confirm.click();
+    await expect(alert.getByText('このリンクは使えません', { exact: true })).toBeVisible();
     await expect(alert).toContainText(reason);
     await expect(alert).toHaveCSS('color','rgb(161, 38, 34)');
+    await expect(alert.getByText('！', { exact: true })).toBeVisible();
+    await expect(input).toHaveCSS('border-top-color', 'rgb(161, 38, 34)');
     await expect(input).toHaveAccessibleDescription(new RegExp(reason));
     await expect(input).toHaveAttribute('aria-invalid', 'true');
     await expect(input).toHaveValue('');
@@ -117,7 +120,7 @@ test('OWNER317-B06 有効期限を過ぎると平文表示を閉じ、新端末�
   await page.getByRole('button',{name:'スマートフォン（2台目）',exact:true}).click();
   await page.getByLabel('受け取った追加端末リンク').fill(link);
   await page.getByRole('button',{name:'リンクを確認',exact:true}).click();
-  await expect(page.getByRole('alert')).toContainText('利用できません');
+  await expect(page.getByRole('alert')).toContainText('このリンクは使えません');
 });
 
 test('OWNER317-B07 URLをコピーせず閉じても再発行でき、旧リンクは使えない', async ({ page }) => {
@@ -146,7 +149,7 @@ test('OWNER317-B07 URLをコピーせず閉じても再発行でき、旧リン�
   const verify = page.getByRole('button', { name: 'リンクを確認', exact: true });
   await received.fill(previousUrl);
   await verify.click();
-  await expect(page.getByRole('alert')).toContainText('利用できません');
+  await expect(page.getByRole('alert')).toContainText('このリンクは使えません');
   await received.fill(newUrl);
   await verify.click();
   await expect(page.getByRole('dialog', { name: 'この端末を関連付けますか？' })).toBeVisible();
