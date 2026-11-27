@@ -48,17 +48,26 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
     }
   }
 
-  /** 保存済み情報から復元できないリンクを、その場だけ表示する。 */
-  async function issue(target: string) {
+  /** 必要なら旧リンクを取り消し、新しいリンクをその場だけ表示する。 */
+  async function issue(target: string, previousId?: string) {
     const basis = view!;
     await act(async () => {
-      const started = performance.now(), requestVersion = version;
+      const requestVersion = version;
+      // 結果が不明になった場合は、次の操作の前に同じ発行記録を照会する。
+      view = undefined;
+      if (previousId) {
+        await port.cancel(previousId);
+        if (disposed || requestVersion !== version) return;
+      }
+
+      const started = performance.now();
       const issued = await port.issue(target, crypto.randomUUID());
-      if (disposed || !view || requestVersion !== version) return;
+      if (disposed || requestVersion !== version) return;
       const body = el('div'), input = el('textarea', 'owner-device-link');
       input.readOnly = true; input.setAttribute('aria-label', '追加端末リンク');
       input.value = ownerDeviceUrl(location.href, basis, issued.token);
       body.append(el('p', '', '新しい端末で、このリンクを開いてください。'),
+        el('p', 'muted', '閉じると、このURLは再表示できません。'),
         el('p', 'muted', '有効期限：' + new Date(issued.link.expiresAt).toLocaleString()), input);
       const copy = button('リンクをコピー', () => {
         void navigator.clipboard.writeText(input.value).then(() => { copy.textContent = 'コピーしました'; },
@@ -69,8 +78,9 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
       timeout = setTimeout(() => { closeShare(); notice = 'リンクの有効期限を過ぎました。'; render(); },
         Math.max(0, issued.link.expiresAt - issued.link.issuedAt - Math.floor(performance.now() - started)));
       // 発行後の一覧取得で平文リンクを閉じないよう、ここでは窓口だけを再照会する。
-      view = await port.load();
-    }, 'リンクを発行しました。');
+      const result = await port.load();
+      if (!disposed && requestVersion === version) view = result;
+    }, previousId ? 'リンクを再発行しました。' : 'リンクを発行しました。');
   }
 
   /** 新端末の承認を確認し、成功後もデータ準備と区別する。 */
@@ -112,20 +122,24 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
         panel.append(el('h3', '', '承認待ち端末：' + target), actionGroup(create)); root.append(panel);
       }
       if (!view.targets.length) root.append(el('p', 'muted', '追加する承認待ち端末はありません。'));
-      for (const issue of view.issues) {
+      for (const link of view.issues) {
         // 取消しは操作後の通知で伝え、再発行できる端末と重複して表示しない。
-        if (issue.status === 'cancelled') continue;
+        if (link.status === 'cancelled') continue;
 
         const panel = el('section', 'panel owner-device-card');
-        const pending = issue.status === 'pending' && view.serverNow < issue.expiresAt;
-        const label = issue.status === 'consumed' ? '関連付け済み' :
-          issue.status === 'not-issued' ? '未発行' : !pending ? '期限切れ' : '発行済み';
-        panel.append(el('h3', '', label + '：' + issue.targetDeviceUid));
+        const pending = link.status === 'pending' && view.serverNow < link.expiresAt;
+        const label = link.status === 'consumed' ? '関連付け済み' :
+          link.status === 'not-issued' ? '未発行' : !pending ? '期限切れ' : '発行済み';
+        panel.append(el('h3', '', label + '：' + link.targetDeviceUid));
         if (pending) {
-          panel.append(el('p', 'muted', 'リンクは再表示できません。必要なら取り消して発行し直してください。'),
-            actionGroup(button('リンクを取り消す', () => {
+          panel.append(actionGroup(
+            button('リンクを再発行', () => {
+              dialog = showDialog('リンクを再発行しますか？', el('p', '', '前のリンクは使えなくなります。'),
+                [button('再発行する', () => { closeShare(); void issue(link.targetDeviceUid, link.operationId); })], 'キャンセル');
+            }),
+            button('リンクを取り消す', () => {
               dialog = showDialog('リンクを取り消しますか？', el('p', '', 'このリンクは使えなくなります。'),
-                [button('取り消す', () => { closeShare(); void act(async () => { await port.cancel(issue.operationId); view = await port.load(); }, '取り消しました。'); })], 'キャンセル');
+                [button('取り消す', () => { closeShare(); void act(async () => { await port.cancel(link.operationId); view = await port.load(); }, '取り消しました。'); })], 'キャンセル');
             }, 'button secondary')));
         }
         root.append(panel);

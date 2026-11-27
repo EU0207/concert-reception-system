@@ -95,3 +95,71 @@ test('OWNER317-B06 有効期限を過ぎると平文表示を閉じ、新端末�
   await page.getByRole('button',{name:'リンクを確認',exact:true}).click();
   await expect(page.getByRole('alert')).toContainText('利用できません');
 });
+
+test('OWNER317-B07 URLをコピーせず閉じても再発行でき、旧リンクは使えない', async ({ page }) => {
+  await page.goto(route);
+  await page.getByRole('button', { name: 'リンクを発行', exact: true }).click();
+  const dialog = page.getByRole('dialog');
+  const urlField = dialog.getByRole('textbox', { name: '追加端末リンク', exact: true });
+  const previousUrl = await urlField.inputValue();
+  await expect(dialog.getByText('閉じると、このURLは再表示できません。')).toBeVisible();
+  await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
+
+  const reissue = page.getByRole('button', { name: 'リンクを再発行', exact: true });
+  await reissue.click();
+  await dialog.getByRole('button', { name: 'キャンセル', exact: true }).click();
+  await expect(reissue).toBeEnabled();
+  await reissue.click();
+  await expect(dialog.getByText('前のリンクは使えなくなります。')).toBeVisible();
+  await dialog.getByRole('button', { name: '再発行する', exact: true }).click();
+  const newUrl = await urlField.inputValue();
+  expect(newUrl).not.toBe(previousUrl);
+  await dialog.getByRole('button', { name: '閉じる', exact: true }).click();
+  await expect(reissue).toHaveCount(1);
+
+  await page.getByRole('button', { name: '新しい端末の見本', exact: true }).click();
+  const received = page.getByLabel('受け取った追加端末リンク');
+  const verify = page.getByRole('button', { name: 'リンクを確認', exact: true });
+  await received.fill(previousUrl);
+  await verify.click();
+  await expect(page.getByRole('alert')).toContainText('利用できません');
+  await received.fill(newUrl);
+  await verify.click();
+  await expect(page.getByRole('heading', { name: 'この端末へのリンクを確認済み' })).toBeVisible();
+});
+
+test('OWNER317-B08 旧リンクの取消し結果が不明なら再発行せず、状態の照会を案内する', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4181/tests/emulator/device-management-fixture.html');
+  await page.waitForFunction(() => window.deviceFixtureReady === true);
+  await page.evaluate(async () => {
+    const { createOwnerDevicePreview } = await import('/src/app/owner-device-preview.ts');
+    const { createOwnerDeviceScreen } = await import('/src/app/owner-device-screen.ts');
+    const backend = createOwnerDevicePreview({ environmentId: crypto.randomUUID(), performanceId: crypto.randomUUID() });
+    const { targets } = await backend.issuer.load();
+    await backend.issuer.issue(targets[0], crypto.randomUUID());
+    window.testIssueCount = 0;
+
+    const port = {
+      ...backend.issuer,
+      // 取消し応答だけが失われた状態を作る。
+      async cancel(id) {
+        await backend.issuer.cancel(id);
+        throw new Error('Cancel response lost');
+      },
+      // 照会前の発行要求を数える。
+      async issue(...args) {
+        window.testIssueCount++;
+        return backend.issuer.issue(...args);
+      },
+    };
+    document.body.replaceChildren(createOwnerDeviceScreen(port, true).element);
+  });
+
+  await page.getByRole('button', { name: 'リンクを再発行', exact: true }).click();
+  await page.getByRole('dialog').getByRole('button', { name: '再発行する', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('最新の状態を確認してください。');
+  expect(await page.evaluate(() => window.testIssueCount)).toBe(0);
+  await expect(page.getByRole('button', { name: 'リンクを発行', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: '最新の状態を確認', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'リンクを発行', exact: true })).toBeEnabled();
+});
