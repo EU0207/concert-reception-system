@@ -33,6 +33,8 @@ test('OWNER317-B02 取消し確認後のリンクと、他公演のリンクを�
   await page.goto(route); const link=await issue(page);
   await page.getByRole('button',{name:'リンクを取り消す',exact:true}).click();
   await page.getByRole('dialog').getByRole('button',{name:'取り消す',exact:true}).click();
+  await expect(page.getByRole('status')).toHaveText('取り消しました。');
+  await expect(page.getByRole('heading',{name:/取消し済み/})).toHaveCount(0);
   await expect(page.getByRole('button',{name:'リンクを発行',exact:true})).toBeEnabled();
   await page.getByRole('button',{name:'新しい端末の見本',exact:true}).click();
   for(const value of [link.replace('00000000-0000-4000-8000-000000000001','00000000-0000-4000-8000-000000000002'),link]){

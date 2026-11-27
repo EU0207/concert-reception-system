@@ -113,9 +113,12 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
       }
       if (!view.targets.length) root.append(el('p', 'muted', '追加する承認待ち端末はありません。'));
       for (const issue of view.issues) {
+        // 取消しは操作後の通知で伝え、再発行できる端末と重複して表示しない。
+        if (issue.status === 'cancelled') continue;
+
         const panel = el('section', 'panel owner-device-card');
         const pending = issue.status === 'pending' && view.serverNow < issue.expiresAt;
-        const label = issue.status === 'consumed' ? '関連付け済み' : issue.status === 'cancelled' ? '取消し済み' :
+        const label = issue.status === 'consumed' ? '関連付け済み' :
           issue.status === 'not-issued' ? '未発行' : !pending ? '期限切れ' : '発行済み';
         panel.append(el('h3', '', label + '：' + issue.targetDeviceUid));
         if (pending) {
