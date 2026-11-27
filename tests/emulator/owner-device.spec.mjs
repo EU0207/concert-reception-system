@@ -113,7 +113,8 @@ test('OWNER317-S02 発行の応答喪失から照会・取消しし、他端末�
     await page.getByRole('button',{name:'リンクを発行',exact:true}).click();
     await expect(page.getByRole('alert')).not.toBeEmpty();
     await page.getByRole('button',{name:'最新の状態を確認',exact:true}).click();
-    await expect(page.getByRole('button',{name:'リンクを発行',exact:true})).toBeDisabled();
+    await expect(page.getByRole('heading',{name:/^発行済み：/})).toBeVisible();
+    await expect(page.getByRole('button',{name:'リンクを発行',exact:true})).toHaveCount(0);
     await page.getByRole('button',{name:'リンクを取り消す',exact:true}).click();
     await page.getByRole('dialog').getByRole('button',{name:'取り消す',exact:true}).click();
     await expect(page.getByRole('button',{name:'リンクを発行',exact:true})).toBeEnabled();

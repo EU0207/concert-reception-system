@@ -2,7 +2,7 @@
 
 import { actionGroup, button, el, showDialog } from './dom.ts';
 import { ownerDeviceUrl, parseOwnerDeviceUrl } from './owner-device-url.ts';
-import type { OwnerDeviceUiPort, OwnerDeviceView } from './owner-device-types.ts';
+import type { OwnerDeviceIssue, OwnerDeviceUiPort, OwnerDeviceView } from './owner-device-types.ts';
 
 /** 内部情報やリンクをエラーへ含めず、再確認する方法を短く案内する。 */
 function message(cause: unknown): string {
@@ -104,6 +104,58 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
     finally { approving = false; if (!disposed) { busy = false; render(); } }
   }
 
+  /** 端末ごとに現在の状態と操作を一つのカードへ出す。 */
+  function renderIssuer({ targets, issues, serverNow }: OwnerDeviceView) {
+    root.append(el('p', '', '新しい端末でログイン・端末登録を済ませてから選んでください。'));
+    const waiting = new Set(targets);
+    const byDevice = new Map<string, OwnerDeviceIssue[]>(targets.map(target => [target, []]));
+
+    for (const link of issues) {
+      // 取消し済みの記録だけで、新規発行できない端末のカードを作らない。
+      if (link.status === 'cancelled' && !waiting.has(link.targetDeviceUid)) continue;
+      const links = byDevice.get(link.targetDeviceUid) ?? [];
+      links.push(link);
+      byDevice.set(link.targetDeviceUid, links);
+    }
+
+    for (const target of [...byDevice.keys()].sort()) {
+      const links = byDevice.get(target)!;
+      const active = links.filter(link => link.status === 'pending' && serverNow < link.expiresAt);
+      const unknown = links.some(link => link.status === 'unknown');
+      const approved = links.some(link => link.status === 'consumed');
+      const latest = links.reduce<OwnerDeviceIssue | undefined>((newest, link) =>
+        !newest || link.expiresAt > newest.expiresAt ? link : newest, undefined);
+      const label = active.length ? '発行済み' : unknown ? '発行結果の確認が必要' : approved ? '関連付け済み' :
+        latest?.status === 'not-issued' ? '未発行' : latest?.status === 'pending' ? '期限切れ' : '承認待ち端末';
+      const panel = el('section', 'panel owner-device-card');
+      panel.append(el('h3', '', label + '：' + target));
+
+      if (waiting.has(target) && !active.length && !unknown) {
+        panel.append(actionGroup(button('リンクを発行', () => { void issue(target); })));
+      }
+
+      for (const [index, link] of active.entries()) {
+        const actions = actionGroup();
+        if (waiting.has(target) && active.length === 1 && !unknown) {
+          actions.append(button('リンクを再発行', () => {
+            dialog = showDialog('リンクを再発行しますか？', el('p', '', '前のリンクは使えなくなります。'),
+              [button('再発行する', () => { closeShare(); void issue(target, link.operationId); })], 'キャンセル');
+          }));
+        }
+
+        const cancelLabel = active.length > 1 ? `リンク${index + 1}を取り消す` : 'リンクを取り消す';
+        actions.append(button(cancelLabel, () => {
+          dialog = showDialog('リンクを取り消しますか？', el('p', '', 'このリンクは使えなくなります。'),
+            [button('取り消す', () => { closeShare(); void act(async () => { await port.cancel(link.operationId); view = await port.load(); }, '取り消しました。'); })], 'キャンセル');
+        }, 'button secondary'));
+        panel.append(actions);
+      }
+      root.append(panel);
+    }
+
+    if (!targets.length) root.append(el('p', 'muted', '追加する承認待ち端末はありません。'));
+  }
+
   /** 入力と回収状態を表示し、結果不明の発行を自動で作り直さない。 */
   function render() {
     root.replaceChildren(el('h2', '', '管理者の追加端末'));
@@ -113,37 +165,7 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
     const toolbar = actionGroup(button('最新の状態を確認', () => { void load(); }, 'button secondary'));
     toolbar.classList.add('management-toolbar'); root.append(alert, status, toolbar);
     if (view?.mode === 'issuer') {
-      root.append(el('p', '', '新しい端末でログイン・端末登録を済ませてから選んでください。'));
-      for (const target of view.targets) {
-        const panel = el('section', 'panel owner-device-card');
-        const pending = view.issues.some(issue => issue.targetDeviceUid === target &&
-          (issue.status === 'unknown' || (issue.status === 'pending' && view!.serverNow < issue.expiresAt)));
-        const create = button('リンクを発行', () => { void issue(target); }); create.disabled = pending;
-        panel.append(el('h3', '', '承認待ち端末：' + target), actionGroup(create)); root.append(panel);
-      }
-      if (!view.targets.length) root.append(el('p', 'muted', '追加する承認待ち端末はありません。'));
-      for (const link of view.issues) {
-        // 取消しは操作後の通知で伝え、再発行できる端末と重複して表示しない。
-        if (link.status === 'cancelled') continue;
-
-        const panel = el('section', 'panel owner-device-card');
-        const pending = link.status === 'pending' && view.serverNow < link.expiresAt;
-        const label = link.status === 'consumed' ? '関連付け済み' :
-          link.status === 'not-issued' ? '未発行' : !pending ? '期限切れ' : '発行済み';
-        panel.append(el('h3', '', label + '：' + link.targetDeviceUid));
-        if (pending) {
-          panel.append(actionGroup(
-            button('リンクを再発行', () => {
-              dialog = showDialog('リンクを再発行しますか？', el('p', '', '前のリンクは使えなくなります。'),
-                [button('再発行する', () => { closeShare(); void issue(link.targetDeviceUid, link.operationId); })], 'キャンセル');
-            }),
-            button('リンクを取り消す', () => {
-              dialog = showDialog('リンクを取り消しますか？', el('p', '', 'このリンクは使えなくなります。'),
-                [button('取り消す', () => { closeShare(); void act(async () => { await port.cancel(link.operationId); view = await port.load(); }, '取り消しました。'); })], 'キャンセル');
-            }, 'button secondary')));
-        }
-        root.append(panel);
-      }
+      renderIssuer(view);
     } else if (view?.mode === 'receiver') {
       const approved = view.readers.some(reader => reader.approved);
       if (!approved) {

@@ -13,7 +13,8 @@ async function issue(page) {
 test('OWNER317-B01 発行・確認・関連付けし、承認をデータ準備完了と表示しない',async({page})=>{
   await page.goto(route); const link=await issue(page);
   await expect(page.getByRole('textbox',{name:'追加端末リンク',exact:true})).toHaveCount(0);
-  await expect(page.getByRole('button',{name:'リンクを発行',exact:true}).first()).toBeDisabled();
+  await expect(page.getByRole('heading',{name:'発行済み：スマートフォン（2台目）',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:/：スマートフォン（2台目）$/})).toHaveCount(1);
   await page.getByRole('button',{name:'スマートフォン（2台目）',exact:true}).click();
   await page.getByLabel('受け取った追加端末リンク').fill(link);
   await page.getByRole('button',{name:'リンクを確認',exact:true}).click();
@@ -35,6 +36,8 @@ test('OWNER317-B02 取消し確認後のリンクと、他公演のリンクを�
   await page.getByRole('dialog').getByRole('button',{name:'取り消す',exact:true}).click();
   await expect(page.getByRole('status')).toHaveText('取り消しました。');
   await expect(page.getByRole('heading',{name:/取消し済み/})).toHaveCount(0);
+  await expect(page.getByRole('heading',{name:'承認待ち端末：スマートフォン（2台目）',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:/：スマートフォン（2台目）$/})).toHaveCount(1);
   await expect(page.getByRole('button',{name:'リンクを発行',exact:true}).first()).toBeEnabled();
   await page.getByRole('button',{name:'スマートフォン（2台目）',exact:true}).click();
   for(const value of [link.replace('00000000-0000-4000-8000-000000000001','00000000-0000-4000-8000-000000000002'),link]){
@@ -91,6 +94,13 @@ test('OWNER317-B06 有効期限を過ぎると平文表示を閉じ、新端末�
   const link=await page.getByRole('textbox',{name:'追加端末リンク',exact:true}).inputValue();
   await page.clock.fastForward(900001);
   await expect(page.getByRole('dialog')).toHaveCount(0);
+  await page.getByRole('button',{name:'最新の状態を確認',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'期限切れ：スマートフォン（2台目）',exact:true})).toBeVisible();
+  await issue(page);
+  await page.getByRole('button',{name:'リンクを取り消す',exact:true}).click();
+  await page.getByRole('dialog').getByRole('button',{name:'取り消す',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'承認待ち端末：スマートフォン（2台目）',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:/：スマートフォン（2台目）$/})).toHaveCount(1);
   await page.getByRole('button',{name:'スマートフォン（2台目）',exact:true}).click();
   await page.getByLabel('受け取った追加端末リンク').fill(link);
   await page.getByRole('button',{name:'リンクを確認',exact:true}).click();
