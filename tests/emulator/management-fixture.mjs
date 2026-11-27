@@ -31,7 +31,7 @@ async function principals(page, settings, user, google) {
     await signInHumanPassword(window.devicePrincipals, user.email, user.password);
     if (google) {
       const { linkFictionalGoogle } = await import('/tests/emulator/sdk-fixture.mjs');
-      await linkFictionalGoogle(window.devicePrincipals, { sub: crypto.randomUUID(), email: user.email });
+      await linkFictionalGoogle(window.devicePrincipals, google === true ? { sub: crypto.randomUUID(), email: user.email } : google);
     }
     return ensureDeviceIdentity(window.devicePrincipals);
   }, { settings, user, google });
@@ -43,7 +43,8 @@ export async function setup(page, browser) {
   const settings = { schemaVersion: 1, appVersion: '0.1.0', environmentId, environmentType: 'evaluation-firebase',
     environmentName: 'ローカル端末管理試験', firebase: { apiKey: 'demo-key', projectId: project, appId: 'demo-web',
       authDomain: 'localhost', databaseURL: `https://${project}-default-rtdb.firebaseio.com/` } };
-  const ownerDevice = await principals(page, settings, owner, true);
+  const ownerGoogle = { sub: randomUUID(), email: owner.email };
+  const ownerDevice = await principals(page, settings, owner, ownerGoogle);
   const other = await browser.newContext(), target = await other.newPage();
   const staffDevice = await principals(target, settings, staff, false);
   const scope = { environmentId, performanceId }, now = Date.now(), expires = now + 3600_000, epoch = randomUUID();
@@ -69,5 +70,5 @@ export async function setup(page, browser) {
     await window.managementPort.issueSession(expires);
     await ensureDeviceKey(binding, true);
   }, { binding, expires });
-  return { scope, binding, settings, staffDevice, target, other, root };
+  return { scope, binding, settings, staffDevice, target, other, root, owner, ownerGoogle };
 }

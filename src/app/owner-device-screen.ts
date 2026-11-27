@@ -1,0 +1,165 @@
+// 管理者の追加端末リンクを発行・確認し、本人の新端末の承認へ接続する。
+
+import { actionGroup, button, el, showDialog } from './dom.ts';
+import { ownerDeviceUrl, parseOwnerDeviceUrl } from './owner-device-url.ts';
+import type { OwnerDeviceUiPort, OwnerDeviceView } from './owner-device-types.ts';
+
+/** 内部情報やリンクをエラーへ含めず、再確認する方法を短く案内する。 */
+function message(cause: unknown): string {
+  const code = cause && typeof cause === 'object' && 'code' in cause ? String(cause.code) : '';
+  if (code === 'RECENT_AUTH_REQUIRED' || code === 'GOOGLE_AUTH_REQUIRED') return 'Googleで本人確認をやり直してください。';
+  if (code === 'INVALID_OWNER_DEVICE_TOKEN' || code === 'OWNER_LINK_BINDING_MISMATCH') return 'この端末・公演で使えるリンクを確認してください。';
+  if (code === 'OWNER_LINK_UNAVAILABLE') return 'このリンクは利用できません。有効期限や取消し状況を確認してください。';
+  return '操作結果を確認できませんでした。最新の状態を確認してください。';
+}
+
+/** 既存端末と新端末を分け、同じ操作IDの照会と明示操作だけを行う画面を作る。 */
+export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false, receivedToken?: string) {
+  const root = el('section', 'owner-device-screen');
+  let view: OwnerDeviceView | undefined, busy = false, disposed = false, approving = false, error = '', notice = '', version = 0;
+  let dialog: HTMLDialogElement | undefined, token = receivedToken;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  /** 平文リンクのダイアログを片付け、閉じた後に再表示できる値を残さない。 */
+  function closeShare() { clearTimeout(timeout); dialog?.close(); dialog = undefined; }
+
+  /** 最新の状態を取得し、承認・発行を自動で実行しない。 */
+  async function load() {
+    if (busy || disposed) return;
+    const operation = ++version; busy = true; error = ''; closeShare(); render();
+    try { const result = await port.load(); if (operation === version && !disposed) view = result; }
+    catch (cause) { if (operation === version && !disposed) { view = undefined; error = message(cause); } }
+    finally { if (operation === version && !disposed) { busy = false; render(); } }
+  }
+
+  /** 明示操作を一度だけ実行し、失敗時は再送せず結果の再確認を案内する。 */
+  async function act(work: () => Promise<void>, success: string) {
+    if (busy || disposed) return;
+    const operation = ++version; busy = true; error = notice = ''; render();
+    try {
+      await work();
+      if (disposed || operation !== version) return;
+      notice = success;
+    } catch (cause) {
+      if (disposed || operation !== version) return;
+      error = message(cause);
+    } finally {
+      if (!disposed && operation === version) { busy = false; render(); }
+    }
+  }
+
+  /** 保存済み情報から復元できないリンクを、その場だけ表示する。 */
+  async function issue(target: string) {
+    const basis = view!;
+    await act(async () => {
+      const started = performance.now(), requestVersion = version;
+      const issued = await port.issue(target, crypto.randomUUID());
+      if (disposed || !view || requestVersion !== version) return;
+      const body = el('div'), input = el('textarea', 'owner-device-link');
+      input.readOnly = true; input.setAttribute('aria-label', '追加端末リンク');
+      input.value = ownerDeviceUrl(location.href, basis, issued.token);
+      body.append(el('p', '', '新しい端末で、このリンクを開いてください。'),
+        el('p', 'muted', '有効期限：' + new Date(issued.link.expiresAt).toLocaleString()), input);
+      const copy = button('リンクをコピー', () => {
+        void navigator.clipboard.writeText(input.value).then(() => { copy.textContent = 'コピーしました'; },
+          () => { input.focus(); input.select(); copy.textContent = 'リンクを選択しました'; });
+      });
+      dialog = showDialog('追加端末リンク', body, [copy]);
+      dialog.addEventListener('close', () => { input.value = ''; clearTimeout(timeout); }, { once: true });
+      timeout = setTimeout(() => { closeShare(); notice = 'リンクの有効期限を過ぎました。'; render(); },
+        Math.max(0, issued.link.expiresAt - issued.link.issuedAt - Math.floor(performance.now() - started)));
+      // 発行後の一覧取得で平文リンクを閉じないよう、ここでは窓口だけを再照会する。
+      view = await port.load();
+    }, 'リンクを発行しました。');
+  }
+
+  /** 新端末の承認を確認し、成功後もデータ準備と区別する。 */
+  function approve(id: string) {
+    const body = el('p', '', 'この端末を管理者本人の端末として関連付けます。');
+    dialog = showDialog('この端末を関連付けますか？', body, [button('関連付ける', () => {
+      closeShare(); void completeApproval(id);
+    })], 'キャンセル');
+  }
+
+  /** 自端末の承認による旧認可の失効後も、専用の読取り証跡・結果だけを取り直す。 */
+  async function completeApproval(id: string) {
+    if (busy || disposed) return;
+    approving = busy = true; error = notice = ''; render();
+    try {
+      await port.approve(id);
+      const result = await port.load();
+      if (disposed) return;
+      view = result; notice = '関連付けました。データ準備へ進めます。'; error = '';
+    } catch (cause) { if (!disposed) { view = undefined; error = message(cause); } }
+    finally { approving = false; if (!disposed) { busy = false; render(); } }
+  }
+
+  /** 入力と回収状態を表示し、結果不明の発行を自動で作り直さない。 */
+  function render() {
+    root.replaceChildren(el('h2', '', '管理者の追加端末'));
+    if (preview) root.append(el('p', 'notice', '架空データの見本です。実際の端末は承認されません。'));
+    const alert = el('p', 'device-error', error); alert.setAttribute('role', 'alert');
+    const status = el('p', 'muted', busy ? '確認中…' : notice); status.setAttribute('role', 'status');
+    const toolbar = actionGroup(button('最新の状態を確認', () => { void load(); }, 'button secondary'));
+    toolbar.classList.add('management-toolbar'); root.append(alert, status, toolbar);
+    if (view?.mode === 'issuer') {
+      root.append(el('p', '', '新しい端末でログイン・端末登録を済ませてから選んでください。'));
+      for (const target of view.targets) {
+        const panel = el('section', 'panel owner-device-card');
+        const pending = view.issues.some(issue => issue.targetDeviceUid === target &&
+          (issue.status === 'unknown' || (issue.status === 'pending' && view!.serverNow < issue.expiresAt)));
+        const create = button('リンクを発行', () => { void issue(target); }); create.disabled = pending;
+        panel.append(el('h3', '', '承認待ち端末：' + target), actionGroup(create)); root.append(panel);
+      }
+      if (!view.targets.length) root.append(el('p', 'muted', '追加する承認待ち端末はありません。'));
+      for (const issue of view.issues) {
+        const panel = el('section', 'panel owner-device-card');
+        const pending = issue.status === 'pending' && view.serverNow < issue.expiresAt;
+        const label = issue.status === 'consumed' ? '関連付け済み' : issue.status === 'cancelled' ? '取消し済み' :
+          issue.status === 'not-issued' ? '未発行' : !pending ? '期限切れ' : '発行済み';
+        panel.append(el('h3', '', label + '：' + issue.targetDeviceUid));
+        if (pending) {
+          panel.append(el('p', 'muted', 'リンクは再表示できません。必要なら取り消して発行し直してください。'),
+            actionGroup(button('リンクを取り消す', () => {
+              dialog = showDialog('リンクを取り消しますか？', el('p', '', 'このリンクは使えなくなります。'),
+                [button('取り消す', () => { closeShare(); void act(async () => { await port.cancel(issue.operationId); view = await port.load(); }, '取り消しました。'); })], 'キャンセル');
+            }, 'button secondary')));
+        }
+        root.append(panel);
+      }
+    } else if (view?.mode === 'receiver') {
+      const approved = view.readers.some(reader => reader.approved);
+      if (!approved) {
+        root.append(el('p', '', '既存の管理者端末で発行したリンクを確認してください。'));
+        const input = el('textarea', 'owner-device-link'); input.setAttribute('aria-label', '受け取った追加端末リンク');
+        const read = button(token ? '受け取ったリンクを確認' : 'リンクを確認', () => {
+          let secret = token;
+          try { secret ??= parseOwnerDeviceUrl(input.value.trim(), location.href, view!); }
+          catch (cause) { input.value = ''; error = message(cause); render(); return; }
+          input.value = ''; token = undefined;
+          void act(async () => { await port.read(secret!); view = await port.load(); }, 'リンクを確認しました。');
+        });
+        read.disabled = !token;
+        input.addEventListener('input', () => { read.disabled = busy || !input.value.trim(); });
+        if (!token) root.append(input);
+        root.append(actionGroup(read));
+      }
+      for (const reader of view.readers.filter(item => !approved || item.approved)) {
+        const panel = el('section', 'panel owner-device-card');
+        panel.append(el('h3', '', reader.approved ? '関連付け済み' : 'この端末へのリンクを確認済み'));
+        if (reader.approved) panel.append(el('p', 'muted', '受付の前に、この端末のデータ準備が必要です。'));
+        else panel.append(actionGroup(button('この端末を関連付ける', () => approve(reader.operationId))));
+        root.append(panel);
+      }
+    }
+    if (busy) for (const control of root.querySelectorAll<HTMLButtonElement | HTMLTextAreaElement>('button, textarea')) control.disabled = true;
+  }
+
+  const unsubscribe = port.onInvalidate(() => { version++; busy = approving; view = undefined; token = undefined; closeShare(); error = '現在の本人・端末を確認し直してください。'; render(); });
+
+  /** 古い応答と平文リンクの表示を破棄し、保存済みの操作結果は保持する。 */
+  function dispose() { disposed = true; version++; token = undefined; closeShare(); unsubscribe(); port.dispose(); view = undefined; root.replaceChildren(); }
+
+  render(); void load();
+  return { element: root, dispose };
+}

@@ -1038,3 +1038,8 @@ p {
 .appointment-permission-summary .permission-mark { font-size: 1.2em; text-align: center; }
 .temporary-permissions-screen .device-error:empty,
 .temporary-permissions-screen [role='status']:empty { display: none; }
+/* 追加端末リンクは長い値でも画面幅を押し広げず、操作グループの余白を維持する。 */
+.owner-device-card { margin-top: 16px; overflow-wrap: anywhere; }
+.owner-device-link { display: block; width: 100%; min-height: 100px; padding: 10px; margin: 16px 0; resize: vertical; border: 1px solid #c8d5cd; border-radius: 8px; font: inherit; }
+.owner-device-link:focus-visible { outline: 2px solid #98aba4; outline-offset: -2px; }
+.owner-device-screen [role='alert']:empty, .owner-device-screen [role='status']:empty { display: none; }
