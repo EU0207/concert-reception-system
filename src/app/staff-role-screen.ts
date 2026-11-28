@@ -1,6 +1,6 @@
 // 一般受付と臨時管理者の任命・解除を表示し、固定入力の保存と結果回収へ接続する。
 
-import { actionGroup, button, el, showDialog } from './dom.ts';
+import { actionGroup, button, el, formError, showDialog } from './dom.ts';
 import { watchDialogValidity } from './dialog-validation.ts';
 import { createRoleDisplayClock, staffRoleDisplayName, temporaryTermEnded } from './staff-role-display.ts';
 import { TEMPORARY_PERMISSIONS } from '../domain/authorization/types.ts';
@@ -8,6 +8,7 @@ import { temporaryPermissionLabels as labels } from './temporary-permission-labe
 import type { RoleGrant, TemporaryPermission } from '../domain/authorization/types.ts';
 import { createRoleChangeRequest } from '../domain/authorization/role-management.ts';
 import { RECENT_AUTH_WINDOW } from '../domain/authorization/policy.ts';
+import { SeatDomainError } from '../domain/seats/validation.ts';
 import type { StaffRoleView, PendingStaffRole, StaffRoleOutcome, StaffRoleUiPort } from './staff-role-types.ts';
 
 /** 端末のタイムゾーンで、秒単位の日時入力値を作る。保存時は元のミリ秒を維持する。 */
@@ -129,7 +130,7 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
       for (const key of TEMPORARY_PERMISSIONS) { values[key] = all.checked; checks.get(key)!.checked = all.checked; }
       selection();
     });
-    const validation = el('p', 'device-error permission-validation'); validation.setAttribute('role', 'alert');
+    const validation = formError('任命の設定を確認してください');
 
     /** 現在の入力をコピーし、確認した9項目を固定案へ含める。 */
     function change(): PendingStaffRole {
@@ -141,13 +142,16 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
     /** 不正な日時と期限を入力中に検出し、確認ボタンの隣に理由を示す。 */
     function validate() {
       const now = basis.serverNow + Math.max(0, Math.floor(performance.now() - basisAt)), input = change().input;
-      if (preview && Date.now() > basis.snapshot.session.humanAuthTime + RECENT_AUTH_WINDOW) return 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。';
-      if (!Number.isFinite(input.startsAt) || !Number.isFinite(input.endsAt)) return '有効開始と有効終了を入力してください。';
-      if (input.startsAt >= input.endsAt) return '有効終了は、有効開始より後の日時にしてください。';
-      if (input.endsAt <= now) return '有効終了が過去になっています。現在より後の日時にしてください。';
-      if (input.endsAt > basis.snapshot.staffDeadline) return `有効終了がスタッフ利用期限（${new Date(basis.snapshot.staffDeadline).toLocaleString('ja-JP')}）を超えています。`;
-      try { createRoleChangeRequest(basis.snapshot, role, input, now); return ''; }
-      catch (cause) { return message(cause); }
+      if (preview && Date.now() > basis.snapshot.session.humanAuthTime + RECENT_AUTH_WINDOW) {
+        return { reason: 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。' };
+      }
+      const missing = [start, end].filter((_, index) => !Number.isFinite(index === 0 ? input.startsAt : input.endsAt));
+      if (missing.length) return { reason: '有効開始と有効終了を入力してください。', fields: missing };
+      if (input.startsAt >= input.endsAt) return { reason: '有効終了は、有効開始より後の日時にしてください。', fields: [end] };
+      if (input.endsAt <= now) return { reason: '有効終了が過去になっています。現在より後の日時にしてください。', fields: [end] };
+      if (input.endsAt > basis.snapshot.staffDeadline) return { reason: `有効終了をスタッフ利用期限（${new Date(basis.snapshot.staffDeadline).toLocaleString('ja-JP')}）までにしてください。`, fields: [end] };
+      try { createRoleChangeRequest(basis.snapshot, role, input, now); return { reason: '' }; }
+      catch (cause) { return { reason: message(cause), fields: cause instanceof SeatDomainError && cause.code === 'INVALID_ROLE_PERIOD' ? [start, end] : [] }; }
     }
 
     /** 変更内容を読み直し、期間と選択した権限を確認してから保存へ進む。 */
@@ -171,7 +175,7 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
 
     const action = button('変更内容を確認', confirm);
     dialog = showDialog(reappointment ? '臨時管理者に再任命' : '臨時管理者に任命', body, [action], 'キャンセル');
-    dialog.classList.add('permission-edit-dialog'); dialog.querySelector('.dialog-actions')!.before(validation);
+    dialog.classList.add('permission-edit-dialog'); dialog.querySelector('.dialog-actions')!.before(validation.element);
     const refresh = watchDialogValidity(dialog, [start, end], action, validation, validate);
   }
 
@@ -184,7 +188,7 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
       el('p', '', '臨時管理者を解除し、一般受付に戻します。'),
       el('p', '', `一般受付の利用期限：${new Date(basis.snapshot.staffDeadline).toLocaleString('ja-JP')}`),
       el('p', '', 'このスタッフの全ての端末に反映します。'));
-    const id = crypto.randomUUID(), validation = el('p', 'device-error permission-validation'); validation.setAttribute('role', 'alert');
+    const id = crypto.randomUUID(), validation = formError('解除の状況を確認してください');
 
     /** 解除時点の開始時刻を使い、現在の期限・認可を再検査する。 */
     function change(): PendingStaffRole {
@@ -195,15 +199,15 @@ export function createStaffRoleScreen(port: StaffRoleUiPort, preview = false) {
     /** 解除できない理由を表示し、確定操作も無効にする。 */
     function validate() {
       const pending = change();
-      if (preview && Date.now() > basis.snapshot.session.humanAuthTime + RECENT_AUTH_WINDOW) return 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。';
-      if (role.endsAt <= pending.input.startsAt) return '臨時任期は終了しました。解除は不要です。';
-      try { createRoleChangeRequest(basis.snapshot, role, pending.input, pending.input.startsAt); return ''; }
-      catch (cause) { return message(cause); }
+      if (preview && Date.now() > basis.snapshot.session.humanAuthTime + RECENT_AUTH_WINDOW) return { reason: 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。' };
+      if (role.endsAt <= pending.input.startsAt) return { reason: '臨時任期は終了しました。解除は不要です。' };
+      try { createRoleChangeRequest(basis.snapshot, role, pending.input, pending.input.startsAt); return { reason: '' }; }
+      catch (cause) { return { reason: message(cause) }; }
     }
 
     const action = button('解除して一般受付へ戻す', () => { if (!refresh()) return; const pending = change(); dialog?.close(); void act(pending, 'save'); });
     dialog = showDialog('臨時管理者の解除', summary, [action], 'キャンセル');
-    dialog.querySelector('.dialog-actions')!.before(validation);
+    dialog.querySelector('.dialog-actions')!.before(validation.element);
     const refresh = watchDialogValidity(dialog, [], action, validation, validate);
   }
 

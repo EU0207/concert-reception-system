@@ -2,7 +2,7 @@
 
 import type { Axis, ExtensionInput, LayoutSection, SeatOrder, SectionInput } from '../domain/seats/types.ts';
 import { SEAT_LIMITS } from '../domain/seats/validation.ts';
-import { button, el, showDialog } from './dom.ts';
+import { button, el, formError, showDialog } from './dom.ts';
 
 /** フォーム部品とその入力名を組にする。 */
 function field(label: string, control: HTMLInputElement | HTMLSelectElement) {
@@ -50,7 +50,7 @@ export function createSectionForm(
   const dimensions = el('div', 'seat-form-row');
   const lineDetails = el('details');
   const lineFields = el('div', 'seat-line-fields');
-  const error = el('p');
+  const error = formError('設定を反映できませんでした');
   let lineInputs: { name: HTMLInputElement; start: HTMLInputElement }[] = [];
 
   /** 縦横の設定に応じて、既存の列入力を保持しながら必要な列を並べる。 */
@@ -85,7 +85,6 @@ export function createSectionForm(
 
   name.required = true;
   name.value = initial?.name ?? '';
-  error.setAttribute('role', 'alert');
   setSeatOptions(axis, [['horizontal', '横方向'], ['vertical', '縦方向']]);
   axis.value = initial?.axis ?? 'horizontal';
   renderLines();
@@ -97,14 +96,14 @@ export function createSectionForm(
   actions.append(submit);
   if (initial && onReset) actions.append(button('設定を元に戻す', onReset, 'button secondary'));
   if (!initial) form.append(field('区画名', name));
-  form.append(dimensions, lineDetails, error, actions);
+  form.append(dimensions, lineDetails, error.element, actions);
 
   rows.addEventListener('input', renderLines);
   columns.addEventListener('input', renderLines);
   axis.addEventListener('change', renderLines);
   lineDetails.addEventListener('invalid', () => { lineDetails.open = true; }, true);
-  form.addEventListener('input', onEdit);
-  form.addEventListener('change', onEdit);
+  form.addEventListener('input', () => { error.show(''); onEdit(); });
+  form.addEventListener('change', () => { error.show(''); onEdit(); });
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
@@ -123,7 +122,7 @@ export function createSectionForm(
         }),
       });
     } catch {
-      error.textContent = '設定を反映できませんでした。入力内容と、割当・発券済みの席への影響を確認してください。';
+      error.show('入力内容と、割当・発券済みの席への影響を確認してください。');
     }
   });
 
@@ -146,7 +145,7 @@ export function openSectionExtension(section: LayoutSection, apply: (input: Exte
   const dimension = el('select');
   const count = numberInput(1, SEAT_LIMITS.cells);
   const lines = el('div');
-  const error = el('p');
+  const error = formError('行・列を追加できませんでした');
   let newLines: { name: HTMLInputElement; start: HTMLInputElement }[] = [];
 
   /** 採番列を増やす方向を選んだ場合、新しい列だけの設定を表示する。 */
@@ -161,15 +160,15 @@ export function openSectionExtension(section: LayoutSection, apply: (input: Exte
       name.required = true;
       name.pattern = '.*\\S.*';
       name.value = newLines[index]?.name.value ?? '';
-      name.addEventListener('invalid', () => {
-        error.textContent = '追加行・列の名前を入力してください。';
-      });
+      const nameError = formError('追加行・列の名前を確認してください');
+      name.addEventListener('invalid', () => { nameError.show('追加行・列の名前を入力してください。', [name]); });
+      name.addEventListener('input', () => { nameError.show(''); });
       const start = numberInput(1, Number.MAX_SAFE_INTEGER);
       start.value = newLines[index]?.start.value ?? '1';
       const group = el('div', 'seat-form-row');
       group.setAttribute('role', 'group');
       group.setAttribute('aria-label', `追加する${index + 1}列目`);
-      group.append(field('追加行・列の名前', name), field('追加行・列の開始番号', start));
+      group.append(field('追加行・列の名前', name), field('追加行・列の開始番号', start), nameError.element);
       lines.append(group);
 
       return { name, start };
@@ -179,13 +178,14 @@ export function openSectionExtension(section: LayoutSection, apply: (input: Exte
   const top = section.axis === 'vertical' && section.seatOrder === 'reverse';
   const left = section.axis === 'horizontal' && section.seatOrder === 'reverse';
   setSeatOptions(dimension, [['rows', top ? '上に行を追加' : '下に行を追加'], ['columns', left ? '左に列を追加' : '右に列を追加']]);
-  error.setAttribute('role', 'alert');
   renderLines();
   form.append(el('p', '', '既存の席番号を保って外周に追加します。追加セルは「未」になります。'),
-    field('追加方向', dimension), field('追加数', count), lines, error, el('button', 'button', '追加内容を確認'));
+    field('追加方向', dimension), field('追加数', count), lines, error.element, el('button', 'button', '追加内容を確認'));
   const dialog = showDialog('行・列を追加', form);
   dimension.addEventListener('change', renderLines);
   count.addEventListener('input', renderLines);
+  form.addEventListener('input', () => { error.show(''); });
+  form.addEventListener('change', () => { error.show(''); });
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     try {
@@ -194,7 +194,7 @@ export function openSectionExtension(section: LayoutSection, apply: (input: Exte
       });
       dialog.close();
     } catch {
-      error.textContent = '追加できませんでした。区画全体のセル数と列設定を確認してください。';
+      error.show('区画全体のセル数と列設定を確認してください。');
     }
   });
 }

@@ -74,6 +74,7 @@ test('ROLE315-B02 不正な期間は赤いエラーで拒否し、保存しな�
   await expect(page.getByRole('dialog').getByRole('alert')).toContainText('有効開始より後');
   await expect(page.getByRole('dialog').getByRole('alert')).toBeInViewport();
   await expect(page.getByRole('dialog').getByRole('alert')).toHaveCSS('color', 'rgb(161, 38, 34)');
+  await expect(page.getByLabel('有効終了', { exact: true })).toHaveAccessibleDescription(/有効開始より後/);
   await page.getByRole('dialog').getByRole('button', { name: 'キャンセル', exact: true }).click();
   await expect(page.locator('.staff-role-card')).toContainText('一般受付');
 });
