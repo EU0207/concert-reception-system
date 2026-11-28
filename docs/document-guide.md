@@ -252,4 +252,4 @@ PoCの試験用形式は製品の互換性要件にしない。最新の承認�
 
 [ADR-015：公演日のサーバー判定に使う暦の登録](development/decisions/ADR-015-performance-calendar-authority.md)は、#111・#104・#283の保存側が使う日付境界の登録責任を扱う。2026-11-15に案Aを選択し、登録責任はApproved。初期設定と直接API試験の実装結果は公演保存基盤の記録で確認する。
 
-[管理者追加端末の画面接続・試験記録](development/technical-validation/owner-device-ui-results.md)（In Review）は、#317の一回リンク発行・新端末の確認と、平文を保持しない結果回収を扱う。親#263へ残す実Google・データ準備と、次セッションの再開先を区別する。
+[管理者追加端末の画面接続・試験記録](development/technical-validation/owner-device-ui-results.md)（Approved、PR #318）は、#317の一回リンク発行・新端末の確認と、平文を保持しない結果回収を扱う。実Google・データ準備は親#263、入力エラー表示の展開は#319で扱う。

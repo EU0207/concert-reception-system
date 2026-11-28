@@ -4,7 +4,7 @@
 |---|---|
 | 状態 | In Review |
 | 読者・目的 | 開発者・評価者が、READMEで要約した内容の詳細と根拠を確認する |
-| 更新日・関連 | 2026-11-27、任命・解除のPR #316統合と、管理者追加端末の#317を更新。ほかの機能の確認範囲は既存記録を維持 |
+| 更新日・関連 | 2026-11-28、管理者追加端末の開発者レビュー結果を反映。ほかの機能の確認範囲は既存記録を維持 |
 
 ## 現在の開発フェーズ
 
@@ -37,7 +37,7 @@
 | 役割の表示名 | main統合済み | [ADR-019](development/decisions/ADR-019-administrator-role-name.md)により管理者へ統一。#311・PR #312で表示・現行文書を変更し、内部役割値と権限は維持する |
 | 臨時管理者の権限設定 | main統合済み | [固定9項目と期間の設定画面](development/technical-validation/temporary-permissions-ui-results.md)を#313・PR #314で接続。任命・端末の追加準備と各業務の実行は後続 |
 | 公演限定スタッフの任命・解除 | main統合済み | [一般受付と臨時管理者の役割変更画面](development/technical-validation/staff-role-ui-results.md)を#315で接続。任命時の権限選択・即時解除と任期終了後の表示・再任命をPR #316で承認・統合。代理への昇格・降格と端末追加準備は後続 |
-| 管理者の追加端末 | レビュー中 | [一回限りのリンクによる関連付け画面](development/technical-validation/owner-device-ui-results.md)を#317で接続。実Googleと受付データ準備は後続 |
+| 管理者の追加端末 | 承認済み | [一回限りのリンクによる関連付け画面](development/technical-validation/owner-device-ui-results.md)を#317で接続し、PR #318の開発者レビューで承認。実Googleと受付データ準備は後続 |
 | QR受付・同期・帳票・運用画面 | 未完了 | 製品としての機能実装と機能間の結合が残る |
 
 ## テストの実施状況
