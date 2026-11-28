@@ -1,6 +1,6 @@
 // 管理者の追加端末リンクを発行・確認し、本人の新端末の承認へ接続する。
 
-import { actionGroup, button, el, showDialog } from './dom.ts';
+import { actionGroup, button, el, formError, showDialog } from './dom.ts';
 import { ownerDeviceUrl, parseOwnerDeviceUrl } from './owner-device-url.ts';
 import type { OwnerDeviceIssue, OwnerDeviceUiPort, OwnerDeviceView } from './owner-device-types.ts';
 
@@ -208,27 +208,15 @@ export function createOwnerDeviceScreen(port: OwnerDeviceUiPort, preview = false
           }, 'リンクを確認しました。', 'check-link');
         });
         read.disabled = !token;
-        const inlineAlert = el('div', 'device-error owner-device-link-error');
-        inlineAlert.id = 'owner-device-link-error';
-        inlineAlert.setAttribute('role', 'alert');
-        if (linkError) {
-          const icon = el('span', 'owner-device-error-icon', '！');
-          icon.setAttribute('aria-hidden', 'true');
-          const detail = el('div');
-          detail.append(el('strong', '', 'このリンクは使えません'), el('span', '', linkError));
-          inlineAlert.append(icon, detail);
-          input.setAttribute('aria-invalid', 'true');
-          input.setAttribute('aria-describedby', inlineAlert.id);
-        }
+        const inlineAlert = formError('このリンクは使えません');
+        inlineAlert.show(linkError, token ? [] : [input]);
         input.addEventListener('input', () => {
           read.disabled = busy || !input.value.trim();
           linkError = '';
-          inlineAlert.replaceChildren();
-          input.removeAttribute('aria-invalid');
-          input.removeAttribute('aria-describedby');
+          inlineAlert.show('');
         });
         if (!token) root.append(input);
-        root.append(inlineAlert, actionGroup(read));
+        root.append(inlineAlert.element, actionGroup(read));
       }
       for (const reader of view.readers.filter(item => !approved || item.approved)) {
         const panel = el('section', 'panel owner-device-card');

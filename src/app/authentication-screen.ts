@@ -1,6 +1,6 @@
 // 本人認証の入力・確認画面を組み立てる。公演の業務認可や端末準備の代わりにはしない。
 
-import { button, el } from './dom.ts';
+import { button, el, formError } from './dom.ts';
 import type { HumanIdentity } from '../domain/authorization/types.ts';
 
 export interface AuthenticationUiPort {
@@ -39,34 +39,52 @@ export function createAuthenticationScreen(port: AuthenticationUiPort, preview =
   const root = el('section', 'panel authentication-screen');
   let identity: HumanIdentity | null = null, initialized = false, busy = false, disposed = false, version = 0;
   let email = '', password = '', reauth = false, error = '', notice = '';
+  let inputError: { field: 'email' | 'password'; reason: string } | undefined;
 
   /** メールとパスワードをDOMの値として入力し、HTML属性や保存先へ書き出さない。 */
-  function field(label: string, type: string, value: string, update: (value: string) => void) {
+  function field(label: string, type: 'email' | 'password', value: string, update: (value: string) => void) {
     const wrapper = el('label', 'seat-field', label), input = el('input');
     input.type = type;
     input.value = value;
     input.disabled = busy;
     input.autocomplete = type === 'password' ? 'current-password' : 'username';
     input.maxLength = type === 'password' ? 20 : 254;
-    input.addEventListener('input', () => update(input.value));
+    const validation = formError(`${label}を確認してください`);
+    if (inputError?.field === type) validation.show(inputError.reason, [input]);
+    input.addEventListener('input', () => {
+      update(input.value);
+      if (inputError?.field === type) inputError = undefined;
+      validation.show('');
+    });
     wrapper.append(input);
-    return wrapper;
+    const fragment = document.createDocumentFragment();
+    fragment.append(wrapper, validation.element);
+    return fragment;
+  }
+
+  /** 入力欄に案内を表示し、修正する欄へフォーカスを移す。 */
+  function showInputError(field: 'email' | 'password', reason: string) {
+    error = notice = '';
+    inputError = { field, reason };
+    render();
+    root.querySelector<HTMLInputElement>(`input[type="${field}"]`)?.focus();
+    return false;
   }
 
   /** 入力条件の不足だけを表示し、利用者の入力値をメッセージへ含めない。 */
   function validate(needsPassword: boolean): boolean {
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) error = 'メールアドレスの形式を確認してください。';
-    else if (needsPassword && passwordError(password)) error = `パスワード：${passwordError(password)}。`;
-    else return true;
-    render();
-    return false;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
+      return showInputError('email', 'メールアドレスを正しい形式で入力してください。');
+    }
+    const missing = needsPassword ? passwordError(password) : '';
+    return missing ? showInputError('password', `${missing}。`) : true;
   }
 
   /** 処理中は操作を止め、完了後の現在の本人だけを表示する。 */
   async function act(action: () => Promise<void>, success = '') {
     if (busy || disposed) return;
     const current = ++version;
-    busy = true; error = notice = ''; password = '';
+    busy = true; error = notice = ''; password = ''; inputError = undefined;
     render();
     try {
       await action();
@@ -88,7 +106,7 @@ export function createAuthenticationScreen(port: AuthenticationUiPort, preview =
     const current = ++version;
     try {
       const result = await port.identity();
-      if (!disposed && current === version) { identity = result; initialized = true; reauth = false; render(); }
+      if (!disposed && current === version) { identity = result; initialized = true; reauth = false; inputError = undefined; render(); }
     } catch {
       if (!disposed && current === version) { initialized = true; error = '本人の状態を確認できません。接続を確認して、もう一度お試しください。'; render(); }
     }
@@ -140,11 +158,12 @@ export function createAuthenticationScreen(port: AuthenticationUiPort, preview =
             el('p', 'muted', '半角英字と数字を含む6～20文字'),
           );
           actions.append(button('本人確認する', () => {
-            if (identity?.provider === 'password' && passwordError(password)) { error = `パスワード：${passwordError(password)}。`; render(); return; }
+            const missing = identity?.provider === 'password' ? passwordError(password) : '';
+            if (missing) { showInputError('password', `${missing}。`); return; }
             const credential = password;
             void act(() => port.reauthenticate(credential), '本人確認を更新しました。');
           }));
-          actions.append(button('戻る', () => { reauth = false; password = ''; error = ''; render(); }, 'button secondary'));
+          actions.append(button('戻る', () => { reauth = false; password = ''; error = ''; inputError = undefined; render(); }, 'button secondary'));
         } else actions.append(button('本人確認をやり直す', () => { reauth = true; notice = error = ''; render(); }, 'button secondary'));
       }
       actions.append(button('ログアウト', () => { void act(() => port.signOut(), 'ログアウトしました。端末に保存したデータは保持しています。'); }, 'button secondary'));

@@ -430,6 +430,7 @@ test('DD91-T30 個別編集の欠番・通路への移動と番号重複を拒�
   await expect(number).toBeVisible();
   await number.getByRole('button', { name: '変更を反映', exact: true }).click();
   await expect(number.getByRole('alert')).toContainText('番号の重複');
+  await expect(number.getByLabel('席番号', { exact: true })).toHaveAccessibleDescription(/番号の重複/);
   expect(await canvasCells(page)).toEqual(before);
 });
 
@@ -583,7 +584,7 @@ test('DD91-T03・T06 作成済み区画の設定を確認して反映し、取�
   const lineName = extension.getByLabel('追加行・列の名前', { exact: true });
   await expect(lineName).toHaveValue('');
   await extension.getByRole('button', { name: '追加内容を確認' }).click();
-  await expect(extension.getByRole('alert')).toHaveText('追加行・列の名前を入力してください。');
+  await expect(lineName).toHaveAccessibleDescription(/追加行・列の名前を入力してください。/);
   await lineName.fill('　 ');
   await extension.getByRole('button', { name: '追加内容を確認' }).click();
   await expect(extension).toBeVisible();

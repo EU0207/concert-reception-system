@@ -1,12 +1,13 @@
 // 臨時管理者の固定9項目と有効期間を表示し、確認・暗号化保存・結果回収へ接続する。
 
-import { actionGroup, button, el, showDialog } from './dom.ts';
+import { actionGroup, button, el, formError, showDialog } from './dom.ts';
 import { watchDialogValidity } from './dialog-validation.ts';
 import { RECENT_AUTH_WINDOW } from '../domain/authorization/policy.ts';
 import { temporaryPermissionLabels as labels } from './temporary-permission-labels.ts';
 import { TEMPORARY_PERMISSIONS } from '../domain/authorization/types.ts';
 import type { RoleGrant, TemporaryProfile, TemporaryPermission } from '../domain/authorization/types.ts';
 import { changeTemporaryPermissions } from '../domain/authorization/role-management.ts';
+import { SeatDomainError } from '../domain/seats/validation.ts';
 import type { PermissionView, PendingPermission, PermissionOutcome, TemporaryPermissionsUiPort } from './temporary-permissions-types.ts';
 
 /** 設定値を色付きの記号だけで示し、読み上げ用の意味を保持する。 */
@@ -133,7 +134,7 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
     startLabel.append(start); endLabel.append(end); period.append(startLabel, endLabel); body.append(period,
       el('p', 'muted', `日時はこの端末の時刻（${Intl.DateTimeFormat().resolvedOptions().timeZone}）で入力します。`),
       el('p', 'muted', `設定できる期間：${new Date(role.startsAt).toLocaleString('ja-JP')} ～ ${new Date(Math.min(role.endsAt, basis.snapshot.staffDeadline)).toLocaleString('ja-JP')}`));
-    const validation = el('p', 'device-error permission-validation'); validation.setAttribute('role', 'alert');
+    const validation = formError('権限設定を確認してください');
     const operationId = crypto.randomUUID();
 
     /** 選択中の項目と日時を、固定する入力へコピーする。 */
@@ -146,9 +147,11 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
 
     /** 入力時点で検査し、不正な期間の確認操作を無効にする。 */
     function validate() {
-      if (preview && Date.now() > basis.serverNow + RECENT_AUTH_WINDOW) return 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。';
-      try { changeTemporaryPermissions(basis.snapshot, role, changeInput().input, basis.serverNow + Math.max(0, Math.floor(performance.now() - basisAt))); return ''; }
-      catch (cause) { return message(cause); }
+      if (preview && Date.now() > basis.serverNow + RECENT_AUTH_WINDOW) return { reason: 'この見本の確認期限が過ぎています。ページを再読み込みして開き直してください。' };
+      const { input } = changeInput();
+      const now = basis.serverNow + Math.max(0, Math.floor(performance.now() - basisAt));
+      try { changeTemporaryPermissions(basis.snapshot, role, input, now); return { reason: '' }; }
+      catch (cause) { return { reason: message(cause), fields: cause instanceof SeatDomainError && cause.code === 'INVALID_PROFILE_PERIOD' ? [start, end] : [] }; }
     }
 
     /** 編集値を検証し、変更前後の確認を開く。取消しでは保存しない。 */
@@ -170,7 +173,7 @@ export function createTemporaryPermissionsScreen(port: TemporaryPermissionsUiPor
     dialog = showDialog('臨時管理者の権限設定', body, [action], 'キャンセル');
     dialog.classList.add('permission-edit-dialog');
     // 9項目の下へエラーを隠さず、確認ボタンの直前へ固定する。
-    dialog.querySelector('.dialog-actions')!.before(validation);
+    dialog.querySelector('.dialog-actions')!.before(validation.element);
     const refresh = watchDialogValidity(dialog, [start, end], action, validation, validate);
   }
 

@@ -2,7 +2,7 @@
 
 import type { SectionModel } from '../domain/seats/types.ts';
 import { displayNumber, SEAT_LIMITS, SeatDomainError } from '../domain/seats/validation.ts';
-import { el, showDialog } from './dom.ts';
+import { el, formError, showDialog } from './dom.ts';
 
 type IndividualEdit = { number?: string; targetCellId?: string };
 
@@ -29,16 +29,21 @@ export function openIndividualSeatEdit(
   const number = el('input');
   const target = model.section.cells.find((cell) => cell.cellId === targetCellId);
   const other = target?.seatId ? model.seats.find((candidate) => candidate.seatId === target.seatId) : undefined;
-  const error = el('p');
+  const error = formError('変更できませんでした');
+  const numberError = formError('席番号を確認してください');
   const submit = el('button', 'button', '変更を反映');
-  error.setAttribute('role', 'alert');
   form.append(el('p', '', `変更前：${label} ／ ${source.row + 1}行${source.column + 1}列`));
   if (mode === 'number') {
     number.value = label;
     number.required = true;
     number.maxLength = SEAT_LIMITS.displayNumber;
     number.pattern = '.*\\S.*';
-    form.append(field('席番号', number));
+    form.append(field('席番号', number), numberError.element);
+    number.addEventListener('invalid', event => {
+      event.preventDefault();
+      numberError.show('席番号を入力してください。', [number]);
+      number.focus();
+    });
   } else {
     if (!target) throw new SeatDomainError('INVALID_MOVE_TARGET');
     form.append(el('p', '', other
@@ -46,7 +51,7 @@ export function openIndividualSeatEdit(
       : '移動元は「空間」になります。'));
     form.append(el('p', 'muted', '席番号を保持します。別の採番列へ移す場合は「手動」と表示します。'));
   }
-  form.append(preview, error, submit);
+  form.append(preview, error.element, submit);
 
   /** 入力中の変更後表示を更新する。 */
   function updatePreview() {
@@ -54,7 +59,7 @@ export function openIndividualSeatEdit(
       : `変更後：${label} ／ ${target!.row + 1}行${target!.column + 1}列`;
   }
 
-  number.addEventListener('input', updatePreview);
+  number.addEventListener('input', () => { numberError.show(''); updatePreview(); });
   updatePreview();
   const dialog = showDialog(mode === 'number' ? '席番号を変更' : '席の位置を変更', form);
   form.addEventListener('submit', (event) => {
@@ -63,11 +68,19 @@ export function openIndividualSeatEdit(
       apply(mode === 'number' ? { number: number.value.trim() } : { targetCellId: target!.cellId });
       dialog.close();
     } catch (caught) {
-      error.textContent = caught instanceof SeatDomainError && caught.code === 'OCCUPIED_MOVE_TARGET'
+      const code = caught instanceof SeatDomainError ? caught.code : '';
+      if (mode === 'number' && code === 'DUPLICATE_DISPLAY_NUMBER') {
+        error.show('');
+        numberError.show('番号の重複があります。区画内で使われていない番号を入力してください。', [number]);
+        return;
+      }
+
+      numberError.show('');
+      error.show(code === 'OCCUPIED_MOVE_TARGET'
         ? '移動先には「未」または「空間」を指定してください。'
-        : caught instanceof SeatDomainError && caught.code === 'STALE_INDIVIDUAL_EDIT'
+        : code === 'STALE_INDIVIDUAL_EDIT'
           ? '編集中の構成が変わりました。閉じてから変更をやり直してください。'
-          : '変更できませんでした。番号の重複、入力内容と割当・発券済みの席を確認してください。';
+          : '入力内容と割当・発券済みの席を確認してください。');
     }
   });
   if (mode === 'number') number.focus();

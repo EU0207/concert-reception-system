@@ -35,6 +35,45 @@ export function actionGroup(...actions: HTMLElement[]): HTMLDivElement {
   return group;
 }
 
+/** エラー文と該当入力を関連付け、解消時にこの案内だけを外す。 */
+export function formError(title: string) {
+  const element = el('div', 'form-error');
+  element.id = `form-error-${crypto.randomUUID()}`;
+  element.setAttribute('role', 'alert');
+  let current = '', marked: HTMLElement[] = [];
+
+  /** メッセージと対象が変わったときだけ表示を更新する。 */
+  function show(text: string, fields: HTMLElement[] = []) {
+    if (!text) fields = [];
+    if (text === current && fields.length === marked.length && fields.every((field, index) => field === marked[index])) return;
+
+    for (const field of marked) {
+      const descriptions = (field.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(id => id && id !== element.id);
+      if (descriptions.length) field.setAttribute('aria-describedby', descriptions.join(' '));
+      else field.removeAttribute('aria-describedby');
+      field.removeAttribute('aria-invalid');
+      field.classList.remove('form-error-field');
+    }
+    element.replaceChildren();
+    current = text;
+    marked = fields;
+    if (!text) return;
+
+    const icon = el('span', 'form-error-icon', '！'), detail = el('div');
+    icon.setAttribute('aria-hidden', 'true');
+    detail.append(el('strong', '', title), el('span', '', text));
+    element.append(icon, detail);
+    for (const field of marked) {
+      const descriptions = field.getAttribute('aria-describedby');
+      field.setAttribute('aria-describedby', descriptions ? `${descriptions} ${element.id}` : element.id);
+      field.setAttribute('aria-invalid', 'true');
+      field.classList.add('form-error-field');
+    }
+  }
+
+  return { element, show };
+}
+
 /** 確認用のダイアログを開く。閉じた後は部品を片付け、元の要素へフォーカスを戻す。 */
 export function showDialog(
   title: string,
