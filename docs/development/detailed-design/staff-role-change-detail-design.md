@@ -9,7 +9,7 @@
 
 ## 画面接続の段階実装
 
-#110の[役割変更基盤と確認範囲](../technical-validation/authorization-foundation-results.md#確認した範囲)はmain統合済み。一般受付と臨時管理者の2方向を#315で画面へ接続し、[任命・解除の確認記録](../technical-validation/staff-role-ui-results.md)をレビュー中。代理への昇格・降格とGoogle本人確認、端末追加準備の画面結合は親#263へ残す。以下の設計全18ケースの受入は未完了。
+#110の[役割変更基盤と確認範囲](../technical-validation/authorization-foundation-results.md#確認した範囲)はmain統合済み。一般受付と臨時管理者の2方向を#315で画面へ接続し、[任命・解除の確認記録](../technical-validation/staff-role-ui-results.md)をPR #316で承認・main統合済み。代理への昇格・降格とGoogle本人確認、端末追加準備の画面結合は親#263へ残す。以下の設計全18ケースの受入は未完了。
 
 ## DD-96-01 対象と許可表
 

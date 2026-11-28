@@ -253,6 +253,14 @@ export function createOwnerDeviceLinkPort(context: Context) {
     ) as Reader[];
   }
 
+  /** 未承認の新端末でも、Google本人確認の期限とサーバー時刻だけを取得する。 */
+  async function receiverState(): Promise<{ serverNow: number; validUntil: number }> {
+    const human = await context.verify(), now = await context.serverNow();
+    requireValue(human.provider === 'google.com', 'GOOGLE_AUTH_REQUIRED');
+    requireRecentAuthentication(human.authenticatedAt, now);
+    return { serverNow: now, validUntil: human.authenticatedAt + OWNER_DEVICE_LINK_LIFETIME + 1 };
+  }
+
   /** 未使用リンクと本人証明を確認し、端末承認と結果・監査を一体保存する。 */
   async function approve(operationId: string): Promise<PairingResult> {
     requireValue(isId(operationId), 'INVALID_OPERATION_ID');
@@ -348,6 +356,21 @@ export function createOwnerDeviceLinkPort(context: Context) {
   }
 
   /** 暗号化した操作記録から、発行したリンクの現在状態を照会する。 */
+  async function inspectIssue(
+    operationId: string,
+    journal: AuthorizationOperationJournal,
+    assertAuthorized: () => void,
+  ): Promise<OwnerDeviceLink | null> {
+    const saved = await journal.read(operationId, assertAuthorized) as { kind?: string; digest?: string } | null;
+    requireValue(saved?.kind === 'ownerDeviceLink' && /^[0-9a-f]{64}$/.test(saved.digest ?? ''), 'FIXED_OPERATION_REQUIRED');
+    await context.verify();
+    const link = await read(`ownerDeviceLinks/${saved!.digest}`) as OwnerDeviceLink | null;
+    assertAuthorized();
+    requireValue(!link || link.operationId === operationId, 'OWNER_LINK_RESULT_MISMATCH');
+    return link;
+  }
+
+  /** 暗号化した操作記録から、発行済みリンクの照合値と現在状態を取得する。 */
   async function issued(
     operationId: string,
     journal: AuthorizationOperationJournal,
@@ -440,9 +463,11 @@ export function createOwnerDeviceLinkPort(context: Context) {
     issue,
     readToken,
     listReadLinks,
+    receiverState,
     approve,
     receipt,
     issued,
+    inspectIssue,
     cancel,
     recordExpired,
     recordRejection,

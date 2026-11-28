@@ -17,6 +17,10 @@ import { createStaffRoleScreen } from './staff-role-screen.ts';
 import { createStaffRolePreview } from './staff-role-preview.ts';
 import { createTemporaryPermissionsScreen } from './temporary-permissions-screen.ts';
 import { createTemporaryPermissionsPreview } from './temporary-permissions-preview.ts';
+import { createOwnerDeviceScreen } from './owner-device-screen.ts';
+import { createOwnerDevicePreview } from './owner-device-preview.ts';
+import { takeOwnerDeviceToken } from '../domain/authorization/device-registration.ts';
+import { isId } from '../domain/seats/validation.ts';
 
 // 設定・共有状態：起動処理で設定し、画面と操作の各関数から参照する。
 let root: HTMLElement;
@@ -49,6 +53,8 @@ let authenticationScreen: ReturnType<typeof createAuthenticationScreen> | undefi
 let deviceManagementScreen: ReturnType<typeof createDeviceManagementScreen> | undefined;
 let staffRoleScreen: ReturnType<typeof createStaffRoleScreen> | undefined;
 let temporaryPermissionsScreen: ReturnType<typeof createTemporaryPermissionsScreen> | undefined;
+let ownerDeviceScreen: ReturnType<typeof createOwnerDeviceScreen> | undefined;
+let incomingOwnerLink: { token: string; environmentId: string; performanceId: string } | undefined;
 
 // 関数の定義：処理内容を定義し、下部の起動処理や画面操作から使用する。
 
@@ -283,6 +289,7 @@ async function mountSeatEditor(panel: HTMLElement, performanceId: string) {
 
 /** 現在のURLに対応する本文を描画し、選択中のメニューとページ名を更新する。 */
 function renderPage() {
+  ownerDeviceScreen?.dispose(); ownerDeviceScreen = undefined;
   staffRoleScreen?.dispose();
   staffRoleScreen = undefined;
   temporaryPermissionsScreen?.dispose();
@@ -356,8 +363,28 @@ function renderPage() {
       el('p', 'muted', event.name), deviceManagementScreen.element);
     document.title = 'スタッフ・端末 | コンサート受付';
     const staffLinks = actionGroup(routeLink('スタッフの役割変更', `/events/${event.id}/roles`, 'button secondary'),
-      routeLink('臨時管理者の権限設定', `/events/${event.id}/permissions`, 'button secondary'));
+      routeLink('臨時管理者の権限設定', `/events/${event.id}/permissions`, 'button secondary'),
+      routeLink('管理者の追加端末', `/events/${event.id}/owner-devices`, 'button secondary'));
     staffLinks.classList.add('management-links'); main.append(staffLinks);
+  } else if (startup.config.environmentType === 'evaluation-local' && events.some(event => currentRoute === `/events/${event.id}/owner-devices`)) {
+    const event = events.find(item => currentRoute === `/events/${item.id}/owner-devices`)!;
+    const preview = createOwnerDevicePreview({ environmentId: startup.config.environmentId, performanceId: event.id });
+    const panel = el('div'), incoming = incomingOwnerLink;
+    incomingOwnerLink = undefined;
+    /** 見本だけで端末側を切り替え、実認証や承認済み状態を変更しない。 */
+    function show(port: typeof preview.issuer, token?: string) {
+      ownerDeviceScreen?.dispose();
+      ownerDeviceScreen = createOwnerDeviceScreen(port, true, token);
+      panel.replaceChildren(ownerDeviceScreen.element);
+    }
+
+    const controls = actionGroup(button('既存端末の見本', () => show(preview.issuer), 'button secondary'),
+      ...preview.receivers.map(({ name, port }) => button(name, () => show(port), 'button secondary')));
+    controls.classList.add('management-toolbar');
+    main.append(routeLink('← スタッフ・端末へ', `/events/${event.id}/devices`, 'back-link'),
+      el('p', 'muted', '見本で操作する端末を選択：'), controls, panel);
+    show(incoming ? preview.receivers[0]!.port : preview.issuer, incoming?.token);
+    document.title = '管理者の追加端末 | コンサート受付';
   } else if (currentRoute === '/login' && startup.config.environmentType === 'evaluation-local') {
     authenticationScreen = createAuthenticationScreen(createAuthenticationPreview(), true);
     main.append(routeLink('← 公演一覧へ', '/events', 'back-link'), authenticationScreen.element);
@@ -506,6 +533,19 @@ async function runApplication(): Promise<void> {
   root = document.querySelector<HTMLElement>('#app')!;
   gate = new NavigationGate();
   currentRoute = location.hash.slice(1) || '/events';
+  // 秘密の断片は非同期の設定取得より前に消し、PWA・履歴へ受渡し値を残さない。
+  if (location.hash.startsWith('#owner-device-link=')) {
+    const source = new URL(location.href), environmentId = source.searchParams.get('environment') ?? '',
+      performanceId = source.searchParams.get('performance') ?? '';
+    currentRoute = isId(environmentId) && isId(performanceId) ? `/events/${performanceId}/owner-devices` : '/events';
+    try {
+      const token = takeOwnerDeviceToken(source, () => {
+        const clean = new URL(source); clean.search = ''; clean.hash = currentRoute;
+        history.replaceState(null, '', clean);
+      });
+      if (token && isId(environmentId) && isId(performanceId)) incomingOwnerLink = { token, environmentId, performanceId };
+    } catch { incomingOwnerLink = undefined; }
+  }
 
   // 通信状態やブラウザーの履歴操作を、画面表示へ反映する。
   window.addEventListener('online', () => {
@@ -531,6 +571,7 @@ async function runApplication(): Promise<void> {
   // 起動確認が成功した後だけ画面を作り、オフライン起動の準備を進める。
   try {
     startup = await startApplication();
+    if (incomingOwnerLink?.environmentId !== startup.config.environmentId) incomingOwnerLink = undefined;
     renderShell();
     void registerPwa(
       () => {
@@ -549,6 +590,7 @@ async function runApplication(): Promise<void> {
       updateBanner.hidden = false;
     });
   } catch (error) {
+    incomingOwnerLink = undefined;
     showStartupError(error);
   }
 }

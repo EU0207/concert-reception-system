@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| 状態 | In Review（#315・PR #316） |
+| 状態 | Approved（2026-11-27、PR #316を開発者レビュー承認・main統合） |
 | 日付 | 2026-11-27 |
 | 読者・目的 | 開発者・実装担当者が、承認済みの初期権限指定と再任命を接続する方式を確認する |
 | 根拠 | [DD-98-01・04、T02・16](../detailed-design/temporary-admin-permissions-detail-design.md)、[DD-96](../detailed-design/staff-role-change-detail-design.md) |
